@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/HRHUBAPI/bin/Debug/net6.0
+/.vs
+/HRHUBAPI/obj
+/HRHUBWEB/bin/Debug/net6.0
+/HRHUBWEB/obj
