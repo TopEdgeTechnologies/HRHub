@@ -27,7 +27,7 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpGet]
-       // [AllowAnonymous]
+       [AllowAnonymous]
         public async Task<IActionResult> Loginpage(int id=0)
         {
             User obj = new User();
@@ -37,7 +37,7 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpPost]
-      ///  [ValidateAntiForgeryToken]
+      [ValidateAntiForgeryToken]
         public async Task<IActionResult> Loginpage(User user)
         {
             try
@@ -60,7 +60,7 @@ namespace HRHUBWEB.Controllers
                             HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
                             HttpContext.Session.SetObjectAsJson("AuthenticatedToken", model.Token);
 
-                            return RedirectToAction("HouseList", "Configuration");
+                            return RedirectToAction("Index", "Home");
                             
 
                         }
