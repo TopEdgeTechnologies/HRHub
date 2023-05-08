@@ -1,0 +1,667 @@
+﻿@model HRHUBAPI.Models.GluserGroup
+
+@{
+    ViewData["Title"] = "User Group";
+    //Layout = "";
+}
+
+
+
+
+        <div class="col-lg-12 col-md-12 mt-4">
+								<div class="card">
+									<div class="card-header border-bottom-0">
+            <h3 class="card-title">@((Model.GroupId == 0) ? "Create" : "Update") User Group </h3>
+									</div>
+									<div class="card-body pb-2">
+            @using (@Html.BeginForm("UserGroupCreateOrUpdate", "UserGroup", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            {
+               
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="GroupId" />
+                    
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group local-forms">
+                           
+                            <input asp-for="GroupTitle" class="form-control" type="text" placeholder="Enter User Group Title">
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group local-forms">
+                          
+                            <input asp-for="Description" class="form-control" type="text" placeholder="Enter Discription">
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3 mt-2">
+
+                        <div class="form-group"> <label class="custom-control custom-checkbox"> 
+                                <input type="checkbox" asp-for="IsActive" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span> </label> </div>
+
+
+
+                    </div>
+
+                    
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">User Permissions</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                                        
+                                    <thead>
+                                        <tr>
+
+                                            <th class="">Forms</th>                                       
+                                                
+
+                                            <th class="text-center wd-15p border-bottom-0 ">
+                                                <label class="custom-switch">
+                                                    <span class="me-2">IsAssign</span>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="check-Assign">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+                                            </th>
+                                            <th class="text-center wd-15p border-bottom-0 ">
+                                              <label class="custom-switch">
+                                                    <span class="me-2">IsEdit</span>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="check-IsEdit">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>                                                   
+                                                
+                                                </th>
+                                            <th class="text-center wd-15p border-bottom-0 ">
+                                                <label class="custom-switch">
+                                                    <span class="me-2"> IsDelete</span>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="check-IsDelete">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+                                                </th>
+                                            <th class="text-center wd-15p border-bottom-0 "> 
+                                                <label class="custom-switch">
+                                                    <span class="me-2"> IsPrint</span>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="check-IsPrint">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+                                                
+                                                
+                                            </th>
+                                            <th class="text-center wd-15p border-bottom-0 ">                                               
+                                                
+                                                  <label class="custom-switch">
+                                                    <span class="me-2"> IsNew</span>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="check-IsNew">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+
+
+
+                                            </th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.GroupId == 0)
+                                        {
+                                            @foreach (var item in ViewBag.ListUserForm)
+                                            {
+                                                <tr>
+                                                    <td> <input type="hidden" class="form-check-input checkbox-Assign" name="ListForm" value="@item.FormId" />@item.FormTitle</td>
+                                                    <td class="text-center">
+                                                        <label class="custom-switch">
+                                                            
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-Assign" id="Assign_@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+                                                        <input type="hidden" class="form-check-input Hd-Assign" id="ListAssign_@item.FormId" value="0" name="ListAssign" />   
+                                                    
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="custom-switch">
+
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsEdit" id="IsEdit_@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+                                                        
+                                                        
+                                                        <input type="hidden" class="form-check-input Hd-IsEdit" id="ListIsEdit_@item.FormId" value="0" name="ListIsEdit" /> 
+                                                        
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="custom-switch">
+
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsDelete" id="IsDelete_@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+
+
+                                                        <input type="hidden" class="form-check-input Hd-IsDelete" id="ListIsDelete_@item.FormId" value="0" name="ListIsDelete" />   
+                                                    
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <label class="custom-switch">
+
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsPrint" id="IsPrint@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+
+                                                        <input type="hidden" class="form-check-input Hd-IsPrint" id="ListIsPrint_@item.FormId" value="0" name="ListIsPrint" />   
+                                                    </td>
+                                                    <td class="text-center">
+
+                                                        <label class="custom-switch">
+
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsNew" id="IsNew@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+
+                                                        <input type="hidden" class="form-check-input Hd-IsNew" id="ListisNew_@item.FormId" value="0" name="ListisNew" />  
+                                                    </td>
+
+
+
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @foreach (var item in ViewBag.ListUserForm)
+                                            {
+                                                <tr>
+                                                    <td> <input type="hidden" class="form-check-input checkbox-Assign" name="ListForm" value="@item.FormId" />@item.FormTitle</td>
+
+                                                    
+                                                    @if (@item.Assign == true)
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-Assign" id="Assign_@item.FormId" onchange="setvalue(this.id)" checked />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+                                                            <input type="hidden" class="form-check-input Hd-Assign" id="ListAssign_@item.FormId" value="0" name="ListAssign" />
+
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-Assign" id="Assign_@item.FormId" onchange="setvalue(this.id)" />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+                                                            <input type="hidden" class="form-check-input Hd-Assign" id="ListAssign_@item.FormId" value="0" name="ListAssign" />
+
+                                                        </td>
+
+                                                    }
+
+                                                    @if (@item.IsEdit == true)
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsEdit" id="IsEdit_@item.FormId" onchange="setvalue(this.id)" checked />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+
+                                                            <input type="hidden" class="form-check-input Hd-IsEdit" id="ListIsEdit_@item.FormId" value="0" name="ListIsEdit" />
+
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                    <td class="text-center">
+                                                        <label class="custom-switch">
+
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsEdit" id="IsEdit_@item.FormId" onchange="setvalue(this.id)" />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+                                                        
+                                                        
+                                                        <input type="hidden" class="form-check-input Hd-IsEdit" id="ListIsEdit_@item.FormId" value="0" name="ListIsEdit" /> 
+                                                        
+                                                    </td>
+                                                        
+                                                    }
+                                                    @if (@item.IsDelete == true)
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsDelete" id="IsDelete_@item.FormId" onchange="setvalue(this.id)" checked />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+
+                                                            <input type="hidden" class="form-check-input Hd-IsDelete" id="ListIsDelete_@item.FormId" value="0" name="ListIsDelete" />
+
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsDelete" id="IsDelete_@item.FormId" onchange="setvalue(this.id)" />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+
+                                                            <input type="hidden" class="form-check-input Hd-IsDelete" id="ListIsDelete_@item.FormId" value="0" name="ListIsDelete" />
+
+                                                        </td>
+
+                                                    }
+                                                    @if (@item.IsPrint == true)
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsPrint" id="IsPrint@item.FormId" onchange="setvalue(this.id)" checked />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+                                                            <input type="hidden" class="form-check-input Hd-IsPrint" id="ListIsPrint_@item.FormId" value="0" name="ListIsPrint" />
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center">
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsPrint" id="IsPrint@item.FormId" onchange="setvalue(this.id)" />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+                                                            <input type="hidden" class="form-check-input Hd-IsPrint" id="ListIsPrint_@item.FormId" value="0" name="ListIsPrint" />
+                                                        </td>
+
+                                                    }
+                                                    @if (@item.IsNew == true)
+                                                    {
+                                                        <td class="text-center">
+
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsNew" id="IsNew@item.FormId" onchange="setvalue(this.id)" checked />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+                                                            <input type="hidden" class="form-check-input Hd-IsNew" id="ListisNew_@item.FormId" value="0" name="ListisNew" />
+                                                        </td>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="text-center">
+
+                                                            <label class="custom-switch">
+
+                                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsNew" id="IsNew@item.FormId" onchange="setvalue(this.id)" />
+                                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                            </label>
+
+                                                            <input type="hidden" class="form-check-input Hd-IsNew" id="ListisNew_@item.FormId" value="0" name="ListisNew" />
+                                                        </td>
+                                                    }
+
+
+
+                                                </tr>
+                                            }
+                                        }
+
+
+                                    </tbody>
+
+
+
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                  
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="col-12 mt-5 mb-3">
+
+
+                        <div class="student-submit">
+
+                            <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+                            <a asp-action="UserGroupList" asp-controller="UserGroup" class="btn btn-secondary">Back</a>
+                        </div>
+                    </div>
+                </div>
+             
+            }
+
+									</div>
+								</div>
+								</div>
+
+
+
+
+@section scripts{
+
+<script type="text/javascript">
+        $('#myTable').DataTable({ searching: true,
+            "paging": false
+        });
+
+
+        $('#check-Assign').click(function () {
+
+                  if( $('#check-Assign').is(':checked'))
+                  {
+                      $('.checkbox-Assign').prop('checked', true);
+                       $('.Hd-Assign').val(1)
+                  }
+                  else{
+                       $('.checkbox-Assign').prop('checked', false);
+                        $('.Hd-Assign').val(0)
+                     }
+        });
+
+
+
+
+        $('#check-IsEdit').click(function () {
+
+            if ($('#check-IsEdit').is(':checked')) {
+                $('.checkbox-IsEdit').prop('checked', true);
+                $('.Hd-IsEdit').val(1)
+            }
+            else {
+                $('.checkbox-IsEdit').prop('checked', false);
+                $('.Hd-IsEdit').val(0)
+            }
+            
+        });
+
+
+        $('#check-IsDelete').click(function () {
+
+            if ($('#check-IsDelete').is(':checked')) {
+                $('.checkbox-IsDelete').prop('checked', true);
+                $('.Hd-IsDelete').val(1)
+            }
+            else {
+                $('.checkbox-IsDelete').prop('checked', false);
+                $('.Hd-IsDelete').val(0)
+            }
+
+
+
+        });
+
+
+          $('#check-IsPrint').click(function () {
+
+
+            if ($('#check-IsPrint').is(':checked')) {
+                $('.checkbox-IsPrint').prop('checked', true);
+                $('.Hd-IsPrint').val(1)
+            }
+            else {
+                $('.checkbox-IsPrint').prop('checked', false);
+                $('.Hd-IsPrint').val(0)
+            }
+
+
+        });
+
+
+
+        $('#check-IsNew').click(function () {
+
+
+            if ($('#check-IsNew').is(':checked')) {
+                $('.checkbox-IsNew').prop('checked', true);
+                $('.Hd-IsNew').val(1)
+            }
+            else {
+                $('.checkbox-IsNew').prop('checked', false);
+                $('.Hd-IsNew').val(0)
+            }
+
+
+        });
+
+
+
+
+        function postdata() {
+            var status = true;
+
+
+            if ($("#GroupTitle").val() == "") {
+                
+
+                $.growl.warning({
+                    message: "Please Enter User Group Title"
+                });
+
+
+
+                $("#GroupTitle").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#GroupTitle").css("border-color", "#ddd");
+            }
+
+             if ($("#Discription").val() == "") {
+                    $.growl.warning({
+                    message: "Please Enter User Group Discription"
+                });
+
+              
+                $("#Discription").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Discription").css("border-color", "#ddd");
+            }
+
+
+
+            var Data = { id: $("#GroupId").val(), title: $('#GroupTitle').val() == '' ? '""' : $('#GroupTitle').val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/UserGroup/CheckDublicateUserGroup",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+                           
+
+                            
+                        $.growl.warning(b.message);
+
+                            status = false;
+                        }
+
+                       
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+
+
+
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+
+
+
+                    }
+                    else if (
+
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+        function setvalue(event)
+        {
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+
+                if (control == 'Assign')
+                {
+                    $('#ListAssign_'+id).val('1')
+                }
+                else if (control == 'IsEdit')
+                {
+                    $('#ListIsEdit_' + id).val('1')
+
+                }
+                else if (control == 'IsDelete') {
+                    $('#ListIsDelete_' + id).val('1')
+
+                }
+                else if (control == 'IsPrint') {
+                    $('#ListIsPrint_' + id).val('1')
+
+                }
+                else if (control == 'IsNew') {
+                    $('#ListisNew_' + id).val('1')
+                }    
+          }
+          else{
+                if (control == 'Assign') {
+                    $('#ListAssign_' + id).val('0')
+                }
+                else if (control == 'IsEdit') {
+                    $('#ListIsEdit_' + id).val('0')
+
+                }
+                else if (control == 'IsDelete') {
+                    $('#ListIsDelete_' + id).val('0')
+
+                }
+                else if (control == 'IsPrint') {
+                    $('#ListIsPrint_' + id).val('0')
+
+                }
+                else if (control == 'IsNew') {
+                    $('#ListisNew_' + id).val('0')
+                }
+
+            }
+        
+        }
+
+
+
+</script>     
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
