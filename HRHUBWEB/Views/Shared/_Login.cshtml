@@ -155,11 +155,11 @@
     <script src="~/assets/js/sticky.js"></script>
 
     <!-- INTERNAL Notifications js -->
-    <script src="~/assets/plugins/notify/js/rainbow.js"></script>
-    <script src="~/assets/plugins/notify/js/sample.js"></script>
-    <script src="~/assets/plugins/notify/js/jquery.growl.js"></script>
-    <script src="~/assets/plugins/notify/js/notifIt.js"></script>
-    <script src="~/assets/js/popover.js"></script>
+    <script src="/assets/plugins/notify/js/rainbow.js"></script>
+    <script src="/assets/plugins/notify/js/sample.js"></script>
+    <script src="/assets/plugins/notify/js/jquery.growl.js"></script>
+    <script src="/assets/plugins/notify/js/notifIt.js"></script>
+    <script src="/assets/js/popover.js"></script>
 
 
 
@@ -175,6 +175,11 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+
+          
+
+          
+
             $(".alert").delay(4000).slideUp(200, function () {
                 $(this).alert('close');
             });
@@ -201,12 +206,7 @@
                 //alert("Please Login Again.")
             }
 
-            //if (msg !== "" && msg == '3') {
-            //    toastr.success("You record is Deleted Succesfully.");
-            //}
-            //if (msg !== "" && msg == '0') {
-            //    toastr.error("Error Occured.");
-            //}
+           
 
         });
 
@@ -219,9 +219,34 @@
         function postdata() {
             debugger
             var status = true;
-            if ($("#Password").val() == "") {
-                //toastr.warning("Please Enter user password");
-                notify("Warning: Please Enter user password", "warn");
+
+            if ($("#UserName").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter user Name"
+                });
+
+
+
+
+                $("#UserName").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#UserName").css("border-color", "#ddd");
+
+            }
+
+
+            if ($("#Password").val() == "") {              
+
+                $.growl.warning({
+                    message: "Please Enter user password"
+                });
+
+               
                 $("#Password").css("border-color", "red");
                 status = false;
 
@@ -231,17 +256,7 @@
 
             }
 
-            if ($("#UserName").val() == "") {
-                //toastr.warning("Please Enter user Name");
-                notify("Warning: Please Enter user Name", "warn");
-                $("#UserName").css("border-color", "red");
-                status = false;
-
-            }
-            else {
-                $("#UserName").css("border-color", "#ddd");
-
-            }
+           
 
             if (status) {
                 $("#myform").submit();
