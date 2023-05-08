@@ -1,5 +1,6 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
+using HRHUBWEB.Filters;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace HRHUBWEB.Controllers
         }
 
         #region UserGroupController
-
+        [CustomAuthorization]
         public async Task<IActionResult> UserGroupList(string data = "")
         {
             ViewBag.Success = data;
