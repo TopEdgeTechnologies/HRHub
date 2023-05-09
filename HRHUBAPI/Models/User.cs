@@ -27,9 +27,7 @@ public partial class User
 
     public DateTime? UpdatedOn { get; set; }
 
-    public int? InstituteId { get; set; }
-
-    public int? SchoolId { get; set; }
+    public int? CompanyId { get; set; }
 
     public int? GroupId { get; set; }
 }

@@ -101,7 +101,7 @@ namespace HRHUBWEB.Controllers
 
             //Get Instutute ID through Sessions
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var InstituteId = userObject.InstituteId;
+            var InstituteId = userObject.CompanyId;
 
             if (Token != null) { 
 

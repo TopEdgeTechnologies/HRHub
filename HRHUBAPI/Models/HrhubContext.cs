@@ -45,7 +45,7 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
-  
+   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AttendanceMaster>(entity =>
@@ -164,7 +164,7 @@ public partial class HrhubContext : DbContext
         {
             entity.HasKey(e => e.DesignationId).HasName("PK_Designation2");
 
-            entity.ToTable("Designation");
+            entity.ToTable("Designation", "HR");
 
             entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
@@ -301,11 +301,10 @@ public partial class HrhubContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.GroupId).HasColumnName("GroupID");
-            entity.Property(e => e.InstituteId).HasColumnName("InstituteID");
             entity.Property(e => e.Password).IsUnicode(false);
-            entity.Property(e => e.SchoolId).HasColumnName("SchoolID");
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.StudentId).HasColumnName("StudentID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
