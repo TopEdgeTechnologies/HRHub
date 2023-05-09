@@ -1,0 +1,213 @@
+﻿@model HRHUBAPI.Models.Designation
+
+@{
+    ViewData["Title"] = "User Group";
+    //Layout = "";
+}
+
+
+
+
+<div class="col-lg-12 col-md-12 mt-4">
+    <div class="card">
+        <div class="card-header border-bottom-0">
+            <h3 class="card-title">@((Model.DesignationId == 0) ? "Create" : "Update") User Group </h3>
+        </div>
+        <div class="card-body pb-2">
+            @using (@Html.BeginForm("DesignationCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            {
+
+                <div class="row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="DesignationId" />
+
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group local-forms">
+
+                            <input asp-for="Title" class="form-control" type="text" placeholder="Enter Title">
+
+                        </div>
+                    </div>
+
+
+                    @*
+                <div class="col-md-3 mt-2">
+
+                <div class="form-group"> <label class="custom-control custom-checkbox">
+                <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                <span class="custom-control-label">IsActive</span> </label> </div>
+
+
+
+                </div>*@
+
+
+
+
+                    <div class="col-12 mt-5 mb-3">
+
+
+                        <div class="student-submit">
+
+                            <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+                            <a asp-action="DesignationList" asp-controller="Configuration" class="btn btn-secondary">Back</a>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+
+
+
+
+
+        function postdata() {
+            var status = true;
+
+
+            if ($("#Title").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+
+
+
+                $("#Title").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+
+
+
+
+
+            var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/DesignationCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+
+
+
+                            $.growl.warning(b.message);
+
+                            status = false;
+                        }
+
+
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+
+
+
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+
+
+
+                    }
+                    else if (
+
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

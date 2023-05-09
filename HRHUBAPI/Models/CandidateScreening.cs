@@ -24,4 +24,8 @@ public partial class CandidateScreening
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public virtual Candidate? Candidate { get; set; }
+
+    public virtual StatusInfo? Status { get; set; }
 }

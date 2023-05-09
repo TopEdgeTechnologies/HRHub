@@ -19,7 +19,7 @@ namespace HRHUBWEB.Controllers
         }
 
         #region UserGroupController
-        [CustomAuthorization]
+     
         public async Task<IActionResult> UserGroupList(string data = "")
         {
             ViewBag.Success = data;

@@ -56,4 +56,12 @@ public partial class Candidate
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public int? CompanyId { get; set; }
+
+    public virtual ICollection<CandidateScreening> CandidateScreenings { get; } = new List<CandidateScreening>();
+
+    public virtual ICollection<CandidateSkill> CandidateSkills { get; } = new List<CandidateSkill>();
+
+    public virtual Company? Company { get; set; }
 }
