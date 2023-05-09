@@ -14,15 +14,14 @@ namespace HRHUBAPI.Models
     {
         
 
-        public async Task<List<Designation>> GetDesignation(HrhubContext _context)
+        public async Task<List<Designation>> GetDesignation(int CompanyId,HrhubContext _context)
         {
             try
             {
-                return await _context.Designations.Where(x=>x.IsDeleted==false).ToListAsync();
-                
-               
+                List<Designation> list = new List<Designation>();
+                    list =await _context.Designations.Where(x=>x.IsDeleted==false && x.CompanyId==CompanyId).ToListAsync();
 
-
+                return list;
               
             }
             catch (Exception ex)
@@ -38,7 +37,7 @@ namespace HRHUBAPI.Models
             try
             {
 
-                var result = await _context.Designations.FirstOrDefaultAsync(x => x.DesignationId == id && x.IsDeleted==false);
+                var result = await _context.Designations.FirstOrDefaultAsync(x => x.DesignationId == id  && x.IsDeleted==false);
                 if (result != null)
                 {
                     return result;
@@ -74,13 +73,14 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedOn = DateTime.Now;
                     checkDesignationInfo.Status = ObjDesignationInfo.Status;
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
-                   
+                   checkDesignationInfo.CompanyId=ObjDesignationInfo.CompanyId;
                     await _context.SaveChangesAsync();
 
                 }
                 else
                 {
                     ObjDesignationInfo.CreatedOn = DateTime.Now;
+                    ObjDesignationInfo.IsDeleted=false;
                     _context.Designations.Add(ObjDesignationInfo);
                 }
                 await _context.SaveChangesAsync();
@@ -103,7 +103,7 @@ namespace HRHUBAPI.Models
             try
             {
                 bool check = false;
-                var DesignationInfo = await _context.Designations.FirstOrDefaultAsync(x => x.DesignationId == id && x.IsDeleted == false);
+                var DesignationInfo = await _context.Designations.FirstOrDefaultAsync(x => x.DesignationId == id  && x.IsDeleted == false);
 
                 if (DesignationInfo != null)
                 {
@@ -125,13 +125,13 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> AlreadyExist(int DesignationInfoId, string title, HrhubContext _context)
+        public async Task<bool> AlreadyExist(int DesignationInfoId, string title,int CompanyId, HrhubContext _context)
         {
             try
             {
                 if (DesignationInfoId > 0)
                 {
-                    var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.DesignationId != DesignationInfoId && x.IsDeleted==false);
+                    var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.CompanyId==CompanyId && x.DesignationId != DesignationInfoId && x.IsDeleted==false);
                     if (result != null)
                     {
                         return true;
@@ -141,7 +141,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.IsDeleted == false);
+                    var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.CompanyId==CompanyId && x.IsDeleted == false);
                     if (result != null)
                     {
                         return true;

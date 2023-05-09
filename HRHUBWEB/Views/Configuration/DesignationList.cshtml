@@ -24,7 +24,7 @@
                                 
                                 <th class="border-bottom-0">Designation Title</th>                               
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
+                                <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,7 +65,7 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip">
+                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit primary text-primary">
                                                         </i>
                                                     </a>

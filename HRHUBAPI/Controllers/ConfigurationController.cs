@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 using System.Text.Json.Nodes;
 
 namespace HRHUBAPI.Controllers
@@ -21,11 +22,11 @@ namespace HRHUBAPI.Controllers
         // test comment
         #region DesignationInfo
 
-        [HttpGet("GetDesignationInfos")]
-        public async Task<ActionResult<List<Designation>>> GetDesignationInfos()
+        [HttpGet("GetDesignationInfos{CompanyId}")]
+        public async Task<ActionResult<List<Designation>>> GetDesignationInfos(int CompanyId)
         {
 
-            return await new Designation().GetDesignation(_context);
+            return await new Designation().GetDesignation(CompanyId,_context);
         }
 
 
@@ -84,10 +85,10 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("DesignationCheckData{id}/{title}")]
-        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
+        [HttpGet("DesignationCheckData{id}/{title}/{CompanyId}")]
+        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title,int CompanyId)
         {
-            if (await new Designation().AlreadyExist(id, title, _context))
+            if (await new Designation().AlreadyExist(id, title,CompanyId, _context))
             {
                 return Ok(new
                 {
