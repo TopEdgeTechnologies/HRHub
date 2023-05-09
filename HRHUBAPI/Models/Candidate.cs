@@ -23,13 +23,15 @@ public partial class Candidate
 
     public decimal? ExpectedSalary { get; set; }
 
-    public string? ResonToLeft { get; set; }
+    public string? ReasonToLeft { get; set; }
 
     public DateTime? Dob { get; set; }
 
-    public decimal? ExperienceInYears { get; set; }
+    public short? ExperienceInYears { get; set; }
 
-    public string? Gender { get; set; }
+    public short? ExperienceInMonths { get; set; }
+
+    public string Gender { get; set; } = null!;
 
     public string? City { get; set; }
 
@@ -58,10 +60,4 @@ public partial class Candidate
     public DateTime? UpdatedOn { get; set; }
 
     public int? CompanyId { get; set; }
-
-    public virtual ICollection<CandidateScreening> CandidateScreenings { get; } = new List<CandidateScreening>();
-
-    public virtual ICollection<CandidateSkill> CandidateSkills { get; } = new List<CandidateSkill>();
-
-    public virtual Company? Company { get; set; }
 }

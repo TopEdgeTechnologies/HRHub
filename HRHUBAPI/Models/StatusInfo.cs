@@ -20,6 +20,4 @@ public partial class StatusInfo
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public virtual ICollection<CandidateScreening> CandidateScreenings { get; } = new List<CandidateScreening>();
 }

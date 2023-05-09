@@ -22,6 +22,4 @@ public partial class CandidateSkill
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public virtual Candidate? Candidate { get; set; }
 }

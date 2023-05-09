@@ -118,7 +118,7 @@ namespace HRHUBAPI.Models
                     checkCandidateInfo.ApplyDate = CandidateInfo.ApplyDate;             
                     checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;             
                     checkCandidateInfo.StatusId = CandidateInfo.StatusId;             
-                    checkCandidateInfo.ResonToLeft = CandidateInfo.ResonToLeft;             
+                    checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;             
                     checkCandidateInfo.UpdatedOn = DateTime.Now;
                     checkCandidateInfo.Status = CandidateInfo.Status;
                     checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;

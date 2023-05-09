@@ -45,10 +45,7 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AttendanceMaster>(entity =>
@@ -85,21 +82,15 @@ public partial class HrhubContext : DbContext
                 .HasColumnName("DOB");
             entity.Property(e => e.Email).IsUnicode(false);
             entity.Property(e => e.ExpectedSalary).HasColumnType("money");
-            entity.Property(e => e.ExperienceInYears).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Gender)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Name).IsUnicode(false);
             entity.Property(e => e.Phone).IsUnicode(false);
             entity.Property(e => e.Qualification).IsUnicode(false);
-            entity.Property(e => e.ResonToLeft).IsUnicode(false);
+            entity.Property(e => e.ReasonToLeft).IsUnicode(false);
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.Candidates)
-                .HasForeignKey(d => d.CompanyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_Candidate_Company");
         });
 
         modelBuilder.Entity<CandidateScreening>(entity =>
@@ -115,16 +106,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ScreeningDate).HasColumnType("date");
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Candidate).WithMany(p => p.CandidateScreenings)
-                .HasForeignKey(d => d.CandidateId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_CandidateScreening_Candidate");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.CandidateScreenings)
-                .HasForeignKey(d => d.StatusId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_CandidateScreening_StatusInfo");
         });
 
         modelBuilder.Entity<CandidateSkill>(entity =>
@@ -137,11 +118,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SkillStatus).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Candidate).WithMany(p => p.CandidateSkills)
-                .HasForeignKey(d => d.CandidateId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_CandidateSkills_Candidate");
         });
 
         modelBuilder.Entity<Company>(entity =>
@@ -182,19 +158,15 @@ public partial class HrhubContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.Departments)
-                .HasForeignKey(d => d.CompanyId)
-                .HasConstraintName("FK_Department_Company");
         });
 
         modelBuilder.Entity<Designation>(entity =>
         {
-            entity.ToTable("Designation", "HR");
+            entity.HasKey(e => e.DesignationId).HasName("PK_Designation2");
 
-            entity.Property(e => e.DesignationId)
-                .ValueGeneratedNever()
-                .HasColumnName("DesignationID");
+            entity.ToTable("Designation");
+
+            entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
@@ -238,11 +210,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.LeaveTypes)
-                .HasForeignKey(d => d.CompanyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_LeaveType_Company");
         });
 
         modelBuilder.Entity<Staff>(entity =>
@@ -302,16 +269,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SalaryPerMonth).HasColumnType("money");
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Company).WithMany(p => p.Staff)
-                .HasForeignKey(d => d.CompanyId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_Staff_Company");
-
-            entity.HasOne(d => d.Department).WithMany(p => p.Staff)
-                .HasForeignKey(d => d.DepartmentId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_Staff_Department");
         });
 
         modelBuilder.Entity<StaffAttachment>(entity =>
@@ -327,11 +284,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-            entity.HasOne(d => d.Staff).WithMany(p => p.StaffAttachments)
-                .HasForeignKey(d => d.StaffId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_StaffAttachments_Staff");
         });
 
         modelBuilder.Entity<StatusInfo>(entity =>
