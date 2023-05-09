@@ -7,15 +7,15 @@
 <div class="row row-sm mt-4">
 
     <div class="col-lg-12">
-        @if (Convert.ToBoolean(ViewBag.IsNew))
-        {
-            <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary"><i class="fas fa-plus"></i>New</a>
-        }
+       
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">User Group Details</h3>
+        @if (Convert.ToBoolean(ViewBag.IsNew))
+        {
                 <div class="card-options"> <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary">Add New</a> </div>
-            </div>
+        }
+        </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
@@ -25,7 +25,7 @@
                                 <th class="border-bottom-0">Group Title</th>
                                 <th class="border-bottom-0">Description</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Action</th>
+                                <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,39 +53,32 @@
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
-                                        <th class="text-center">
-                                           
-                                            <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="btn btn-primary btn-icon btn-xs"> 
-                                                <i class="feather feather-edit"></i> 
-                                                </a>
+                                        <th class="d-none">
 
-                                        
-                                            <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" onclick="return confirm('Are you sure you want to delete')"  class="btn btn-danger btn-icon btn-xs" 
-                                            ><i class="feather feather-trash-2"></i></a>
+                                           
+
+
+
 
                                         </th>
                                     }
                                     else
                                     {
                                         <td class="text-end">
-                                            <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId">
-                                                <i class="fe fe-edit-2"></i>
-                                                    </a>
-                                            <div class="actions ">
+                                            <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-
-                                                    <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="btn btn-sm bg-success-light me-2 ">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                }
-                                                @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip">
+                                                        <i class="feather feather-edit primary text-primary">
+                                                    </i>
+                                                </a>
+                                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" onclick="return confirm('Are you sure you want to delete')" class="btn btn-sm bg-danger-light">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                }
+                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <i class="feather feather-trash-2 text-danger"></i>
+                                                </a>}
                                             </div>
+
                                         </td>
                                     }
 
@@ -118,16 +111,40 @@
 
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
-                toastr.success("You record is Inserted Succesfully.");
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
             }
             if (msg !== "" && msg == '2') {
-                toastr.success("You record is Updated Succesfully.");
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
             }
             if (msg !== "" && msg == '3') {
-                toastr.success("You record is Deleted Succesfully.");
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
             }
             if (msg !== "" && msg == '0') {
-                toastr.error("Error Occured.");
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
             }
             $('#myTable').DataTable();
         });

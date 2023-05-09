@@ -19,9 +19,16 @@ namespace HRHUBWEB.Controllers
         }
 
         #region UserGroupController
-     
+        [CustomAuthorization]
         public async Task<IActionResult> UserGroupList(string data = "")
         {
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+
             ViewBag.Success = data;
             List<GluserGroup> ObjUserGroup = new List<GluserGroup>();
 

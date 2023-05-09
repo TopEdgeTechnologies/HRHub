@@ -24,7 +24,7 @@ namespace HRHUBWEB.Controllers
         }
 
         #region DesignationInfo
-       
+        [CustomAuthorization]
         public async Task<IActionResult> DesignationList(string data = "")
         {
 
@@ -105,37 +105,12 @@ namespace HRHUBWEB.Controllers
 
             //Get Instutute ID through Sessions
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var InstituteId = userObject.CompanyId;
+            //var InstituteId = userObject.CompanyId;
 
             if (Token != null) { 
 
 
-            //HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetSessions{InstituteId}");
-            //if (message.IsSuccessStatusCode)
-            //{
-            //    var result = message.Content.ReadAsStringAsync().Result;
-            //    ViewBag.DesignationSession = JsonConvert.DeserializeObject<List<Session>>(result);
-
-            //}
-            
-
-            //HttpResponseMessage message1 = await _client.GetAsync($"api/Configuration/GetGroupInfos{InstituteId}");
-            //if (message1.IsSuccessStatusCode)
-            //{
-            //    var result = message1.Content.ReadAsStringAsync().Result;
-            //    ViewBag.DesignationGroup = JsonConvert.DeserializeObject<List<GroupInfo>>(result);
-
-            //}
            
-            
-
-            //HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetClassInfos{InstituteId}");
-            //if (message1.IsSuccessStatusCode)
-            //{
-            //    var result = message3.Content.ReadAsStringAsync().Result;
-            //    ViewBag.ClassList = JsonConvert.DeserializeObject<List<ClassInfo>>(result);
-
-            //}
            
 
             if (id == 0)
@@ -168,7 +143,7 @@ namespace HRHUBWEB.Controllers
 
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 ObjDesignation.CreatedBy = userObject.UserId;
-                //ObjDesignation.InstituteId = userObject.InstituteId;
+                //ObjDesignation.CompanyId = userObject.;
                 HttpResponseMessage message = await _client.PostAsJsonAsync("api/Designation/DesignationAddOrUpdate", ObjDesignation);
 
                 if (message.IsSuccessStatusCode)

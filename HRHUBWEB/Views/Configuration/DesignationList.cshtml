@@ -7,16 +7,18 @@
 <div class="row row-sm mt-4">
 
     <div class="col-lg-12">
-        @if (Convert.ToBoolean(ViewBag.IsNew))
-        {
-            <a asp-action="DesignationCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary"><i class="fas fa-plus"></i>New</a>
-        }
+       
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title"> Designation Details</h3>
-                <div class="card-options"> <a asp-action="DesignationCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add New</a> </div>
-            </div>
-            <div class="card-body">
+                 
+                    <div class="card-options">
+                    @if (Convert.ToBoolean(ViewBag.IsNew))
+                    {
+                        <div class="card-options"> <a asp-action="DesignationCreateOrUpdate" asp-controller="Designation" class="btn btn-primary">Add New</a> </div>
+                    }
+                    </div>
+                <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
@@ -50,42 +52,35 @@
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
-                                        <th class="text-center">
-                                           
-                                            <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.DesignationId" class="btn btn-primary btn-icon btn-xs"> 
-                                                <i class="feather feather-edit"></i> 
-                                                </a>
+                                        <th class="d-none">
 
-                                        
-                                            <a asp-action="UserGroupDelete" asp-route-id="@item.DesignationId" onclick="return confirm('Are you sure you want to delete')"  class="btn btn-danger btn-icon btn-xs" 
-                                            ><i class="feather feather-trash-2"></i></a>
+
+
+
+
 
                                         </th>
                                     }
                                     else
                                     {
                                         <td class="text-end">
-                                            <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.DesignationId">
-                                                <i class="fe fe-edit-2"></i>
-                                                    </a>
-                                            <div class="actions ">
+                                            <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-
-                                                    <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.DesignationId" class="btn btn-sm bg-success-light me-2 ">
-                                                        <i class="fa fa-edit"></i>
+                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip">
+                                                        <i class="feather feather-edit primary text-primary">
+                                                        </i>
                                                     </a>
-                                                }
-                                                @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.DesignationId" onclick="return confirm('Are you sure you want to delete')" class="btn btn-sm bg-danger-light">
-                                                        <i class="fa fa-trash"></i>
+                                                        <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <i class="feather feather-trash-2 text-danger"></i>
                                                     </a>
                                                 }
                                             </div>
+
                                         </td>
                                     }
-
 
 
 
