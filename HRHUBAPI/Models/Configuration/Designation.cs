@@ -73,7 +73,7 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedOn = DateTime.Now;
                     checkDesignationInfo.Status = ObjDesignationInfo.Status;
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
-                   checkDesignationInfo.CompanyId=ObjDesignationInfo.CompanyId;
+                  
                     await _context.SaveChangesAsync();
 
                 }

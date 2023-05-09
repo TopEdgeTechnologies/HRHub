@@ -19,11 +19,11 @@ namespace HRHUBAPI.Models
         public string? GroupName { get; set; }
         [NotMapped]
         public string? SessionName { get; set; }
-        public async Task<List<Candidate>> GetCandidate(HrhubContext _context)
+        public async Task<List<Candidate>> GetCandidate(int CompanyId,HrhubContext _context)
         {
             try
             {
-                var list = await _context.Candidates.Where(x=>x.IsDeleted==false).ToListAsync();
+                var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
                 //var list = await (from c in _context.Candidates
                 //                  join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
                 //                  join g in _context.GroupInfos on c.GroupId equals g.GroupId
@@ -118,7 +118,7 @@ namespace HRHUBAPI.Models
                     checkCandidateInfo.ApplyDate = CandidateInfo.ApplyDate;             
                     checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;             
                     checkCandidateInfo.StatusId = CandidateInfo.StatusId;             
-                    checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;             
+                    checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;                   
                     checkCandidateInfo.UpdatedOn = DateTime.Now;
                     checkCandidateInfo.Status = CandidateInfo.Status;
                     checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
@@ -129,6 +129,7 @@ namespace HRHUBAPI.Models
                 else
                 {
                     CandidateInfo.CreatedOn = DateTime.Now;
+                    CandidateInfo.IsDeleted= false;
                     _context.Candidates.Add(CandidateInfo);
                 }
                 await _context.SaveChangesAsync();
@@ -173,13 +174,13 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> AlreadyExist(int CandidateInfoId, string email, HrhubContext _context)
+        public async Task<bool> AlreadyExist(int CandidateInfoId, string email,int CompanyId, HrhubContext _context)
         {
             try
             {
                 if (CandidateInfoId > 0)
                 {
-                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CandidateId != CandidateInfoId && x.IsDeleted==false);
+                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CompanyId== CompanyId && x.CandidateId != CandidateInfoId && x.IsDeleted==false);
                     if (result != null)
                     {
                         return true;
@@ -189,7 +190,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.IsDeleted == false);
+                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CompanyId == CompanyId  && x.IsDeleted == false);
                     if (result != null)
                     {
                         return true;

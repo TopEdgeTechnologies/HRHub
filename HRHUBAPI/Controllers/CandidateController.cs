@@ -21,11 +21,11 @@ namespace HRHUBAPI.Controllers
 
         #region CandidateInfo
 
-        [HttpGet("GetCandidateInfos")]
-        public async Task<ActionResult<List<Candidate>>> GetCandidateInfos()
+        [HttpGet("GetCandidateInfos{CompanyId}")]
+        public async Task<ActionResult<List<Candidate>>> GetCandidateInfos(int CompanyId)
         {
 
-            return await new Candidate().GetCandidate(_context);
+            return await new Candidate().GetCandidate(CompanyId,_context);
         }
 
 
@@ -85,9 +85,9 @@ namespace HRHUBAPI.Controllers
 
 
         [HttpGet("CandidateCheckData{id}/{cnic}")]
-        public async Task<ActionResult<JsonObject>> CandidateCheckData(int id, string email)
+        public async Task<ActionResult<JsonObject>> CandidateCheckData(int id,int CompanyId, string email)
         {
-            if (await new Candidate().AlreadyExist(id, email, _context))
+            if (await new Candidate().AlreadyExist(id, email, CompanyId, _context))
             {
                 return Ok(new
                 {

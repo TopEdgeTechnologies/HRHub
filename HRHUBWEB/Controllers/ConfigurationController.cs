@@ -97,7 +97,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Designation/GetDesignationId{id}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfoId{id}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;

@@ -1,0 +1,752 @@
+﻿@model HRHUBAPI.Models.Candidate
+
+@{
+    ViewData["Title"] = "Candidate Form";
+}
+
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">@((Model.CandidateId == 0) ? "Enroll" : "Update") Candidate</div>
+    </div>
+   
+</div>
+<!-- Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Basic Details</h3>
+               
+            </div>
+            @using (@Html.BeginForm("CandidateCreateOrUpdate", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            {
+
+                <input type="hidden" asp-for="CandidateId" />
+                <input type="hidden" asp-for="CompanyId" value="@ViewBag.CompanyId" />
+            <div class="card-body">
+          
+                <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Name *</label>
+                                <input asp-for="Name" class="form-control" type="text" placeholder="Enter Name">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Email *</label>
+                                <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Phone No *</label>
+                                <input asp-for="Phone" class="form-control" type="text" placeholder="Enter phone">
+
+                            </div>
+                        </div>
+                        
+                       
+
+                         <div class="col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input asp-for="Dob" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Qualification *</label>
+                                <input asp-for="Qualification" class="form-control" type="text" placeholder="Enter Qualification">
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4 col-sm-4">
+
+
+                            <div class="form-group">
+                                <div class="custom-controls-stacked d-md-flex mt-4">
+                                    <label class="form-label mt-1 me-3">Gender: </label>
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_male" value="Male" checked>
+                                    <label class="form-check-label" for="gender_male">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_female" value="Female">
+                                    <label class="form-check-label" for="gender_female">Female</label>
+                                </div>
+                            </div>
+                       
+                        
+                        
+                        
+                        </div>
+                   </div>
+
+                        <div class="card-header">
+                         <h3 class="card-title">Professional Details</h3>
+
+                        </div>
+
+                 
+                   
+                   
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Company *</label>
+                                <input asp-for="CurrentCompany" class="form-control" type="text" placeholder="Enter Current Company">
+
+                            </div>
+                        </div>
+                   <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Designation *</label>
+                                <input asp-for="CurrentDesignation" class="form-control" type="text" placeholder="Enter Current Designation">
+
+                            </div>
+                        </div>
+                      <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Salary *</label>
+                                <input asp-for="CurrentSalary" class="form-control" type="text" placeholder="Enter CurrentSalary">
+
+                            </div>
+                        </div>
+                   <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Expected Salary *</label>
+                                <input asp-for="ExpectedSalary" class="form-control" type="text" placeholder="Enter Expected Salary">
+
+                            </div>
+                        </div>
+                    <div class="col-md-6">
+                            <div class="form-group">
+									<label class="form-label">Experiences in Year *</label>
+                                <select asp-for="ExperienceInYears" class="form-control custom-select select2" data-placeholder="Select Experience">
+										<option label="Select Experience"></option>
+										<option value="0">Fresher</option>
+										<option value="1">1 yr</option>
+										<option value="2">2 yrs</option>
+										<option value="3">3 yrs</option>
+										<option value="4">4 yrs</option>
+										<option value="5">5 yrs</option>
+										<option value="6">6 yrs</option>
+										<option value="7">7 yrs</option>
+										<option value="8">8 yrs</option>
+										<option value="9">9 yrs</option>
+										<option value="10">10 yrs</option>
+										<option value="11">10+ yrs</option>
+									</select>
+						    </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Experiences in Months *</label>
+                                <select asp-for="ExperienceInMonths" class="form-control custom-select select2" data-placeholder="Select Months">
+                                    <option label="Select Months"></option>
+                                    <option value="0">Fresher</option>
+                                    <option value="1">1 Month</option>
+                                    <option value="2">2 Months</option>
+                                    <option value="3">3 Months</option>
+                                    <option value="4">4 Months</option>
+                                    <option value="5">5 Months</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="7">7 Months</option>
+                                    <option value="8">8 Months</option>
+                                    <option value="9">9 Months</option>
+                                    <option value="10">10 Months</option>
+                                    <option value="11">10+ Months</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                   
+                </div>
+
+
+                    <div class="card-header">
+                        <h3 class="card-title">Skills</h3>
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-12">
+                            <label class="form-label">Skills *</label>
+                            <div class="form-group local-forms">
+                                <input asp-for="City" class="form-control" type="text" placeholder="Enter Skills">
+
+                            </div>
+                        </div>
+
+                       
+
+
+
+                    </div>
+
+
+
+                    <div class="card-header">
+                        <h3 class="card-title">Apply Now</h3>
+
+                    </div>
+                <div class="row mt-5">
+                        <div class="col-md-4 col-sm-4">
+                        <div class="form-group">
+                                <label class="form-label">Apply Date *</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="feather feather-calendar"></i>
+                                    </div>
+                                </div><input asp-for="ApplyDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="text">
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Apply for Position *</label>
+                                <input asp-for="ExpectedSalary" class="form-control" type="text" placeholder="Enter Expected Salary">
+
+                            </div>
+                    </div>
+                    
+                    <div class="col-md-4 col-sm-4">
+                            <label class="form-label">Upload Resume *</label>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" type="file">
+                            </div>
+                    </div>  
+                    <div class="col-md-12">
+                            <label class="form-label">Cover Latter *</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="CoverLetter" rows="3" class="form-control" placeholder="Cover Latter"></textarea>
+                            </div>
+                    </div>
+                   
+                    
+                </div>
+                
+                    <div class="card-header">
+                        <h3 class="card-title">Address Details</h3>
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <label class="form-label">City *</label>
+                            <div class="form-group local-forms">
+                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Permanant Address *</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="CoverLetter" rows="3" class="form-control" placeholder="Permanant Address"></textarea>
+                            </div>
+                        </div>
+
+                        
+
+                    </div>
+
+
+                    <div class="student-submit ">
+
+                        <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+                        <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
+                    </div>
+              
+            </div>
+              
+            }
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+        
+        
+          
+              
+        
+        
+        
+        })
+
+        
+
+       
+
+
+
+        function postdata() {
+            var status = true;
+
+
+            if ($("#Name").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Name"
+                });
+
+
+
+                $("#Name").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Name").css("border-color", "#ddd");
+            }
+
+            if ($("#Email").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Email"
+                });
+
+
+
+                $("#Email").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Email").css("border-color", "#ddd");
+            }
+
+            if ($("#Phone").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Phone"
+                });
+
+
+
+                $("#Phone").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Phone").css("border-color", "#ddd");
+            }
+
+            if ($("#Qualification").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Qualification"
+                });
+
+
+
+                $("#Qualification").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Qualification").css("border-color", "#ddd");
+            }
+            if ($("#CurrentCompany").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Company"
+                });
+
+
+
+                $("#CurrentCompany").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentCompany").css("border-color", "#ddd");
+            }
+
+            if ($("#CurrentDesignation").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Designation"
+                });
+
+
+
+                $("#CurrentDesignation").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentDesignation").css("border-color", "#ddd");
+            }
+
+            if ($("#CurrentSalary").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Salary"
+                });
+
+
+
+                $("#CurrentSalary").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentSalary").css("border-color", "#ddd");
+            }
+
+            if ($("#ExpectedSalary").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Expected Salary"
+                });
+
+
+
+                $("#ExpectedSalary").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExpectedSalary").css("border-color", "#ddd");
+            }
+
+            if ($("#ExperienceInYears").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Experience In Years"
+                });
+
+
+
+                $("#ExperienceInYears").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExperienceInYears").css("border-color", "#ddd");
+            }
+
+
+             if ($("#ExperienceInMonths").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Experience In Months"
+                });
+
+
+
+                $("#ExperienceInMonths").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExperienceInMonths").css("border-color", "#ddd");
+            }
+
+
+
+
+            var Data = { id: $("#CandidateId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Candidate/CandidateCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+
+
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        }
+
+
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+
+
+
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+
+
+
+                    }
+                    else if (
+
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CandidateCreateOrUpdate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CandidateId" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoverLetter" class="control-label"></label>
+                <input asp-for="CoverLetter" class="form-control" />
+                <span asp-validation-for="CoverLetter" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentDesignation" class="control-label"></label>
+                <input asp-for="CurrentDesignation" class="form-control" />
+                <span asp-validation-for="CurrentDesignation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentCompany" class="control-label"></label>
+                <input asp-for="CurrentCompany" class="form-control" />
+                <span asp-validation-for="CurrentCompany" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CurrentSalary" class="control-label"></label>
+                <input asp-for="CurrentSalary" class="form-control" />
+                <span asp-validation-for="CurrentSalary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpectedSalary" class="control-label"></label>
+                <input asp-for="ExpectedSalary" class="form-control" />
+                <span asp-validation-for="ExpectedSalary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReasonToLeft" class="control-label"></label>
+                <input asp-for="ReasonToLeft" class="form-control" />
+                <span asp-validation-for="ReasonToLeft" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dob" class="control-label"></label>
+                <input asp-for="Dob" class="form-control" />
+                <span asp-validation-for="Dob" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExperienceInYears" class="control-label"></label>
+                <input asp-for="ExperienceInYears" class="form-control" />
+                <span asp-validation-for="ExperienceInYears" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExperienceInMonths" class="control-label"></label>
+                <input asp-for="ExperienceInMonths" class="form-control" />
+                <span asp-validation-for="ExperienceInMonths" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Qualification" class="control-label"></label>
+                <input asp-for="Qualification" class="form-control" />
+                <span asp-validation-for="Qualification" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DesignationId" class="control-label"></label>
+                <input asp-for="DesignationId" class="form-control" />
+                <span asp-validation-for="DesignationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplyDate" class="control-label"></label>
+                <input asp-for="ApplyDate" class="form-control" />
+                <span asp-validation-for="ApplyDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusId" class="control-label"></label>
+                <input asp-for="StatusId" class="form-control" />
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AttachmentPath" class="control-label"></label>
+                <input asp-for="AttachmentPath" class="form-control" />
+                <span asp-validation-for="AttachmentPath" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Status" /> @Html.DisplayNameFor(model => model.Status)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsDeleted" class="control-label"></label>
+                <input asp-for="IsDeleted" class="form-control" />
+                <span asp-validation-for="IsDeleted" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedBy" class="control-label"></label>
+                <input asp-for="UpdatedBy" class="form-control" />
+                <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UpdatedOn" class="control-label"></label>
+                <input asp-for="UpdatedOn" class="form-control" />
+                <span asp-validation-for="UpdatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <input asp-for="CompanyId" class="form-control" />
+                <span asp-validation-for="CompanyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+*@

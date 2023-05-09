@@ -40,9 +40,11 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            var CompanyId = userObject.CompanyId;
 
 
-            HttpResponseMessage message = await _client.GetAsync("api/Candidate/GetCandidateInfos");
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -99,9 +101,9 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            //Get Instutute ID through Sessions
+            //Get Company ID through Sessions
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var InstituteId = userObject.CompanyId;
+            ViewBag.CompanyId = userObject.CompanyId;
 
             if (Token != null) { 
 
@@ -163,8 +165,8 @@ namespace HRHUBWEB.Controllers
                 ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
 
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+                ObjCandidate.CompanyId = userObject.CompanyId;
                 ObjCandidate.CreatedBy = userObject.UserId;
-                //ObjCandidate.InstituteId = userObject.InstituteId;
                 HttpResponseMessage message = await _client.PostAsJsonAsync("api/Candidate/CandidateAddOrCreate", ObjCandidate);
 
                 if (message.IsSuccessStatusCode)
@@ -254,8 +256,10 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-          
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckData{id}/{email}");
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            var CompanyId = userObject.CompanyId;
+
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckData{id}/{email}/{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
