@@ -22,7 +22,7 @@ namespace HRHUBWEB.Controllers
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
         }
-
+        
         #region DesignationInfo
         [CustomAuthorization]
         public async Task<IActionResult> DesignationList(string data = "")
@@ -45,7 +45,7 @@ namespace HRHUBWEB.Controllers
             {
 
 
-                HttpResponseMessage message = await _client.GetAsync("api/Designation/GetDesignationInfos");
+                HttpResponseMessage message = await _client.GetAsync("api/Configuration/GetDesignationInfos");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
@@ -130,7 +130,7 @@ namespace HRHUBWEB.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> DesignationCreateOrUpdate(IFormCollection my,Designation ObjDesignation)
+        public async Task<IActionResult> DesignationCreateOrUpdate(Designation ObjDesignation)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace HRHUBWEB.Controllers
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 ObjDesignation.CreatedBy = userObject.UserId;
                 //ObjDesignation.CompanyId = userObject.;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Designation/DesignationAddOrUpdate", ObjDesignation);
+                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/DesignationAddOrUpdate", ObjDesignation);
 
                 if (message.IsSuccessStatusCode)
                 {

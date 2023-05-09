@@ -37,7 +37,7 @@ public partial class Company
 
     public int? MarkHalfDayAfterLateMinutes { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

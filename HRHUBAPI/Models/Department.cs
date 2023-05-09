@@ -13,7 +13,7 @@ public partial class Department
 
     public string? LogoAttachment { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

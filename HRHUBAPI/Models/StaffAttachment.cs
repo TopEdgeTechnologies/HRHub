@@ -15,7 +15,7 @@ public partial class StaffAttachment
 
     public string? Title { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

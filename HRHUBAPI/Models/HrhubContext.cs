@@ -124,9 +124,7 @@ public partial class HrhubContext : DbContext
         {
             entity.ToTable("Company");
 
-            entity.Property(e => e.CompanyId)
-                .ValueGeneratedNever()
-                .HasColumnName("CompanyID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.Address).IsUnicode(false);
             entity.Property(e => e.CompanyName).IsUnicode(false);
             entity.Property(e => e.ContactPerson).IsUnicode(false);

@@ -47,7 +47,7 @@ public partial class Candidate
 
     public string? AttachmentPath { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 
