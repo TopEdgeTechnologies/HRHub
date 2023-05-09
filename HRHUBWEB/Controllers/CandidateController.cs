@@ -27,7 +27,7 @@ namespace HRHUBWEB.Controllers
         [CustomAuthorization]
         public async Task<IActionResult> CandidateList(string data = "")
         {
-
+            
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);

@@ -63155,7 +63155,7 @@ select [aria-selected=true]:focus {
 }
 
 .slide-menu a:before {
-    content: "\e0b1";
+    /*content: "\e0b1";*/
     margin-right: 16px;
     font-size: 11px;
     position: relative;
