@@ -79,7 +79,7 @@
 
                             <div class="form-group">
                                 <div class="custom-controls-stacked d-md-flex mt-4">
-                                    <label class="form-label mt-1 me-3">Gender: </label>
+                                   @* <label class="form-label mt-1 me-3">Gender: </label>*@
                                     <div class="form-check form-check-inline">
                                         <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_male" value="Male" checked>
                                         <label class="form-check-label" for="gender_male">Male</label>
@@ -88,12 +88,12 @@
                                         <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_female" value="Female">
                                         <label class="form-check-label" for="gender_female">Female</label>
                                     </div>
-                                </div>
-
-
-
+                                </div>                                
 
                             </div>
+                          
+
+
                         </div>
 
                         <div class="card-header">
@@ -352,6 +352,17 @@
                                 <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
                             </div>
                         </div>
+
+                        <div class="col-md-4 col-sm-4">
+                           
+                            <span class="avatar avatar-xxl brround" style="background-image: url(~/assets/images/users/8.jpg)"></span>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidatePicture" name="CandidatePicture" type="file">
+                            </div>
+                        </div>
+
+
+                         
 
 
 

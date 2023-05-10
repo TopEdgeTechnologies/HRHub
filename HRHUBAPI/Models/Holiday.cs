@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class LeaveType
+public partial class Holiday
 {
-    public int LeaveTypeId { get; set; }
+    public int HolidayId { get; set; }
 
-    public int? CompanyId { get; set; }
+    public DateTime? HolidayDate { get; set; }
+
+    public string? DayName { get; set; }
 
     public string? Title { get; set; }
-
-    public int? NoOfLeaves { get; set; }
-
-    public bool IsNonPaid { get; set; }
 
     public bool Status { get; set; }
 
@@ -26,4 +24,6 @@ public partial class LeaveType
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public int? CompanyId { get; set; }
 }

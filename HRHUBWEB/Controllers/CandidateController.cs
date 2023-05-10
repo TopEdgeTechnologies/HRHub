@@ -162,8 +162,10 @@ namespace HRHUBWEB.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
                 var CandidateResume = my.Files.GetFile("CandidateResume");
+                var CandidatePicture = my.Files.GetFile("CandidatePicture");
 
                 ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
+                ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
 
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 ObjCandidate.CompanyId = userObject.CompanyId;
