@@ -1,5 +1,6 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBAPI.Web.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,12 +32,12 @@ namespace SchoolManagementSystem.API.Controllers
             if (Obj == null)
                 return BadRequest();
 
-            var user = await new User().Login(Obj, _context);
+            var user = await Obj.Login(Obj, _context);
+
+
             if (user != null)
             {
-               
-                 
-              var  token=  _jwtToken.GenerateJwtToken(user.UserId.ToString(), user.UserName, _configuration.GetSection("Jwt").GetValue<string>("Key"), _configuration["Jwt:Issuer"], _configuration["Jwt:ValidAudience"]);
+                var token =  _jwtToken.GenerateJwtToken(user.UserId.ToString(), user.UserName, _configuration.GetSection("Jwt").GetValue<string>("Key"), _configuration["Jwt:Issuer"], _configuration["Jwt:ValidAudience"]);
 
                 return Ok(
                    new
@@ -44,7 +45,8 @@ namespace SchoolManagementSystem.API.Controllers
                        Success = true,
                        Message = "Login Successfully!",
                        Data= user,
-                       Token= token
+                       Token= token,
+					
                    }
 
 
@@ -126,7 +128,41 @@ namespace SchoolManagementSystem.API.Controllers
 
         }
 
+        [Authorize]
+
+		[HttpPost("UserChangePassword")]
+		public async Task<ActionResult<JsonObject>> UserChangePassword(User obj  )
+		{
 
 
-    }
+            var result = await obj.ChangePassword(obj, _context);
+			if( result!=null)
+			{
+				return Ok(new
+				{
+
+					Success = true,
+					Message = "Password Updated Successfully"
+
+
+				});
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					Message = "Fail"
+
+
+				});
+			}
+
+		}
+
+
+
+	}
 }

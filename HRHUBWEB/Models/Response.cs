@@ -10,6 +10,7 @@ namespace HRHUBWEB.Models
         public string Token { get; set; }
 
 
+
     }
 
 

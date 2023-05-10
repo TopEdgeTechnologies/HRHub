@@ -7,6 +7,8 @@ public partial class GluserGroup
 {
     public int GroupId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public string? GroupTitle { get; set; }
 
     public string? Description { get; set; }
