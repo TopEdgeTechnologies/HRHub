@@ -85,7 +85,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateId{id}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{id}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -104,39 +104,40 @@ namespace HRHUBWEB.Controllers
             //Get Company ID through Sessions
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
             ViewBag.CompanyId = userObject.CompanyId;
+            var CompanyId = ViewBag.CompanyId;
+            var CandidateId = id;
+            if (Token != null) {
 
-            if (Token != null) { 
+
+                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{CompanyId}");
+                if (message.IsSuccessStatusCode)
+                {
+                    var result = message.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
+
+                }
 
 
-            //HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetSessions{InstituteId}");
-            //if (message.IsSuccessStatusCode)
-            //{
-            //    var result = message.Content.ReadAsStringAsync().Result;
-            //    ViewBag.CandidateSession = JsonConvert.DeserializeObject<List<Session>>(result);
+                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
+                if (message1.IsSuccessStatusCode)
+                {
+                    var result = message1.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
 
-            //}
-            
+                }
 
-            //HttpResponseMessage message1 = await _client.GetAsync($"api/Configuration/GetGroupInfos{InstituteId}");
-            //if (message1.IsSuccessStatusCode)
-            //{
-            //    var result = message1.Content.ReadAsStringAsync().Result;
-            //    ViewBag.CandidateGroup = JsonConvert.DeserializeObject<List<GroupInfo>>(result);
 
-            //}
-           
-            
 
-            //HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetClassInfos{InstituteId}");
-            //if (message1.IsSuccessStatusCode)
-            //{
-            //    var result = message3.Content.ReadAsStringAsync().Result;
-            //    ViewBag.ClassList = JsonConvert.DeserializeObject<List<ClassInfo>>(result);
+                //HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetClassInfos{InstituteId}");
+                //if (message1.IsSuccessStatusCode)
+                //{
+                //    var result = message3.Content.ReadAsStringAsync().Result;
+                //    ViewBag.ClassList = JsonConvert.DeserializeObject<List<ClassInfo>>(result);
 
-            //}
-           
+                //}
 
-            if (id == 0)
+
+                if (id == 0)
             {
                 Candidate Info = new Candidate();
                 
@@ -153,7 +154,7 @@ namespace HRHUBWEB.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CandidateCreateOrUpdate(FormCollection my,Candidate ObjCandidate)
+        public async Task<IActionResult> CandidateCreateOrUpdate(IFormCollection my,Candidate ObjCandidate)
         {
             try
             {
@@ -259,7 +260,7 @@ namespace HRHUBWEB.Controllers
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
             var CompanyId = userObject.CompanyId;
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckData{id}/{email}/{CompanyId}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckDataInfo{id}/{email}/{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -269,7 +270,15 @@ namespace HRHUBWEB.Controllers
 
             else
             {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
+                return Json(new 
+
+                {
+                    Success = false,
+                    Message = "Error occur"
+
+                }
+                );
+                ///return RedirectToAction("Loginpage", "User",  new {id=2 });
             }
         }
 

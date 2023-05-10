@@ -13,6 +13,8 @@ public partial class LeaveType
 
     public int? NoOfLeaves { get; set; }
 
+    public bool? IsNonPaid { get; set; }
+
     public bool? Status { get; set; }
 
     public bool? IsDeleted { get; set; }

@@ -15,8 +15,6 @@ public partial class User
 
     public int? StaffId { get; set; }
 
-    public int? StudentId { get; set; }
-
     public bool IsActive { get; set; }
 
     public int? CreateBy { get; set; }
