@@ -27,9 +27,9 @@ public partial class Candidate
 
     public DateTime? Dob { get; set; }
 
-    public short? ExperienceInYears { get; set; }
+    public int? ExperienceInYears { get; set; }
 
-    public short? ExperienceInMonths { get; set; }
+    public int? ExperienceInMonths { get; set; }
 
     public string Gender { get; set; } = null!;
 
@@ -47,7 +47,7 @@ public partial class Candidate
 
     public string? AttachmentPath { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

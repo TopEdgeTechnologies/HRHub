@@ -57,7 +57,7 @@ public partial class Staff
 
     public int? TaxPayerNumber { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; }
 
     public string? JobDescription { get; set; }
 
