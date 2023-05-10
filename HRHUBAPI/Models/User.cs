@@ -28,4 +28,6 @@ public partial class User
     public int? CompanyId { get; set; }
 
     public int? GroupId { get; set; }
+
+    public string? UserImage { get; set; }
 }

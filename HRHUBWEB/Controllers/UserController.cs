@@ -4,8 +4,9 @@ using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-
+using System.Net.Http.Headers;
 
 namespace HRHUBWEB.Controllers
 {
@@ -37,7 +38,7 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpPost]
-      [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Loginpage(User user)
         {
             try
@@ -51,22 +52,19 @@ namespace HRHUBWEB.Controllers
                     var body = message.Content.ReadAsStringAsync();
                     
                     var model = JsonConvert.DeserializeObject<Response>(body.Result);
-                  
-                    if (model.Success)
+					if (model.Success)
                     {
 
                         if (model.Message.Contains("Successfully"))
                         {
-                            HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
+
+							//Company objco = new Company();
+							//var CompanymodelResponse = JsonConvert.DeserializeObject<dynamic>(body.Result);
+							//objco.CompanyName = CompanymodelResponse.companyData["companyName"];
+							HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
                             HttpContext.Session.SetObjectAsJson("AuthenticatedToken", model.Token);
-
                             return RedirectToAction("Index", "Home");
-                            
-
                         }
-
-
-
 
                     }
                     else
@@ -87,13 +85,104 @@ namespace HRHUBWEB.Controllers
                 return RedirectToAction("Loginpage", "User", new { id = 1 });
             }
         }
-        #endregion
+
+
+		[HttpPost]
+		public async Task<IActionResult> passwordchange(string Password ,string OldPasword) 
+		{
+			try
+			{
+
+
+				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+				var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+				_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+				if (string.IsNullOrWhiteSpace( OldPasword ))
+				{
+					return Json(new
+					{
+
+						Message = "Please Enter Current Password !",
+						Success = false
+					});
+				}
+
+
+				if (string.IsNullOrWhiteSpace(Password))
+				{
+					return Json(new
+					{
+
+						Message = "Please Enter New Password !",
+						Success = false
+					});
+				}
+
+
+				if (OldPasword != userObject.Password)
+				{
+					return Json(new
+					{
+
+						Message = "Fail due old password incorrect",
+						Success = false
+					});
+				}
+
+				userObject.Password = Password;
+				userObject.CreateBy = userObject.UserId;
+                if (Token != null)
+                {
+                    HttpResponseMessage message = await _client.PostAsJsonAsync("api/User/UserChangePassword", userObject);
+
+                    if (message.IsSuccessStatusCode)
+                    {
+                        var body = message.Content.ReadAsStringAsync();
+
+                        var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+                        return Json(model);
+
+
+                    }else
+                    {
+
+						return Json( new { 
+                        
+                        Message="Fail ",
+					    Success=false
+						}  );
+
+					}
+                }
+                else
+                {
+					return RedirectToAction("Loginpage", "User", new { id = 2 });
+				} 
+				
+			}
+			catch (Exception)
+			{
+
+				return Json(new
+				{
+
+					Message = "Fail",
+					Success = false
+
+
+				});
+			}
+		}
+		#endregion
 
 
 
-        #region Register
+		#region Register
 
-        [HttpGet]
+		[HttpGet]
         public async Task<IActionResult> Register()
         {
            
