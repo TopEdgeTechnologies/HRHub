@@ -9,5 +9,8 @@ namespace HRHUBWEB.Models
         public string? ErrorMessage { get; set; }
         public string? StackTrace { get; set; }
         public string? InnerException { get; set; }
-    }
+		public string? UserID { get; set; }
+
+
+	}
 }
