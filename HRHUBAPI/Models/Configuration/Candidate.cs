@@ -123,6 +123,7 @@ namespace HRHUBAPI.Models
                         checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;
                         checkCandidateInfo.StatusId = CandidateInfo.StatusId;
                         checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;
+                        checkCandidateInfo.Picture = CandidateInfo.Picture;
                         checkCandidateInfo.UpdatedOn = DateTime.Now;
                         checkCandidateInfo.Status = CandidateInfo.Status;
                         checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
@@ -233,7 +234,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteCandidateInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteCandidate(int id, int UserId, HrhubContext _context)
         {
             try
             {
@@ -244,7 +245,8 @@ namespace HRHUBAPI.Models
                 {
                     CandidateInfo.IsDeleted= true;   
                     CandidateInfo.UpdatedOn= DateTime.Now;
-                    check = true;
+                    CandidateInfo.UpdatedBy = UserId;
+                   
 
                 }
                 await _context.SaveChangesAsync();
@@ -292,6 +294,35 @@ namespace HRHUBAPI.Models
                 throw;
             }
         }
+
+
+
+
+        // load data Candidateskills in table on Update mode
+        public async Task<List<StatusInfo>> GetCandidateStatus(HrhubContext _context)
+        {
+            try
+            {
+                var list = await _context.StatusInfos.Where(x => x.IsDeleted == false).ToListAsync();
+
+
+                return list;
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
 
 
         // load data Candidateskills in table on Update mode

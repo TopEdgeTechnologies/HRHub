@@ -7,17 +7,9 @@
 <!--Page header-->
 <div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
-        <div class="page-title">User Profile</div>
+        <div class="page-title">Candidate Profile</div>
     </div>
-    <div class="page-rightheader ms-md-auto">
-        <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-            <div class="btn-list">
-                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-                <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-            </div>
-        </div>
-    </div>
+   
 </div>
 <!--End Page header-->
 <!-- Row -->
@@ -29,12 +21,12 @@
                     <div class="col-lg-8">
                         <div class="profile-pic mb-0">
                             <div class="d-md-flex">
-                                <img alt="user" class="avatar avatar-xxl brround" src="../assets/images/users/1.jpg">
+                                <img alt="user" class="avatar avatar-xxl brround" src="@Url.Content(Model.Picture)">
                                 <div class="ms-4">
                                     <a class="text-dark" href="javascript:void(0);">
-                                        <h4 class="mt-3 mb-1 font-weight-semibold">Faith Harris</h4>
-                                    </a> <span class="text-muted">PHP Developer</span><br>
-                                    <small class="text-muted">3 Yrs Experience</small>
+                                        <h4 class="mt-3 mb-1 font-weight-semibold">@Model.Name</h4>
+                                    </a> <span class="text-muted">@Model.CurrentDesignation</span><br>
+                                    <small class="text-muted">@Model.ExperienceInYears Yrs Experience</small>
                                 </div>
                             </div>
                         </div>
@@ -48,72 +40,60 @@
                     <table class="table row table-borderless w-100 m-0 text-nowrap">
                         <tbody class="col-lg-12 col-xl-6 p-0">
                             <tr>
-                                <td><span class="font-weight-semibold">Full Name :</span> Faith Harris</td>
+                                <td><span class="font-weight-semibold">Full Name :</span> @Model.Name</td>
+                            </tr>
+                           
+                            <tr>
+                                <td><span class="font-weight-semibold">Current Designation :</span> @Model.CurrentDesignation</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Resume Title :</span> Searching For PHP Developer Position</td>
+                                <td><span class="font-weight-semibold">Annual Salary :</span> @Model.CurrentSalary</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Current Designation :</span> PHP Developer</td>
+                                <td><span class="font-weight-semibold">Current Company :</span> @Model.CurrentCompany</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Annual Salary :</span> $5.7Lacs</td>
+                                <td><span class="font-weight-semibold">Experience :</span> @Model.ExperienceInYears Yrs</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Current Company :</span> Info Tech Pvt Ltd</td>
+                                <td><span class="font-weight-semibold">Location :</span> @Model.City</td>
                             </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Experience :</span> 3 Yrs</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Location :</span> USA</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Preferred Location :</span> USA</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Qualification :</span> B.Tech(CSE)</td>
-                            </tr>
+                           
+                           
                         </tbody>
                         <tbody class="col-lg-12 col-xl-6 p-0  border-top-0">
                             <tr>
-                                <td><span class="font-weight-semibold">Languages :</span> English, German, Spanish.</td>
+                                <td><span class="font-weight-semibold">Qualification :</span>@Model.Qualification</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Email :</span> faith@gmail.com</td>
+                                <td><span class="font-weight-semibold">Email :</span> @Model.Email</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Phone :</span> +125 254 3562</td>
+                                <td><span class="font-weight-semibold">Phone :</span> @Model.Phone</td>
+                            </tr>
+                           
+                            <tr>
+                                <td><span class="font-weight-semibold">Date Of Birth :</span> @Model.Dob</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Industry :</span>  It Software/ Developer</td>
+                                <td><span class="font-weight-semibold">Gender :</span> @Model.Gender</td>
                             </tr>
+                           
                             <tr>
-                                <td><span class="font-weight-semibold">Date Of Birth :</span> 17 December 1990</td>
+                                <td><span class="font-weight-semibold">Permanent Address :</span> @Model.Address</td>
                             </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Gender :</span> Female</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Marital Status :</span> Unmarried</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Permanent Address :</span> USA</td>
-                            </tr>
-                            <tr>
-                                <td><span class="font-weight-semibold">Zip code :</span> 625417</td>
-                            </tr>
+                            
                         </tbody>
-                        <tbody class="p-0">
+                        @*<tbody class="p-0">
                             <tr>
                                 <td><span class="font-weight-semibold">Key Skills :</span> Effective leadership and management, Good communication, Planning and research skills, Resilience, Self-management, Teamwork and interpersonal skills, Relevant work experience</td>
                             </tr>
-                        </tbody>
+                        </tbody>*@
                     </table>
                 </div>
                 <h5 class="mb-4 mt-5 font-weight-semibold">Employment Details</h5>
                 <div>
-                    <i class="fa fa-caret-right me-2"></i> Currently Working at <span class="font-weight-semibold">Info Tech Pvt Ltd</span>
+                    <i class="fa fa-caret-right me-2"></i> Currently Working at <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
                 <div>
                     <i class="fa fa-caret-right me-2"></i> 3 Yrs Of Working Experience in <span class="font-weight-semibold">Info Tech Pvt Ltd</span>
@@ -123,19 +103,18 @@
                     <table class="table table-bordered border-top mb-0">
                         <thead>
                             <tr>
-                                <th>Skill Name</th>
-                                <th>Version</th>
-                                <th>Last Used</th>
-                                <th>Experience</th>
+                                <th>Skill Name</th>                           
+                               
+                                <th>Expert</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var item in ViewBag.CandidateSkill){
                             <tr>
-                                <th scope="row">PHP Developer</th>
-                                <td></td>
-                                <td></td>
-                                <td>3 yrs</td>
+                               <th scope="row">@item.Title</th>
+                               <th scope="row">@item.SkillStatus</th>
                             </tr>
+                            }   
                         </tbody>
                     </table>
                 </div>
@@ -143,8 +122,8 @@
             <div class="card-footer">
                 <div class="btn-list">
                     <a class="btn btn-primary" href="javascript:void(0);"><i class="fa fa-download"></i> Download Resume</a>
-                    <a class="btn btn-warning" href="javascript:void(0);"><i class="si si-share me-1"></i> Share Profile</a>
-                    <a class="btn btn-success" href="javascript:void(0);"><i class="si si-call-in me-1"></i>Contact</a>
+                    @*<a class="btn btn-warning" type="hidden" href="javascript:void(0);"><i class="si si-share me-1"></i> Share Profile</a>
+                    <a class="btn btn-success" href="javascript:void(0);"><i class="si si-call-in me-1"></i>Contact</a>*@
                 </div>
             </div>
         </div>
@@ -163,180 +142,3 @@
 
 
 
-
-@*
-<h1>CandidateDetails</h1>
-
-<div>
-    <h4>Candidate</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CoverLetter)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CoverLetter)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrentDesignation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CurrentDesignation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrentCompany)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CurrentCompany)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CurrentSalary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CurrentSalary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExpectedSalary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExpectedSalary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReasonToLeft)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReasonToLeft)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Dob)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Dob)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExperienceInYears)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExperienceInYears)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExperienceInMonths)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExperienceInMonths)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Qualification)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Qualification)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DesignationId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DesignationId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ApplyDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplyDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AttachmentPath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AttachmentPath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompanyId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompanyId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CandidateId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-*@

@@ -133,6 +133,7 @@ namespace HRHUBAPI.Models
         {
             try
             {
+
                 if (DesignationInfoId > 0)
                 {
                     var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.CompanyId==CompanyId && x.DesignationId != DesignationInfoId && x.IsDeleted==false);

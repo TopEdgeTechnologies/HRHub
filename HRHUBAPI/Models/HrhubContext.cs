@@ -262,24 +262,13 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UserGroupId).HasColumnName("UserGroupID");
         });
 
-        modelBuilder.Entity<Holiday>(entity =>
-        {
-            entity.ToTable("Holidays", "HR");
-
-            entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DayName).IsUnicode(false);
-            entity.Property(e => e.HolidayDate).HasColumnType("date");
-            entity.Property(e => e.Title).IsUnicode(false);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
         modelBuilder.Entity<Leave>(entity =>
         {
             entity.ToTable("Leave", "HR");
 
-            entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
+            entity.Property(e => e.LeaveId)
+                .ValueGeneratedNever()
+                .HasColumnName("LeaveID");
             entity.Property(e => e.ApplicationHtml)
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
@@ -298,9 +287,10 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LeaveApproval>(entity =>
         {
-            entity.ToTable("LeaveApproval", "HR");
+            entity
+                .HasNoKey()
+                .ToTable("LeaveApproval", "HR");
 
-            entity.Property(e => e.LeaveApprovalId).HasColumnName("LeaveApprovalID");
             entity.Property(e => e.ApprovalByStaffId).HasColumnName("ApprovalBy_StaffID");
             entity.Property(e => e.ApprovalDate)
                 .HasColumnType("date")
@@ -309,32 +299,19 @@ public partial class HrhubContext : DbContext
                 .HasColumnType("date")
                 .HasColumnName("Forward_Date");
             entity.Property(e => e.ForwardedByStaffId).HasColumnName("ForwardedBy_StaffId");
+            entity.Property(e => e.LeaveApprovalId).HasColumnName("LeaveApprovalID");
             entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
             entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
             entity.Property(e => e.Remarks).IsUnicode(false);
-        });
-
-        modelBuilder.Entity<LeaveApprovalSetting>(entity =>
-        {
-            entity.HasKey(e => e.SettingId);
-
-            entity.ToTable("LeaveApprovalSetting", "HR");
-
-            entity.Property(e => e.SettingId)
-                .ValueGeneratedNever()
-                .HasColumnName("SettingID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.FinalApprovalByStaffId).HasColumnName("FinalApprovalBy_StaffID");
-            entity.Property(e => e.LeaveApprovalLeaveStatusId).HasColumnName("LeaveApproval_LeaveStatusID");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<LeaveStatus>(entity =>
         {
             entity.ToTable("LeaveStatus", "HR");
 
-            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
+            entity.Property(e => e.LeaveStatusId)
+                .ValueGeneratedNever()
+                .HasColumnName("LeaveStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);

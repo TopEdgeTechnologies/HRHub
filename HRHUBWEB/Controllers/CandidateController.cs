@@ -42,18 +42,35 @@ namespace HRHUBWEB.Controllers
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
             var CompanyId = userObject.CompanyId;
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
-            if (message.IsSuccessStatusCode)
+            if (Token != null)
             {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+
+                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
+                if (message.IsSuccessStatusCode)
+                {
+                    var result = message.Content.ReadAsStringAsync().Result;
+                    ObjCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+
+                }
+
+
+
+                HttpResponseMessage message1 = await _client.GetAsync("api/Candidate/GetCandidateStatusInfos");
+                if (message1.IsSuccessStatusCode)
+                {
+                    var result = message1.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateStatus = JsonConvert.DeserializeObject<List<StatusInfo>>(result);
+
+                }
+
+
+
+
 
             }
             else
             {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
             }
 
 
@@ -64,9 +81,22 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
            
-            if(Token != null) { 
+            if(Token != null) {
 
-            Candidate ObjCandidate = await GetCandidatebyID(id);
+                var CandidateId = id;
+                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
+                if (message1.IsSuccessStatusCode)
+                {
+                    var result = message1.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
+
+                }
+
+
+
+
+
+                Candidate ObjCandidate = await GetCandidatebyID(id);
 
             return View(ObjCandidate);
             }
@@ -162,8 +192,10 @@ namespace HRHUBWEB.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
                 var CandidateResume = my.Files.GetFile("CandidateResume");
+                var CandidatePicture = my.Files.GetFile("CandidatePicture");
 
                 ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
+                ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
 
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 ObjCandidate.CompanyId = userObject.CompanyId;
@@ -218,7 +250,11 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}");
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            Candidate candidateObj= new Candidate();            
+            candidateObj.CreatedBy = userObject.UserId;
+            var UserId = userObject.UserId;
+            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}/{UserId}");
             if (message.IsSuccessStatusCode)
             {
                 var body = message.Content.ReadAsStringAsync();
