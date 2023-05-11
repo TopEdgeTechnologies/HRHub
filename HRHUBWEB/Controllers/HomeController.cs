@@ -17,7 +17,7 @@ namespace HRHUBWEB.Controllers
         public IActionResult Index()
         {
 
-            Convert.ToBoolean("sdasd");
+      
             return View();
         }
 
