@@ -1,10 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRHUBAPI.Models
 {
     public partial class Holiday
     {
-
+        [NotMapped]
+        public IEnumerable<Holiday>? ListOfHolidays { get; set; }
+        [NotMapped]
+        public int TransFlag { get; set; }
 
         public async Task<List<Holiday>> GetHolidays(int CompanyID, HrhubContext _context)
         {
@@ -66,7 +70,7 @@ namespace HRHUBAPI.Models
                     objHoliday.Status = obj.Status;
                     objHoliday.UpdatedOn = DateTime.Now;
                     objHoliday.UpdatedBy = obj.CreatedBy;
-
+                    objHoliday.TransFlag = 2; //  Record Updated 
                     await _context.SaveChangesAsync();
                     return objHoliday;
                 }
@@ -75,7 +79,7 @@ namespace HRHUBAPI.Models
 
                     obj.CreatedOn = DateTime.Now;
                     obj.IsDeleted = false;
-
+                    obj.TransFlag = 1; // New Record Inserted
 
                     _context.Holidays.Add(obj);
 
@@ -94,18 +98,18 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteHoliday(Holiday obj, HrhubContext _context)
+        public async Task<bool> DeleteHoliday(int id,int UserID, HrhubContext _context)
         {
             try
             {
                 bool DeleteSuccessfull = false;
-                var objHoliday = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayId == obj.HolidayId && x.IsDeleted == false);
+                var objHoliday = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayId == id && x.IsDeleted == false);
 
                 if (objHoliday != null)
                 {
                     objHoliday.IsDeleted = true;
                     objHoliday.UpdatedOn = DateTime.Now;
-                    objHoliday.UpdatedBy = obj.CreatedBy;
+                    objHoliday.UpdatedBy = UserID;
                     DeleteSuccessfull = true;
                     
 
@@ -124,14 +128,14 @@ namespace HRHUBAPI.Models
 
 
 
-        public async Task<bool> AlredyExist(int HolidayID, string title, int CompanyID, HrhubContext _context)
+        public async Task<bool> AlredyExist(int HolidayID, DateTime Daydate, int CompanyID, HrhubContext _context)
         {
             try
             {
                 bool returnResult = false;
                 if (HolidayID > 0)
                 {
-                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.Title == title && x.HolidayId != HolidayID && x.CompanyId == CompanyID && x.IsDeleted == false);
+                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate == Daydate && x.HolidayId != HolidayID && x.CompanyId == CompanyID && x.IsDeleted == false);
                     if (result != null)
                     {
                         returnResult = true;
@@ -139,7 +143,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.Title == title && x.CompanyId == CompanyID && x.IsDeleted == false);
+                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate == Daydate && x.CompanyId == CompanyID && x.IsDeleted == false);
                     if (result != null)
                     {
                         returnResult = true;

@@ -29,7 +29,7 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<List<Designation>>> GetDesignationInfos(int CompanyId)
         {
 
-            return await new Designation().GetDesignation(CompanyId,_context);
+            return await new Designation().GetDesignation(CompanyId, _context);
         }
 
 
@@ -89,9 +89,9 @@ namespace HRHUBAPI.Controllers
 
 
         [HttpGet("DesignationCheckData{id}/{title}/{CompanyId}")]
-        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title,int CompanyId)
+        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title, int CompanyId)
         {
-            if (await new Designation().AlreadyExist(id, title,CompanyId, _context))
+            if (await new Designation().AlreadyExist(id, title, CompanyId, _context))
             {
                 return Ok(new
                 {
@@ -149,7 +149,7 @@ namespace HRHUBAPI.Controllers
         [HttpPost("PostDepartment")]
         public async Task<ActionResult<Department>> PostDepartment(Department department)
         {
-           
+
             var dbResult = await new Department().PostDepartment(department, _context);
             if (dbResult != null && dbResult.TransFlag == 2)
             {
@@ -170,7 +170,7 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("DeleteDepartment{id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteDepartment(int id,int UserId)
+        public async Task<ActionResult<bool>> DeleteDepartment(int id, int UserId)
         {
             if (id > 0)
             {
@@ -209,6 +209,9 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
+
+        #endregion
+
 
         #region LeaveTypeInfo
 
@@ -314,6 +317,101 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
+
+
+        #region Holiday
+        [HttpGet("GetHolidaysByCompanyID{CompanyID}")]
+        public async Task<ActionResult<List<Holiday>>> GetHolidays(int CompanyID)
+        {
+            return await new Holiday().GetHolidays(CompanyID, _context);
+        }
+
+
+        [HttpGet("GetHolidayByID{id}")]
+        public async Task<ActionResult<List<Holiday>>> GetHolidayByID(int id)
+        {
+            var dbresult = await new Holiday().GetHOlidayByID(id, _context);
+            if (dbresult != null)
+            {
+                return Ok(dbresult);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPost("POstHoliday")]
+        public async Task<ActionResult<Holiday>> PostHoliday(Holiday objHoliday)
+        {
+
+            Holiday obj = new Holiday();
+            var dbResult = await obj.PostHoliday(objHoliday, _context);
+            if (dbResult != null && dbResult.TransFlag == 2)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    MessageProcessingHandler = "Data"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+
+
+        }
+
+
+        [HttpGet("DeleteHoliday{id}/{UserID}")]
+        public async Task<ActionResult<bool>> DeleteHoliday(int id, int UserID)
+        {
+            if (id > 0)
+            {
+                var dbResult = await new Holiday().DeleteHoliday(id, UserID, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+
+        }
+
+        [HttpGet("HolidayAlreadyExistCheck{COmpanyID}/{HolidayID}/{DayDate}")]
+        public async Task<ActionResult<bool>> HolidayAlreadyExistCheck(int CompanyID, int ID, DateTime DayDate)
+        {
+            var dbResult = await new Holiday().AlredyExist(ID, DayDate, CompanyID,_context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+
+        #endregion
+
         private string uploadImage(string name, IFormFile file, string root)
         {
 
@@ -358,7 +456,6 @@ namespace HRHUBAPI.Controllers
 
 
 
-        #endregion
 
     }
 }

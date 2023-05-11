@@ -694,6 +694,58 @@ namespace HRHUBWEB.Controllers
         #endregion
 
 
+
+
+
+
+
+
+
+
+        #region HOliday
+        [CustomAuthorization]
+        public async Task<IActionResult> Holiday(string data = "")
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+
+
+            Holiday objHoliday = new Holiday();
+
+            #region Token Authentication & User Data
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            #endregion
+
+            objHoliday.CompanyId = userObject.CompanyId;
+
+
+            if (Token != null)
+            { 
+                HttpResponseMessage response = await  _client.GetAsync($"api/Configuration/GetHolidaysByCompanyID{objHoliday.CompanyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    objHoliday.ListOfHolidays = JsonConvert.DeserializeObject<List<Holiday>>(content);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+            return View(Holiday);
+
+        }
+
+        #endregion
+
+
+
         // Code for save images into database
 
         private string uploadImage(string name, IFormFile file, string root)
