@@ -75,17 +75,21 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
                   
                     await _context.SaveChangesAsync();
+					return checkDesignationInfo;
 
-                }
+				}
                 else
                 {
                     ObjDesignationInfo.CreatedOn = DateTime.Now;
                     ObjDesignationInfo.IsDeleted=false;
                     _context.Designations.Add(ObjDesignationInfo);
-                }
-                await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync();
 
-                return checkDesignationInfo;
+					return ObjDesignationInfo;
+
+				}
+
+           
 
 
             }
