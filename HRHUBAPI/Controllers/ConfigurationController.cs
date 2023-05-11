@@ -169,12 +169,13 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        [HttpGet("DeleteDepartment{id}")]
-        public async Task<ActionResult<bool>> DeleteDepartment(int id)
+        [HttpGet("DeleteDepartment{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteDepartment(int id,int UserId)
         {
             if (id > 0)
             {
-                var dbResult = await new Department().DeleteDepartment(id, _context);
+
+                var dbResult = await new Department().DeleteDepartment(id, UserId, _context);
                 if (dbResult == true)
                 {
                     return Ok(new

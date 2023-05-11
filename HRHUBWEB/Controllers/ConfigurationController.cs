@@ -274,6 +274,178 @@ namespace HRHUBWEB.Controllers
 
         #region Department Info
 
+        [CustomAuthorization]
+        public async Task<IActionResult> DepartmentList(string data = "" )
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+         
+            ViewBag.Success = data;
+
+            Department departments = new Department();
+            
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            departments.CompanyId = userObject.CompanyId;
+
+            //if (id > 0)
+            //{
+            //    departments = await GetDepartmentById(id);
+            //}
+          
+
+            if (Token != null)
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{departments.CompanyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    departments.Listdepartments = JsonConvert.DeserializeObject<List<Department>>(content);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+            return View(departments);
+        }
+
+        //public async Task<IActionResult> DepartmentDetails(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+        //    if (Token != null)
+        //    {
+        //        Department department = await GetDepartmentById(id);
+        //        return View(department);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+        //    }
+        //}
+
+        public async Task<IActionResult> GetDepartmentById(int id)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            Department department = new Department();
+            var response = await _client.GetAsync($"api/Configuration/GetDepartmentById{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                department = JsonConvert.DeserializeObject<Department>(content);
+                return Json(department);
+            }
+            else {
+
+                return Json(null);
+            }
+
+        
+        }
+
+        public async Task<IActionResult> GetDepartmentCreateOrUpdate(int id)
+        {         
+                return RedirectToAction("DepartmentList", new { id = id });  
+        }
+
+        public async Task<IActionResult> DepartmentCreateOrUpdate(IFormCollection MyAttachment, Department department)
+        {
+            //file add
+            var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
+            department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
+            ///
+
+            //token get from session
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            //
+
+            //user get from session
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            department.CompanyId = userObject.CompanyId;
+            department.CreatedBy = userObject.UserId;
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostDepartment", department);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Response>(content.Result);
+                int status = 0;
+
+
+                if (result.Success)
+                {
+                    if (result.Message.Contains("Insert"))
+                    {
+                        status = 1;
+                    }
+                    else if (result.Message.Contains("Update"))
+                    {
+                        status = 2;
+                    }
+                }
+                return RedirectToAction("DepartmentList", new { data = status });
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+        }
+
+        public async Task<IActionResult> DepartmentDelete(int id )
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+
+            var response = await _client.GetAsync($"api/Configuration/DeleteDepartment{id}/{userObject.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Response>(content);
+                int status = 0;
+
+                if (result.Success)
+                {
+                    if (result.Message.Contains("Delete"))
+                    {
+                        status = 3;
+                    }
+                }
+                return RedirectToAction("DepartmentList", new { data = status });
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+        }
+
+        public async Task<IActionResult> DepartmentAlreadyExists(int id, string title)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            var CompanyId = userObject.CompanyId;
+            var response = await _client.GetAsync($"api/Configuration/DepartmentAlreadyExists{CompanyId}/{id}/{title}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                return Json(content);
+            }
+            return RedirectToAction("Loginpage", "User", new { id = 2 });
+        }
+
+        #endregion
+
 
         #region LeaveTypeInfo
         [CustomAuthorization]
@@ -498,15 +670,6 @@ namespace HRHUBWEB.Controllers
             var CompanyId = userObject.CompanyId;
 
 
-        [CustomAuthorization]
-        public async Task<IActionResult> DepartmentList(string data = "" , int id=0 )
-        {
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-         
-            ViewBag.Success = data;
 
             HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeCheckData{id}/{title}/{CompanyId}");
             if (message.IsSuccessStatusCode)
@@ -530,157 +693,6 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-
-            Department departments = new Department();
-            
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            departments.CompanyId = userObject.CompanyId;
-
-            if (id > 0)
-            {
-                departments = await GetDepartmentById(id);
-            }
-
-            if (Token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{departments.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    departments.Listdepartments = JsonConvert.DeserializeObject<List<Department>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-            return View(departments);
-        }
-
-        public async Task<IActionResult> DepartmentDetails(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            if (Token != null)
-            {
-                Department department = await GetDepartmentById(id);
-                return View(department);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
-
-        public async Task<Department> GetDepartmentById(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            Department department = new Department();
-            var response = await _client.GetAsync($"api/Configuration/GetDepartmentById{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                department = JsonConvert.DeserializeObject<Department>(content);
-            }
-            return department;
-        }
-
-        public async Task<IActionResult> GetDepartmentCreateOrUpdate(int id)
-        {         
-                return RedirectToAction("DepartmentList", new { id = id });  
-        }
-
-        public async Task<IActionResult> DepartmentCreateOrUpdate(IFormCollection MyAttachment, Department department)
-        {
-            //file add
-            var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
-            department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
-            ///
-
-            //token get from session
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            //
-
-            //user get from session
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            department.CompanyId = userObject.CompanyId;
-            department.CreatedBy = userObject.UserId;
-
-
-            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostDepartment", department);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content.Result);
-                int status = 0;
-
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Insert"))
-                    {
-                        status = 1;
-                    }
-                    else if (result.Message.Contains("Update"))
-                    {
-                        status = 2;
-                    }
-                }
-                return RedirectToAction("DepartmentList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
-
-        public async Task<IActionResult> DepartmentDelete(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var response = await _client.GetAsync($"api/Configuration/DeleteDepartment{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content);
-                int status = 0;
-
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-                }
-                return RedirectToAction("DepartmentList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
-
-        public async Task<IActionResult> DepartmentAlreadyExists(int id, string title)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-            var response = await _client.GetAsync($"api/Configuration/DepartmentAlreadyExists{CompanyId}/{id}/{title}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync().Result;
-                return Json(content);
-            }
-            return RedirectToAction("Loginpage", "User", new { id = 2 });
-        }
-
-        #endregion
 
         // Code for save images into database
 
@@ -724,6 +736,10 @@ namespace HRHUBWEB.Controllers
 
 
         }
+
+
+
+
 
     }
 }
