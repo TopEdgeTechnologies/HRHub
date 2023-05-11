@@ -12,18 +12,17 @@ namespace HRHUBAPI.Models
 
     public partial class Candidate
     {
-        
+
         [NotMapped]
-        public string? ClassTitle { get; set; }
+        public IEnumerable<string>? ListSkillTitle { get; set; }
         [NotMapped]
-        public string? GroupName { get; set; }
-        [NotMapped]
-        public string? SessionName { get; set; }
-        public async Task<List<Candidate>> GetCandidate(HrhubContext _context)
+        public IEnumerable<string>? ListSkillStatus { get; set; }
+       
+        public async Task<List<Candidate>> GetCandidate(int CompanyId,HrhubContext _context)
         {
             try
             {
-                var list = await _context.Candidates.Where(x=>x.IsDeleted==false).ToListAsync();
+                var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
                 //var list = await (from c in _context.Candidates
                 //                  join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
                 //                  join g in _context.GroupInfos on c.GroupId equals g.GroupId
@@ -94,59 +93,148 @@ namespace HRHUBAPI.Models
 
         public async Task<Candidate> PostCandidate(Candidate CandidateInfo, HrhubContext _context)
         {
-            try
+
+
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
             {
-                string msg = "";
-                var checkCandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == CandidateInfo.CandidateId && x.IsDeleted==false);
-                if (checkCandidateInfo != null && checkCandidateInfo.CandidateId > 0)
+
+                try
                 {
-                    checkCandidateInfo.CandidateId =CandidateInfo.CandidateId;                                                  
-                    checkCandidateInfo.Name = CandidateInfo.Name;                 
-                    checkCandidateInfo.Dob = CandidateInfo.Dob;             
-                    checkCandidateInfo.Gender = CandidateInfo.Gender; 
-                    checkCandidateInfo.Address = CandidateInfo.Address; 
-                    checkCandidateInfo.City = CandidateInfo.City;                 
-                    checkCandidateInfo.Email = CandidateInfo.Email;             
-                    checkCandidateInfo.CoverLetter = CandidateInfo.CoverLetter;             
-                    checkCandidateInfo.DesignationId = CandidateInfo.DesignationId;             
-                    checkCandidateInfo.CurrentCompany = CandidateInfo.CurrentCompany;             
-                    checkCandidateInfo.CurrentDesignation = CandidateInfo.CurrentDesignation;             
-                    checkCandidateInfo.CurrentSalary = CandidateInfo.CurrentSalary;             
-                    checkCandidateInfo.ExpectedSalary = CandidateInfo.ExpectedSalary;             
-                    checkCandidateInfo.AttachmentPath = CandidateInfo.AttachmentPath;             
-                    checkCandidateInfo.Qualification = CandidateInfo.Qualification;             
-                    checkCandidateInfo.ApplyDate = CandidateInfo.ApplyDate;             
-                    checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;             
-                    checkCandidateInfo.StatusId = CandidateInfo.StatusId;             
-                    checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;             
-                    checkCandidateInfo.UpdatedOn = DateTime.Now;
-                    checkCandidateInfo.Status = CandidateInfo.Status;
-                    checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
-                   
+                    string msg = "";
+                    var checkCandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == CandidateInfo.CandidateId && x.IsDeleted == false);
+                    if (checkCandidateInfo != null && checkCandidateInfo.CandidateId > 0)
+                    {
+                        checkCandidateInfo.CandidateId = CandidateInfo.CandidateId;
+                        checkCandidateInfo.Name = CandidateInfo.Name;
+                        checkCandidateInfo.Dob = CandidateInfo.Dob;
+                        checkCandidateInfo.Gender = CandidateInfo.Gender;
+                        checkCandidateInfo.Address = CandidateInfo.Address;
+                        checkCandidateInfo.City = CandidateInfo.City;
+                        checkCandidateInfo.Email = CandidateInfo.Email;
+                        checkCandidateInfo.CoverLetter = CandidateInfo.CoverLetter;
+                        checkCandidateInfo.DesignationId = CandidateInfo.DesignationId;
+                        checkCandidateInfo.CurrentCompany = CandidateInfo.CurrentCompany;
+                        checkCandidateInfo.CurrentDesignation = CandidateInfo.CurrentDesignation;
+                        checkCandidateInfo.CurrentSalary = CandidateInfo.CurrentSalary;
+                        checkCandidateInfo.ExpectedSalary = CandidateInfo.ExpectedSalary;
+                        checkCandidateInfo.AttachmentPath = CandidateInfo.AttachmentPath;
+                        checkCandidateInfo.Qualification = CandidateInfo.Qualification;
+                        checkCandidateInfo.ApplyDate = CandidateInfo.ApplyDate;
+                        checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;
+                        checkCandidateInfo.StatusId = CandidateInfo.StatusId;
+                        checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;
+                        checkCandidateInfo.Picture = CandidateInfo.Picture;
+                        checkCandidateInfo.UpdatedOn = DateTime.Now;
+                        checkCandidateInfo.Status = CandidateInfo.Status;
+                        checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
+
+                        await _context.SaveChangesAsync();
+
+                    }
+                    else
+                    {
+                        CandidateInfo.CreatedOn = DateTime.Now;
+                        CandidateInfo.StatusId = 1;
+
+                        CandidateInfo.IsDeleted = false;
+                        _context.Candidates.Add(CandidateInfo);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+
+
+                    // ---------------------------------------------Save and update Candidate Skills records
+
+
+
+                    var acadresult = _context.CandidateSkills.Where(x => x.CandidateId == CandidateInfo.CandidateId).ToList();
+                    if (acadresult != null && acadresult.Count() > 0)
+                    {
+                        foreach (var item in acadresult)
+                        {
+                            item.IsDeleted = true;
+                            item.UpdatedBy = CandidateInfo.CreatedBy;
+                           
+                        }
+
+                        await _context.SaveChangesAsync();
+
+                    }
+
+                    List<CandidateSkill> lsobjAca = new List<CandidateSkill>();
+
+                    int a = 0;
+                    if (CandidateInfo.ListSkillTitle != null)
+                    {
+
+                        foreach (var item in CandidateInfo.ListSkillTitle)
+                        {
+
+                            CandidateSkill objAca = new CandidateSkill();
+
+                            objAca.Title = item;
+                            objAca.SkillStatus = CandidateInfo.ListSkillStatus.ToArray()[a];
+                            
+                            objAca.CreatedOn = DateTime.Now;
+                            objAca.CandidateId = CandidateInfo.CandidateId;
+                            objAca.CreatedBy = CreatedBy;
+                            objAca.IsDeleted= false;
+                            lsobjAca.Add(objAca);
+                            a++;
+
+                        }
+
+
+                        _context.CandidateSkills.AddRange(lsobjAca);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                    //--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+                    return checkCandidateInfo;
+
 
                 }
-                else
+                catch (Exception ex)
                 {
-                    CandidateInfo.CreatedOn = DateTime.Now;
-                    _context.Candidates.Add(CandidateInfo);
+                    dbContextTransaction.Rollback();
+                    throw;
+
                 }
-                await _context.SaveChangesAsync();
-
-                return checkCandidateInfo;
 
 
             }
-            catch (Exception ex)
-            {
 
-                throw;
 
-            }
+
+
+
+
+
+           
         }
 
 
-        public async Task<bool> DeleteCandidateInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteCandidate(int id, int UserId, HrhubContext _context)
         {
             try
             {
@@ -157,7 +245,8 @@ namespace HRHUBAPI.Models
                 {
                     CandidateInfo.IsDeleted= true;   
                     CandidateInfo.UpdatedOn= DateTime.Now;
-                    check = true;
+                    CandidateInfo.UpdatedBy = UserId;
+                   
 
                 }
                 await _context.SaveChangesAsync();
@@ -173,13 +262,13 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> AlreadyExist(int CandidateInfoId, string email, HrhubContext _context)
+        public async Task<bool> AlreadyExist(int CandidateInfoId, string email,int CompanyId, HrhubContext _context)
         {
             try
             {
                 if (CandidateInfoId > 0)
                 {
-                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CandidateId != CandidateInfoId && x.IsDeleted==false);
+                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CompanyId== CompanyId && x.CandidateId != CandidateInfoId && x.IsDeleted==false);
                     if (result != null)
                     {
                         return true;
@@ -189,7 +278,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.IsDeleted == false);
+                    var result = await _context.Candidates.FirstOrDefaultAsync(x => x.Email == email && x.CompanyId == CompanyId  && x.IsDeleted == false);
                     if (result != null)
                     {
                         return true;
@@ -205,6 +294,31 @@ namespace HRHUBAPI.Models
                 throw;
             }
         }
+
+
+        // load data Candidateskills in table on Update mode
+        public async Task<List<CandidateSkill>> GetCandidateSkill(int CandidateId,HrhubContext _context)
+        {
+            try
+            {
+                var list = await _context.CandidateSkills.Where(x => x.IsDeleted == false && x.CandidateId== CandidateId).ToListAsync();
+                
+
+                return list;
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
 
 
         //Load dropdown candidate data Id vise

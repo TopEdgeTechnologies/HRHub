@@ -73,19 +73,23 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedOn = DateTime.Now;
                     checkDesignationInfo.Status = ObjDesignationInfo.Status;
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
-                   checkDesignationInfo.CompanyId=ObjDesignationInfo.CompanyId;
+                  
                     await _context.SaveChangesAsync();
+					return checkDesignationInfo;
 
-                }
+				}
                 else
                 {
                     ObjDesignationInfo.CreatedOn = DateTime.Now;
                     ObjDesignationInfo.IsDeleted=false;
                     _context.Designations.Add(ObjDesignationInfo);
-                }
-                await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync();
 
-                return checkDesignationInfo;
+					return ObjDesignationInfo;
+
+				}
+
+           
 
 
             }
@@ -129,6 +133,7 @@ namespace HRHUBAPI.Models
         {
             try
             {
+
                 if (DesignationInfoId > 0)
                 {
                     var result = await _context.Designations.FirstOrDefaultAsync(x => x.Title == title && x.CompanyId==CompanyId && x.DesignationId != DesignationInfoId && x.IsDeleted==false);

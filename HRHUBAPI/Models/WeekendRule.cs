@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace HRHUBAPI.Models;
 
-public partial class Department
+public partial class WeekendRule
 {
-    public int DepartmentId { get; set; }
+    public int WeekendRuleId { get; set; }
 
-    public string? Title { get; set; }
+    public int? CompanyId { get; set; }
 
-    public string? ShortCode { get; set; }
-
-    public string? LogoAttachment { get; set; }
+    public string? DayName { get; set; }
 
     public bool Status { get; set; }
 
@@ -25,6 +22,4 @@ public partial class Department
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public int? CompanyId { get; set; }
 }

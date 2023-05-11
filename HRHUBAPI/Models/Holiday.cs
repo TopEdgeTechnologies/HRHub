@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace HRHUBAPI.Models;
 
-public partial class Department
+public partial class Holiday
 {
-    public int DepartmentId { get; set; }
+    public int HolidayId { get; set; }
+
+    public DateTime? HolidayDate { get; set; }
+
+    public string? DayName { get; set; }
 
     public string? Title { get; set; }
-
-    public string? ShortCode { get; set; }
-
-    public string? LogoAttachment { get; set; }
 
     public bool Status { get; set; }
 

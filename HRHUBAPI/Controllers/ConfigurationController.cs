@@ -1,5 +1,6 @@
 ﻿using HRHUBAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design;
@@ -13,13 +14,15 @@ namespace HRHUBAPI.Controllers
     public class ConfigurationController : ControllerBase
     {
         private readonly HrhubContext _context;
+        private IWebHostEnvironment _webHostEnvironment;
 
-        public ConfigurationController(HrhubContext context)
+        public ConfigurationController(HrhubContext context, IWebHostEnvironment WebHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = WebHostEnvironment;
 
         }
-        // test comment
+
         #region DesignationInfo
 
         [HttpGet("GetDesignationInfos{CompanyId}")]
@@ -123,6 +126,88 @@ namespace HRHUBAPI.Controllers
 
 
         #endregion
+
+        #region Department Info
+
+        [HttpGet("GetDepartmentByCompanyID{CompanyId}")]
+        public async Task<ActionResult<List<Department>>> GetDepartment(int CompanyId)
+        {
+            return await new Department().GetDepartment(CompanyId, _context);
+        }
+
+        [HttpGet("GetDepartmentById{id}")]
+        public async Task<ActionResult<Department>> GetDepartmentById(int Id)
+        {
+            var dbResult = await new Department().GetDepartmentById(Id, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+
+        [HttpPost("PostDepartment")]
+        public async Task<ActionResult<Department>> PostDepartment(Department department)
+        {
+           
+            var dbResult = await new Department().PostDepartment(department, _context);
+            if (dbResult != null && dbResult.TransFlag == 2)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("DeleteDepartment{id}")]
+        public async Task<ActionResult<bool>> DeleteDepartment(int id)
+        {
+            if (id > 0)
+            {
+                var dbResult = await new Department().DeleteDepartment(id, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpGet("DepartmentAlreadyExists{CompanyId}/{id}/{title}")]
+        public async Task<ActionResult<bool>> DepartmentAlreadyExists(int CompanyId, int Id, string title)
+        {
+            var dbResult = await new Department().AlreadyExists(CompanyId, Id, title, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #region LeaveTypeInfo
 
@@ -228,9 +313,51 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
+        private string uploadImage(string name, IFormFile file, string root)
+        {
+
+            try
+            {
+                string fileName = string.Empty;
+                if (file != null)
+                {
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    fileName = name + "-" + DateTime.Now.Ticks + fileExtension;
+                    var filepath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", root, fileName);
+
+                    var OldpathImage = filepath;
+                    if (System.IO.File.Exists(OldpathImage))
+                    {
+                        System.IO.File.Delete(OldpathImage);
+                    }
+
+
+                    using (var stream = new FileStream(filepath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return "/Images/" + root + "/" + fileName;    // Path.GetFullPath( filepath);// @"/Images/" + root + "/" + fileName;
+                }
+                else
+                {
+
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
 
 
 
+
+        #endregion
 
     }
 }

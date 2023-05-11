@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HRHUBAPI.Models.Designation>
+﻿@model IEnumerable<HRHUBAPI.Models.Candidate>
 
 
 
@@ -8,12 +8,17 @@
 
     <div class="col-lg-12">
 
-        <div class="card">
+        <div class="card mt-4">
             <div class="card-header">
-                <h3 class="card-title">Designation Details</h3>
+                <h3 class="card-title">Candidate Details</h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
-                    <div class="card-options"> <a asp-action="DesignationCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add New</a> </div>
+                    <div class="card-options">
+                        <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary">
+                            <i class="fe fe-plus-circle me-1">
+                            </i>Add New
+                        </a>
+                    </div>
                 }
             </div>
                 <div class="card-body">
@@ -22,7 +27,11 @@
                         <thead>
                             <tr>
                                 
-                                <th class="border-bottom-0">Designation Title</th>                               
+                                <th class="border-bottom-0">Candidate Title</th>
+                                <th class="border-bottom-0">Candidate Email</th>
+                                <th class="border-bottom-0">Qualification</th>
+                                <th class="border-bottom-0">Contact No</th>
+                                <th class="border-bottom-0">City</th>
                                 <th class="text-center">Status</th>
                                 <th class="">Action</th>
                             </tr>
@@ -33,8 +42,21 @@
                                 <tr>
 
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
+                                        @Html.DisplayFor(modelItem => item.Name)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Qualification)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Phone)
+                                    </td>
+                                     <td>
+                                        @Html.DisplayFor(modelItem => item.City)
+                                    </td>
+                                    
 
                                    
                                     @if (item.Status == true)
@@ -51,12 +73,6 @@
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
                                         <th class="d-none">
-
-
-
-
-
-
                                         </th>
                                     }
                                     else
@@ -65,14 +81,25 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
-                                                        <i class="feather feather-edit primary text-primary">
+                                                    <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">
+                                                        <i class="feather feather-check text-success mt-1">
+                                                        </i>
+                                                    </a>
+                                                    <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View">
+                                                        <i class="feather feather-eye  text-primary mt-1">
+                                                        </i>
+                                                    </a> 
+                                                    <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
+                                                        <i class="feather feather-edit  text-primary mt-1">
                                                         </i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="DesignationDelete" asp-route-id="@item.DesignationId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger"></i>
+                                                    <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                    </a>
+                                                    <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume">
+                                                        <i class="feather feather-download  text-secondary mt-1"></i>
                                                     </a>
                                                 }
                                             </div>
@@ -80,7 +107,7 @@
                                         </td>
                                     }
 
-
+                                   
 
                                 </tr>
                             }
@@ -137,7 +164,7 @@
             }
             if (msg !== "" && msg == '0') {
                 notif({
-                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Error:</b> Error Occured.",
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
                     type: "error"
                 });
 
