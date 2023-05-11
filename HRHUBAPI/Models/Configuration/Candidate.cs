@@ -234,23 +234,23 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<Candidate> DeleteCandidate(Candidate obj, HrhubContext _context)
+        public async Task<bool> DeleteCandidate(int id, int UserId, HrhubContext _context)
         {
             try
             {
-                
-                var CandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == obj.CandidateId && x.IsDeleted == false);
+                bool check = false;
+                var CandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == id && x.IsDeleted == false);
 
                 if (CandidateInfo != null)
                 {
                     CandidateInfo.IsDeleted= true;   
                     CandidateInfo.UpdatedOn= DateTime.Now;
-                    CandidateInfo.UpdatedBy = obj.CreatedBy;
+                    CandidateInfo.UpdatedBy = UserId;
                    
 
                 }
                 await _context.SaveChangesAsync();
-                return obj;
+                return check;
             }
             catch (Exception)
             {

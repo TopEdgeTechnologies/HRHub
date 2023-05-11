@@ -77,16 +77,16 @@
                         <div class="col-md-4 col-sm-4">
 
 
-                            <div class="form-group">
+                            <div class="form-group mt-5">
                                 <div class="custom-controls-stacked d-md-flex mt-4">
-                                   @* <label class="form-label mt-1 me-3">Gender: </label>*@
+                                    <label class="form-label mt-1 me-3">Gender: </label>
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_male" value="Male" checked>
-                                        <label class="form-check-label" for="gender_male">Male</label>
+                                        <input asp-for="Gender" class="form-check-input mt-2" type="radio" name="gender" id="gender_male" value="Male" checked>
+                                        <label class="form-check-label mt-1" for="gender_male">Male</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_female" value="Female">
-                                        <label class="form-check-label" for="gender_female">Female</label>
+                                        <input asp-for="Gender" class="form-check-input mt-2" type="radio" name="gender" id="gender_female" value="Female">
+                                        <label class="form-check-label mt-1" for="gender_female">Female</label>
                                     </div>
                                 </div>                                
 
@@ -185,107 +185,145 @@
                         <h3 class="card-title">Skills</h3>
 
                     </div>
-                    <div class="row mt-5">
+                    <!-- Row -->
+                    <div class="row">
                         <div class="col-md-6">
-                            <label class="form-label">Skills *</label>
-                            <div class="form-group local-forms">
-                                <input id="SkillTitle" class="form-control" type="text" placeholder="Enter Skills">
+                            <div class="card">
+                                <div class="card-header  border-0">
+                                    <h4 class="card-title">Enter Skills</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="leave-types">
+                                        <div class="form-group local-forms">
+                                            <label class="form-label">Skills *</label>
+                                            <input id="SkillTitle" class="form-control" type="text" placeholder="Enter Skills">
 
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Skill Status *</label>
+                                            <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Skill Status">
+                                                <option label="Select Months"></option>
+                                                <option value="Beginer">Beginer</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Expert">Expert</option>
+                                            </select>
+                                        </div>
+
+                                       
+                                       
+                                    </div>
+                                    <div class="ms-auto">
+                                        <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass"> <i class="fe fe-arrow-right-circle"></i> </button>
+                                    </div>
+                                </div>
+                               
                             </div>
                         </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="form-label">Skill Status *</label>
-                                <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Skill Status">
-                                    <option label="Select Months"></option>
-                                    <option value="Beginer">Beginer</option>
-                                    <option value="Intermediate">Intermediate</option>
-                                    <option value="Expert">Expert</option>
-                                </select>
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-2 mt-4">
-                            <button type="button" class="btn btn-primary" id="btn_AddClass"> <i class="fe fe-plus-circle"></i> </button>
-                        </div>
-
-
-
-
-
-
-
-
-                        <div class="col-md-12 mt-4">
-                            <div class="table-responsive">
-                                <div class="overflow-auto overflow-scrolling mt-3" style="height: 200px;">
-                                    <table id="AccountTable" class="table table-bordered text-nowrap border-bottom custom-border">
-                                        <thead>
-                                            <tr>
-
-                                                <th>Skill Title</th>
-                                                <th>Skill Status</th>
-                                                <th class="">Action</th>
-                                            </tr>
-                                        </thead>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="p-0">
+                                    <div class="card-header border-0">
+                                        <h4 class="card-title">Skills Details</h4>
+                                    </div>
+                                    <div class="card-body">
 
                                         @if (Model.CandidateId > 0)
                                         {
-                                            <tbody id="TBodyID">
-
-                                                @foreach (var item in ViewBag.CandidateSkill)
-                                                {
 
 
+                                            @foreach (var item in ViewBag.CandidateSkill)
+                                            {
 
-                                                    <tr>
-                                                        <td TD_SkillTitle="@item.Title"><input type='hidden' value="@item.Title" name='ListSkillTitle' /> @item.Title</td>
-                                                        <td TD_SkillStatus="@item.SkillStatus"><input type='hidden' value='@item.SkillStatus' name='ListSkillStatus' />@item.SkillStatus</td>
-                                                      
-                                                        
-                                                        
-                                                        
-                                                        
-                                                        <td>
-                                                            <div class="d-flex ">
-                                                                <a id="@item.CandidateSkillId" >
-                                                                    <i class="feather feather-edit primary text-primary me-3"></i>
-                                                                </a>
-                                                                <a onclick="return confirm('Are you sure you want to delete')" id="@item.CandidateSkillId" >
-                                                                    <i class="feather feather-trash-2 text-danger"></i>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                <ul class="timeline" id="SkillsList"> 
+                                                    <li class="primary" id="@item.CandidateSkillId">
+                                                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">@item.Title</a>
+                                                        <span style="float: right; cursor:pointer;display:none">
+                                                            <a onclick="Update(@item.CandidateSkillId)">
+                                                         <i class="feather feather-edit primary text-primary me-1"></i>
+                                                         </a>
+                                                         <a onclick="return confirm('Are you sure you want to delete')" id="@item.CandidateSkillId">
+                                                         <i class="feather feather-trash-2 text-danger"></i>
+                                                         </a>
+                                                        </span>
+                                                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">@item.SkillStatus</p>
+                                                    </li>
+                                                </ul>
 
-                                                }
+                                            
 
-                                            </tbody>
-                                        }
-                                        else
-                                        {
-                                            <tbody id="TBodyID"></tbody>
-                                        }
+                                            }
 
+                                    }
 
-
-
-                                    </table>
+                                                    
+                                    </div>
+                                   
                                 </div>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
-
+                       
                     </div>
+                    <!-- End Row-->
+
+                    <div class="table-responsive" style="display:none">
+                        <div class="overflow-auto overflow-scrolling mt-3" style="height: 200px;">
+                            <table id="AccountTable" class="table table-bordered text-nowrap border-bottom">
+                                <thead class="bg-info">
+                                    <tr>
+
+                                        <th>Skill Title</th>
+                                        <th>Skill Status</th>
+                                        <th class="">Action</th>
+                                    </tr>
+                                </thead>
+
+                                @if (Model.CandidateId > 0)
+                                {
+                                    <tbody id="TBodyID">
+
+                                        @foreach (var item in ViewBag.CandidateSkill)
+                                        {
+
+
+
+                                            <tr>
+                                                <td TD_SkillTitle="@item.Title"><input type='hidden' value="@item.Title" name='ListSkillTitle' /> @item.Title</td>
+                                                <td TD_SkillStatus="@item.SkillStatus"><input type='hidden' value='@item.SkillStatus' name='ListSkillStatus' />@item.SkillStatus</td>
+
+
+
+
+
+                                                <td>
+                                                    <div class="d-flex ">
+                                                        <a id="@item.CandidateSkillId">
+                                                            <i class="feather feather-edit primary text-primary me-3"></i>
+                                                        </a>
+                                                        <a onclick="return confirm('Are you sure you want to delete')" id="@item.CandidateSkillId">
+                                                            <i class="feather feather-trash-2 text-danger"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        }
+
+                                    </tbody>
+                                }
+                                else
+                                {
+                                    <tbody id="TBodyID"></tbody>
+                                }
+
+
+
+
+                            </table>
+                        </div>
+                    </div>
+
+
+
 
 
 
@@ -293,7 +331,7 @@
                         <h3 class="card-title">Apply Now</h3>
 
                     </div>
-                    <div class="row mt-5">
+                    <div class="row ">
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
                                 <label class="form-label">Apply Date *</label>
@@ -355,7 +393,7 @@
 
                         <div class="col-md-4 col-sm-4">
                            
-                            <span class="avatar avatar-xxl brround" style="background-image: url(~/assets/images/users/8.jpg)"></span>
+                            
                             <div class="form-group local-forms">
                                 <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidatePicture" name="CandidatePicture" type="file">
                             </div>
@@ -381,6 +419,14 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
 <!-- End Row -->
 @section scripts{
 
@@ -637,6 +683,13 @@
 
 
         // Data Add int bootstrap table
+
+
+        function Update(id) {
+        alert(id);
+        }
+
+
         $("#btn_AddClass").click(function () {
             debugger;
 
@@ -670,6 +723,14 @@
 
                 }
                 else {
+
+
+                    debugger
+
+                    var New_LI = " <li class='primary'   >";
+                    New_LI = New_LI + " <a target='_blank' href='#' class='font-weight-semibold fs-15 mb-2 ms-3'>" + $("#SkillTitle").val() +"</a>";
+                    New_LI = New_LI + "<p class='mb-0 pb-0 text-muted fs-11 pt-1 ms-3'>" + $("#SkillStatus").val() + "</p>";
+                    $("#SkillsList").append(New_LI);
 
                     var tBody = $("#AccountTable > TBODY")[0];
 

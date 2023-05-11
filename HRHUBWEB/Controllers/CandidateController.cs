@@ -234,11 +234,10 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            Candidate candidateObj= new Candidate();
-            candidateObj.CandidateId = id;
+            Candidate candidateObj= new Candidate();            
             candidateObj.CreatedBy = userObject.UserId;
-
-            HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/DeleteCandidateInfo", candidateObj);
+            var UserId = userObject.UserId;
+            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}/{UserId}");
             if (message.IsSuccessStatusCode)
             {
                 var body = message.Content.ReadAsStringAsync();
