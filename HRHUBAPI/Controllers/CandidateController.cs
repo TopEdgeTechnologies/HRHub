@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Nodes;
 
 namespace HRHUBAPI.Controllers
@@ -122,6 +123,17 @@ namespace HRHUBAPI.Controllers
             return await new Candidate().GetCandidateSkill(CandidateId,_context);
         }
 
+
+
+
+
+        ////Load Satatus data candidate list form 
+        [HttpGet("GetCandidateStatusInfos")]
+        public async Task<ActionResult<List<StatusInfo>>> GetCandidateStatusInfos()
+        {
+
+            return await new Candidate().GetCandidateStatus( _context);
+        }
 
 
 

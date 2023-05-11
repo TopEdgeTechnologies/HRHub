@@ -42,18 +42,35 @@ namespace HRHUBWEB.Controllers
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
             var CompanyId = userObject.CompanyId;
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
-            if (message.IsSuccessStatusCode)
+            if (Token != null)
             {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+
+                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
+                if (message.IsSuccessStatusCode)
+                {
+                    var result = message.Content.ReadAsStringAsync().Result;
+                    ObjCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+
+                }
+
+
+
+                HttpResponseMessage message1 = await _client.GetAsync("api/Candidate/GetCandidateStatusInfos");
+                if (message1.IsSuccessStatusCode)
+                {
+                    var result = message1.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateStatus = JsonConvert.DeserializeObject<List<StatusInfo>>(result);
+
+                }
+
+
+
+
 
             }
             else
             {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
             }
 
 

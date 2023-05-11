@@ -57,9 +57,9 @@
                                         @Html.DisplayFor(modelItem => item.City)
                                     </td>
                                     
-
                                    
-                                    @if (item.Status == true)
+                              
+                                    @*@if (item.Status == true)
                                     {
                                         <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Active</span></td>
                                     }
@@ -68,7 +68,7 @@
                                         <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
 
                                     }
-
+*@
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
