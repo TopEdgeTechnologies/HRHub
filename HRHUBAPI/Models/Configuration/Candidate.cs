@@ -296,6 +296,35 @@ namespace HRHUBAPI.Models
         }
 
 
+
+
+        // load data Candidateskills in table on Update mode
+        public async Task<List<StatusInfo>> GetCandidateStatus(HrhubContext _context)
+        {
+            try
+            {
+                var list = await _context.StatusInfos.Where(x => x.IsDeleted == false).ToListAsync();
+
+
+                return list;
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
+
+
         // load data Candidateskills in table on Update mode
         public async Task<List<CandidateSkill>> GetCandidateSkill(int CandidateId,HrhubContext _context)
         {
