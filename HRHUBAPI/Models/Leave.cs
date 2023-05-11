@@ -23,9 +23,9 @@ public partial class Leave
 
     public string? LeaveSubject { get; set; }
 
-    public bool? MarkAsHalfLeave { get; set; }
+    public bool MarkAsHalfLeave { get; set; }
 
-    public bool? MarkAsShortLeave { get; set; }
+    public bool MarkAsShortLeave { get; set; }
 
     public bool? IsDeleted { get; set; }
 

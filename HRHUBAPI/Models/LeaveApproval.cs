@@ -5,7 +5,7 @@ namespace HRHUBAPI.Models;
 
 public partial class LeaveApproval
 {
-    public int? LeaveApprovalId { get; set; }
+    public int LeaveApprovalId { get; set; }
 
     public int? LeaveId { get; set; }
 

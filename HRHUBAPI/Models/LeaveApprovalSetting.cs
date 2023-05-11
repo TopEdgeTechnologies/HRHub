@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class LeaveType
+public partial class LeaveApprovalSetting
 {
-    public int LeaveTypeId { get; set; }
+    public int SettingId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public string? Title { get; set; }
+    public int? FinalApprovalByStaffId { get; set; }
 
-    public int? NoOfLeaves { get; set; }
-
-    public bool IsNonPaid { get; set; }
+    public int? LeaveApprovalLeaveStatusId { get; set; }
 
     public bool Status { get; set; }
 

@@ -164,5 +164,39 @@ namespace SchoolManagementSystem.API.Controllers
 
 
 
+		[HttpPost("ExpectionLog")]
+		public async Task<ActionResult<JsonObject>> ExpectionLog(ExceptionLog obj)
+		{
+
+
+			var result = await obj.PostExecptiontion(obj, _context);
+			if (result)
+			{
+				return Ok(new
+				{
+
+					Success = true,
+					Message = "Insert Execptiontion"
+
+
+				});
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					Message = "Fail"
+
+
+				});
+			}
+
+		}
+
+
+
 	}
 }

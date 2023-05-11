@@ -1,5 +1,6 @@
 ﻿using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 using System.Diagnostics;
 
 namespace HRHUBWEB.Controllers
@@ -15,6 +16,8 @@ namespace HRHUBWEB.Controllers
 
         public IActionResult Index()
         {
+
+            Convert.ToBoolean("sdasd");
             return View();
         }
 
