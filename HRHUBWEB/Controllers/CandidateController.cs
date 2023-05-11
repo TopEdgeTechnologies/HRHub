@@ -64,9 +64,22 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
            
-            if(Token != null) { 
+            if(Token != null) {
 
-            Candidate ObjCandidate = await GetCandidatebyID(id);
+                var CandidateId = id;
+                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
+                if (message1.IsSuccessStatusCode)
+                {
+                    var result = message1.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
+
+                }
+
+
+
+
+
+                Candidate ObjCandidate = await GetCandidatebyID(id);
 
             return View(ObjCandidate);
             }
@@ -220,7 +233,12 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}");
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            Candidate candidateObj= new Candidate();
+            candidateObj.CandidateId = id;
+            candidateObj.CreatedBy = userObject.UserId;
+
+            HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/DeleteCandidateInfo", candidateObj);
             if (message.IsSuccessStatusCode)
             {
                 var body = message.Content.ReadAsStringAsync();

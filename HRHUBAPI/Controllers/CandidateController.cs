@@ -66,11 +66,11 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteCandidateInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteCandidateInfo(int id)
+        [HttpPost("DeleteCandidateInfo")]
+        public async Task<ActionResult<Candidate>> DeleteCandidateInfo(Candidate obj)
         {
-            var result = await new Candidate().DeleteCandidateInfo(id, _context);
-            if (id > 0)
+            var result = await new Candidate().DeleteCandidate(obj, _context);
+            if (obj.CandidateId > 0)
                 return Ok(new
                 {
 

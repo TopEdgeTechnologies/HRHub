@@ -123,6 +123,7 @@ namespace HRHUBAPI.Models
                         checkCandidateInfo.ExperienceInYears = CandidateInfo.ExperienceInYears;
                         checkCandidateInfo.StatusId = CandidateInfo.StatusId;
                         checkCandidateInfo.ReasonToLeft = CandidateInfo.ReasonToLeft;
+                        checkCandidateInfo.Picture = CandidateInfo.Picture;
                         checkCandidateInfo.UpdatedOn = DateTime.Now;
                         checkCandidateInfo.Status = CandidateInfo.Status;
                         checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
@@ -233,22 +234,23 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteCandidateInfo(int id, HrhubContext _context)
+        public async Task<Candidate> DeleteCandidate(Candidate obj, HrhubContext _context)
         {
             try
             {
-                bool check = false;
-                var CandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == id && x.IsDeleted == false);
+                
+                var CandidateInfo = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == obj.CandidateId && x.IsDeleted == false);
 
                 if (CandidateInfo != null)
                 {
                     CandidateInfo.IsDeleted= true;   
                     CandidateInfo.UpdatedOn= DateTime.Now;
-                    check = true;
+                    CandidateInfo.UpdatedBy = obj.CreatedBy;
+                   
 
                 }
                 await _context.SaveChangesAsync();
-                return check;
+                return obj;
             }
             catch (Exception)
             {
