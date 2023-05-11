@@ -57,12 +57,7 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
-    public virtual DbSet<WeekendRule> WeekendRules { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
+   
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AttendanceDetail>(entity =>
@@ -246,69 +241,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UserGroupDetailId).HasColumnName("UserGroupDetailID");
             entity.Property(e => e.FormId).HasColumnName("FormID");
             entity.Property(e => e.UserGroupId).HasColumnName("UserGroupID");
-        });
-
-        modelBuilder.Entity<Holiday>(entity =>
-        {
-            entity.ToTable("Holidays", "HR");
-
-            entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.DayName).IsUnicode(false);
-            entity.Property(e => e.HolidayDate).HasColumnType("date");
-            entity.Property(e => e.Title).IsUnicode(false);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<Leave>(entity =>
-        {
-            entity.ToTable("Leave", "HR");
-
-            entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
-            entity.Property(e => e.ApplicationHtml)
-                .IsUnicode(false)
-                .HasColumnName("Application_HTML");
-            entity.Property(e => e.AppliedOn).HasColumnType("date");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.EndDate).HasColumnType("date");
-            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
-            entity.Property(e => e.LeaveSubject).IsUnicode(false);
-            entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
-            entity.Property(e => e.MarkAsHalfLeave).HasColumnName("MarkAs_HalfLeave");
-            entity.Property(e => e.MarkAsShortLeave).HasColumnName("MarkAs_ShortLeave");
-            entity.Property(e => e.StaffId).HasColumnName("StaffID");
-            entity.Property(e => e.StartDate).HasColumnType("date");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<LeaveApproval>(entity =>
-        {
-            entity.ToTable("LeaveApproval", "HR");
-
-            entity.Property(e => e.LeaveApprovalId).HasColumnName("LeaveApprovalID");
-            entity.Property(e => e.ApprovalByStaffId).HasColumnName("ApprovalBy_StaffID");
-            entity.Property(e => e.ApprovalDate)
-                .HasColumnType("date")
-                .HasColumnName("Approval_Date");
-            entity.Property(e => e.ForwardDate)
-                .HasColumnType("date")
-                .HasColumnName("Forward_Date");
-            entity.Property(e => e.ForwardedByStaffId).HasColumnName("ForwardedBy_StaffId");
-            entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
-            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
-            entity.Property(e => e.Remarks).IsUnicode(false);
-        });
-
-        modelBuilder.Entity<LeaveStatus>(entity =>
-        {
-            entity.ToTable("LeaveStatus", "HR");
-
-            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.Title).IsUnicode(false);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<LeaveType>(entity =>
