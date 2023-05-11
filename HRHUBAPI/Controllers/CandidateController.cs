@@ -21,11 +21,11 @@ namespace HRHUBAPI.Controllers
 
         #region CandidateInfo
 
-        [HttpGet("GetCandidateInfos")]
-        public async Task<ActionResult<List<Candidate>>> GetCandidateInfos()
+        [HttpGet("GetCandidateInfos{CompanyId}")]
+        public async Task<ActionResult<List<Candidate>>> GetCandidateInfos(int CompanyId)
         {
 
-            return await new Candidate().GetCandidate(_context);
+            return await new Candidate().GetCandidate(CompanyId,_context);
         }
 
 
@@ -66,11 +66,11 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteCandidateInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteCandidateInfo(int id)
+        [HttpPost("DeleteCandidateInfo")]
+        public async Task<ActionResult<Candidate>> DeleteCandidateInfo(Candidate obj)
         {
-            var result = await new Candidate().DeleteCandidateInfo(id, _context);
-            if (id > 0)
+            var result = await new Candidate().DeleteCandidate(obj, _context);
+            if (obj.CandidateId > 0)
                 return Ok(new
                 {
 
@@ -84,10 +84,10 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("CandidateCheckData{id}/{cnic}")]
-        public async Task<ActionResult<JsonObject>> CandidateCheckData(int id, string email)
+        [HttpGet("CandidateCheckDataInfo{id}/{email}/{CompanyId}")]
+        public async Task<ActionResult<JsonObject>> CandidateCheckDataInfo(int id, string email,int CompanyId)
         {
-            if (await new Candidate().AlreadyExist(id, email, _context))
+            if (await new Candidate().AlreadyExist(id, email, CompanyId, _context))
             {
                 return Ok(new
                 {
@@ -114,18 +114,14 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        ////Load Candidate data from database to Student form change dropdown selection
-        //[HttpGet("GetCandidateIdVise{id}")]
-        //public async Task<ActionResult<List<CandidateClassSubject>>> GetCandidateIdVise(int id)
-        //{
-        //    var result = await new CandidateInfo().GetCandidateIdVise(id, _context);
-        //    if (result != null)
-        //        return Ok(result);
+        ////Load Candidate Skill data from database to 
+        [HttpGet("GetCandidateSkillInfos{CandidateId}")]
+        public async Task<ActionResult<List<CandidateSkill>>> GetCandidateSkillInfos(int CandidateId)
+        {
 
-        //    return NotFound();
+            return await new Candidate().GetCandidateSkill(CandidateId,_context);
+        }
 
-
-        //}
 
 
 
@@ -145,7 +141,7 @@ namespace HRHUBAPI.Controllers
         //}
 
 
-       
+
 
         //[HttpGet("GetCandidateSubjectId{id}")]
         //public async Task<ActionResult<CandidateClassSubject>> GetCandidateSubjectId(int id)
@@ -163,7 +159,7 @@ namespace HRHUBAPI.Controllers
         //public async Task<ActionResult> CandidateSubjectAddOrCreate(List<CandidateClassSubject> obj)
         //{
 
-            
+
         //    var result = await new CandidateClassSubject().PostCandidateClassSubject(obj, _context);
         //    if (result > 0)
         //        return Ok(new
@@ -244,9 +240,9 @@ namespace HRHUBAPI.Controllers
         //    }
 
         //}
-        
-        
-        
+
+
+
         ////load subject data in dropdown by language ID
         //[HttpGet("GetSubjectLanguageId{id}")]
         //public async Task<ActionResult<List<SubjectInfo>>> GetSubjectLanguageId(int id)

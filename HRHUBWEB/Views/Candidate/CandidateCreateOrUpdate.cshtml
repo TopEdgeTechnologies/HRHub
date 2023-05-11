@@ -1,0 +1,988 @@
+﻿@model HRHUBAPI.Models.Candidate
+
+@{
+    ViewData["Title"] = "Candidate Form";
+}
+
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">@((Model.CandidateId == 0) ? "Enroll" : "Update") Candidate</div>
+    </div>
+
+</div>
+<!-- Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Basic Details</h3>
+
+            </div>
+            @using (@Html.BeginForm("CandidateCreateOrUpdate", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            {
+
+                <input type="hidden" asp-for="CandidateId" />
+                <input type="hidden" asp-for="CompanyId" value="@ViewBag.CompanyId" />
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Name *</label>
+                                <input asp-for="Name" class="form-control" type="text" placeholder="Enter Name">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Email *</label>
+                                <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Phone No *</label>
+                                <input asp-for="Phone" class="form-control" type="text" placeholder="Enter phone">
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input asp-for="Dob" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Qualification *</label>
+                                <input asp-for="Qualification" class="form-control" type="text" placeholder="Enter Qualification">
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4 col-sm-4">
+
+
+                            <div class="form-group">
+                                <div class="custom-controls-stacked d-md-flex mt-4">
+                                   @* <label class="form-label mt-1 me-3">Gender: </label>*@
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_male" value="Male" checked>
+                                        <label class="form-check-label" for="gender_male">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="Gender" class="form-check-input" type="radio" name="gender" id="gender_female" value="Female">
+                                        <label class="form-check-label" for="gender_female">Female</label>
+                                    </div>
+                                </div>                                
+
+                            </div>
+                          
+
+
+                        </div>
+
+                        <div class="card-header">
+                            <h3 class="card-title">Professional Details</h3>
+
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Company *</label>
+                                <input asp-for="CurrentCompany" class="form-control" type="text" placeholder="Enter Current Company">
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Designation *</label>
+                                <input asp-for="CurrentDesignation" class="form-control" type="text" placeholder="Enter Current Designation">
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Current Salary *</label>
+                                <input asp-for="CurrentSalary" class="form-control" type="text" placeholder="Enter CurrentSalary">
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Expected Salary *</label>
+                                <input asp-for="ExpectedSalary" class="form-control" type="text" placeholder="Enter Expected Salary">
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Experiences in Year *</label>
+                                <select asp-for="ExperienceInYears" class="form-control custom-select select2" data-placeholder="Select Experience">
+                                    <option label="Select Experience"></option>
+                                    <option value="0">Fresher</option>
+                                    <option value="1">1 yr</option>
+                                    <option value="2">2 yrs</option>
+                                    <option value="3">3 yrs</option>
+                                    <option value="4">4 yrs</option>
+                                    <option value="5">5 yrs</option>
+                                    <option value="6">6 yrs</option>
+                                    <option value="7">7 yrs</option>
+                                    <option value="8">8 yrs</option>
+                                    <option value="9">9 yrs</option>
+                                    <option value="10">10 yrs</option>
+                                    <option value="11">10+ yrs</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Experiences in Months *</label>
+                                <select asp-for="ExperienceInMonths" class="form-control custom-select select2" data-placeholder="Select Months">
+                                    <option label="Select Months"></option>
+                                    <option value="0">Fresher</option>
+                                    <option value="1">1 Month</option>
+                                    <option value="2">2 Months</option>
+                                    <option value="3">3 Months</option>
+                                    <option value="4">4 Months</option>
+                                    <option value="5">5 Months</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="7">7 Months</option>
+                                    <option value="8">8 Months</option>
+                                    <option value="9">9 Months</option>
+                                    <option value="10">10 Months</option>
+                                    <option value="11">10+ Months</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="card-header">
+                        <h3 class="card-title">Skills</h3>
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <label class="form-label">Skills *</label>
+                            <div class="form-group local-forms">
+                                <input id="SkillTitle" class="form-control" type="text" placeholder="Enter Skills">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Skill Status *</label>
+                                <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Skill Status">
+                                    <option label="Select Months"></option>
+                                    <option value="Beginer">Beginer</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2 mt-4">
+                            <button type="button" class="btn btn-primary" id="btn_AddClass"> <i class="fe fe-plus-circle"></i> </button>
+                        </div>
+
+
+
+
+
+
+
+
+                        <div class="col-md-12 mt-4">
+                            <div class="table-responsive">
+                                <div class="overflow-auto overflow-scrolling mt-3" style="height: 200px;">
+                                    <table id="AccountTable" class="table table-bordered text-nowrap border-bottom custom-border">
+                                        <thead>
+                                            <tr>
+
+                                                <th>Skill Title</th>
+                                                <th>Skill Status</th>
+                                                <th class="">Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        @if (Model.CandidateId > 0)
+                                        {
+                                            <tbody id="TBodyID">
+
+                                                @foreach (var item in ViewBag.CandidateSkill)
+                                                {
+
+
+
+                                                    <tr>
+                                                        <td TD_SkillTitle="@item.Title"><input type='hidden' value="@item.Title" name='ListSkillTitle' /> @item.Title</td>
+                                                        <td TD_SkillStatus="@item.SkillStatus"><input type='hidden' value='@item.SkillStatus' name='ListSkillStatus' />@item.SkillStatus</td>
+                                                      
+                                                        
+                                                        
+                                                        
+                                                        
+                                                        <td>
+                                                            <div class="d-flex ">
+                                                                <a id="@item.CandidateSkillId" >
+                                                                    <i class="feather feather-edit primary text-primary me-3"></i>
+                                                                </a>
+                                                                <a onclick="return confirm('Are you sure you want to delete')" id="@item.CandidateSkillId" >
+                                                                    <i class="feather feather-trash-2 text-danger"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                }
+
+                                            </tbody>
+                                        }
+                                        else
+                                        {
+                                            <tbody id="TBodyID"></tbody>
+                                        }
+
+
+
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                    </div>
+
+
+
+                    <div class="card-header">
+                        <h3 class="card-title">Apply Now</h3>
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group">
+                                <label class="form-label">Apply Date *</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input asp-for="ApplyDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Apply for Position *</label>
+                                <select asp-for="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">
+                                    <option value="">Select Designation</option>
+                                </select>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label class="form-label">Upload Resume *</label>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidateResume" name="CandidateResume" type="file">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Cover Latter *</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="CoverLetter" rows="3" class="form-control" placeholder="Cover Latter"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="card-header">
+                        <h3 class="card-title">Address Details</h3>
+
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-md-6">
+                            <label class="form-label">City *</label>
+                            <div class="form-group local-forms">
+                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Permanant Address *</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                           
+                            <span class="avatar avatar-xxl brround" style="background-image: url(~/assets/images/users/8.jpg)"></span>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidatePicture" name="CandidatePicture" type="file">
+                            </div>
+                        </div>
+
+
+                         
+
+
+
+                    </div>
+
+
+                    <div class="student-submit ">
+
+                        <input type="button" value="Save" id="btnsave" class="btn btn-primary" />
+                        <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
+                    </div>
+
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+@section scripts{
+
+    <script type="text/javascript">
+
+
+
+
+
+
+
+
+
+        $(document).ready(function () {
+
+
+            $('#DesignationId').select2();
+            $('#SkillStatus').select2();
+
+
+
+
+        })
+
+
+
+
+
+
+
+     function valdation() {
+            var status = true;
+            
+            
+             var Data = { id: $("#CandidateId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Candidate/CandidateCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        var b = JSON.parse(data)
+                        if (b.success) {
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        
+                        }
+
+
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+            if ($("#Name").val().trim() == "") {
+                $.growl.warning({
+                    message: "Please Enter Name"
+                });
+                $("#Name").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Name").css("border-color", "#ddd");
+            }
+
+
+            if ($("#Email").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Email"
+                });
+
+
+
+                $("#Email").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Email").css("border-color", "#ddd");
+            }
+
+            if ($("#Phone").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Phone"
+                });
+
+
+
+                $("#Phone").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Phone").css("border-color", "#ddd");
+            }
+
+            if ($("#Qualification").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Qualification"
+                });
+
+
+
+                $("#Qualification").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Qualification").css("border-color", "#ddd");
+            }
+            if ($("#CurrentCompany").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Company"
+                });
+
+
+
+                $("#CurrentCompany").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentCompany").css("border-color", "#ddd");
+            }
+
+            if ($("#CurrentDesignation").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Designation"
+                });
+
+
+
+                $("#CurrentDesignation").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentDesignation").css("border-color", "#ddd");
+            }
+
+            if ($("#CurrentSalary").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Current Salary"
+                });
+
+
+
+                $("#CurrentSalary").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CurrentSalary").css("border-color", "#ddd");
+            }
+
+            if ($("#ExpectedSalary").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Expected Salary"
+                });
+
+
+
+                $("#ExpectedSalary").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExpectedSalary").css("border-color", "#ddd");
+            }
+
+            if ($("#ExperienceInYears").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Experience In Years"
+                });
+
+
+
+                $("#ExperienceInYears").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExperienceInYears").css("border-color", "#ddd");
+            }
+
+
+            if ($("#ExperienceInMonths").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Experience In Months"
+                });
+
+
+
+                $("#ExperienceInMonths").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#ExperienceInMonths").css("border-color", "#ddd");
+            }
+
+            var rowCount = $('#AccountTable tbody tr').length;
+            if (rowCount < 1) {
+                $.growl.warning({
+                    message: "Please Select Skills."
+                });
+
+                status = false;
+            }
+            //if (document.getElementById("CandidateResume").value == "") {
+
+            //    $.growl.warning({
+            //        message: "Please Enter Experience In Months"
+            //    });
+
+            //    status = false;
+            
+            //}
+           
+
+            return status;
+        }
+
+
+        // Data Add int bootstrap table
+        $("#btn_AddClass").click(function () {
+            debugger;
+
+
+            if ($("#SkillTitle").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Skill Name"
+                });
+                return;
+            }
+
+            var Skillstatusdropdown = $("#SkillStatus").val();
+            if (Skillstatusdropdown == "" || Skillstatusdropdown == null) {
+                $.growl.warning({
+                    message: "Please Enter Skill Status"
+                });
+                return;
+            }
+
+
+
+
+
+
+            else {
+                if (IsRowAlreadyExist()) {
+
+                    $.growl.warning({
+                        message: "This Record is Already Inserted in Table."
+                    });
+
+                }
+                else {
+
+                    var tBody = $("#AccountTable > TBODY")[0];
+
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+                    //row.attr("id", $("#AcademicRecordId").val());
+                    row.id = $("#CandidateSkillId").val();
+
+                    //Add SkillTitle cell.
+                    var cell = $(row.insertCell(-1));
+
+                    cell.html($("#SkillTitle").val() + "<input type='hidden' value='" + $("#SkillTitle").val() + "' name='ListSkillTitle'  />");
+                    cell.attr("TD_SkillTitle", $("#SkillTitle").val());
+
+
+                    //Add SkillStatus cell.
+                    var cell = $(row.insertCell(-1));
+
+                    cell.html($("#SkillStatus").val() + "<input type='hidden' value='" + $("#SkillStatus").val() + "' name='ListSkillStatus'  />");
+                    cell.attr("TD_SkillStatus", $("#SkillStatus").val());
+                   
+
+
+
+
+
+
+                    //Add Button cell.
+                    cell = $(row.insertCell(-1));
+                    var Buttons =
+                        '<div class="d-flex"><a  CandidateSkillId = "' + $("#CandidateSkillId").val() + '"><i class="feather feather-edit primary text-primary me-3"></i></a><a   CandidateSkillId = "' + $("#CandidateSkillId").val() + '"><i class="feather feather-trash-2 text-danger"></i></a></div>';
+
+
+                    cell.append(Buttons);
+                    Account_ClearControls();
+                }
+            }
+
+        });
+        ////////////////////////////////////
+
+
+
+
+
+
+
+
+        //Save Data into database
+        $("#btnsave").click(function () {
+
+           
+
+
+            if (valdation()) {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire(
+                            'Saved!',
+                            'Your record has been Saved.',
+                            'success'
+                        )
+
+
+                        $("#myform").submit();
+                             
+
+                        //debugger
+                        //var tbody = $('#TBodyID');
+
+
+                        //var data = [];
+                        //$("table tr").each(function (index) {
+                        //    if (index !== 0) {
+                        //        var row = {};
+                        //        var currentRow = $(this).closest("tr");
+
+                        //        //// var PrimaryKey = currentRow.attr("id");
+                        //        //row.CandidateClassSubjectId = PrimaryKey;
+                        //        row.StatusTitle = $(this).find("td:eq(0)").attr("TD_StatusTitle");
+                        //        row.StatusTitle = $(this).find("td:eq(1)").attr("TD_StatusTitle");
+
+                        //        data.push(row);
+
+
+
+
+                        //    }
+                        //});
+
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Candidate/CandidateCreateOrUpdate",
+                        //    data: { rows: data },
+                        //    success: function (result) {
+                        //        var tbody = $('#TBodyID');
+                        //        tbody.empty();
+                        //        var data = "/Candidate/CandidateList?data=1"
+                        //        window.location.href = data
+
+
+                        //    },
+                        //    error: function (error) {
+                        //        // Handle any errors that occur during the request
+                        //    }
+                        //});
+
+
+                    } else if (
+
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+
+
+
+
+            }
+
+
+
+
+        });
+        /////////////////////////////////
+
+
+
+
+        // Check Duplicate data in table
+        function IsRowAlreadyExist() {
+            debugger
+            var IsFound = false;
+
+            var SkillTitle = $("#SkillTitle").val();
+            //var SubjectID = $("#SubjectId").val();
+
+            $('#AccountTable > tbody  > tr').each(function (index, tr) {
+
+
+                var dID = $(this).find("TD").eq(0).attr("TD_SkillTitle");
+                ////var SID = $(this).find("TD").eq(2).attr("TD_SubjectID");
+                if (SkillTitle == dID) {
+                    IsFound = true;
+                }
+
+                //console.log($(this).find("TD").eq(1).attr("TD_ClassID"));
+                console.log(index);
+
+                console.log(tr);
+
+            });
+
+
+
+            return IsFound;
+        }
+        //////////////////////////
+
+
+        // Clear Data from fields
+        function Account_ClearControls() {
+            debugger
+
+            $("#SkillTitle").val("");
+            $('#SkillStatus').select2({ placeholder: "Select SkillStatus" }).val('').trigger('change');
+
+
+
+
+        }
+        //////////////////////////////////
+
+
+
+
+
+        //Remove data from bootstrap table
+        //function Remove(button) {
+        $("#AccountTable").on('click', '.feather-trash-2', function () {
+            debugger;
+            var currentRow = $(this).closest("tr");
+
+            var PrimaryKey = currentRow.attr("id");
+
+            var CandidateClassSubjectID = PrimaryKey;
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, delete it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        'Your record has been deleted.',
+                        'success'
+                    )
+                    var table = $("#AccountTable")[0];
+                    currentRow.remove();
+                } else if (
+
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            })
+
+
+        });
+
+        //////////////////////////////////////////
+
+
+
+
+        // Edit mode bootstrap table data
+        $("#AccountTable").on('click', '.feather-edit', function () {
+            debugger;
+            var currentRow = $(this).closest("tr");
+
+            var PrimaryKey = currentRow.attr("id");
+            //var Description = currentRow.find("td:eq(0)").attr("td_candidateclasssubjectid");
+
+            //var CandidateClassSubjectID = currentRow.find("td:eq(0)").attr("TD_CandidateClassSubjectID");
+
+            $("#CandidateClassSubjectId").val(PrimaryKey);
+
+            var SkillTitle = currentRow.find("td:eq(0)").attr("TD_SkillTitle");
+            var SkillStatus = currentRow.find("td:eq(1)").attr("TD_SkillStatus");
+
+
+
+            currentRow.remove();
+
+            $("#SkillTitle").val(SkillTitle);
+            $('#SkillStatus').val(SkillStatus).trigger('change');
+
+
+
+
+
+
+        });
+                                ////////////////////////////////////
+
+
+
+
+
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
