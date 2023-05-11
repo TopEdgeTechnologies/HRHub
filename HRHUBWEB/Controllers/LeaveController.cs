@@ -10,25 +10,26 @@ using HRHUBWEB.Models;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
-using System.ComponentModel.Design;
+using System.Runtime.InteropServices;
+using Microsoft.VisualBasic;
 
 namespace HRHUBWEB.Controllers
 {
-    public class ConfigurationController : Controller
+    public class LeaveController : Controller
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-        public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+        public LeaveController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
         }
-        
-        #region DesignationInfo
-        [CustomAuthorization]
-        public async Task<IActionResult> DesignationList(string data = "")
-        {
 
+        #region LeaveInfo
+        [CustomAuthorization]
+        public async Task<IActionResult> LeaveList(string data = "")
+        {
+            
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
@@ -36,48 +37,38 @@ namespace HRHUBWEB.Controllers
 
 
             ViewBag.Success = data;
-            List<Designation> ObjDesignation = new List<Designation>();
+            List<Leave> ObjLeave = new List<Leave>();
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
 
 
-
-            if (Token != null)
+            HttpResponseMessage message = await _client.GetAsync("api/Leave/GetLeaveInfos");
+            if (message.IsSuccessStatusCode)
             {
+                var result = message.Content.ReadAsStringAsync().Result;
+                ObjLeave = JsonConvert.DeserializeObject<List<Leave>>(result);
 
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
             }
             else
             {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
+                return RedirectToAction("Loginpage", "User",  new {id=2 });
             }
 
 
-            return View(ObjDesignation);
+            return View(ObjLeave);
         }
-        public async Task<IActionResult> DesignationDetails(int id)
+        public async Task<IActionResult> LeaveDetails(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
            
-
-
             if(Token != null) { 
 
-            Designation ObjDesignation = await GetDesignationbyID(id);
+            Leave ObjLeave = await GetLeavebyID(id);
 
-            return View(ObjDesignation);
+            return View(ObjLeave);
             }
             else
             {
@@ -85,53 +76,75 @@ namespace HRHUBWEB.Controllers
 
             }
         }
-        private async Task<Designation> GetDesignationbyID(int id)
+        private async Task<Leave> GetLeavebyID(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            Designation ObjDesignation = new Designation();
+            Leave ObjLeave = new Leave();
             
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfoId{id}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetLeaveInfoId{id}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
-                ObjDesignation = JsonConvert.DeserializeObject<Designation>(result);
+                ObjLeave = JsonConvert.DeserializeObject<Leave>(result);
 
             }
 
-            return ObjDesignation;
+            return ObjLeave;
         }
         [HttpGet]
-        public async Task<IActionResult> DesignationCreateOrUpdate(int id)
+        public async Task<IActionResult> LeaveCreateOrUpdate(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             //Get Instutute ID through Sessions
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
+            var CompanyId = userObject.CompanyId;
 
-            if (Token != null) { 
+            if (Token != null) {
 
 
-           
-           
+                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
+                if (message.IsSuccessStatusCode)
+                {
+                    var result = message.Content.ReadAsStringAsync().Result;
+                    ViewBag.LeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
 
-            if (id == 0)
+                }
+
+                
+                //HttpResponseMessage message1 = await _client.GetAsync($"api/Configuration/GetGroupInfos{InstituteId}");
+                //if (message1.IsSuccessStatusCode)
+                //{
+                //    var result = message1.Content.ReadAsStringAsync().Result;
+                //    ViewBag.LeaveGroup = JsonConvert.DeserializeObject<List<GroupInfo>>(result);
+
+                //}
+
+
+
+                //HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetClassInfos{InstituteId}");
+                //if (message1.IsSuccessStatusCode)
+                //{
+                //    var result = message3.Content.ReadAsStringAsync().Result;
+                //    ViewBag.ClassList = JsonConvert.DeserializeObject<List<ClassInfo>>(result);
+
+                //}
+
+
+                if (id == 0)
             {
-                Designation Info = new Designation();
+                Leave Info = new Leave();
                 
                 return View(Info);
             }
-            Designation Designationinfo = await GetDesignationbyID(id);
+            Leave Leaveinfo = await GetLeavebyID(id);
 
-            return View(Designationinfo);
+            return View(Leaveinfo);
             }
             else
             {
@@ -140,21 +153,21 @@ namespace HRHUBWEB.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> DesignationCreateOrUpdate(Designation ObjDesignation)
+        public async Task<IActionResult> LeaveCreateOrUpdate(Leave ObjLeave)
         {
             try
             {
                 var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-               // var DesignationResume = my.Files.GetFile("DesignationResume");
-
-                //ObjDesignation.AttachmentPath = uploadImage(ObjDesignation.Name, DesignationResume, "DesignationAttachment");
-
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjDesignation.CompanyId = userObject.CompanyId;
-                ObjDesignation.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/DesignationAddOrUpdate", ObjDesignation);
+                ObjLeave.StaffId = userObject.StaffId;
+                ObjLeave.AppliedOn = DateTime.Now;
+                ObjLeave.LeaveStatusId = 1; // New
+                ObjLeave.CreatedBy = userObject.UserId;
+                ObjLeave.IsDeleted = false;
+                //ObjLeave.InstituteId = userObject.InstituteId;
+                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Leave/LeaveAddOrCreate", ObjLeave);
 
                 if (message.IsSuccessStatusCode)
                 {
@@ -182,7 +195,7 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("DesignationList", new { data = status });
+                    return RedirectToAction("LeaveList", new { data = status });
 
                 }
                 else
@@ -199,12 +212,12 @@ namespace HRHUBWEB.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> DesignationDelete(int id)
+        public async Task<IActionResult> LeaveDelete(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);      
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteDesignationInfo{id}");
+            HttpResponseMessage message = await _client.DeleteAsync($"api/Leave/DeleteLeaveInfo{id}");
             if (message.IsSuccessStatusCode)
             {
                 var body = message.Content.ReadAsStringAsync();
@@ -226,7 +239,7 @@ namespace HRHUBWEB.Controllers
 
                 }
 
-                return RedirectToAction("DesignationList", new { data = status });
+                return RedirectToAction("LeaveList", new { data = status });
 
             }
 
@@ -237,20 +250,14 @@ namespace HRHUBWEB.Controllers
 
         }
 
-        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
+        public async Task<ActionResult<JsonObject>> LeaveCheckData(int id, string email)
         {
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/DesignationCheckData{id}/{title}/{CompanyId}");
+          
+            HttpResponseMessage message = await _client.GetAsync($"api/Leave/LeaveCheckData{id}/{email}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -266,239 +273,17 @@ namespace HRHUBWEB.Controllers
 
 
 
-
-
-
-
-        #endregion
-
-
-
-        #region LeaveTypeInfo
-        [CustomAuthorization]
-        public async Task<IActionResult> LeaveTypeList(string data = "")
-        {
-
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-
-
-            ViewBag.Success = data;
-            List<LeaveType> ObjLeaveType = new List<LeaveType>();
-
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            if (Token != null)
-            {
-
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjLeaveType = JsonConvert.DeserializeObject<List<LeaveType>>(result);
-
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-
-
-            return View(ObjLeaveType);
-        }
-        public async Task<IActionResult> LeaveTypeDetails(int id)
+        private async Task<ActionResult<JsonObject>> ViewLeaveDetail(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            if (Token != null)
-            {
-
-                LeaveType ObjLeaveType = await GetLeaveTypebyID(id);
-
-                return View(ObjLeaveType);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-
-            }
-        }
-        private async Task<LeaveType> GetLeaveTypebyID(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            LeaveType ObjLeaveType = new LeaveType();
+            Leave ObjLeave = new Leave();
 
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjLeaveType = JsonConvert.DeserializeObject<LeaveType>(result);
+            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetLeaveDetailInfoId{id}");
 
-            }
-
-            return ObjLeaveType;
-        }
-        [HttpGet]
-        public async Task<IActionResult> LeaveTypeCreateOrUpdate(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            //Get Instutute ID through Sessions
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
-
-            if (Token != null)
-            {
-
-
-
-
-
-                if (id == 0)
-                {
-                    LeaveType Info = new LeaveType();
-
-                    return View(Info);
-                }
-                LeaveType LeaveTypeinfo = await GetLeaveTypebyID(id);
-
-                return View(LeaveTypeinfo);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjLeaveType.CompanyId = userObject.CompanyId;
-                ObjLeaveType.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LeaveTypeAddOrUpdate", ObjLeaveType);
-
-                if (message.IsSuccessStatusCode)
-                {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("LeaveTypeList", new { data = status });
-
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-
-                return View();
-            }
-        }
-        public async Task<IActionResult> LeaveTypeDelete(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLeaveTypeInfo{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
-
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                int status = 0;
-                if (model.Success)
-                {
-
-
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-
-
-
-                }
-
-                return RedirectToAction("LeaveTypeList", new { data = status });
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-
-        }
-
-        public async Task<ActionResult<JsonObject>> LeaveTypeCheckData(int id, string title)
-        {
-
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeCheckData{id}/{title}/{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -514,11 +299,9 @@ namespace HRHUBWEB.Controllers
 
 
 
-
-
-
-
         #endregion
+
+
 
 
 
@@ -606,7 +389,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-        //        #region CandidateSubject
+        //        #region LeaveSubject
         //        [CustomAuthorization]
         //        public async Task<IActionResult> SubjectList(string data = "")
         //        {
@@ -622,13 +405,13 @@ namespace HRHUBWEB.Controllers
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 
-        //            List<ViewCandidateClassSubject> CandidateSubject = new List<ViewCandidateClassSubject>();
+        //            List<ViewLeaveClassSubject> LeaveSubject = new List<ViewLeaveClassSubject>();
 
-        //            HttpResponseMessage message = await _client.GetAsync("api/Candidate/GetCandidateSubjects");
+        //            HttpResponseMessage message = await _client.GetAsync("api/Leave/GetLeaveSubjects");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
-        //                CandidateSubject = JsonConvert.DeserializeObject<List<ViewCandidateClassSubject>>(result);
+        //                LeaveSubject = JsonConvert.DeserializeObject<List<ViewLeaveClassSubject>>(result);
 
         //            }
         //            else
@@ -636,7 +419,7 @@ namespace HRHUBWEB.Controllers
         //                return RedirectToAction("Loginpage", "User",  new {id=2 });
         //            }
 
-        //            return View(CandidateSubject);
+        //            return View(LeaveSubject);
         //        }
         //        public async Task<IActionResult> SubjectDetails(int id)
         //        {
@@ -645,9 +428,9 @@ namespace HRHUBWEB.Controllers
 
 
         //            if (Token != null) { 
-        //            CandidateClassSubject CandidateSubject = await GetSubjectbyID(id);
+        //            LeaveClassSubject LeaveSubject = await GetSubjectbyID(id);
 
-        //            return View(CandidateSubject);
+        //            return View(LeaveSubject);
         //             }
         //            else
         //            {
@@ -655,23 +438,23 @@ namespace HRHUBWEB.Controllers
 
         //            }
         //}
-        //        private async Task<CandidateClassSubject> GetSubjectbyID(int id)
+        //        private async Task<LeaveClassSubject> GetSubjectbyID(int id)
         //        {
-        //            CandidateClassSubject CandidateSubject = new CandidateClassSubject();
+        //            LeaveClassSubject LeaveSubject = new LeaveClassSubject();
         //            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateSubjectId{id}");
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetLeaveSubjectId{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
-        //                CandidateSubject = JsonConvert.DeserializeObject<CandidateClassSubject>(result);
+        //                LeaveSubject = JsonConvert.DeserializeObject<LeaveClassSubject>(result);
 
         //            }
 
-        //            return CandidateSubject;
+        //            return LeaveSubject;
         //        }
         //        [HttpGet]
-        //        public async Task<IActionResult> CandidateSubject(int id)
+        //        public async Task<IActionResult> LeaveSubject(int id)
         //        {
 
         //            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -729,12 +512,12 @@ namespace HRHUBWEB.Controllers
 
         //            if (id == 0)
         //            {
-        //                CandidateClassSubject Info = new CandidateClassSubject();
+        //                LeaveClassSubject Info = new LeaveClassSubject();
         //                return View(Info);
         //            }
-        //            CandidateClassSubject Candidateinfo = await GetSubjectbyID(id);
+        //            LeaveClassSubject Leaveinfo = await GetSubjectbyID(id);
 
-        //            return View(Candidateinfo);
+        //            return View(Leaveinfo);
         //            }
         //            else
         //            {
@@ -743,7 +526,7 @@ namespace HRHUBWEB.Controllers
 
         //        }
         //        [HttpPost]
-        //        public async Task<IActionResult> CandidateSubject(List<CandidateClassSubject> rows)
+        //        public async Task<IActionResult> LeaveSubject(List<LeaveClassSubject> rows)
         //        {
         //            try
         //            {
@@ -760,7 +543,7 @@ namespace HRHUBWEB.Controllers
 
         //                }
 
-        //                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Candidate/CandidateSubjectAddOrCreate", rows);
+        //                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Leave/LeaveSubjectAddOrCreate", rows);
 
         //                    if (message.IsSuccessStatusCode)
         //                    {
@@ -804,12 +587,12 @@ namespace HRHUBWEB.Controllers
         //                return View();
         //            }
         //        }
-        //        public async Task<IActionResult> DeleteCandidateSubjectByClassId(int id)
+        //        public async Task<IActionResult> DeleteLeaveSubjectByClassId(int id)
         //        {
         //            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-        //            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateClassSubjectByClassId{id}");
+        //            HttpResponseMessage message = await _client.DeleteAsync($"api/Leave/DeleteLeaveClassSubjectByClassId{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var body = message.Content.ReadAsStringAsync();
@@ -863,7 +646,7 @@ namespace HRHUBWEB.Controllers
 
         //            List<SubjectInfo> cc = new List<SubjectInfo>();
 
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetSubjectLanguageId{id}");
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetSubjectLanguageId{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
@@ -885,7 +668,7 @@ namespace HRHUBWEB.Controllers
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
         //            List<ClassInfo> cc = new List<ClassInfo>();
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetClassByLevelId{id}");
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetClassByLevelId{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
@@ -907,7 +690,7 @@ namespace HRHUBWEB.Controllers
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
         //            List<SubjectInfo> cc = new List<SubjectInfo>();
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetSubjectByGroupId{id}/{groupId}");
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/GetSubjectByGroupId{id}/{groupId}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
@@ -923,18 +706,18 @@ namespace HRHUBWEB.Controllers
 
         //        }
 
-        //        //load Candidatesubject data in dropdown by Class ID
+        //        //load Leavesubject data in dropdown by Class ID
         //        public async Task<IActionResult> LoadDataByClassId(int id)
         //        {
         //            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-        //            List<CandidateClassSubject> cc = new List<CandidateClassSubject>();
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/LoadDataByClassId{id}");
+        //            List<LeaveClassSubject> cc = new List<LeaveClassSubject>();
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/LoadDataByClassId{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
-        //                cc = JsonConvert.DeserializeObject<List<CandidateClassSubject>>(result);
+        //                cc = JsonConvert.DeserializeObject<List<LeaveClassSubject>>(result);
 
         //            }
         //            else
@@ -947,17 +730,17 @@ namespace HRHUBWEB.Controllers
         //        }
 
         //        //Delete single row Data from table       
-        //        public async Task<IActionResult> DeleteCandidateSubject(int id)
+        //        public async Task<IActionResult> DeleteLeaveSubject(int id)
         //        {
         //            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
         //            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-        //            List<CandidateClassSubject> cc = new List<CandidateClassSubject>();
-        //            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/DeleteCandidateSubject{id}");
+        //            List<LeaveClassSubject> cc = new List<LeaveClassSubject>();
+        //            HttpResponseMessage message = await _client.GetAsync($"api/Leave/DeleteLeaveSubject{id}");
         //            if (message.IsSuccessStatusCode)
         //            {
         //                var result = message.Content.ReadAsStringAsync().Result;
-        //                cc = JsonConvert.DeserializeObject<List<CandidateClassSubject>>(result);
+        //                cc = JsonConvert.DeserializeObject<List<LeaveClassSubject>>(result);
 
         //            }
         //            else

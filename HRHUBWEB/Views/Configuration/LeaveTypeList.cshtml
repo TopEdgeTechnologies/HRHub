@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HRHUBAPI.Models.Designation>
+﻿@model IEnumerable<HRHUBAPI.Models.LeaveType>
 
 
 
@@ -10,21 +10,49 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">User Group Details</h3>
+                <h3 class="card-title">Leave Type Details</h3>
+
+                <div class="page-rightheader ms-md-auto">
+                    <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                        <div class="btn-list">
+
+                            @if (Convert.ToBoolean(ViewBag.IsNew))
+                            {
+
+                                <a asp-action="LeaveTypeCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary me-3">Add Leave Type</a>
+
+                            }
+                            @*  <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
+                            <i class="feather feather-mail"></i>
+                            </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact" fdprocessedid="8etyje">
+                            <i class="feather feather-phone-call"></i>
+                            </button>*@
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info" fdprocessedid="32j8uv">
+                                <i class="feather feather-info"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @*
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
-                    <div class="card-options"> <a asp-action="DesignationCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add New</a> </div>
-                }
+
+                <div class="card-options"> <a asp-action="LeaveTypeCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add Leave Type</a> </div>
+
+                }*@
             </div>
-                <div class="card-body">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                
-                                <th class="border-bottom-0">Designation Title</th>                               
+
+                                <th class="border-bottom-0">LeaveType Title</th>
+                                <th class="border-bottom-0">No. of Leaves</th>
+                                <th class="text-center">Non Paid leave</th>
                                 <th class="text-center">Status</th>
-                                <th class="">Action</th>
+                                <th class="col-md-1">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,8 +63,20 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Title)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.NoOfLeaves)
+                                    </td>
 
-                                   
+                                    @if (item.IsNonPaid == true)
+                                    {
+                                        <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
+
+                                    }
+
                                     @if (item.Status == true)
                                     {
                                         <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
@@ -46,7 +86,6 @@
                                         <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
 
                                     }
-
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
@@ -65,13 +104,13 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
+                                                    <a asp-action="LeaveTypeCreateOrUpdate" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit primary text-primary">
                                                         </i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="DesignationDelete" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a asp-action="LeaveTypeDelete" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger"></i>
                                                     </a>
                                                 }
@@ -94,18 +133,10 @@
 </div>
 
 <!-- End Row -->
-
-
-
-
-
-
-
-
 @section scripts{
 
     <script>
-        $(document).ready( function () {
+        $(document).ready(function () {
 
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {

@@ -15,8 +15,6 @@ public partial class User
 
     public int? StaffId { get; set; }
 
-    public int? StudentId { get; set; }
-
     public bool IsActive { get; set; }
 
     public int? CreateBy { get; set; }
@@ -30,4 +28,6 @@ public partial class User
     public int? CompanyId { get; set; }
 
     public int? GroupId { get; set; }
+
+    public string? UserImage { get; set; }
 }
