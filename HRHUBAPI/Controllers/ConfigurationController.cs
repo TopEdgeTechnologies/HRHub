@@ -70,10 +70,10 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteDesignationInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteDesignationInfo(int id)
+        [HttpDelete("DeleteDesignationInfo{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteDesignationInfo(int id, int UserId)
         {
-            var result = await new Designation().DeleteDesignationInfo(id, _context);
+            var result = await new Designation().DeleteDesignationInfo(id, UserId, _context);
             if (id > 0)
                 return Ok(new
                 {

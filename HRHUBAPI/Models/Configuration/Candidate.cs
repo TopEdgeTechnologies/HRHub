@@ -25,32 +25,7 @@ namespace HRHUBAPI.Models
             try
             {
                 var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
-                //var list = await (from c in _context.Candidates
-                //                  join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-                //                  join g in _context.GroupInfos on c.GroupId equals g.GroupId
-                //                  join s in _context.Sessions on c.SessionId equals s.SessionId
-
-                //                  where c.IsDeleted == false
-                //                  && cl.IsDeleted == false
-                //                  && g.IsDeleted == false
-                //                  && s.IsDeleted == false
-                //                  select new Candidate()
-                //                  {
-                //                      CandidateId = c.CandidateId,
-                //                      Name = $"{c.FirstName} {c.LastName}",//c.Name,
-                //                      AppliedForClassId = cl.ClassId,
-                //                      ClassTitle = cl.Title,
-                //                      GroupId = g.GroupId,
-                //                      GroupName = g.Title,
-                //                      SessionId = s.SessionId,
-                //                      SessionName = s.Title,
-                //                      Cnic = c.Cnic,
-                //                      AdmissionDate = c.AdmissionDate,
-                //                      CandidateNo= c.CandidateNo,
-                //                      IsActive = c.IsActive
-
-
-                //                  }).ToListAsync();
+               
 
                 return list  ;
 
@@ -141,6 +116,27 @@ namespace HRHUBAPI.Models
                         CandidateInfo.IsDeleted = false;
                         _context.Candidates.Add(CandidateInfo);
                         await _context.SaveChangesAsync();
+
+
+                        // ---------------------------------------------Save and Insert Candidate Status records
+
+
+
+
+                        CandidateScreening objscreen = new CandidateScreening();
+                        objscreen.StatusId = CandidateInfo.StatusId;
+                        objscreen.CandidateId = CandidateInfo.CandidateId;
+                        objscreen.Remarks = "Applied";
+                        objscreen.ScreeningDate = DateTime.Now;
+                        objscreen.CreatedOn = DateTime.Now;
+                        objscreen.CreatedBy = CandidateInfo.CreatedBy;
+                        objscreen.IsDeleted = false;
+                        _context.CandidateScreenings.Add(objscreen);
+                        await _context.SaveChangesAsync();
+
+                        // ---------------------------------------------
+
+
                     }
 
 
@@ -157,7 +153,7 @@ namespace HRHUBAPI.Models
                         {
                             item.IsDeleted = true;
                             item.UpdatedBy = CandidateInfo.CreatedBy;
-                           
+                            item.UpdatedOn = DateTime.Now;
                         }
 
                         await _context.SaveChangesAsync();
@@ -194,13 +190,6 @@ namespace HRHUBAPI.Models
 
 
                     //--------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 
 

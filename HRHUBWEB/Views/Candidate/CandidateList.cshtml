@@ -17,11 +17,15 @@
                 <h3 class="card-title">Candidate Details</h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
+                        @*<a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add New </a>*@
                     <div class="card-options">
-                        <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary">
-                            <i class="fe fe-plus-circle me-1">
-                            </i>Add New
-                        </a>
+                        <div class="btn-list">
+                            <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add Candidates </a>
+
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
                     </div>
                 }
             </div>

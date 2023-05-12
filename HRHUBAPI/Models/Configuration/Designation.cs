@@ -12,8 +12,9 @@ namespace HRHUBAPI.Models
 
     public partial class Designation
     {
-        
 
+        [NotMapped]
+        public IEnumerable<Designation>? Listdesignation { get; set; }
         public async Task<List<Designation>> GetDesignation(int CompanyId,HrhubContext _context)
         {
             try
@@ -75,7 +76,7 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
                   
                     await _context.SaveChangesAsync();
-					return checkDesignationInfo;
+					return ObjDesignationInfo;
 
 				}
                 else
@@ -102,7 +103,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteDesignationInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteDesignationInfo(int id,int Userid, HrhubContext _context)
         {
             try
             {
@@ -113,6 +114,7 @@ namespace HRHUBAPI.Models
                 {
                     DesignationInfo.IsDeleted= true;   
                     DesignationInfo.UpdatedOn= DateTime.Now;
+                    DesignationInfo.UpdatedBy = Userid;
                     check = true;
 
                 }

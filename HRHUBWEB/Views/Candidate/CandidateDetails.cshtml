@@ -32,7 +32,10 @@
                         </div>
                     </div>
                     <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                        <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
+
                         <a class="btn btn-primary" href=""><i class="fa fa-download"></i> Download Resume</a>
+
                     </div>
                 </div>
                 <h5 class="mb-4 font-weight-semibold">Description</h5>
@@ -73,7 +76,7 @@
                             </tr>
                            
                             <tr>
-                                <td><span class="font-weight-semibold">Date Of Birth :</span> @Model.Dob</td>
+                                <td><span class="font-weight-semibold">Date Of Birth :</span> @Model.Dob.Value.ToString("dd-MMM-yyyy")</td>
                             </tr>
                             <tr>
                                 <td><span class="font-weight-semibold">Gender :</span> @Model.Gender</td>
@@ -96,7 +99,7 @@
                     <i class="fa fa-caret-right me-2"></i> Currently Working at <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
                 <div>
-                    <i class="fa fa-caret-right me-2"></i> 3 Yrs Of Working Experience in <span class="font-weight-semibold">Info Tech Pvt Ltd</span>
+                    <i class="fa fa-caret-right me-2"></i> @Model.ExperienceInYears Yrs Of Working Experience in <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
                 <h5 class="mb-4 mt-5 font-weight-semibold">IT Skills</h5>
                 <div class="table-responsive">
@@ -121,7 +124,7 @@
             </div>
             <div class="card-footer">
                 <div class="btn-list">
-                    <a class="btn btn-primary" href="javascript:void(0);"><i class="fa fa-download"></i> Download Resume</a>
+                    @*<a class="btn btn-primary" href="javascript:void(0);"><i class="fa fa-download"></i> Download Resume</a>*@
                     @*<a class="btn btn-warning" type="hidden" href="javascript:void(0);"><i class="si si-share me-1"></i> Share Profile</a>
                     <a class="btn btn-success" href="javascript:void(0);"><i class="si si-call-in me-1"></i>Contact</a>*@
                 </div>

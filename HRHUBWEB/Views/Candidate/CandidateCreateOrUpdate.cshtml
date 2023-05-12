@@ -4,19 +4,21 @@
     ViewData["Title"] = "Candidate Form";
 }
 
-<div class="page-header d-xl-flex d-block">
-    <div class="page-leftheader">
-        <div class="page-title">@((Model.CandidateId == 0) ? "Enroll" : "Update") Candidate</div>
-    </div>
 
-</div>
 <!-- Row -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Basic Details</h3>
+                <h3 class="card-title">Candidate Personal Information</h3>
+                <div class="card-options">
+                    <div class="btn-list">
 
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                    </div>
+                </div>
             </div>
             @using (@Html.BeginForm("CandidateCreateOrUpdate", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
             {
@@ -28,7 +30,7 @@
                     <div class="row">
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
-                                <label class="form-label">Name *</label>
+                                <label class="form-label">Name <span class="text-danger">*</span></label>
                                 <input asp-for="Name" class="form-control" type="text" placeholder="Enter Name">
 
                             </div>
@@ -36,7 +38,7 @@
 
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
-                                <label class="form-label">Email *</label>
+                                <label class="form-label">Email <span class="text-danger">*</span></label>
                                 <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email">
 
                             </div>
@@ -44,7 +46,7 @@
 
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
-                                <label class="form-label">Phone No *</label>
+                                <label class="form-label">Phone No <span class="text-danger">*</span></label>
                                 <input asp-for="Phone" class="form-control" type="text" placeholder="Enter phone">
 
                             </div>
@@ -67,7 +69,7 @@
 
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
-                                <label class="form-label">Qualification *</label>
+                                <label class="form-label">Qualification <span class="text-danger">*</span></label>
                                 <input asp-for="Qualification" class="form-control" type="text" placeholder="Enter Qualification">
 
                             </div>
@@ -96,6 +98,34 @@
 
                         </div>
 
+                        <div class="col-md-4 col-sm-4">
+                            <label class="form-label">City <span class="text-danger">*</span></label>
+                            <div class="form-group local-forms">
+                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label class="form-label">Permanant Address <span class="text-danger">*</span></label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="Address" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+
+                            <label class="form-label">Choose Image </label>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" accept=".jpg, .jpeg, .png" id="CandidatePicture" name="CandidatePicture" type="file">
+                            </div>
+                        </div>
+
+
+
+
+
+
                         <div class="card-header">
                             <h3 class="card-title">Professional Details</h3>
 
@@ -108,35 +138,35 @@
                     <div class="row mt-5">
                         <div class="col-md-6">
                             <div class="form-group local-forms">
-                                <label class="form-label">Current Company *</label>
+                                <label class="form-label">Current Company <span class="text-danger">*</span></label>
                                 <input asp-for="CurrentCompany" class="form-control" type="text" placeholder="Enter Current Company">
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group local-forms">
-                                <label class="form-label">Current Designation *</label>
+                                <label class="form-label">Current Designation <span class="text-danger">*</span></label>
                                 <input asp-for="CurrentDesignation" class="form-control" type="text" placeholder="Enter Current Designation">
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group local-forms">
-                                <label class="form-label">Current Salary *</label>
+                                <label class="form-label">Current Salary <span class="text-danger">*</span></label>
                                 <input asp-for="CurrentSalary" class="form-control" type="text" placeholder="Enter CurrentSalary">
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group local-forms">
-                                <label class="form-label">Expected Salary *</label>
+                                <label class="form-label">Expected Salary <span class="text-danger">*</span></label>
                                 <input asp-for="ExpectedSalary" class="form-control" type="text" placeholder="Enter Expected Salary">
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Experiences in Year *</label>
+                                <label class="form-label">Experiences in Year <span class="text-danger">*</span></label>
                                 <select asp-for="ExperienceInYears" class="form-control custom-select select2" data-placeholder="Select Experience">
                                     <option label="Select Experience"></option>
                                     <option value="0">Fresher</option>
@@ -157,7 +187,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Experiences in Months *</label>
+                                <label class="form-label">Experiences in Months <span class="text-danger">*</span></label>
                                 <select asp-for="ExperienceInMonths" class="form-control custom-select select2" data-placeholder="Select Months">
                                     <option label="Select Months"></option>
                                     <option value="0">Fresher</option>
@@ -171,7 +201,7 @@
                                     <option value="8">8 Months</option>
                                     <option value="9">9 Months</option>
                                     <option value="10">10 Months</option>
-                                    <option value="11">10+ Months</option>
+                                    <option value="11">11 Months</option>
                                 </select>
                             </div>
                         </div>
@@ -195,12 +225,12 @@
                                 <div class="card-body">
                                     <div class="leave-types">
                                         <div class="form-group local-forms">
-                                            <label class="form-label">Skills *</label>
+                                            <label class="form-label">Skills <span class="text-danger">*</span></label>
                                             <input id="SkillTitle" class="form-control" type="text" placeholder="Enter Skills">
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="form-label">Skill Status *</label>
+                                            <label class="form-label">Skill Status <span class="text-danger">*</span></label>
                                             <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Skill Status">
                                                 <option label="Select Months"></option>
                                                 <option value="Beginer">Beginer</option>
@@ -213,7 +243,9 @@
                                        
                                     </div>
                                     <div class="ms-auto">
-                                        <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass"> <i class="fe fe-arrow-right-circle"></i> </button>
+                                        <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass" style="float: right;">
+                                            <i class="fa fa-arrow-right" style="font-size: x-large;"></i>
+                                        </button>
                                     </div>
                                 </div>
                                
@@ -225,7 +257,8 @@
                                     <div class="card-header border-0">
                                         <h4 class="card-title">Skills Details</h4>
                                     </div>
-                                    <div class="card-body">
+                                    
+                                        <div class="card-body overflow-auto overflow-scrolling mt-3" style="height: 200px;">
 
                                         @if (Model.CandidateId > 0)
                                         {
@@ -249,14 +282,19 @@
                                                     </li>
                                                 </ul>
 
-                                            
+
 
                                             }
-
-                                    }
+                                        }
+                                        else
+                                        {
+                                        <ul class="timeline" id="SkillsList">
+                                        </ul>
+                                        }
 
                                                     
                                     </div>
+                                   
                                    
                                 </div>
                             </div>
@@ -331,10 +369,10 @@
                         <h3 class="card-title">Apply Now</h3>
 
                     </div>
-                    <div class="row ">
+                    <div class="row mt-5">
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
-                                <label class="form-label">Apply Date *</label>
+                                <label class="form-label">Apply Date <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -346,7 +384,7 @@
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
-                                <label class="form-label">Apply for Position *</label>
+                                <label class="form-label">Apply for Position <span class="text-danger">*</span></label>
                                 <select asp-for="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">
                                     <option value="">Select Designation</option>
                                 </select>
@@ -356,13 +394,13 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label class="form-label">Upload Resume *</label>
+                            <label class="form-label">Upload Resume <span class="text-danger">*</span></label>
                             <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidateResume" name="CandidateResume" type="file">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" type="file" accept=".pdf, .doc, .docx">
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label">Cover Latter *</label>
+                            <label class="form-label">Cover Latter <span class="text-danger">*</span></label>
                             <div class="form-group local-forms">
                                 <textarea asp-for="CoverLetter" rows="3" class="form-control" placeholder="Cover Latter"></textarea>
                             </div>
@@ -371,45 +409,12 @@
 
                     </div>
 
-                    <div class="card-header">
-                        <h3 class="card-title">Address Details</h3>
-
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col-md-6">
-                            <label class="form-label">City *</label>
-                            <div class="form-group local-forms">
-                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Permanant Address *</label>
-                            <div class="form-group local-forms">
-                                <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                           
-                            
-                            <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidatePicture" name="CandidatePicture" type="file">
-                            </div>
-                        </div>
-
-
-                         
-
-
-
-                    </div>
+                  
 
 
                     <div class="student-submit ">
 
-                        <input type="button" value="Save" id="btnsave" class="btn btn-primary" />
+                        <input type="button" value="Enroll Candidate" id="btnsave" class="btn btn-primary" />
                         <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
                     </div>
 
@@ -448,11 +453,75 @@
 
 
 
+            $('#CandidatePicture').change(function () {
+                var fileInput = $(this);
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+                var fileSize = this.files[0].size;
+                var filePath = fileInput.val();
+                if (!allowedExtensions.exec(filePath)) {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
+                        type: "warning"
+                    });
+                    fileInput.val('');
+                    return false;
+                } else if (fileSize > fileSizeLimit) {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+                        type: "warning"
+                    });
+                    fileInput.val('');
+                    return false;
+                } else {
+                    readURL(this)
 
-        })
+                }
+
+            });
 
 
 
+
+
+
+            $('#CandidateResume').change(function () {
+            debugger
+            var fileInput = $(this);
+            var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+            var fileSizeLimit = 5 * 1024 * 1024; // 2 MB
+            var fileSize = this.files[0].size;
+            var filePath = fileInput.val();
+            if (!allowedExtensions.exec(filePath)) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a Pdf, Doc, or Docx file.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else if (fileSize > fileSizeLimit) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else {
+                readURL(this)
+
+            }
+
+        });
+
+
+
+
+
+
+        });
+
+
+        
 
 
 
@@ -659,6 +728,50 @@
                 $("#ExperienceInMonths").css("border-color", "#ddd");
             }
 
+
+            if ($("#City").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter City Name"
+                });
+
+
+
+                $("#City").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#City").css("border-color", "#ddd");
+            }
+
+
+            if ($("#Address").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Address"
+                });
+
+
+
+                $("#Address").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Address").css("border-color", "#ddd");
+            }
+
+
+
+
+
+
+
+
+
             var rowCount = $('#AccountTable tbody tr').length;
             if (rowCount < 1) {
                 $.growl.warning({
@@ -667,16 +780,21 @@
 
                 status = false;
             }
-            //if (document.getElementById("CandidateResume").value == "") {
+            if (document.getElementById("CandidateResume").value == "") {
 
-            //    $.growl.warning({
-            //        message: "Please Enter Experience In Months"
-            //    });
+                $.growl.warning({
+                    message: "Please Enter Resume"
+                });
 
-            //    status = false;
-            
-            //}
-           
+
+                $("#CandidateResume").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CandidateResume").css("border-color", "#ddd");
+            }
+
 
             return status;
         }
@@ -727,8 +845,8 @@
 
                     debugger
 
-                    var New_LI = " <li class='primary'   >";
-                    New_LI = New_LI + " <a target='_blank' href='#' class='font-weight-semibold fs-15 mb-2 ms-3'>" + $("#SkillTitle").val() +"</a>";
+                    var New_LI = "<li class='primary'>";
+                    New_LI = New_LI + "<a target='_blank' href='#' class='font-weight-semibold fs-15 mb-2 ms-3'>" + $("#SkillTitle").val() +"</a>";
                     New_LI = New_LI + "<p class='mb-0 pb-0 text-muted fs-11 pt-1 ms-3'>" + $("#SkillStatus").val() + "</p>";
                     $("#SkillsList").append(New_LI);
 
