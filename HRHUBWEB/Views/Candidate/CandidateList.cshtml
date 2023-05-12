@@ -1,7 +1,11 @@
-﻿@model IEnumerable<HRHUBAPI.Models.Candidate>
+﻿@model HRHUBAPI.Models.Candidate
 
 
-
+<style>
+    .modal-dialog {
+        max-width: 1012px;
+    }
+</style>
 
 <!-- Row -->
 <div class="row row-sm mt-4">
@@ -21,23 +25,23 @@
                     </div>
                 }
             </div>
-                <div class="card-body">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                
+
                                 <th class="border-bottom-0">Candidate Title</th>
                                 <th class="border-bottom-0">Candidate Email</th>
                                 <th class="border-bottom-0">Qualification</th>
                                 <th class="border-bottom-0">Contact No</th>
                                 <th class="border-bottom-0">City</th>
-                                <th class="text-center">Status</th>
+                                @*<th class="text-center">Status</th>*@
                                 <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.ListCandidate)
                             {
                                 <tr>
 
@@ -53,22 +57,22 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Phone)
                                     </td>
-                                     <td>
+                                    <td>
                                         @Html.DisplayFor(modelItem => item.City)
                                     </td>
-                                    
-                                   
-                              
-                                    @*@if (item.Status == true)
-                                    {
-                                        <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
 
-                                    }
-*@
+
+
+                                    @*@if (item.Status == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                }
+                                *@
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
@@ -81,14 +85,14 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">
+                                                    <a class="action-btns1" Onclick="loadModal(@item.CandidateId)" >
                                                         <i class="feather feather-check text-success mt-1">
                                                         </i>
                                                     </a>
                                                     <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View">
                                                         <i class="feather feather-eye  text-primary mt-1">
                                                         </i>
-                                                    </a> 
+                                                    </a>
                                                     <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit  text-primary mt-1">
                                                         </i>
@@ -107,7 +111,7 @@
                                         </td>
                                     }
 
-                                   
+
 
                                 </tr>
                             }
@@ -125,6 +129,131 @@
 
 
 
+<div class="modal fade" id="newStatusmodal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Candidate Status</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" asp-for="CandidateId" />
+                <div class="col-lg-12">
+                    <div class="card overflow-hidden">
+                        <div class="card-header border-0">
+                            <h4 class="card-title">Status Set</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group local-forms">
+                                    <label class="form-label">Status *</label>
+                                    <select asp-for="StatusId" name="StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateStatus,"StatusId" ,"Title"))">
+                                        <option value="">Select Status</option>
+                                    </select>
+
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Current Date</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="feather feather-calendar"></i>
+                                            </div>
+                                        </div><input name="ScreeningDate" id="ScreeningDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Remarks</label>
+                                    <textarea rows="2" name="Remarks" id="Remarks" class="form-control" placeholder="something text here..."></textarea>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="Submit()">Submit</button>
+                                <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+                            </div>
+
+
+
+                            <div class="col-md-6">
+                                <div class="card overflow-hidden">
+                                    <div class="card-header border-0">
+                                        <h4 class="card-title">Time Line Status</h4>
+                                    </div>
+                                    <div class="pt-2">
+                                        <div class="list-group">
+                                            <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                                                <div class="me-3 me-xs-0">
+                                                    <div class="calendar-icon icons">
+                                                        <div class="date_time bg-pink-transparent">
+                                                            <span class="date">18</span> <span class="month">FEB</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ms-1">
+                                                    <div class="h5 fs-14 mb-1">Board meeting Completed</div>
+                                                    <small class="text-muted">attend the company mangers...</small>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                                                <div class="me-3 me-xs-0">
+                                                    <div class="calendar-icon icons">
+                                                        <div class="date_time bg-success-transparent ">
+                                                            <span class="date">16</span> <span class="month">FEB</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ms-1">
+                                                    <div class="h5 fs-14 mb-1">Updated the Company Policy</div>
+                                                    <small class="text-muted">
+                                                        some changes &amp; add the terms &amp; conditions
+
+                                                    </small>
+                                                </div>
+                                            </div> <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                                                <div class="me-3 me-xs-0">
+                                                    <div class="calendar-icon icons">
+                                                        <div class="date_time bg-orange-transparent ">
+                                                            <span class="date">17</span> <span class="month">FEB</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ms-1">
+                                                    <div class="h5 fs-14 mb-1">Office Timings Changed</div>
+                                                    <small class="text-muted"> this effetct after March 01st 9:00 Am To 5:00 Pm</small>
+                                                </div>
+                                            </div> <div class="list-group-item d-flex pt-3 pb-5 border-0">
+                                                <div class="me-3 me-xs-0">
+                                                    <div class="calendar-icon icons">
+                                                        <div class="date_time bg-info-transparent ">
+                                                            <span class="date">26</span>
+                                                            <span class="month">JAN</span>
+                                                        </div>
+                                                    </div>
+                                                </div> <div class="ms-1"> <div class="h5 fs-15 mb-1"> Republic Day Celebrated </div> <small class="text-muted">participate the all employess </small> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -132,7 +261,14 @@
 @section scripts{
 
     <script>
-        $(document).ready( function () {
+
+
+        $(document).ready(function () {
+
+
+            $('#StatusId').select2();
+
+
 
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
@@ -174,6 +310,93 @@
             $('#myTable').DataTable();
         });
 
+
+
+
+        function loadModal(id) {
+
+          
+            $("#CandidateId").val(id)
+            $("#newStatusmodal").modal('show');
+
+
+        }
+
+
+        function Submit() {
+     
+            var obj = {
+
+                CandidateId: $("#CandidateId").val(),
+                StatusId: $("#StatusId").val(),
+                Remarks: $("#Remarks").val(),
+                ScreeningDate: $("#ScreeningDate").val()
+            }
+
+          
+
+            $.ajax({
+                url: "/Candidate/CandidateStatusEdit",
+                type: "POST",
+                async: false,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if(data!=null)
+                    {
+                          var table = $('#myTable').DataTable();
+                           table.clear();
+                           table.draw();
+                      
+                        var  listcandidate= data.listcandidate
+                       
+                        for (var i = 0; i < listcandidate.length; i++) {
+                           
+                            var rowData = [];
+                            var action = '<div class="d-flex">';
+                            action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
+                            action += '<i class="feather feather-check text-success mt-1"></i></a>';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
+                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
+                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
+
+
+                            rowData.push([listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
+
+
+                           table.rows.add(rowData);
+                           table.draw();
+
+                          }
+
+                        $("#newStatusmodal").modal('hide');
+
+                      $.growl.notice({
+                            message: "Status Updated"
+                          });
+
+
+                    }
+                  
+                    
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+               
+     
+     }
+
+
     </script>
 
 }
+
+

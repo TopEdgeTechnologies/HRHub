@@ -10,6 +10,7 @@ using HRHUBWEB.Models;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
+using System.ComponentModel.Design;
 
 namespace HRHUBWEB.Controllers
 {
@@ -35,7 +36,7 @@ namespace HRHUBWEB.Controllers
 
 
             ViewBag.Success = data;
-            List<Candidate> ObjCandidate = new List<Candidate>();
+            Candidate ObjCandidate = new Candidate();
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -49,7 +50,7 @@ namespace HRHUBWEB.Controllers
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
-                    ObjCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+                    ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
 
                 }
 
@@ -158,14 +159,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-                //HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetClassInfos{InstituteId}");
-                //if (message1.IsSuccessStatusCode)
-                //{
-                //    var result = message3.Content.ReadAsStringAsync().Result;
-                //    ViewBag.ClassList = JsonConvert.DeserializeObject<List<ClassInfo>>(result);
-
-                //}
-
+              
 
                 if (id == 0)
             {
@@ -314,11 +308,76 @@ namespace HRHUBWEB.Controllers
 
                 }
                 );
-                ///return RedirectToAction("Loginpage", "User",  new {id=2 });
+              
             }
         }
 
 
+
+
+
+
+        // Update Candidate Status here
+        [HttpPost]
+        public async Task<ActionResult<JsonObject>> CandidateStatusEdit(CandidateScreening obj)
+        {
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            obj.CreatedBy = userObject.UserId;
+
+
+          
+            HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/CandidateStatusUpdate", obj);
+            if (message.IsSuccessStatusCode)
+            {
+                var result = message.Content.ReadAsStringAsync().Result;
+
+                // Update list of candidates
+                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateInfos{userObject.CompanyId}");
+                if (message.IsSuccessStatusCode)
+                {
+                    var result1 = message1.Content.ReadAsStringAsync().Result;
+                   var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1);
+
+                    return Json(new
+                    {
+                        success =true ,
+                        Listcandidate = ListCandidate,
+                   
+                    });
+
+                }
+
+                else
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        Listcandidate = "",
+
+                    });
+                }
+               
+
+
+
+            }
+
+            else
+            {
+                return Json(new
+                {
+                    Success = false,
+                    Message = "Error occur"
+
+                }
+                );
+
+            }
+        }
 
 
 

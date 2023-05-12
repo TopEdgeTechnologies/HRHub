@@ -140,6 +140,34 @@ namespace HRHUBAPI.Controllers
 
 
 
+        // update candidate status
+
+        [HttpPost("CandidateStatusUpdate")]
+        public async Task<ActionResult<CandidateScreening>> CandidateStatusUpdate(CandidateScreening obj)
+        {
+
+
+            var result = await new Candidate().PostScreening(obj, _context);
+            if (result != null && result.ScreeningId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+
+
+
+
+
+        }
+
+
 
         #endregion
 

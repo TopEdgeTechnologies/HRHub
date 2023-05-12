@@ -17,7 +17,9 @@ namespace HRHUBAPI.Models
         public IEnumerable<string>? ListSkillTitle { get; set; }
         [NotMapped]
         public IEnumerable<string>? ListSkillStatus { get; set; }
-       
+        [NotMapped]
+        public IEnumerable<Candidate>? ListCandidate { get; set; }
+
         public async Task<List<Candidate>> GetCandidate(int CompanyId,HrhubContext _context)
         {
             try
@@ -210,7 +212,7 @@ namespace HRHUBAPI.Models
 
                     await _context.SaveChangesAsync();
                     dbContextTransaction.Commit();
-                    return checkCandidateInfo;
+                    return CandidateInfo;
 
 
                 }
@@ -232,6 +234,52 @@ namespace HRHUBAPI.Models
 
            
         }
+
+
+
+        public async Task<CandidateScreening> PostScreening(CandidateScreening objscreen , HrhubContext _context)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+
+                try
+                {
+                    var checkCandidateResult = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == objscreen.CandidateId && x.IsDeleted == false);
+                    if (checkCandidateResult != null && checkCandidateResult.CandidateId > 0)
+                    {
+                        checkCandidateResult.StatusId = Convert.ToInt32(objscreen.StatusId);
+                        checkCandidateResult.UpdatedBy = objscreen.CreatedBy;
+                        
+                        checkCandidateResult.UpdatedOn=DateTime.Now;
+
+                        await _context.SaveChangesAsync();
+                    }
+
+
+
+
+                    // Update CandidateScreening details table
+
+                    _context.CandidateScreenings.Add(objscreen);
+                    objscreen.CreatedOn= DateTime.Now;
+                    objscreen.IsDeleted = false;
+                    await _context.SaveChangesAsync();
+
+                    dbContextTransaction.Commit();
+                    return objscreen;
+                }
+                catch (Exception)
+                {
+
+                    dbContextTransaction.Rollback();
+                    throw;
+
+                }
+            }
+
+        }
+
+
 
 
         public async Task<bool> DeleteCandidate(int id, int UserId, HrhubContext _context)
@@ -350,67 +398,7 @@ namespace HRHUBAPI.Models
 
 
 
-        //Load dropdown candidate data Id vise
-        //public async Task<List<Candidate>> GetCandidateIdVise(int candidateId,HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        //var list = await _context.CandidateInfos.Where(x=>x.IsDeleted==false).ToListAsync();
-        //        var list = await (from c in _context.Candidates
-        //                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-        //                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
-        //                          join s in _context.Sessions on c.SessionId equals s.SessionId
-
-        //                          where c.IsDeleted == false
-        //                          && cl.IsDeleted == false
-        //                          && g.IsDeleted == false
-        //                          && s.IsDeleted == false
-        //                          && c.CandidateId == candidateId
-        //                          select new Candidate()
-        //                          {
-        //                              CandidateId = c.CandidateId,
-        //                              Name = c.Name,
-        //                              AppliedForClassId = cl.ClassId,
-        //                              ClassTitle = cl.Title,
-        //                              GroupId = g.GroupId,
-        //                              GroupName = g.Title,
-        //                              SessionId = s.SessionId,
-        //                              SessionName = s.Title,
-        //                              Cnic = c.Cnic,
-        //                              AdmissionDate = c.AdmissionDate,
-        //                              CandidateNo = c.CandidateNo,
-        //                              Dob = c.Dob,
-        //                              FatherName = c.FatherName,
-        //                              Gender = c.Gender,
-        //                              Address= c.Address,
-        //                              City= c.City,
-        //                              Mobile = c.Mobile,
-        //                              Email= c.Email,
-        //                              PreviousSchool= c.PreviousSchool,
-        //                              FatherQualification = c.FatherQualification,
-        //                              MotherQualification = c.MotherQualification,
-        //                              MotherName= c.MotherName,
-        //                              ParentStaffId= c.ParentStaffId,
-        //                              FirstName = c.FirstName,
-        //                              LastName = c.LastName,
-        //                              IsActive = c.IsActive
-
-
-        //                          }).ToListAsync();
-
-        //        return list;
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
-
+       
 
 
 
