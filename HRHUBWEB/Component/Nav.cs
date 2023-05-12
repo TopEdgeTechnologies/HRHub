@@ -50,7 +50,8 @@ namespace HRHUBWEB.Component
                 isParent = Convert.ToBoolean(row["isParent"]),
                 parentId = Convert.ToInt32(row["parentId"]),
                 IsMenu = Convert.ToBoolean(row["IsMenu"]),
-                ReferenceID = string.IsNullOrWhiteSpace(row["ReferenceID"].ToString()) ? 0 : Convert.ToInt32(row["ReferenceID"])
+                ReferenceID = string.IsNullOrWhiteSpace(row["ReferenceID"].ToString()) ? 0 : Convert.ToInt32(row["ReferenceID"]),
+                titlewithcounter = string.IsNullOrWhiteSpace(row["titlewithcounter"].ToString()) ? 0 : Convert.ToInt32(row["titlewithcounter"])
 
 
 
