@@ -38,7 +38,7 @@
                                 <th class="border-bottom-0">Sr.#</th>
 
                                 <th class="border-bottom-0">Candidate Title</th>
-                                <th class="border-bottom-0">Candidate Email</th>
+                                @*<th class="border-bottom-0">Candidate Email</th>*@
                                 <th class="border-bottom-0">Qualification</th>
                                 <th class="border-bottom-0">Contact No</th>
                                 <th class="border-bottom-0">City</th>
@@ -59,9 +59,9 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                    <td>
+                                   @* <td>
                                         @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
+                                    </td>*@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Qualification)
                                     </td>
@@ -420,35 +420,35 @@
                     console.log(data);
                     if(data!=null)
                     {
-                          var table = $('#myTable').DataTable();
-                           table.clear();
-                           table.draw();
+                        //  var table = $('#myTable').DataTable();
+                        //   table.clear();
+                        //   table.draw();
                       
-                        var  listcandidate= data.listcandidate
+                        //var  listcandidate= data.listcandidate
                        
-                        for (var i = 0; i < listcandidate.length; i++) {
+                        //for (var i = 0; i < listcandidate.length; i++) {
                            
-                            var rowData = [];
-                            var action = '<div class="d-flex">';
-                            action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
-                            action += '<i class="feather feather-check text-success mt-1"></i></a>';
-                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
-                            action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
-                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
-                            action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
-                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
-                            action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
-                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
-                            action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
+                        //    var rowData = [];
+                        //    var action = '<div class="d-flex">';
+                        //    action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
+                        //    action += '<i class="feather feather-check text-success mt-1"></i></a>';
+                        //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
+                        //    action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
+                        //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
+                        //    action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
+                        //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                        //    action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
+                        //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                        //    action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
 
 
-                            rowData.push([i+1, listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
+                        //    rowData.push([i+1, listcandidate[i]["name"],  listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
 
 
-                           table.rows.add(rowData);
-                           table.draw();
+                        //   table.rows.add(rowData);
+                        //   table.draw();
 
-                          }
+                        //  }
 
                         $("#newStatusmodal").modal('hide');
 
@@ -456,7 +456,7 @@
                             message: "Status Updated"
                           });
 
-
+                        location.reload();
                     }
                   
                     

@@ -229,7 +229,7 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("CandidateList", new { data = status });
+                    return RedirectToAction("CandidateList", new { id = 1 });
 
                 }
                 else
