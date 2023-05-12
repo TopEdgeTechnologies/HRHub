@@ -106,7 +106,7 @@
                                                     <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
-                                                    <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume">
+                                                    <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume">
                                                         <i class="feather feather-download  text-secondary mt-1"></i>
                                                     </a>
                                                 }

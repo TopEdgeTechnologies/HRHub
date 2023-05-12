@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
+using System;
 
 namespace HRHUBWEB.Controllers
 {
@@ -312,6 +313,24 @@ namespace HRHUBWEB.Controllers
             }
         }
 
+        // Download file 
+        public IActionResult Download(int Id)
+        {
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "CandidateAttachment", "Ali-638193298396942917");
+            var fileInfo = new FileInfo(filePath);
+
+            var fileStream = new FileStream(filePath, FileMode.Open);
+            var fileName = Path.GetFileName(filePath);
+            return File(fileStream, fileName);
+
+
+
+        }
+
+       
+       
+
+
 
 
 
@@ -444,7 +463,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-
+       
 
 
 

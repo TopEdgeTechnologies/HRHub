@@ -97,20 +97,20 @@
 																@if (item.LeaveStatusId == 1) // New
 																 {
 																	<a  asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
-													    				<i class="feather feather-edit  text-primary"  data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+															<i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
 													    			</a>
 																 }
 																<a onclick="ViewLeave('@item.LeaveId')" class="action-btns1" data-bs-toggle="modal" data-bs-target="#leaveapplictionmodal">
-													    			<i class="feather feather-eye  text-success"  data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+														<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
 													    		</a>
 																@if (item.LeaveStatusId == 1) // New
 																 {
 																	<a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-													    				<i class="feather feather-trash-2 text-danger"></i>
+													    				<i class="feather feather-trash-2 text-danger mt-1"></i>
 													    			</a>
 																 }
 													    		<a  href="javascript:void(0);" class="action-btns1"  data-bs-toggle="modal" data-bs-target="#reportmodal">
-													    			<i class="feather feather-info text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
+													    			<i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
 													    		</a>
 													    	</td>
 													    </tr>
