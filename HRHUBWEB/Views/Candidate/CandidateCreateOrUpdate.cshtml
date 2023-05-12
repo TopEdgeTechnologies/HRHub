@@ -96,6 +96,34 @@
 
                         </div>
 
+                        <div class="col-md-4 col-sm-4">
+                            <label class="form-label">City *</label>
+                            <div class="form-group local-forms">
+                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+                            <label class="form-label">Permanant Address *</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4">
+
+                            <label class="form-label">Choose Image *</label>
+                            <div class="form-group local-forms">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidatePicture" name="CandidatePicture" type="file">
+                            </div>
+                        </div>
+
+
+
+
+
+
                         <div class="card-header">
                             <h3 class="card-title">Professional Details</h3>
 
@@ -171,7 +199,7 @@
                                     <option value="8">8 Months</option>
                                     <option value="9">9 Months</option>
                                     <option value="10">10 Months</option>
-                                    <option value="11">10+ Months</option>
+                                    <option value="11">11 Months</option>
                                 </select>
                             </div>
                         </div>
@@ -213,7 +241,10 @@
                                        
                                     </div>
                                     <div class="ms-auto">
-                                        <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass"> <i class="fe fe-arrow-right-circle"></i> </button>
+                                       @* <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass"> <i class="fe fe-arrow-right-circle"></i> </button>*@
+                                        <button type="button" class="btn btn-primary mt-3 float-right" id="btn_AddClass" style="float: right;">
+                                            <i class="fa fa-arrow-right" style="font-size: x-large;"></i>
+                                        </button>
                                     </div>
                                 </div>
                                
@@ -225,6 +256,7 @@
                                     <div class="card-header border-0">
                                         <h4 class="card-title">Skills Details</h4>
                                     </div>
+                                    <div class="overflow-auto overflow-scrolling mt-3" style="height: 200px;">
                                     <div class="card-body">
 
                                         @if (Model.CandidateId > 0)
@@ -249,13 +281,18 @@
                                                     </li>
                                                 </ul>
 
-                                            
+
 
                                             }
-
-                                    }
+                                        }
+                                        else
+                                        {
+                                        <ul class="timeline" id="SkillsList">
+                                        </ul>
+                                        }
 
                                                     
+                                    </div>
                                     </div>
                                    
                                 </div>
@@ -331,7 +368,7 @@
                         <h3 class="card-title">Apply Now</h3>
 
                     </div>
-                    <div class="row ">
+                    <div class="row mt-5">
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
                                 <label class="form-label">Apply Date *</label>
@@ -358,7 +395,7 @@
                         <div class="col-md-4 col-sm-4">
                             <label class="form-label">Upload Resume *</label>
                             <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidateResume" name="CandidateResume" type="file">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" type="file" accept=".pdf, .doc, .docx">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -371,40 +408,7 @@
 
                     </div>
 
-                    <div class="card-header">
-                        <h3 class="card-title">Address Details</h3>
-
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col-md-6">
-                            <label class="form-label">City *</label>
-                            <div class="form-group local-forms">
-                                <input asp-for="City" class="form-control" type="text" placeholder="Enter City">
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Permanant Address *</label>
-                            <div class="form-group local-forms">
-                                <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 col-sm-4">
-                           
-                            
-                            <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id = "CandidatePicture" name="CandidatePicture" type="file">
-                            </div>
-                        </div>
-
-
-                         
-
-
-
-                    </div>
+                  
 
 
                     <div class="student-submit ">
@@ -449,10 +453,43 @@
 
 
 
-        })
+            $('#CandidateResume').change(function () {
+            debugger
+            var fileInput = $(this);
+            var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+            var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+            var fileSize = this.files[0].size;
+            var filePath = fileInput.val();
+            if (!allowedExtensions.exec(filePath)) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a Pdf, Doc, or Docx file.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else if (fileSize > fileSizeLimit) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else {
+                readURL(this)
+
+            }
+
+        });
 
 
 
+
+
+
+        });
+
+
+        
 
 
 
@@ -667,15 +704,15 @@
 
                 status = false;
             }
-            //if (document.getElementById("CandidateResume").value == "") {
+            if (document.getElementById("CandidateResume").value == "") {
 
-            //    $.growl.warning({
-            //        message: "Please Enter Experience In Months"
-            //    });
+                $.growl.warning({
+                    message: "Please Enter Resume"
+                });
 
-            //    status = false;
+                status = false;
             
-            //}
+            }
            
 
             return status;
@@ -727,8 +764,8 @@
 
                     debugger
 
-                    var New_LI = " <li class='primary'   >";
-                    New_LI = New_LI + " <a target='_blank' href='#' class='font-weight-semibold fs-15 mb-2 ms-3'>" + $("#SkillTitle").val() +"</a>";
+                    var New_LI = "<li class='primary'>";
+                    New_LI = New_LI + "<a target='_blank' href='#' class='font-weight-semibold fs-15 mb-2 ms-3'>" + $("#SkillTitle").val() +"</a>";
                     New_LI = New_LI + "<p class='mb-0 pb-0 text-muted fs-11 pt-1 ms-3'>" + $("#SkillStatus").val() + "</p>";
                     $("#SkillsList").append(New_LI);
 
