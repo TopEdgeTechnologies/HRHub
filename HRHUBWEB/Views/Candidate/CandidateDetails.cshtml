@@ -4,13 +4,7 @@
     ViewData["Title"] = "Candidate Profile";
 }
 
-<!--Page header-->
-<div class="page-header d-xl-flex d-block">
-    <div class="page-leftheader">
-        <div class="page-title">Candidate Profile</div>
-    </div>
-   
-</div>
+
 <!--End Page header-->
 <!-- Row -->
 <div class="row">
@@ -32,9 +26,21 @@
                         </div>
                     </div>
                     <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                        <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
+                        @*<a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>*@
 
-                        <a class="btn btn-primary" href=""><i class="fa fa-download"></i> Download Resume</a>
+
+                       
+
+                        <a class="btn btn-primary" target="_blank" href="@Url.Content(@Model.AttachmentPath)"> <i class="fa fa-download"></i> Download Resume</a>
+
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+
+
+
+
+
 
                     </div>
                 </div>

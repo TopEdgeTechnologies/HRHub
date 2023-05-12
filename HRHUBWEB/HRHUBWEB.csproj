@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\Images\CandidateAttachment\**" />
-    <Content Remove="wwwroot\Images\CandidateAttachment\**" />
-    <EmbeddedResource Remove="wwwroot\Images\CandidateAttachment\**" />
-    <None Remove="wwwroot\Images\CandidateAttachment\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -28,6 +21,14 @@
   <ItemGroup>
     <Folder Include="Views\Error\" />
     <Folder Include="wwwroot\Images\CompanyImages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\CandidateAttachment\Ali-638193298396942917.pdf" />
+    <None Include="wwwroot\Images\CandidateAttachment\Ali-638193946254145592.pdf" />
+    <None Include="wwwroot\Images\CandidateAttachment\Ali-638194880071039198.docx" />
+    <None Include="wwwroot\Images\CandidateAttachment\Qasim-638195002404001707.pdf" />
+    <None Include="wwwroot\Images\CandidateAttachment\Sajid Ali-638194881412998079.pdf" />
   </ItemGroup>
 
 </Project>
