@@ -91,11 +91,6 @@
                                     {
                                         <th class="d-none">
 
-
-
-
-
-
                                         </th>
                                     }
                                     else
@@ -105,13 +100,13 @@
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
                                                     <a asp-action="LeaveTypeCreateOrUpdate" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
-                                                        <i class="feather feather-edit primary text-primary">
+                                                        <i class="feather feather-edit primary text-primary mt-1">
                                                         </i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
                                                     <a asp-action="LeaveTypeDelete" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger"></i>
+                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
                                                 }
                                             </div>
