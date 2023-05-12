@@ -33,6 +33,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Designation> Designations { get; set; }
 
+    public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
+
     public virtual DbSet<GluserGroup> GluserGroups { get; set; }
 
     public virtual DbSet<GluserGroupDetail> GluserGroupDetails { get; set; }
@@ -43,7 +45,10 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<LeaveApproval> LeaveApprovals { get; set; }
 
+    public virtual DbSet<LeaveApprovalSetting> LeaveApprovalSettings { get; set; }
+
     public virtual DbSet<LeaveStatus> LeaveStatuses { get; set; }
+
 
     public virtual DbSet<LeaveType> LeaveTypes { get; set; }
 
@@ -57,7 +62,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
-   
+    public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AttendanceDetail>(entity =>
@@ -76,6 +82,10 @@ public partial class HrhubContext : DbContext
             entity.HasKey(e => e.AttendanceId);
 
             entity.ToTable("AttendanceMaster", "HR");
+            entity.HasKey(e => e.AttendanceId);
+
+            entity.Property(e => e.AttendanceId).HasColumnName("AttendanceID");
+            entity.ToTable("AttendanceMaster", "HR");
 
             entity.Property(e => e.AttendanceId).HasColumnName("AttendanceID");
             entity.Property(e => e.AttendanceDate).HasColumnType("date");
@@ -92,6 +102,19 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.TotalDefinedMinutes).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.TotalWorkingMinutes).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.TotalDefinedMinutes).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.TotalWorkingMinutes).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<AttendanceStatus>(entity =>
+        {
+            entity.ToTable("AttendanceStatus", "HR");
+
+            entity.Property(e => e.AttendanceStatusId).HasColumnName("AttendanceStatusID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -216,6 +239,20 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<ExceptionLog>(entity =>
+        {
+            entity.HasKey(e => e.ExceptionId);
+
+            entity.ToTable("ExceptionLog");
+
+            entity.Property(e => e.ExceptionId).HasColumnName("ExceptionID");
+            entity.Property(e => e.ErrorMessage).IsUnicode(false);
+            entity.Property(e => e.ExceptionDateTime).HasColumnType("datetime");
+            entity.Property(e => e.InnerException).IsUnicode(false);
+            entity.Property(e => e.StackTrace).IsUnicode(false);
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+        });
+
         modelBuilder.Entity<GluserGroup>(entity =>
         {
             entity.HasKey(e => e.GroupId);
@@ -241,6 +278,83 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UserGroupDetailId).HasColumnName("UserGroupDetailID");
             entity.Property(e => e.FormId).HasColumnName("FormID");
             entity.Property(e => e.UserGroupId).HasColumnName("UserGroupID");
+        });
+
+        modelBuilder.Entity<Holiday>(entity =>
+        {
+            entity.ToTable("Holidays", "HR");
+
+            entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DayName).IsUnicode(false);
+            entity.Property(e => e.HolidayDate).HasColumnType("date");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Leave>(entity =>
+        {
+            entity.ToTable("Leave", "HR");
+
+            entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
+            entity.Property(e => e.ApplicationHtml)
+                .IsUnicode(false)
+                .HasColumnName("Application_HTML");
+            entity.Property(e => e.AppliedOn).HasColumnType("date");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
+            entity.Property(e => e.LeaveSubject).IsUnicode(false);
+            entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
+            entity.Property(e => e.MarkAsHalfLeave).HasColumnName("MarkAs_HalfLeave");
+            entity.Property(e => e.MarkAsShortLeave).HasColumnName("MarkAs_ShortLeave");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.StartDate).HasColumnType("date");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<LeaveApproval>(entity =>
+        {
+            entity.ToTable("LeaveApproval", "HR");
+
+            entity.Property(e => e.LeaveApprovalId).HasColumnName("LeaveApprovalID");
+            entity.Property(e => e.ApprovalByStaffId).HasColumnName("ApprovalBy_StaffID");
+            entity.Property(e => e.ApprovalDate)
+                .HasColumnType("date")
+                .HasColumnName("Approval_Date");
+            entity.Property(e => e.ForwardDate)
+                .HasColumnType("date")
+                .HasColumnName("Forward_Date");
+            entity.Property(e => e.ForwardedByStaffId).HasColumnName("ForwardedBy_StaffId");
+            entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
+            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
+            entity.Property(e => e.Remarks).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<LeaveApprovalSetting>(entity =>
+        {
+            entity.HasKey(e => e.SettingId);
+
+            entity.ToTable("LeaveApprovalSetting", "HR");
+
+            entity.Property(e => e.SettingId).HasColumnName("SettingID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FinalApprovalByStaffId).HasColumnName("FinalApprovalBy_StaffID");
+            entity.Property(e => e.LeaveApprovalLeaveStatusId).HasColumnName("LeaveApproval_LeaveStatusID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<LeaveStatus>(entity =>
+        {
+            entity.ToTable("LeaveStatus", "HR");
+
+            entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<LeaveType>(entity =>

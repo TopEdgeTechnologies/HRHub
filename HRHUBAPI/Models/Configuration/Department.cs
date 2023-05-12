@@ -50,7 +50,7 @@ namespace HRHUBAPI.Models
                     dbResult.DepartmentId = department.DepartmentId;
                     dbResult.Title = department.Title;
                     dbResult.ShortCode = department.ShortCode;
-                    dbResult.LogoAttachment = department.LogoAttachment;
+                    dbResult.LogoAttachment = string.IsNullOrWhiteSpace(department.LogoAttachment) ? dbResult.LogoAttachment: department.LogoAttachment;
                     dbResult.Status = department.Status;
                     dbResult.UpdatedBy = department.UpdatedBy;
                     dbResult.UpdatedOn = DateTime.Now;
@@ -71,7 +71,7 @@ namespace HRHUBAPI.Models
             catch { throw; }
         }
 
-        public async Task<bool> DeleteDepartment(int id, HrhubContext hrhubContext)
+        public async Task<bool> DeleteDepartment(int id , int userid , HrhubContext hrhubContext)
         {
             try
             {
@@ -81,6 +81,8 @@ namespace HRHUBAPI.Models
                 {
                     dbResult.IsDeleted = true;
                     dbResult.UpdatedOn = DateTime.Now;
+                    dbResult.UpdatedBy = userid;
+
                     recordDeleted = true;
                 }
                 await hrhubContext.SaveChangesAsync();
@@ -95,8 +97,8 @@ namespace HRHUBAPI.Models
             {
                 if (Id > 0)
                 {
-                    var dbResul = await hrhubContext.Departments.FirstOrDefaultAsync(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.Title == title && x.DepartmentId != Id);
-                    if (dbResul != null)
+                    var dbResult = await hrhubContext.Departments.FirstOrDefaultAsync(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.Title == title && x.DepartmentId != Id);
+                    if (dbResult != null)
                     {
                         return true;
                     }

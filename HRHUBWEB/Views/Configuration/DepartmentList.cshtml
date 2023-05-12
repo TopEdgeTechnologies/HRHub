@@ -1,57 +1,60 @@
 ﻿@model HRHUBAPI.Models.Department
 
 
-
-
+<input type="hidden" asp-for="CompanyId" />
 <!--Add Department Modal -->
 @using (@Html.BeginForm("DepartmentCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
 
-<input type="hidden" asp-for="CompanyId"  />
-<input type="hidden" asp-for="DepartmentId" />
+    <input type="hidden" asp-for="DepartmentId" />
 
-<div class="modal fade" id="adddepartmentmodal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Department</h5>
-                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Department Title</label>
-                    <input asp-for="Title" class="form-control" type="text" placeholder="Enter Department Title">
+    <div class="modal fade" id="adddepartmentmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Short Code</label>
-                    <input asp-for="ShortCode" class="form-control" type="text" placeholder="Enter Short Code">
-                </div>
-                   <div class="form-group">
-                    <label class="form-label">Logo Attachment</label>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Department Title</label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Department Title">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Short Code</label>
+                        <input asp-for="ShortCode" class="form-control" type="text" placeholder="Enter Short Code">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Logo Attachment</label>
                         <input name="LogoAttachmentFile" accept=".jpg, .jpeg, .png" id="LogoAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
-                </div>
-                <div class="form-group">
-                    <label class="custom-control custom-checkbox">
-                        <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
-                        <span class="custom-control-label">IsActive</span>
-                    </label>
+                    </div>
+                    <div class="form-group">
+
+                        <img src="/Images/Avatar.png" alt="user-img" id="viewlogo" class="avatar-xxl rounded-circle mb-1">
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+
+                    </div>
+
+
 
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                     <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 }
 <!-- End Add Department Modal  -->
-
 <!-- Row -->
 <div class="row row-sm mt-4">
     <div class="col-lg-12">
@@ -62,7 +65,7 @@
                 {
                     <div class="card-options">
                         <div class="btn-list">
-                            <a href="javascript:void(0);" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#adddepartmentmodal">Add Department</a>
+                            <a onclick="addnewdepartment()" class="btn btn-primary me-3">Add Department</a>
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
@@ -76,6 +79,7 @@
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
+                                <th class="text-center">Sr.#</th>
                                 <th class="text-center">Logo</th>
                                 <th class="border-bottom-0">Title</th>
                                 <th class="text-center">Short Code</th>
@@ -84,53 +88,63 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Listdepartments)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="d-flex">
-                                            <span class="avatar avatar-md brround me-3" style="background-image: url(@item.LogoAttachment)"></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ShortCode)
-                                    </td>
-                                    @if (item.Status == true)
-                                    {
-                                        <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
 
-                                    }
-                                    @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                    {
-                                        <th class="d-none">
-                                        </th>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-end">
+                            @{
+                                int count = 1;
+                                foreach (var item in Model.Listdepartments)
+                                {
+                                    <tr>
+                                        <td>
                                             <div class="d-flex">
-                                                @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                {
-                                                    <a asp-action="GetDepartmentCreateOrUpdate" asp-route-id="@item.DepartmentId" class="action-btns1 btn-xs">
-                                                        <i class="feather feather-edit primary text-primary "   data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title="" title="Edit"></i> 
-                                                    </a>
-                                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                {
-                                                    <a onclick="confirmation(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger"></i>
-                                                    </a>
-                                                }
+                                                <span>@count</span>
                                             </div>
                                         </td>
-                                    }
-                                </tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <span class="avatar avatar-md brround me-3" style="background-image: url(@item.LogoAttachment)"></span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ShortCode)
+                                        </td>
+                                        @if (item.Status == true)
+                                        {
+                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                        }
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a onclick="editrecord(@item.DepartmentId)" class="action-btns1 btn-xs">
+                                                            <i class="feather feather-edit primary text-primary " data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title="" title="Edit"></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a onclick="confirmation(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                            <i class="feather feather-trash-2 text-danger"></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
                             }
                         </tbody>
                     </table>
@@ -145,38 +159,35 @@
 
     <script>
 
-        $(document).ready(function () 
-        {
 
-            if(@Model.DepartmentId > 0) // for Edit Record
+
+        $(document).ready(function () {
+
+            if (@Model.DepartmentId > 0) // for Edit Record
             {
                 $("#adddepartmentmodal").modal('show');
             }
 
             var msg = '@ViewBag.Success';
-            if (msg !== "" && msg == '1') 
-            {
+            if (msg !== "" && msg == '1') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
                     type: "success"
                 });
             }
-            if (msg !== "" && msg == '2') 
-            {
+            if (msg !== "" && msg == '2') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
                     type: "success"
                 });
             }
-            if (msg !== "" && msg == '3') 
-            {
+            if (msg !== "" && msg == '3') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
                     type: "success"
                 });
             }
-            if (msg !== "" && msg == '0') 
-            {
+            if (msg !== "" && msg == '0') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
                     type: "error"
@@ -190,31 +201,43 @@
                 var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
                 var fileSize = this.files[0].size;
                 var filePath = fileInput.val();
-                if (!allowedExtensions.exec(filePath)) 
-                {
+                if (!allowedExtensions.exec(filePath)) {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
-                } else if (fileSize > fileSizeLimit) 
-                {
+                } else if (fileSize > fileSizeLimit) {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
+                } else {
+                    readURL(this)
+
                 }
+
             });
         });
+
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#viewlogo').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
         function postdata() {
             var status = true;
             debugger;
-            if ($("#Title").val() == "") 
-            {
+            if ($("#Title").val() == "") {
                 $.growl.warning({
                     message: "Please Enter Title"
                 });
@@ -222,8 +245,7 @@
                 status = false;
                 return false;
             }
-            else 
-            {
+            else {
                 $("#Title").css("border-color", "#ddd");
             }
             var Data = { id: $("#DepartmentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
@@ -245,8 +267,7 @@
                             });
                             status = false;
                         }
-                        else
-                        {
+                        else {
                             $("#adddepartmentmodal").modal('hide');
                         }
                     }
@@ -277,8 +298,7 @@
                     if (result.isConfirmed) {
                         $("#myform").submit();
                     }
-                    else if (result.dismiss === Swal.DismissReason.cancel) 
-                    {
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
                             'Cancelled',
                             'Your record is safe :)',
@@ -293,8 +313,39 @@
 
         }
 
-        function confirmation(id)
-        {
+
+        function editrecord(id) {
+            addnewdepartment();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetDepartmentById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#DepartmentId").val(data.departmentId);
+                        $("#Title").val(data.title);
+                        $("#ShortCode").val(data.shortCode);
+
+                        $("#Status").prop('checked', data.status)
+                        $("#viewlogo").attr("src", data.logoAttachment);
+                        $("#adddepartmentmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function confirmation(id) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -326,6 +377,21 @@
                     )
                 }
             });
+        }
+
+
+
+        function addnewdepartment() {
+
+            $("#adddepartmentmodal").modal('show');
+            $("#DepartmentId").val(0)
+            $("#Title").val('')
+            $("#ShortCode").val('')
+            $("#LogoAttachmentFile").val('')
+            $("#viewlogo").attr("src", null);
+            $("#Status").prop('checked', false)
+
+
         }
 
     </script>

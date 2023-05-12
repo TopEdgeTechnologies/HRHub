@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class Department
+public partial class LeaveApprovalSetting
 {
-    public int DepartmentId { get; set; }
+    public int SettingId { get; set; }
 
-    public string? Title { get; set; }
+    public int? CompanyId { get; set; }
 
-    public string? ShortCode { get; set; }
+    public int? FinalApprovalByStaffId { get; set; }
 
-    public string? LogoAttachment { get; set; }
+    public int? LeaveApprovalLeaveStatusId { get; set; }
 
     public bool Status { get; set; }
 
@@ -24,6 +24,4 @@ public partial class Department
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public int? CompanyId { get; set; }
 }
