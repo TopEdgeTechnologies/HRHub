@@ -3,13 +3,17 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class StatusInfo
+public partial class LeaveApprovalSetting
 {
-    public int StatusId { get; set; }
+    public int SettingId { get; set; }
 
-    public string? Title { get; set; }
+    public int? CompanyId { get; set; }
 
-    public bool? Status { get; set; }
+    public int? FinalApprovalByStaffId { get; set; }
+
+    public int? LeaveApprovalLeaveStatusId { get; set; }
+
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -20,6 +24,4 @@ public partial class StatusInfo
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public string? BackGroundClass { get; set; }
 }

@@ -1,0 +1,175 @@
+﻿@model HRHUBAPI.Models.Staff
+
+@*<div class="app-content main-content">*@
+	<div class="side-app main-container">
+
+		<!--Page header-->
+		<div class="page-header d-xl-flex d-block">
+			<div class="page-leftheader">
+				<div class="page-title">Employees</div>
+			</div>
+			<div class="page-rightheader ms-md-auto">
+				<div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
+					<div class="btn-list">
+
+						@* <div class="card-options">
+							<a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary">
+								<i class="fe fe-plus-circle me-1">
+								</i>Add New
+							</a>
+						</div>*@
+						@if (Convert.ToBoolean(ViewBag.IsNew))
+						{
+							<a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Employee</a>
+						}
+						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+						<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+						<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--End Page header-->
+		<!-- Main Cards Row-->
+		<div class="row">
+			<div class="col-xl-3 col-lg-6 col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-7">
+								<div class="mt-0 text-start">
+									<span class="font-weight-semibold">Total Employees</span>
+									<h3 class="mb-0 mt-1 text-success">5,678</h3>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="icon1 bg-success-transparent my-auto  float-end"> <i class="las la-users"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-6 col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-7">
+								<div class="mt-0 text-start">
+									<span class="font-weight-semibold">Total Male Employees</span>
+									<h3 class="mb-0 mt-1 text-primary">3,876</h3>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="icon1 bg-primary-transparent my-auto  float-end"> <i class="las la-male"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-6 col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-7">
+								<div class="mt-0 text-start">
+									<span class="font-weight-semibold">Total Female Employees</span>
+									<h3 class="mb-0 mt-1 text-secondary">1,396</h3>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="icon1 bg-secondary-transparent my-auto  float-end"> <i class="las la-female"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-6 col-md-6">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-7">
+								<div class="mt-0 text-start">
+									<span class="font-weight-semibold">Total New Employees</span>
+									<h3 class="mb-0 mt-1 text-danger">398</h3>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="icon1 bg-danger-transparent my-auto  float-end"> <i class="las la-user-friends"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Main Cards Row -->
+		<!-- List Row -->
+		<div class="row">
+			<div class="col-xl-12 col-md-12 col-lg-12">
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">Employees List</h4>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-table">
+								<thead>
+									<tr>
+										<th class="border-bottom-0 w-5">No</th>
+										<th class="border-bottom-0">Emp Name</th>
+										<th class="border-bottom-0 w-10">#Emp ID</th>
+										<th class="border-bottom-0">Department</th>
+										<th class="border-bottom-0">Designation</th>
+										<th class="border-bottom-0">Phone Number</th>
+										<th class="border-bottom-0">Join Date</th>
+										<th class="border-bottom-0">Status</th>
+										<th class="border-bottom-0">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+								@foreach(var item in Model.StaffList)
+								{
+									<tr>
+										<td>@Html.DisplayFor(modelitem => item.SNO)</td>
+										<td>
+											<div class="d-flex">
+												<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/1.jpg)"></span>
+												<div class="me-3 mt-0 mt-sm-1 d-block">
+													<h6 class="mb-1 fs-14">@Html.DisplayFor(modelitem => item.FirstName)</h6>
+													<p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Email)</p>
+												</div>
+											</div>
+										</td>
+										<td>@Html.DisplayFor(modelitem => item.StaffId)</td>
+										<td>@Html.DisplayFor(modelitem => item.Department)</td>
+										<td>@Html.DisplayFor(modelitem => item.Designation)</td>
+										<td>@Html.DisplayFor(modelitem => item.ContactNumber1)</td>
+										<td>@Html.DisplayFor(modelitem => item.JoiningDate)</td>
+										<td><span class="badge badge-success">Active</span></td>
+										<td>
+											@if (Convert.ToBoolean(ViewBag.IsEdit))
+											{
+												<a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm">
+													<i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
+												</a>
+												@*<a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm" href="hr-empview.html">
+													<i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
+												</a>*@
+											}
+											@if (Convert.ToBoolean(ViewBag.IsDelete))
+											{
+												<a class="btn btn-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-original-title="Delete"><i class="feather feather-trash-2"></i></a>
+											}
+										</td>
+									</tr>
+								}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End List Row-->
+
+	</div><!-- end app-content-->
+@*</div>*@

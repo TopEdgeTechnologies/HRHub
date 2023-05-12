@@ -119,10 +119,6 @@ namespace HRHUBWEB.Controllers
 
             if (Token != null) { 
 
-
-           
-           
-
             if (id == 0)
             {
                 Designation Info = new Designation();
@@ -263,12 +259,6 @@ namespace HRHUBWEB.Controllers
                 return RedirectToAction("Loginpage", "User",  new {id=2 });
             }
         }
-
-
-
-
-
-
 
         #endregion
 

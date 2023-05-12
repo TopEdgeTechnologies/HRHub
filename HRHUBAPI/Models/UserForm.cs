@@ -24,4 +24,6 @@ public partial class UserForm
     public int? DOrder { get; set; }
 
     public bool? IsMenu { get; set; }
+
+    public int? ReferenceId { get; set; }
 }
