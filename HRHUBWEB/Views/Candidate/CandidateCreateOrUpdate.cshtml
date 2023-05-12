@@ -4,19 +4,26 @@
     ViewData["Title"] = "Candidate Form";
 }
 
-<div class="page-header d-xl-flex d-block">
+@*<div class="page-header d-xl-flex d-block">
     <div class="page-leftheader">
         <div class="page-title">@((Model.CandidateId == 0) ? "Enroll" : "Update") Candidate</div>
     </div>
 
-</div>
+</div>*@
 <!-- Row -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Basic Details</h3>
+                <h3 class="card-title">Candidate Personal Information</h3>
+                <div class="card-options">
+                    <div class="btn-list">
 
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                    </div>
+                </div>
             </div>
             @using (@Html.BeginForm("CandidateCreateOrUpdate", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
             {
@@ -107,15 +114,15 @@
                         <div class="col-md-4 col-sm-4">
                             <label class="form-label">Permanant Address *</label>
                             <div class="form-group local-forms">
-                                <textarea asp-for="CoverLetter" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
+                                <textarea asp-for="Address" rows="1" class="form-control" placeholder="Permanant Address"></textarea>
                             </div>
                         </div>
 
                         <div class="col-md-4 col-sm-4">
 
-                            <label class="form-label">Choose Image *</label>
+                            <label class="form-label">Choose Image </label>
                             <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidatePicture" name="CandidatePicture" type="file">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" accept=".jpg, .jpeg, .png" id="CandidatePicture" name="CandidatePicture" type="file">
                             </div>
                         </div>
 
@@ -413,7 +420,7 @@
 
                     <div class="student-submit ">
 
-                        <input type="button" value="Save" id="btnsave" class="btn btn-primary" />
+                        <input type="button" value="Enroll Candidate" id="btnsave" class="btn btn-primary" />
                         <a asp-action="CandidateList" asp-controller="Candidate" class="btn btn-danger">Back</a>
                     </div>
 
@@ -452,12 +459,43 @@
 
 
 
+            $('#CandidatePicture').change(function () {
+                var fileInput = $(this);
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+                var fileSize = this.files[0].size;
+                var filePath = fileInput.val();
+                if (!allowedExtensions.exec(filePath)) {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
+                        type: "warning"
+                    });
+                    fileInput.val('');
+                    return false;
+                } else if (fileSize > fileSizeLimit) {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+                        type: "warning"
+                    });
+                    fileInput.val('');
+                    return false;
+                } else {
+                    readURL(this)
+
+                }
+
+            });
+
+
+
+
+
 
             $('#CandidateResume').change(function () {
             debugger
             var fileInput = $(this);
             var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
-            var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+            var fileSizeLimit = 5 * 1024 * 1024; // 2 MB
             var fileSize = this.files[0].size;
             var filePath = fileInput.val();
             if (!allowedExtensions.exec(filePath)) {
@@ -696,6 +734,50 @@
                 $("#ExperienceInMonths").css("border-color", "#ddd");
             }
 
+
+            if ($("#City").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter City Name"
+                });
+
+
+
+                $("#City").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#City").css("border-color", "#ddd");
+            }
+
+
+            if ($("#Address").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Address"
+                });
+
+
+
+                $("#Address").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#Address").css("border-color", "#ddd");
+            }
+
+
+
+
+
+
+
+
+
             var rowCount = $('#AccountTable tbody tr').length;
             if (rowCount < 1) {
                 $.growl.warning({
@@ -710,10 +792,15 @@
                     message: "Please Enter Resume"
                 });
 
+
+                $("#CandidateResume").css("border-color", "red");
                 status = false;
-            
+
             }
-           
+            else {
+                $("#CandidateResume").css("border-color", "#ddd");
+            }
+
 
             return status;
         }
