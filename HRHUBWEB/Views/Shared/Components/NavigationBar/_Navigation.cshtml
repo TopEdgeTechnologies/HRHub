@@ -56,6 +56,61 @@
 
 
 
+    #region Old Menu Code
+
+   @* <li class="slide">
+        <a href="#" class="side-menu__item" data-bs-toggle="slide">
+            <i class="@item.imageClass sidemenu_icon"></i><span class="side-menu__label">@item.FormTitle</span><i class="angle fa fa-angle-right"></i>
+
+        </a>
+
+        <ul class="slide-menu">
+            @foreach (var Childitem in Model.Where(c => c.parentId == item.Formid))
+            {
+                @if (Childitem.isParent == true)
+                {
+                    <li class="sub-slide">
+                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="#"><i class="@Childitem.imageClass"></i><span style="margin-left: 6px;" class="sub-side-menu__label">@Childitem.FormTitle</span><i class="sub-angle fa fa-angle-right"></i>	</a>
+                        <ul class="sub-slide-menu">
+                            @foreach (var SubChildItem in Model.Where(s => s.parentId == Childitem.Formid))
+                            {
+                                <li class="sub-slide">
+                                    <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
+                                        <i class="@SubChildItem.imageClass"></i>
+                                        <span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>
+                                    </a>
+                                </li>
+
+
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li style="margin-left: 15px;">
+                        <a asp-action="@Childitem.action" asp-controller="@Childitem.controller">
+                            <i class="@Childitem.imageClass"></i>
+
+                            <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                        </a>
+                    </li>
+
+                }
+
+            }
+
+        </ul>
+    </li>*@
+
+
+    #endregion
+
+
+
+
+
+
 
 
 
