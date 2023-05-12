@@ -52,10 +52,10 @@ namespace  HRHUBWEB.Filters
                        imageClass = row["imageClass"].ToString(),
                        status = Convert.ToBoolean(row["status"]),
                        isParent = Convert.ToBoolean(row["isParent"]),
-                       parentId = Convert.ToInt32(row["parentId"])
-
-                   })
-                   .ToList();
+                       parentId = Convert.ToInt32(row["parentId"]),
+                       IsMenu = Convert.ToBoolean(row["IsMenu"]),
+                       ReferenceID = string.IsNullOrWhiteSpace(row["ReferenceID"].ToString()) ? 0 : Convert.ToInt32(row["ReferenceID"])
+                   }).ToList();
 
                 string actionName = context.ActionDescriptor.RouteValues["action"].ToString();
                 string controllerName = context.ActionDescriptor.RouteValues["controller"].ToString();
@@ -67,6 +67,8 @@ namespace  HRHUBWEB.Filters
                     controller.TempData["IsEdit"] = ResultRole.IsEdit;
                     controller.TempData["IsDelete"] = ResultRole.IsDelete;
                     controller.TempData["IsPrint"] = ResultRole.IsPrint;
+                    controller.TempData["ReferenceID"] = ResultRole.ReferenceID;
+
                     return;
 
                 }

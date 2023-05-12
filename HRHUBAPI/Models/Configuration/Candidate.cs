@@ -387,7 +387,51 @@ namespace HRHUBAPI.Models
 
 
 
-       
+        // load data GetCandidateStatus in table on Update mode
+        public async Task<List<CandidateScreening>> GetCandidateStatus(int CandidateId, HrhubContext _context)
+        {
+            try
+            {
+                ///   var list = await _context.CandidateScreenings.Where(x => x.IsDeleted == false && x.CandidateId == CandidateId).ToListAsync();
+
+                var query = from cs in _context.CandidateScreenings
+                            join s in _context.StatusInfos on cs.StatusId equals s.StatusId
+                            where cs.CandidateId == CandidateId && cs.IsDeleted == false
+                            select new CandidateScreening
+                            {
+                                CandidateId = cs.CandidateId,
+                                ScreeningDate = cs.ScreeningDate,
+                                StatusId = cs.StatusId,
+                                CreatedOn = cs.CreatedOn,
+                                CreatedBy = cs.CreatedBy,
+                                StatusTitle = s.Title,
+                                Remarks = cs.Remarks,
+                                ScreeningId = cs.ScreeningId,
+                                Month = cs.ScreeningDate.Value.Date.ToString("MMM"),
+                                day = cs.ScreeningDate.Value.Date.Day,
+                                CssColor=s.BackGroundClass
+                                
+
+
+
+                            };
+
+             return query!=null? query.OrderByDescending(x=>x.ScreeningId). ToList() : new List<CandidateScreening>();
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
 
 
 

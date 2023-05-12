@@ -5,6 +5,88 @@
 @foreach (var item in Model.Where(x => x.parentId == 0 && x.isParent == true))
 	
 {
+
+
+@*    <li class="slide">
+        <a href="#" class="side-menu__item" data-bs-toggle="slide">
+            <i class="@item.imageClass sidemenu_icon"></i><span class="side-menu__label">@item.FormTitle</span><i class="angle fa fa-angle-right"></i>
+
+        </a>
+
+        <ul class="slide-menu">
+            @foreach (var Childitem in Model.Where(c => c.parentId == item.Formid))
+            {
+                @if (Childitem.isParent == true)
+                {
+                    <li class="sub-slide">
+                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="#"><i class="@Childitem.imageClass"></i><span style="margin-left: 6px;" class="sub-side-menu__label">@Childitem.FormTitle</span><i class="sub-angle fa fa-angle-right"></i>	</a>
+                        <ul class="sub-slide-menu">
+                            @foreach (var SubChildItem in Model.Where(s => s.parentId == Childitem.Formid))
+                            {
+                                if (@SubChildItem.ReferenceID > 0)
+                                {
+                                    <li class="sub-slide">
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@Childitem.ReferenceID">
+                                            <i class="@SubChildItem.imageClass@Childitem.ReferenceID"></i>
+                                            <span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>
+                                        </a>
+                                    </li>
+
+
+                                }
+                                else
+                                {
+
+                                    <li class="sub-slide">
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
+                                            <i class="@SubChildItem.imageClass"></i>
+                                            <span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>
+                                        </a>
+                                    </li>
+
+                                }
+
+
+
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    if (@Childitem.ReferenceID > 0)
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller" asp-route-id="@Childitem.ReferenceID">
+                                <i class="@Childitem.imageClass@Childitem.ReferenceID"></i>
+
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller">
+                                <i class="@Childitem.imageClass"></i>
+
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+
+
+                    }
+
+
+
+                }
+
+            }
+
+        </ul>
+    </li>
+*@
+
 	<li class="slide">
 		<a href="#" class="side-menu__item" data-bs-toggle="slide">
 			<i class="@item.imageClass sidemenu_icon"></i><span class="side-menu__label">@item.FormTitle</span><i class="angle fa fa-angle-right"></i>
@@ -17,26 +99,69 @@
                 @if (Childitem.isParent==true)
                 {
 					<li class="sub-slide">
-						<a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="#"><i class="@Childitem.imageClass"></i><span style="margin-left: 6px;" class="sub-side-menu__label">@Childitem.FormTitle</span><i class="sub-angle fa fa-angle-right"></i>	</a>
+						<a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="#">
+							<i class="@Childitem.imageClass  sidemenu_icon"></i>
+							<span  class="sub-side-menu__label">@Childitem.FormTitle</span>
+							<i class="sub-angle fa fa-angle-right"></i>	</a>    
 						<ul class="sub-slide-menu">
                             @foreach (var SubChildItem in Model.Where(s => s.parentId == Childitem.Formid))
                             {
-								<li class="sub-slide" >  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller"><i class="@SubChildItem.imageClass"></i>
-										<span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>	</a></li>
 
+                                if (@SubChildItem.ReferenceID > 0)
+                                {
+                                    <li>
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@SubChildItem.ReferenceID">
+                                        <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
+                                            <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle  </span>
+                                            <span class="badge badge-success side-badge"> @SubChildItem.titlewithcounter</span>
+                                        </a>
+								</li>
 
+                                }
+                                else
+                                {
+                                    	<li>  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
+                                        <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
+                                        <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle</span>										
+									</a>
+								</li>
+                                
+                                }
+
+							
                             }
                         </ul>
                     </li>
                 }
                 else
                 {
-                    <li style="margin-left: 15px;">
-                        <a asp-action="@Childitem.action" asp-controller="@Childitem.controller">
-                            <i class="@Childitem.imageClass"></i>
 
-                            <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                    if (@Childitem.ReferenceID > 0)
+                    {
+
+
+                    <li>
+                            <a class="slide-item" asp-action="@Childitem.action" asp-controller="@Childitem.controller" asp-route-id="@Childitem.ReferenceID">
+                            <i class="@Childitem.imageClass  sidemenu_icon"></i>
+                            <span class="side-menu__label">
+                                    @Childitem.FormTitle
+                                </span> <span class="badge badge-success side-badge">@Childitem.titlewithcounter</span>
                     </a></li>
+                    }
+                    else
+                    {
+
+                        <li>
+                            <a class="slide-item" asp-action="@Childitem.action" asp-controller="@Childitem.controller">
+                                <i class="@Childitem.imageClass  sidemenu_icon"></i>
+                                <span class="side-menu__label">
+                                    @Childitem.FormTitle
+                                </span>
+                            </a>
+                        </li>
+                        
+                    }
+
 
                 }
 
@@ -44,4 +169,108 @@
 
         </ul>
     </li>
+
+
+
+
+
+
+
+    #region Old Menu Code
+
+   @* <li class="slide">
+        <a href="#" class="side-menu__item" data-bs-toggle="slide">
+            <i class="@item.imageClass sidemenu_icon"></i><span class="side-menu__label">@item.FormTitle</span><i class="angle fa fa-angle-right"></i>
+
+        </a>
+
+        <ul class="slide-menu">
+            @foreach (var Childitem in Model.Where(c => c.parentId == item.Formid))
+            {
+                @if (Childitem.isParent == true)
+                {
+                    <li class="sub-slide">
+                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="#"><i class="@Childitem.imageClass"></i><span style="margin-left: 6px;" class="sub-side-menu__label">@Childitem.FormTitle</span><i class="sub-angle fa fa-angle-right"></i>	</a>
+                        <ul class="sub-slide-menu">
+                            @foreach (var SubChildItem in Model.Where(s => s.parentId == Childitem.Formid))
+                            {
+                                if (@Childitem.ReferenceID > 0)
+                                {
+                                    <li class="sub-slide">
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@Childitem.ReferenceID">
+                                            <i class="@SubChildItem.imageClass@Childitem.ReferenceID"></i>
+                                            <span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>
+                                        </a>
+                                    </li>
+
+
+                                }
+                                else
+                                {
+                                    
+                                <li class="sub-slide" >  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller"  ><i class="@SubChildItem.imageClass"></i>
+										<span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>	</a></li>
+
+                                }
+
+								
+
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    if (@Childitem.ReferenceID >0)
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller" asp-route-id="@Childitem.ReferenceID">
+                                <i class="@Childitem.imageClass@Childitem.ReferenceID"></i>
+
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller" >
+                                <i class="@Childitem.imageClass"></i>
+
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+                        
+                    
+                    }
+
+                  
+
+                }
+
+            }
+
+        </ul>
+    </li>*@
+
+
+    #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -26,15 +26,21 @@ namespace HRHUBWEB.Controllers
         }
 
         #region CandidateInfo
+
+        
+
+
+
         [CustomAuthorization]
-        public async Task<IActionResult> CandidateList(string data = "")
+        public async Task<IActionResult> CandidateList(string data = "",int id=0)
         {
             
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-
+          
+            
 
             ViewBag.Success = data;
             Candidate ObjCandidate = new Candidate();
@@ -51,7 +57,7 @@ namespace HRHUBWEB.Controllers
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
-                    ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result);
+                    ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x=>x.StatusId== id);
 
                 }
 
@@ -398,6 +404,32 @@ namespace HRHUBWEB.Controllers
             }
         }
 
+
+
+
+        public async Task<ActionResult<JsonObject>> GetCandidateScreening(int id)
+        {
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateStatusdata{id}");
+            if (message.IsSuccessStatusCode)
+            {
+                var result = message.Content.ReadAsStringAsync().Result;
+
+                var ListCandidate = JsonConvert.DeserializeObject<List<CandidateScreening>>(result);
+
+                return Json(ListCandidate);
+
+            }
+
+            else
+            {
+                return Json(new CandidateScreening() );
+
+            }
+        }
 
 
 

@@ -169,6 +169,24 @@ namespace HRHUBAPI.Controllers
 
 
 
+
+        // update candidate status
+
+        [HttpGet("GetCandidateStatusdata{id}")]
+        public async Task<ActionResult<List< CandidateScreening>>> GetCandidateStatusdata(int id)
+        {
+
+
+            return await new Candidate().GetCandidateStatus(id, _context);
+           
+
+
+        }
+
+
+
+
+
         #endregion
 
         //#region CandidateSubject
