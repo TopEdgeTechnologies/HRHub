@@ -11,8 +11,6 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int? UserGroupId { get; set; }
-
     public int? StaffId { get; set; }
 
     public bool IsActive { get; set; }

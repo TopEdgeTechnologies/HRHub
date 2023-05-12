@@ -21,9 +21,26 @@
 						<ul class="sub-slide-menu">
                             @foreach (var SubChildItem in Model.Where(s => s.parentId == Childitem.Formid))
                             {
-								<li class="sub-slide" >  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller"><i class="@SubChildItem.imageClass"></i>
+                                if (@Childitem.ReferenceID > 0)
+                                {
+                                    <li class="sub-slide">
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@Childitem.ReferenceID">
+                                            <i class="@SubChildItem.imageClass@Childitem.ReferenceID"></i>
+                                            <span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>
+                                        </a>
+                                    </li>
+
+
+                                }
+                                else
+                                {
+                                    
+                                <li class="sub-slide" >  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller"  ><i class="@SubChildItem.imageClass"></i>
 										<span style="margin-left: 6px;" class="sub-side-menu__label">@SubChildItem.FormTitle</span>	</a></li>
 
+                                }
+
+								
 
                             }
                         </ul>
@@ -31,12 +48,30 @@
                 }
                 else
                 {
-                    <li style="margin-left: 15px;">
-                        <a asp-action="@Childitem.action" asp-controller="@Childitem.controller">
-                            <i class="@Childitem.imageClass"></i>
+                    if (@Childitem.ReferenceID >0)
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller" asp-route-id="@Childitem.ReferenceID">
+                                <i class="@Childitem.imageClass@Childitem.ReferenceID"></i>
 
-                            <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
-                    </a></li>
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="margin-left: 15px;">
+                            <a asp-action="@Childitem.action" asp-controller="@Childitem.controller" >
+                                <i class="@Childitem.imageClass"></i>
+
+                                <span style="margin-left: 6px;" class="sub-side-menu__label"> @Childitem.FormTitle</span>
+                            </a>
+                        </li>
+                        
+                    
+                    }
+
+                  
 
                 }
 

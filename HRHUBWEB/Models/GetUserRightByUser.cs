@@ -27,6 +27,10 @@
         public Nullable<bool> isParent { get; set; }
         public Nullable<int> parentId { get; set; }
         public Nullable<bool> IsMenu { get; set; }
+        public int? ReferenceID { get; set; }
+        public int? titlewithcounter { get; set; }
+
+
 
 
 

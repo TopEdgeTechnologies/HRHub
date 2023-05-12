@@ -31,6 +31,8 @@
                         <thead>
                             <tr>
 
+                                <th class="border-bottom-0">Sr.#</th>
+
                                 <th class="border-bottom-0">Candidate Title</th>
                                 <th class="border-bottom-0">Candidate Email</th>
                                 <th class="border-bottom-0">Qualification</th>
@@ -41,10 +43,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @{
+                                int count = 1;
+                            }
                             @foreach (var item in Model.ListCandidate)
                             {
                                 <tr>
-
+                                    <td>
+                                        @count
+                                    </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
@@ -114,6 +121,7 @@
 
 
                                 </tr>
+                                count++;
                             }
 
                         </tbody>
@@ -129,7 +137,7 @@
 
 
 
-<div class="modal fade" id="newStatusmodal">
+<div class="modal fade" id="newStatusmodal" >
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -140,15 +148,61 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" asp-for="CandidateId" />
-                <div class="col-lg-12">
+             
+               @* <div class="col-lg-12">
+*@
                     <div class="card overflow-hidden">
-                        <div class="card-header border-0">
-                            <h4 class="card-title">Status Set</h4>
-                        </div>
+                       
+                             
                         <div class="row">
+
+
                             <div class="col-md-6">
+                                <div class="card overflow-hidden">
+                                    <div class="card-header border-0">
+                                    <h4 class="card-title">Candidate Status update</h4>
+                                    </div>
+
+                                    <div style="padding:2px">
+
+                                    <div class="form-group local-forms">
+                                        <label class="form-label">Status <span class="text-danger">*</span>  </label>
+                                        <select asp-for="StatusId" name="StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateStatus,"StatusId" ,"Title"))">
+                                            <option value="">Select Status</option>
+                                        </select>
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Current Date</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="feather feather-calendar"></i>
+                                                </div>
+                                            </div><input name="ScreeningDate" id="ScreeningDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Remarks</label>
+                                        <textarea rows="2" name="Remarks" id="Remarks" class="form-control" placeholder="something text here..."></textarea>
+                                    </div>
+
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" onclick="Submit()">Submit</button>
+                                    <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+                                      </div>
+                                      </div>
+
+                                </div>
+                            </div>
+                           @* <div class="card-header border-0">
+                                <h4 class="card-title">Time Line Status</h4>
+                            </div>
+                            <div class="col-md-6">
+                                
                                 <div class="form-group local-forms">
-                                    <label class="form-label">Status *</label>
+                                    <label class="form-label">Status <span class="text-danger">*</span>  </label>
                                     <select asp-for="StatusId" name="StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateStatus,"StatusId" ,"Title"))">
                                         <option value="">Select Status</option>
                                     </select>
@@ -172,7 +226,7 @@
                                 <button type="button" class="btn btn-primary" onclick="Submit()">Submit</button>
                                 <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
                             </div>
-
+*@
 
 
                             <div class="col-md-6">
@@ -180,66 +234,15 @@
                                     <div class="card-header border-0">
                                         <h4 class="card-title">Time Line Status</h4>
                                     </div>
-                                    <div class="pt-2">
-                                        <div class="list-group">
-                                            <div class="list-group-item d-flex pt-3 pb-3 border-0">
-                                                <div class="me-3 me-xs-0">
-                                                    <div class="calendar-icon icons">
-                                                        <div class="date_time bg-pink-transparent">
-                                                            <span class="date">18</span> <span class="month">FEB</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="ms-1">
-                                                    <div class="h5 fs-14 mb-1">Board meeting Completed</div>
-                                                    <small class="text-muted">attend the company mangers...</small>
-                                                </div>
-                                            </div>
-                                            <div class="list-group-item d-flex pt-3 pb-3 border-0">
-                                                <div class="me-3 me-xs-0">
-                                                    <div class="calendar-icon icons">
-                                                        <div class="date_time bg-success-transparent ">
-                                                            <span class="date">16</span> <span class="month">FEB</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="ms-1">
-                                                    <div class="h5 fs-14 mb-1">Updated the Company Policy</div>
-                                                    <small class="text-muted">
-                                                        some changes &amp; add the terms &amp; conditions
-
-                                                    </small>
-                                                </div>
-                                            </div> <div class="list-group-item d-flex pt-3 pb-3 border-0">
-                                                <div class="me-3 me-xs-0">
-                                                    <div class="calendar-icon icons">
-                                                        <div class="date_time bg-orange-transparent ">
-                                                            <span class="date">17</span> <span class="month">FEB</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="ms-1">
-                                                    <div class="h5 fs-14 mb-1">Office Timings Changed</div>
-                                                    <small class="text-muted"> this effetct after March 01st 9:00 Am To 5:00 Pm</small>
-                                                </div>
-                                            </div> <div class="list-group-item d-flex pt-3 pb-5 border-0">
-                                                <div class="me-3 me-xs-0">
-                                                    <div class="calendar-icon icons">
-                                                        <div class="date_time bg-info-transparent ">
-                                                            <span class="date">26</span>
-                                                            <span class="month">JAN</span>
-                                                        </div>
-                                                    </div>
-                                                </div> <div class="ms-1"> <div class="h5 fs-15 mb-1"> Republic Day Celebrated </div> <small class="text-muted">participate the all employess </small> </div>
-                                            </div>
-                                        </div>
+                                    <div  id="timeofcandidatescreening"  class="overflow-auto overflow-scrolling mt-3" style="height: 300px;">
                                     </div>
+                            
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                </div>
+                @*</div>*@
 
             </div>
         </div>
@@ -317,6 +320,56 @@
 
           
             $("#CandidateId").val(id)
+             var obj = { id: id }
+            $.ajax({
+                url: "/Candidate/GetCandidateScreening",
+                type: "GET",
+                async: false,
+                dataType: "json",
+                data: obj,
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        debugger;
+                        var html=''
+                        for (var i = 0; i < data.length; i++) {
+
+
+                             html += '  <div class="pt-2"><div class="list-group"> ';
+                            html += '<div class="list-group-item d-flex pt-3 pb-3 border-0"> ';
+                            html += '    <div class="me-3 me-xs-0">';
+                            html += '        <div class="calendar-icon icons">';
+                            html += '            <div class="date_time ' + data[i]["cssColor"] + '">';
+                            html += '                <span class="date"> ' + data[i]["day"] + ' </span> <span class="month">' + data[i]["month"] + '</span>';
+                            html += '             </div>';
+                            html += '        </div>';
+                            html += '     </div>';
+                            html += '         <div class="ms-1">';
+                            html += '            <div class="h5 fs-14 mb-1" >Candidate Status   <span class="' + data[i]["cssColor"] + '">' + data[i]["statusTitle"] + '</span>     ';
+                            html += '         </div>';
+                            html += '        <small class="text-muted" > ' + data[i]["remarks"] + ' </small>';
+                            html += '     </div>';
+                            html += '</div></div></div>';
+
+                           
+                        }
+
+
+                         $('#timeofcandidatescreening').html(html)
+
+
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+
+
+
             $("#newStatusmodal").modal('show');
 
 
@@ -324,7 +377,25 @@
 
 
         function Submit() {
-     
+
+
+            if ($("#StatusId").val()=='')
+            {
+                $.growl.warning({
+                    message: "Please select Status !"
+                });
+
+                return false;
+            }
+
+            if ($("#Remarks").val() == '') {
+                $.growl.warning({
+                    message: "Please Enter Remarks !"
+                });
+
+                return false;
+            }
+
             var obj = {
 
                 CandidateId: $("#CandidateId").val(),
@@ -340,6 +411,7 @@
                 type: "POST",
                 async: false,
                 dataType: "json",
+                data: obj,
                 success: function (data) {
                     console.log(data);
                     if(data!=null)
@@ -366,7 +438,7 @@
                             action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
 
 
-                            rowData.push([listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
+                            rowData.push([i+1, listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
 
 
                            table.rows.add(rowData);
