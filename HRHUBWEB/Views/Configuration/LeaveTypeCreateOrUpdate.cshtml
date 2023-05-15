@@ -1,4 +1,4 @@
-﻿@model HRHUBAPI.Models.Designation
+﻿@model HRHUBAPI.Models.LeaveType
 
 @{
     ViewData["Title"] = "User Group";
@@ -11,15 +11,15 @@
 <div class="col-lg-12 col-md-12 mt-4">
     <div class="card">
         <div class="card-header border-bottom-0">
-            <h3 class="card-title">@((Model.DesignationId == 0) ? "Create" : "Update") Designation </h3>
+            <h3 class="card-title">@((Model.LeaveTypeId == 0) ? "Create" : "Update") LeaveType </h3>
         </div>
         <div class="card-body pb-2">
-            @using (@Html.BeginForm("DesignationCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            @using (@Html.BeginForm("LeaveTypeCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
             {
 
                 <div class="row">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="DesignationId" />
+                    <input type="hidden" asp-for="LeaveTypeId" />
                     <input type="hidden" asp-for="CompanyId" value="@ViewBag.CompanyId" />
 
                     <div class="col-md-4 col-sm-4">
@@ -29,15 +29,31 @@
 
                         </div>
                     </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group local-forms">
+
+                            <input asp-for="NoOfLeaves" class="form-control" type="number" placeholder="Enter Leave Count">
+
+                        </div>
+                    </div>
 
 
-
-                    <div class="col-md-3 mt-2">
+                    <div class="col-md-2 mt-2">
 
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
-                                <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" value="@Model.Status">
+                                <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
                                 <span class="custom-control-label">IsActive</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 mt-2">
+
+                        <div class="form-group">
+                            <label class="custom-control custom-checkbox">
+                                <input type="checkbox" asp-for="IsNonPaid" type="checkbox" class="custom-control-input">
+                                <span class="custom-control-label">Is Non-Paid</span>
                             </label>
                         </div>
 
@@ -46,15 +62,13 @@
                     </div>
 
 
-
-
                     <div class="col-12 mt-5 mb-3">
 
 
                         <div class="student-submit">
 
                             <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
-                            <a asp-action="DesignationList" asp-controller="Configuration" class="btn btn-danger">Back</a>
+                            <a asp-action="LeaveTypeList" asp-controller="Configuration" class="btn btn-secondary">Back</a>
                         </div>
                     </div>
                 </div>
@@ -94,18 +108,30 @@
                 status = false;
 
             }
+            else if ($("#NoOfLeaves").val() == "" || $("#NoOfLeaves").val() == "0") {
+                $.growl.warning({
+                    message: "Please Enter Leave Count"
+                });
+
+
+
+                $("#NoOfLeaves").css("border-color", "red");
+                status = false;
+            }
             else {
                 $("#Title").css("border-color", "#ddd");
+                $("#NoOfLeaves").css("border-color", "#ddd");
             }
 
 
 
 
-            var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+
+            var Data = { id: $("#LeaveTypeId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/Configuration/DesignationCheckData",
+                url: "/Configuration/LeaveTypeCheckData",
                 type: "GET",
                 data: Data,
                 success: function (data) {

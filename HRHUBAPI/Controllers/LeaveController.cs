@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Nodes;
 
 namespace HRHUBAPI.Controllers
@@ -10,30 +9,30 @@ namespace HRHUBAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CandidateController : ControllerBase
+    public class LeaveController : ControllerBase
     {
         private readonly HrhubContext _context;
 
-        public CandidateController(HrhubContext context)
+        public LeaveController(HrhubContext context)
         {
             _context = context;
 
         }
 
-        #region CandidateInfo
+        #region LeaveInfo
 
-        [HttpGet("GetCandidateInfos{CompanyId}")]
-        public async Task<ActionResult<List<Candidate>>> GetCandidateInfos(int CompanyId)
+        [HttpGet("GetLeaveInfos")]
+        public async Task<ActionResult<List<Leave>>> GetLeaveInfos()
         {
 
-            return await new Candidate().GetCandidate(CompanyId,_context);
+            return await new Leave().GetLeave(_context);
         }
 
 
-        [HttpGet("GetCandidateInfoId{id}")]
-        public async Task<ActionResult<Candidate>> GetCandidateInfoId(int id)
+        [HttpGet("GetLeaveInfoId{id}")]
+        public async Task<ActionResult<Leave>> GetLeaveInfoId(int id)
         {
-            var result = await new Candidate().GetCandidateById(id, _context);
+            var result = await new Leave().GetLeaveById(id, _context);
             if (result != null)
                 return Ok(result);
 
@@ -42,13 +41,13 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpPost("CandidateAddOrCreate")]
-        public async Task<ActionResult<Candidate>> CandidateAddOrCreate(Candidate obj)
+        [HttpPost("LeaveAddOrCreate")]
+        public async Task<ActionResult<Leave>> LeaveAddOrCreate(Leave obj)
         {
 
 
-            var result = await new Candidate().PostCandidate(obj, _context);
-            if (result != null && result.CandidateId > 0)
+            var result = await new Leave().PostLeave(obj, _context);
+            if (result != null && result.LeaveId > 0)
                 return Ok(new
                 {
                     Success = true,
@@ -67,10 +66,10 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteCandidateInfo{id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteCandidateInfo(int id, int UserId)
+        [HttpDelete("DeleteLeaveInfo{id}")]
+        public async Task<ActionResult<bool>> DeleteLeaveInfo(int id)
         {
-            var result = await new Candidate().DeleteCandidate(id,UserId, _context);
+            var result = await new Leave().DeleteLeaveInfo(id, _context);
             if (id > 0)
                 return Ok(new
                 {
@@ -85,16 +84,16 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("CandidateCheckDataInfo{id}/{email}/{CompanyId}")]
-        public async Task<ActionResult<JsonObject>> CandidateCheckDataInfo(int id, string email,int CompanyId)
+        [HttpGet("LeaveCheckData{id}/{cnic}")]
+        public async Task<ActionResult<JsonObject>> LeaveCheckData(int id, string email)
         {
-            if (await new Candidate().AlreadyExist(id, email, CompanyId, _context))
+            if (await new Leave().AlreadyExist(id, email, _context))
             {
                 return Ok(new
                 {
 
                     Success = true,
-                    Message = "Candidate Already Exist!"
+                    Message = "Leave Already Exist!"
 
 
                 });
@@ -115,96 +114,42 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        ////Load Candidate Skill data from database to 
-        [HttpGet("GetCandidateSkillInfos{CandidateId}")]
-        public async Task<ActionResult<List<CandidateSkill>>> GetCandidateSkillInfos(int CandidateId)
+        [HttpGet("GetLeaveDetailInfoId{id}")]
+        public async Task<ActionResult<JsonObject>> GetLeaveDetailInfoId(int id)
         {
-
-            return await new Candidate().GetCandidateSkill(CandidateId,_context);
-        }
-
-
-
-
-
-        ////Load Satatus data candidate list form 
-        [HttpGet("GetCandidateStatusInfos")]
-        public async Task<ActionResult<List<StatusInfo>>> GetCandidateStatusInfos()
-        {
-
-            return await new Candidate().GetCandidateStatus( _context);
-        }
-
-
-
-
-
-
-        // update candidate status
-
-        [HttpPost("CandidateStatusUpdate")]
-        public async Task<ActionResult<CandidateScreening>> CandidateStatusUpdate(CandidateScreening obj)
-        {
-
-
-            var result = await new Candidate().PostScreening(obj, _context);
-            if (result != null && result.ScreeningId > 0)
+            var result = await new Leave().GetLeaveById(id, _context);
+            if (result != null)
+            {
                 return Ok(new
                 {
+
                     Success = true,
-                    Message = "Data Update Successfully!"
+                    Message = "Leave Already Exist!",
+                    data = result
+
                 });
+
+            }
             else
+            {
+
                 return Ok(new
                 {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
+
+                    Success = false,
+                    Message = "Not found"
+
+
                 });
-
-
-
-
+            }
 
         }
 
-
-
-
-        // update candidate status
-
-        [HttpGet("GetCandidateStatusdata{id}")]
-        public async Task<ActionResult<List< CandidateScreening>>> GetCandidateStatusdata(int id)
-        {
-
-
-            return await new Candidate().GetCandidateStatus(id, _context);
-           
-
-
-        }
-
-
-
-
-
-        #endregion
-
-        //#region CandidateSubject
-
-        //[HttpGet("GetCandidateSubjects")]
-        //public async Task<ActionResult<List<ViewCandidateClassSubject>>> GetCandidateSubjects()
+        ////Load Leave data from database to Student form change dropdown selection
+        //[HttpGet("GetLeaveIdVise{id}")]
+        //public async Task<ActionResult<List<LeaveClassSubject>>> GetLeaveIdVise(int id)
         //{
-
-        //    return await new CandidateClassSubject().GetCandidateClassSubject(_context);
-        //}
-
-
-
-
-        //[HttpGet("GetCandidateSubjectId{id}")]
-        //public async Task<ActionResult<CandidateClassSubject>> GetCandidateSubjectId(int id)
-        //{
-        //    var result = await new CandidateClassSubject().GetCandidateClassSubjectById(id, _context);
+        //    var result = await new LeaveInfo().GetLeaveIdVise(id, _context);
         //    if (result != null)
         //        return Ok(result);
 
@@ -213,12 +158,44 @@ namespace HRHUBAPI.Controllers
 
         //}
 
-        //[HttpPost("CandidateSubjectAddOrCreate")]
-        //public async Task<ActionResult> CandidateSubjectAddOrCreate(List<CandidateClassSubject> obj)
+
+
+
+
+
+
+        #endregion
+
+        //#region LeaveSubject
+
+        //[HttpGet("GetLeaveSubjects")]
+        //public async Task<ActionResult<List<ViewLeaveClassSubject>>> GetLeaveSubjects()
+        //{
+
+        //    return await new LeaveClassSubject().GetLeaveClassSubject(_context);
+        //}
+
+
+
+
+        //[HttpGet("GetLeaveSubjectId{id}")]
+        //public async Task<ActionResult<LeaveClassSubject>> GetLeaveSubjectId(int id)
+        //{
+        //    var result = await new LeaveClassSubject().GetLeaveClassSubjectById(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
+
+        //    return NotFound();
+
+
+        //}
+
+        //[HttpPost("LeaveSubjectAddOrCreate")]
+        //public async Task<ActionResult> LeaveSubjectAddOrCreate(List<LeaveClassSubject> obj)
         //{
 
 
-        //    var result = await new CandidateClassSubject().PostCandidateClassSubject(obj, _context);
+        //    var result = await new LeaveClassSubject().PostLeaveClassSubject(obj, _context);
         //    if (result > 0)
         //        return Ok(new
         //        {
@@ -234,10 +211,10 @@ namespace HRHUBAPI.Controllers
 
         //}
 
-        //[HttpDelete("DeleteCandidateClassSubjectByClassId{id}")]
-        //public async Task<ActionResult<bool>> DeleteCandidateClassSubjectByClassId(int id)
+        //[HttpDelete("DeleteLeaveClassSubjectByClassId{id}")]
+        //public async Task<ActionResult<bool>> DeleteLeaveClassSubjectByClassId(int id)
         //{
-        //    var result = await new CandidateClassSubject().DeleteCandidateSubjectByClassId(id, _context);
+        //    var result = await new LeaveClassSubject().DeleteLeaveSubjectByClassId(id, _context);
         //    if (id > 0)
         //        return Ok(new
         //        {
@@ -252,10 +229,10 @@ namespace HRHUBAPI.Controllers
         //}
 
 
-        //[HttpDelete("DeleteCandidateSubject{id}")]
-        //public async Task<ActionResult<bool>> DeleteCandidateSubject(int id)
+        //[HttpDelete("DeleteLeaveSubject{id}")]
+        //public async Task<ActionResult<bool>> DeleteLeaveSubject(int id)
         //{
-        //    var result = await new CandidateClassSubject().DeleteCandidateClassSubject(id, _context);
+        //    var result = await new LeaveClassSubject().DeleteLeaveClassSubject(id, _context);
         //    if (id > 0)
         //        return Ok(new
         //        {
@@ -270,10 +247,10 @@ namespace HRHUBAPI.Controllers
         //}
 
 
-        //[HttpGet("CandidateSubjectCheckData{id}/{GroupId}/{title}/{language}")]
-        //public async Task<ActionResult<JsonObject>> CandidateSubjectCheckData(int id, int GroupId, string title, string language)
+        //[HttpGet("LeaveSubjectCheckData{id}/{GroupId}/{title}/{language}")]
+        //public async Task<ActionResult<JsonObject>> LeaveSubjectCheckData(int id, int GroupId, string title, string language)
         //{
-        //    if (await new CandidateClassSubject().AlreadyExist(id, GroupId, title, language, _context))
+        //    if (await new LeaveClassSubject().AlreadyExist(id, GroupId, title, language, _context))
         //    {
         //        return Ok(new
         //        {
@@ -339,9 +316,9 @@ namespace HRHUBAPI.Controllers
         //}
         ////Load Class data from database to bootstrap table on class dropdown selection
         //[HttpGet("LoadDataByClassId{id}")]
-        //public async Task<ActionResult<List<CandidateClassSubject>>> LoadDataByClassId(int id)
+        //public async Task<ActionResult<List<LeaveClassSubject>>> LoadDataByClassId(int id)
         //{
-        //    var result = await new CandidateClassSubject().LoadDataByClassId(id, _context);
+        //    var result = await new LeaveClassSubject().LoadDataByClassId(id, _context);
         //    if (result != null)
         //        return Ok(result);
 

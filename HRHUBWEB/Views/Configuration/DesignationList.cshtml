@@ -1,4 +1,56 @@
-﻿@model IEnumerable<HRHUBAPI.Models.Designation>
+﻿@model HRHUBAPI.Models.Designation
+
+
+
+
+
+<input type="hidden" asp-for="CompanyId" />
+<!--Add Designation Modal -->
+@using (@Html.BeginForm("DesignationCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+
+    <input type="hidden" asp-for="DesignationId" />
+
+    <div class="modal fade" id="adddesignationmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Designation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Designation Title</label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Designation Title">
+                    </div>
+                   
+                    <div class="form-group">                      
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                    <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<!-- End Add Department Modal  -->
+<!-- Row -->
+
 
 
 
@@ -11,9 +63,16 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Designation Details</h3>
-                @if (Convert.ToBoolean(ViewBag.IsNew))
+                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
-                    <div class="card-options"> <a asp-action="DesignationCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add New</a> </div>
+                    <div class="card-options">
+                        <div class="btn-list">
+                            <a onclick="addnewdesignation()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Designation</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
                 }
             </div>
                 <div class="card-body">
@@ -28,7 +87,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
+                            @foreach (var item in Model.Listdesignation)
                             {
                                 <tr>
 
@@ -65,14 +124,13 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="DesignationCreateOrUpdate" asp-route-id="@item.DesignationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
-                                                        <i class="feather feather-edit primary text-primary">
-                                                        </i>
+                                                    <a onclick="editrecord(@item.DesignationId)" class="action-btns1 btn-xs">
+                                                        <i class="feather feather-edit primary text-primary mt-1 " data-bs-toggle="" data-original-title="Edit" data-bs-original-title="" title="Edit"></i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="DesignationDelete" asp-route-id="@item.DesignationId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger"></i>
+                                                    <a onclick="confirmation(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-toggle="" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
                                                 }
                                             </div>
@@ -146,6 +204,174 @@
             }
             $('#myTable').DataTable();
         });
+
+
+
+
+
+        function postdata() {
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+            var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/DesignationCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#adddesignationmodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+        function editrecord(id) {
+            debugger
+            addnewdesignation();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/DesignationDetails",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                       
+
+                        $("#DesignationId").val(data.designationId);
+                        $("#Title").val(data.title);                     
+                        $("#Status").prop('checked', data.status)
+                      
+                        $("#adddesignationmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var url = "@Url.Action("DesignationDelete", "Configuration")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+
+        function addnewdesignation() {
+
+            $("#adddesignationmodal").modal('show');
+            $("#DesignationId").val(0);
+            $("#Title").val('');          
+            $("#Status").prop('checked', false);
+
+
+        }
+
+
+
+
+
+
+
+
 
     </script>
 

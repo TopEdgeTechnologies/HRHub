@@ -13,7 +13,7 @@
                 <h3 class="card-title">User Group Details</h3>
         @if (Convert.ToBoolean(ViewBag.IsNew))
         {
-                <div class="card-options"> <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary">Add New</a> </div>
+                <div class="card-options"> <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add New</a> </div>
         }
         </div>
             <div class="card-body">
@@ -69,13 +69,13 @@
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
                                                     <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip">
-                                                        <i class="feather feather-edit primary text-primary">
+                                                        <i class="feather feather-edit text-primary mt-1">
                                                     </i>
                                                 </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
                                                     <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger"></i>
+                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                 </a>}
                                             </div>
 
