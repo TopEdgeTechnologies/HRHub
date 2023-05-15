@@ -156,6 +156,7 @@ public partial class HrhubContext : DbContext
             entity.ToTable("CandidateScreening", "Recuriment");
 
             entity.Property(e => e.ScreeningId).HasColumnName("ScreeningID");
+            entity.Property(e => e.AttachmentPath).IsUnicode(false);
             entity.Property(e => e.CandidateId).HasColumnName("CandidateID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Remarks).IsUnicode(false);
@@ -365,7 +366,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.BankName).IsUnicode(false);
             entity.Property(e => e.BloodGroup).IsUnicode(false);
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.ContactNumber).IsUnicode(false);
+            entity.Property(e => e.ContactNumber1).IsUnicode(false);
+            entity.Property(e => e.ContactNumber2).IsUnicode(false);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
@@ -376,11 +378,12 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.EmergencyContact1).IsUnicode(false);
             entity.Property(e => e.EmergencyContact2).IsUnicode(false);
             entity.Property(e => e.FatherName).IsUnicode(false);
+            entity.Property(e => e.FirstName).IsUnicode(false);
             entity.Property(e => e.Gender).IsUnicode(false);
             entity.Property(e => e.JobDescription).IsUnicode(false);
             entity.Property(e => e.JoiningDate).HasColumnType("date");
+            entity.Property(e => e.LastName).IsUnicode(false);
             entity.Property(e => e.MaterialStatus).IsUnicode(false);
-            entity.Property(e => e.Name).IsUnicode(false);
             entity.Property(e => e.NationalIdnumber)
                 .IsUnicode(false)
                 .HasColumnName("NationalIDNumber");

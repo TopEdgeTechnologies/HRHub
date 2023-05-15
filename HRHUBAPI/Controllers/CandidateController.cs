@@ -185,171 +185,24 @@ namespace HRHUBAPI.Controllers
 
 
 
+        // search data Candidate by Name , Designation and ExperienceId
+
+        [HttpGet("SearchAllCandidate{Name}/{DesignationId}/{ExperienceId}/{CompanyId}")]
+        public async Task<ActionResult<List<Candidate>>> SearchAllCandidates(string Name, int DesignationId, int ExperienceId, int CompanyId)
+        {
+            var result = await new Candidate().SearchCandidates(Name, DesignationId, ExperienceId, CompanyId, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
 
 
         #endregion
 
-        //#region CandidateSubject
-
-        //[HttpGet("GetCandidateSubjects")]
-        //public async Task<ActionResult<List<ViewCandidateClassSubject>>> GetCandidateSubjects()
-        //{
-
-        //    return await new CandidateClassSubject().GetCandidateClassSubject(_context);
-        //}
-
-
-
-
-        //[HttpGet("GetCandidateSubjectId{id}")]
-        //public async Task<ActionResult<CandidateClassSubject>> GetCandidateSubjectId(int id)
-        //{
-        //    var result = await new CandidateClassSubject().GetCandidateClassSubjectById(id, _context);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound();
-
-
-        //}
-
-        //[HttpPost("CandidateSubjectAddOrCreate")]
-        //public async Task<ActionResult> CandidateSubjectAddOrCreate(List<CandidateClassSubject> obj)
-        //{
-
-
-        //    var result = await new CandidateClassSubject().PostCandidateClassSubject(obj, _context);
-        //    if (result > 0)
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Update Successfully!"
-        //        });
-        //    else
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Insert Successfully!"
-        //        });
-
-        //}
-
-        //[HttpDelete("DeleteCandidateClassSubjectByClassId{id}")]
-        //public async Task<ActionResult<bool>> DeleteCandidateClassSubjectByClassId(int id)
-        //{
-        //    var result = await new CandidateClassSubject().DeleteCandidateSubjectByClassId(id, _context);
-        //    if (id > 0)
-        //        return Ok(new
-        //        {
-
-        //            Success = true,
-        //            Message = "Data Delete Successfully!"
-
-
-        //        });
-
-        //    return NotFound("Data Not Found!");
-        //}
-
-
-        //[HttpDelete("DeleteCandidateSubject{id}")]
-        //public async Task<ActionResult<bool>> DeleteCandidateSubject(int id)
-        //{
-        //    var result = await new CandidateClassSubject().DeleteCandidateClassSubject(id, _context);
-        //    if (id > 0)
-        //        return Ok(new
-        //        {
-
-        //            Success = true,
-        //            Message = "Data Delete Successfully!"
-
-
-        //        });
-
-        //    return NotFound("Data Not Found!");
-        //}
-
-
-        //[HttpGet("CandidateSubjectCheckData{id}/{GroupId}/{title}/{language}")]
-        //public async Task<ActionResult<JsonObject>> CandidateSubjectCheckData(int id, int GroupId, string title, string language)
-        //{
-        //    if (await new CandidateClassSubject().AlreadyExist(id, GroupId, title, language, _context))
-        //    {
-        //        return Ok(new
-        //        {
-
-        //            Success = true,
-        //            Message = "Title Already Exist!"
-
-
-        //        });
-        //    }
-        //    else
-        //    {
-
-        //        return Ok(new
-        //        {
-
-        //            Success = false,
-        //            Message = "Not found"
-
-
-        //        });
-        //    }
-
-        //}
-
-
-
-        ////load subject data in dropdown by language ID
-        //[HttpGet("GetSubjectLanguageId{id}")]
-        //public async Task<ActionResult<List<SubjectInfo>>> GetSubjectLanguageId(int id)
-        //{
-        //    var result = await new SubjectInfo().GetSubjectLangugeId(id, _context);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound();
-
-
-        //}
-        ////load class data in dropdown by level ID
-        //[HttpGet("GetClassByLevelId{id}")]
-        //public async Task<ActionResult<List<ClassInfo>>> GetClassByLevelId(int id)
-        //{
-        //    var result = await new ClassInfo().GetClassbyLevelId(id, _context);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound();
-
-
-        //}
-        ////load subject data in dropdown by Group ID
-        //[HttpGet("GetSubjectByGroupId{id}/{groupId}")]
-        //public async Task<ActionResult<List<SubjectInfo>>> GetSubjectByGroupId(int id, int groupId)
-        //{
-        //    var result = await new SubjectInfo().GetSubjectByGroupId(id, groupId, _context);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound();
-
-
-        //}
-        ////Load Class data from database to bootstrap table on class dropdown selection
-        //[HttpGet("LoadDataByClassId{id}")]
-        //public async Task<ActionResult<List<CandidateClassSubject>>> LoadDataByClassId(int id)
-        //{
-        //    var result = await new CandidateClassSubject().LoadDataByClassId(id, _context);
-        //    if (result != null)
-        //        return Ok(result);
-
-        //    return NotFound();
-
-
-        //}
-        //#endregion
 
 
 

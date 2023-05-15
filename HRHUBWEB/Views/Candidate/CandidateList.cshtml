@@ -7,28 +7,94 @@
     }
 </style>
 
+<input type="hidden" asp-for="CompanyId"/>
 <!-- Row -->
-<div class="row row-sm mt-4">
+<div class="row row-sm mt-2">
 
     <div class="col-lg-12">
 
-        <div class="card mt-4">
+        <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Candidate Details</h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
+                   
                         @*<a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add New </a>*@
                     <div class="card-options">
                         <div class="btn-list">
-                            <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add Candidates </a>
+                            @if(Model.UrlRequestSatausID==1)
+                            {
+                                 <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add Candidates </a>
+                                
+                            }
 
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
                         </div>
                     </div>
                 }
             </div>
+            <div class="row" id="IdFilters">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @using (@Html.BeginForm("SearchList", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+                            {
+                            <div class="row">
+                                <div class="col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label">Enter Name:</label>
+                                        <div class="input-group">
+                                            
+                                           <input class="form-control" name="Name" id="Name" placeholder="Enter name" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-3">
+                                    <div class="form-group">
+                                            <label class="form-label">Select Designation:</label>
+                                            <select id="DesignationId" name="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">
+                                                <option value="">Select Designation</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Experiences in Year <span class="text-danger"></span></label>
+                                            <select id="ExperienceId" name="ExperienceId" class="form-control custom-select select2" data-placeholder="Select Experience">
+                                                <option label="Select Experience"></option>
+                                                <option value="0">Fresher</option>
+                                                <option value="1">1 yr</option>
+                                                <option value="2">2 yrs</option>
+                                                <option value="3">3 yrs</option>
+                                                <option value="4">4 yrs</option>
+                                                <option value="5">5 yrs</option>
+                                                <option value="6">6 yrs</option>
+                                                <option value="7">7 yrs</option>
+                                                <option value="8">8 yrs</option>
+                                                <option value="9">9 yrs</option>
+                                                <option value="10">10 yrs</option>
+                                                <option value="11">10+ yrs</option>
+                                            </select>
+                                        </div>
+                                </div>
+                                <div class="col-md-12 col-lg-3">
+                                    <div class="form-group mt-5">
+                                            <button type="submit" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+
+                                    </div>
+                                </div>
+                              
+                            </div>
+                       
+                             }
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
@@ -37,12 +103,11 @@
 
                                 <th class="border-bottom-0">Sr.#</th>
 
-                                <th class="border-bottom-0">Candidate Title</th>
-                                @*<th class="border-bottom-0">Candidate Email</th>*@
-                                <th class="border-bottom-0">Qualification</th>
-                                <th class="border-bottom-0">Contact No</th>
+                                <th class="border-bottom-0">Candidate Title</th>                             
+                                <th class="border-bottom-0">Designation</th>
+                                <th class="border-bottom-0">Experience</th>
                                 <th class="border-bottom-0">City</th>
-                                @*<th class="text-center">Status</th>*@
+                                
                                 <th class="">Action</th>
                             </tr>
                         </thead>
@@ -63,10 +128,10 @@
                                         @Html.DisplayFor(modelItem => item.Email)
                                     </td>*@
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Qualification)
+                                        @Html.DisplayFor(modelItem => item.DesignationId)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Phone)
+                                        @Html.DisplayFor(modelItem => item.ExperienceInYears)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.City)
@@ -96,24 +161,27 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a class="action-btns1" Onclick="loadModal(@item.CandidateId)" >
+                                                    <a class="action-btns1" href="#" Onclick="loadModal(@item.CandidateId)" >
                                                         <i class="feather feather-check text-success mt-1">
                                                         </i>
                                                     </a>
-                                                    <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View">
+                                                    <a  asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View">
                                                         <i class="feather feather-eye  text-primary mt-1">
                                                         </i>
                                                     </a>
-                                                    <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
+                                                    <a  asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit  text-primary mt-1">
                                                         </i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                    </a>
-                                                    <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume">
+                                                    @if (Model.UrlRequestSatausID == 1)
+                                                    {
+                                                        <a  asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
+                                                    <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume">
                                                         <i class="feather feather-download  text-secondary mt-1"></i>
                                                     </a>
                                                 }
@@ -145,7 +213,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Update Candidate Status</h5>
+                <h5 id="lblName" class="modal-title"></h5>
                 <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -177,6 +245,16 @@
 
 
                                     </div>
+
+                                        
+                                    <div id="ShowAttachment">
+                                        <label class="form-label">Attachment Later <span class="text-danger">*</span></label>
+                                        <div class="form-group local-forms">
+                                            <label for="form-label" class="form-label"></label> <input class="form-control" id="AttachmentCandidate" name="AttachmentCandidate" type="file" accept=".pdf, .doc, .docx">
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group">
                                         <label class="form-label">Current Date</label>
                                         <div class="input-group">
@@ -272,6 +350,30 @@
 
         $(document).ready(function () {
 
+            $('#DesignationId').select2();
+            // Show Filters controls
+            $("#IdFilters").hide();
+            $('#btn_Filter').click(function () {
+                //$('#IdFilters').css('display', 'block');
+                $("#IdFilters").toggle(1000);
+            });
+            //////
+
+
+            /// Show status Attachment Control on dropdown selection
+           $('#ShowAttachment').hide(1000);
+            $('#StatusId').change(function () {
+                var selectOption = $(this).val();
+               
+                debugger
+                if (selectOption == '7') {
+                    $('#ShowAttachment').show(1000);
+                } else {
+                    $('#ShowAttachment').hide(1000);
+                }
+            });
+
+            //////
 
             $('#StatusId').select2();
 
@@ -334,6 +436,8 @@
                 success: function (data) {
                     console.log(data);
                     if (data != null) {
+                        $("#lblName").text(data[0]["candidateName"]);
+                        alert(data[0]["candidateName"])
                         debugger;
                         var html=''
                         for (var i = 0; i < data.length; i++) {
@@ -350,7 +454,13 @@
                             html += '     </div>';
                             html += '         <div class="ms-1">';
                             html += '            <div class="h5 fs-14 mb-1" >Candidate Status   <span class="' + data[i]["cssColor"] + '">' + data[i]["statusTitle"] + '</span>     ';
-                            html += '         </div>';
+                            html += '         </div>'
+                            if(data[i]["attachmentPath"]!='')  
+                            {
+                            html += '<div class="d-flex"><a target="_blank" href="' + data[i]["attachmentPath"] + '" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Offer">';
+                            html += '<i class="feather feather-download  text-secondary mt-1" > </i> </a> </div> ';
+                            
+                            }
                             html += '        <small class="text-muted" > ' + data[i]["remarks"] + ' </small>';
                             html += '     </div>';
                             html += '</div></div></div>';
@@ -380,6 +490,35 @@
         }
 
 
+        $('#AttachmentCandidate').change(function () {
+            debugger
+            var fileInput = $(this);
+            var allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
+            var fileSizeLimit = 5 * 1024 * 1024; // 2 MB
+            var fileSize = this.files[0].size;
+            var filePath = fileInput.val();
+            if (!allowedExtensions.exec(filePath)) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a Pdf, Doc, or Docx file.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else if (fileSize > fileSizeLimit) {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+                    type: "warning"
+                });
+                fileInput.val('');
+                return false;
+            } else {
+                readURL(this)
+
+            }
+
+        });
+
+
         function Submit() {
 
 
@@ -402,69 +541,95 @@
 
             var obj = {
 
-                CandidateId: $("#CandidateId").val(),
-                StatusId: $("#StatusId").val(),
-                Remarks: $("#Remarks").val(),
-                ScreeningDate: $("#ScreeningDate").val()
+                CandidateId:   $("#CandidateId").val(),
+                StatusId:      $("#StatusId").val(),
+                Remarks:       $("#Remarks").val(),
+                ScreeningDate: $("#ScreeningDate").val(),
+                AttachmentPath: $("#AttachmentCandidate").val()
             }
 
-          
 
-            $.ajax({
-                url: "/Candidate/CandidateStatusEdit",
-                type: "POST",
-                async: false,
-                dataType: "json",
-                data: obj,
-                success: function (data) {
-                    console.log(data);
-                    if(data!=null)
-                    {
-                        //  var table = $('#myTable').DataTable();
-                        //   table.clear();
-                        //   table.draw();
+             var formData = new FormData();
+            var fileInput = document.getElementById('AttachmentCandidate');
+            formData.append('file', fileInput.files[0]);
+
+
+            formData.append('obj', JSON.stringify(obj));
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Candidate/CandidateStatusEdit');
+                 xhr.onload = function() {
+                     debugger
+                 if (xhr) {
+                    $("#newStatusmodal").modal('hide');
+                    $.growl.notice({
+                               message: "Status Updated"
+                              });
+
+                               location.reload();
+                } else {
+                 console.log('Error uploading form data');
+                 }
+                    };
+  xhr.send(formData);
+
+
+
+            //$.ajax({
+            //    url: "/Candidate/CandidateStatusEdit",
+            //    type: "POST",
+            //    async: false,
+            //    dataType: "json",
+            //    data: obj,
+            //    success: function (data) {
+            //        console.log(data);
+            //        if(data!=null)
+            //        {
+            //            //  var table = $('#myTable').DataTable();
+            //            //   table.clear();
+            //            //   table.draw();
                       
-                        //var  listcandidate= data.listcandidate
+            //            //var  listcandidate= data.listcandidate
                        
-                        //for (var i = 0; i < listcandidate.length; i++) {
+            //            //for (var i = 0; i < listcandidate.length; i++) {
                            
-                        //    var rowData = [];
-                        //    var action = '<div class="d-flex">';
-                        //    action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
-                        //    action += '<i class="feather feather-check text-success mt-1"></i></a>';
-                        //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
-                        //    action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
-                        //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
-                        //    action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
-                        //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
-                        //    action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
-                        //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
-                        //    action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
+            //            //    var rowData = [];
+            //            //    var action = '<div class="d-flex">';
+            //            //    action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
+            //            //    action += '<i class="feather feather-check text-success mt-1"></i></a>';
+            //            //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
+            //            //    action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
+            //            //    action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
+            //            //    action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
+            //            //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+            //            //    action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
+            //            //    action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Download Resume" aria-label="Download Resume" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+            //            //    action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
 
 
-                        //    rowData.push([i+1, listcandidate[i]["name"],  listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
+            //            //    rowData.push([i+1, listcandidate[i]["name"],  listcandidate[i]["qualification"], listcandidate[i]["phone"], listcandidate[i]["city"], action]);
 
 
-                        //   table.rows.add(rowData);
-                        //   table.draw();
+            //            //   table.rows.add(rowData);
+            //            //   table.draw();
 
-                        //  }
+            //            //  }
 
-                        $("#newStatusmodal").modal('hide');
+            //            $("#newStatusmodal").modal('hide');
 
-                      $.growl.notice({
-                            message: "Status Updated"
-                          });
+            //          $.growl.notice({
+            //                message: "Status Updated"
+            //              });
 
-                        location.reload();
-                    }
+            //            location.reload();
+            //        }
                   
                     
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                }
-            });
+            //    },
+            //    error: function (jqXHR, textStatus, errorThrown) {
+            //        console.log(textStatus, errorThrown);
+            //    }
+            //});
 
                
      

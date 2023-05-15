@@ -49,16 +49,16 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
+            ObjCandidate.CompanyId = userObject.CompanyId;
             if (Token != null)
             {
 
-                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{CompanyId}");
+                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{ObjCandidate.CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
                     ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x=>x.StatusId== id);
-
+                    ObjCandidate.UrlRequestSatausID = id;
                 }
 
 
@@ -71,7 +71,13 @@ namespace HRHUBWEB.Controllers
 
                 }
 
+                HttpResponseMessage message2 = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjCandidate.CompanyId}");
+                if (message2.IsSuccessStatusCode)
+                {
+                    var result = message2.Content.ReadAsStringAsync().Result;
+                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
 
+                }
 
 
 
@@ -84,11 +90,43 @@ namespace HRHUBWEB.Controllers
 
             return View(ObjCandidate);
         }
+
+
+        // Load filter vise data from database
+        [HttpPost]
+        public async Task<IActionResult> SearchList(string Name, int DesignationId, int ExperienceId, int id = 0)
+        {
+           
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+         
+
+
+
+            Candidate objCandidate = new Candidate();
+            objCandidate.CompanyId = userObject.CompanyId;
+
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{objCandidate.CompanyId}");
+            if (message.IsSuccessStatusCode)
+            {
+                var result = message.Content.ReadAsStringAsync().Result;
+                objCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x => x.StatusId == id);
+                objCandidate.UrlRequestSatausID = id;
+            }
+
+            return View("CandidateList", objCandidate.ListCandidate);
+        }
+
+
+
+
         public async Task<IActionResult> CandidateDetails(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-           
+            ViewBag.CandidateId = id;
             if(Token != null) {
 
                 var CandidateId = id;
@@ -100,6 +138,7 @@ namespace HRHUBWEB.Controllers
 
                 }
 
+                
 
 
 
@@ -319,19 +358,7 @@ namespace HRHUBWEB.Controllers
             }
         }
 
-        // Download file 
-        public IActionResult Download(int Id)
-        {
-            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "CandidateAttachment", "Ali-638193298396942917");
-            var fileInfo = new FileInfo(filePath);
-
-            var fileStream = new FileStream(filePath, FileMode.Open);
-            var fileName = Path.GetFileName(filePath);
-            return File(fileStream, fileName);
-
-
-
-        }
+       
 
        
        
@@ -344,7 +371,7 @@ namespace HRHUBWEB.Controllers
 
         // Update Candidate Status here
         [HttpPost]
-        public async Task<ActionResult<JsonObject>> CandidateStatusEdit(CandidateScreening obj)
+        public async Task<ActionResult<JsonObject>> CandidateStatusEdit(IFormCollection my,CandidateScreening obj)
         {
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -354,8 +381,20 @@ namespace HRHUBWEB.Controllers
             obj.CreatedBy = userObject.UserId;
 
 
-          
-            HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/CandidateStatusUpdate", obj);
+            // Get key valuse form iformCollection
+
+            var modelobj = JsonConvert.DeserializeObject<CandidateScreening>(my["obj"]);
+            modelobj.CreatedBy = userObject.UserId;
+
+
+            /////////////////////////
+            ///
+
+            // Save attachment in database
+            var CandidateAttachment = my.Files.GetFile("file");
+            modelobj.AttachmentPath=uploadImage(modelobj.Remarks, CandidateAttachment, "CandidateAttachmentOffer");
+
+            HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/CandidateStatusUpdate", modelobj);
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
