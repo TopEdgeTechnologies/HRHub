@@ -11,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
+using System.Net.NetworkInformation;
 
 namespace HRHUBWEB.Controllers
 {
@@ -235,7 +236,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-         
+            
             ViewBag.Success = data;
 
             Department departments = new Department();
@@ -657,8 +658,8 @@ namespace HRHUBWEB.Controllers
 
 
         #region HOliday
-        [CustomAuthorization]
-        public async Task<IActionResult> Holiday(string data = "")
+       [CustomAuthorization]
+        public async Task<IActionResult> HolidayList(string data = "")
         {
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
@@ -692,9 +693,141 @@ namespace HRHUBWEB.Controllers
             {
                 return RedirectToAction("Loginpage", "User", new { id = 2 });
             }
-            return View(Holiday);
+            return View(objHoliday);
 
         }
+
+
+        public async Task<IActionResult> GetHolidayByID(int id)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            Holiday objholiday = new Holiday();
+            var response = await _client.GetAsync($"api/Configuration/GetHolidayById{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                objholiday = JsonConvert.DeserializeObject<Holiday>(content);
+                return Json(objholiday);
+            }
+            else
+            {
+
+                return Json(null);
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> HolidayCreateOrUpdate(Holiday objHoliday)
+        {
+            //token get from session
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            //
+
+            //user get from session
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            objHoliday.CompanyId = userObject.CompanyId;
+            objHoliday.CreatedBy = userObject.UserId;
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostHoliday", objHoliday);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Response>(content.Result);
+
+
+                int status = 0;
+
+
+                if (result.Success)
+                {
+                    if (result.Message.Contains("Insert"))
+                    {
+                        status = 1;
+                    }
+                    else if (result.Message.Contains("Update"))
+                    {
+                        status = 2;
+                    }
+                }
+                return RedirectToAction("DepartmentList", new { data = status });
+
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+
+        }
+
+
+
+        public async Task<IActionResult> HolidayDelete(int id)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+            var response = await _client.GetAsync($"api/Configuration/DeleteHoliday{id}/{userObject.UserId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<Response>(content);
+                int status = 0;
+
+                if (result.Success)
+                {
+                    if (result.Message.Contains("Delete"))
+                    {
+                        status = 3;
+                    }
+                }
+                return RedirectToAction("HOlidayList", new { data = status });
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+
+        }
+
+
+        public async Task<IActionResult> HolidayAlreadyExists(int id, DateTime HolidayDate)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            var CompanyId = userObject.CompanyId;
+
+            var response = await _client.GetAsync($"api/Configuration/HolidayAlreadyExists{CompanyId}/{id}/{HolidayDate}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                return Json(content);
+            }
+            return RedirectToAction("Loginpage", "User", new { id = 2 });
+        }
+
+
+
+
+
+
+
+
 
         #endregion
 

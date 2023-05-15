@@ -17,7 +17,7 @@ namespace HRHUBAPI.Models
             {
                 List<Holiday> list = new List<Holiday>();
 
-                list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+                list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyID).ToListAsync();
                 return list;
             }
             catch (Exception Ex)
