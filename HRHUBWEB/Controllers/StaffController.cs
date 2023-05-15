@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System.Net.Http;
 using System.Collections.Specialized;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HRHUBWEB.Controllers
 {
@@ -97,11 +98,12 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> GetStaffCreateOrUpdate(int Id) 
         {
-			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            ViewBag.MaterialStatus = GetMaterialStatusList();
+            ViewBag.BloodGroup = GetBloodGroup();
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-			//staff.CompanyId = userObject.CompanyId;
-			//staff.CreatedBy = userObject.CreateBy;
 
 			HttpResponseMessage response = await _client.GetAsync($"api/Staffs/GetStaffById{Id}");
 
@@ -121,6 +123,29 @@ namespace HRHUBWEB.Controllers
 				return RedirectToAction("Loginpage", "User", new { id = 2 });
 			}
 		}
+
+        public List<SelectListItem> GetMaterialStatusList() 
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "Single", Value = "1" });
+            listobj.Add(new SelectListItem { Text = "Married", Value = "2" });
+            ViewBag.MaterialStatus = listobj;
+            return listobj;
+        }
+
+        public List<SelectListItem> GetBloodGroup()
+        {
+            List<SelectListItem > listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "A+", Value = "1" });
+            listobj.Add(new SelectListItem { Text = "B+", Value = "2" });
+            listobj.Add(new SelectListItem { Text = "O+", Value = "3" });
+            listobj.Add(new SelectListItem { Text = "AB+", Value = "4" });
+            listobj.Add(new SelectListItem { Text = "A-", Value = "5" });
+            listobj.Add(new SelectListItem { Text = "B-", Value = "6" });
+            listobj.Add(new SelectListItem { Text = "O-", Value = "7" });
+            listobj.Add(new SelectListItem { Text = "AB-", Value = "8" });
+            return listobj;
+        }
 
         public async Task<IActionResult> StaffCreateOrUpdate(Staff staff)
         {
@@ -154,6 +179,48 @@ namespace HRHUBWEB.Controllers
         }
 
 
+        private string uploadImage(string name, IFormFile file, string root)
+        {
 
-	}
+            try
+            {
+                string fileName = string.Empty;
+                if (file != null)
+                {
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    fileName = name + "-" + DateTime.Now.Ticks + fileExtension;
+                    var filepath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", root, fileName);
+
+                    var OldpathImage = filepath;
+                    if (System.IO.File.Exists(OldpathImage))
+                    {
+                        System.IO.File.Delete(OldpathImage);
+                    }
+
+
+                    using (var stream = new FileStream(filepath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return "/Images/" + root + "/" + fileName;    // Path.GetFullPath( filepath);// @"/Images/" + root + "/" + fileName;
+                }
+                else
+                {
+
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+
+        }
+
+
+
+    }
 }
