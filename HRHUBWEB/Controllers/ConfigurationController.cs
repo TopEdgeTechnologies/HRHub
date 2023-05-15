@@ -218,12 +218,6 @@ namespace HRHUBWEB.Controllers
             }
         }
 
-
-
-
-
-
-
         #endregion
 
         #region Department Info
