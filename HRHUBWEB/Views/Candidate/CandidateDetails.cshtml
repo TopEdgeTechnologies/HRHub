@@ -12,7 +12,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="row mb-5">
+
                     <div class="col-lg-8">
+                        <button type="button" onclick="history.back()" class="btn btn-primary m-4" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
+
+
                         <div class="profile-pic mb-0">
                             <div class="d-md-flex">
                                 <img alt="user" class="avatar avatar-xxl brround" src="@Url.Content(Model.Picture)">
@@ -108,7 +112,7 @@
                     <i class="fa fa-caret-right me-2"></i> @Model.ExperienceInYears Yrs Of Working Experience in <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
               
-               <div class="row">
+               <div class="row mt-4">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="p-0">

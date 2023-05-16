@@ -187,7 +187,7 @@ namespace HRHUBAPI.Controllers
 
         // search data Candidate by Name , Designation and ExperienceId
 
-        [HttpGet("SearchAllCandidate{Name}/{DesignationId}/{ExperienceId}/{CompanyId}")]
+        [HttpGet("SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{CompanyId}")]
         public async Task<ActionResult<List<Candidate>>> SearchAllCandidates(string Name, int DesignationId, int ExperienceId, int CompanyId)
         {
             var result = await new Candidate().SearchCandidates(Name, DesignationId, ExperienceId, CompanyId, _context);

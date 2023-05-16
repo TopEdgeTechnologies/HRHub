@@ -5,9 +5,19 @@
     .modal-dialog {
         max-width: 1012px;
     }
+
+    .dt-button.buttons-columnVisibility {
+       
+        color: grey;
+    }
+
+        .dt-button.buttons-columnVisibility.active {
+            color: green;
+        }
 </style>
 
 <input type="hidden" asp-for="CompanyId"/>
+<input type="hidden" asp-for="UrlRequestSatausID" />
 <!-- Row -->
 <div class="row row-sm mt-2">
 
@@ -15,7 +25,41 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Candidate Details</h3>
+                 @if(Model.UrlRequestSatausID==1){
+                    <h3 class="card-title">Applied Candidate</h3>
+                }
+                else if (Model.UrlRequestSatausID == 2)
+                {
+                    <h3 class="card-title">Short Candidate List</h3>
+                }
+                else if (Model.UrlRequestSatausID == 3)
+                {
+                    <h3 class="card-title">Interview Candidate List</h3>
+                }
+                else if (Model.UrlRequestSatausID == 4)
+                {
+                    <h3 class="card-title">Re-Interview Candidate List</h3>
+                }
+               else if (Model.UrlRequestSatausID == 5)
+                {
+                    <h3 class="card-title">Qualified Candidate List</h3>
+                }
+                else if (Model.UrlRequestSatausID == 6)
+                {
+                    <h3 class="card-title">Not-Qualified Candidate List</h3>
+                }
+                else if (Model.UrlRequestSatausID == 7)
+                {
+                    <h3 class="card-title">Offered Candidate List</h3>
+                }
+                else if (Model.UrlRequestSatausID == 8)
+                {
+                    <h3 class="card-title">Approved Candidate List</h3>
+                } 
+                else if (Model.UrlRequestSatausID == 9)
+                {
+                    <h3 class="card-title">Rejected Candidate List</h3>
+                }
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
                    
@@ -28,10 +72,10 @@
                                 
                             }
 
-                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
-                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
+                            <button class="btn btn-light" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
                         </div>
                     </div>
                 }
@@ -82,7 +126,10 @@
                                 </div>
                                 <div class="col-md-12 col-lg-3">
                                     <div class="form-group mt-5">
-                                            <button type="submit" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                            <button type="button" onclick="SearchCandidadte()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                            <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+
+
 
                                     </div>
                                 </div>
@@ -97,18 +144,24 @@
            
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                    <table class="table table-bordered text-nowrap key-buttons border-bottom" id="myTable">
                         <thead>
                             <tr>
 
-                                <th class="border-bottom-0">Sr.#</th>
+                                <th class="border-bottom-0" style="max-width: 100px; word-wrap: break-word!important; overflow: hidden;">Sr.#</th>
 
-                                <th class="border-bottom-0">Candidate Title</th>                             
-                                <th class="border-bottom-0">Designation</th>
+                                <th class="border-bottom-0" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">Name</th>                             
+                                <th class="border-bottom-0" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">Email</th>
+                                <th class="border-bottom-0" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">Contact</th>
+                                <th class="border-bottom-0" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">Apply Designation</th>
                                 <th class="border-bottom-0">Experience</th>
-                                <th class="border-bottom-0">City</th>
+                                <th class="border-bottom-0">Gender</th>
+                                <th class="border-bottom-0" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">City</th>
+                                <th class="border-bottom-0">Current Company</th>
+                                <th class="border-bottom-0">Applied Date</th>
+                                <th class="border-bottom-0">Expected Salary</th>
                                 
-                                <th class="">Action</th>
+                                <th class=""style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,19 +177,34 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Name)
                                     </td>
-                                   @* <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>*@
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.DesignationId)
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Phone)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DesignationTitle)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.ExperienceInYears)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.City)
+                                        @Html.DisplayFor(modelItem => item.Gender)
                                     </td>
-
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.City)
+                                    </td> 
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CurrentCompany)
+                                    </td>
+                                    <td>
+                                        @item.ApplyDate.Value.ToString("yyyy-MMM-dd")
+                                        
+                                    </td>
+                                     <td>
+                                        @Html.DisplayFor(modelItem => item.ExpectedSalary)
+                                    </td>
 
 
                                     @*@if (item.Status == true)
@@ -197,6 +265,7 @@
                             }
 
                         </tbody>
+                        
                     </table>
                 </div>
             </div>
@@ -278,38 +347,7 @@
 
                                 </div>
                             </div>
-                           @* <div class="card-header border-0">
-                                <h4 class="card-title">Time Line Status</h4>
-                            </div>
-                            <div class="col-md-6">
-                                
-                                <div class="form-group local-forms">
-                                    <label class="form-label">Status <span class="text-danger">*</span>  </label>
-                                    <select asp-for="StatusId" name="StatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateStatus,"StatusId" ,"Title"))">
-                                        <option value="">Select Status</option>
-                                    </select>
-
-
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Current Date</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="feather feather-calendar"></i>
-                                            </div>
-                                        </div><input name="ScreeningDate" id="ScreeningDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Remarks</label>
-                                    <textarea rows="2" name="Remarks" id="Remarks" class="form-control" placeholder="something text here..."></textarea>
-                                </div>
-                                <button type="button" class="btn btn-primary" onclick="Submit()">Submit</button>
-                                <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
-                            </div>
-*@
-
+                          
 
                             <div class="col-md-6">
                                 <div class="card overflow-hidden">
@@ -350,17 +388,105 @@
 
         $(document).ready(function () {
 
+            // Search table data by Column vise
+            $('#myTable thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#myTable thead');
+
+
+
+            var table = $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                   buttons: [
+                    'excelHtml5', 'pdfHtml5', 'csvHtml5','colvis'
+                    ],
+                  "columnDefs" : [{ 'visible': false, 'targets': [2,3,5,6,8,9,10] }],
+                
+                orderCellsTop: true,
+                fixedHeader: true,
+                initComplete: function () {
+                    
+                    var api = this.api();
+
+                // For each column
+                api.columns().eq(0).each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    var search = $(cell).text();
+                    if (search != "Action" && search != "") {
+                        $(cell).html('<input type="text" class="form-control" placeholder="' + search + '" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;" / >');
+                    }
+                    else {
+                        $(cell).empty();
+                    }
+
+
+                    // On every keypress in this input
+                    $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                                .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+                   
+                }
+            });
+
+            
+
+            /////////////////////////////////////////////////////////
+
+            $('#myTable').on('column-visibility.dt', function (e, settings, column, state) {
+             
+               //var table =  $('#myTable').DataTable();
+              alert("column changed")
+            });
+
+
+
+            $('#StatusId').select2();
             $('#DesignationId').select2();
+
             // Show Filters controls
+           
             $("#IdFilters").hide();
             $('#btn_Filter').click(function () {
-                //$('#IdFilters').css('display', 'block');
+               
                 $("#IdFilters").toggle(1000);
             });
-            //////
+
+            ////////////////////////////////////
 
 
             /// Show status Attachment Control on dropdown selection
+
            $('#ShowAttachment').hide(1000);
             $('#StatusId').change(function () {
                 var selectOption = $(this).val();
@@ -373,11 +499,12 @@
                 }
             });
 
-            //////
+            ////////////////////////////
 
-            $('#StatusId').select2();
+           
 
 
+            // Show notification 
 
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
@@ -416,9 +543,9 @@
 
 
             }
-            $('#myTable').DataTable();
+            
         });
-
+        ////////////////////////////////////////////////////////////////
 
 
 
@@ -437,7 +564,7 @@
                     console.log(data);
                     if (data != null) {
                         $("#lblName").text(data[0]["candidateName"]);
-                        alert(data[0]["candidateName"])
+                       
                         debugger;
                         var html=''
                         for (var i = 0; i < data.length; i++) {
@@ -634,6 +761,89 @@
                
      
      }
+
+
+
+     function SearchCandidadte(){
+
+            var obj = {
+
+                Name: $("#Name").val(),
+                DesignationId: $("#DesignationId").val(),
+                ExperienceId: $("#ExperienceId").val(),
+                CompanyId: $("#CompanyId").val(),
+                id: $("#UrlRequestSatausID").val()
+                
+            }
+
+
+
+            $.ajax({
+                url: "/Candidate/SearchList",
+                type: "POST",
+                async: false,
+                dataType: "json",
+                data: obj,
+                success: function (data) {
+                    console.log(data);
+                    if(data!=null)
+                    {      debugger
+                          var table = $('#myTable').DataTable();
+                           table.clear();
+                           table.draw();
+
+                        var  listcandidate= data.listcandidate
+                        console.log(listcandidate);
+                        for (var i = 0; i < listcandidate.length; i++) {
+
+                            var dateTimeString = listcandidate[i]["applyDate"];
+                             var ApplyDate = dateTimeString.split("T")[0];
+
+
+                            var rowData = [];
+                            var action = '<div class="d-flex">';
+                            action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
+                            action += '<i class="feather feather-check text-success mt-1"></i></a>';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
+                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
+                            action += '<a target="_blank" href="' + listcandidate[i]["attachmentPath"] + '"  class="action-btns1"data-bs-toggle="" data - bs - placement="top" title = "" data - bs - original - title="Download Resume" aria - label="Download Resume" > ';
+                            action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
+
+
+                            rowData.push([i + 1, listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["phone"], listcandidate[i]["designationTitle"], listcandidate[i]["experienceInYears"], listcandidate[i]["gender"], listcandidate[i]["city"], listcandidate[i]["currentCompany"], ApplyDate, listcandidate[i]["expectedSalary"], action]);
+
+
+                           table.rows.add(rowData);
+                           table.draw();
+
+                          }
+
+                       
+
+
+                       
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+     
+     
+     
+     
+     }
+
+
+
+
 
 
     </script>

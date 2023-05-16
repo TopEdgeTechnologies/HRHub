@@ -94,32 +94,52 @@ namespace HRHUBWEB.Controllers
 
         // Load filter vise data from database
         [HttpPost]
-        public async Task<IActionResult> SearchList(string Name, int DesignationId, int ExperienceId, int id = 0)
+        public async Task<IActionResult> SearchList(string Name, int DesignationId, int ExperienceId,int CompanyId, int id = 0)
         {
-           
+
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-         
+
 
 
 
             Candidate objCandidate = new Candidate();
-            objCandidate.CompanyId = userObject.CompanyId;
+           
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{objCandidate.CompanyId}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
-                var result = message.Content.ReadAsStringAsync().Result;
-                objCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x => x.StatusId == id);
+                var result1 = message.Content.ReadAsStringAsync().Result;
+                var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1).Where(x => x.StatusId == id);
                 objCandidate.UrlRequestSatausID = id;
+
+                return Json(new
+                {
+                    success = true,
+                    Listcandidate = ListCandidate,
+
+                });
+
             }
 
-            return View("CandidateList", objCandidate.ListCandidate);
-        }
+            else
+            {
+                return Json(new
+                {
+                    success = false,
+                    Listcandidate = "",
+
+                });
+            }
 
 
+
+
+  
+
+    }
 
 
         public async Task<IActionResult> CandidateDetails(int id)

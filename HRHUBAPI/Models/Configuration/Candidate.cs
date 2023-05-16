@@ -17,6 +17,9 @@ namespace HRHUBAPI.Models
         public int? UrlRequestSatausID { get; set; }
 
         [NotMapped]
+        public string? DesignationTitle { get; set; }
+
+        [NotMapped]
         public IEnumerable<string>? ListSkillTitle { get; set; }
         [NotMapped]
         public IEnumerable<string>? ListSkillStatus { get; set; }
@@ -31,11 +34,56 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                var list = await _context.Candidates.Where(x => x.Name == Name && x.DesignationId == DesignationId && x.ExperienceInYears== ExperienceId && x.CompanyId==CompanyId && x.IsDeleted == false).ToListAsync();
+                //var list = await _context.Candidates.Where(x => x.Name == Name && x.DesignationId == DesignationId && x.ExperienceInYears== ExperienceId && x.CompanyId==CompanyId && x.IsDeleted == false).ToListAsync();
 
 
-                return list;
+                var query = from cs in _context.Candidates
+                            join d in _context.Designations on cs.DesignationId equals d.DesignationId
+                            
+                            where cs.Name == Name && cs.DesignationId==DesignationId && cs.ExperienceInYears==ExperienceId && cs.CompanyId==CompanyId && cs.IsDeleted == false
+                            select new Candidate
+                            {
+                                CandidateId = cs.CandidateId,
+                                Name = cs.Name,
+                                DesignationId = cs.DesignationId,
+                                DesignationTitle = d.Title,
+                                CoverLetter = cs.CoverLetter,
+                                Email = cs.Email,
+                                Phone= cs.Phone,
+                                CurrentCompany = cs.CurrentCompany,
+                                CurrentDesignation= cs.CurrentDesignation,
+                                CurrentSalary= cs.CurrentSalary,
+                                ExpectedSalary = cs.ExpectedSalary,
+                                ExperienceInMonths= cs.ExperienceInMonths,
+                                ExperienceInYears= cs.ExperienceInYears,
+                                Dob= cs.Dob,
+                                Gender= cs.Gender,
+                                City= cs.City,
+                                Address= cs.Address,
+                                Qualification = cs.Qualification,
+                                ApplyDate = cs.ApplyDate,
+                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                                CompanyId= cs.CompanyId,
+                                StatusId = cs.StatusId,
+                                CreatedOn = cs.CreatedOn,
+                                CreatedBy = cs.CreatedBy,                        
+                                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath) ? "" : cs.AttachmentPath
 
+
+
+
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.CandidateId).ToList() : new List<Candidate>();
+
+
+
+
+
+
+
+
+               
 
 
             }
@@ -54,13 +102,51 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
-               
+                //var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
+                var query = from cs in _context.Candidates
+                            join d in _context.Designations on cs.DesignationId equals d.DesignationId
 
-                return list  ;
+                            where  cs.CompanyId == CompanyId && cs.IsDeleted == false
+                            select new Candidate
+                            {
+                                CandidateId = cs.CandidateId,
+                                Name = cs.Name,
+                                DesignationId = cs.DesignationId,
+                                DesignationTitle = d.Title,
+                                CoverLetter = cs.CoverLetter,
+                                Email = cs.Email,
+                                Phone = cs.Phone,
+                                CurrentCompany = cs.CurrentCompany,
+                                CurrentDesignation = cs.CurrentDesignation,
+                                CurrentSalary = cs.CurrentSalary,
+                                ExpectedSalary = cs.ExpectedSalary,
+                                ExperienceInMonths = cs.ExperienceInMonths,
+                                ExperienceInYears = cs.ExperienceInYears,
+                                Dob = cs.Dob,
+                                Gender = cs.Gender,
+                                City = cs.City,
+                                Address = cs.Address,
+                                Qualification = cs.Qualification,
+                                ApplyDate = cs.ApplyDate,
+                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                                CompanyId = cs.CompanyId,
+                                StatusId = cs.StatusId,
+                                CreatedOn = cs.CreatedOn,
+                                CreatedBy = cs.CreatedBy,
+                                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath) ? "" : cs.AttachmentPath
 
 
-              
+
+
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.CandidateId).ToList() : new List<Candidate>();
+
+
+
+
+
+
             }
             catch (Exception ex)
             {
