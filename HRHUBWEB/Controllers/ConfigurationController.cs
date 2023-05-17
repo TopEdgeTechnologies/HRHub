@@ -704,6 +704,7 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             Holiday objholiday = new Holiday();
+            
             var response = await _client.GetAsync($"api/Configuration/GetHolidayById{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -761,7 +762,7 @@ namespace HRHUBWEB.Controllers
                         status = 2;
                     }
                 }
-                return RedirectToAction("DepartmentList", new { data = status });
+                return RedirectToAction("HOlidayList", new { data = status });
 
             }
             else
@@ -773,7 +774,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-        public async Task<IActionResult> HolidayDelete(int id)
+        public async Task<IActionResult> DeleteHoliday(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -811,7 +812,10 @@ namespace HRHUBWEB.Controllers
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
             var CompanyId = userObject.CompanyId;
 
-            var response = await _client.GetAsync($"api/Configuration/HolidayAlreadyExists{CompanyId}/{id}/{HolidayDate}");
+
+
+
+            var response = await _client.GetAsync($"api/Configuration/HolidayAlreadyExistsss{CompanyId}/{id}/{HolidayDate.ToString("dd-MMM-yyyy")}");
 
             if (response.IsSuccessStatusCode)
             {

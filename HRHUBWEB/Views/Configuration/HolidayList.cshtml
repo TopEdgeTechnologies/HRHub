@@ -12,7 +12,7 @@
                 <div class="btn-list">
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
-                    <a href="#" onclick="AddNewHoliday()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#holidaymodal">Add Holiday</a>
+                    <a href="#" onclick="AddHoliday()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#holidaymodal">Add Holiday</a>
                 }
                 
                    
@@ -25,8 +25,8 @@
     </div>
     <!--End Page header-->
     <!-- Row -->
-    <div class="row">
-        <div class="col-xl-12 col-md-12 col-lg-12">
+<div class="row" style="display:none">
+        <div class="col-xl-12 col-md-12 col-lg-12" > 
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -127,16 +127,16 @@
                                     <tr>
                                         <td>@count</td>
                                         <td>@item.DayName</td>
-                                        <td>@item.HolidayDate</td>
+                                        <td>@item.HolidayDate.Value.ToString("dd-MMM-yyyy")</td>
                                         <td class="font-weight-semibold">@item.Title</td>
                                         <td>
 
 
                                             @if (Convert.ToBoolean(ViewBag.IsEdit))
                                             {
-                                              
 
-                                                <a onclick="editrecord(@item.HolidayId)" class="btn btn-primary btn-icon btn-sm" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#holidaymodal">
+
+                                                <a onclick="EditRecord(@item.HolidayId)" class="btn btn-primary btn-icon btn-sm" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#holidaymodal">
                                                     <i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
                                                 </a>
 
@@ -176,18 +176,25 @@
     </div>
     <!-- End Row-->
 <!-- Holiday Modal -->
-@using (@Html.BeginForm("DepartmentCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+<input type="hidden" asp-for="CompanyId" />
+
+@using (@Html.BeginForm("HolidayCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform"}))
 {
+
+  
+
 <div class="modal fade" id="holidaymodal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Add Holidays</h5>
-                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
+                    <input type="hidden" asp-for="HolidayId" />
+                    <input type="hidden" asp-for="CompanyId" />
                 <div class="form-group">
                     <label class="form-label">Select Date</label>
                     <div class="input-group">
@@ -195,17 +202,25 @@
                             <div class="input-group-text">
                                 <i class="feather feather-calendar"></i>
                             </div>
-                        </div><input type="date" id="HolidayDate" name="HolidayDate" class="form-control" data-bs-toggle="modaldatepicker">
+                            </div><input asp-for="HolidayDate" type="date" id="HolidayDate" class="form-control" data-bs-toggle="modaldatepicker">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Enter Occasion</label>
-                    <input class="form-control" type="text" id="Title" name="Title" placeholder="Cccasion title">
+                    <input class="form-control" type="text" asp-for="Title" placeholder="Occasion Title">
                 </div>
+
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+                    </div>
+
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Add</button>
+                <button  type="button"  class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="PostData()" id="btnSave">Add</button>
             </div>
         </div>
     </div>
@@ -227,23 +242,220 @@
 
         $(document).ready(function () {
             $('#hr-holiday').DataTable();
+
+
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+
+
      
         });
 
 
         /*--Add Holiday Code--*/
         function AddHoliday() {
-
+            debugger;
             $("#holidaymodal").modal('show');
-            $("#Title").val(0)
+            $("#Title").val("")
             $("#HolidayDate").val('')
-       
+        }
+        function PostData()
+        {
+            var status = true;
+            debugger;
+
+
+            /*-- Validate Check Code Start from Here --*/
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+            if ($("#HolidayDate").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Holiday Date"
+                });
+                $("#HolidayDate").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#HolidayDate").css("border-color", "#ddd");
+            }
+            /*-- Validate Check Code Ends Here --*/
+
+
+            var Data = { companyid: $("#CompanyId").val(), id: $("#HolidayId").val(), HolidayDate: $("#HolidayDate").val(), }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/HolidayAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#holidaymodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
 
 
         }
 
 
+        function EditRecord(id)
+        {
+            AddHoliday(); // clearing controlls opening model
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetHolidayById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
 
+                   
+                        $("#HolidayId").val(data.holidayId);
+                        $("#CompanyId").val(data.companyId);
+                        $("#Title").val(data.title);
+                        
+                        var dateTimeString = data.holidayDate;
+                        var _HolidayDate = dateTimeString.split("T")[0];
+
+                        $("#HolidayDate").val(_HolidayDate);
+
+                        $("#Status").prop('checked', data.status)
+
+                      //  $("#holidaymodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+
+
+
+
+
+        function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var url = "@Url.Action("DeleteHoliday", "Configuration")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
 
 
 
@@ -266,31 +478,22 @@
                 businessHours: true, // display business hours
                 editable: true,
                 selectable: true,
-                selectMirror: true,
-                droppable: true, // this allows things to be dropped onto the calendar
-                drop: function (arg) {
-                    // is the "remove after drop" checkbox checked?
-                    if (document.getElementById('drop-remove').checked) {
-                        // if so, remove the element from the "Draggable Events" list
-                        arg.draggedEl.parentNode.removeChild(arg.draggedEl);
-                    }
-                },
-                //select: function (arg) {
-                //    var title = prompt('Event Title:');
-                //    if (title) {
-                //        calendar.addEvent({
-                //            title: title,
-                //            start: arg.start,
-                //            end: arg.end,
-                //            allDay: arg.allDay
-                //        })
-                //    }
-                //    calendar.unselect()
-                //},
                 eventClick: function (arg) {
+                    debugger;
+               
                     if (confirm('Are you sure you want to delete this event?')) {
                         arg.event.remove()
                     }
+                },
+                dateClick: function (info) {
+                    debugger;
+                    var clickedDate = info.date;
+                   // alert('Clicked date: ');
+                },
+                viewRender: function (view) {
+                    debugger;
+                  //  var monthName = view.title;
+                   // alert('Month changed to: ');
                 },
                 editable: true,
                 dayMaxEvents: true, // allow "more" link when too many events
@@ -299,19 +502,20 @@
                     if ((event.description).toString() == "Halfday") {
                         element.find(".fc-event-time").after($("<span class=\"fc-event-icons\"></span>").html("<i class='fe fe-view'></i> "));
                     }
-                },
-                events: [
-                    {
-                        title: 'Rest Day',
-                        start: '2023-05-14',
-                        color: 'rgba(255, 173, 0, 0.1)',
-                    },
-                    {
-                        title: 'EID',
-                        start: '2023-05-26',
-                        color: 'rgba(255, 173, 0, 0.1)',
-                    },
-                ]
+                }
+                //,
+                //events: [
+                //    {
+                       
+                //        start: '2023-05-14',
+                //        color: 'rgba(255, 173, 0, 0.1)',
+                //    },
+                //    {
+                //        title: 'EID',
+                //        start: '2023-05-26',
+                //        color: 'rgba(255, 173, 0, 0.1)',
+                //    },
+                //]
             });
             calendar.render();
         });

@@ -64,7 +64,10 @@ namespace HRHUBAPI.Models
                 if (objHoliday != null && objHoliday.HolidayId > 0)
                 {
                     objHoliday.HolidayId = obj.HolidayId;
-                    objHoliday.DayName = obj.DayName;
+
+                    DateTime dtH = Convert.ToDateTime(obj.HolidayDate);
+                    objHoliday.DayName = dtH.Date.DayOfWeek.ToString();  // Getting DayName from Dayof We
+
                     objHoliday.HolidayDate = obj.HolidayDate;
                     objHoliday.Title = obj.Title;
                     objHoliday.Status = obj.Status;
@@ -135,7 +138,7 @@ namespace HRHUBAPI.Models
                 bool returnResult = false;
                 if (HolidayID > 0)
                 {
-                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate == Daydate && x.HolidayId != HolidayID && x.CompanyId == CompanyID && x.IsDeleted == false);
+                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate.Value.Date  == Daydate.Date && x.HolidayId != HolidayID && x.CompanyId == CompanyID && x.IsDeleted == false);
                     if (result != null)
                     {
                         returnResult = true;
@@ -143,7 +146,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate == Daydate && x.CompanyId == CompanyID && x.IsDeleted == false);
+                    var result = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayDate.Value.Date == Daydate.Date && x.CompanyId == CompanyID && x.IsDeleted == false);
                     if (result != null)
                     {
                         returnResult = true;
