@@ -14,23 +14,139 @@ namespace HRHUBAPI.Models
     {
 
         [NotMapped]
+        public int? UrlRequestSatausID { get; set; }
+
+        [NotMapped]
+        public string? DesignationTitle { get; set; }
+
+        [NotMapped]
         public IEnumerable<string>? ListSkillTitle { get; set; }
         [NotMapped]
         public IEnumerable<string>? ListSkillStatus { get; set; }
         [NotMapped]
         public IEnumerable<Candidate>? ListCandidate { get; set; }
 
+
+
+        // Search Candidate by Name or Designation and Experince
+
+        public async Task<List<Candidate>> SearchCandidates(string Name, int DesignationId,int ExperienceId,int CompanyId, HrhubContext _context)
+        {
+            try
+            {
+                //var list = await _context.Candidates.Where(x => x.Name == Name && x.DesignationId == DesignationId && x.ExperienceInYears== ExperienceId && x.CompanyId==CompanyId && x.IsDeleted == false).ToListAsync();
+
+
+                var query = from cs in _context.Candidates
+                            join d in _context.Designations on cs.DesignationId equals d.DesignationId
+                            
+                            where cs.Name == Name && cs.DesignationId==DesignationId && cs.ExperienceInYears==ExperienceId && cs.CompanyId==CompanyId && cs.IsDeleted == false
+                            select new Candidate
+                            {
+                                CandidateId = cs.CandidateId,
+                                Name = cs.Name,
+                                DesignationId = cs.DesignationId,
+                                DesignationTitle = d.Title,
+                                CoverLetter = cs.CoverLetter,
+                                Email = cs.Email,
+                                Phone= cs.Phone,
+                                CurrentCompany = cs.CurrentCompany,
+                                CurrentDesignation= cs.CurrentDesignation,
+                                CurrentSalary= cs.CurrentSalary,
+                                ExpectedSalary = cs.ExpectedSalary,
+                                ExperienceInMonths= cs.ExperienceInMonths,
+                                ExperienceInYears= cs.ExperienceInYears,
+                                Dob= cs.Dob,
+                                Gender= cs.Gender,
+                                City= cs.City,
+                                Address= cs.Address,
+                                Qualification = cs.Qualification,
+                                ApplyDate = cs.ApplyDate,
+                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                                CompanyId= cs.CompanyId,
+                                StatusId = cs.StatusId,
+                                CreatedOn = cs.CreatedOn,
+                                CreatedBy = cs.CreatedBy,                        
+                                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath) ? "" : cs.AttachmentPath
+
+
+
+
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.CandidateId).ToList() : new List<Candidate>();
+
+
+
+
+
+
+
+
+               
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
         public async Task<List<Candidate>> GetCandidate(int CompanyId,HrhubContext _context)
         {
             try
             {
-                var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
-               
+                //var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
+                var query = from cs in _context.Candidates
+                            join d in _context.Designations on cs.DesignationId equals d.DesignationId
 
-                return list  ;
+                            where  cs.CompanyId == CompanyId && cs.IsDeleted == false
+                            select new Candidate
+                            {
+                                CandidateId = cs.CandidateId,
+                                Name = cs.Name,
+                                DesignationId = cs.DesignationId,
+                                DesignationTitle = d.Title,
+                                CoverLetter = cs.CoverLetter,
+                                Email = cs.Email,
+                                Phone = cs.Phone,
+                                CurrentCompany = cs.CurrentCompany,
+                                CurrentDesignation = cs.CurrentDesignation,
+                                CurrentSalary = cs.CurrentSalary,
+                                ExpectedSalary = cs.ExpectedSalary,
+                                ExperienceInMonths = cs.ExperienceInMonths,
+                                ExperienceInYears = cs.ExperienceInYears,
+                                Dob = cs.Dob,
+                                Gender = cs.Gender,
+                                City = cs.City,
+                                Address = cs.Address,
+                                Qualification = cs.Qualification,
+                                ApplyDate = cs.ApplyDate,
+                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                                CompanyId = cs.CompanyId,
+                                StatusId = cs.StatusId,
+                                CreatedOn = cs.CreatedOn,
+                                CreatedBy = cs.CreatedBy,
+                                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath) ? "" : cs.AttachmentPath
 
 
-              
+
+
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.CandidateId).ToList() : new List<Candidate>();
+
+
+
+
+
+
             }
             catch (Exception ex)
             {
@@ -252,6 +368,7 @@ namespace HRHUBAPI.Models
                     _context.CandidateScreenings.Add(objscreen);
                     objscreen.CreatedOn= DateTime.Now;
                     objscreen.IsDeleted = false;
+                    
                     await _context.SaveChangesAsync();
 
                     dbContextTransaction.Commit();
@@ -335,7 +452,7 @@ namespace HRHUBAPI.Models
 
 
 
-        // load data Candidateskills in table on Update mode
+        // load data CandidatesStatus in table on Update mode
         public async Task<List<StatusInfo>> GetCandidateStatus(HrhubContext _context)
         {
             try
@@ -396,10 +513,12 @@ namespace HRHUBAPI.Models
 
                 var query = from cs in _context.CandidateScreenings
                             join s in _context.StatusInfos on cs.StatusId equals s.StatusId
+                            join cand in _context.Candidates on cs.CandidateId equals cand.CandidateId
                             where cs.CandidateId == CandidateId && cs.IsDeleted == false
                             select new CandidateScreening
                             {
                                 CandidateId = cs.CandidateId,
+                                CandidateName = cand.Name,
                                 ScreeningDate = cs.ScreeningDate,
                                 StatusId = cs.StatusId,
                                 CreatedOn = cs.CreatedOn,
@@ -409,7 +528,8 @@ namespace HRHUBAPI.Models
                                 ScreeningId = cs.ScreeningId,
                                 Month = cs.ScreeningDate.Value.Date.ToString("MMM"),
                                 day = cs.ScreeningDate.Value.Date.Day,
-                                CssColor=s.BackGroundClass
+                                CssColor=s.BackGroundClass,
+                                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath)?"" : cs.AttachmentPath
                                 
 
 
