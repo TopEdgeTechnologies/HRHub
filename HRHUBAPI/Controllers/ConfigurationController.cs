@@ -352,7 +352,7 @@ namespace HRHUBAPI.Controllers
                 return Ok(new
                 {
                     Success = true,
-                    MessageProcessingHandler = "Data"
+                    Message = "Data Updated Successfully"
                 });
             }
             else
@@ -387,10 +387,12 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpGet("HolidayAlreadyExistCheck{COmpanyID}/{HolidayID}/{DayDate}")]
-        public async Task<ActionResult<bool>> HolidayAlreadyExistCheck(int CompanyID, int ID, DateTime DayDate)
+
+
+[HttpGet("HolidayAlreadyExistsss{CompanyId}/{id}/{HolidayDate}")]
+        public async Task<ActionResult<bool>> HolidayAlreadyExistsss(int CompanyId, int id, DateTime HolidayDate)
         {
-            var dbResult = await new Holiday().AlredyExist(ID, DayDate, CompanyID,_context);
+            var dbResult = await new Holiday().AlredyExist(id, HolidayDate, CompanyId, _context);
             if (dbResult == true)
             {
                 return Ok(new
