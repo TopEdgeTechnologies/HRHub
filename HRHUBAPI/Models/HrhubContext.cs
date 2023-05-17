@@ -63,10 +63,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AttendanceDetail>(entity =>
@@ -156,6 +152,7 @@ public partial class HrhubContext : DbContext
             entity.ToTable("CandidateScreening", "Recuriment");
 
             entity.Property(e => e.ScreeningId).HasColumnName("ScreeningID");
+            entity.Property(e => e.AttachmentPath).IsUnicode(false);
             entity.Property(e => e.CandidateId).HasColumnName("CandidateID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Remarks).IsUnicode(false);
@@ -361,11 +358,13 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.AccountTitle).IsUnicode(false);
             entity.Property(e => e.BankAccountNumber).IsUnicode(false);
+            entity.Property(e => e.BankCode).IsUnicode(false);
             entity.Property(e => e.BankLocation).IsUnicode(false);
             entity.Property(e => e.BankName).IsUnicode(false);
             entity.Property(e => e.BloodGroup).IsUnicode(false);
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.ContactNumber).IsUnicode(false);
+            entity.Property(e => e.ContactNumber1).IsUnicode(false);
+            entity.Property(e => e.ContactNumber2).IsUnicode(false);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
             entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
@@ -376,11 +375,12 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.EmergencyContact1).IsUnicode(false);
             entity.Property(e => e.EmergencyContact2).IsUnicode(false);
             entity.Property(e => e.FatherName).IsUnicode(false);
+            entity.Property(e => e.FirstName).IsUnicode(false);
             entity.Property(e => e.Gender).IsUnicode(false);
             entity.Property(e => e.JobDescription).IsUnicode(false);
             entity.Property(e => e.JoiningDate).HasColumnType("date");
+            entity.Property(e => e.LastName).IsUnicode(false);
             entity.Property(e => e.MaterialStatus).IsUnicode(false);
-            entity.Property(e => e.Name).IsUnicode(false);
             entity.Property(e => e.NationalIdnumber)
                 .IsUnicode(false)
                 .HasColumnName("NationalIDNumber");
@@ -388,7 +388,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
             entity.Property(e => e.ResigningDate).HasColumnType("date");
-            entity.Property(e => e.SalaryPerMonth).HasColumnType("money");
+            entity.Property(e => e.SalaryAmount).HasColumnType("money");
+            entity.Property(e => e.SalaryMethod).IsUnicode(false);
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });

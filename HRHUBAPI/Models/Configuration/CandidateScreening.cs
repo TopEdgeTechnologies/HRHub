@@ -12,7 +12,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? Month { get; set; }
         [NotMapped]
-        public string? CssColor { get; set; }
+        public string? CssColor { get; set; } 
+        [NotMapped]
+        public string? CandidateName { get; set; }
 
 
 

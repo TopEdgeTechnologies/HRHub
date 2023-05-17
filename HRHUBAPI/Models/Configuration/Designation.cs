@@ -19,8 +19,8 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                List<Designation> list = new List<Designation>();
-                    list =await _context.Designations.Where(x=>x.IsDeleted==false && x.CompanyId==CompanyId).ToListAsync();
+
+				var list =await _context.Designations.Where(x=>x.IsDeleted==false && x.CompanyId==CompanyId).ToListAsync();
 
                 return list;
               
