@@ -21,9 +21,11 @@ Steps need to follow
 
 4, Generate DbContext using scaffold command
 
-For Webserver ------>Scaffold-DbContext "Data Source=WebServer;Initial Catalog=SchoolManagementSystem;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f -DataAnnotations     
+For Webserver ------>
+Scaffold-DbContext "Data Source=WebServer;Initial Catalog=HRHub;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f -DataAnnotations     
 	
-For Local ---------> Scaffold-DbContext "Data Source=DESKTOP-A2BNQOF;Initial Catalog=MTB_SchoolSystem; Trusted_Connection=true; TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f -DataAnnotations
+For Local ---------> 
+Scaffold-DbContext "Data Source=DESKTOP-A2BNQOF;Initial Catalog=HRHub; Trusted_Connection=true; TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -f -DataAnnotations
 
 5, Set Program Class
 
