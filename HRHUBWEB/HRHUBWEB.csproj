@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Staff\GetStaffCreateOrUpdate.cshtml" />
+    <None Include="Views\Staff\StaffList.cshtml" />
     <None Include="wwwroot\Images\CandidateAttachment\Ali-638193298396942917.pdf" />
     <None Include="wwwroot\Images\CandidateAttachment\Ali-638193946254145592.pdf" />
     <None Include="wwwroot\Images\CandidateAttachment\Ali-638194880071039198.docx" />

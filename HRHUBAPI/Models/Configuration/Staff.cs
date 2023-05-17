@@ -27,6 +27,8 @@ namespace HRHUBAPI.Models
 
 		[NotMapped]
 		public IEnumerable< Designation> DepartmentList { get; set; }
+
+		[NotMapped]
 		public IEnumerable<Designation> dDesignationList { get; set; }
 
 
