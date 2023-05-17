@@ -25,17 +25,22 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string Designation { get; set; } = string.Empty;
 
-    //    public async Task<List<Staff>> GetStaffByCompanyId_DB(int CompanyId, HrhubContext hrhubContext)
-    //    {
-    //        try
-    //        {
-    //            List<Staff> staff = new List<Staff> ();
-    //            staff = await hrhubContext.Staff.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
-				//return staff;   
-    //        } catch { throw; }
-    //    }
+		[NotMapped]
+		public IEnumerable< Designation> DepartmentList { get; set; }
+		public IEnumerable<Designation> dDesignationList { get; set; }
 
-		public async Task<List<Staff>> GetEmployee(int CompanyId)
+
+		//    public async Task<List<Staff>> GetStaffByCompanyId_DB(int CompanyId, HrhubContext hrhubContext)
+		//    {
+		//        try
+		//        {
+		//            List<Staff> staff = new List<Staff> ();
+		//            staff = await hrhubContext.Staff.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+		//return staff;   
+		//        } catch { throw; }
+		//    }
+
+		public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
 		{
 			DbConnection _db = new DbConnection();
 			try
@@ -110,7 +115,8 @@ namespace HRHUBAPI.Models
                     dbResult.JoiningDate = staff.JoiningDate;
                     dbResult.ResigningDate = staff.ResigningDate;   
                     dbResult.TerminationDate = staff.TerminationDate;   
-                    dbResult.SalaryPerMonth = staff.SalaryPerMonth;
+                    dbResult.SalaryMethod = staff.SalaryMethod;
+                    dbResult.SalaryAmount = staff.SalaryAmount;
                     dbResult.AccountTitle = staff.AccountTitle;
                     dbResult.BankAccountNumber  = staff.BankAccountNumber;  
                     dbResult.BankName = staff.BankName;

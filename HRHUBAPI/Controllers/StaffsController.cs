@@ -33,7 +33,7 @@ namespace HRHUBAPI.Controllers
         {
 			//return await new Staff().GetStaffByCompanyId(CompanyId, _context);
 			//return await new Staff().GetStaffByCompanyId(CompanyId);
-			return await new Staff().GetEmployee(CompanyId);
+			return await new Staff().GetStaffByCompanyId(CompanyId);
 		}
 
         [HttpGet("GetStaffById{Id}")]

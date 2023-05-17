@@ -14,6 +14,7 @@ using System.ComponentModel.Design;
 using System.Net.Http;
 using System.Collections.Specialized;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace HRHUBWEB.Controllers
 {
@@ -100,8 +101,10 @@ namespace HRHUBWEB.Controllers
         {
             ViewBag.MaterialStatus = GetMaterialStatusList();
             ViewBag.BloodGroup = GetBloodGroup();
+            ViewBag.ObjSalaryMethod = GetSalaryMethod();
+		  //  ViewBag.ObjDepartmentList = GetDeparmentByCompany();
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
@@ -109,10 +112,32 @@ namespace HRHUBWEB.Controllers
 
 			if (Token != null)
 			{
-				if (Id == 0)
+				//Department
+				HttpResponseMessage response2 = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{userObject.CompanyId}");
+				if (response2.IsSuccessStatusCode)
+				{
+					var result = response2.Content.ReadAsStringAsync().Result;
+					ViewBag.ObjDepartmentList = JsonConvert.DeserializeObject<List<Department>>(result);
+				}
+				//Designation
+				//HttpResponseMessage response3 = await _client.GetAsync($"api/Configuration/GetDesignationInfos{userObject.CompanyId}");
+    //            if (response3.IsSuccessStatusCode)
+    //            {
+    //                var result = response3.Content.ReadAsStringAsync().Result;
+    //                ViewBag.ObjDesignationList = JsonConvert.DeserializeObject<List<Designation>>(result);
+    //            }
+    
+                //HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{userObject.CompanyId}");
+				//if (message.IsSuccessStatusCode)
+				//{
+				//	var result = message.Content.ReadAsStringAsync().Result;
+				//	ViewBag.ObjDesignationList = JsonConvert.DeserializeObject<List<Designation>>(result);
+
+				//}
+				
+                if (Id == 0)
 				{
 					Staff Info = new Staff();
-
 					return View(Info);
 				}
 				Staff staff = await GetStaffById(Id);
@@ -129,7 +154,6 @@ namespace HRHUBWEB.Controllers
             List<SelectListItem> listobj = new List<SelectListItem>();
             listobj.Add(new SelectListItem { Text = "Single", Value = "1" });
             listobj.Add(new SelectListItem { Text = "Married", Value = "2" });
-            ViewBag.MaterialStatus = listobj;
             return listobj;
         }
 
@@ -147,7 +171,15 @@ namespace HRHUBWEB.Controllers
             return listobj;
         }
 
-        public async Task<IActionResult> StaffCreateOrUpdate(Staff staff)
+        public List<SelectListItem> GetSalaryMethod()
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "Monthly", Value = "1" });
+			listobj.Add(new SelectListItem { Text = "Yearly", Value = "2" });
+            return listobj; 
+		}
+
+		public async Task<IActionResult> StaffCreateOrUpdate(Staff staff)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -178,10 +210,8 @@ namespace HRHUBWEB.Controllers
             }
         }
 
-
-        private string uploadImage(string name, IFormFile file, string root)
+        private string UploadImage(string name, IFormFile file, string root)
         {
-
             try
             {
                 string fileName = string.Empty;
@@ -196,31 +226,19 @@ namespace HRHUBWEB.Controllers
                     {
                         System.IO.File.Delete(OldpathImage);
                     }
-
-
                     using (var stream = new FileStream(filepath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
-
                     return "/Images/" + root + "/" + fileName;    // Path.GetFullPath( filepath);// @"/Images/" + root + "/" + fileName;
                 }
                 else
                 {
-
                     return "";
                 }
             }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
-
+            catch { throw; }
         }
-
-
 
     }
 }

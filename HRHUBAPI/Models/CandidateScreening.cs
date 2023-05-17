@@ -15,7 +15,7 @@ public partial class CandidateScreening
 
     public DateTime? ScreeningDate { get; set; }
 
-    public bool? IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }
 
@@ -24,4 +24,6 @@ public partial class CandidateScreening
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
+
+    public string? AttachmentPath { get; set; }
 }

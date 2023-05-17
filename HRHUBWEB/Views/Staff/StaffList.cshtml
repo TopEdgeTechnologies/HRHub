@@ -6,7 +6,7 @@
 		<!--Page header-->
 		<div class="page-header d-xl-flex d-block">
 			<div class="page-leftheader">
-				<div class="page-title">Employees</div>
+			<div class="page-title">Staff</div>
 			</div>
 			<div class="page-rightheader ms-md-auto">
 				<div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -20,7 +20,7 @@
 						</div>*@
 						@if (Convert.ToBoolean(ViewBag.IsNew))
 						{
-							<a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Employee</a>
+							<a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Staff</a>
 						}
 						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
 						<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
@@ -38,7 +38,7 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<span class="font-weight-semibold">Total Employees</span>
+								<span class="font-weight-semibold">Total Staff</span>
 									<h3 class="mb-0 mt-1 text-success">5,678</h3>
 								</div>
 							</div>
@@ -55,7 +55,7 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<span class="font-weight-semibold">Total Male Employees</span>
+								<span class="font-weight-semibold">Total Male Staff</span>
 									<h3 class="mb-0 mt-1 text-primary">3,876</h3>
 								</div>
 							</div>
@@ -72,7 +72,7 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<span class="font-weight-semibold">Total Female Employees</span>
+								<span class="font-weight-semibold">Total Female Staff</span>
 									<h3 class="mb-0 mt-1 text-secondary">1,396</h3>
 								</div>
 							</div>
@@ -89,7 +89,7 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<span class="font-weight-semibold">Total New Employees</span>
+								<span class="font-weight-semibold">Total New Staff</span>
 									<h3 class="mb-0 mt-1 text-danger">398</h3>
 								</div>
 							</div>
@@ -107,7 +107,7 @@
 			<div class="col-xl-12 col-md-12 col-lg-12">
 				<div class="card">
 					<div class="card-header  border-0">
-						<h4 class="card-title">Employees List</h4>
+					<h4 class="card-title">Staff List</h4>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -115,8 +115,8 @@
 								<thead>
 									<tr>
 										<th class="border-bottom-0 w-5">No</th>
-										<th class="border-bottom-0">Emp Name</th>
-										<th class="border-bottom-0 w-10">#Emp ID</th>
+										<th class="border-bottom-0">Staff Name</th>
+										<th class="border-bottom-0 w-10">Staff ID</th>
 										<th class="border-bottom-0">Department</th>
 										<th class="border-bottom-0">Designation</th>
 										<th class="border-bottom-0">Phone Number</th>
@@ -139,7 +139,7 @@
 												</div>
 											</div>
 										</td>
-										<td>@Html.DisplayFor(modelitem => item.StaffId)</td>
+										<td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
 										<td>@Html.DisplayFor(modelitem => item.Department)</td>
 										<td>@Html.DisplayFor(modelitem => item.Designation)</td>
 										<td>@Html.DisplayFor(modelitem => item.ContactNumber1)</td>

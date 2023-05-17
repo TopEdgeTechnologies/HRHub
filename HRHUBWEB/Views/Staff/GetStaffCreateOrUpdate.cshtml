@@ -1,12 +1,15 @@
 ﻿@model HRHUBAPI.Models.Staff
 
+@using (@Html.BeginForm("StaffCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+	
 @*<div class="app-content main-content">*@
 <div class="side-app main-container">
 
 	<!--Page header-->
 	<div class="page-header d-xl-flex d-block">
 		<div class="page-leftheader">
-			<div class="page-title">Add Employee</div>
+			<div class="page-title">Add Staff</div>
 		</div>
 		<div class="page-rightheader ms-md-auto">
 			<div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -20,17 +23,16 @@
 	</div>
 	<!--End Page header-->
 	<!-- Row -->
-	@*<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" style="position: absolute; top: 637.547px; left: 799.938px; z-index: 1; display: block;"><div class="ui-datepicker-header ui-widget-header ui-helper-clearfix ui-corner-all"><a class="ui-datepicker-prev ui-corner-all" data-handler="prev" data-event="click" title="Prev"><span class="ui-icon ui-icon-circle-triangle-w">Prev</span></a><a class="ui-datepicker-next ui-corner-all" data-handler="next" data-event="click" title="Next"><span class="ui-icon ui-icon-circle-triangle-e">Next</span></a><div class="ui-datepicker-title"><span class="ui-datepicker-month">May</span>&nbsp;<span class="ui-datepicker-year">2023</span></div></div><table class="ui-datepicker-calendar"><thead><tr><th scope="col" class="ui-datepicker-week-end"><span title="Sunday">Su</span></th><th scope="col"><span title="Monday">Mo</span></th><th scope="col"><span title="Tuesday">Tu</span></th><th scope="col"><span title="Wednesday">We</span></th><th scope="col"><span title="Thursday">Th</span></th><th scope="col"><span title="Friday">Fr</span></th><th scope="col" class="ui-datepicker-week-end"><span title="Saturday">Sa</span></th></tr></thead><tbody><tr><td class=" ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">1</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">2</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">3</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">4</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">5</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">6</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">7</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">8</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">9</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">10</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">11</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">12</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">13</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">14</a></td><td class=" ui-datepicker-days-cell-over  ui-datepicker-today" data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default ui-state-highlight" href="#">15</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">16</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">17</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">18</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">19</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">20</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">21</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">22</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">23</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">24</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">25</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">26</a></td><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">27</a></td></tr><tr><td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">28</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">29</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">30</a></td><td class=" " data-handler="selectDay" data-event="click" data-month="4" data-year="2023"><a class="ui-state-default" href="#">31</a></td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td><td class=" ui-datepicker-week-end ui-datepicker-other-month ui-datepicker-unselectable ui-state-disabled">&nbsp;</td></tr></tbody></table></div>*@
-
 	<div class="row">
 		<div class="col-xl-3 col-md-12 col-lg-12">
 			<div class="card box-widget widget-user">
 				<div class="card-body text-center">
 					<div class="widget-user-image mx-auto text-center">
-						<img class="avatar avatar-xxl brround rounded-circle" alt="img" src="../assets/images/users/1.jpg">
+						@*<img class="avatar avatar-xxl brround rounded-circle" alt="img" src="../assets/images/users/1.jpg">*@
+						<img class="avatar avatar-xxl brround rounded-circle" id="viewUserImage" alt="img" alt="user-img" src="/Images/Avatar.png">
 					</div>
 					<div class="pro-user mt-3">
-						<h5 class="pro-user-username text-dark mb-1 fs-16">Faith Harris</h5>
+						<h5 class="pro-user-username text-dark mb-1 fs-16">@Html.DisplayFor(modelitem => Model.FirstName)</h5>
 						<h6 class="pro-user-desc text-muted fs-12">Web Designer</h6>
 					</div>
 					<div class="rating-stars stars-example-fontawesome block" id="rating-1" data-stars="2"></div>
@@ -334,19 +336,36 @@
 									<div class="col-md-9">
 										<div class="form-group">
 											<label for="form-label" class="form-label"></label>
-											<input class="form-control" type="file">
+											@*<input class="form-control" type="file">*@
+											<input name="UserImage" accept=".jpg, .jpeg, .png" id="UserImage" class="form-control" type="file" placeholder="Enter Title">
 										</div>
 									</div>
 								</div>
 							</div>
-							<h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>
+							@*<h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>*@
+
+							<div class="form-group mt-7">
+								<div class="row">
+									<div class="col-md-3">
+										<h4 class="form-label" font-weight-bold">Account Login</h4>
+									</div>
+									<div class="col-md-9">
+										<label class="custom-switch">
+											<input type="checkbox" name="chk_AccountLoginSwitch" id="chk_AccountLoginSwitch" onchange="AccountLoginControls()" class="custom-switch-input">
+											<span class="custom-switch-indicator"></span>
+											<span class="custom-switch-description">On/Off</span>
+										</label>
+									</div>
+								</div>
+							</div>
+
 							<div class="form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="form-label mb-0 mt-2">Employee Email</label>
+										<label class="form-label mb-0 mt-2">Staff Email</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="employee email">
+										<input type="text" id="txt_OfficialEmailAddress" disabled="disabled" class="form-control" placeholder="Staff email">
 									</div>
 								</div>
 							</div>
@@ -356,7 +375,7 @@
 										<label class="form-label mb-0 mt-2">Password</label>
 									</div>
 									<div class="col-md-9">
-										<input type="password" class="form-control" placeholder="password">
+										<input type="password" id="txt_OfficialEmailPassword" disabled="disabled" class="form-control" placeholder="password">
 									</div>
 								</div>
 							</div>
@@ -367,7 +386,7 @@
 									</div>
 									<div class="col-md-9">
 										<label class="custom-switch">
-											<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+											<input type="checkbox" name="chk_EmailNotification" id="chk_EmailNotification" disabled="disabled" class="custom-switch-input">
 											<span class="custom-switch-indicator"></span>
 											<span class="custom-switch-description">On/Off</span>
 										</label>
@@ -381,10 +400,10 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="form-label mb-0 mt-2">Employee ID</label>
+										<label class="form-label mb-0 mt-2">Staff Registration #</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="#ID">
+										<input asp-for="RegistrationNo" type="text" class="form-control" placeholder="Registration Number">
 									</div>
 								</div>
 							</div>
@@ -394,7 +413,12 @@
 										<label class="form-label mb-0 mt-2">Department</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Department">
+										@*<input type="text" class="form-control" placeholder="Department">*@
+										@*<select asp-for="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">*@
+                        
+										<select asp-for=DepartmentId id="DepartmentId" class="form-control custom-select select2" data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjDepartmentList,"DepartmentId", "Title"))">
+											<option label="Select Department"></option>
+										</select>
 									</div>
 								</div>
 							</div>
@@ -404,7 +428,10 @@
 										<label class="form-label mb-0 mt-2">Designation</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Designation">
+										@*<input type="text" class="form-control" placeholder="Designation">*@
+										@*<select asp-for=DesignationId id="DesignationId" class="form-control custom-select select2" data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
+											<option label="Select Designation"></option>
+										</select>*@
 									</div>
 								</div>
 							</div>
@@ -414,7 +441,8 @@
 										<label class="form-label mb-0 mt-2">Date Of Joining</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">
+										@*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
+										<input asp-for="JoiningDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
 									</div>
 								</div>
 							</div>
@@ -424,7 +452,8 @@
 										<label class="form-label mb-0 mt-2">Resignation Date</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">
+										@*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
+										<input asp-for="ResigningDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
 									</div>
 								</div>
 							</div>
@@ -434,7 +463,8 @@
 										<label class="form-label mb-0 mt-2">Termination Date</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">
+										@*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
+										<input asp-for="TerminationDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
 									</div>
 								</div>
 							</div>
@@ -443,7 +473,7 @@
 									<div class="col-md-3">
 										<label class="form-label mb-0 mt-2">
 											Credit Leaves
-											<span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Unused leaves for the Employee">?</span>
+											<span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Unused leaves for the Staff">?</span>
 										</label>
 									</div>
 									<div class="col-md-9">
@@ -455,14 +485,18 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-md-3">
-										<label class="form-label mb-0 mt-2">Type</label>
+										<label class="form-label mb-0 mt-2">Method</label>
 									</div>
 									<div class="col-md-9">
-										<select name="projects" class="form-control custom-select select2" data-placeholder="Select Type">
+										<select asp-for="SalaryMethod" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethod,"Text" ,"Text"))">
+											<option value="">Select Salary Method</option>
+										</select>
+
+										@*<select name="projects" class="form-control custom-select select2" data-placeholder="Select Type">
 											<option label="Select Type"></option>
 											<option value="0">Full-Time</option>
 											<option value="1">Part-Time</option>
-										</select>
+										</select>*@
 									</div>
 								</div>
 							</div>
@@ -472,7 +506,7 @@
 										<label class="form-label mb-0 mt-2">Salary</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="$Salary">
+										<input asp-for=SalaryAmount type="text" class="form-control" placeholder="$Salary">
 									</div>
 								</div>
 							</div>
@@ -483,9 +517,9 @@
 									</div>
 									<div class="col-md-9">
 										<label class="custom-switch">
-											<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+											<input asp-for=Status id="chk_StaffStatus" type="checkbox" onchange="StatusChange()" name="custom-switch-checkbox" class="custom-switch-input">
 											<span class="custom-switch-indicator"></span>
-											<span class="custom-switch-description">Active/Inactive</span>
+											<span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
 										</label>
 									</div>
 								</div>
@@ -500,7 +534,7 @@
 										<label class="form-label mb-0 mt-2">Account Holder</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Name">
+										<input asp-for="AccountTitle" type="text" class="form-control" placeholder="Name">
 									</div>
 								</div>
 							</div>
@@ -510,7 +544,7 @@
 										<label class="form-label mb-0 mt-2">Account Number</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Number">
+										<input asp-for="BankAccountNumber" type="text" class="form-control" placeholder="Number">
 									</div>
 								</div>
 							</div>
@@ -520,7 +554,7 @@
 										<label class="form-label mb-0 mt-2">Bank Name</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Name">
+										<input asp-for="BankName" type="text" class="form-control" placeholder="Name">
 									</div>
 								</div>
 							</div>
@@ -530,7 +564,7 @@
 										<label class="form-label mb-0 mt-2">Branch Location</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Location">
+										<input asp-for="BankLocation" type="text" class="form-control" placeholder="Location">
 									</div>
 								</div>
 							</div>
@@ -543,7 +577,7 @@
 										</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="Code">
+										<input asp-for="BankCode" type="text" class="form-control" placeholder="Code">
 									</div>
 								</div>
 							</div>
@@ -556,7 +590,7 @@
 										</label>
 									</div>
 									<div class="col-md-9">
-										<input type="text" class="form-control" placeholder="ID No">
+										<input asp-for="TaxPayerNumber" type="text" class="form-control" placeholder="ID No">
 									</div>
 								</div>
 							</div>
@@ -656,5 +690,95 @@
 
 </div><!-- end app-content-->
 @*</div>*@
+
+}
+
+@section scripts{
+	<script>
+		$(document).ready(function () 
+		{
+			$('#DepartmentId').select2();
+			//$('#DesignationId').select2();
+			StatusChange();
+			$('#UserImage').change(function () {
+				var fileInput = $(this);
+				var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+				var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+				var fileSize = this.files[0].size;
+				var filePath = fileInput.val();
+				if (!allowedExtensions.exec(filePath))
+				{
+					notif({
+						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
+						type: "warning"
+					});
+					fileInput.val('');
+					return false;
+				} else if (fileSize > fileSizeLimit) 
+				{
+					notif({
+						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+						type: "warning"
+					});
+					fileInput.val('');
+					return false;
+				} else {
+					readURL(this)
+				}
+			});
+
+		});
+
+		function readURL(input) 
+		{
+            if (input.files && input.files[0]) 
+			{
+                var reader = new FileReader();
+                reader.onload = function (e) 
+				{
+					$('#viewUserImage').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+		function AccountLoginControls()
+		{
+			var chk_AccountLogin = document.getElementById('chk_AccountLoginSwitch');
+			var txt_Email = document.getElementById('txt_OfficialEmailAddress');
+			var txt_Pass = document.getElementById('txt_OfficialEmailPassword');
+			var chk_EmailNotification = document.getElementById('chk_EmailNotification');
+
+			if(chk_AccountLogin.checked)
+			{
+				txt_Email.disabled = false;
+				txt_Pass.disabled = false;
+				chk_EmailNotification.disabled = false;
+			}
+			else 
+			{
+				txt_Email.disabled = true;
+				txt_Pass.disabled = true;
+				chk_EmailNotification.disabled = true;
+			}
+		}
+
+		function StatusChange()
+		{
+			var chk_StaffStatus = document.getElementById("chk_StaffStatus");
+			var lbl_StaffStatus = document.getElementById("lbl_StaffStatus");
+
+			if (chk_StaffStatus.checked)
+			{
+				lbl_StaffStatus.textContent = "Active";
+			}
+			else 
+			{
+				lbl_StaffStatus.textContent = "In Active";
+			}
+		}
+
+	</script>
+}
 
 
