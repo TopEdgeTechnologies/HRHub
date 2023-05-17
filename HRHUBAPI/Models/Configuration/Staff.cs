@@ -110,7 +110,7 @@ namespace HRHUBAPI.Models
                     dbResult.JoiningDate = staff.JoiningDate;
                     dbResult.ResigningDate = staff.ResigningDate;   
                     dbResult.TerminationDate = staff.TerminationDate;   
-                    dbResult.SalaryPerMonth = staff.SalaryPerMonth;
+                   // dbResult.SalaryPerMonth = staff.SalaryPerMonth;
                     dbResult.AccountTitle = staff.AccountTitle;
                     dbResult.BankAccountNumber  = staff.BankAccountNumber;  
                     dbResult.BankName = staff.BankName;

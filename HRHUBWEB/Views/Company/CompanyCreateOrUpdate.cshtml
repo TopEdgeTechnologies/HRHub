@@ -1,0 +1,310 @@
+﻿@model HRHUBAPI.Models.Company
+
+@{
+    ViewData["Title"] = "Company";
+}
+
+<!--Row-->
+<div class="row ">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header border-bottom-0">
+				<div class="card-title">
+					<h3 class="card-title">Register Company</h3>
+					@*<div class="card-options">
+						<div class="btn-list">
+
+							<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+							<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+							<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+						</div>
+					</div>*@
+				</div>
+
+			</div>
+			<div class="card-body">
+			@using (@Html.BeginForm("CompanyCreateOrUpdate", "Company", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+            {
+				<div id="wizard3">
+					<input type="hidden" asp-for="CompanyId"/>
+					<h3>Organization Setup</h3>
+					<section>
+							<div class="row mt-4">
+							<div class="col-md-6">
+						<div class="control-group form-group">
+							<label class="form-label">Organization Name <span class="text-danger">*</span></label>
+							<input asp-for="CompanyName" type="text" class="form-control" placeholder="Enter Organization Name" required>
+						</div>
+						@*<div class="control-group form-group">
+							<label class="form-label">Phone Number</label>
+							<input asp-for="Phone" type="hidden" class="form-control required" placeholder=" Enter Number">
+						</div>*@
+					</div>
+					<div class="col-md-6">
+						<div class="control-group form-group">
+							<label class="form-label">Organization Email <span class="text-danger">*</span></label>
+							<input asp-for="Email" type="email" class="form-control" placeholder="Enter Email Address" required>
+							
+						</div>
+						@*<div class="control-group form-group mb-0" hidden>
+							<label class="form-label">Address</label>
+							<textarea rows="1"asp-for="Address" type="hidden" class="form-control required" placeholder="Address"></textarea>
+						</div>*@
+					</div>
+					</div>
+					</section>
+						<h3>Staff Setup</h3>
+						<section>
+							<div class="row mt-4">
+								<div class="col-md-6">
+							<div class="control-group form-group">
+							<label class="form-label">Full Name</label>
+							<input asp-for="Staffname" type="text" class="form-control" placeholder="Enter Full Name">
+							</div>
+							<div class="control-group form-group">
+								<label class="form-label">Department</label>
+								<input asp-for="StaffDepartment" type="text" class="form-control" placeholder="Enter Department">
+								</div>
+							</div>
+								<div class="col-md-6">
+									<div class="control-group form-group">
+										<label class="form-label">Email</label>
+										<input asp-for="StaffEmail" type="email" class="form-control" placeholder="Enter Email Address">
+
+									</div>
+									<div class="control-group form-group">
+										<label class="form-label">Designation</label>
+										<input asp-for="StaffDesignation" type="text" class="form-control" placeholder="Enter Designation">
+								</div>
+								</div>
+							</div>
+						</section>
+					<h3>Attendence Setup</h3>
+					<section>
+						<div class="row mt-4">
+					<div class="col-md-6">
+							<div class="control-group form-group">
+								<label class="form-label">Office Start Time</label>
+								<input asp-for="OfficeStartTime" type="time" class="form-control">
+							</div>
+							@*<div class="control-group form-group">
+								<label class="form-label">Grace Minuts</label>
+								<input asp-for="StartTimeGraceMinutes" type="number" class="form-control" placeholder="Enter Grace Minutes">
+							</div>*@
+							</div>
+							<div class="col-md-6">
+							<div class="control-group form-group">
+							<label class="form-label">Office End Time</label>
+							<input asp-for="OfficeEndTime" type="time" class="form-control">
+								
+							</div>
+							@*<div class="control-group form-group">
+							<label class="form-label">Mark HalfDay Minutes</label>
+							<input asp-for="MarkHalfDayAfterLateMinutes" type="number" class="form-control" placeholder="Enter Mark HalfDay Minutes">
+							</div>*@
+							</div>
+
+
+
+				</div>
+					</section>
+
+						<h3>User Setup</h3>
+						<section>
+							<div class="row mt-4">
+								<div class="col-md-6">
+									<div class="control-group form-group">
+								<label class="form-label">Username</label>
+								<input asp-for="Username" type="text" class="form-control" placeholder="Enter User name">
+							</div>
+							</div>
+								<div class="col-md-6">
+							<div class="control-group form-group">
+								<label class="form-label">User password</label>
+								<input asp-for="UserPassword" type="password" class="form-control" placeholder="Enter User password">
+							</div>
+							</div>
+								
+					</div>
+						</section>
+
+						<h3>Logo Setup</h3>
+						<section>
+							<div class="row mt-4">
+								@*<div class="col-md-6">
+							<div class="control-group form-group">
+							<label class="form-label">Web Url</label>
+							<input asp-for="WebUrl" type="text" class="form-control" placeholder="Enter Website Url">
+							</div>
+							<div class="control-group form-group">
+							<label class="form-label">Language</label>
+							<input asp-for="Language" type="text" class="form-control" placeholder="Enter Language">
+							</div>
+							</div>*@
+								<div class="col-md-12">
+									<div class="control-group form-group">
+										<label class="form-label">Organization Logo</label>
+										<label for="form-label" class="form-label"></label> <input class="form-control" id="CompanyLogo" name="CompanyLogo" type="file" accept=".jpg, .jpeg, .png">
+
+									</div>
+									@*<div class="control-group form-group">
+								<label class="form-label">Currency</label>
+								<input asp-for="Currency" type="text" class="form-control" placeholder="Enter Currency">
+								</div>*@
+								</div>
+							</div>
+						</section>
+
+				</div>
+				}
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+@section scripts{
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			$('#finish').click(function () {				
+				postdata();
+			});
+		});
+	
+
+
+
+		function postdata() {
+			var status = true;
+
+
+			if ($("#CompanyName").val() == "") {
+
+
+				$.growl.warning({
+					message: "Please Enter Organization Name"
+				});
+
+
+
+				$("#CompanyName").css("border-color", "red");
+				status = false;
+
+			}
+			else {
+				$("#CompanyName").css("border-color", "#ddd");
+			}
+
+			if ($("#Email").val() == "") {
+
+
+				$.growl.warning({
+					message: "Please Enter Organization Email"
+				});
+
+
+
+				$("#Email").css("border-color", "red");
+				status = false;
+
+			}
+			else {
+				$("#Email").css("border-color", "#ddd");
+			}
+
+
+
+
+			var Data = { id: $("#CompanyId").val(), companyName: $('#CompanyName').val() == '' ? '""' : $('#CompanyName').val(), email: $('#Email').val() == '' ? '""' : $('#Email').val() }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Company/CompanyCheckData",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+
+						var b = JSON.parse(data)
+						if (b.success) {
+
+							$.growl.warning({
+								message: b.message
+							});
+							status = false;
+						}
+
+
+					}
+				},
+				error: function () {
+					status = false;
+					
+				}
+			})
+
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			});
+			if (status) {
+
+
+
+
+				swalWithBootstrapButtons.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: 'No, cancel!',
+					confirmButtonText: 'Yes, Save it!',
+					timer: 30000,
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$("#myform").submit();
+
+
+
+					}
+					else if (
+
+						result.dismiss === Swal.DismissReason.cancel
+					) {
+						swalWithBootstrapButtons.fire(
+							'Cancelled',
+							'Your record is safe :)',
+							'error'
+						)
+					}
+				});
+
+
+			}
+
+
+		}
+
+
+
+
+
+
+	</script>
+
+
+
+}
+
+

@@ -412,6 +412,11 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
+
+     
+
+
+
         private string uploadImage(string name, IFormFile file, string root)
         {
 

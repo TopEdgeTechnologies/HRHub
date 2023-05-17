@@ -391,7 +391,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
             entity.Property(e => e.ResigningDate).HasColumnType("date");
-            entity.Property(e => e.SalaryPerMonth).HasColumnType("money");
+           // entity.Property(e => e.SalaryPerMonth).HasColumnType("money");
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
