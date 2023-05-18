@@ -84,16 +84,16 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("CompanyCheckData{id}/{companyName}/{email}")]
-        public async Task<ActionResult<JsonObject>> CompanyCheckData(int id,string companyName, string email)
+        [HttpGet("CompanyEmailCheck{id}/{email}")]
+        public async Task<ActionResult<JsonObject>> CompanyEmailCheck(int id, string email)
         {
-            if (await new Company().AlreadyExist(id, companyName, email, _context))
+            if (await new Company().AlreadyCompanyEmailExist(id,email, _context))
             {
                 return Ok(new
                 {
 
                     Success = true,
-                    Message = "Company Already Exist!"
+                    Message = "Email Already Exist!"
 
 
                 });
@@ -116,11 +116,43 @@ namespace HRHUBAPI.Controllers
 
 
 
+		[HttpGet("CompanyNameCheck{id}/{companyName}")]
+		public async Task<ActionResult<JsonObject>> CompanyNameCheck(int id, string companyName)
+		{
+			if (await new Company().AlreadyCompanyNameExist(id, companyName, _context))
+			{
+				return Ok(new
+				{
+
+					Success = true,
+					Message = "Company Already Exist!"
+
+
+				});
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					Message = "Not found"
+
+
+				});
+			}
+
+		}
 
 
 
 
 
-        #endregion
-    }
+
+
+
+
+		#endregion
+	}
 }

@@ -117,8 +117,9 @@ namespace HRHUBWEB.Controllers
                 if (id == 0)
                 {
                     Company Info = new Company();
+                    Info.LogoAttachment = "~/Images/CompanyLogo.png";
 
-                    return View(Info);
+					return View(Info);
                 }
                 Company Companyinfo = await GetCompanybyID(id);
 
@@ -228,8 +229,9 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-
-        public async Task<ActionResult<JsonObject>> CompanyCheckData(int id, string companyName, string email)
+       
+      // check duplicate company email 
+        public async Task<ActionResult<JsonObject>> CompanyEmailCheckData(int id, string email)
         {
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -241,7 +243,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Company/CompanyCheckData{id}/{companyName}/{email}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Company/CompanyEmailCheck{id}/{email}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -256,7 +258,61 @@ namespace HRHUBWEB.Controllers
         }
 
 
+		// check duplicate company name
+		public async Task<ActionResult<JsonObject>> CompanyNameCheckData(int id, string companyName)
+		{
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+
+
+			HttpResponseMessage message = await _client.GetAsync($"api/Company/CompanyNameCheck{id}/{companyName}");
+			if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				return Json(result);
+
+			}
+
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
+
+
+
+		// check duplicate company name
+	public async Task<ActionResult<JsonObject>> UserCheckData(int id, string username)
+    {
+
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+
+
+			HttpResponseMessage message = await _client.GetAsync($"api/User/UserCheckData{id}/{username}");
+			if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				return Json(result);
+
+			}
+
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
 
 
 

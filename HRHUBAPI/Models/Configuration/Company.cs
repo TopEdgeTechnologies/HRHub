@@ -24,6 +24,8 @@ namespace HRHUBAPI.Models
 		public string? StaffDepartment { get; set; }
 
 		[NotMapped]
+        public string UserId { get; set; }= string.Empty;
+        [NotMapped]
         public string Username { get; set; }= string.Empty;
 		[NotMapped]
         public string UserPassword { get; set; }= string.Empty;
@@ -117,6 +119,7 @@ namespace HRHUBAPI.Models
                     ObjCompanyInfo.Currency = "0";
                     ObjCompanyInfo.StartTimeGraceMinutes = 0;
                     ObjCompanyInfo.MarkHalfDayAfterLateMinutes = 0;
+                    ObjCompanyInfo.Status = true;
                     _context.Companies.Add(ObjCompanyInfo);
 					await _context.SaveChangesAsync();
 
@@ -240,14 +243,14 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> AlreadyExist(int CompanyInfoId,string companyName, string email, HrhubContext _context)
+        public async Task<bool> AlreadyCompanyEmailExist(int CompanyInfoId,string email, HrhubContext _context)
         {
             try
             {
 
                 if (CompanyInfoId > 0)
                 {
-                    var result = await _context.Companies.FirstOrDefaultAsync(x =>x.CompanyName== companyName && x.Email == email && x.CompanyId != CompanyInfoId && x.IsDeleted==false);
+                    var result = await _context.Companies.FirstOrDefaultAsync(x => x.Email == email && x.CompanyId != CompanyInfoId && x.IsDeleted==false);
                     if (result != null)
                     {
                         return true;
@@ -257,7 +260,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyName== companyName && x.Email == email && x.IsDeleted == false);
+                    var result = await _context.Companies.FirstOrDefaultAsync(x =>  x.Email == email && x.IsDeleted == false);
                     if (result != null)
                     {
                         return true;
@@ -274,9 +277,41 @@ namespace HRHUBAPI.Models
             }
         }
 
+		public async Task<bool> AlreadyCompanyNameExist(int CompanyInfoId, string companyName,  HrhubContext _context)
+		{
+			try
+			{
 
-        
+				if (CompanyInfoId > 0)
+				{
+					var result = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyName == companyName && x.CompanyId != CompanyInfoId && x.IsDeleted == false);
+					if (result != null)
+					{
+						return true;
+					}
 
 
-    }
+				}
+				else
+				{
+					var result = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyName == companyName && x.IsDeleted == false);
+					if (result != null)
+					{
+						return true;
+					}
+
+				}
+
+				return false;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+
+
+	}
 }
