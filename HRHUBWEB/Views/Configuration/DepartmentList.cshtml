@@ -364,8 +364,8 @@
                 timer: 30000,
                 reverseButtons: true
             }).then((result) => {
-                if (result.isConfirmed) {
-
+                if (result.isConfirmed) 
+                {
                     var url = "@Url.Action("DepartmentDelete", "Configuration")/" + id; // replace with the desired action and controller names
                     window.location.href = url;
                 }
