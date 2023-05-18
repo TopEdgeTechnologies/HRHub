@@ -3,15 +3,21 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class StaffAttachment
+public partial class StaffSalary
 {
-    public int StaffDocumentId { get; set; }
+    public int StaffSalaryId { get; set; }
 
     public int? StaffId { get; set; }
 
-    public string? DocumentTitle { get; set; }
+    public DateTime? SalaryMonth { get; set; }
 
-    public string? DocumentPath { get; set; }
+    public decimal? TotalDeductions { get; set; }
+
+    public decimal? TotalEarnings { get; set; }
+
+    public decimal? NetSalary { get; set; }
+
+    public int? SalaryStatusId { get; set; }
 
     public bool? IsDeleted { get; set; }
 
