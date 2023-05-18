@@ -99,10 +99,10 @@ namespace SchoolManagementSystem.API.Controllers
         }
         #endregion
 
-        [HttpGet("UserCheckData")]
-        public async Task<ActionResult<JsonObject>> UserCheckData(int id, string title = "")
+        [HttpGet("UserCheckData{id}/{username}")]
+        public async Task<ActionResult<JsonObject>> UserCheckData(int id, string username)
         {
-            if (await new User().AlreadyExist(id, title.Trim(), _context))
+            if (await new User().AlreadyExist(id, username, _context))
             {
                 return Ok(new
                 {
