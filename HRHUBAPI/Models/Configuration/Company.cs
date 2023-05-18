@@ -14,8 +14,8 @@ namespace HRHUBAPI.Models
     {
 
 		[NotMapped]
-		public string? Staffname { get; set; }
-		[NotMapped]
+        public string? Staffname { get; set; }
+        [NotMapped]
 		public string? StaffEmail { get; set; }
 
 		[NotMapped]
@@ -163,7 +163,7 @@ namespace HRHUBAPI.Models
 
 						Staff objStaff = new Staff();
 						objStaff.CompanyId = ObjCompanyInfo.CompanyId;
-						objStaff.FirstName = ObjCompanyInfo.Staffname;
+						objStaff.FirstName = ObjCompanyInfo.ContactPerson;
 						objStaff.Email = ObjCompanyInfo.StaffEmail;
 						objStaff.DesignationId = objDesignation.DesignationId;
 						objStaff.DepartmentId = objDepartment.DepartmentId;
