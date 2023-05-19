@@ -3,15 +3,11 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class AttendanceStatus
+public partial class SalaryStatus
 {
-    public int AttendanceStatusId { get; set; }
+    public int SalaryStatusId { get; set; }
 
     public string? Title { get; set; }
-
-    public int? DefinedMinutes { get; set; }
-
-    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -22,6 +18,4 @@ public partial class AttendanceStatus
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public string? CssClass { get; set; }
 }

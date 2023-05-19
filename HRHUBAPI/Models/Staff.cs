@@ -49,7 +49,9 @@ public partial class Staff
 
     public DateTime? TerminationDate { get; set; }
 
-    public decimal? SalaryPerMonth { get; set; }
+    public string? SalaryMethod { get; set; }
+
+    public decimal? SalaryAmount { get; set; }
 
     public string? AccountTitle { get; set; }
 
@@ -59,11 +61,15 @@ public partial class Staff
 
     public string? BankLocation { get; set; }
 
+    public string? BankCode { get; set; }
+
     public int? TaxPayerNumber { get; set; }
 
-    public bool Status { get; set; }
-
     public string? JobDescription { get; set; }
+
+    public string? SnapPath { get; set; }
+
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

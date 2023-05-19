@@ -51,8 +51,8 @@ namespace HRHUBAPI.Models
                         LastName = row["LastName"].ToString(),
                         Email = row["Email"].ToString(),
 						StaffId = Convert.ToInt32(row["StaffId"]),
-						Department = row["Department"].ToString(),
-						Designation = row["Designation"].ToString(),
+						Department = row["DepartmentTitle"].ToString(),
+						Designation = row["DesignationTitle"].ToString(),
 						ContactNumber1 = row["ContactNumber1"].ToString(),
 						ContactNumber2 = row["ContactNumber2"].ToString(),
 						JoiningDate = Convert.ToDateTime(row["JoiningDate"]),
@@ -62,7 +62,10 @@ namespace HRHUBAPI.Models
 					.ToList();
 				return staff;
 			}
-			catch { throw; }
+			catch (Exception ex)
+            { 
+                throw;
+            }
 		}
 
 		public async Task<Staff> GetStaffById(int Id, HrhubContext hrhubContext)
@@ -110,7 +113,6 @@ namespace HRHUBAPI.Models
                     dbResult.JoiningDate = staff.JoiningDate;
                     dbResult.ResigningDate = staff.ResigningDate;   
                     dbResult.TerminationDate = staff.TerminationDate;   
-                    dbResult.SalaryPerMonth = staff.SalaryPerMonth;
                     dbResult.AccountTitle = staff.AccountTitle;
                     dbResult.BankAccountNumber  = staff.BankAccountNumber;  
                     dbResult.BankName = staff.BankName;
