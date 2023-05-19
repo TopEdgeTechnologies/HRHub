@@ -4,7 +4,7 @@
 <div class="side-app main-container">
 
     <!--Page header-->
-    <div class="page-header d-xl-flex d-block">
+   @* <div class="page-header d-xl-flex d-block">
         <div class="page-leftheader">
             <div class="page-title">Add Staff</div>
         </div>
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
     <!--End Page header-->
     <!-- Row -->
     @using (Html.BeginForm("StaffCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
@@ -31,19 +31,25 @@
                 <div class="card box-widget widget-user">
                     <div class="card-body text-center">
                         <div class="widget-user-image mx-auto text-center">
-                            @*<img class="avatar avatar-xxl brround rounded-circle" alt="img" src="../assets/images/users/1.jpg">*@
-                            <img class="avatar avatar-xxl brround rounded-circle" id="viewUserImage" alt="user-img" src="/Images/Avatar.png">
+                            @{
+                                string pathfile = Model.SnapPath != null ? @Model.SnapPath : " /Images/Avatar.png";
+                            }
+                            <img class="avatar avatar-xxl brround rounded-circle" id="viewUserImage" alt="user-img" src="@pathfile">
                         </div>
                         <div class="pro-user mt-3">
-                            <h5 class="pro-user-username text-dark mb-1 fs-16">@Html.DisplayFor(modelitem => Model.FirstName)</h5>
-                            <h6 class="pro-user-desc text-muted fs-12">Web Designer</h6>
+                            @{
+                                string fullName = Model.FirstName + ' ' + Model.LastName;
+                                string cardName = fullName != null ? fullName : "lbl_FullName";
+                            }
+                            <h5 id="lbl_FullName" class="pro-user-username text-dark mb-1 fs-16">@cardName</h5>
+                            <h6 id="lbl_Designation" class="pro-user-desc text-muted fs-12">Web Designer</h6>
                         </div>
                         <div class="rating-stars stars-example-fontawesome block" id="rating-1" data-stars="2"></div>
                     </div>
                     <div class="card-footer p-0">
                         <div class="row">
                             <div class="col-4 text-center py-5 border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">January</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">May</h5>
                                 <h5 class="mb-2">
                                     <span class="fs-18 text-success">0</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
@@ -52,7 +58,7 @@
                                 <h5 class="fs-12 mb-0">Attendance</h5>
                             </div>
                             <div class="col-4  py-5 text-center border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2021</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
                                 <h5 class="mb-2">
                                     <span class="fs-18 text-orange">0</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
@@ -61,7 +67,7 @@
                                 <h5 class="fs-12 mb-0">Leaves</h5>
                             </div>
                             <div class="col-4 text-center py-5">
-                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2021</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
                                 <h5 class="mb-2">
                                     <span class="fs-18 text-primary">0</span>
                                 </h5>
@@ -72,7 +78,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header  border-0">
-                        <div class="card-title">Statistics-2021</div>
+                        <div class="card-title">Statistics-2023</div>
                     </div>
                     <div class="card-body">
                         <div class="row mb-7">
@@ -144,11 +150,11 @@
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <input asp-for=FirstName type="text" class="form-control mb-md-0 mb-5" placeholder="First Name">
+                                                    <input asp-for=FirstName type="text" id="txt_FirstName" oninput="OnTextChangeStaffName()" class="form-control mb-md-0 mb-5" placeholder="First Name">
                                                     <span class="text-muted"></span>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input asp-for=LastName type="text" class="form-control" placeholder="Last Name">
+                                                    <input asp-for=LastName type="text" id="txt_LastName" oninput="OnTextChangeStaffName()" class="form-control" placeholder="Last Name">
                                                 </div>
                                             </div>
                                         </div>
@@ -192,16 +198,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @*<div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Contact Number</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Phone Number">
-                            </div>
-                            </div>
-                            </div>*@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -220,27 +216,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                @*<div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Emergency Contact Number 01</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Contact Number01">
-                            </div>
-                            </div>
-                            </div>*@
-                                @*<div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Emergency Contact Number 02</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Contact Number02">
-                            </div>
-                            </div>
-                            </div>*@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -276,15 +251,9 @@
                                             <label class="form-label mb-0 mt-2">Marital Status</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<select asp-for="MaterialStatus" class="form-control" asp-items="@(new SelectList(@ViewBag.Marialstatus,"Value" ,"Text"))">*@
                                             <select asp-for="MaterialStatus" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.MaterialStatus,"Text" ,"Text"))">
                                                 <option value="">Select</option>
                                             </select>
-                                            @*<select name="projects" class="form-control custom-select select2" data-placeholder="Select">
-                                        <option label="Select"></option>
-                                        <option value="1">Single</option>
-                                        <option value="2">Married</option>
-                                        </select>*@
                                         </div>
                                     </div>
                                 </div>
@@ -297,17 +266,6 @@
                                             <select asp-for="BloodGroup" class="form-control custom-select select2" data-placeholder="Select Group" asp-items="@(new SelectList(@ViewBag.BloodGroup,"Text", "Text"))">
                                                 <option label="Select Group"></option>
                                             </select>
-                                            @*<select name="projects" class="form-control custom-select select2" data-placeholder="Select Group">
-                                        <option label="Select Group"></option>
-                                        <option value="1">A+</option>
-                                        <option value="2">B+</option>
-                                        <option value="3">O+</option>
-                                        <option value="4">AB+</option>
-                                        <option value="5">A-</option>
-                                        <option value="6">B-</option>
-                                        <option value="7">O-</option>
-                                        <option value="8">AB-</option>
-                                        </select>*@
                                         </div>
                                     </div>
                                 </div>
@@ -350,7 +308,7 @@
                                             <div class="form-group">
                                                 <label for="form-label" class="form-label"></label>
                                                 @*<input class="form-control" type="file">*@
-                                                <input name="UserImageAttachmentFile" accept=".jpg, .jpeg, .png" id="UserImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
+                                                <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
                                             </div>
                                         </div>
                                     </div>
@@ -426,9 +384,6 @@
                                             <label class="form-label mb-0 mt-2">Department</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<input type="text" class="form-control" placeholder="Department">*@
-                                            @*<select asp-for="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">*@
-
                                             <select asp-for=DepartmentId id="DepartmentId" class="form-control custom-select select2" data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjDepartmentList,"DepartmentId", "Title"))">
                                                 <option label="Select Department"></option>
                                             </select>
@@ -441,8 +396,7 @@
                                             <label class="form-label mb-0 mt-2">Designation</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<input type="text" class="form-control" placeholder="Designation">*@
-                                            <select asp-for=DesignationId id="DesignationId" class="form-control custom-select select2 " data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
+                                            <select asp-for=DesignationId id="DesignationId" onchange="onchangeDesignation()" class="form-control custom-select select2 " data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
                                                 <option label="Select Designation"></option>
                                             </select>
                                         </div>
@@ -491,19 +445,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @*<div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">
-                            Credit Leaves
-                            <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Unused leaves for the Staff">?</span>
-                            </label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="0">
-                            </div>
-                            </div>
-                            </div>*@
                                 <h4 class="mb-5 mt-7 font-weight-bold">Salary</h4>
                                 <div class="form-group">
                                     <div class="row">
@@ -514,12 +455,6 @@
                                             <select asp-for="SalaryMethod" id="SalaryMethod" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethod,"Text" ,"Text"))">
                                                 <option value="">Select Salary Method</option>
                                             </select>
-
-                                            @*<select name="projects" class="form-control custom-select select2" data-placeholder="Select Type">
-                                        <option label="Select Type"></option>
-                                        <option value="0">Full-Time</option>
-                                        <option value="1">Part-Time</option>
-                                        </select>*@
                                         </div>
                                     </div>
                                 </div>
@@ -540,7 +475,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <label class="custom-switch">
-                                                <input asp-for=Status id="chk_StaffStatus" type="checkbox" onchange="StatusChange()" name="custom-switch-checkbox" class="custom-switch-input">
+                                                <input asp-for=Status id="chk_StaffStatus" type="checkbox" onchange="StaffStatusChange()" name="custom-switch-checkbox" class="custom-switch-input">
                                                 <span class="custom-switch-indicator"></span>
                                                 <span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
                                             </label>
@@ -633,6 +568,27 @@
                                             </tr>
                                         </thead>
                                         <tbody id="TBodyID1">
+                                            @{
+                                                int i = 0;
+                                                int j = 1;
+                                                if (Model.StaffAttachmentList != null && Model.StaffAttachmentList.Count() > 0)
+                                                {
+                                                    foreach (var item in Model.StaffAttachmentList)
+                                                    {
+                                                        <tr id="@i">
+                                                            <td> @j </td>
+                                                            <td> <input type="text" class="form-control " id="DocumentTitle_@i" name="DocumentTitle" value="@item.DocumentTitle" />    </td>
+                                                            <td>     <a target="_blank" href="@item.DocumentPath">   <img src="@item.DocumentPath" alt="user-img" id="viewlogo" class="avatar-sm rounded-circle mb-1">  </a>  <input type="hidden" value="@item.DocumentPath" id="DocFile_@i" name="DocumentPath" /> </td>
+                                                            <td>
+                                                                <button type="button" style="" class="btn btn-info btn-xs btn-circle" id="detailDocDataAdd_@i" value="+" onclick="AddStaffAtachmentData($(this).parent().parent().attr('id'), false)" title="Add"> <span class="fa fa-plus" aria-hidden="true"> </span> <span><strong></strong></span> </button>
+                                                                <button type="button" id="detailDocDataDelete_@i" title="Remove" value=" - " onclick="DeleteDocDetailData(this, $(this).parent().parent().attr('id'))" class="btn btn-danger btn-xs btn-circle userDellbtn"> <span class="fa fa-trash" aria-hidden="true"></span> <span><strong></strong></span>  </button>
+                                                            </td>
+                                                        </tr>
+                                                        i++;
+                                                        j++;
+                                                    }
+                                                }
+                                            }
                                         </tbody>
                                     </table>
                                 </div>
@@ -656,11 +612,14 @@
 @section scripts{
     <script>
         $(document).ready(function () {
+
             $('#DepartmentId').select2({ dropdownAutoWidth: true, width: 'auto' });
             $('#DesignationId').select2();
             $('#SalaryMethod').select2();
-            StatusChange();
-            $('#UserImage').change(function () {
+
+            StaffStatusChange();
+
+            $('#StaffImageAttachmentFile').change(function () {
                 var fileInput = $(this);
                 var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
                 var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
@@ -686,48 +645,28 @@
             });
 
             // Staff Document Add
-            var rowCount = $('#documentTable tbody tr').length;
-
-            $('#btnAdd').click(function () {
-                var documentId = $('#Title').val();
-                var documentPath = $('#LogoAttachment').val();
-
-                if (documentId && documentPath) {
-                    var newRow = '<tr>' +
-                        '<td>' + (rowCount + 1) + '</td>' +
-                        '<td>' + Title + '</td>' +
-                        '<td>' + LogoAttachment + '</td>' +
-                        '<td><button type="button" class="btnDelete">Delete</button></td>' +
-                        '</tr>';
-
-                    $('#documentTable tbody').append(newRow);
-
-                    // Clear input fields
-                    $('#Title').val('');
-                    $('#LogoAttachment').val('');
-
-                    rowCount++;
-                }
-            });
-
-            $(document).on('click', '.btnDelete', function () {
-                $(this).closest('tr').remove();
-                rowCount--;
-                renumberRows();
-            });
-
-            //function renumberRows()
-            //{
-            //	$('#documentTable tbody tr').each(function (index) {
-            //		$(this).find('td:first').text(index + 1);
-            //	});
-            //}
-            // End Staff Document Add
-
             AddStaffAtachmentData(0, true);
 
-
         });
+
+        function OnTextChangeStaffName()
+        {
+            var txt_Name = document.getElementById("txt_FirstName");
+            var txt_LtName = document.getElementById("txt_LastName");
+            var lbl_Name = document.getElementById("lbl_FullName");
+
+            var full_Name = txt_Name.value + ' ' + txt_LtName.value;
+            lbl_Name.textContent = full_Name;
+        }
+
+        function onchangeDesignation()
+        {
+            var ddl_design = document.getElementById("DesignationId");
+            var lbl_Design = document.getElementById("lbl_Designation")
+
+            var selectedOption = ddl_design.options[ddl_design.selectedIndex];
+            lbl_Design.textContent = selectedOption.text;
+        }
 
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -757,7 +696,7 @@
             }
         }
 
-        function StatusChange() {
+        function StaffStatusChange() {
             var chk_StaffStatus = document.getElementById("chk_StaffStatus");
             var lbl_StaffStatus = document.getElementById("lbl_StaffStatus");
 
@@ -853,16 +792,13 @@
             //}
         });
 
-        function AddStaffAtachmentData(ThisRowID, FromDocumentDotReady) 
-        {
+        function AddStaffAtachmentData(ThisRowID, FromDocumentDotReady) {
             debugger;
             var dtDetailInfoHtml;
             var totalNullAccountsCount = 0;
 
-            if (FromDocumentDotReady != true) 
-            {
-                if (document.getElementById("DocumentTitle_" + ThisRowID).value == '') 
-                {
+            if (FromDocumentDotReady != true) {
+                if (document.getElementById("DocumentTitle_" + ThisRowID).value == '') {
                     //message empty
                     $.growl.warning({
                         message: "Please Enter Document Title !"
@@ -873,10 +809,8 @@
 
             var insertrow = true;
 
-            $("#TBodyID1 tr").each(function() 
-            {
-                if (document.getElementById("DocFile_" + $(this).prop('id')).value == 0) 
-                {
+            $("#TBodyID1 tr").each(function () {
+                if (document.getElementById("DocFile_" + $(this).prop('id')).value == 0) {
                     totalNullAccountsCount++;
                     $.growl.warning({
                         message: "Please Attach File!"
@@ -885,58 +819,47 @@
                 }
             });
 
-            if (insertrow) 
-            {
-                if (totalNullAccountsCount < 1) 
-                {
-                    if (FromDocumentDotReady != true) 
-                    {
+            if (insertrow) {
+                if (totalNullAccountsCount < 1) {
+                    if (FromDocumentDotReady != true) {
                         document.getElementById("AttachmentDetailRowNo").value = $('#TBodyID1 tr:last').attr('id');
                         document.getElementById("AttachmentDetailRowNo").value++;
                     }
-                    else 
-                    {
+                    else {
                         document.getElementById("AttachmentDetailRowNo").value = 0
                     }
                 }
-
                 var q = document.getElementById("AttachmentDetailRowNo").value;
-
                 var i = parseInt(q) + 1;
 
                 dtDetailInfoHtml = '';
                 dtDetailInfoHtml = '<tr id="' + document.getElementById("AttachmentDetailRowNo").value + '">';
-
-                dtDetailInfoHtml += '<td  > ' + i + ' </td>';
-                dtDetailInfoHtml += '<td > <input type="text" class="form-control "   id="DocumentTitle_' + document.getElementById("AttachmentDetailRowNo").value + '" name="DocumentTitle" />   </td>';
-
-                dtDetailInfoHtml += '<td > <input type="file" class="form-control Attachmentch"   id="DocFile_' + document.getElementById("AttachmentDetailRowNo").value + '" name="DocFiles" />   </td>';
-                dtDetailInfoHtml += '<td > <button type="button" style="" class="btn btn-info  btn-xs btn-circle" id="detailDocDataAdd_' + document.getElementById("AttachmentDetailRowNo").value +
-                    '" value="+" onclick="AddStaffAtachmentData($(this).parent().parent().attr(\'id\'),false)"  title="Add" ><span class="fa fa-plus" aria-hidden="true"> </span><span><strong></strong></span> </button>  ';
-
-                dtDetailInfoHtml += '<button type="button"  id = "detailDocDataDelete_' + document.getElementById("AttachmentDetailRowNo").value + '" title="Remove" value=" - " onclick="DeleteDocDetailData(this, $(this).parent().parent().attr(\'id\'))"  class="btn btn-danger  btn-xs btn-circle userDellbtn"   ><span class="fa fa-trash" aria-hidden="true"></span><span><strong></strong></span>  </button>  </td>';
-
+                dtDetailInfoHtml += '   <td> ' + i + ' </td>';
+                dtDetailInfoHtml += '   <td> <input type="text" class="form-control" id="DocumentTitle_' + document.getElementById("AttachmentDetailRowNo").value + '" name="DocumentTitle" /> </td>';
+                dtDetailInfoHtml += '   <td> <input type="file" class="form-control Attachmentch" id="DocFile_' + document.getElementById("AttachmentDetailRowNo").value + '" name="DocFiles" /> </td>';
+                dtDetailInfoHtml += '   <td> <button type="button" style="" class="btn btn-info btn-xs btn-circle" id="detailDocDataAdd_' + document.getElementById("AttachmentDetailRowNo").value +
+                    '        " value="+" onclick="AddStaffAtachmentData($(this).parent().parent().attr(\'id\'),false)" title="Add"> <span class="fa fa-plus" aria-hidden="true"> </span> <span><strong></strong></span> </button>';
+                dtDetailInfoHtml += '       <button type="button" id = "detailDocDataDelete_' + document.getElementById("AttachmentDetailRowNo").value + '" title="Remove" value=" - " onclick="DeleteDocDetailData(this, $(this).parent().parent().attr(\'id\'))" class="btn btn-danger btn-xs btn-circle userDellbtn"> <span class="fa fa-trash" aria-hidden="true"></span> <span><strong></strong></span>  </button>  </td>';
                 dtDetailInfoHtml += '</tr>';
                 $("#TBodyID1").append(dtDetailInfoHtml);
 
                 //console.log(dtDetailInfoHtml);
-
                 ///	document.getElementById("DocImagePath_" + document.getElementById("AttachmentDetailRowNo").value);
+                $('#documentTable tbody tr').each(function (index) {
+                    $(this).find('td:first').text(index + 1);
+                });
             }
         }
 
         // for delete snap button
-        function DeleteDocDetailData(element, rowid) 
-        {
+        function DeleteDocDetailData(element, rowid) {
             var Next = $(element).parent().parent().next("tr").length;
             var Prev = $(element).parent().parent().prev("tr").length;
 
-            if (parseInt(Next) > 0 || parseInt(Prev) > 0) 
-            {
+            if (parseInt(Next) > 0 || parseInt(Prev) > 0) {
                 $(element).parent().parent().remove();
             }
-            else 
-            {
+            else {
                 $("#TBodyID1 tr").remove();
                 AddStaffAtachmentData(0, true);
             }
@@ -945,7 +868,6 @@
                 $(this).find('td:first').text(index + 1);
             });
         }
-
 
     </script>
 }

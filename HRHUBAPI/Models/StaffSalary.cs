@@ -11,6 +11,8 @@ public partial class StaffSalary
 
     public DateTime? SalaryMonth { get; set; }
 
+    public decimal? GrossSalary { get; set; }
+
     public decimal? TotalDeductions { get; set; }
 
     public decimal? TotalEarnings { get; set; }

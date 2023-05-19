@@ -90,11 +90,6 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<UserForm> UserForms { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=hrhub;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -453,6 +448,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SalaryStatusId)
                 .ValueGeneratedNever()
                 .HasColumnName("SalaryStatusID");
+            entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -585,6 +581,19 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<StaffLeaveAllocation>(entity =>
+        {
+            entity.HasKey(e => e.LeaveAllocationId);
+
+            entity.ToTable("StaffLeaveAllocation");
+
+            entity.Property(e => e.LeaveAllocationId).HasColumnName("LeaveAllocationID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StaffSalary>(entity =>
         {
             entity.ToTable("StaffSalary");
@@ -597,6 +606,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.NetSalary).HasColumnType("money");
             entity.Property(e => e.SalaryMonth).HasColumnType("date");
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
+            entity.Property(e => e.GrossSalary).HasColumnType("money");
             entity.Property(e => e.NetSalary).HasColumnType("money");
             entity.Property(e => e.SalaryMonth).HasColumnType("date");
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
@@ -666,7 +676,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.MinIncome)
                 .HasColumnType("money")
                 .HasColumnName("Min_Income");
-            entity.Property(e => e.TaxRate).HasColumnType("money");
+            entity.Property(e => e.TaxRatePercentage).HasColumnType("money");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });

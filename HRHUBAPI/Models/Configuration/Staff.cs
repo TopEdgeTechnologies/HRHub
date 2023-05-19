@@ -13,6 +13,18 @@ namespace HRHUBAPI.Models
     public partial class Staff
     {
         [NotMapped]
+        public int? TotalActiveStaff { get; set; }
+
+        [NotMapped]
+        public int? TotalMaleStaff { get; set; }
+
+        [NotMapped]
+        public int? TotalFemaleStaff { get; set; }
+        
+        [NotMapped]
+        public int? TotalProbationStaff { get; set; }
+
+        [NotMapped]
         public IEnumerable<Staff>? StaffList { get; set; }
 
         [NotMapped]
@@ -45,15 +57,27 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<StaffAttachment>? StaffAttachmentList { get; set; }
 
-        //    public async Task<List<Staff>> GetStaffByCompanyId_DB(int CompanyId, HrhubContext hrhubContext)
-        //    {
-        //        try
-        //        {
-        //            List<Staff> staff = new List<Staff> ();
-        //            staff = await hrhubContext.Staff.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
-        //return staff;   
-        //        } catch { throw; }
-        //    }
+        public async Task<List<Staff>> GetStaffStatisticsByCompanyId(int CompanyId)
+        {
+            DbConnection _db = new DbConnection();
+            try
+            {
+                string query = "EXEC BI.sp_Get_Staff_Statistics " + CompanyId;
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var staffStatistics = dt.AsEnumerable()
+                    .Select(row => new Staff
+                    {
+                        TotalActiveStaff = Convert.ToInt32(row["TotalActiveStaff"]),
+                        TotalMaleStaff = Convert.ToInt32(row["TotalMaleStaff"]),
+                        TotalFemaleStaff = Convert.ToInt32(row["TotalFemaleStaff"]),
+                        TotalProbationStaff = Convert.ToInt32(row["TotalProbationStaff"])
+                    })
+                    .ToList();
+                return staffStatistics;
+            }
+            catch { throw; }
+        }
 
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {
@@ -76,7 +100,7 @@ namespace HRHUBAPI.Models
                         DesignationTitle = row["DesignationTitle"].ToString(),
                         ContactNumber1 = row["ContactNumber1"].ToString(),
                         ContactNumber2 = string.IsNullOrWhiteSpace(row["ContactNumber2"].ToString()) ? "" : row["ContactNumber2"].ToString(),
-                        JoiningDate = Convert.ToDateTime(row["JoiningDate"]),
+                        Gender = row["Gender"].ToString(),
                         //JoiningDate = DateTime.ParseExact(row["JoiningDate"].ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture),
                         Status = Convert.ToBoolean(row["Status"])
                     })
@@ -103,6 +127,12 @@ namespace HRHUBAPI.Models
             catch { throw; }
         }
 
+        public async Task<List<StaffAttachment>> GetStaffDocumentDetail(int Id, HrhubContext hrhubContext)
+        {
+            return await hrhubContext.StaffAttachments.Where(x => x.IsDeleted == false && x.StaffId==Id).ToListAsync();     
+        }
+
+        public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
 
 
         // Get single record of Staff by company ID
@@ -240,7 +270,6 @@ namespace HRHUBAPI.Models
                 throw ex;
             }
         }
-
 
         public async Task<bool> StaffDelete(int id, HrhubContext hrhubContext)
         {
