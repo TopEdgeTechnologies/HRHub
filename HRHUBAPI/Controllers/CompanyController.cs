@@ -21,11 +21,11 @@ namespace HRHUBAPI.Controllers
 
         #region CompanyInfo
 
-        [HttpGet("GetCompanyInfos")]
-        public async Task<ActionResult<List<Company>>> GetCompanyInfos()
+        [HttpGet("GetCompanyInfos{CompanyId}")]
+        public async Task<ActionResult<List<Company>>> GetCompanyInfos(int CompanyId)
         {
 
-            return await new Company().GetCompany(_context);
+            return await new Company().GetCompany(CompanyId,_context);
         }
 
 
@@ -146,7 +146,18 @@ namespace HRHUBAPI.Controllers
 		}
 
 
+        // Get user Details by Company Id
+		[HttpGet("GetUserbyId{userId}")]
+		public async Task<ActionResult<Company>> GetUserbyId(int userId)
+		{
+			var result = await new Company().GetUserByCompanyId(userId, _context);
+			if (result != null)
+				return Ok(result);
 
+			return NotFound();
+
+
+		}
 
 
 
