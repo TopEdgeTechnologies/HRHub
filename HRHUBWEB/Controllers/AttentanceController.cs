@@ -64,6 +64,28 @@ namespace HRHUBWEB.Controllers
 		}
 
 
+		public async Task<IActionResult> AttentanceOverView(string data = "")
+		{
+			return View();
+		}
+
+
+		public async Task<IActionResult> AttentanceByUser(string data = "")
+		{
+			return View();
+		}
+
+
+
+	    public async Task<IActionResult> AttendanceView(string data = "")
+		{
+			return View();
+		}
+		 public async Task<IActionResult> OverviewCalendar(string data = "")
+		{
+			return View();
+		}
+
 
 
 

@@ -9,6 +9,9 @@ using HRHUBAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using System.Reflection.Metadata.Ecma335;
+using Azure;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace HRHUBAPI.Controllers
 {
@@ -47,7 +50,7 @@ namespace HRHUBAPI.Controllers
             return NotFound();
         }
 
-        [HttpGet("PostStaff")]
+		[HttpPost("PostStaff")]
         public async Task<ActionResult<Staff>> PostStaff(Staff staff)
         {
             var dbResult = await new Staff().PostStaff(staff, _context);    
@@ -57,7 +60,7 @@ namespace HRHUBAPI.Controllers
                 {
                     success = true,
                     Message = "Data Updated Successfully"
-                }); ;
+                });
             }
             else
             {
@@ -87,10 +90,10 @@ namespace HRHUBAPI.Controllers
             return NotFound("Data not Found!");
         }
 
-        [HttpGet("StaffAlreadyExists{CompanyId}/{Id}/{title}")]
-        public async Task<ActionResult<bool>> StaffAlreadyExists(int CompanyId, int Id, string title)
+        [HttpGet("StaffAlreadyExists{CompanyId}/{Id}/{nationalId}")]
+        public async Task<ActionResult<bool>> StaffAlreadyExists(int CompanyId, int Id, string nationalId)
         {
-            var dbResult = await new Staff().StaffAlreadyExists(CompanyId, Id, title, _context);   
+            var dbResult = await new Staff().StaffAlreadyExists(CompanyId, Id, nationalId, _context);   
             if(dbResult == true)
             {
                 return Ok(new
@@ -109,7 +112,28 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        #endregion
 
-    }
+		// Get single record of Staff by company ID
+
+		[HttpGet("GetStaffCompanyVise{CompanyId}")]
+		public async Task<ActionResult<Staff>> GetStaffCompanyVise(int CompanyId)
+		{
+			var dbResult = await new Staff().GetStaffCompanyId(CompanyId, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+
+
+
+
+
+
+
+		#endregion
+
+	}
 }

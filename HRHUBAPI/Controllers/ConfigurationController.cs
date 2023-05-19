@@ -352,7 +352,7 @@ namespace HRHUBAPI.Controllers
                 return Ok(new
                 {
                     Success = true,
-                    MessageProcessingHandler = "Data"
+                    Message = "Data Updated Successfully"
                 });
             }
             else
@@ -387,10 +387,12 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpGet("HolidayAlreadyExistCheck{COmpanyID}/{HolidayID}/{DayDate}")]
-        public async Task<ActionResult<bool>> HolidayAlreadyExistCheck(int CompanyID, int ID, DateTime DayDate)
+
+
+        [HttpGet("HolidayAlreadyExistsss{CompanyId}/{id}/{HolidayDate}")]
+        public async Task<ActionResult<bool>> HolidayAlreadyExistsss(int CompanyId, int id, DateTime HolidayDate)
         {
-            var dbResult = await new Holiday().AlredyExist(ID, DayDate, CompanyID,_context);
+            var dbResult = await new Holiday().AlredyExist(id, HolidayDate, CompanyId, _context);
             if (dbResult == true)
             {
                 return Ok(new
@@ -408,6 +410,62 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
+
+
+        #endregion
+
+
+
+
+
+        #region WeekendRule
+
+        [HttpGet("GetWeekendRuleByCompanyID{CompanyID}")]
+        public async Task<ActionResult<List<WeekendRule>>> GetWeekendRules(int CompanyID)
+        {
+            return await new WeekendRule().GetWeekendRules(CompanyID, _context);
+        }
+
+
+        [HttpGet("GetWeekendRuleByID{ID}")]
+        public async Task<ActionResult<List<WeekendRule>>> GetWeekendRuleByID(int ID)
+        {
+            var dbResult = await new WeekendRule().GetWeekendRuleByID(ID, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+
+        [HttpPost("PostWeekendRule")]
+        public async Task<ActionResult<Holiday>> PostWeekendRule(WeekendRule objRule)
+        {
+            WeekendRule obj = new WeekendRule();
+            var dbResult = await obj.PostWeekendRule(objRule, _context);
+            if (dbResult != null && dbResult.TransFlag == 2)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
 
 
         #endregion

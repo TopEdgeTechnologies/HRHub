@@ -1,0 +1,639 @@
+﻿@model HRHUBAPI.Models.Company
+@{
+    ViewData["Title"] = "Setting";
+}
+
+
+<div class="page-header d-xl-flex d-block">
+	<div class="page-leftheader">
+		<div class="page-title">Settings</div>
+	</div>
+	<div class="page-rightheader ms-md-auto">
+		<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+			<div class="btn-list">
+				<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+				<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+				<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--End Page header-->
+<!-- Row -->
+<div class="row">
+
+	
+	<div class="col-md-12 col-xl-3">
+		<div class="card">
+			<div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+				<a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+					<i class="nav-icon las la-cog"></i> General Settings
+				</a>
+				<a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+					<i class="nav-icon las la-user-circle"></i> Profile Settings
+				</a>
+				<a class="nav-link" data-bs-toggle="pill" href="#" role="tab">
+					@*#tab-3*@
+					<i class="nav-icon las la-bell"></i> Notification Settings
+				</a>
+				<a class="nav-link" data-bs-toggle="pill" href="#tab-4" role="tab">
+					<i class="nav-icon las la-edit"></i> Attendance Settings
+				</a>
+				<a class="nav-link" data-bs-toggle="pill" href="#tab-5" role="tab">
+					
+					<i class="nav-icon las la-palette"></i> Leave Approval Settings
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-xl-9">
+		<div class="tab-content adminsetting-content" id="setting-tabContent">
+			<div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+				@using (@Html.BeginForm("CompanyCreateOrUpdate", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
+				{
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">General Settings</h4>
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Organization Name</label>
+								</div>
+								<div class="col-md-9">
+									<input asp-for="CompanyName" type="text" class="form-control" placeholder="Enter your Organization Name" >
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Email</label>
+								</div>
+								<div class="col-md-9">
+										<input asp-for="Email" type="text" class="form-control" placeholder="Enter Youre Email">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Address</label>
+								</div>
+								<div class="col-md-9">
+								<textarea asp-for="Address" rows="2" class="form-control" placeholder="Enter your Address"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Number</label>
+								</div>
+								<div class="col-md-9">
+									<input asp-for="Phone" type="number" class="form-control" placeholder="Enter your Phon">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Website</label>
+								</div>
+								<div class="col-md-9">
+								<input asp-for="WebUrl" type="text" class="form-control" placeholder="Enter your WebUrl">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Contact Person</label>
+								</div>
+								<div class="col-md-9">
+										<input asp-for="ContactPerson" type="text" class="form-control" placeholder="Enter Contact Person">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Upload Image</label>
+								</div>
+								<div class="col-md-1">
+								<img src="@Url.Content(Model.LogoAttachment)" alt="user-img" id="viewlogo" class="avatar-lg rounded-circle mb-1">
+								</div>
+								<div class="col-md-8">
+									<div class="form-group">
+										<label for="form-label" class="form-label"></label>
+											<input class="form-control" type="file" id="CompanyLogo" name="CompanyLogo" accept=".jpg, .jpeg, .png">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Country</label>
+								</div>
+								<div class="col-md-9">
+									<select class="form-control custom-select select2" data-placeholder="Select Country">
+										<option label="Select Country"></option>
+										<option value="1">Germany</option>
+										<option value="3">Canada</option>
+										<option value="4" selected>Usa</option>
+										<option value="5">Afghanistan</option>
+										<option value="6">Albania</option>
+										<option value="7">China</option>
+										<option value="8">Denmark</option>
+										<option value="9">Finland</option>
+										<option value="10">India</option>
+										<option value="11">Kiribati</option>
+										<option value="12">Kuwait</option>
+										<option value="13">Mexico</option>
+										<option value="14">Pakistan</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Language</label>
+								</div>
+								<div class="col-md-9">
+									<select asp-for="Language" data-placeholder="Choose a Language..." class="form-control">
+										<option label="Choose Language"></option>
+										<option value="AF">Afrikanns</option>
+										<option value="SQ">Albanian</option>
+										<option value="AR">Arabic</option>
+										<option value="HY">Armenian</option>
+										<option value="EU">Basque</option>
+										<option value="BN">Bengali</option>
+										<option value="BG">Bulgarian</option>
+										<option value="CA">Catalan</option>
+										<option value="KM">Cambodian</option>
+										<option value="ZH">Chinese (Mandarin)</option>
+										<option value="HR">Croation</option>
+										<option value="CS">Czech</option>
+										<option value="DA">Danish</option>
+										<option value="NL">Dutch</option>
+										<option value="English">English</option>
+										<option value="ET">Estonian</option>
+										<option value="FJ">Fiji</option>
+										<option value="FI">Finnish</option>
+										<option value="FR">French</option>
+										<option value="KA">Georgian</option>
+										<option value="DE">German</option>
+										<option value="EL">Greek</option>
+										<option value="GU">Gujarati</option>
+										<option value="HE">Hebrew</option>
+										<option value="HI">Hindi</option>
+										<option value="HU">Hungarian</option>
+										<option value="IS">Icelandic</option>
+										<option value="ID">Indonesian</option>
+										<option value="GA">Irish</option>
+										<option value="IT">Italian</option>
+										<option value="JA">Japanese</option>
+										<option value="JW">Javanese</option>
+										<option value="KO">Korean</option>
+										<option value="LA">Latin</option>
+										<option value="LV">Latvian</option>
+										<option value="LT">Lithuanian</option>
+										<option value="MK">Macedonian</option>
+										<option value="MS">Malay</option>
+										<option value="ML">Malayalam</option>
+										<option value="MT">Maltese</option>
+										<option value="MI">Maori</option>
+										<option value="MR">Marathi</option>
+										<option value="MN">Mongolian</option>
+										<option value="NE">Nepali</option>
+										<option value="NO">Norwegian</option>
+										<option value="FA">Persian</option>
+										<option value="PL">Polish</option>
+										<option value="PT">Portuguese</option>
+										<option value="PA">Punjabi</option>
+										<option value="QU">Quechua</option>
+										<option value="RO">Romanian</option>
+										<option value="RU">Russian</option>
+										<option value="SM">Samoan</option>
+										<option value="SR">Serbian</option>
+										<option value="SK">Slovak</option>
+										<option value="SL">Slovenian</option>
+										<option value="ES">Spanish</option>
+										<option value="SW">Swahili</option>
+										<option value="SV">Swedish </option>
+										<option value="TA">Tamil</option>
+										<option value="TT">Tatar</option>
+										<option value="TE">Telugu</option>
+										<option value="TH">Thai</option>
+										<option value="BO">Tibetan</option>
+										<option value="TO">Tonga</option>
+										<option value="TR">Turkish</option>
+										<option value="UK">Ukranian</option>
+										<option value="UR">Urdu</option>
+										<option value="UZ">Uzbek</option>
+										<option value="VI">Vietnamese</option>
+										<option value="CY">Welsh</option>
+										<option value="XH">Xhosa</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Currency</label>
+								</div>
+								<div class="col-md-9">
+									<select asp-for="Currency" data-placeholder="Choose Currency" class="form-control">
+										<option label="Choose Currency"></option>
+										<option value="US DOllar(USD)">US DOllar(USD)</option>
+										<option value="European Euro (EUR)">European Euro (EUR)</option>
+										<option value="Japanese Yen (JPY)">Japanese Yen (JPY)</option>
+										<option value="British Pound (GBP)">British Pound (GBP)</option>
+										<option value="Swiss Franc (CHF)">Swiss Franc (CHF)</option>
+										<option value="Canadian Dollar (CAD)">Canadian Dollar (CAD)</option>
+										<option value="Australian/New Zealand Dollar (AUD/NZD)">Australian/New Zealand Dollar (AUD/NZD)</option>
+										<option value="South African Rand (ZAR)">South African Rand (ZAR)</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
+						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+					</div>
+				</div>
+			
+				}
+			</div>
+			<div class="tab-pane fade" id="tab-2" role="tabpanel">
+
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">Profile Settings</h4>
+					</div>
+					<div class="card-body">  
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label  class="form-label mb-0 mt-2">Name</label>
+								</div>
+								<div class="col-md-9">
+									<input asp-for="SettingStaff.FirstName" type="text" class="form-control" placeholder="Name" >
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Email</label>
+								</div>
+								<div class="col-md-9">
+									<input asp-for="SettingUser.UserName" type="email" class="form-control" placeholder="login email">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Password</label>
+								</div>
+								<div class="col-md-9">
+									<input asp-for="SettingUser.Password" type="password" class="form-control" placeholder="password" value="">
+								</div>
+							</div>
+						</div>
+						@*<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Confirm Password</label>
+								</div>
+								<div class="col-md-9">
+									<input type="password" class="form-control" placeholder="Confirm password" value="">
+								</div>
+							</div>
+						</div>*@
+					</div>
+					<div class="card-footer">
+						<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tab-3" role="tabpanel">
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">Notification Settings</h4>
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Attendance</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Awards</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Leaves</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Notice Board</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Expenses</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Payroll</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Events</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-description">Enable/Disable</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tab-4" role="tabpanel">
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">Attendance Settings</h4>
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Office Start Time</label>
+								</div>
+								<div class="col-md-9">
+									<div class="input-group">
+										<input asp-for="OfficeStartTime" class="form-control" placeholder="HH:MM AM/PM" type="time">
+										<div class="input-group-append">
+											<div class="input-group-text">
+												<i class="feather feather-clock"></i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Office End Time</label>
+								</div>
+								<div class="col-md-9">
+									<div class="input-group">
+										<input asp-for="OfficeEndTime" class="form-control" placeholder="HH:MM AM/PM" type="time">
+										<div class="input-group-append">
+											<div class="input-group-text">
+												<i class="feather feather-clock"></i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Late Mark after(mintues)</label>
+								</div>
+								<div class="col-md-9">
+									<input type="text" class="form-control" placeholder="Enter mintues" value="">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label">Employees Mark Attendance</label>
+								</div>
+								<div class="col-md-9">
+									<label class="custom-switch">
+										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+										<span class="custom-switch-indicator"></span>
+										<span class="custom-switch-label">Monday</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card-footer">
+						<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="tab-5" role="tabpanel">
+
+				<div class="card">
+					<div class="card-header  border-0">
+						<h4 class="card-title">General Settings</h4>
+					</div>
+					<div class="card-body">
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Staff</label>
+								</div>
+								<div class="col-md-9">
+									<select asp-for="StaffId" class="form-control custom-select select2">
+										@* asp-items="@(new SelectList(@ViewBag.Stafflist,"StaffId" ,"FirstName"))"*@
+										<option value="">Select Staff</option>
+									</select>
+								
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-3">
+									<label class="form-label mb-0 mt-2">Leave Status</label>
+								</div>
+								<div class="col-md-9">
+									<select asp-for="LeaveStatusId" class="form-control custom-select select2" asp-items="@(new SelectList(@ViewBag.LeaveStatusList,"LeaveStatusId" ,"Title"))">
+										<option value="">Select Leave Status</option>
+									</select>
+									
+								</div>
+							</div>
+						</div>
+					
+					</div>
+					<div class="card-footer">
+						<a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
+						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+	
+</div>
+<!-- End Row -->
+
+
+@section scripts{
+
+	<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+	$(document).ready(function () {
+
+
+			$('#Language,#StaffId,#Currency,#LeaveStatusId').select2();
+		
+
+
+			// Show logo
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						$('#viewlogo').attr('src', e.target.result);
+					}
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+
+
+
+
+			$("#CompanyLogo").change(function () {
+				debugger
+				readURL(this);
+			});
+
+
+
+
+			$('#CompanyLogo').change(function () {
+			var fileInput = $(this);
+			var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+			var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+			var fileSize = this.files[0].size;
+			var filePath = fileInput.val();
+			if (!allowedExtensions.exec(filePath)) {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
+					type: "warning"
+				});
+				fileInput.val('');
+				return false;
+			} else if (fileSize > fileSizeLimit) {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+					type: "warning"
+				});
+				fileInput.val('');
+				return false;
+			} else {
+				readURL(this)
+
+			}
+
+		});
+	
+	
+	
+	});
+
+</script>
+
+
+
+}

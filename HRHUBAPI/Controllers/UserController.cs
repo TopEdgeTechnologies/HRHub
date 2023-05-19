@@ -99,10 +99,10 @@ namespace SchoolManagementSystem.API.Controllers
         }
         #endregion
 
-        [HttpGet("UserCheckData")]
-        public async Task<ActionResult<JsonObject>> UserCheckData(int id, string title = "")
+        [HttpGet("UserCheckData{id}/{username}")]
+        public async Task<ActionResult<JsonObject>> UserCheckData(int id, string username)
         {
-            if (await new User().AlreadyExist(id, title.Trim(), _context))
+            if (await new User().AlreadyExist(id, username, _context))
             {
                 return Ok(new
                 {
@@ -195,6 +195,27 @@ namespace SchoolManagementSystem.API.Controllers
 			}
 
 		}
+
+
+
+
+
+		// Get single record of User by company ID
+
+		[HttpGet("GetUserCompanyViseId{CompanyId}")]
+		public async Task<ActionResult<User>> GetUserCompanyViseId(int CompanyId)
+		{
+			var dbResult = await new User().GetUserCompanyVise(CompanyId, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+
+
+
 
 
 

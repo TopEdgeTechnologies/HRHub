@@ -1,0 +1,601 @@
+﻿@model HRHUBAPI.Models.Company
+
+@{
+    ViewData["Title"] = "Company";
+}
+
+
+<!--Row-->
+<div class="row ">
+	<div class="col-md-12">
+		<div class="card">
+			<div class="card-header border-bottom-0">
+				<div class="card-title">
+					<h3 class="card-title">Register Company</h3>
+					@*<div class="card-options">
+						<div class="btn-list">
+
+							<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+							<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+							<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+						</div>
+					</div>*@
+				</div>
+
+			</div>
+			<div class="card-body">
+			@using (@Html.BeginForm("CompanyCreateOrUpdate", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
+            {
+				<div id="wizard3">
+					<input type="hidden" asp-for="CompanyId"/><input type="hidden" asp-for="UserId"/>
+					<h3>Organization Setup</h3>
+					<section>
+							<div class="row mt-4">
+							<div class="col-md-6">
+						<div class="control-group form-group">
+										<label class="form-label">Organization Name <span class="text-danger">*</span>  <span id="alreadyexistid" class="text-danger"></span></label>
+										<input asp-for="CompanyName" type="text" class="form-control " placeholder="Enter your Organization Name" required autocomplete="off">
+						</div>
+									@*<div class="control-group form-group"> was-validated
+							<label class="form-label">Phone Number</label>
+							<input asp-for="Phone" type="hidden" class="form-control required" placeholder=" Enter Number">
+						</div>*@
+					</div>
+					<div class="col-md-6">
+						<div class="control-group form-group">
+							<label class="form-label">Email <span class="text-danger">*</span> <span id="alreadyexistEmail" class="text-danger"></span></label>
+										<input asp-for="Email" type="email" class="form-control" placeholder="Enter your Email Address" required autocomplete="off">
+							
+						</div>
+						@*<div class="control-group form-group mb-0" hidden>
+							<label class="form-label">Address</label>
+							<textarea rows="1"asp-for="Address" type="hidden" class="form-control required" placeholder="Address"></textarea>
+						</div>*@
+					</div>
+					</div>
+					</section>
+						<h3>Personal Information</h3>
+						<section>
+							<div class="row mt-4">
+								<div class="col-md-6">
+							<div class="control-group form-group">
+							<label class="form-label">Name <span class="text-danger">*</span></label>
+							<input asp-for="ContactPerson" type="text" class="form-control" placeholder="Enter your Name" required>
+							</div>
+							<div class="control-group form-group">
+								<label class="form-label">Department <span class="text-danger">*</span></label>
+										<input asp-for="StaffDepartment" type="text" class="form-control" placeholder="Enter Department" required>
+								</div>
+							</div>
+								<div class="col-md-6">
+									<div class="control-group form-group">
+										<label class="form-label">Email <span class="text-danger">*</span></label>
+										<input asp-for="StaffEmail" type="email" class="form-control" placeholder="Enter your Email Address" required>
+
+									</div>
+									<div class="control-group form-group">
+										<label class="form-label">Designation <span class="text-danger">*</span></label>
+										<input asp-for="StaffDesignation" type="text" class="form-control" placeholder="Enter your Designation" required>
+								</div>
+								</div>
+							</div>
+						</section>
+					<h3>Attendence Setup</h3>
+					<section>
+						<div class="row mt-4">
+					<div class="col-md-6">
+							<div class="control-group form-group">
+								<label class="form-label">Office Start Time</label>
+								<input asp-for="OfficeStartTime" type="time" class="form-control">
+							</div>
+							@*<div class="control-group form-group">
+								<label class="form-label">Grace Minuts</label>
+								<input asp-for="StartTimeGraceMinutes" type="number" class="form-control" placeholder="Enter Grace Minutes">
+							</div>*@
+							</div>
+							<div class="col-md-6">
+							<div class="control-group form-group">
+							<label class="form-label">Office End Time</label>
+							<input asp-for="OfficeEndTime" type="time" class="form-control">
+								
+							</div>
+							@*<div class="control-group form-group">
+							<label class="form-label">Mark HalfDay Minutes</label>
+							<input asp-for="MarkHalfDayAfterLateMinutes" type="number" class="form-control" placeholder="Enter Mark HalfDay Minutes">
+							</div>*@
+							</div>
+
+
+
+				</div>
+					</section>
+
+						<h3>Login Setup</h3>
+						<section>
+							<div class="row mt-4">
+								<div class="col-md-6">
+									<div class="control-group form-group">
+										<label class="form-label">Email <span class="text-danger">*</span><span id="alreadyexistUser" class="text-danger"></span></label>
+										<input asp-for="Username" type="email" class="form-control" placeholder="Enter your Email Address" required>
+							</div>
+							</div>
+								<div class="col-md-6">
+							<div class="control-group form-group">
+								<label class="form-label">Password <span class="text-danger">*</span></label>
+										<input asp-for="UserPassword" type="password" class="form-control" placeholder="Enter your password" required>
+							</div>
+							</div>
+								
+					</div>
+						</section>
+
+						<h3>Organization Logo</h3>
+						<section>
+							<div class="row mt-4">
+								<div class="col-md-3">
+							<div class="control-group form-group">
+							<img src="@Url.Content(Model.LogoAttachment)" alt="user-img" id="viewlogo" class="avatar-xxl rounded-circle mb-1">
+
+							
+							</div>
+							
+							</div>
+								<div class="col-md-7">
+									<div class="control-group form-group">
+										<label class="form-label"></label>
+										<label for="form-label" class="form-label"></label> <input class="form-control mt-3" id="CompanyLogo" name="CompanyLogo" type="file" accept=".jpg, .jpeg, .png">
+
+									</div>
+									
+								</div>
+							</div>
+						</section>
+
+				</div>
+				}
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+@section scripts{
+
+	<script type="text/javascript">
+
+
+		
+		$(document).ready(function () {
+			$('#CompanyLogo').change(function () {
+				var fileInput = $(this);
+				var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+				var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
+				var fileSize = this.files[0].size;
+				var filePath = fileInput.val();
+				if (!allowedExtensions.exec(filePath)) {
+					notif({
+						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
+						type: "warning"
+					});
+					fileInput.val('');
+					return false;
+				} else if (fileSize > fileSizeLimit) {
+					notif({
+						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
+						type: "warning"
+					});
+					fileInput.val('');
+					return false;
+				} else {
+					readURL(this)
+
+				}
+
+			});
+
+
+
+			function validateForm() {
+				debugger;
+
+				var form = $("#myform");
+				var inputs = form.find("input");
+
+
+
+				inputs.each(function () {
+					validateInput($(this));
+				});
+				//if(!alreadyExist()){
+
+				//	form[0].setCustomValidity('Invalid');
+				//}
+				var result= alreadyAllExist();
+
+				if (form[0].checkValidity() && alreadyAllExist()) {
+					console.log("Form is valid");
+					// Submit the form or perform other actions here
+					return true;
+				} else {
+					console.log("Form is invalid");
+					return false;
+				}
+				//form.addClass("was-validated");
+				
+			}
+
+			function alreadyAllExist(){
+				debugger
+				alreadyEmailExist();
+				alreadyNameExist();
+				alreadyUserExist();
+
+			}
+
+			function validateInput(input) {
+				
+			///	alreadyExist();
+
+				if (input[0].checkValidity()) {
+					input.removeClass("is-invalid");
+					input.addClass("is-valid"); //is-valid state-valid
+					input.addClass("state-valid");
+
+					//custom validation
+					customervalidationInValid();
+				
+
+					//input.next(".invalid-feedback").hide();
+				} else {
+					input.removeClass("is-valid");
+					input.addClass("is-invalid");
+					input.addClass("state-valid");
+					//input.next(".invalid-feedback").show();
+				}
+			}
+
+			function customervalidationInValid()
+			{
+				$('#alreadyexistid').text('')
+				$('#alreadyexistEmail').text('')
+				$('#alreadyexistUser').text('')
+				$('#CompanyLogo').removeClass("is-valid");
+				$('#CompanyLogo').removeClass("state-valid");
+			}
+
+			$("#CompanyName,#Email,#Staffname,#StaffDepartment,#StaffEmail,#StaffDesignation,#Username,#UserPassword ").on("input", function () {
+				validateInput($(this));
+			});
+
+
+			$('#finish').click(function (event) {
+
+
+
+				const swalWithBootstrapButtons = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-success',
+						cancelButton: 'btn btn-danger'
+					},
+					buttonsStyling: false
+				});
+
+				if( validateForm())
+				{
+
+						swalWithBootstrapButtons.fire({
+							title: 'Are you sure?',
+							text: "You won't be able to revert this!",
+							icon: 'warning',
+							showCancelButton: true,
+							cancelButtonText: 'No, cancel!',
+							confirmButtonText: 'Yes, Save it!',
+							timer: 30000,
+							reverseButtons: true
+						}).then((result) => {
+							if (result.isConfirmed) {
+								$("#myform").submit();
+
+
+
+							}
+							else if (
+
+								result.dismiss === Swal.DismissReason.cancel
+							) {
+								swalWithBootstrapButtons.fire(
+									'Cancelled',
+									'Your record is safe :)',
+									'error'
+								)
+							}
+						});
+
+
+				}
+				else
+				{
+
+						$.growl.warning({
+							message: "Please Enter required fields !"
+						});
+
+
+				}
+				
+			});
+
+			$("#StaffEmail").change(function () {
+				var email = $("#StaffEmail").val();
+				
+				$("#Username").val(email);
+				});
+			
+
+		});
+
+
+		// Show logo 
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					$('#viewlogo').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+
+
+
+
+		$("#CompanyLogo").change(function () {
+            debugger
+			readURL(this);
+        });
+
+
+		//$("#CompanyName,#Email").(function () {
+		//	alreadyExist();
+		//});
+
+
+		$("#Email").on("keyup", function (event) {
+			// Code to be executed when a key is pressed
+			console.log("Key pressed: " + event.key);
+			// Additional code...
+			alreadyEmailExist();
+		});
+		$("#CompanyName").on("keyup", function (event) {
+			// Code to be executed when a key is pressed
+			console.log("Key pressed: " + event.key);
+			// Additional code...
+			alreadyNameExist();
+		});
+
+		$("#StaffEmail").on("keyup", function (event) {
+			// Code to be executed when a key is pressed
+			console.log("Key pressed: " + event.key);
+			// Additional code...
+			alreadyUserExist();
+		});
+		$("#Username").on("keyup", function (event) {
+			// Code to be executed when a key is pressed
+			console.log("Key pressed: " + event.key);
+			// Additional code...
+			alreadyUserExist();
+		});
+
+
+
+
+
+		////////
+
+
+	
+		function alreadyEmailExist() {
+			var status =false
+			var Data = { id: $("#CompanyId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val() }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Company/CompanyEmailCheckData",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+
+						var b = JSON.parse(data)
+						if (b.success) {
+
+							//$.growl.warning({
+							//	message: b.message
+							//});
+							//$('#myForm').invalid();
+							$('#alreadyexistEmail').text(b.message)
+							
+							$("#Email").addClass("is-invalid");
+							
+							//$("#Email").addClass("state-valid");
+
+
+							status= false;
+						}
+						else
+						{
+							//$("#Email").removeClass("is-invalid");
+
+							//$("#CompanyName").removeClass("is-invalid");
+							//$("#CompanyName").addClass("is-valid");
+							////$("#Email").addClass("is-valid");
+
+							////$("#Email").addClass("state-valid");
+
+							//$("#CompanyName").addClass("state-valid");
+
+							//$('#myForm').valid();
+
+							$('#alreadyexistEmail').text('')
+
+							status= true;
+
+						}
+
+
+					}
+				},
+				error: function () {
+					//$('#myForm').invalid();
+
+					status= false;
+
+					
+				}
+			})
+
+		return	 status;
+		}
+
+		function alreadyNameExist() {
+			var status = false
+			var Data = { id: $("#CompanyId").val(), companyName: $('#CompanyName').val() == '' ? '""' : $('#CompanyName').val() }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Company/CompanyNameCheckData",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+
+						var b = JSON.parse(data)
+						if (b.success) {
+
+							//$.growl.warning({
+							//	message: b.message
+							//});
+							//$('#myForm').invalid();
+							$('#alreadyexistid').text(b.message)
+							$("#CompanyName").addClass("is-invalid");
+							//$("#Email").addClass("is-invalid");
+							//$("#CompanyName").addClass("state-valid");
+							//$("#Email").addClass("state-valid");
+
+
+							status = false;
+						}
+						else {
+							//$("#Email").removeClass("is-invalid");
+
+							//$("#CompanyName").removeClass("is-invalid");
+							//$("#CompanyName").addClass("is-valid");
+							//$("#Email").addClass("is-valid");
+
+							//$("#Email").addClass("state-valid");
+
+							//$("#CompanyName").addClass("state-valid");
+
+							//$('#myForm').valid();
+							$('#alreadyexistid').text('')
+
+							status = true;
+
+						}
+
+
+					}
+				},
+				error: function () {
+					//$('#myForm').invalid();
+
+					status = false;
+
+
+				}
+			})
+
+			return status;
+		}
+
+		function alreadyUserExist() {
+			var status = false
+			var Data = { id: $("#UserId").val(), username: $('#Username').val() == '' ? '""' : $('#Username').val() }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Company/UserCheckData",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+
+						var b = JSON.parse(data)
+						if (b.success) {
+
+							//$.growl.warning({
+							//	message: b.message
+							//});
+							//$('#myForm').invalid();
+							//$('#alreadyexistUser').text(b.message)
+							$("#Username").addClass("is-invalid");
+							////$("#Email").addClass("is-invalid");
+							//$("#Username").addClass("state-valid");
+							//$("#Email").addClass("state-valid");
+
+
+							status = false;
+						}
+						else {
+							//$("#Email").removeClass("is-invalid");
+
+							//$("#Username").removeClass("is-invalid");
+							//$("#Username").addClass("is-valid");
+							//$("#Email").addClass("is-valid");
+
+							//$("#Email").addClass("state-valid");
+
+							//$("#CompanyName").addClass("state-valid");
+
+							//$('#myForm').valid();
+							$('#alreadyexistUser').text('')
+
+							status = true;
+
+						}
+
+
+					}
+				},
+				error: function () {
+					//$('#myForm').invalid();
+
+					status = false;
+
+
+				}
+			})
+
+			return status;
+		}
+
+
+
+
+
+
+
+	</script>
+
+
+
+}
+
+
