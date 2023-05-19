@@ -132,7 +132,7 @@ namespace HRHUBAPI.Models
             return await hrhubContext.StaffAttachments.Where(x => x.IsDeleted == false && x.StaffId==Id).ToListAsync();     
         }
 
-        public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
+       
 
 
         // Get single record of Staff by company ID
