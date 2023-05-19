@@ -29,15 +29,25 @@ namespace HRHUBAPI.Controllers
             _webHostEnvironment = webHostEnvironment;   
         }
 
-        #region Staff
+		#region Staff
 
-        [HttpGet("GetStaffByCompanyId{CompanyId}")]
+		[HttpGet("GetStaffStatisticsByCompanyId{CompanyId}")]
+		public async Task<ActionResult<List<Staff>>> GetStaffStatisticsByCompanyId(int CompanyId)
+		{
+			return await new Staff().GetStaffStatisticsByCompanyId(CompanyId);
+		}
+
+		[HttpGet("GetStaffByCompanyId{CompanyId}")]
         public async Task<ActionResult<List<Staff>>> GetStaffByCompanyId(int CompanyId)
         {
-			//return await new Staff().GetStaffByCompanyId(CompanyId, _context);
-			//return await new Staff().GetStaffByCompanyId(CompanyId);
 			return await new Staff().GetStaffByCompanyId(CompanyId);
 		}
+
+        [HttpGet("GetStaffDocumentDetail{StaffId}")]
+        public async Task<ActionResult<List<StaffAttachment>>> GetStaffDocumentDetail(int StaffId)
+        {
+            return await new Staff().GetStaffDocumentDetail(StaffId, _context);
+        }
 
         [HttpGet("GetStaffById{Id}")]
         public async Task<ActionResult<Staff>> GetStaffById(int Id)

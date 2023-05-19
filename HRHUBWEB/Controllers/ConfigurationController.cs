@@ -15,868 +15,869 @@ using System.Net.NetworkInformation;
 
 namespace HRHUBWEB.Controllers
 {
-    public class ConfigurationController : Controller
-    {
-        private readonly HttpClient _client;
-        private IWebHostEnvironment _webHostEnvironment;
-        public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
-        {
-            _client = httpClient.CreateClient("APIClient");
-            _webHostEnvironment = webHostEnvironment;
-        }
-        
-        #region DesignationInfo
-        [CustomAuthorization]
-        public async Task<IActionResult> DesignationList(string data = "")
-        {
-
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+	public class ConfigurationController : Controller
+	{
+		private readonly HttpClient _client;
+		private IWebHostEnvironment _webHostEnvironment;
+		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+		{
+			_client = httpClient.CreateClient("APIClient");
+			_webHostEnvironment = webHostEnvironment;
+		}
 
+		#region DesignationInfo
+		[CustomAuthorization]
+		public async Task<IActionResult> DesignationList(string data = "")
+		{
 
-            ViewBag.Success = data;
-            Designation ObjDesignation = new Designation();
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ObjDesignation.CompanyId = userObject.CompanyId;
+			ViewBag.Success = data;
+			Designation ObjDesignation = new Designation();
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			ObjDesignation.CompanyId = userObject.CompanyId;
 
-            if (Token != null)
-            {
 
 
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjDesignation.Listdesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
+			if (Token != null)
+			{
 
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
 
+				HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}");
+				if (message.IsSuccessStatusCode)
+				{
+					var result = message.Content.ReadAsStringAsync().Result;
+					ObjDesignation.Listdesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
 
-            return View(ObjDesignation);
-        }
-        public async Task<IActionResult> DesignationDetails(int id)
-        {
+				}
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            Designation designation = new Designation();
-            var response = await _client.GetAsync($"api/Configuration/GetDesignationInfoId{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                designation = JsonConvert.DeserializeObject<Designation>(content);
-                return Json(designation);
-            }
-            else
-            {
+			return View(ObjDesignation);
+		}
+		public async Task<IActionResult> DesignationDetails(int id)
+		{
 
-                return Json(null);
-            }
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-           
-        }
-       
-        
-        [HttpPost]
-        public async Task<IActionResult> DesignationCreateOrUpdate(Designation ObjDesignation)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			Designation designation = new Designation();
+			var response = await _client.GetAsync($"api/Configuration/GetDesignationInfoId{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				designation = JsonConvert.DeserializeObject<Designation>(content);
+				return Json(designation);
+			}
+			else
+			{
 
-               // var DesignationResume = my.Files.GetFile("DesignationResume");
+				return Json(null);
+			}
 
-                //ObjDesignation.AttachmentPath = uploadImage(ObjDesignation.Name, DesignationResume, "DesignationAttachment");
 
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjDesignation.CompanyId = userObject.CompanyId;
-                ObjDesignation.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/DesignationAddOrUpdate", ObjDesignation);
+		}
 
-                if (message.IsSuccessStatusCode)
-                {
 
-                    var body = message.Content.ReadAsStringAsync();
+		[HttpPost]
+		public async Task<IActionResult> DesignationCreateOrUpdate(Designation ObjDesignation)
+		{
+			try
+			{
+				var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+				_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+				// var DesignationResume = my.Files.GetFile("DesignationResume");
 
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
+				//ObjDesignation.AttachmentPath = uploadImage(ObjDesignation.Name, DesignationResume, "DesignationAttachment");
 
+				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+				ObjDesignation.CompanyId = userObject.CompanyId;
+				ObjDesignation.CreatedBy = userObject.UserId;
+				HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/DesignationAddOrUpdate", ObjDesignation);
 
-                    int status = 0;
-                    if (model.Success)
-                    {
+				if (message.IsSuccessStatusCode)
+				{
 
+					var body = message.Content.ReadAsStringAsync();
 
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
 
+					var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
-                    }
 
-                    return RedirectToAction("DesignationList", new { data = status });
+					int status = 0;
+					if (model.Success)
+					{
 
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User",  new {id=2 });
-                }
 
+						if (model.Message.Contains("Insert"))
+						{
+							status = 1;
+						}
+						else if (model.Message.Contains("Update"))
+						{
+							status = 2;
+						}
 
 
-            }
-            catch (Exception)
-            {
+					}
 
-                return View();
-            }
-        }
-        public async Task<IActionResult> DesignationDelete(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+					return RedirectToAction("DesignationList", new { data = status });
 
+				}
+				else
+				{
+					return RedirectToAction("Loginpage", "User", new { id = 2 });
+				}
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteDesignationInfo{id}/{userObject.UserId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
 
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
+			}
+			catch (Exception)
+			{
 
+				return View();
+			}
+		}
+		public async Task<IActionResult> DesignationDelete(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-                int status = 0;
-                if (model.Success)
-                {
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
+			HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteDesignationInfo{id}/{userObject.UserId}");
+			if (message.IsSuccessStatusCode)
+			{
+				var body = message.Content.ReadAsStringAsync();
 
+				var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
 
-                }
+				int status = 0;
+				if (model.Success)
+				{
 
-                return RedirectToAction("DesignationList", new { data = status });
 
-            }
+					if (model.Message.Contains("Delete"))
+					{
+						status = 3;
+					}
 
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-            }
 
-        }
 
-        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
-        {
+				}
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+				return RedirectToAction("DesignationList", new { data = status });
 
+			}
 
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
+		}
 
+		public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
+		{
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/DesignationCheckData{id}/{title}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
 
-            }
 
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-            }
-        }
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
 
-        #endregion
 
-        #region Department Info
 
-        [CustomAuthorization]
-        public async Task<IActionResult> DepartmentList(string data = "" )
-        {
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-            
-            ViewBag.Success = data;
+			HttpResponseMessage message = await _client.GetAsync($"api/Configuration/DesignationCheckData{id}/{title}/{CompanyId}");
+			if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				return Json(result);
 
-            Department departments = new Department();
-            
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            departments.CompanyId = userObject.CompanyId;
-
-            //if (id > 0)
-            //{
-            //    departments = await GetDepartmentById(id);
-            //}
-          
-
-            if (Token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{departments.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    departments.Listdepartments = JsonConvert.DeserializeObject<List<Department>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-            return View(departments);
-        }
-
-        //public async Task<IActionResult> DepartmentDetails(int id)
-        //{
-        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-        //    if (Token != null)
-        //    {
-        //        Department department = await GetDepartmentById(id);
-        //        return View(department);
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
-        //    }
-        //}
-
-        public async Task<IActionResult> GetDepartmentById(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            Department department = new Department();
-            var response = await _client.GetAsync($"api/Configuration/GetDepartmentById{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                department = JsonConvert.DeserializeObject<Department>(content);
-                return Json(department);
-            }
-            else {
-
-                return Json(null);
-            }
-
-        
-        }
-
-        public async Task<IActionResult> GetDepartmentCreateOrUpdate(int id)
-        {         
-                return RedirectToAction("DepartmentList", new { id = id });  
-        }
-
-        public async Task<IActionResult> DepartmentCreateOrUpdate(IFormCollection MyAttachment, Department department)
-        {
-            //file add
-            var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
-            department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
-            ///
-
-            //token get from session
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            //
-
-            //user get from session
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            department.CompanyId = userObject.CompanyId;
-            department.CreatedBy = userObject.UserId;
-
-            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostDepartment", department);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content.Result);
-                int status = 0;
-
-
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Insert"))
-                    {
-                        status = 1;
-                    }
-                    else if (result.Message.Contains("Update"))
-                    {
-                        status = 2;
-                    }
-                }
-                return RedirectToAction("DepartmentList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
-
-        public async Task<IActionResult> DepartmentDelete(int id )
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-
-            var response = await _client.GetAsync($"api/Configuration/DeleteDepartment{id}/{userObject.UserId}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content);
-                int status = 0;
-
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-                }
-                return RedirectToAction("DepartmentList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
+			}
 
-        public async Task<IActionResult> DepartmentAlreadyExists(int id, string title)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-            var response = await _client.GetAsync($"api/Configuration/DepartmentAlreadyExists{CompanyId}/{id}/{title}");
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync().Result;
-                return Json(content);
-            }
-            return RedirectToAction("Loginpage", "User", new { id = 2 });
-        }
+		#endregion
 
-        #endregion
+		#region Department Info
 
+		[CustomAuthorization]
+		public async Task<IActionResult> DepartmentList(string data = "")
+		{
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-        #region LeaveTypeInfo
-        [CustomAuthorization]
-        public async Task<IActionResult> LeaveTypeList(string data = "")
-        {
+			ViewBag.Success = data;
 
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+			Department departments = new Department();
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			departments.CompanyId = userObject.CompanyId;
 
-            ViewBag.Success = data;
-            List<LeaveType> ObjLeaveType = new List<LeaveType>();
+			//if (id > 0)
+			//{
+			//    departments = await GetDepartmentById(id);
+			//}
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
+			if (Token != null)
+			{
+				HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{departments.CompanyId}");
+				if (response.IsSuccessStatusCode)
+				{
+					var content = await response.Content.ReadAsStringAsync();
+					departments.Listdepartments = JsonConvert.DeserializeObject<List<Department>>(content);
+				}
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+			return View(departments);
+		}
 
+		//public async Task<IActionResult> DepartmentDetails(int id)
+		//{
+		//    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+		//    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+		//    if (Token != null)
+		//    {
+		//        Department department = await GetDepartmentById(id);
+		//        return View(department);
+		//    }
+		//    else
+		//    {
+		//        return RedirectToAction("Loginpage", "User", new { id = 2 });
+		//    }
+		//}
+
+		public async Task<IActionResult> GetDepartmentById(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+			Department department = new Department();
+			var response = await _client.GetAsync($"api/Configuration/GetDepartmentById{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				department = JsonConvert.DeserializeObject<Department>(content);
+				return Json(department);
+			}
+			else
+			{
+
+				return Json(null);
+			}
+
+
+		}
+
+		public async Task<IActionResult> GetDepartmentCreateOrUpdate(int id)
+		{
+			return RedirectToAction("DepartmentList", new { id = id });
+		}
+
+		public async Task<IActionResult> DepartmentCreateOrUpdate(IFormCollection MyAttachment, Department department)
+		{
+			//file add
+			var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
+			department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
+			///
+
+			//token get from session
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			//
+
+			//user get from session
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			department.CompanyId = userObject.CompanyId;
+			department.CreatedBy = userObject.UserId;
 
+			HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostDepartment", department);
+			if (response.IsSuccessStatusCode)
+			{
+				var content = response.Content.ReadAsStringAsync();
+				var result = JsonConvert.DeserializeObject<Response>(content.Result);
+				int status = 0;
 
-            if (Token != null)
-            {
 
+				if (result.Success)
+				{
+					if (result.Message.Contains("Insert"))
+					{
+						status = 1;
+					}
+					else if (result.Message.Contains("Update"))
+					{
+						status = 2;
+					}
+				}
+				return RedirectToAction("DepartmentList", new { data = status });
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
 
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjLeaveType = JsonConvert.DeserializeObject<List<LeaveType>>(result);
+		public async Task<IActionResult> DepartmentDelete(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
 
-            return View(ObjLeaveType);
-        }
-        public async Task<IActionResult> LeaveTypeDetails(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var response = await _client.GetAsync($"api/Configuration/DeleteDepartment{id}/{userObject.UserId}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var result = JsonConvert.DeserializeObject<Response>(content);
+				int status = 0;
 
+				if (result.Success)
+				{
+					if (result.Message.Contains("Delete"))
+					{
+						status = 3;
+					}
+				}
+				return RedirectToAction("DepartmentList", new { data = status });
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
 
+		public async Task<IActionResult> DepartmentAlreadyExists(int id, string title)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
+			var response = await _client.GetAsync($"api/Configuration/DepartmentAlreadyExists{CompanyId}/{id}/{title}");
 
-            if (Token != null)
-            {
+			if (response.IsSuccessStatusCode)
+			{
+				var content = response.Content.ReadAsStringAsync().Result;
+				return Json(content);
+			}
+			return RedirectToAction("Loginpage", "User", new { id = 2 });
+		}
 
-                LeaveType ObjLeaveType = await GetLeaveTypebyID(id);
+		#endregion
 
-                return View(ObjLeaveType);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
 
-            }
-        }
-        private async Task<LeaveType> GetLeaveTypebyID(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+		#region LeaveTypeInfo
+		[CustomAuthorization]
+		public async Task<IActionResult> LeaveTypeList(string data = "")
+		{
 
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
 
-            LeaveType ObjLeaveType = new LeaveType();
+			ViewBag.Success = data;
+			List<LeaveType> ObjLeaveType = new List<LeaveType>();
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjLeaveType = JsonConvert.DeserializeObject<LeaveType>(result);
 
-            }
+			if (Token != null)
+			{
 
-            return ObjLeaveType;
-        }
-        [HttpGet]
-        public async Task<IActionResult> LeaveTypeCreateOrUpdate(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            //Get Instutute ID through Sessions
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
+				HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
+				if (message.IsSuccessStatusCode)
+				{
+					var result = message.Content.ReadAsStringAsync().Result;
+					ObjLeaveType = JsonConvert.DeserializeObject<List<LeaveType>>(result);
 
-            if (Token != null)
-            {
+				}
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
 
+			return View(ObjLeaveType);
+		}
+		public async Task<IActionResult> LeaveTypeDetails(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 
 
-                if (id == 0)
-                {
-                    LeaveType Info = new LeaveType();
+			if (Token != null)
+			{
 
-                    return View(Info);
-                }
-                LeaveType LeaveTypeinfo = await GetLeaveTypebyID(id);
+				LeaveType ObjLeaveType = await GetLeaveTypebyID(id);
 
-                return View(LeaveTypeinfo);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
+				return View(ObjLeaveType);
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
 
-            }
-        }
-        [HttpPost]
-        public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			}
+		}
+		private async Task<LeaveType> GetLeaveTypebyID(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjLeaveType.CompanyId = userObject.CompanyId;
-                ObjLeaveType.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LeaveTypeAddOrUpdate", ObjLeaveType);
 
-                if (message.IsSuccessStatusCode)
-                {
 
-                    var body = message.Content.ReadAsStringAsync();
+			LeaveType ObjLeaveType = new LeaveType();
 
 
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
 
-                    int status = 0;
-                    if (model.Success)
-                    {
+			HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
+			if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				ObjLeaveType = JsonConvert.DeserializeObject<LeaveType>(result);
 
+			}
 
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
+			return ObjLeaveType;
+		}
+		[HttpGet]
+		public async Task<IActionResult> LeaveTypeCreateOrUpdate(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			//Get Instutute ID through Sessions
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			ViewBag.CompanyId = userObject.CompanyId;
 
-                    }
+			if (Token != null)
+			{
 
-                    return RedirectToAction("LeaveTypeList", new { data = status });
 
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
 
 
 
-            }
-            catch (Exception)
-            {
+				if (id == 0)
+				{
+					LeaveType Info = new LeaveType();
 
-                return View();
-            }
-        }
-        public async Task<IActionResult> LeaveTypeDelete(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+					return View(Info);
+				}
+				LeaveType LeaveTypeinfo = await GetLeaveTypebyID(id);
 
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLeaveTypeInfo{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
+				return View(LeaveTypeinfo);
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
 
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
+			}
+		}
+		[HttpPost]
+		public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)
+		{
+			try
+			{
+				var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+				_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+				ObjLeaveType.CompanyId = userObject.CompanyId;
+				ObjLeaveType.CreatedBy = userObject.UserId;
+				HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LeaveTypeAddOrUpdate", ObjLeaveType);
 
-                int status = 0;
-                if (model.Success)
-                {
+				if (message.IsSuccessStatusCode)
+				{
 
+					var body = message.Content.ReadAsStringAsync();
 
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
 
+					var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
 
-                }
+					int status = 0;
+					if (model.Success)
+					{
 
-                return RedirectToAction("LeaveTypeList", new { data = status });
 
-            }
+						if (model.Message.Contains("Insert"))
+						{
+							status = 1;
+						}
+						else if (model.Message.Contains("Update"))
+						{
+							status = 2;
+						}
 
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
 
-        }
+					}
 
-        public async Task<ActionResult<JsonObject>> LeaveTypeCheckData(int id, string title)
-        {
+					return RedirectToAction("LeaveTypeList", new { data = status });
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+				}
+				else
+				{
+					return RedirectToAction("Loginpage", "User", new { id = 2 });
+				}
 
 
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
+			}
+			catch (Exception)
+			{
 
+				return View();
+			}
+		}
+		public async Task<IActionResult> LeaveTypeDelete(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLeaveTypeInfo{id}");
+			if (message.IsSuccessStatusCode)
+			{
+				var body = message.Content.ReadAsStringAsync();
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeCheckData{id}/{title}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
+				var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
-            }
 
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-        }
+				int status = 0;
+				if (model.Success)
+				{
 
 
+					if (model.Message.Contains("Delete"))
+					{
+						status = 3;
+					}
 
 
 
+				}
 
+				return RedirectToAction("LeaveTypeList", new { data = status });
 
-        #endregion
+			}
 
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
+		}
 
+		public async Task<ActionResult<JsonObject>> LeaveTypeCheckData(int id, string title)
+		{
 
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
 
 
 
-        #region HOliday
-       [CustomAuthorization]
-        public async Task<IActionResult> HolidayList(string data = "")
-        {
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+			HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeCheckData{id}/{title}/{CompanyId}");
+			if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				return Json(result);
 
-            ViewBag.Success = data;
+			}
 
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
 
-            Holiday objHoliday = new Holiday();
 
-            #region Token Authentication & User Data
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            #endregion
 
-            objHoliday.CompanyId = userObject.CompanyId;
 
 
-            if (Token != null)
-            { 
-                HttpResponseMessage response = await  _client.GetAsync($"api/Configuration/GetHolidaysByCompanyID{objHoliday.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    objHoliday.ListOfHolidays = JsonConvert.DeserializeObject<List<Holiday>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-            return View(objHoliday);
 
-        }
 
+		#endregion
 
-        public async Task<IActionResult> GetHolidayByID(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            Holiday objholiday = new Holiday();
-            
-            var response = await _client.GetAsync($"api/Configuration/GetHolidayById{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                objholiday = JsonConvert.DeserializeObject<Holiday>(content);
-                return Json(objholiday);
-            }
-            else
-            {
 
-                return Json(null);
-            }
 
 
-        }
 
 
 
 
 
+		#region HOliday
+		[CustomAuthorization]
+		public async Task<IActionResult> HolidayList(string data = "")
+		{
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
+			ViewBag.Success = data;
 
 
+			Holiday objHoliday = new Holiday();
 
-        public async Task<IActionResult> HolidayCreateOrUpdate(Holiday objHoliday)
-        {
-            //token get from session
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            //
+			#region Token Authentication & User Data
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			#endregion
 
-            //user get from session
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            objHoliday.CompanyId = userObject.CompanyId;
-            objHoliday.CreatedBy = userObject.UserId;
+			objHoliday.CompanyId = userObject.CompanyId;
 
-            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostHoliday", objHoliday);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content.Result);
 
+			if (Token != null)
+			{
+				HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetHolidaysByCompanyID{objHoliday.CompanyId}");
+				if (response.IsSuccessStatusCode)
+				{
+					var content = await response.Content.ReadAsStringAsync();
+					objHoliday.ListOfHolidays = JsonConvert.DeserializeObject<List<Holiday>>(content);
+				}
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+			return View(objHoliday);
 
-                int status = 0;
+		}
 
 
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Insert"))
-                    {
-                        status = 1;
-                    }
-                    else if (result.Message.Contains("Update"))
-                    {
-                        status = 2;
-                    }
-                }
-                return RedirectToAction("HOlidayList", new { data = status });
+		public async Task<IActionResult> GetHolidayByID(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+			Holiday objholiday = new Holiday();
 
-        }
+			var response = await _client.GetAsync($"api/Configuration/GetHolidayById{id}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				objholiday = JsonConvert.DeserializeObject<Holiday>(content);
+				return Json(objholiday);
+			}
+			else
+			{
 
+				return Json(null);
+			}
 
 
-        public async Task<IActionResult> DeleteHoliday(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+		}
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
-            var response = await _client.GetAsync($"api/Configuration/DeleteHoliday{id}/{userObject.UserId}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content);
-                int status = 0;
 
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-                }
-                return RedirectToAction("HOlidayList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
 
-        }
 
 
-        public async Task<IActionResult> HolidayAlreadyExists(int id, DateTime HolidayDate)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
 
 
 
+		public async Task<IActionResult> HolidayCreateOrUpdate(Holiday objHoliday)
+		{
+			//token get from session
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			//
 
-            var response = await _client.GetAsync($"api/Configuration/HolidayAlreadyExistsss{CompanyId}/{id}/{HolidayDate.ToString("dd-MMM-yyyy")}");
+			//user get from session
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			objHoliday.CompanyId = userObject.CompanyId;
+			objHoliday.CreatedBy = userObject.UserId;
 
-            if (response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync().Result;
-                return Json(content);
-            }
-            return RedirectToAction("Loginpage", "User", new { id = 2 });
-        }
+			HttpResponseMessage response = await _client.PostAsJsonAsync("api/Configuration/PostHoliday", objHoliday);
+			if (response.IsSuccessStatusCode)
+			{
+				var content = response.Content.ReadAsStringAsync();
+				var result = JsonConvert.DeserializeObject<Response>(content.Result);
 
 
+				int status = 0;
 
 
+				if (result.Success)
+				{
+					if (result.Message.Contains("Insert"))
+					{
+						status = 1;
+					}
+					else if (result.Message.Contains("Update"))
+					{
+						status = 2;
+					}
+				}
+				return RedirectToAction("HOlidayList", new { data = status });
 
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
+		}
 
 
 
-        #endregion
+		public async Task<IActionResult> DeleteHoliday(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
+			var response = await _client.GetAsync($"api/Configuration/DeleteHoliday{id}/{userObject.UserId}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				var result = JsonConvert.DeserializeObject<Response>(content);
+				int status = 0;
 
-        // Code for save images into database
+				if (result.Success)
+				{
+					if (result.Message.Contains("Delete"))
+					{
+						status = 3;
+					}
+				}
+				return RedirectToAction("HOlidayList", new { data = status });
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
 
-        private string uploadImage(string name, IFormFile file, string root)
-        {
+		}
 
-            try
-            {
-                string fileName = string.Empty;
-                if (file != null)
-                {
-                    var fileExtension = Path.GetExtension(file.FileName);
-                    fileName = name + "-" + DateTime.Now.Ticks + fileExtension;
-                    var filepath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", root, fileName);
 
-                    var OldpathImage = filepath;
-                    if (System.IO.File.Exists(OldpathImage))
-                    {
-                        System.IO.File.Delete(OldpathImage);
-                    }
+		public async Task<IActionResult> HolidayAlreadyExists(int id, DateTime HolidayDate)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
 
 
-                    using (var stream = new FileStream(filepath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
 
-                    return "/Images/" + root + "/" + fileName;    // Path.GetFullPath( filepath);// @"/Images/" + root + "/" + fileName;
-                }
-                else
-                {
 
-                    return "";
-                }
-            }
-            catch (Exception ex)
-            {
+			var response = await _client.GetAsync($"api/Configuration/HolidayAlreadyExistsss{CompanyId}/{id}/{HolidayDate.ToString("dd-MMM-yyyy")}");
 
-                throw;
-            }
+			if (response.IsSuccessStatusCode)
+			{
+				var content = response.Content.ReadAsStringAsync().Result;
+				return Json(content);
+			}
+			return RedirectToAction("Loginpage", "User", new { id = 2 });
+		}
 
 
-        }
 
 
 
 
 
-    }
+
+
+		#endregion
+
+
+
+		// Code for save images into database
+
+		private string uploadImage(string name, IFormFile file, string root)
+		{
+
+			try
+			{
+				string fileName = string.Empty;
+				if (file != null)
+				{
+					var fileExtension = Path.GetExtension(file.FileName);
+					fileName = name + "-" + DateTime.Now.Ticks + fileExtension;
+					var filepath = Path.Combine(_webHostEnvironment.WebRootPath, "Images", root, fileName);
+
+					var OldpathImage = filepath;
+					if (System.IO.File.Exists(OldpathImage))
+					{
+						System.IO.File.Delete(OldpathImage);
+					}
+
+
+					using (var stream = new FileStream(filepath, FileMode.Create))
+					{
+						file.CopyTo(stream);
+					}
+
+					return "/Images/" + root + "/" + fileName;    // Path.GetFullPath( filepath);// @"/Images/" + root + "/" + fileName;
+				}
+				else
+				{
+
+					return "";
+				}
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
+
+		}
+
+
+
+
+
+	}
 }

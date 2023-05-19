@@ -104,7 +104,9 @@ namespace HRHUBWEB.Controllers
             ViewBag.BloodGroup = GetBloodGroup();
             ViewBag.ObjSalaryMethod = GetSalaryMethod();
 
-			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            Staff staff = new Staff();
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
@@ -127,13 +129,22 @@ namespace HRHUBWEB.Controllers
                     ViewBag.ObjDesignationList = JsonConvert.DeserializeObject<List<Designation>>(result);
                 }
 
+                
+
                 if (Id == 0)
 				{
-					Staff Info = new Staff();
-					return View(Info);
+                    Staff Info = new Staff();
+                    return View(Info);
 				}
-				Staff staff = await GetStaffById(Id);
-				return View(staff);
+				staff = await GetStaffById(Id);
+                //Staff Document Details
+                HttpResponseMessage response4 = await _client.GetAsync($"api/Staffs/GetStaffDocumentDetail{Id}");
+                if (response4.IsSuccessStatusCode)
+                {
+                    var result = response4.Content.ReadAsStringAsync().Result;
+                    staff.StaffAttachmentList = JsonConvert.DeserializeObject<List<StaffAttachment>>(result);
+                }
+                return View(staff);
 			}
 			else
 			{
@@ -171,21 +182,79 @@ namespace HRHUBWEB.Controllers
             return listobj; 
 		}
 
-        private void StaffAttachments(Staff objStaff)
+        private void StaffAttachmentsDetail(Staff objStaff)
         {
-
             List<StaffAttachment> ListobjDoc = new List<StaffAttachment>();
             int i = 0;
-            foreach (var item in objStaff.DocFiles)
+            int j = 0;
+
+            foreach (var item in objStaff.DocumentTitle)
+            {
+                if (!string.IsNullOrWhiteSpace(item))
+                {
+                    //DocFiles
+                    StaffAttachment objDoc = new StaffAttachment();
+
+                    if (objStaff.DocumentPath != null && objStaff.DocumentPath.Count() > 0 && i < objStaff.DocumentPath.Count())
+                    {
+                        objDoc.DocumentPath = objStaff.DocumentPath.ToArray()[i];
+                        objDoc.DocumentTitle = objStaff.DocumentTitle.ToArray()[i];
+                        objDoc.IsDeleted = false;
+                        objDoc.CreatedOn = DateTime.Now;
+                        objDoc.CreatedBy = objStaff.CreatedBy;
+                        ListobjDoc.Add(objDoc);
+                    }
+                    else
+                    {
+                        objDoc.DocumentPath = UploadImage(objStaff.DocumentTitle.ToArray()[i] + '-' + DateTime.Now.Ticks, objStaff.DocFiles.ToArray()[j], "StaffImages");
+                        objDoc.DocumentTitle = objStaff.DocumentTitle.ToArray()[i];
+                        objDoc.IsDeleted = false;
+                        objDoc.CreatedOn = DateTime.Now;
+                        objDoc.CreatedBy = objStaff.CreatedBy;
+                        ListobjDoc.Add(objDoc);
+                        j++;
+                    }
+                }
+                i++;
+            }
+
+            /*
+            List<string> myCollection = new List<string>();
+
+            if (objStaff.DocumentPath != null && objStaff.DocumentPath.Count() > 0)
+            {
+                foreach (var item in objStaff.DocumentPath)
+                {
+                    myCollection.Add(item.ToString());
+
+                }
+            }
+
+            i = 0;
+            if (objStaff.DocFiles != null && objStaff.DocFiles.Count() > 0)
+            {
+
+                foreach (var item in objStaff.DocFiles)
+                {
+
+                    myCollection.Add(UploadImage("StaffDoc-" + DateTime.Now.Ticks.ToString(), item, "StaffImages"));
+
+                }
+            }
+
+            foreach (var item in myCollection)
             {
                 StaffAttachment objDoc = new StaffAttachment();
-                objDoc.DocumentPath = UploadImage(objStaff.DocumentTitle.ToArray()[i] + '-' + DateTime.Now.Ticks, item, "StaffImages");
+                objDoc.DocumentPath = item;
                 objDoc.DocumentTitle = objStaff.DocumentTitle.ToArray()[i];
+                objDoc.IsDeleted = false;
                 objDoc.CreatedOn = DateTime.Now;
                 objDoc.CreatedBy = objStaff.CreatedBy;
                 ListobjDoc.Add(objDoc);
                 i++;
             }
+            */
+
             objStaff.DocFiles = null;
             objStaff.StaffAttachmentList = ListobjDoc;
            
@@ -197,14 +266,16 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
-            var staffImage = objForm.Files.GetFile("UserImageAttachmentFile");
-			objStaff.SnapPath = UploadImage(objStaff.FirstName, staffImage, "StaffImages");
-
             objStaff.CompanyId = userObject.CompanyId;
 			objStaff.CreatedBy = userObject.UserId;
-            objStaff.CreatedOn = DateTime.Now;  
-            //staff Attachment
-            StaffAttachments(objStaff);
+            objStaff.CreatedOn = DateTime.Now;
+
+            var staffImage = objForm.Files.GetFile("StaffImageAttachmentFile");
+            objStaff.SnapPath = UploadImage(objStaff.FirstName + '-' + DateTime.Now.Ticks, staffImage, "StaffImages");
+            //var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
+            //department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
+
+            StaffAttachmentsDetail(objStaff);
 
             HttpResponseMessage response = await _client.PostAsJsonAsync("api/Staffs/PostStaff", objStaff);
 
