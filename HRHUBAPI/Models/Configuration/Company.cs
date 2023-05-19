@@ -366,35 +366,7 @@ namespace HRHUBAPI.Models
 		}
 
 
-		//Get data user table for company setting
-
-		//public async Task<Staff> GetStaffByCompanyId(int CompanyId, HrhubContext _context)
-		//{
-		//	try
-		//	{
-
-		//		var result = await _context.Staff.FirstOrDefaultAsync(x => x.CompanyId == CompanyId);
-		//		if (result != null)
-		//		{
-		//			return result;
-		//		}
-		//		else
-		//		{
-		//			return null;
-
-		//		}
-
-
-
-		//	}
-		//	catch (Exception ex)
-		//	{
-
-		//		throw;
-
-		//	}
-		//}
-
+		
 
 	}
 }
