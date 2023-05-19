@@ -69,6 +69,14 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<StaffCustomField> StaffCustomFields { get; set; }
 
+    public virtual DbSet<StaffLeaveAllocation> StaffLeaveAllocations { get; set; }
+
+    public virtual DbSet<StaffSalary> StaffSalaries { get; set; }
+
+    public virtual DbSet<StaffSalaryDetail> StaffSalaryDetails { get; set; }
+
+    public virtual DbSet<StaffCustomField> StaffCustomFields { get; set; }
+
     public virtual DbSet<StaffSalary> StaffSalaries { get; set; }
 
     public virtual DbSet<StaffSalaryDetail> StaffSalaryDetails { get; set; }
@@ -432,6 +440,16 @@ public partial class HrhubContext : DbContext
         {
             entity.ToTable("SalaryStatus");
 
+            entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<SalaryStatus>(entity =>
+        {
+            entity.ToTable("SalaryStatus");
+
             entity.Property(e => e.SalaryStatusId)
                 .ValueGeneratedNever()
                 .HasColumnName("SalaryStatusID");
@@ -525,6 +543,48 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<StaffLeaveAllocation>(entity =>
+        {
+            entity.HasKey(e => e.LeaveAllocationId);
+
+            entity.ToTable("StaffLeaveAllocation");
+
+            entity.Property(e => e.LeaveAllocationId).HasColumnName("LeaveAllocationID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<StaffSalary>(entity =>
+        {
+            entity.ToTable("StaffSalary");
+
+            entity.Property(e => e.StaffSalaryId)
+                .ValueGeneratedNever()
+                .HasColumnName("StaffSalaryID");
+            entity.Property(e => e.StaffDocumentId).HasColumnName("StaffDocumentID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DocumentPath).IsUnicode(false);
+            entity.Property(e => e.DocumentTitle).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<StaffCustomField>(entity =>
+        {
+            entity.Property(e => e.StaffCustomFieldId)
+                .ValueGeneratedNever()
+                .HasColumnName("StaffCustomFieldID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DataType).IsUnicode(false);
+            entity.Property(e => e.DefaultValue).IsUnicode(false);
+            entity.Property(e => e.FieldName).IsUnicode(false);
+            entity.Property(e => e.PlaceholderHelpText).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StaffSalary>(entity =>
         {
             entity.ToTable("StaffSalary");
@@ -533,6 +593,10 @@ public partial class HrhubContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("StaffSalaryID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.GrossSalary).HasColumnType("money");
+            entity.Property(e => e.NetSalary).HasColumnType("money");
+            entity.Property(e => e.SalaryMonth).HasColumnType("date");
+            entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
             entity.Property(e => e.NetSalary).HasColumnType("money");
             entity.Property(e => e.SalaryMonth).HasColumnType("date");
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
@@ -563,6 +627,26 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.BackGroundClass).IsUnicode(false);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<TaxSlabSetting>(entity =>
+        {
+            entity.HasKey(e => e.SlabId);
+
+            entity.ToTable("TaxSlabSetting");
+
+            entity.Property(e => e.SlabId).ValueGeneratedNever();
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.MaxIncome)
+                .HasColumnType("money")
+                .HasColumnName("Max_Income");
+            entity.Property(e => e.MinIncome)
+                .HasColumnType("money")
+                .HasColumnName("Min_Income");
+            entity.Property(e => e.TaxRatePercentage).HasColumnType("money");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
