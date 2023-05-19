@@ -213,38 +213,28 @@ namespace HRHUBAPI.Models
 
 
 
+		// Get single record of User by company ID
+		public async Task<User> GetUserCompanyVise(int CompanyId, HrhubContext hrhubContext)
+		{
+			try
+			{
+				var dbResult = await hrhubContext.Users.FirstOrDefaultAsync(x =>  x.CompanyId == CompanyId);
+				if (dbResult != null)
+				{
+					return dbResult;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			catch { throw; }
+		}
 
-		//public async Task<bool> AlreadyExist(int userid, string username, HrhubContext _context)
-		//      {
-		//          try
-		//          {
-		//              if (userid > 0)
-		//              {
-		//                  var result = await _context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == username.ToLower() && x.UserId != userid);
-		//                  if (result != null)
-		//                  {
-		//                      return true;
-		//                  }
 
 
-		//              }
-		//              else
-		//              {
-		//                  var result = _context.Users.FirstOrDefaultAsync(x => x.UserName == username);
-		//                  if (result != null)
-		//                  {
-		//                      return true;
-		//                  }
 
-		//              }
 
-		//              return false;
-		//          }
-		//          catch (Exception)
-		//          {
 
-		//              throw;
-		//          }
-		//      }
 	}
 }

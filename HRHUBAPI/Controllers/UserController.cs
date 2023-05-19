@@ -198,5 +198,26 @@ namespace SchoolManagementSystem.API.Controllers
 
 
 
+
+
+		// Get single record of User by company ID
+
+		[HttpGet("GetUserCompanyViseId{CompanyId}")]
+		public async Task<ActionResult<User>> GetUserCompanyViseId(int CompanyId)
+		{
+			var dbResult = await new User().GetUserCompanyVise(CompanyId, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+
+
+
+
+
+
 	}
 }

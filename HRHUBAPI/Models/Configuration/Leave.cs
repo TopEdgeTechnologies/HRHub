@@ -191,69 +191,107 @@ namespace HRHUBAPI.Models
         }
 
 
-        //Load dropdown Leave data Id vise
-        //public async Task<List<Leave>> GetLeaveIdVise(int LeaveId,HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        //var list = await _context.LeaveInfos.Where(x=>x.IsDeleted==false).ToListAsync();
-        //        var list = await (from c in _context.Leaves
-        //                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-        //                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
-        //                          join s in _context.Sessions on c.SessionId equals s.SessionId
-
-        //                          where c.IsDeleted == false
-        //                          && cl.IsDeleted == false
-        //                          && g.IsDeleted == false
-        //                          && s.IsDeleted == false
-        //                          && c.LeaveId == LeaveId
-        //                          select new Leave()
-        //                          {
-        //                              LeaveId = c.LeaveId,
-        //                              Name = c.Name,
-        //                              AppliedForClassId = cl.ClassId,
-        //                              ClassTitle = cl.Title,
-        //                              GroupId = g.GroupId,
-        //                              GroupName = g.Title,
-        //                              SessionId = s.SessionId,
-        //                              SessionName = s.Title,
-        //                              Cnic = c.Cnic,
-        //                              AdmissionDate = c.AdmissionDate,
-        //                              LeaveNo = c.LeaveNo,
-        //                              Dob = c.Dob,
-        //                              FatherName = c.FatherName,
-        //                              Gender = c.Gender,
-        //                              Address= c.Address,
-        //                              City= c.City,
-        //                              Mobile = c.Mobile,
-        //                              Email= c.Email,
-        //                              PreviousSchool= c.PreviousSchool,
-        //                              FatherQualification = c.FatherQualification,
-        //                              MotherQualification = c.MotherQualification,
-        //                              MotherName= c.MotherName,
-        //                              ParentStaffId= c.ParentStaffId,
-        //                              FirstName = c.FirstName,
-        //                              LastName = c.LastName,
-        //                              IsActive = c.IsActive
-
-
-        //                          }).ToListAsync();
-
-        //        return list;
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
+		//Load dropdown LeaveStatus
+		public async Task<List<LeaveStatus>> GetLeaveStatus(HrhubContext hrhubContext)
+		{
+			try
+			{
+				List<LeaveStatus> objleaveStatus = new List<LeaveStatus>();
+				objleaveStatus = await hrhubContext.LeaveStatuses.Where(x => x.IsDeleted == false && x.Status==true).ToListAsync();
+				return objleaveStatus;
+			}
+			catch { throw; }
+		}
 
 
 
 
-    }
+		//Load dropdown WeekendRule
+		public async Task<List<WeekendRule>> GetWeekendRule(HrhubContext hrhubContext)
+		{
+			try
+			{
+				List<WeekendRule> objWeekendRule = new List<WeekendRule>();
+				objWeekendRule = await hrhubContext.WeekendRules.Where(x => x.IsDeleted == false && x.Status==true).ToListAsync();
+				return objWeekendRule;
+			}
+			catch { throw; }
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+		//Load dropdown Leave data Id vise
+		//public async Task<List<Leave>> GetLeaveIdVise(int LeaveId,HrhubContext _context)
+		//{
+		//    try
+		//    {
+		//        //var list = await _context.LeaveInfos.Where(x=>x.IsDeleted==false).ToListAsync();
+		//        var list = await (from c in _context.Leaves
+		//                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
+		//                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
+		//                          join s in _context.Sessions on c.SessionId equals s.SessionId
+
+		//                          where c.IsDeleted == false
+		//                          && cl.IsDeleted == false
+		//                          && g.IsDeleted == false
+		//                          && s.IsDeleted == false
+		//                          && c.LeaveId == LeaveId
+		//                          select new Leave()
+		//                          {
+		//                              LeaveId = c.LeaveId,
+		//                              Name = c.Name,
+		//                              AppliedForClassId = cl.ClassId,
+		//                              ClassTitle = cl.Title,
+		//                              GroupId = g.GroupId,
+		//                              GroupName = g.Title,
+		//                              SessionId = s.SessionId,
+		//                              SessionName = s.Title,
+		//                              Cnic = c.Cnic,
+		//                              AdmissionDate = c.AdmissionDate,
+		//                              LeaveNo = c.LeaveNo,
+		//                              Dob = c.Dob,
+		//                              FatherName = c.FatherName,
+		//                              Gender = c.Gender,
+		//                              Address= c.Address,
+		//                              City= c.City,
+		//                              Mobile = c.Mobile,
+		//                              Email= c.Email,
+		//                              PreviousSchool= c.PreviousSchool,
+		//                              FatherQualification = c.FatherQualification,
+		//                              MotherQualification = c.MotherQualification,
+		//                              MotherName= c.MotherName,
+		//                              ParentStaffId= c.ParentStaffId,
+		//                              FirstName = c.FirstName,
+		//                              LastName = c.LastName,
+		//                              IsActive = c.IsActive
+
+
+		//                          }).ToListAsync();
+
+		//        return list;
+
+
+
+		//    }
+		//    catch (Exception ex)
+		//    {
+
+		//        throw;
+
+		//    }
+		//}
+
+
+
+
+	}
 }

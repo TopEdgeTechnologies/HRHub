@@ -112,7 +112,28 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        #endregion
 
-    }
+		// Get single record of Staff by company ID
+
+		[HttpGet("GetStaffCompanyVise{CompanyId}")]
+		public async Task<ActionResult<Staff>> GetStaffCompanyVise(int CompanyId)
+		{
+			var dbResult = await new Staff().GetStaffCompanyId(CompanyId, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+
+
+
+
+
+
+
+		#endregion
+
+	}
 }

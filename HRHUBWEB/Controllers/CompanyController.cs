@@ -36,13 +36,14 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");         
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
+            var CompanyId = userObject.CompanyId;
             if (Token != null)
             {
 
 
-                HttpResponseMessage message = await _client.GetAsync($"api/Company/GetCompanyInfos");
+                HttpResponseMessage message = await _client.GetAsync($"api/Company/GetCompanyInfos{CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
@@ -83,22 +84,39 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            
 
+			Company ObjCompany = new Company();
+            var CompanyId = userObject.CompanyId;
+            var userId = userObject.UserId;
 
-            Company ObjCompany = new Company();
-
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Company/GetCompanyInfoId{id}");
+			HttpResponseMessage message = await _client.GetAsync($"api/Company/GetCompanyInfoId{id}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
-                ObjCompany = JsonConvert.DeserializeObject<Company>(result);
+                ObjCompany = JsonConvert.DeserializeObject<Company>(result);		
 
-            }
 
-            return ObjCompany;
+			}
+
+
+			var response = await _client.GetAsync($"api/Staffs/GetStaffCompanyVise{CompanyId}");
+			if (response.IsSuccessStatusCode)
+			{
+				var content = await response.Content.ReadAsStringAsync();
+				ObjCompany.SettingStaff = JsonConvert.DeserializeObject<Staff>(content);
+			}
+
+			var response1 = await _client.GetAsync($"api/User/GetUserCompanyViseId{userId}");
+			if (response1.IsSuccessStatusCode)
+			{
+				var content = await response1.Content.ReadAsStringAsync();
+				ObjCompany.SettingUser = JsonConvert.DeserializeObject<User>(content);
+			}
+
+
+			return ObjCompany;
         }
         [HttpGet]
         public async Task<IActionResult> CompanyCreateOrUpdate(int id)
@@ -229,9 +247,93 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-       
-      // check duplicate company email 
-        public async Task<ActionResult<JsonObject>> CompanyEmailCheckData(int id, string email)
+
+
+
+		// Company Settings 
+		[HttpGet]
+		public async Task<IActionResult> CompanySetting(int id)
+		{
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+			//Get Instutute ID through Sessions
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var CompanyId = userObject.CompanyId;
+
+			if (Token != null)
+			{
+				if (id == 0)
+				{
+					Company Info = new Company();
+					Info.LogoAttachment = "~/Images/CompanyLogo.png";
+
+					return View(Info);
+				}
+
+				//HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}");
+				//if (message1.IsSuccessStatusCode)
+				//{
+				//	var result = message1.Content.ReadAsStringAsync().Result;
+				//	ViewBag.Stafflist = JsonConvert.DeserializeObject<List<Staff>>(result);
+
+				//}
+
+
+                HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetLeaveStatusInfos");
+				if (message2.IsSuccessStatusCode)
+				{
+					var result = message2.Content.ReadAsStringAsync().Result;
+					ViewBag.LeaveStatusList = JsonConvert.DeserializeObject<List<LeaveStatus>>(result);
+
+				}
+
+
+				HttpResponseMessage message3 = await _client.GetAsync($"api/Leave/GetWeekendRuleInfos");
+				if (message3.IsSuccessStatusCode)
+				{
+					var result = message3.Content.ReadAsStringAsync().Result;
+					ViewBag.LeaveWeekendRule = JsonConvert.DeserializeObject<List<WeekendRule>>(result);
+
+				}
+
+
+
+
+
+
+
+				Company Companyinfo = await GetCompanybyID(id);
+
+				return View(Companyinfo);
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		// check duplicate company email 
+		public async Task<ActionResult<JsonObject>> CompanyEmailCheckData(int id, string email)
         {
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");

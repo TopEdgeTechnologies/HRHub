@@ -103,7 +103,35 @@ namespace HRHUBAPI.Models
             catch { throw; }
         }
 
-        public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
+
+
+        // Get single record of Staff by company ID
+		public async Task<Staff> GetStaffCompanyId(int CompanyId, HrhubContext hrhubContext)
+		{
+			try
+			{
+				var dbResult = await hrhubContext.Staff.FirstOrDefaultAsync(x => x.IsDeleted == false && x.CompanyId == CompanyId);
+				if (dbResult != null)
+				{
+					return dbResult;
+				}
+				else
+				{
+					return null;
+				}
+			}
+			catch { throw; }
+		}
+
+
+
+
+
+
+
+
+
+		public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {

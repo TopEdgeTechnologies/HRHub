@@ -13,6 +13,13 @@ namespace HRHUBAPI.Models
     public partial class Company
     {
 
+
+		[NotMapped]
+		public int LeaveStatusId { get; set; }
+		
+		[NotMapped]
+		public int StaffId { get; set; }
+
 		[NotMapped]
         public string? Staffname { get; set; }
         [NotMapped]
@@ -29,12 +36,29 @@ namespace HRHUBAPI.Models
         public string Username { get; set; }= string.Empty;
 		[NotMapped]
         public string UserPassword { get; set; }= string.Empty;
-		public async Task<List<Company>> GetCompany(HrhubContext _context)
+
+
+		[NotMapped]
+		public User? SettingUser { get; set; }
+		[NotMapped]
+		public WeekendRule? SettingWeekendRule { get; set; }
+
+		[NotMapped]
+		public Staff? SettingStaff { get; set; }
+
+		[NotMapped]
+		public AttendanceStatus? SettingAttendanceStatus { get; set; }
+
+		[NotMapped]
+		public LeaveApproval? SettingLeaveApproval { get; set; }
+
+
+		public async Task<List<Company>> GetCompany(int CompanyId,HrhubContext _context)
         {
             try
             {
                 List<Company> list = new List<Company>();
-                    list =await _context.Companies.Where(x=>x.IsDeleted==false).ToListAsync();
+                    list =await _context.Companies.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
 
                 return list;
               
@@ -312,6 +336,37 @@ namespace HRHUBAPI.Models
 		}
 
 
+		//Get data user table for company setting
+
+		public async Task<User> GetUserByCompanyId(int userId, HrhubContext _context)
+		{
+			try
+			{
+
+				var result = await _context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+				if (result != null)
+				{
+					return result;
+				}
+				else
+				{
+					return null;
+
+				}
+
+
+
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+
+			}
+		}
+
+
+		
 
 	}
 }
