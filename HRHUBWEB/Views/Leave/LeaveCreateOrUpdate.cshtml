@@ -8,10 +8,9 @@
 
 <style>
 
-    .note-editing-area{
-        height:400px !important
+    .note-editing-area {
+        height: 400px !important
     }
-
 
 </style>
 
@@ -36,9 +35,9 @@
     @using (@Html.BeginForm("LeaveCreateOrUpdate", "Leave", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
 
-    <!-- Row -->
+        <!-- Row -->
 
-    <div class="row">
+        <div class="row">
 
 
             <div class="col-xl-4 col-md-12 col-lg-12">
@@ -47,7 +46,7 @@
                         <h4 class="card-title">Apply Leaves</h4>
                     </div>
                     <div class="card-body">
-                        <input type="hidden" asp-for="LeaveId"  />
+                        <input type="hidden" asp-for="LeaveId" />
                         <div class="leave-types">
                             <div class="form-group">
                                 <label class="form-label">Leaves Dates</label>
@@ -57,23 +56,27 @@
                                 </select>
                             </div>
                             <div class="leave-content active" id="single">
-                                <div class="form-group">
+                                <div class="row form-group">
                                     <label class="form-label">Date Range:</label>
-                                    <div class="input-group">
-                                        <input type="date" asp-for="StartDate" class="form-control fc-datepicker" placeholder="select date" />
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <i class="bx bx-calendar"></i>
-                                            </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-12">
+                                        <div class="input-group">
+                                            <input type="date" asp-for="StartDate" class="form-control fc-datepicker" placeholder="select date" />
+                                            @* <div class="input-group-append">
+                                        <div class="input-group-text">
+                                        <i class="bx bx-calendar"></i>
                                         </div>
-
+                                        </div>
+                                        *@
+                                        </div>
                                     </div>
-                                    <div class="input-group" hidden id="divMultipleDate">
-                                        <input type="date" asp-for="EndDate" class="form-control fc-datepicker" placeholder="select date" />
-                                        <div class="input-group-append">
-                                            <div class="input-group-text">
-                                                <i class="bx bx-calendar"></i>
-                                            </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-12">
+                                        <div class="input-group" hidden id="divMultipleDate">
+                                            <input type="date" asp-for="EndDate" class="form-control fc-datepicker" placeholder="select date" />
+                                            @*<div class="input-group-append">
+                                        <div class="input-group-text">
+                                        <i class="bx bx-calendar"></i>
+                                        </div>
+                                        </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +85,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Leaves Types</label>
-                                <select asp-for="LeaveTypeId" class="form-control" asp-items="@(new SelectList(@ViewBag.LeaveTypes,"LeaveTypeId" ,"Title"))">
+                                <select asp-for="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
                                     <option value="">Select Leave Type</option>
                                 </select>
                             </div>
@@ -139,36 +142,54 @@
                 </div>
             </div>
 
-       
 
-        <div class="col-xl-4 col-md-12 col-lg-12">
-            <div class="card">
-                <div class="card-header  border-0">
-                    <h4 class="card-title">Leaves Overview</h4>
-                </div>
-                <div class="card-body">
-                    <div id="leavesoverview" class="mx-auto pt-2"></div>
-                    <div class="row pt-4 mx-auto text-center">
-                        <div class="col-lg-9 col-md-12 mx-auto d-block">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="d-flex font-weight-semibold">
-                                        <span class="dot-label bg-primary me-2 my-auto"></span>Casual Leaves
-                                    </div>
+
+            <div class="col-xl-4 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header  border-0">
+                        <h4 class="card-title">Leaves Overview</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-0 pb-0">
+                            @foreach (var item in Model.ListleaveTypes)
+                            {
+                                <div class="col-4 text-center py-5 border-end">
+                                    <h5>@item.Title</h5>
+                                    <div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> @item.NoOfLeaves</span></div>
                                 </div>
-                                <div class="col-md-6 mt-3 mt-md-0">
-                                    <div class="d-flex font-weight-semibold">
-                                        <span class="dot-label badge-danger me-2 my-auto"></span>Sick Leaves
+                            }
+                            @*   <div class="col-4 text-center py-5 border-end">
+                        <h5>Sick leave</h5>
+                        <div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
+                        </div>
+                        <div class="col-4 text-center py-5">
+                        <h5>Unpaid leave</h5>
+                        <div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
+                        </div>*@
+                        </div>
+                        <div id="leavesoverview" class="mx-auto pt-2"></div>
+                        <div class="row pt-4 mx-auto text-center">
+                            <div class="col-lg-9 col-md-12 mx-auto d-block">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="d-flex font-weight-semibold">
+                                            <span class="dot-label bg-primary me-2 my-auto"></span>Casual Leaves
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="d-flex font-weight-semibold">
-                                        <span class="dot-label bg-secondary me-2 my-auto"></span>Gifted Leaves
+                                    <div class="col-md-6 mt-3 mt-md-0">
+                                        <div class="d-flex font-weight-semibold">
+                                            <span class="dot-label badge-danger me-2 my-auto"></span>Sick Leaves
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="d-flex font-weight-semibold">
-                                        <span class="dot-label bg-success me-2 my-auto"></span>Remaining Leaves
+                                    <div class="col-md-6 mt-3">
+                                        <div class="d-flex font-weight-semibold">
+                                            <span class="dot-label bg-secondary me-2 my-auto"></span>Gifted Leaves
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt-3">
+                                        <div class="d-flex font-weight-semibold">
+                                            <span class="dot-label bg-success me-2 my-auto"></span>Remaining Leaves
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -177,9 +198,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- End Row-->
-        }
+        <!-- End Row-->
+    }
 </div>
 
 
@@ -192,8 +212,8 @@
 
             $('#LeaveTypeId').select2();
             debugger;
-            if(@Model.LeaveId > 0){
-                if ($('#StartDate').val() != $('#EndDate').val()){
+            if (@Model.LeaveId > 0) {
+                if ($('#StartDate').val() != $('#EndDate').val()) {
                     $('#daterange-categories').val('multiple').change();
                     $("#divMultipleDate").attr("hidden", false);
                 }
@@ -345,14 +365,15 @@
                 $("#divMultipleDate").attr("hidden", false);
             }
             else {
-                //$("#StartDate").val("");
-                //$("#EndDate").val("");
+                var strtdate = $("#StartDate").val();
+                $("#EndDate").val(strtdate);
                 $("#divMultipleDate").attr("hidden", true);
             }
+            DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })
 
         $("#StartDate").change(function () {
-            //debugger;
+            debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "single") {
                 var strtdate = $("#StartDate").val();
@@ -369,7 +390,7 @@
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })
 
-        function DateRangeinDays(startdate,enddate){
+        function DateRangeinDays(startdate, enddate) {
             if (startdate != "" && enddate != "") {
 
                 var startdate = new Date($("#StartDate").val());

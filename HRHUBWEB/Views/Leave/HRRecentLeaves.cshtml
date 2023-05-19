@@ -1,0 +1,406 @@
+﻿@model HRHUBAPI.Models.Leave
+
+
+<!-- Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Recent Leave Applications</h4>
+                <div class="card-options">
+                    <div class="btn-list">
+
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    @foreach (var item in Model.ListNewOrPendingleaves)
+                    {
+                        <div class="col-xl-3 col-lg-6 col-md-12">
+                            <div class="card border p-0 shadow-none">
+                                <div class="card-header border-0">
+                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId"><h3 class="card-title">@item.LeaveTypeTitle Leave</h3></a>
+                                </div>
+                                <div class="d-flex p-4">
+                                    <div>
+                                        <div class="avatar avatar-lg brround d-block cover-image" data-bs-image-src="../assets/images/users/1.jpg"></div>
+                                    </div>
+                                    <div class="ps-3">
+                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId"><h5 class="mb-0 mt-2 text-dark fs-18">@item.StaffName</h5></a>
+                                        <p class="text-muted fs-12 mt-1 mb-0">@item.Department <span class="my-auto fs-9 font-weight-normal  ms-1 me-1 text-black-20">/</span> @item.Designation</p>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-2 bg-light">
+                                    <div class="mt-3 mb-3">
+                                        <div class="h5 mb-1">
+                                            <span class="feather feather-calendar"></span> : @(item.LeaveStartDate == item.LeaveEndDate ? item.LeaveStartDate : item.LeaveStartDate + " - " + item.LeaveEndDate)
+                                            <span class="badge badge-md badge-primary-light ms-1">Leave: @item.Days </span>
+                                        </div>
+                                        <small class="text-muted fs-11">Applied On: @item.LeaveAppliedOnDate</small>
+                                    </div>
+                                    <div class="progress progress-sm mb-2">
+                                        <div class="progress-bar bg-success w-70"></div>
+                                    </div>
+                                    <div class="d-flex align-items-end justify-content-between mb-0">
+                                        <h6 class="fs-12 mb-0">Remaining Leaves</h6>
+                                        <h6 class="font-weight-bold fs-12 mb-0">15</h6>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <label class="form-label">Reason:</label>
+                                    <p class="text-muted leave-text">@item.LeaveSubject</p>
+                                </div>
+                                <div class="card-footer p-0 border-top-0">
+                                    <div class="btn-group w-100 leaves-btns">
+                                        <a onclick="showleaveApprovalmodel(@item.LeaveId,3 )" class="btn btn-outline-light w-50 text-success">Accept</a>
+                                        <a onclick="showforwardleavemodel(@item.LeaveId)" class="btn btn-outline-light w-50 text-warning">Forward</a>
+                                        <a onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="btn btn-outline-light w-50 text-danger">Reject</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+<!--My Leave Approval Modal -->
+<div class="modal fade" id="leaveapprovalmodal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Leave Approval</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <input type="hidden" id="LeaveID" />
+            <input type="hidden" id="LeaveStatusID" />
+            <div class="modal-body">
+
+                <div class="p-0 mt-3">
+                    <div class="form-group">
+                        <label class="form-label">Remarks</label>
+                        <input id="Remarks" class="form-control" type="text" placeholder="Enter Remarks">
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                <input type="button" value="submit" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Report Modal  -->
+<!--My Leave FOrward Modal -->
+@using (@Html.BeginForm("ForwardLeaveToStaff", "Leave", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="leaveforwardmodal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Leave Forward</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <input type="hidden" asp-for="LeaveId" />
+                <div class="modal-body">
+
+                    <div class="p-0 mt-3">
+                        <div class="form-group">
+                            <label class="form-label">Forward to Staff:</label>
+                            <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                    <input type="submit" value="submit" id="btnsave" onclick="forwardleaves()" class="btn btn-primary" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- End Report Modal  -->
+@section scripts{
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+            $('#myTable').DataTable();
+        })
+
+        function showleaveApprovalmodel(leaveid, approvalstatusid) {
+            debugger;
+            $("#Remarks").val('')
+            $("#LeaveID").val(leaveid);
+            $("#LeaveStatusID").val(approvalstatusid);
+            $("#Remarks").css("border-color", "#ddd");
+            $("#leaveapprovalmodal").modal('show');
+
+        }
+
+
+        function showforwardleavemodel(leaveid, approvalstatusid) {
+            debugger;
+            $("#Remarks").val('')
+            $("#LeaveId").val(leaveid);
+            $("#leaveforwardmodal").modal('show');
+
+        }
+
+
+        function forwardleaves() {
+            debugger
+
+            if ($("#ForwardToStaffID").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Staff"
+                });
+                $("#ForwardToStaffID").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#ForwardToStaffID").css("border-color", "#ddd");
+            }
+            var Data = { id: $("#LeaveID").val(), ForwardedByStaffId: $("#ForwardToStaffID").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/ForwardLeaveToStaffs",
+                type: "get",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRRecentLeaves", "Leave")';
+                            window.location.href = url;
+
+                        }
+                        else {
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRRecentLeaves", "Leave")';
+                            window.location.href = url;
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function postdata() {
+            debugger
+
+            if ($("#Remarks").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Remarks"
+                });
+                $("#Remarks").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Remarks").css("border-color", "#ddd");
+            }
+            var Data = { id: $("#LeaveID").val(), leavestatusid: $("#LeaveStatusID").val(), remarks: $("#Remarks").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/SaveLeaveApprovalData",
+                type: "Post",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRRecentLeaves", "Leave")';
+                            window.location.href = url;
+
+                        }
+                        else {
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRRecentLeaves", "Leave")';
+                            window.location.href = url;
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+
+
+
+
+        function ViewLeave(leaveid) {
+            debugger
+
+
+            var Data = { id: leaveid }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/ViewLeaveDetail",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $('#LeaveType').text(data[0].leaveTypeTitle);
+                        if (data[0].leaveStartDate == data[0].leaveEndDate) {
+                            $('#DateRange').text(data[0].leaveStartDate);  //formatDate(new Date(data[0].leaveStartDate))
+                        }
+                        else {
+                            $('#DateRange').text(data[0].leaveStartDate + " - " + data[0].leaveEndDate);
+                        }
+
+                        $('#SelectedDays').text(data[0].days);
+                        $('#LeaveSubject').text(data[0].leaveSubject);
+                        $('#AppliedOn').text(data[0].leaveAppliedOnDate);
+
+                        $("#Application").summernote("code", data[0].applicationHtml);
+
+
+
+                        $("#leaveapplictionmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        //function DateRangeinDays(leavestartdate, leaveenddate) {
+        //    if (leavestartdate != "" && leaveenddate != "") {
+
+        //        var startdate = new Date(leavestartdate);
+        //        var enddate = new Date(leaveenddate);
+
+        //        // end - start returns difference in milliseconds
+        //        var diff = new Date(enddate - startdate);
+
+        //        // get days
+        //        var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
+
+        //        $("#SelectedDays").text(days);
+        //    }
+        //}
+
+
+
+        function formatDate(date) {
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
+
+
+            var d = new Date(date),
+                month = '' + (d.getMonth()),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+
+            return [day, monthNames[parseInt(month)], year].join('-');
+        }
+
+
+    </script>
+
+}

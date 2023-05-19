@@ -222,6 +222,13 @@ namespace HRHUBAPI.Controllers
             return await new LeaveType().GetLeaveType(CompanyId, _context);
         }
 
+        // using this api in leave apply form
+        [HttpGet("GetStaffWiseLeaveTypeInfos{CompanyId}")]
+        public async Task<ActionResult<List<LeaveType>>> GetStaffWiseLeaveTypeInfos(int StaffId)
+        {
+
+            return await new LeaveType().GetStaffWiseLeaveType(StaffId, _context);
+        }
 
         [HttpGet("GetLeaveTypeInfoId{id}")]
         public async Task<ActionResult<LeaveType>> GetLeaveTypeInfoId(int id)
@@ -234,6 +241,7 @@ namespace HRHUBAPI.Controllers
 
 
         }
+
 
         [HttpPost("LeaveTypeAddOrUpdate")]
         public async Task<ActionResult<LeaveType>> LeaveTypeAddOrUpdate(LeaveType obj)
@@ -278,37 +286,27 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("LeaveTypeCheckData{id}/{title}/{CompanyId}")]
-        public async Task<ActionResult<JsonObject>> LeaveTypeCheckData(int id, string title, int CompanyId)
+        [HttpGet("LeaveTypeAlreadyExists{id}/{title}/{CompanyId}")]
+        public async Task<ActionResult<bool>> LeaveTypeAlreadyExists(int id, string title, int CompanyId)
         {
-            if (await new LeaveType().AlreadyExist(id, title, CompanyId, _context))
+            var dbResult = await new LeaveType().AlreadyExist(id, title, CompanyId, _context);
+            if (dbResult == true)
             {
                 return Ok(new
                 {
-
                     Success = true,
-                    Message = "LeaveType Already Exist!"
-
-
+                    Message = "Record Already Exists"
                 });
             }
             else
             {
-
                 return Ok(new
                 {
-
                     Success = false,
-                    Message = "Not found"
-
-
+                    Message = "Data Not Found!"
                 });
             }
-
         }
-
-
-
 
 
 

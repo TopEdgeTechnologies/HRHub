@@ -396,122 +396,185 @@ namespace HRHUBWEB.Controllers
 
 
         #region LeaveTypeInfo
+        //[CustomAuthorization]
+        //public async Task<IActionResult> LeaveTypeList(string data = "")
+        //{
+
+        //    ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+        //    ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+        //    ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+        //    ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+
+        //    ViewBag.Success = data;
+        //    LeaveType leavetypes = new LeaveType();
+
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+        //    var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+        //    var CompanyId = userObject.CompanyId;
+
+
+
+        //    if (Token != null)
+        //    {
+
+
+        //        HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
+        //        if (message.IsSuccessStatusCode)
+        //        {
+
+        //            var content = await message.Content.ReadAsStringAsync();
+        //            leavetypes.ListLeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(content);
+
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+        //    }
+
+
+        //    return View(leavetypes);
+        //}
+
+
         [CustomAuthorization]
         public async Task<IActionResult> LeaveTypeList(string data = "")
         {
-
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-
             ViewBag.Success = data;
-            List<LeaveType> ObjLeaveType = new List<LeaveType>();
+
+            LeaveType leavetypes = new LeaveType();
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
+            leavetypes.CompanyId = userObject.CompanyId;
 
 
             if (Token != null)
             {
-
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
+                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{leavetypes.CompanyId}");
+                if (response.IsSuccessStatusCode)
                 {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjLeaveType = JsonConvert.DeserializeObject<List<LeaveType>>(result);
-
+                    var content = await response.Content.ReadAsStringAsync();
+                    leavetypes.ListLeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(content);
                 }
             }
             else
             {
                 return RedirectToAction("Loginpage", "User", new { id = 2 });
             }
-
-
-            return View(ObjLeaveType);
+            return View(leavetypes);
         }
-        public async Task<IActionResult> LeaveTypeDetails(int id)
+
+
+        //public async Task<IActionResult> LeaveTypeDetails(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+        //    if (Token != null)
+        //    {
+
+        //        LeaveType ObjLeaveType = await GetLeaveTypebyID(id);
+
+        //        return View(ObjLeaveType);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+
+        //    }
+        //}
+        //private async Task<LeaveType> GetLeaveTypebyID(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+        //    LeaveType ObjLeaveType = new LeaveType();
+
+
+
+
+        //    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
+        //    if (message.IsSuccessStatusCode)
+        //    {
+        //        var result = message.Content.ReadAsStringAsync().Result;
+        //        ObjLeaveType = JsonConvert.DeserializeObject<LeaveType>(result);
+
+        //    }
+
+        //    return ObjLeaveType;
+        //}
+
+        public async Task<IActionResult> GetLeaveTypeById(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-
-
-            if (Token != null)
+            LeaveType leavetype = new LeaveType();
+            var response = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
+            if (response.IsSuccessStatusCode)
             {
-
-                LeaveType ObjLeaveType = await GetLeaveTypebyID(id);
-
-                return View(ObjLeaveType);
+                var content = await response.Content.ReadAsStringAsync();
+                leavetype = JsonConvert.DeserializeObject<LeaveType>(content);
+                return Json(leavetype);
             }
             else
             {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
 
+                return Json(null);
             }
+
+
         }
-        private async Task<LeaveType> GetLeaveTypebyID(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+        //[HttpGet]
+        //public async Task<IActionResult> LeaveTypeCreateOrUpdate(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+        //    //Get Instutute ID through Sessions
+        //    var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+        //    ViewBag.CompanyId = userObject.CompanyId;
 
-            LeaveType ObjLeaveType = new LeaveType();
-
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjLeaveType = JsonConvert.DeserializeObject<LeaveType>(result);
-
-            }
-
-            return ObjLeaveType;
-        }
-        [HttpGet]
-        public async Task<IActionResult> LeaveTypeCreateOrUpdate(int id)
-        {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            //Get Instutute ID through Sessions
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
-
-            if (Token != null)
-            {
+        //    if (Token != null)
+        //    {
 
 
 
 
 
-                if (id == 0)
-                {
-                    LeaveType Info = new LeaveType();
+        //        if (id == 0)
+        //        {
+        //            LeaveType Info = new LeaveType();
 
-                    return View(Info);
-                }
-                LeaveType LeaveTypeinfo = await GetLeaveTypebyID(id);
+        //            return View(Info);
+        //        }
+        //        LeaveType LeaveTypeinfo = await GetLeaveTypebyID(id);
 
-                return View(LeaveTypeinfo);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
+        //        return View(LeaveTypeinfo);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
 
-            }
-        }
+        //    }
+        //}
+
+
         [HttpPost]
         public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)
         {
@@ -606,7 +669,7 @@ namespace HRHUBWEB.Controllers
 
         }
 
-        public async Task<ActionResult<JsonObject>> LeaveTypeCheckData(int id, string title)
+        public async Task<ActionResult<JsonObject>> LeaveTypeAlreadyExists(int id, string title)
         {
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -619,7 +682,7 @@ namespace HRHUBWEB.Controllers
 
 
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeCheckData{id}/{title}/{CompanyId}");
+            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeAlreadyExists{id}/{title}/{CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -632,9 +695,6 @@ namespace HRHUBWEB.Controllers
                 return RedirectToAction("Loginpage", "User", new { id = 2 });
             }
         }
-
-
-
 
 
 

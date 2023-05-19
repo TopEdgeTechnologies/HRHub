@@ -1,8 +1,66 @@
-﻿@model IEnumerable<HRHUBAPI.Models.LeaveType>
+﻿@model HRHUBAPI.Models.LeaveType
 
 
 
 
+
+<!--Add LeaveType Modal -->
+@using (@Html.BeginForm("LeaveTypeCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+    <input type="hidden" asp-for="CompanyId" />
+    <input type="hidden" asp-for="LeaveTypeId" />
+
+    <div class="modal fade" id="addleavetypemodal">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Leave Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Title">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Leave Count</label>
+                        <input asp-for="NoOfLeaves" class="form-control" type="number" placeholder="Enter Leave Count">
+                    </div>
+                    <div class="form-group">
+
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+
+                    </div>
+                    <div class="form-group">
+
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="IsNonPaid" class="custom-control-input">
+                            <span class="custom-control-label">Is Non-Paid</span>
+                        </label>
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                    <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<!-- End Add LeaveType Modal  -->
 <!-- Row -->
 <div class="row row-sm mt-4">
 
@@ -19,7 +77,7 @@
                             @if (Convert.ToBoolean(ViewBag.IsNew))
                             {
 
-                                <a asp-action="LeaveTypeCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Leave Type</a>
+                                <a onclick="addnewleavetype()" class="btn btn-primary me-3">Add Leave Type</a>
 
                             }
                             @*  <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
@@ -47,7 +105,7 @@
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-
+                                <th class="text-center">Sr.#</th>
                                 <th class="border-bottom-0">LeaveType Title</th>
                                 <th class="border-bottom-0">No. of Leaves</th>
                                 <th class="text-center">Non Paid leave</th>
@@ -56,67 +114,80 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.NoOfLeaves)
-                                    </td>
-
-                                    @if (item.IsNonPaid == true)
-                                    {
-                                        <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
-
-                                    }
-
-                                    @if (item.Status == true)
-                                    {
-                                        <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
-
-                                    }
-
-                                    @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                    {
-                                        <th class="d-none">
-
-                                        </th>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-end">
-                                            <div class="d-flex">
-                                                @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                {
-                                                    <a asp-action="LeaveTypeCreateOrUpdate" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
-                                                        <i class="feather feather-edit primary text-primary mt-1">
-                                                        </i>
-                                                    </a>
-                                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                {
-                                                    <a asp-action="LeaveTypeDelete" asp-route-id="@item.LeaveTypeId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                    </a>
-                                                }
-                                            </div>
-
+                            @{
+                                int count = 1;
+                                foreach (var item in Model.ListLeaveTypes)
+                                {
+                                    <tr>
+                                        <td>
+                                            @count
                                         </td>
-                                    }
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.NoOfLeaves)
+                                        </td>
+
+                                        @if (item.IsNonPaid == true)
+                                        {
+                                            <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
+
+                                        }
+
+                                        @if (item.Status == true)
+                                        {
+                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                        }
+
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
 
 
 
-                                </tr>
+
+
+
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+
+                                                        <a onclick="editrecord(@item.LeaveTypeId)" class="action-btns1 btn-xs">
+                                                            <i class="feather feather-edit primary text-primary " data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title="" title="Edit"></i>
+                                                        </a>
+
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a onclick="confirmation(@item.LeaveTypeId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+                                                            <i class="feather feather-trash-2 text-danger"></i>
+                                                        </a>
+                                                    }
+                                                </div>
+
+                                            </td>
+                                        }
+
+
+
+                                    </tr>
+                                    count++;
+                                }
                             }
 
                         </tbody>
@@ -172,6 +243,179 @@
             }
             $('#myTable').DataTable();
         });
+
+
+
+        function postdata() {
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if ($("#NoOfLeaves").val() == "0" || $("#NoOfLeaves").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Leave Count"
+                });
+                $("#NoOfLeaves").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#NoOfLeaves").css("border-color", "#ddd");
+                $("#Title").css("border-color", "#ddd");
+            }
+            var Data = { id: $("#LeaveTypeId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/LeaveTypeAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addleavetypemodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+        function editrecord(id) {
+            debugger;
+            addnewleavetype();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetLeaveTypeById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#LeaveTypeId").val(data.leaveTypeId);
+                        $("#Title").val(data.title);
+                        $("#NoOfLeaves").val(data.noOfLeaves);
+
+                        $("#Status").prop('checked', data.status)
+                        $("#IsNonPaid").prop('checked', data.isNonPaid)
+                        $("#addleavetypemodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var url = "@Url.Action("LeaveTypeDelete", "Configuration")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+
+        function addnewleavetype() {
+
+
+            $("#LeaveTypeId").val(0)
+            $("#Title").val('')
+            $("#NoOfLeaves").val('')
+            $("#Status").prop('checked', false)
+            $("#IsNonPaid").prop('checked', false)
+            $("#NoOfLeaves").css("border-color", "#ddd");
+            $("#Title").css("border-color", "#ddd");
+
+            $("#addleavetypemodal").modal('show');
+
+        }
+
 
     </script>
 

@@ -21,13 +21,32 @@ namespace HRHUBAPI.Controllers
 
         #region LeaveInfo
 
-        [HttpGet("GetLeaveInfos")]
-        public async Task<ActionResult<List<Leave>>> GetLeaveInfos()
+        [HttpGet("GetLeaveInfos{CompanyId}")]
+        public async Task<ActionResult<List<Leave>>> GetLeaveInfos(int CompanyId)
         {
 
-            return await new Leave().GetLeave(_context);
+            return await new Leave().GetLeave(CompanyId, _context);
         }
 
+        [HttpGet("GetNewOrPendingLeaveInfos{CompanyId}")]
+        public async Task<ActionResult<List<Leave>>> GetNewOrPendingLeaveInfos(int CompanyId)
+        {
+
+            return await new Leave().GetNewOrPendingLeave(CompanyId, _context);
+        }
+
+
+        [HttpGet("GetLeaveDetailInfoId{id}")]
+        public async Task<ActionResult<Leave>> GetLeaveDetailInfoId(int id)
+        {
+            var result = await new Leave().GetLeaveDetailById(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
 
         [HttpGet("GetLeaveInfoId{id}")]
         public async Task<ActionResult<Leave>> GetLeaveInfoId(int id)
@@ -113,36 +132,56 @@ namespace HRHUBAPI.Controllers
 
         }
 
-
-        [HttpGet("GetLeaveDetailInfoId{id}")]
-        public async Task<ActionResult<JsonObject>> GetLeaveDetailInfoId(int id)
+        [HttpPost("SaveLeaveApprovalDetail")]  //{id}/{leavestatusid}/{remarks}/{staffid}
+        public async Task<ActionResult<JsonObject>> SaveLeaveApprovalDetail(LeaveApproval obj)
         {
-            var result = await new Leave().GetLeaveById(id, _context);
-            if (result != null)
+
+            var dbResult = await new Leave().SaveLeaveApprovalDetail(obj, _context);
+            if (dbResult != null)
             {
                 return Ok(new
                 {
-
                     Success = true,
-                    Message = "Leave Already Exist!",
-                    data = result
-
+                    Message = obj.LeaveStatusId == 3 ? "Leave Approved Successfully" : "Leave Rejectd Successfully"
                 });
-
             }
             else
             {
-
                 return Ok(new
                 {
-
                     Success = false,
                     Message = "Not found"
-
-
                 });
             }
+        }
 
+
+        [HttpPost("SaveForwardLeaveDetail")]
+        public async Task<ActionResult<Leave>> SaveForwardLeaveDetail(Leave obj)
+        {
+
+
+            var result = await new Leave().PostLeaveApproval(obj, _context);
+            if (result != null && result.LeaveId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+
+        }
+
+        [HttpGet("GetLeaveApprovalByLeaveId{id}")]
+        public async Task<ActionResult<List<LeaveApproval>>> GetLeaveApprovalByLeaveId(int id)
+        {
+
+            return await new LeaveApproval().GetLeaveAprrovalDetail(id, _context);
         }
 
         ////Load Leave data from database to Student form change dropdown selection
