@@ -213,7 +213,7 @@
 									<th class="border-bottom-0">Clock-In</th>
 									<th class="border-bottom-0">Clock-Out</th>
 									<th class="border-bottom-0">Progress</th>
-									<th class="border-bottom-0">Hours</th>
+									
 								</tr>
 							</thead>
 							<tbody>
@@ -253,7 +253,8 @@
 
 
 		  var currentDate = new Date(); // Get the current date
-
+			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+			var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 			$('#fromdate').datepicker({
 				//dateFormat: 'dd M yyyy',
 				autoHide: true
@@ -262,7 +263,7 @@
 
 			});
 
-			$('#fromdate').datepicker('setDate', currentDate);
+			$('#fromdate').datepicker('setDate', firstDayOfMonth);
 
 			$('#todate').datepicker({
               // dateFormat: 'dd M yy',
@@ -271,7 +272,7 @@
 				
 			
             });
-			$('#todate').datepicker('setDate', currentDate);
+			$('#todate').datepicker('setDate', lastDayOfMonth);
 
 
 
@@ -364,11 +365,21 @@
                            
                             var rowData = [];
 
-							var percenatge= (parseFloat(	data[i]["totalWorkingMinutes"])/	parseFloat(	data[i]["totalDefinedMinutes"]))*100
-							var statusHtml = '<td><span class="badge badge-success">' + data[i]["Attendancestatus"] + '</span></td>';
-							var progress = '<div class="progress progress-sm d-block"><div class="progress-bar bg-success w-' + percenatge + '" > </div>	</div>';
 
-							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, data[i]["firstPunchIn"], data[i]["lastPunchOut"], percenatge, "9:00"]);
+							var Totalhours = Math.floor(  parseInt(data[i]["totalDefinedMinutes"]) / 60);
+							var TotalremainingMinutes = parseInt(data[i]["totalDefinedMinutes"]) % 60;
+
+							var Emphours = Math.floor(parseInt(data[i]["totalWorkingMinutes"]) / 60);
+							var EmpremainingMinutes = parseInt(data[i]["totalWorkingMinutes"]) % 60;
+
+
+
+
+							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
+							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
+							var progress = '<div class="progress progress-sm d-block"   data-toggle="tooltip" title="' + Totalhours + ':' + TotalremainingMinutes + '"   ><div class="progress-bar bg-success w-' + parseInt(percenatge) + '"   data-toggle="tooltip" title="' + Emphours + ':' + EmpremainingMinutes + '" > </div>	</div>';
+
+							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, data[i]["firstPunchIn"], data[i]["lastPunchOut"], progress ]);
 
 
                           table.rows.add(rowData);

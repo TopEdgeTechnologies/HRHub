@@ -11,6 +11,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? Attendancestatus { get; set; }
 
+		[NotMapped]
+		public string? CssClass { get; set; }
 
 		[NotMapped]
 		public string? AttendanceFormateDate { get; set; }
@@ -67,8 +69,10 @@ namespace HRHUBAPI.Models
                                 MarkedAsShortDay = at.MarkedAsShortDay,
                                 IsDeleted = at.IsDeleted,
                                 AttendanceFormateDate = at.AttendanceDate.Value.Date.ToString("dd-MMM-yyyy"),
-				               // AttendanceFormateDateIn = at.FirstPunchIn.Value.ToString("h:mm tt"),
-				               // AttendanceFormateDateOut = at.LastPunchOut.Value.ToString("h:mm tt")
+								CssClass = s.CssClass
+
+								// AttendanceFormateDateIn = at.FirstPunchIn.Value.ToString("h:mm tt"),
+								// AttendanceFormateDateOut = at.LastPunchOut.Value.ToString("h:mm tt")
 
 
 

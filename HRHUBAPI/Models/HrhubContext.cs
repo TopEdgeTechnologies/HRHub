@@ -21,6 +21,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<AttendanceStatus> AttendanceStatuses { get; set; }
 
+    public virtual DbSet<AttendanceStatusSetting> AttendanceStatusSettings { get; set; }
+
     public virtual DbSet<Candidate> Candidates { get; set; }
 
     public virtual DbSet<CandidateScreening> CandidateScreenings { get; set; }
@@ -62,6 +64,10 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<UserForm> UserForms { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=hrhub;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,8 +112,22 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.AttendanceStatusId).HasColumnName("AttendanceStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CssClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<AttendanceStatusSetting>(entity =>
+        {
+            entity.ToTable("AttendanceStatusSetting");
+
+            entity.Property(e => e.AttendanceStatusSettingId).HasColumnName("AttendanceStatusSettingID");
+            entity.Property(e => e.AttendanceStatusId).HasColumnName("AttendanceStatusID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.WorkingMinutesFrom).HasColumnName("WorkingMinutes_From");
+            entity.Property(e => e.WorkingMinutesTo).HasColumnName("WorkingMinutes_To");
         });
 
         modelBuilder.Entity<Candidate>(entity =>
