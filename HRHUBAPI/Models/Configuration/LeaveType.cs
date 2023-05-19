@@ -12,6 +12,8 @@ namespace HRHUBAPI.Models
 
     public partial class LeaveType
     {
+        [NotMapped]
+        public IEnumerable<LeaveType>? ListLeaveTypes { get; set; }
 
         public async Task<List<LeaveType>> GetLeaveType(int CompanyId, HrhubContext _context)
         {
@@ -19,6 +21,38 @@ namespace HRHUBAPI.Models
             {
                 List<LeaveType> list = new List<LeaveType>();
                 list = await _context.LeaveTypes.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+
+                return list;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+        // using this in leave apply form
+        public async Task<List<LeaveType>> GetStaffWiseLeaveType(int StaffId, HrhubContext _context)
+        {
+            try
+            {
+                List<LeaveType> list = new List<LeaveType>();
+
+
+                list = await (from l in _context.StaffLeaveAllocations
+                              join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
+
+                              where l.IsDeleted == false
+                              && lt.IsDeleted == false
+                              && l.StaffId == StaffId
+                              select new LeaveType()
+                              {
+                                  LeaveTypeId = lt.LeaveTypeId,
+                                  Title = lt.Title,
+                                  NoOfLeaves = l.AllowedLeaves
+
+                              }).ToListAsync();
 
                 return list;
 

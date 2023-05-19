@@ -138,7 +138,7 @@ namespace HRHUBWEB.Controllers
                 {
 
 
-                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetStaffWiseLeaveTypeInfos{StaffId}");
+                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{StaffId}");
                     if (message.IsSuccessStatusCode)
                     {
                         var result = message.Content.ReadAsStringAsync().Result;
@@ -363,7 +363,7 @@ namespace HRHUBWEB.Controllers
                     }
 
                     HttpResponseMessage message1 = await _client.GetAsync($"api/Leave/GetLeaveInfos{CompanyId}");
-                    if (message.IsSuccessStatusCode)
+                    if (message1.IsSuccessStatusCode)
                     {
                         var result = message1.Content.ReadAsStringAsync().Result;
                         ObjLeave.ListAllleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
@@ -372,7 +372,7 @@ namespace HRHUBWEB.Controllers
 
 
                     HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetNewOrPendingLeaveInfos{CompanyId}");
-                    if (message1.IsSuccessStatusCode)
+                    if (message2.IsSuccessStatusCode)
                     {
                         var result = message2.Content.ReadAsStringAsync().Result;
                         ObjLeave.ListNewOrPendingleaves = JsonConvert.DeserializeObject<List<Leave>>(result);

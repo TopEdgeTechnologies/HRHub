@@ -4,6 +4,7 @@ using System;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.VisualBasic;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace HRHUBAPI.Models
 {
@@ -12,11 +13,11 @@ namespace HRHUBAPI.Models
 
     public partial class Leave
     {
-        
         [NotMapped]
         public string? LeaveTypeTitle { get; set; }
         [NotMapped]
         public string? Days { get; set; }
+
         [NotMapped]
         public string? LeaveStartDate { get; set; }
         [NotMapped]
@@ -25,34 +26,158 @@ namespace HRHUBAPI.Models
         public string? LeaveAppliedOnDate { get; set; }
         [NotMapped]
         public string? LeaveStatus { get; set; }
-        public async Task<List<Leave>> GetLeave(HrhubContext _context)
+        [NotMapped]
+        public string? StaffRegistrationNo { get; set; }
+        [NotMapped]
+        public string? StaffName { get; set; }
+        [NotMapped]
+        public string? Department { get; set; }
+        [NotMapped]
+        public string? Designation { get; set; }
+        [NotMapped]
+        public int[]? ForwardToStaffID { get; set; }
+
+        [NotMapped]
+        public IEnumerable<LeaveType>? ListleaveTypes { get; set; }
+        [NotMapped]
+        public IEnumerable<LeaveApproval>? ListLeaveApprovalData { get; set; }
+
+        [NotMapped]
+        public int? ForwardByStaffID { get; set; }
+        [NotMapped]
+        public IEnumerable<Leave>? ListAllleaves { get; set; }
+        [NotMapped]
+        public IEnumerable<Leave>? ListNewOrPendingleaves { get; set; }
+        public async Task<List<Leave>> GetLeave(int CompanyId, HrhubContext _context)
         {
             try
             {
-               // var list = await _context.Leaves.Where(x=>x.IsDeleted==false).ToListAsync();
+
                 var list = await (from l in _context.Leaves
                                   join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
+                                  join s in _context.Staff on l.StaffId equals s.StaffId
+                                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                                  join di in _context.Designations on s.DesignationId equals di.DesignationId
 
                                   where l.IsDeleted == false
                                   && lt.IsDeleted == false
+                                  && s.CompanyId == CompanyId
                                   select new Leave()
                                   {
                                       LeaveId = l.LeaveId,
                                       LeaveTypeTitle = lt.Title,
                                       LeaveStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
-                                      LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy") ,
-                                      Days = l.MarkAsHalfLeave == true? "Half Day" : l.MarkAsShortLeave == true ? "Short Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString(),
+                                      LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
+                                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Short Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString(),
                                       LeaveSubject = l.LeaveSubject,
+                                      LeaveAppliedOnDate = Convert.ToDateTime(l.AppliedOn).ToString("dd-MMM-yyyy"),
+                                      LeaveStatusId = l.LeaveStatusId,
+
+                                      StaffRegistrationNo = s.RegistrationNo,
+                                      StaffName = s.FirstName,
+                                      Department = dep.Title,
+                                      Designation = di.Title
+
+                                  }).ToListAsync();
+
+                return list;
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        public async Task<List<Leave>> GetNewOrPendingLeave(int CompanyId, HrhubContext _context)
+        {
+            try
+            {
+
+                var list = await (from l in _context.Leaves
+                                  join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
+                                  join s in _context.Staff on l.StaffId equals s.StaffId
+                                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                                  join di in _context.Designations on s.DesignationId equals di.DesignationId
+
+                                  where l.IsDeleted == false
+                                  && lt.IsDeleted == false
+                                  && (l.LeaveStatusId == 1 || l.LeaveStatusId == 2)
+                                   && s.CompanyId == CompanyId
+                                  select new Leave()
+                                  {
+                                      LeaveId = l.LeaveId,
+                                      LeaveTypeTitle = lt.Title,
+                                      LeaveStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
+                                      LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
+                                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Short Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString(),
+                                      LeaveSubject = l.LeaveSubject,
+                                      LeaveAppliedOnDate = Convert.ToDateTime(l.AppliedOn).ToString("dd-MMM-yyyy"),
+                                      LeaveStatusId = l.LeaveStatusId,
+
+                                      StaffRegistrationNo = s.RegistrationNo,
+                                      StaffName = s.FirstName,
+                                      Department = dep.Title,
+                                      Designation = di.Title
+
+                                  }).OrderByDescending(x => x.LeaveId).ToListAsync();
+
+                return list;
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        public async Task<List<Leave>> GetLeaveDetailById(int id, HrhubContext _context)
+        {
+            try
+            {
+
+
+                var list = await (from l in _context.Leaves
+                                  join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
+
+                                  where l.LeaveId == id && l.IsDeleted == false
+                                    && lt.IsDeleted == false
+
+                                  select new Leave()
+                                  {
+                                      LeaveId = l.LeaveId,
+                                      LeaveTypeTitle = lt.Title,
+                                      LeaveStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
+                                      LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
+                                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Short Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString(),
+                                      LeaveSubject = l.LeaveSubject,
+                                      ApplicationHtml = l.ApplicationHtml,
                                       LeaveAppliedOnDate = Convert.ToDateTime(l.AppliedOn).ToString("dd-MMM-yyyy"),
                                       LeaveStatusId = l.LeaveStatusId
 
 
                                   }).ToListAsync();
 
-                return list  ;
+                if (list != null)
+                {
+                    return list;
+                }
+                else
+                {
+                    return null;
+
+                }
 
 
-              
+
             }
             catch (Exception ex)
             {
@@ -67,7 +192,8 @@ namespace HRHUBAPI.Models
             try
             {
 
-                var result = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == id && x.IsDeleted==false);
+                var result = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == id && x.IsDeleted == false);
+
                 if (result != null)
                 {
                     return result;
@@ -95,7 +221,7 @@ namespace HRHUBAPI.Models
             try
             {
                 string msg = "";
-                var checkLeaveInfo = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == LeaveInfo.LeaveId && x.IsDeleted==false);
+                var checkLeaveInfo = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == LeaveInfo.LeaveId && x.IsDeleted == false);
                 if (checkLeaveInfo != null && checkLeaveInfo.LeaveId > 0)
                 {
                     checkLeaveInfo.LeaveId = LeaveInfo.LeaveId;
@@ -129,6 +255,71 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public async Task<Leave> PostLeaveApproval(Leave LeaveInfo, HrhubContext _context)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    string msg = "";
+
+                    List<LeaveApproval> lsobjAca = new List<LeaveApproval>();
+
+                    int a = 0;
+                    if (LeaveInfo.ForwardToStaffID != null)
+                    {
+
+                        foreach (var item in LeaveInfo.ForwardToStaffID)
+                        {
+
+                            LeaveApproval objAca = new LeaveApproval();
+
+                          
+                            objAca.LeaveId = LeaveInfo.LeaveId;
+                            objAca.ForwardedByStaffId = LeaveInfo.ForwardByStaffID;
+                            objAca.ForwardDate = DateTime.Now;
+                            objAca.ApprovalByStaffId = LeaveInfo.ForwardToStaffID.ToArray()[a];
+                            objAca.LeaveStatusId = 2; // Pending;
+                            lsobjAca.Add(objAca);
+
+                         
+                            a++;
+
+                        }
+
+
+                        _context.LeaveApprovals.AddRange(lsobjAca);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+                    var checkLeaveInfo = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == LeaveInfo.LeaveId && x.IsDeleted == false);
+                    if (checkLeaveInfo != null && checkLeaveInfo.LeaveId > 0)
+                    {
+                        checkLeaveInfo.LeaveStatusId = 2; // Pending
+
+                        await _context.SaveChangesAsync();
+
+                    }
+                    else
+                    {
+                        LeaveInfo.CreatedOn = DateTime.Now;
+                        _context.Leaves.Add(LeaveInfo);
+                    }
+                    await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+                    return checkLeaveInfo;
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+
+                }
+            }
+        }
 
         public async Task<bool> DeleteLeaveInfo(int id, HrhubContext _context)
         {
@@ -139,8 +330,8 @@ namespace HRHUBAPI.Models
 
                 if (LeaveInfo != null)
                 {
-                    LeaveInfo.IsDeleted= true;   
-                    LeaveInfo.UpdatedOn= DateTime.Now;
+                    LeaveInfo.IsDeleted = true;
+                    LeaveInfo.UpdatedOn = DateTime.Now;
                     check = true;
 
                 }
@@ -189,6 +380,69 @@ namespace HRHUBAPI.Models
                 throw;
             }
         }
+
+
+
+        public async Task<LeaveApproval> SaveLeaveApprovalDetail(LeaveApproval obj, HrhubContext hrhubContext)
+        {
+            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var Info = await hrhubContext.Leaves.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.IsDeleted == false);
+                    if (Info != null && Info.LeaveId > 0)
+                    {
+                        Info.LeaveStatusId = obj.LeaveStatusId;
+
+                        await hrhubContext.SaveChangesAsync();
+                    }
+
+                    var dbResult = await hrhubContext.LeaveApprovals.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.ApprovalByStaffId == obj.ApprovalByStaffId);
+                    if (dbResult != null)
+                    {
+                        dbResult.LeaveId = obj.LeaveId;
+                        dbResult.ApprovalByStaffId = obj.ApprovalByStaffId;
+                        dbResult.ApprovalDate = obj.ApprovalDate;
+                        dbResult.LeaveStatusId = obj.LeaveStatusId;
+                        dbResult.Remarks = obj.Remarks;
+
+                        await hrhubContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                        return dbResult;
+                    }
+                    else
+                    {
+
+                        hrhubContext.LeaveApprovals.Add(obj);
+                        await hrhubContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                        return obj;
+                    }
+
+                    
+
+                    
+
+
+                }
+                catch
+                {
+                    dbContextTransaction.Rollback(); throw;
+                }
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
         //Load dropdown Leave data Id vise
@@ -251,8 +505,6 @@ namespace HRHUBAPI.Models
 
         //    }
         //}
-
-
 
 
     }
