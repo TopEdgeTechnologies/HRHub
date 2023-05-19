@@ -78,7 +78,7 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="CompanyCreateOrUpdate" asp-route-id="@item.CompanyId" class="action-btns1 btn-xs">
+                                                    <a asp-action="CompanySetting" asp-route-id="@item.CompanyId" class="action-btns1 btn-xs">
                                                         <i class="feather feather-edit primary text-primary mt-1 " data-bs-toggle="" data-original-title="Edit" data-bs-original-title="" title="Edit"></i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
