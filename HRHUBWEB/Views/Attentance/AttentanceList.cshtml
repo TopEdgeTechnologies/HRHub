@@ -1,40 +1,11 @@
 ﻿
+
 @{
     ViewData["Title"] = "Attentance List";
 }
 
 <div class="side-app main-container">
 
-	<!--Page header-->
-	@*<div class="page-header d-xl-flex d-block">
-		<div class="page-leftheader">
-			<div class="page-title">Attendance</div>
-		</div>
-		<div class="page-rightheader ms-md-auto">
-			<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-				<div class="d-flex">
-					<div class="header-datepicker me-3">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="feather feather-calendar"></i>
-								</div>
-							</div><input class="form-control fc-datepicker" type="text">
-						</div>
-					</div>
-				</div>
-				<div class="d-lg-flex">
-					<div class="btn-list">
-						<button class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#clockinmodal">Clock In</button>
-						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-						<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-						<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>*@
-	<!--End Page header-->
 	<!-- Row -->
 	<div class="row">
 		<div class="col-xl-3 col-md-12 col-lg-12">
@@ -42,14 +13,17 @@
 				<div class="card-body">
 					<div class="countdowntimer mt-0">
 						
-						<span id="clocktimer2" class="border-0 style size_md" style="background: transparent; color: rgb(49, 62, 106); border-color: transparent;">12:33:30</span>
+						<span id="clocktimer2" class="border-0 style size_md" style="background: transparent; color: rgb(49, 62, 106); border-color: transparent;"></span>
 						<label class="form-label">Current Time</label>
+						@*<input type="text" asp-for="AttendanceDate" />
+						<input type="text" asp-for="FirstPunchIn" />*@
+						@*<label class="form-label" id="dateTimeLabel"></label>*@
 
 				
 					</div>
 					<div class="btn-list text-center mt-5">
-						<a href="javascript:void(0);" class="btn ripple btn-primary disabled">Clock in</a>
-						<a href="javascript:void(0);" class="btn ripple btn-primary">Clock Out</a>
+						<a id="timeInId" class="btn ripple btn-primary">Check In</a>
+						@*<a id="timeoutId" class="btn ripple btn-primary ">Check Out</a>*@
 					</div>
 				</div>
 			</div>
@@ -64,7 +38,7 @@
 
 							<div class="d-lg-flex">
 								<div class="btn-list">
-									<button class="btn btn-primary me-4" data-bs-toggle="modal" data-bs-target="#clockinmodal">Clock In</button>
+									
 									<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
 									<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
 									<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
@@ -149,50 +123,6 @@
 							</div>
 						</div>
 
-					@*	<div class="col-md-12 col-lg-12 col-xl-3">
-							<div class="form-group">
-								<label class="form-label">Month:</label>
-								<select name="attendance" class="form-control custom-select select2" data-placeholder="Select Month">
-									<option label="Select Month"></option>
-									<option value="1">January</option>
-									<option value="2">February</option>
-									<option value="3">March</option>
-									<option value="4">April</option>
-									<option value="5">May</option>
-									<option value="6">June</option>
-									<option value="7">July</option>
-									<option value="8">August</option>
-									<option value="9">September</option>
-									<option value="10">October</option>
-									<option value="11">November</option>
-									<option value="12">December</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-md-12 col-lg-12 col-xl-2">
-							<div class="form-group">
-								<label class="form-label">Year:</label>
-								<select name="attendance" class="form-control custom-select select2" data-placeholder="Select Year">
-									<option label="Select Year"></option>
-									<option value="1">2024</option>
-									<option value="2">2023</option>
-									<option value="3">2022</option>
-									<option value="4">2021</option>
-									<option value="5">2020</option>
-									<option value="6">2019</option>
-									<option value="7">2018</option>
-									<option value="8">2017</option>
-									<option value="9">2016</option>
-									<option value="10">2015</option>
-									<option value="11">2014</option>
-									<option value="12">2013</option>
-									<option value="13">2012</option>
-									<option value="14">2011</option>
-									<option value="15">2019</option>
-									<option value="16">2010</option>
-								</select>
-							</div>
-						</div>*@
 						<div class="col-md-12 col-lg-12 col-xl-2">
 							<div class="form-group mt-5">
 								<button class="btn btn-primary" id="searchbtn" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="si si-magnifier"></i> Search </button>
@@ -250,6 +180,44 @@
 
 
         $(document).ready(function () {
+
+			
+			CheckStatusNow();
+			function updateTime() {
+				var currentTime = new Date();
+				var hours = currentTime.getHours();
+				var minutes = currentTime.getMinutes();
+				var seconds = currentTime.getSeconds();
+
+				var ampm = "";
+
+				// Convert hours to 12-hour format
+				if (hours >= 12) {
+					ampm = "PM";
+					hours = hours % 12;
+				} else {
+					ampm = "AM";
+				}
+				hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+
+        // Format the time
+        var formattedTime = hours + ":" + minutes + ":" + seconds;
+
+        // Add AM/PM to the time if in 12-hour format
+        if (ampm !== "") {
+            formattedTime += " " + ampm;
+        }
+
+				
+				$("#clocktimer2").text(formattedTime);
+			}
+
+			// Call updateTime() every second to update the time display
+			setInterval(updateTime, 1000);
+
+
+
 
 
 		  var currentDate = new Date(); // Get the current date
@@ -326,6 +294,67 @@
         });
 
 
+		
+
+		$("#timeInId").click(function () { 
+			debugger;
+			
+			var test = $("#timeInId").text();
+			CheckAtendence();
+			if (test == "Check In") {
+				$("#timeInId").text('Check Out');
+			}
+			else{
+				$("#timeInId").text('Check In');
+			}
+		 
+		 });
+		 
+		 function CheckAtendence(){
+		
+			$.ajax({
+				url: "/Attentance/MarkAttendenceSubmit",
+				type: "POST",
+				async: false,				
+				success: function (response) {
+					console.log(response)
+					
+					if (response.value1){
+						debugger
+
+					notif({
+						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Time In Succesfully.",
+						type: "success"
+					});
+					}
+					
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+		}
+
+		
+		function CheckStatusNow(){
+			$.ajax({
+				url: "/Attentance/StatusCheckData",
+				method: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					
+					console.log(response);
+					
+				},
+				error: function (xhr, status, error) {
+					
+					console.error('AJAX request failed');
+				}
+			});
+		});
+
+		}
 
 
 
@@ -387,11 +416,11 @@
 
                          }
 
-                        $("#newStatusmodal").modal('hide');
+                      //  $("#newStatusmodal").modal('hide');
 
-                      $.growl.notice({
-                            message: "Status Updated"
-                          });
+                      //$.growl.notice({
+                      //      message: "Status Updated"
+                      //    });
 
                        
                     }
