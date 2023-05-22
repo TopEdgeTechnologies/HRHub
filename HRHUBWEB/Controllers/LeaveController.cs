@@ -136,25 +136,21 @@ namespace HRHUBWEB.Controllers
 
                 if (Token != null)
                 {
-
-
-                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{StaffId}");
+                    Leave Info = new Leave();
+                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetStaffWiseLeaveTypeInfos{StaffId}");
                     if (message.IsSuccessStatusCode)
                     {
                         var result = message.Content.ReadAsStringAsync().Result;
-                        ViewBag.LeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
+                        Info.ListleaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
 
                     }
 
                     if (id == 0)
                     {
-                        Leave Info = new Leave();
-                        Info.ListleaveTypes = ViewBag.LeaveTypes;
                         return View(Info);
                     }
-                    Leave Leaveinfo = await GetLeavebyID(id);
-                    Leaveinfo.ListleaveTypes = ViewBag.LeaveTypes;
-                    return View(Leaveinfo);
+                    Info = await GetLeavebyID(id);
+                    return View(Info);
                 }
                 else
                 {
@@ -271,15 +267,17 @@ namespace HRHUBWEB.Controllers
             }
         }
 
-        public async Task<ActionResult<JsonObject>> LeaveCheckData(int id, string email)
+        public async Task<ActionResult<JsonObject>> LeaveCheckData(int leavetypeid)
         {
             try
             {
                 var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+                var staffid = userObject.StaffId;
 
-                HttpResponseMessage message = await _client.GetAsync($"api/Leave/LeaveCheckData{id}/{email}");
+                HttpResponseMessage message = await _client.GetAsync($"api/Leave/LeaveCheckData{staffid}/{leavetypeid}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
@@ -297,7 +295,38 @@ namespace HRHUBWEB.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> GetLeaveChartData()
+        {
+            try
+            {
+                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+                //Get Instutute ID through Sessions
+                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+                var StaffId = userObject.StaffId;
+
+
+                List<LeaveType> leavetype = new List<LeaveType>();
+                var response = await _client.GetAsync($"api/Configuration/GetStaffWiseLeaveTypeInfos{StaffId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    leavetype = JsonConvert.DeserializeObject<List<LeaveType>>(content);
+                    return Json(leavetype);
+                }
+                else
+                {
+
+                    return Json(null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
         public async Task<IActionResult> ViewLeaveDetail(int id)
         {
             try
@@ -371,13 +400,13 @@ namespace HRHUBWEB.Controllers
                     }
 
 
-                    HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetNewOrPendingLeaveInfos{CompanyId}");
-                    if (message2.IsSuccessStatusCode)
-                    {
-                        var result = message2.Content.ReadAsStringAsync().Result;
-                        ObjLeave.ListNewOrPendingleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
+                    //HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetNewOrPendingLeaveInfos{CompanyId}");
+                    //if (message2.IsSuccessStatusCode)
+                    //{
+                    //    var result = message2.Content.ReadAsStringAsync().Result;
+                    //    ObjLeave.ListNewOrPendingleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
 
-                    }
+                    //}
                 }
                 else
                 {
@@ -420,13 +449,21 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/Leave/GetNewOrPendingLeaveInfos{CompanyId}");
+                    HttpResponseMessage message1 = await _client.GetAsync($"api/Leave/GetLeaveInfos{CompanyId}");
                     if (message1.IsSuccessStatusCode)
                     {
                         var result = message1.Content.ReadAsStringAsync().Result;
-                        ObjLeave.ListNewOrPendingleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
+                        ObjLeave.ListAllleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
 
                     }
+
+                    //HttpResponseMessage message1 = await _client.GetAsync($"api/Leave/GetNewOrPendingLeaveInfos{CompanyId}");
+                    //if (message1.IsSuccessStatusCode)
+                    //{
+                    //    var result = message1.Content.ReadAsStringAsync().Result;
+                    //    ObjLeave.ListNewOrPendingleaves = JsonConvert.DeserializeObject<List<Leave>>(result);
+
+                    //}
                 }
                 else
                 {
@@ -531,7 +568,7 @@ namespace HRHUBWEB.Controllers
         }
 
 
-        public async Task<IActionResult> LeaveApproval(int id)
+        public async Task<IActionResult> LeaveApproval(int id , int staffid)
         {
             try
             {
@@ -541,12 +578,7 @@ namespace HRHUBWEB.Controllers
                 //Get Instutute ID through Sessions
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 var CompanyId = userObject.CompanyId;
-
-
-
-               
-
-
+                var StaffId = staffid;
 
                 if (Token != null)
                 {
@@ -567,13 +599,21 @@ namespace HRHUBWEB.Controllers
                         ObjLeave.ListLeaveApprovalData = JsonConvert.DeserializeObject<List<LeaveApproval>>(result);
 
                     }
-                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
+                    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetStaffWiseLeaveTypeInfos{StaffId}");
                     if (message.IsSuccessStatusCode)
                     {
                         var result = message.Content.ReadAsStringAsync().Result;
                         //ViewBag.LeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
                         ObjLeave.ListleaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
                     }
+
+                    //HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{CompanyId}");
+                    //if (message.IsSuccessStatusCode)
+                    //{
+                    //    var result = message.Content.ReadAsStringAsync().Result;
+                    //    //ViewBag.LeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
+                    //    ObjLeave.ListleaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(result);
+                    //}
 
                     return View(ObjLeave);
                 }

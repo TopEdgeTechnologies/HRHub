@@ -22,7 +22,8 @@
                 <div class="row">
                     @{
                         int Count = 1;
-                        foreach (var item in Model.ListNewOrPendingleaves)
+                        List<HRHUBAPI.Models.Leave> list = (Model.ListAllleaves.Where(x => x.LeaveStatusId == 1 || x.LeaveStatusId == 2)).OrderByDescending(x=> x.LeaveId).ToList();
+                        foreach (var item in list)
                         {
                             if (Count > 4) break;
                             <div class="col-xl-3 col-lg-6 col-md-12">
@@ -43,16 +44,16 @@
                                         <div class="mt-3 mb-3">
                                             <div class="h5 mb-1">
                                                 <span class="feather feather-calendar"></span> : @(item.LeaveStartDate == item.LeaveEndDate ? item.LeaveStartDate : item.LeaveStartDate + " - " + item.LeaveEndDate)
-                                                <span class="badge badge-md badge-primary-light ms-1">Leave: @item.Days </span>
+                                                <span class="badge badge-md badge-primary-light ms-1">@item.Days </span>
                                             </div>
                                             <small class="text-muted fs-11">Applied On: @item.LeaveAppliedOnDate</small>
                                         </div>
                                         <div class="progress progress-sm mb-2">
-                                            <div class="progress-bar bg-success w-70"></div>
+                                            <div class="progress-bar bg-success " style="width: @item.ConsumedLeaves %"></div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mb-0">
                                             <h6 class="fs-12 mb-0">Remaining Leaves</h6>
-                                            <h6 class="font-weight-bold fs-12 mb-0">15</h6>
+                                            <h6 class="font-weight-bold fs-12 mb-0">@item.RemainingLeaves</h6>
                                         </div>
                                     </div>
                                     <div class="p-4">
@@ -61,7 +62,7 @@
                                     </div>
                                     <div class="card-footer p-0 border-top-0">
                                         <div class="btn-group w-100 leaves-btns">
-                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,3 )" class="btn btn-outline-light w-50 text-success">Accept</a>
+                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,3)" class="btn btn-outline-light w-50 text-success">Accept</a>
                                             <a onclick="showforwardleavemodel(@item.LeaveId)" class="btn btn-outline-light w-50 text-warning">Forward</a>
                                             <a onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="btn btn-outline-light w-50 text-danger">Reject</a>
                                         </div>
@@ -95,7 +96,7 @@
                                 <th class="border-bottom-0">Applied Date</th>
                                 @*<th class="border-bottom-0">From</th>
                                 <th class="border-bottom-0">To</th>*@
-                                <th class="border-bottom-0">Leave Date</th>
+                                @*<th class="border-bottom-0">Leave Date</th>*@
                                 <th class="border-bottom-0">Days</th>
                                 <th class="border-bottom-0">Reason</th>
                                 @*<th class="border-bottom-0">Applied on</th>*@
@@ -141,24 +142,24 @@
                                         @*<td>@item.@item.LeaveStartDate</td>
                                 <td>@item.LeaveEndDate</td>*@
                                         @{
-                                            if (item.LeaveStartDate == item.LeaveEndDate)
-                                            {
-                                                <td>@item.LeaveStartDate</td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="me-3 d-block">
-                                                            <span class="mb-0 fs-15 "><small class="text-muted">From:</small> @item.LeaveStartDate</span>
-                                                            <div class="clearfix"></div>
+                                        //    if (item.LeaveStartDate == item.LeaveEndDate)
+                                        //    {
+                                        //        <td>@item.LeaveStartDate</td>
+                                        //    }
+                                        //    else
+                                        //    {
+                                        //        <td>
+                                        //            <div class="d-flex">
+                                        //                <div class="me-3 d-block">
+                                        //                    <span class="mb-0 fs-15 "><small class="text-muted">From:</small> @item.LeaveStartDate</span>
+                                        //                    <div class="clearfix"></div>
                                                             
-                                                            <span class="mb-0 fs-15 "><small class="text-muted">To:</small> @item.LeaveEndDate</span>
+                                        //                    <span class="mb-0 fs-15 "><small class="text-muted">To:</small> @item.LeaveEndDate</span>
                                                            
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            }
+                                        //                </div>
+                                        //            </div>
+                                        //        </td>
+                                        //    }
                                         }
 
                                         <td @*class="font-weight-semibold"*@>@item.Days</td>
@@ -186,22 +187,22 @@
                                         }
 
                                         <td class="text-start d-flex">
-                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,3 )" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
+                                            <a href="#" onclick="showleaveApprovalmodel(@item.LeaveId,3)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
                                                 <i class="feather feather-check text-success"></i>
                                             </a>
-                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
+                                            <a href="#" onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
                                                 <i class="feather feather-x text-danger"></i>
                                             </a>
                                             @if (item.LeaveStatusId == 1) // New
                                             {
-                                                <a onclick="showforwardleavemodel(@item.LeaveId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
+                                                <a href="#" onclick="showforwardleavemodel(@item.LeaveId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
                                                     <i class="text-warning fe fe-arrow-right-circle"></i>
                                                 </a>
                                                 <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                                     <i class="feather feather-trash-2 text-danger"></i>
                                                 </a>
                                             }
-                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" class="action-btns1">
+                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
                                                 <i class="feather feather-eye  text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
                                             </a>
 

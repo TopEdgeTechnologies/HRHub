@@ -223,7 +223,7 @@ namespace HRHUBAPI.Controllers
         }
 
         // using this api in leave apply form
-        [HttpGet("GetStaffWiseLeaveTypeInfos{CompanyId}")]
+        [HttpGet("GetStaffWiseLeaveTypeInfos{StaffId}")]
         public async Task<ActionResult<List<LeaveType>>> GetStaffWiseLeaveTypeInfos(int StaffId)
         {
 

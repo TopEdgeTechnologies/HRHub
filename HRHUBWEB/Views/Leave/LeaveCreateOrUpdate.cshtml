@@ -155,10 +155,10 @@
                             {
                                 <div class="col-4 text-center py-5 border-end">
                                     <h5>@item.Title</h5>
-                                    <div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> @item.NoOfLeaves</span></div>
+                                    <div class="justify-content-center text-center d-flex my-auto"><span class="text-@item.Cssclass  fs-20 font-weight-semibold">@item.ConsumedLeave <span class="my-auto fs-14 font-weight-normal text-light">/</span> @item.NoOfLeaves</span></div>
                                 </div>
                             }
-                            @*   <div class="col-4 text-center py-5 border-end">
+                            @* <div class="col-4 text-center py-5 border-end">
                         <h5>Sick leave</h5>
                         <div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
                         </div>
@@ -171,26 +171,29 @@
                         <div class="row pt-4 mx-auto text-center">
                             <div class="col-lg-9 col-md-12 mx-auto d-block">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="d-flex font-weight-semibold">
-                                            <span class="dot-label bg-primary me-2 my-auto"></span>Casual Leaves
+                                    @foreach (var item in Model.ListleaveTypes)
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="d-flex font-weight-semibold">
+                                                <span class="dot-label bg-@item.Cssclass me-2 my-auto"></span>@item.Title
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mt-3 mt-md-0">
-                                        <div class="d-flex font-weight-semibold">
-                                            <span class="dot-label badge-danger me-2 my-auto"></span>Sick Leaves
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mt-3">
-                                        <div class="d-flex font-weight-semibold">
-                                            <span class="dot-label bg-secondary me-2 my-auto"></span>Gifted Leaves
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mt-3">
-                                        <div class="d-flex font-weight-semibold">
-                                            <span class="dot-label bg-success me-2 my-auto"></span>Remaining Leaves
-                                        </div>
-                                    </div>
+                                    }
+                                    @*<div class="col-md-6 mt-3 mt-md-0">
+                                <div class="d-flex font-weight-semibold">
+                                <span class="dot-label badge-danger me-2 my-auto"></span>Sick Leaves
+                                </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                <div class="d-flex font-weight-semibold">
+                                <span class="dot-label bg-secondary me-2 my-auto"></span>Annual Leaves
+                                </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                <div class="d-flex font-weight-semibold">
+                                <span class="dot-label bg-success me-2 my-auto"></span>Gifted Leaves
+                                </div>
+                                </div>*@
                                 </div>
                             </div>
                         </div>
@@ -211,7 +214,6 @@
 
 
             $('#LeaveTypeId').select2();
-            debugger;
             if (@Model.LeaveId > 0) {
                 if ($('#StartDate').val() != $('#EndDate').val()) {
                     $('#daterange-categories').val('multiple').change();
@@ -220,14 +222,114 @@
             }
 
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
-
+            loadChart();
 
         })
 
+        function loadChart() {
+            //debugger;
+            /*----- Overview ------*/
+            var options = {
+                series: [],
+                chart: {
+                    height: 310,
+                    type: 'donut',
+                },
+                dataLabels: {
+                    enabled: false
+                },
+
+                legend: {
+                    show: false,
+                },
+                stroke: {
+                    show: true,
+                    width: 0
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '85%',
+                            background: 'transparent',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    fontSize: '29px',
+                                    color: '#6c6f9a',
+                                    offsetY: -10
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '26px',
+                                    color: undefined,
+                                    offsetY: 16,
+                                },
+                                total: {
+                                    show: true,
+                                    showAlways: false,
+                                    label: 'Total Leaves',
+                                    fontSize: '22px',
+                                    fontWeight: 600,
+                                    color: '#373d3f',
+                                    // formatter: function (w) {
+                                    //   return w.globals.seriesTotals.reduce((a, b) => {
+                                    // 	return a + b
+                                    //   }, 0)
+                                    // }
+                                }
+
+                            }
+                        }
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            show: false,
+                        }
+                    }
+                }],
+                labels: [],
+                //css: []
+                colors: ['#3366ff', '#f7284a', '#fe7f00', '#01c353'],
+            };
+
+            // Make an AJAX request to fetch the data from the database
+            // Assuming the response is an array of numbers corresponding to each category of leaves
+            $.ajax({
+                url: "/Leave/GetLeaveChartData",
+                method: 'GET',
+                success: function (response) {
+                    // Update the series property with the fetched data
+
+                    for (var i = 0; i < response.length; i++) {
+
+                        options.series.push(response[i].consumedLeave);
+                        options.labels.push(response[i].title);
+                        //options.class.push(response[i].cssclass);
+                    }
+
+                    // Create and render the chart with the updated options
+                    var chart = new ApexCharts(document.querySelector("#leavesoverview"), options);
+                    chart.render();
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+
+
+
+        }
 
 
         function postdata() {
-            debugger;
+            //debugger;
             var status = true;
 
 
@@ -269,43 +371,39 @@
                 $("#EndDate").css("border-color", "#ddd");
                 $("#LeaveSubject").css("border-color", "#ddd");
             }
+            debugger;
+            var Data = { leavetypeid: $("#LeaveTypeId").val()}
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/LeaveCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        var b = JSON.parse(data)
+                        if (b.success) {
 
 
 
 
-
-            //var Data = { id: $("#LeaveId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
-            //console.log(Data)
-            //$.ajax({
-            //    async: false,
-            //    url: "/Configuration/LeaveCheckData",
-            //    type: "GET",
-            //    data: Data,
-            //    success: function (data) {
-            //        if (data != "") {
-            //            debugger
-
-            //            var b = JSON.parse(data)
-            //            if (b.success) {
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+                            status = false;
+                        }
 
 
-
-
-            //                // $.growl.warning(b.message);
-            //                $.growl.warning({
-            //                    message: b.message
-            //                });
-            //                status = false;
-            //            }
-
-
-            //        }
-            //    },
-            //    error: function () {
-            //        status = false;
-            //        //   toastr.error("Please Fill Required Field");
-            //    }
-            //})
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
 
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -357,7 +455,7 @@
 
 
         $("#daterange-categories").change(function () {
-            debugger;
+            //debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "multiple") {
                 //$("#StartDate").val("");
@@ -373,7 +471,7 @@
         })
 
         $("#StartDate").change(function () {
-            debugger;
+            //debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "single") {
                 var strtdate = $("#StartDate").val();
@@ -386,7 +484,7 @@
         })
 
         $("#EndDate").change(function () {
-            debugger;
+            //debugger;
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })
 

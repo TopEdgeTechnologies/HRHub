@@ -7,7 +7,7 @@ public partial class StaffSalary
 {
     public int StaffSalaryId { get; set; }
 
-    public int? StaffId { get; set; }
+    public int StaffId { get; set; }
 
     public DateTime? SalaryMonth { get; set; }
 

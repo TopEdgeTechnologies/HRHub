@@ -74,7 +74,7 @@
                                             <th class="border-bottom-0">Leave Type</th>
                                             @*<th class="border-bottom-0">From</th>
                                             <th class="border-bottom-0">TO</th>*@
-                                            <th class="border-bottom-0">Leave Date</th>
+                                            @*<th class="border-bottom-0">Leave Date</th>*@
                                             <th class="border-bottom-0">Days</th>
                                             <th class="border-bottom-0">Reason</th>
                                             @*<th class="border-bottom-0">Applied On</th>*@
@@ -103,24 +103,24 @@
                                                     @*<td> @Html.DisplayFor(modelItem => item.LeaveStartDate)</td>
                                             <td> @Html.DisplayFor(modelItem => item.LeaveEndDate)</td>*@
                                                     @{
-                                                        if (item.LeaveStartDate == item.LeaveEndDate)
-                                                        {
-                                                            <td>@item.LeaveStartDate</td>
-                                                        }
-                                                        else
-                                                        {
-                                                            <td>
-                                                                <div class="d-flex">
-                                                                    <div class="me-3 d-block">
-                                                                        <span class="mb-0 fs-15 "><small class="text-muted">From:</small> @item.LeaveStartDate</span>
-                                                                        <div class="clearfix"></div>
+                                                        //if (item.LeaveStartDate == item.LeaveEndDate)
+                                                        //{
+                                                        //    <td>@item.LeaveStartDate</td>
+                                                        //}
+                                                        //else
+                                                        //{
+                                                        //    <td>
+                                                        //        <div class="d-flex">
+                                                        //            <div class="me-3 d-block">
+                                                        //                <span class="mb-0 fs-15 "><small class="text-muted">From:</small> @item.LeaveStartDate</span>
+                                                        //                <div class="clearfix"></div>
 
-                                                                        <span class="mb-0 fs-15 "><small class="text-muted">To:</small> @item.LeaveEndDate</span>
+                                                        //                <span class="mb-0 fs-15 "><small class="text-muted">To:</small> @item.LeaveEndDate</span>
 
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        }
+                                                        //            </div>
+                                                        //        </div>
+                                                        //    </td>
+                                                        //}
                                                     }
                                                     <td >@Html.DisplayFor(modelItem => item.Days)</td>
                                                     <td>@Html.DisplayFor(modelItem => item.LeaveSubject)</td>

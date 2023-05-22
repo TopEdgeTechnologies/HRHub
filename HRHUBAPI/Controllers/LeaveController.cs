@@ -28,12 +28,12 @@ namespace HRHUBAPI.Controllers
             return await new Leave().GetLeave(CompanyId, _context);
         }
 
-        [HttpGet("GetNewOrPendingLeaveInfos{CompanyId}")]
-        public async Task<ActionResult<List<Leave>>> GetNewOrPendingLeaveInfos(int CompanyId)
-        {
+        //[HttpGet("GetNewOrPendingLeaveInfos{CompanyId}")]
+        //public async Task<ActionResult<List<Leave>>> GetNewOrPendingLeaveInfos(int CompanyId)
+        //{
 
-            return await new Leave().GetNewOrPendingLeave(CompanyId, _context);
-        }
+        //    return await new Leave().GetNewOrPendingLeave(CompanyId, _context);
+        //}
 
 
         [HttpGet("GetLeaveDetailInfoId{id}")]
@@ -103,16 +103,16 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("LeaveCheckData{id}/{cnic}")]
-        public async Task<ActionResult<JsonObject>> LeaveCheckData(int id, string email)
+        [HttpGet("LeaveCheckData{staffid}/{leavetypeid}")]
+        public async Task<ActionResult<JsonObject>> LeaveCheckData(int staffid,int leavetypeid)
         {
-            if (await new Leave().AlreadyExist(id, email, _context))
+            if (await new Leave().CheckLeave(staffid,leavetypeid,  _context))
             {
                 return Ok(new
                 {
 
                     Success = true,
-                    Message = "Leave Already Exist!"
+                    Message = "You Have Consumed All leave!"
 
 
                 });
@@ -130,7 +130,38 @@ namespace HRHUBAPI.Controllers
                 });
             }
 
+
         }
+
+
+        //[HttpGet("LeaveCheckData{id}/{cnic}")]
+        //public async Task<ActionResult<JsonObject>> LeaveCheckData(int id, string email)
+        //{
+        //    if (await new Leave().AlreadyExist(id, email, _context))
+        //    {
+        //        return Ok(new
+        //        {
+
+        //            Success = true,
+        //            Message = "Leave Already Exist!"
+
+
+        //        });
+        //    }
+        //    else
+        //    {
+
+        //        return Ok(new
+        //        {
+
+        //            Success = false,
+        //            Message = "Not found"
+
+
+        //        });
+        //    }
+
+        //}
 
         [HttpPost("SaveLeaveApprovalDetail")]  //{id}/{leavestatusid}/{remarks}/{staffid}
         public async Task<ActionResult<JsonObject>> SaveLeaveApprovalDetail(LeaveApproval obj)

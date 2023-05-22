@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System;
 
 using System.ComponentModel.DataAnnotations.Schema;
-
+using HRHUBAPI.Models.Configuration;
+using System.Data;
 
 namespace HRHUBAPI.Models
 {
@@ -14,7 +15,11 @@ namespace HRHUBAPI.Models
     {
         [NotMapped]
         public IEnumerable<LeaveType>? ListLeaveTypes { get; set; }
-
+        [NotMapped]
+        public decimal? ConsumedLeave { get; set; }
+        [NotMapped]
+        public decimal? RemainingLeaves { get; set; }
+        
         public async Task<List<LeaveType>> GetLeaveType(int CompanyId, HrhubContext _context)
         {
             try
@@ -35,34 +40,59 @@ namespace HRHUBAPI.Models
         // using this in leave apply form
         public async Task<List<LeaveType>> GetStaffWiseLeaveType(int StaffId, HrhubContext _context)
         {
+
+            DbConnection _db = new DbConnection();
             try
             {
-                List<LeaveType> list = new List<LeaveType>();
+                string query = "EXEC HR.sp_Get_StaffWiseLeaves "  + StaffId;
+                DataTable dt = _db.ReturnDataTable(query);
 
-
-                list = await (from l in _context.StaffLeaveAllocations
-                              join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
-
-                              where l.IsDeleted == false
-                              && lt.IsDeleted == false
-                              && l.StaffId == StaffId
-                              select new LeaveType()
-                              {
-                                  LeaveTypeId = lt.LeaveTypeId,
-                                  Title = lt.Title,
-                                  NoOfLeaves = l.AllowedLeaves
-
-                              }).ToListAsync();
-
-                return list;
-
+                var leavetypes = dt.AsEnumerable()
+                    .Select(row => new LeaveType
+                    {
+                        LeaveTypeId = Convert.ToInt32(row["LeaveTypeId"]),
+                        Title = row["Title"].ToString(),
+                        NoOfLeaves = Convert.ToInt32(row["AllowedLeaves"]),
+                        ConsumedLeave = Convert.ToDecimal(row["ConsumedLeave"]),
+                        RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
+                        Cssclass = row["CSSClass"].ToString()
+                    })
+                    .ToList();
+                return leavetypes;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) 
+            { throw; }
 
-                throw;
 
-            }
+
+            //try
+            //{
+            //    List<LeaveType> list = new List<LeaveType>();
+
+
+            //    list = await (from l in _context.StaffLeaveAllocations
+            //                  join lt in _context.LeaveTypes on l.LeaveTypeId equals lt.LeaveTypeId
+
+            //                  where l.IsDeleted == false
+            //                  && lt.IsDeleted == false
+            //                  && l.StaffId == StaffId
+            //                  select new LeaveType()
+            //                  {
+            //                      LeaveTypeId = lt.LeaveTypeId,
+            //                      Title = lt.Title,
+            //                      NoOfLeaves = l.AllowedLeaves
+
+            //                  }).ToListAsync();
+
+            //    return list;
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw;
+
+            //}
         }
 
         public async Task<LeaveType> GetLeaveTypeById(int id, HrhubContext _context)

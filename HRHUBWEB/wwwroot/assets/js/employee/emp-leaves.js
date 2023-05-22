@@ -1,6 +1,7 @@
 $(function(e){
 	'use strict';
 
+
 	/*----- Overview ------*/
 	var options = {
 		series: [14, 8, 20, 18],
