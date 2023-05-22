@@ -32,7 +32,7 @@ namespace HRHUBAPI.Controllers
 		#region Staff
 
 		[HttpGet("GetStaffStatisticsByCompanyId{CompanyId}")]
-		public async Task<ActionResult<List<Staff>>> GetStaffStatisticsByCompanyId(int CompanyId)
+		public async Task<ActionResult<Staff>> GetStaffStatisticsByCompanyId(int CompanyId)
 		{
 			return await new Staff().GetStaffStatisticsByCompanyId(CompanyId);
 		}

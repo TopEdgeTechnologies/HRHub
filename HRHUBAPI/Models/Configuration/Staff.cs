@@ -57,27 +57,26 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<StaffAttachment>? StaffAttachmentList { get; set; }
 
-        public async Task<List<Staff>> GetStaffStatisticsByCompanyId(int CompanyId)
-        {
-            DbConnection _db = new DbConnection();
-            try
-            {
-                string query = "EXEC BI.sp_Get_Staff_Statistics " + CompanyId;
-                DataTable dt = _db.ReturnDataTable(query);
+		public async Task<Staff> GetStaffStatisticsByCompanyId(int CompanyId)
+		{
+			DbConnection _db = new DbConnection();
+			try
+			{
+				string query = "EXEC BI.sp_Get_Staff_Statistics " + CompanyId;
+				DataTable dt = _db.ReturnDataTable(query);
+				Staff StaffStatistics = new Staff();
 
-                var staffStatistics = dt.AsEnumerable()
-                    .Select(row => new Staff
-                    {
-                        TotalActiveStaff = Convert.ToInt32(row["TotalActiveStaff"]),
-                        TotalMaleStaff = Convert.ToInt32(row["TotalMaleStaff"]),
-                        TotalFemaleStaff = Convert.ToInt32(row["TotalFemaleStaff"]),
-                        TotalProbationStaff = Convert.ToInt32(row["TotalProbationStaff"])
-                    })
-                    .ToList();
-                return staffStatistics;
-            }
-            catch { throw; }
-        }
+				if (dt.Rows.Count > 0)
+				{
+					TotalActiveStaff = Convert.ToInt32(dt.Rows[0]["TotalActiveStaff"]);
+					TotalMaleStaff = Convert.ToInt32(dt.Rows[0]["TotalMaleStaff"]);
+					TotalFemaleStaff = Convert.ToInt32(dt.Rows[0]["TotalFemaleStaff"]);
+					TotalProbationStaff = Convert.ToInt32(dt.Rows[0]["TotalProbationStaff"]);
+				}
+				return StaffStatistics;
+			}
+			catch { throw; }
+		}
 
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {

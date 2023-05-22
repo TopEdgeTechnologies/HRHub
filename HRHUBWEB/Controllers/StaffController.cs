@@ -60,7 +60,21 @@ namespace HRHUBWEB.Controllers
                     var content = await response.Content.ReadAsStringAsync();   
                     staff.StaffList = JsonConvert.DeserializeObject<List<Staff>>(content);
                 }
-            }
+
+				// Fill StaffStatisticsList
+				HttpResponseMessage response2 = await _client.GetAsync($"api/Staffs/GetStaffStatisticsByCompanyId{staff.CompanyId}");
+				if (response2.IsSuccessStatusCode)
+				{
+					var content = await response2.Content.ReadAsStringAsync();
+					var StaffStatistics = JsonConvert.DeserializeObject<Staff>(content);
+
+                    staff.TotalActiveStaff = 104;// StaffStatistics.TotalActiveStaff;
+                    staff.TotalMaleStaff = 90;//StaffStatistics.TotalMaleStaff;
+                    staff.TotalFemaleStaff = 13;// StaffStatistics.TotalFemaleStaff;
+                    staff.TotalProbationStaff = 0;// StaffStatistics.TotalProbationStaff;
+				}
+
+			}
             else
             {
                 RedirectToAction("Loginpage", "User", new { id = 2 });
