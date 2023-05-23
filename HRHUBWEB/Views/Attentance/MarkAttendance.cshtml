@@ -33,7 +33,7 @@
 									<div class="input-group-text">
 										<i class="feather feather-calendar"></i>
 									</div>
-								</div><input class="form-control fc-datepicker" placeholder="DD-MM-YYYY" type="text">
+								</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
 							</div>
 						</div>
 					</div>
@@ -51,311 +51,21 @@
 					</div>
 				</div>
 				<div class="table-responsive">
-					<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-table">
+					<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="emp-attendance">
 						<thead>
 							<tr>
-								<th class="border-bottom-0 w-5">#Emp ID</th>
-								<th class="border-bottom-0">Emp Name</th>
+								<th class="border-bottom-0">Sr.#</th>
+
+								<th class="border-bottom-0">Name</th>
 								<th class="border-bottom-0">Status</th>
-								<th class="border-bottom-0">Clock In</th>
-								<th class="border-bottom-0">Clock Out</th>
-								<th class="border-bottom-0">IP Address</th>
-								<th class="border-bottom-0">Working From</th>
-								<th class="border-bottom-0">Attendance</th>
-								<th class="border-bottom-0">Actions</th>
+								<th class="border-bottom-0">Clock-In</th>
+								<th class="border-bottom-0">Clock-Out</th>
+								<th class="border-bottom-0 text-center">Marks</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>#2987</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/1.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Faith Harris</h6>
-											<p class="text-muted mb-0 fs-12">Web Designer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#4987</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/9.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Austin Bell</h6>
-											<p class="text-muted mb-0 fs-12">Angular Developer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-danger-light">Absent</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.2</td>
-								<td>Office</td>
-								<td><span class="badge badge-danger">Not Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1">
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#6729</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/2.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Maria Bower</h6>
-											<p class="text-muted mb-0 fs-12">Marketing analyst</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#2098</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/10.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Peter Hill</h6>
-											<p class="text-muted mb-0 fs-12">Testor</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-warning-light">Half Day</span></td>
-								<td>09:30 AM</td>
-								<td>01:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-danger">Not Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1">
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#halfpresentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#1025</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/3.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Victoria Lyman</h6>
-											<p class="text-muted mb-0 fs-12">General Manager</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#3262</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/11.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Adam Quinn</h6>
-											<p class="text-muted mb-0 fs-12">Accountant</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#3489</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/4.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Melanie Coleman</h6>
-											<p class="text-muted mb-0 fs-12">App Designer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>09:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#3698</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/12.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Max Wilson</h6>
-											<p class="text-muted mb-0 fs-12">PHP Developer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-orange-light">Late</span></td>
-								<td>10:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-danger">Not Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1">
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#5612</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/5.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Amelia Russell</h6>
-											<p class="text-muted mb-0 fs-12">UX Designer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>10:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>#0245</td>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/13.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-1 d-block">
-											<h6 class="mb-1 fs-14">Justin Metcalfe</h6>
-											<p class="text-muted mb-0 fs-12">Web Designer</p>
-										</div>
-									</div>
-								</td>
-								<td><span class="badge badge-success-light">Present</span></td>
-								<td>10:30 AM</td>
-								<td>06:30 PM</td>
-								<td>225.192.45.1</td>
-								<td>Office</td>
-								<td><span class="badge badge-success">Marked</span></td>
-								<td>
-									<div class="d-flex">
-										<label class="custom-control custom-checkbox-md">
-											<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked>
-											<span class="custom-control-label-md success"></span>
-										</label>
-										<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-											<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
+							
+						
 						</tbody>
 					</table>
 				</div>
@@ -366,286 +76,28 @@
 		</div>
 	</div>
 </div>
+
+
+
+@*
+	<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
+			<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
+		</a>
+<td><div class="d-flex"><label class="custom-control custom-checkbox-md"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div></td>
+*@
+
+
+
+
+
+
+
+
+
 <!-- End Row-->
-	<!--sidebar-right-->
-			<div class="sidebar sidebar-right sidebar-animate">
-				<div class="card-header border-bottom pb-5">
-					<h4 class="card-title">Notifications </h4>
-					<div class="card-options">
-						<a  href="javascript:void(0);" class="btn btn-sm btn-icon btn-light  text-primary"  data-bs-toggle="sidebar-right" data-bs-target=".sidebar-right"><i class="feather feather-x-circle"></i> </a>
-					</div>
-				</div>
-				<div class="">
-					<div class="list-group-item  align-items-center border-0">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/4.jpg)"></span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Liam <span class="text-muted font-weight-normal">Sent Message</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>30 mins ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/10.jpg)"></span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Paul<span class="text-muted font-weight-normal"> commented on you post</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>1 hour ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3 bg-pink-transparent"><span class="feather feather-shopping-cart"></span></span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">James<span class="text-muted font-weight-normal"> Order Placed</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>1 day ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/9.jpg)">
-								<span class="avatar-status bg-green"></span>
-							</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Diane<span class="text-muted font-weight-normal"> New Message Received</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>1 day ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/5.jpg)">
-								<span class="avatar-status bg-muted"></span>
-							</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Vinny<span class="text-muted font-weight-normal"> shared your post</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>2 days ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3 bg-primary-transparent">M</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Mack<span class="text-muted font-weight-normal"> your admin lanuched</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>1 week ago</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/12.jpg)">
-								<span class="avatar-status bg-green"></span>
-							</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Vinny<span class="text-muted font-weight-normal"> shared your post</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>04 Jan 2021 1:56 Am</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/8.jpg)">	</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Anna<span class="text-muted font-weight-normal"> likes your post</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>25 Dec 2020 11:25 Am</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/14.jpg)">	</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Kimberly<span class="text-muted font-weight-normal"> Completed one task</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>24 Dec 2020 9:30 Pm</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3" style="background-image: url(../assets/images/users/3.jpg)">	</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Rina<span class="text-muted font-weight-normal"> your account has Updated</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>28 Nov 2020 7:16 Am</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="list-group-item  align-items-center  border-bottom">
-						<div class="d-flex">
-							<span class="avatar avatar-lg brround me-3 bg-success-transparent">J</span>
-							<div class="mt-1 w-65">
-								<a  href="javascript:void(0);" class="font-weight-semibold fs-16">Julia<span class="text-muted font-weight-normal"> Prepare for Presentation</span></a>
-								<span class="clearfix"></span>
-								<span class="text-muted fs-13 ms-auto"><i class="mdi mdi-clock text-muted me-1"></i>18 Nov 2020 11:55 Am</span>
-							</div>
-							<div class="ms-auto">
-								<a href="" class="me-0 option-dots" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-									<span class="feather feather-more-horizontal"></span>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a  href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
-									<li><a  href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--/sidebar-right-->
+	
 
-			<!--Change password Modal -->
-			<div class="modal fade"  id="changepasswordnmodal">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Change Password</h5>
-							<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="form-group">
-								<label class="form-label">New Password</label>
-								<input type="password" class="form-control" placeholder="password" value="">
-							</div>
-							<div class="form-group">
-								<label class="form-label">Confirm New Password</label>
-								<input type="password" class="form-control" placeholder="password" value="">
-							</div>
-						</div>
-						<div class="modal-footer">
-							<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
-							<a  href="javascript:void(0);" class="btn btn-primary">Confirm</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Change password Modal  -->
-
+			
 			<!--Present Modal -->
 			<div class="modal fade"  id="presentmodal">
 				<div class="modal-dialog" role="document">
@@ -963,81 +415,196 @@
 			</div>
 			<!-- End Present Modal  -->
 
-			<!--Halfday Edit Modal -->
-			<div class="modal fade"  id="halfdayeditmodal">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Attendance Details <span class="badge badge-orange">Half Day</span></h5>
-							<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-8">
-									<div class="form-group">
-										<label class="form-label">Clock In</label>
-										<div class="input-group">
-											<input type="text" class="form-control timepicker" value="9:30 AM">
-											<div class="input-group-text">
-												<i class="fa fa-clock-o"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="custom-switch mt-md-6">
-										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input  orange">
-										<span class="custom-switch-indicator "></span>
-										<span class="custom-switch-description text-dark">Late</span>
-									</label>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-8">
-									<div class="form-group">
-										<label class="form-label">Clock Out</label>
-										<div class="input-group">
-											<input type="text" class="form-control timepicker" value="01: 30 PM">
-											<div class="input-group-text">
-												<i class="fa fa-clock-o"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="custom-switch mt-md-6">
-										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input  orange" checked>
-										<span class="custom-switch-indicator"></span>
-										<span class="custom-switch-description text-dark">half Day</span>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="form-label">IP Address</label>
-								<input type="text" class="form-control" placeholder="225.192.145.1" disabled>
-							</div>
-							<div class="form-group">
-								<label class="form-label">Working Form</label>
-								<select name="projects"  class="form-control custom-select select2" disabled data-placeholder="Select">
-									<option label="Select"></option>
-									<option value="1" selected>Office</option>
-									<option value="2">Home</option>
-									<option value="3">Others</option>
-								</select>
-							</div>
-						</div>
-						<div class="modal-footer d-flex">
-							<div>
-								<a  href="javascript:void(0);" class="btn btn-light"  data-bs-toggle="modal" data-bs-target="#halfpresentmodal" data-bs-dismiss="modal"><i class="feather feather-arrow-left me-1"></i>Back</a>
-							</div>
-							<div class="ms-auto">
-								<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">close</a>
-								<a  href="javascript:void(0);" class="btn btn-primary">Save</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Edit Modal  -->
+			
+@section scripts{
+
+	<script>
+
+
+		$(document).ready(function () {
+			$('#emp-attendance').DataTable();
+
+			$("#todate").change(function () {
+				alert("The text has been changed.");
+				LoadAttendance();
+			});
+
+
+
+
+
+
+			$("#IdEmployee").select2();
+
+			var currentDate = new Date(); // Get the current date
+			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+			var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+			$('#fromdate').datepicker({
+				//dateFormat: 'dd M yyyy',
+				autoHide: true
+
+
+
+			});
+
+			//$('#fromdate').datepicker('setDate', firstDayOfMonth);
+
+			$('#todate').datepicker({
+				dateFormat: 'dd M yy',
+				autoHide: true
+
+
+
+			});
+			$('#todate').datepicker('setDate', currentDate);
+
+
+
+
+			var msg = '@ViewBag.Success';
+			if (msg !== "" && msg == '1') {
+
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+					type: "success"
+				});
+
+
+
+			}
+			if (msg !== "" && msg == '2') {
+
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+					type: "success"
+				});
+
+
+
+			}
+			if (msg !== "" && msg == '3') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+					type: "success"
+				});
+
+			}
+			if (msg !== "" && msg == '0') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+					type: "error"
+				});
+
+
+
+			}
+
+
+			$('#myTable').DataTable();
+
+
+			$('#searchbtn').click(function () {
+				// Code to be executed when the button is clicked
+				LoadAttendance();
+			});
+		});
+
+
+
+
+
+
+		function LoadAttendance() {
+
+
+
+			var obj = {								
+				todate: $("#todate").val()
+
+			}
+			console.log(obj)
+
+
+
+			$.ajax({
+				url: "/Attentance/ListMarkAttendanceData",
+				type: "GET",
+				async: false,
+				data: obj,
+				success: function (data) {
+
+					if (data != null) {
+						console.log(data);
+						debugger;
+						var table = $('#emp-attendance').DataTable();
+						table.clear();
+						table.draw();
+
+
+
+						for (var i = 0; i < data.length; i++) {
+
+							var rowData = [];
+
+
+							var Totalhours = Math.floor(parseInt(data[i]["totalDefinedMinutes"]) / 60);
+							var TotalremainingMinutes = parseInt(data[i]["totalDefinedMinutes"]) % 60;
+
+							var Emphours = Math.floor(parseInt(data[i]["totalWorkingMinutes"]) / 60);
+							var EmpremainingMinutes = parseInt(data[i]["totalWorkingMinutes"]) % 60;
+
+
+
+
+							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
+							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
+							var marks = '<td><div class="d-flex"><label class="custom-control custom-checkbox-md"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div></td>';
+
+							rowData.push([i + 1, data[i]["staffName"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), marks]);
+
+
+							table.rows.add(rowData);
+							table.draw();
+
+						}
+
+
+
+					}
+
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+
+
+
+		}
+
+
+		function convertTimeToAMPM(timeString) {
+			if (timeString != null && timeString != '' && timeString != 'NaN') {
+				var time = timeString.split(':');
+
+				var hours = parseInt(time[0]);
+				var minutes = parseInt(time[1]);
+
+				var ampm = hours >= 12 ? 'PM' : 'AM';
+				hours = hours % 12;
+				hours = hours ? hours : 12; // '0' should be converted to '12'
+
+				var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+				return formattedTime;
+
+			}
+			else {
+				return '';
+			}
+
+		}
+
+
+	</script>
+	}
