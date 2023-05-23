@@ -32,20 +32,20 @@
 				<div class="row mb-0 pb-0">
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-primary-transparent" id="TotalCountId">0</span>
-						<h5 class="mb-0 mt-3" id="TotalDayId">Total Days</h5>
+						<h5 class="mb-0 mt-3" id="TotalDayId">Total</h5>
 					</div>	
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-danger-transparent" id="AbsentCountId">0</span>
-						<h5 class="mb-0 mt-3" id="AbsentDayId">Absent Days</h5>
+						<h5 class="mb-0 mt-3" id="AbsentDayId">Absent</h5>
 					</div>
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5 ">
 						<span class="avatar avatar-md bradius fs-20 bg-success-transparent" id="PresentCountId">0</span>
-						<h5 class="mb-0 mt-3" id="PresentDayId">Present Days</h5>
+						<h5 class="mb-0 mt-3" id="PresentDayId">Present</h5>
 					</div>
 					
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-warning-transparent" id="LeaveCountId">0</span>
-						<h5 class="mb-0 mt-3" id="LeaveDayId">Leave Days</h5>
+						<h5 class="mb-0 mt-3" id="LeaveDayId">Leave</h5>
 					</div>
 					
 					
@@ -334,41 +334,43 @@
 
 		function AtendenceCount(){
 
+			var obj = {
+				staffid: $("#IdEmployee").val()
+				
+
+			}
+
 			$.ajax({
 				url: "/Attentance/GetAttendanceCount",
 				type: "POST",
 				async: false,
+				data: obj,
 				success: function (response) {
 					console.log(response)
 					if (response != null) {
-
-						$('#TotalCountId').text(response.attendenceId);
-						$('#TotalDayId').text(data.titleStatus);
+						debugger
 						
-						
-						
-						
-
 						for (var i = 0; i < response.length; i++) 
-						{
-							if (response.titleStatus == "Total") {
-								$('#TotalCountId').text(response.attendenceId);
-								$('#TotalDayId').text(data.titleStatus);
+						{ 
+							if (response[i].titleStatus == "Total") {
+								$('#TotalCountId').text(response[i].attendanceId);
+								$('#TotalDayId').text(response[i].titleStatus);
 							}	
-							else if (response.titleStatus == "Absent")
+							else if (response[i].titleStatus == "Absent")
 							{
-								$('#AbsentCountId').text(response.attendenceId);
-								$('#AbsentDayId').text(data.titleStatus);
+								$('#AbsentCountId').text(response[i].attendanceId);
+								$('#AbsentDayId').text(response[i].titleStatus);
 							}
-							else if (response.titleStatus == "Present")
+							else if (response[i].titleStatus == "Present")
 							{
-								$('#PresentCountId').text(response.attendenceId);
-								$('#PresentDayId').text(data.titleStatus);
+								$('#PresentCountId').text(response[i].attendanceId);
+								$('#PresentDayId').text(response[i].titleStatus);
 							}
-							else if (response.titleStatus == "Leave")
+							else if (response[i].titleStatus == "Leave")
 							{
-								$('#LeaveCountId').text(response.attendenceId);
-								$('#LeaveDayId').text(data.titleStatus);
+								
+								$('#LeaveCountId').text(response[i].attendanceId);
+								$('#LeaveDayId').text(response[i].titleStatus);
 							}
 							
 						}
