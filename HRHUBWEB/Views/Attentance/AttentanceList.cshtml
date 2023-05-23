@@ -15,15 +15,13 @@
 						
 						<span id="clocktimer2" class="border-0 style size_md" style="background: transparent; color: rgb(49, 62, 106); border-color: transparent;"></span>
 						<label class="form-label">Current Time</label>
-						@*<input type="text" asp-for="AttendanceDate" />
-						<input type="text" asp-for="FirstPunchIn" />*@
-						@*<label class="form-label" id="dateTimeLabel"></label>*@
+						
 
 				
 					</div>
 					<div class="btn-list text-center mt-5">
-						<a id="timeInId" class="btn ripple btn-primary">Check In</a>
-						@*<a id="timeoutId" class="btn ripple btn-primary ">Check Out</a>*@
+						<a id="timeInId" class="btn ripple btn-primary btn-block">Check In</a>
+						
 					</div>
 				</div>
 			</div>
@@ -49,8 +47,17 @@
 
 				</div>
 				<div class="card-body pt-0 pb-3">
-					<div class="row mb-0 pb-0">
-						<div class="col-md-6 col-xl-2 text-center py-5">
+					<div class="row mb-0 pb-0" id="AttendenceCounts">
+
+						@foreach (var item in ViewBag.ListStatusCount)
+						{
+							<div class="col-md-6 col-xl-2 text-center py-5">
+								<span class="avatar avatar-md bradius fs-20 @item.CssClass">@item.AttendanceId</span>
+								<h5 class="mb-0 mt-3">@item.TitleStatus Days</h5>
+							</div>
+						}
+
+						@*<div class="col-md-6 col-xl-2 text-center py-5">
 							<span class="avatar avatar-md bradius fs-20 bg-primary-transparent">31</span>
 							<h5 class="mb-0 mt-3">Total Days</h5>
 						</div>
@@ -73,7 +80,10 @@
 						<div class="col-md-6 col-xl-2 text-center py-5">
 							<span class="avatar avatar-md bradius fs-20 bg-pink-transparent">5</span>
 							<h5 class="mb-0 mt-3">Holidays</h5>
-						</div>
+						</div>*@
+					
+					
+					
 					</div>
 				</div>
 			</div>
@@ -110,7 +120,7 @@
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="form-label">To:</label>
+										<label class="form-label">To:</label>  
 										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
@@ -224,7 +234,7 @@
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 			var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
 			$('#fromdate').datepicker({
-				//dateFormat: 'dd M yyyy',
+				dateFormat: 'dd M yy',
 				autoHide: true
 			
 		
@@ -234,7 +244,7 @@
 			$('#fromdate').datepicker('setDate', firstDayOfMonth);
 
 			$('#todate').datepicker({
-              // dateFormat: 'dd M yy',
+               dateFormat: 'dd M yy',
 				autoHide: true
 				
 				
@@ -291,6 +301,9 @@
 				// Code to be executed when the button is clicked
 				LoadAttendance();
 			});
+
+			$('#searchbtn').click()
+
         });
 
 
@@ -307,7 +320,7 @@
 			else{
 				$("#timeInId").text('Check In');
 			}
-		 
+			
 		 });
 		 
 		 function CheckAtendence(){
@@ -317,16 +330,15 @@
 				type: "POST",
 				async: false,				
 				success: function (response) {
-					console.log(response)
-					
-					if (response.value1){
-						debugger
-
-					notif({
-						msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Time In Succesfully.",
-						type: "success"
-					});
+					if(response!=null)
+					{
+						notif({
+							msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + $("#timeInId").text() + " Succesfully.",
+							type: "success"
+						});
+						$('#searchbtn').click()
 					}
+
 					
 
 				},
@@ -343,8 +355,22 @@
 				method: 'GET',
 				dataType: 'json',
 				success: function (response) {
+					debugger
 					
-					console.log(response);
+					if (response == null) {
+						$("#timeInId").text('Check In');
+					}
+					else if (response.timeIn != null && response.timeOut != null && response.timeIn == null && response.timeOut == null) 
+					{
+						$("#timeInId").text('Check In');
+					}
+					
+					else if (response.timeOut == null && response.timeIn != null)
+					{
+						$("#timeInId").text('Check Out');
+					}
+
+
 					
 				},
 				error: function (xhr, status, error) {
@@ -352,7 +378,7 @@
 					console.error('AJAX request failed');
 				}
 			});
-		});
+		
 
 		}
 
@@ -369,10 +395,8 @@
 				todate: $("#todate").val()
               
             }
-			console.log(obj)
 		
-          
-
+		
             $.ajax({
 				url: "/Attentance/GetAttendanceData",
                 type: "GET",
@@ -382,7 +406,7 @@
                  
                     if(data!=null)
                     {
-						console.log(data);
+						
 						debugger;
 						var table = $('#emp-attendance').DataTable();
                           table.clear();
@@ -408,7 +432,7 @@
 							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
 							var progress = '<div class="progress progress-sm d-block"   data-toggle="tooltip" title="' + Totalhours + ':' + TotalremainingMinutes + '"   ><div class="progress-bar bg-success w-' + parseInt(percenatge) + '"   data-toggle="tooltip" title="' + Emphours + ':' + EmpremainingMinutes + '" > </div>	</div>';
 
-							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, data[i]["firstPunchIn"], data[i]["lastPunchOut"], progress ]);
+							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), progress]);
 
 
                           table.rows.add(rowData);
@@ -416,12 +440,7 @@
 
                          }
 
-                      //  $("#newStatusmodal").modal('hide');
-
-                      //$.growl.notice({
-                      //      message: "Status Updated"
-                      //    });
-
+                      
                        
                     }
                   
@@ -435,6 +454,36 @@
                
      
      }
+
+
+		function convertTimeToAMPM(timeString) {
+			if (timeString != null && timeString != '' && timeString!='NaN'){
+			var time = timeString.split(':');
+		
+				var hours = parseInt(time[0]);
+				var minutes = parseInt(time[1]);
+
+				var ampm = hours >= 12 ? 'PM' : 'AM';
+				hours = hours % 12;
+				hours = hours ? hours : 12; // '0' should be converted to '12'
+
+				var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+				return formattedTime;
+			
+			}
+			else
+			{
+				return '';
+			}
+
+		}
+
+
+
+		
+
+
+
 
 
     </script>

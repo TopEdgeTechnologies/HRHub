@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HRHUBAPI.Models.Configuration;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -15,8 +17,11 @@ namespace HRHUBAPI.Models
 
 		[NotMapped]
         public string? Attendancestatus { get; set; }
+		
 		[NotMapped]
 		public string? StaffName { get; set; }
+		[NotMapped]
+		public string? TitleStatus { get; set; }
 
 		[NotMapped]
 		public string? CssClass { get; set; }
@@ -228,6 +233,7 @@ namespace HRHUBAPI.Models
 							detailAttendance.TimeOut = checkAttendenceInfo.LastPunchOut;
 							detailAttendance.UpdatedOn = DateTime.Now;
 							detailAttendance.UpdatedBy = ObjAttendanceMaster.CreatedBy;
+
 							detailAttendance.IsDeleted = false;
 							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);
 
@@ -240,8 +246,10 @@ namespace HRHUBAPI.Models
 							AttendanceDetail objdetail = new AttendanceDetail();
 							objdetail.AttendanceId = checkAttendenceInfo.AttendanceId;
 							objdetail.TimeIn = ObjAttendanceMaster.FirstPunchIn;
+							objdetail.CreatedOn = DateTime.Now;
 							objdetail.UpdatedOn = DateTime.Now;
 							objdetail.UpdatedBy = ObjAttendanceMaster.CreatedBy;
+							objdetail.CreatedBy = ObjAttendanceMaster.CreatedBy;
 							objdetail.IsDeleted = false;
 							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);
 							_context.AttendanceDetails.Add(objdetail);
@@ -304,25 +312,32 @@ namespace HRHUBAPI.Models
 
 		}
 
-
-
-
-
-
-
-
-
-
-
-		public async Task<bool> CheckStatus(HrhubContext _context)
+		// Check In and Check Out button check Status update
+		public async Task<AttendanceDetail>CheckStatus(int StaffId,HrhubContext _context)
 		{
 			try
 			{
-				var currentDate = DateTime.Now.Date;			
-				var data = await _context.AttendanceMasters
-					.FirstOrDefaultAsync(d => d.AttendanceDate == currentDate);
+				if (StaffId > 0)
+				{
+					var currentDate = DateTime.Now.Date;
 
-				return false;
+					var query = from at in _context.AttendanceDetails
+								join M in _context.AttendanceMasters on at.AttendanceId equals M.AttendanceId
+								where M.StaffId == StaffId && at.IsDeleted == false && M.IsDeleted == false && M.AttendanceDate == currentDate
+								//orderby at.AttendanceId descending
+								select new AttendanceDetail
+								{
+									AttendanceDetailId =at.AttendanceDetailId, 
+									TimeIn = at.TimeIn,
+									TimeOut = at.TimeOut
+								};
+
+					AttendanceDetail? resultlist=	query.OrderByDescending(x => x.AttendanceDetailId).FirstOrDefault();
+
+					return await Task.FromResult(resultlist!=null? resultlist:new AttendanceDetail());
+
+				}
+				return null;
 			}
 			catch (Exception)
 			{
@@ -331,7 +346,28 @@ namespace HRHUBAPI.Models
 			}
 		}
 
+		// Load store procedure Get attendance Status sp_getattendanceStatus
+		public async Task<List<AttendanceMaster>> GetattendanceStatusStaff(int StaffId)
+		{
+			DbConnection _db = new DbConnection();
+			try
+			{
+				string query = "EXEC dbo.sp_getattendanceStatus " + StaffId;
+				DataTable dt = _db.ReturnDataTable(query);
 
+				var StatusStaff = dt.AsEnumerable()
+
+					.Select(row => new AttendanceMaster
+					{
+						AttendanceId = Convert.ToInt32(row["countof"]),
+						TitleStatus = row["TitleStatus"].ToString(),
+						CssClass = row["CssClass"].ToString()
+					})
+					.ToList();
+				return StatusStaff;
+			}
+			catch { throw; }
+		}
 
 
 

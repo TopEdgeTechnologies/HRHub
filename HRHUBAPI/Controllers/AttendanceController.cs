@@ -40,35 +40,21 @@ namespace HRHUBAPI.Controllers
 			return await new AttendanceMaster().PostAttendence(obj, _context);
 		}
 
-		[HttpGet("CheckData")]
-		public async Task<ActionResult<JsonObject>> CheckData()
+		[HttpGet("CheckData{StaffId}")]
+		public async Task<ActionResult<AttendanceDetail>> CheckData(int StaffId)
 		{
-			if (await new AttendanceMaster().CheckStatus(_context))
-			{
-				return Ok(new
-				{
 
-					Success = true,					
-
-
-				});
-			}
-			else
-			{
-
-				return Ok(new
-				{
-
-					Success = false,
-					Message = "Not found"
-
-
-				});
-			}
+			return await new AttendanceMaster().CheckStatus(StaffId, _context);
+			
 
 		}
 
+		[HttpGet("SetStaffAttendanceStatus{StaffId}")]
+		public async Task<ActionResult<List<AttendanceMaster>>> SetStaffAttendanceStatus(int StaffId)
+		{
 
+			return await new AttendanceMaster().GetattendanceStatusStaff(StaffId);
+		}
 
 
 

@@ -30,7 +30,32 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            return View(new  AttendanceMaster());
+
+
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var staffId = userObject.StaffId;
+			if (Token != null)
+			{
+
+				HttpResponseMessage message = await _client.GetAsync($"api/Attendance/SetStaffAttendanceStatus{staffId}");
+				if (message.IsSuccessStatusCode)
+				{
+					var result = message.Content.ReadAsStringAsync().Result;
+					 ViewBag.ListStatusCount = JsonConvert.DeserializeObject<List<AttendanceMaster>>(result);
+
+				}
+
+				return View(new AttendanceMaster());
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+
+			
         }
 
 
@@ -61,21 +86,21 @@ namespace HRHUBWEB.Controllers
 				HttpResponseMessage message = await _client.PostAsJsonAsync("api/Attendance/MarkStaffAttendance", obj);
 				if (message.IsSuccessStatusCode)
 				{
-					var result = message.Content.ReadAsStringAsync().Result;
-
-					if (result !=null)
-					{
-						//  Send "false"
-						return Json(new { success = true, responseText = "Check In" });
-					}
 					
-
-
+					var result = message.Content.ReadAsStringAsync().Result;
+					var objAttendanceMaster = JsonConvert.DeserializeObject<AttendanceMaster>(result);
+					return Json(objAttendanceMaster);
 
 
 				}
 
-				return Json(obj);
+				return Json(new
+
+				{
+					Success = false,
+					Message = "Error occur"
+
+				});
 			}
 			else
 			{
@@ -87,20 +112,21 @@ namespace HRHUBWEB.Controllers
 
 
 		//Check Atendenece In Or Out
-		public async Task<ActionResult<JsonObject>> StatusCheckData()
+		public async Task<ActionResult> StatusCheckData()
 		{
 
 			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-			var CompanyId = userObject.CompanyId;
+			var StaffId = userObject.StaffId;
 
-			HttpResponseMessage message = await _client.GetAsync($"api/Attendance/CheckData");
+			HttpResponseMessage message = await _client.GetAsync($"api/Attendance/CheckData{StaffId}");
 			if (message.IsSuccessStatusCode)
 			{
 				var result = message.Content.ReadAsStringAsync().Result;
-				return Json(result);
+				var objAttendanceDetail = JsonConvert.DeserializeObject<AttendanceDetail>(result);
+				return Json(objAttendanceDetail);
 
 			}
 
@@ -182,6 +208,9 @@ namespace HRHUBWEB.Controllers
 			}
 
 		}
+
+
+
 
 
 
