@@ -11,7 +11,7 @@
 	<div class="page-rightheader ms-md-auto">
 		<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
 			<div class="btn-list">
-				<a href="hr-attmark.html" class="btn btn-primary me-3">Mark Attendance</a>
+			
 				<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
 				<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
 				<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
@@ -31,29 +31,28 @@
 			<div class="card-body">
 				<div class="row mb-0 pb-0">
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
-						<span class="avatar avatar-md bradius fs-20 bg-primary-transparent">31</span>
-						<h5 class="mb-0 mt-3">Total Working Days</h5>
+						<span class="avatar avatar-md bradius fs-20 bg-primary-transparent" id="TotalCountId">0</span>
+						<h5 class="mb-0 mt-3" id="TotalDayId">Total Days</h5>
+					</div>	
+					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
+						<span class="avatar avatar-md bradius fs-20 bg-danger-transparent" id="AbsentCountId">0</span>
+						<h5 class="mb-0 mt-3" id="AbsentDayId">Absent Days</h5>
 					</div>
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5 ">
-						<span class="avatar avatar-md bradius fs-20 bg-success-transparent">24</span>
-						<h5 class="mb-0 mt-3">Present Days</h5>
+						<span class="avatar avatar-md bradius fs-20 bg-success-transparent" id="PresentCountId">0</span>
+						<h5 class="mb-0 mt-3" id="PresentDayId">Present Days</h5>
 					</div>
+					
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
-						<span class="avatar avatar-md bradius fs-20 bg-danger-transparent">2</span>
-						<h5 class="mb-0 mt-3">Absent Days</h5>
+						<span class="avatar avatar-md bradius fs-20 bg-warning-transparent" id="LeaveCountId">0</span>
+						<h5 class="mb-0 mt-3" id="LeaveDayId">Leave Days</h5>
 					</div>
-					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
-						<span class="avatar avatar-md bradius fs-20 bg-warning-transparent">0</span>
-						<h5 class="mb-0 mt-3">Half Days</h5>
-					</div>
-					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5 ">
-						<span class="avatar avatar-md bradius fs-20 bg-orange-transparent">2</span>
-						<h5 class="mb-0 mt-3">Late Days</h5>
-					</div>
-					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
-						<span class="avatar avatar-md bradius fs-20 bg-pink-transparent">5</span>
-						<h5 class="mb-0 mt-3">Holidays</h5>
-					</div>
+					
+					
+				
+				
+				
+				
 				</div>
 				<div class="row mt-5">
 					<div class="col-md-12 col-lg-5">
@@ -220,6 +219,7 @@
 			$('#searchbtn').click(function () {
 				// Code to be executed when the button is clicked
 				LoadAttendance();
+				AtendenceCount();
 			});
 		});
 
@@ -238,7 +238,7 @@
 				todate: $("#todate").val()
 
 			}
-			console.log(obj)
+			
 
 
 
@@ -250,7 +250,7 @@
 				success: function (data) {
 
 					if (data != null) {
-						console.log(data);
+						
 						debugger;
 						var table = $('#emp-attendance').DataTable();
 						table.clear();
@@ -321,6 +321,70 @@
 			}
 
 		}
+
+
+
+
+
+
+
+
+
+
+
+		function AtendenceCount(){
+
+			$.ajax({
+				url: "/Attentance/GetAttendanceCount",
+				type: "POST",
+				async: false,
+				success: function (response) {
+					console.log(response)
+					if (response != null) {
+
+						$('#TotalCountId').text(response.attendenceId);
+						$('#TotalDayId').text(data.titleStatus);
+						
+						
+						
+						
+
+						for (var i = 0; i < response.length; i++) 
+						{
+							if (response.titleStatus == "Total") {
+								$('#TotalCountId').text(response.attendenceId);
+								$('#TotalDayId').text(data.titleStatus);
+							}	
+							else if (response.titleStatus == "Absent")
+							{
+								$('#AbsentCountId').text(response.attendenceId);
+								$('#AbsentDayId').text(data.titleStatus);
+							}
+							else if (response.titleStatus == "Present")
+							{
+								$('#PresentCountId').text(response.attendenceId);
+								$('#PresentDayId').text(data.titleStatus);
+							}
+							else if (response.titleStatus == "Leave")
+							{
+								$('#LeaveCountId').text(response.attendenceId);
+								$('#LeaveDayId').text(data.titleStatus);
+							}
+							
+						}
+					}
+
+
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+		}
+
+
+
 
 
 	</script>

@@ -31,7 +31,6 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
 
-
 			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
@@ -44,7 +43,8 @@ namespace HRHUBWEB.Controllers
 				if (message.IsSuccessStatusCode)
 				{
 					var result = message.Content.ReadAsStringAsync().Result;
-					 ViewBag.ListStatusCount = JsonConvert.DeserializeObject<List<AttendanceMaster>>(result);
+
+					ViewBag.ListStatusCount = JsonConvert.DeserializeObject<List<AttendanceMaster>>(result);
 
 				}
 
@@ -54,6 +54,11 @@ namespace HRHUBWEB.Controllers
 			{
 				return RedirectToAction("Loginpage", "User", new { id = 2 });
 			}
+
+
+
+
+
 
 			
         }
@@ -211,6 +216,7 @@ namespace HRHUBWEB.Controllers
 
 
 
+		
 
 
 
@@ -246,6 +252,35 @@ namespace HRHUBWEB.Controllers
 		}
 
 
+		//Get Attendance Data Status Staff Vise
+		public async Task<ActionResult<JsonObject>> GetAttendanceCount()
+		{
+
+
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			var staffId = userObject.StaffId;
+			if (Token != null)
+			{
+
+				HttpResponseMessage message = await _client.GetAsync($"api/Attendance/SetStaffAttendanceStatus{staffId}");
+				if (message.IsSuccessStatusCode)
+				{
+					var result = message.Content.ReadAsStringAsync().Result;
+					return Json(JsonConvert.DeserializeObject<List<AttendanceMaster>>(result));
+
+				}
+
+				return Json(new AttendanceMaster());
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+
+		}
 
 
 
