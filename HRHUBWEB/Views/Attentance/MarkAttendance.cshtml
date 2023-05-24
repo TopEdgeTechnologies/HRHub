@@ -425,16 +425,9 @@
 			$('#emp-attendance').DataTable();
 
 			$("#todate").change(function () {
-				alert("The text has been changed.");
+				
 				LoadAttendance();
 			});
-
-
-
-
-
-
-			$("#IdEmployee").select2();
 
 			var currentDate = new Date(); // Get the current date
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);

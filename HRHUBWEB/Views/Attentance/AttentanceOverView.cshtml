@@ -3,31 +3,33 @@
     ViewData["Title"] = "Attentance OverView";
 }
 
-<!--Page header-->
-<div class="page-header d-xl-flex d-block">
-	<div class="page-leftheader">
-		<div class="page-title">Attendance</div>
-	</div>
-	<div class="page-rightheader ms-md-auto">
-		<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-			<div class="btn-list">
-				<a href="hr-attmark.html" class="btn btn-primary me-3">Mark Attendance</a>
-				<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-				<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-				<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-			</div>
-		</div>
-	</div>
-</div>
-<!--End Page header-->
+
 <!-- Row -->
 <div class="hrattview-buttons">
-	<a asp-for="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
-	<a asp-for="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
+	<a asp-action="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
+	<a asp-action="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
 </div>
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
+			<div class="card-header  border-0">
+				<h4 class="card-title">Attendence OverView</h4>
+
+				<div class="page-rightheader ms-md-auto">
+					<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+
+						<div class="d-lg-flex">
+							<div class="btn-list">
+
+								<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+								<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+								<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 			<div class="card-body">
 				<div class="row mt-5">
 					<div class="col-md-6 col-lg-3">
