@@ -13,6 +13,8 @@ public partial class LoanType
 
     public bool Status { get; set; }
 
+    public bool? IsNeedApproval { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }

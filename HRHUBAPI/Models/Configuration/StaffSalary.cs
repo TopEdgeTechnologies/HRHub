@@ -11,6 +11,7 @@ namespace HRHUBAPI.Models
         {
             try
             {
+
                 var dbResult = await hrhubContext.SalaryMethods.Where(x => x.IsDeleted == false).ToListAsync();
                 if (dbResult != null)
                 {

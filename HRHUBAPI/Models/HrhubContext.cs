@@ -55,17 +55,29 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<LeaveApprovalSetting> LeaveApprovalSettings { get; set; }
 
+    public virtual DbSet<LeavePolicy> LeavePolicies { get; set; }
+
     public virtual DbSet<LeaveStatus> LeaveStatuses { get; set; }
 
     public virtual DbSet<LeaveType> LeaveTypes { get; set; }
+
+    public virtual DbSet<LoanApplication> LoanApplications { get; set; }
+
+    public virtual DbSet<LoanApplicationProcess> LoanApplicationProcesses { get; set; }
+
+    public virtual DbSet<LoanRepayment> LoanRepayments { get; set; }
+
+    public virtual DbSet<LoanType> LoanTypes { get; set; }
 
     public virtual DbSet<Policy> Policies { get; set; }
 
     public virtual DbSet<PolicyCategory> PolicyCategories { get; set; }
 
-    public virtual DbSet<SalaryCategory> SalaryCategories { get; set; }
-
     public virtual DbSet<SalaryComponent> SalaryComponents { get; set; }
+
+    public virtual DbSet<SalaryComponent1> SalaryComponents1 { get; set; }
+
+    public virtual DbSet<SalaryMethod> SalaryMethods { get; set; }
 
     public virtual DbSet<SalaryStatus> SalaryStatuses { get; set; }
 
@@ -75,6 +87,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<StaffAttachment> StaffAttachments { get; set; }
 
+    public virtual DbSet<StaffContract> StaffContracts { get; set; }
+
     public virtual DbSet<StaffCustomField> StaffCustomFields { get; set; }
 
     public virtual DbSet<StaffLeaveAllocation> StaffLeaveAllocations { get; set; }
@@ -82,6 +96,10 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<StaffSalary> StaffSalaries { get; set; }
 
     public virtual DbSet<StaffSalaryDetail> StaffSalaryDetails { get; set; }
+
+    public virtual DbSet<StaffSalaryDetail1> StaffSalaryDetails1 { get; set; }
+
+    public virtual DbSet<StaffSalarySetting> StaffSalarySettings { get; set; }
 
     public virtual DbSet<StatusInfo> StatusInfos { get; set; }
 
@@ -92,7 +110,6 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<UserForm> UserForms { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -448,6 +465,53 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.ToTable("LoanApplication");
+
+            entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
+            entity.Property(e => e.Amount).HasColumnType("money");
+            entity.Property(e => e.ApplicationDate).HasColumnType("date");
+            entity.Property(e => e.InstallmentPerMonth).HasColumnType("money");
+            entity.Property(e => e.LoanTypeId).HasColumnName("LoanTypeID");
+            entity.Property(e => e.PaymentDate).HasColumnType("date");
+            entity.Property(e => e.Reason).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+        });
+
+        modelBuilder.Entity<LoanApplicationProcess>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("LoanApplicationProcess");
+
+            entity.Property(e => e.ApprovedByStaffId).HasColumnName("ApprovedBy_StaffID");
+            entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
+            entity.Property(e => e.ProcessId).HasColumnName("ProcessID");
+            entity.Property(e => e.Remarks).IsUnicode(false);
+            entity.Property(e => e.StatusId).HasColumnName("StatusID");
+        });
+
+        modelBuilder.Entity<LoanRepayment>(entity =>
+        {
+            entity.Property(e => e.LoanRepaymentId).HasColumnName("LoanRepaymentID");
+            entity.Property(e => e.Amount).HasColumnType("money");
+            entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
+            entity.Property(e => e.PaymentDate).HasColumnType("date");
+            entity.Property(e => e.StaffSalaryId).HasColumnName("StaffSalaryID");
+        });
+
+        modelBuilder.Entity<LoanType>(entity =>
+        {
+            entity.ToTable("LoanType");
+
+            entity.Property(e => e.LoanTypeId).HasColumnName("LoanTypeID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<Policy>(entity =>
         {
             entity.HasKey(e => e.PolicyId).HasName("PK_LeavePolicy_Defined");
@@ -470,19 +534,26 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<SalaryCategory>(entity =>
+        modelBuilder.Entity<SalaryComponent>(entity =>
         {
-            entity.ToTable("SalaryCategory");
+            entity.HasKey(e => e.SalaryComponentId).HasName("PK_SalaryDetailType");
 
-            entity.Property(e => e.SalaryCategoryId)
+            entity.Property(e => e.SalaryComponentId)
                 .ValueGeneratedNever()
-                .HasColumnName("SalaryCategoryID");
+                .HasColumnName("SalaryComponentID");
+            entity.Property(e => e.Category).IsUnicode(false);
+            entity.Property(e => e.CompanyContribution).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.ContributionMethod)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.StaffContribution).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<SalaryComponent>(entity =>
+        modelBuilder.Entity<SalaryComponent1>(entity =>
         {
             entity.HasKey(e => e.SalaryComponentId).HasName("PK_SalaryDetailType");
 
@@ -661,6 +732,23 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<StaffSalaryDetail>(entity =>
         {
+            entity.ToTable("StaffSalaryDetail");
+
+            entity.Property(e => e.StaffSalaryDetailId)
+                .ValueGeneratedNever()
+                .HasColumnName("StaffSalaryDetailID");
+            entity.Property(e => e.Amount).HasColumnType("money");
+            entity.Property(e => e.CompanyContributionAmount)
+                .HasColumnType("money")
+                .HasColumnName("CompanyContribution_Amount");
+            entity.Property(e => e.SalaryComponentId).HasColumnName("SalaryComponentID");
+            entity.Property(e => e.StaffSalaryId).HasColumnName("StaffSalaryID");
+        });
+
+        modelBuilder.Entity<StaffSalaryDetail1>(entity =>
+        {
+            entity.HasKey(e => e.StaffSalaryDetailId);
+
             entity.ToTable("StaffSalaryDetail", "PayRoll");
 
             entity.Property(e => e.StaffSalaryDetailId)
@@ -673,16 +761,10 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<StaffSalarySetting>(entity =>
         {
+            entity.ToTable("StaffSalarySettings", "PayRoll");
+
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.PaysOn)
-                .HasMaxLength(10)
-                .IsFixedLength();
-            entity.Property(e => e.PaysOnLastWorkingDayOfMonth)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("PaysOn_LastWorkingDayOfMonth");
-            entity.Property(e => e.SalaryCategoryId).HasColumnName("SalaryCategoryID");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
         });
 

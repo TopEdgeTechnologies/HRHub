@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class StaffSalaryDetail
+public partial class StaffSalaryDetail1
 {
     public int StaffSalaryDetailId { get; set; }
 
@@ -12,6 +12,4 @@ public partial class StaffSalaryDetail
     public int? SalaryComponentId { get; set; }
 
     public decimal? Amount { get; set; }
-
-    public decimal? CompanyContributionAmount { get; set; }
 }
