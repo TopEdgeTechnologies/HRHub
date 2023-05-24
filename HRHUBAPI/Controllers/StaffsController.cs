@@ -49,6 +49,12 @@ namespace HRHUBAPI.Controllers
             return await new Staff().GetStaffDocumentDetail(StaffId, _context);
         }
 
+        [HttpGet("GetStaffLeaveAllocationsDetail{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<List<StaffLeaveAllocation>>> GetStaffLeaveAllocationsDetail(int CompanyId, int StaffId)
+        {
+            return await new Staff().GetStaffLeaveAllocationsDetail(CompanyId, StaffId, _context); 
+        }
+
         [HttpGet("GetStaffById{Id}")]
         public async Task<ActionResult<Staff>> GetStaffById(int Id)
         {
@@ -100,7 +106,7 @@ namespace HRHUBAPI.Controllers
             return NotFound("Data not Found!");
         }
 
-        [HttpGet("StaffAlreadyExists{CompanyId}/{Id}/{nationalId}")]
+        [HttpGet("StaffAlreadyExists/{CompanyId}/{Id}/{nationalId}")]
         public async Task<ActionResult<bool>> StaffAlreadyExists(int CompanyId, int Id, string nationalId)
         {
             var dbResult = await new Staff().StaffAlreadyExists(CompanyId, Id, nationalId, _context);   
@@ -122,7 +128,6 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-
 		// Get single record of Staff by company ID
 
 		[HttpGet("GetStaffCompanyVise{CompanyId}")]
@@ -135,13 +140,6 @@ namespace HRHUBAPI.Controllers
 			}
 			return NotFound();
 		}
-
-
-
-
-
-
-
 
 		#endregion
 

@@ -15,7 +15,11 @@ public partial class LeaveType
 
     public bool IsNonPaid { get; set; }
 
+    public string? GenderBased { get; set; }
+
     public bool Status { get; set; }
+
+    public string? Cssclass { get; set; }
 
     public bool? IsDeleted { get; set; }
 

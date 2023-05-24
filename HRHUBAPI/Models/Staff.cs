@@ -49,7 +49,7 @@ public partial class Staff
 
     public DateTime? TerminationDate { get; set; }
 
-    public string? SalaryMethod { get; set; }
+    public string? SalaryMethodId { get; set; }
 
     public decimal? SalaryAmount { get; set; }
 
@@ -82,4 +82,6 @@ public partial class Staff
     public DateTime? UpdatedOn { get; set; }
 
     public int? CompanyId { get; set; }
+
+    public int? EmploymentTypeId { get; set; }
 }
