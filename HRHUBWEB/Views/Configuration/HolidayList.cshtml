@@ -12,7 +12,7 @@
                 <div class="btn-list">
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
-                    <a href="#" onclick="AddHoliday()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#holidaymodal">Add Holiday</a>
+                    <a href="#" onclick="AddHoliday()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#holidaymodal"><i class="fe fe-plus-circle me-1"></i>Add Holiday</a>
                 }
                 
                    
@@ -219,8 +219,8 @@
 
             </div>
             <div class="modal-footer">
-                <button  type="button"  class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="PostData()" id="btnSave">Add</button>
+                <button  type="button"  class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
