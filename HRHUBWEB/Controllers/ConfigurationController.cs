@@ -12,6 +12,7 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System.Net.NetworkInformation;
+using System.Text.Json;
 
 namespace HRHUBWEB.Controllers
 {
@@ -19,11 +20,15 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-        public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+        private APIHelper _APIHelper;
+
+		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
-        }
+			_APIHelper=APIHelper;
+
+		}
         
         #region DesignationInfo
         [CustomAuthorization]
@@ -46,8 +51,14 @@ namespace HRHUBWEB.Controllers
             ObjDesignation.CompanyId = userObject.CompanyId;
 
 
+			
 
-            if (Token != null)
+
+			var adsdas = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>( $"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get, Token);
+
+			//var result = await CallApiAsync<object>(model, apiUrl, HttpMethod.Post);
+
+			if (Token != null)
             {
 
 

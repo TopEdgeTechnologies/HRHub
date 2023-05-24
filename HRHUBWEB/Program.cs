@@ -1,4 +1,5 @@
 using HRHUBAPI.Models.Configuration;
+using HRHUBWEB.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -21,6 +22,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<DbConnection>();
+builder.Services.AddSingleton<APIHelper>();
+
 //builder.Services.AddControllersWithViews(options =>
 //{
 //    options.Filters.Add(new ExceptionFilter());
