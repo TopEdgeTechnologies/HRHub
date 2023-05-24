@@ -21,11 +21,11 @@ namespace HRHUBAPI.Controllers
 
         #region LeaveInfo
 
-        [HttpGet("GetLeaveInfos{CompanyId}")]
-        public async Task<ActionResult<List<Leave>>> GetLeaveInfos(int CompanyId)
+        [HttpGet("GetLeaveInfos{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<List<Leave>>> GetLeaveInfos(int CompanyId,int StaffId)
         {
 
-            return await new Leave().GetLeave(CompanyId, _context);
+            return await new Leave().GetLeave(CompanyId,StaffId, _context);
         }
 
         //[HttpGet("GetNewOrPendingLeaveInfos{CompanyId}")]
@@ -238,199 +238,216 @@ namespace HRHUBAPI.Controllers
 
 
 
+        [HttpGet("GetLeaveApprovalSettingInfos{CompanyId}")]
+        public async Task<ActionResult<LeaveApprovalSetting>> GetLeaveApprovalSettingInfos(int CompanyId)
+        {
 
+            return await new Leave().GetLeaveApprovalSetting(CompanyId, _context);
+        }
 
+        // search data Candidate by Name , Designation and ExperienceId
 
+        [HttpGet("SearchAllLeaves{CompanyId}/{StaffId}/{LeaveTypeId}/{LeaveStatusId}/{StartDate}/{EndDate}")]
+        public async Task<ActionResult<List<Leave>>> SearchAllLeaves(int CompanyId, int StaffId,int LeaveTypeId, int LeaveStatusId, DateTime StartDate, DateTime EndDate)
+        {
+            var result = await new Leave().SearchLeaves(CompanyId, StaffId, LeaveTypeId, LeaveStatusId, StartDate, EndDate, _context);
+            if (result != null)
+                return Ok(result);
 
+            return NotFound(); // where clause lgyae hen na where me is me data ka to data ni aye ga na..
 
 
+        }
 
-		////Load Leave data from database to Student form change dropdown selection
-		//[HttpGet("GetLeaveIdVise{id}")]
-		//public async Task<ActionResult<List<LeaveClassSubject>>> GetLeaveIdVise(int id)
-		//{
-		//    var result = await new LeaveInfo().GetLeaveIdVise(id, _context);
-		//    if (result != null)
-		//        return Ok(result);
 
-		//    return NotFound();
 
 
-		//}
+        ////Load Leave data from database to Student form change dropdown selection
+        //[HttpGet("GetLeaveIdVise{id}")]
+        //public async Task<ActionResult<List<LeaveClassSubject>>> GetLeaveIdVise(int id)
+        //{
+        //    var result = await new LeaveInfo().GetLeaveIdVise(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
+        //    return NotFound();
 
 
+        //}
 
 
 
 
-		#endregion
 
-		//#region LeaveSubject
 
-		//[HttpGet("GetLeaveSubjects")]
-		//public async Task<ActionResult<List<ViewLeaveClassSubject>>> GetLeaveSubjects()
-		//{
 
-		//    return await new LeaveClassSubject().GetLeaveClassSubject(_context);
-		//}
+        #endregion
 
+        //#region LeaveSubject
 
+        //[HttpGet("GetLeaveSubjects")]
+        //public async Task<ActionResult<List<ViewLeaveClassSubject>>> GetLeaveSubjects()
+        //{
 
+        //    return await new LeaveClassSubject().GetLeaveClassSubject(_context);
+        //}
 
-		//[HttpGet("GetLeaveSubjectId{id}")]
-		//public async Task<ActionResult<LeaveClassSubject>> GetLeaveSubjectId(int id)
-		//{
-		//    var result = await new LeaveClassSubject().GetLeaveClassSubjectById(id, _context);
-		//    if (result != null)
-		//        return Ok(result);
 
-		//    return NotFound();
 
 
-		//}
+        //[HttpGet("GetLeaveSubjectId{id}")]
+        //public async Task<ActionResult<LeaveClassSubject>> GetLeaveSubjectId(int id)
+        //{
+        //    var result = await new LeaveClassSubject().GetLeaveClassSubjectById(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
-		//[HttpPost("LeaveSubjectAddOrCreate")]
-		//public async Task<ActionResult> LeaveSubjectAddOrCreate(List<LeaveClassSubject> obj)
-		//{
+        //    return NotFound();
 
 
-		//    var result = await new LeaveClassSubject().PostLeaveClassSubject(obj, _context);
-		//    if (result > 0)
-		//        return Ok(new
-		//        {
-		//            Success = true,
-		//            Message = "Data Update Successfully!"
-		//        });
-		//    else
-		//        return Ok(new
-		//        {
-		//            Success = true,
-		//            Message = "Data Insert Successfully!"
-		//        });
+        //}
 
-		//}
+        //[HttpPost("LeaveSubjectAddOrCreate")]
+        //public async Task<ActionResult> LeaveSubjectAddOrCreate(List<LeaveClassSubject> obj)
+        //{
 
-		//[HttpDelete("DeleteLeaveClassSubjectByClassId{id}")]
-		//public async Task<ActionResult<bool>> DeleteLeaveClassSubjectByClassId(int id)
-		//{
-		//    var result = await new LeaveClassSubject().DeleteLeaveSubjectByClassId(id, _context);
-		//    if (id > 0)
-		//        return Ok(new
-		//        {
 
-		//            Success = true,
-		//            Message = "Data Delete Successfully!"
+        //    var result = await new LeaveClassSubject().PostLeaveClassSubject(obj, _context);
+        //    if (result > 0)
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Update Successfully!"
+        //        });
+        //    else
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Insert Successfully!"
+        //        });
 
+        //}
 
-		//        });
+        //[HttpDelete("DeleteLeaveClassSubjectByClassId{id}")]
+        //public async Task<ActionResult<bool>> DeleteLeaveClassSubjectByClassId(int id)
+        //{
+        //    var result = await new LeaveClassSubject().DeleteLeaveSubjectByClassId(id, _context);
+        //    if (id > 0)
+        //        return Ok(new
+        //        {
 
-		//    return NotFound("Data Not Found!");
-		//}
+        //            Success = true,
+        //            Message = "Data Delete Successfully!"
 
 
-		//[HttpDelete("DeleteLeaveSubject{id}")]
-		//public async Task<ActionResult<bool>> DeleteLeaveSubject(int id)
-		//{
-		//    var result = await new LeaveClassSubject().DeleteLeaveClassSubject(id, _context);
-		//    if (id > 0)
-		//        return Ok(new
-		//        {
+        //        });
 
-		//            Success = true,
-		//            Message = "Data Delete Successfully!"
+        //    return NotFound("Data Not Found!");
+        //}
 
 
-		//        });
+        //[HttpDelete("DeleteLeaveSubject{id}")]
+        //public async Task<ActionResult<bool>> DeleteLeaveSubject(int id)
+        //{
+        //    var result = await new LeaveClassSubject().DeleteLeaveClassSubject(id, _context);
+        //    if (id > 0)
+        //        return Ok(new
+        //        {
 
-		//    return NotFound("Data Not Found!");
-		//}
+        //            Success = true,
+        //            Message = "Data Delete Successfully!"
 
 
-		//[HttpGet("LeaveSubjectCheckData{id}/{GroupId}/{title}/{language}")]
-		//public async Task<ActionResult<JsonObject>> LeaveSubjectCheckData(int id, int GroupId, string title, string language)
-		//{
-		//    if (await new LeaveClassSubject().AlreadyExist(id, GroupId, title, language, _context))
-		//    {
-		//        return Ok(new
-		//        {
+        //        });
 
-		//            Success = true,
-		//            Message = "Title Already Exist!"
+        //    return NotFound("Data Not Found!");
+        //}
 
 
-		//        });
-		//    }
-		//    else
-		//    {
+        //[HttpGet("LeaveSubjectCheckData{id}/{GroupId}/{title}/{language}")]
+        //public async Task<ActionResult<JsonObject>> LeaveSubjectCheckData(int id, int GroupId, string title, string language)
+        //{
+        //    if (await new LeaveClassSubject().AlreadyExist(id, GroupId, title, language, _context))
+        //    {
+        //        return Ok(new
+        //        {
 
-		//        return Ok(new
-		//        {
+        //            Success = true,
+        //            Message = "Title Already Exist!"
 
-		//            Success = false,
-		//            Message = "Not found"
 
+        //        });
+        //    }
+        //    else
+        //    {
 
-		//        });
-		//    }
+        //        return Ok(new
+        //        {
 
-		//}
+        //            Success = false,
+        //            Message = "Not found"
 
 
+        //        });
+        //    }
 
-		////load subject data in dropdown by language ID
-		//[HttpGet("GetSubjectLanguageId{id}")]
-		//public async Task<ActionResult<List<SubjectInfo>>> GetSubjectLanguageId(int id)
-		//{
-		//    var result = await new SubjectInfo().GetSubjectLangugeId(id, _context);
-		//    if (result != null)
-		//        return Ok(result);
+        //}
 
-		//    return NotFound();
 
 
-		//}
-		////load class data in dropdown by level ID
-		//[HttpGet("GetClassByLevelId{id}")]
-		//public async Task<ActionResult<List<ClassInfo>>> GetClassByLevelId(int id)
-		//{
-		//    var result = await new ClassInfo().GetClassbyLevelId(id, _context);
-		//    if (result != null)
-		//        return Ok(result);
+        ////load subject data in dropdown by language ID
+        //[HttpGet("GetSubjectLanguageId{id}")]
+        //public async Task<ActionResult<List<SubjectInfo>>> GetSubjectLanguageId(int id)
+        //{
+        //    var result = await new SubjectInfo().GetSubjectLangugeId(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
-		//    return NotFound();
+        //    return NotFound();
 
 
-		//}
-		////load subject data in dropdown by Group ID
-		//[HttpGet("GetSubjectByGroupId{id}/{groupId}")]
-		//public async Task<ActionResult<List<SubjectInfo>>> GetSubjectByGroupId(int id, int groupId)
-		//{
-		//    var result = await new SubjectInfo().GetSubjectByGroupId(id, groupId, _context);
-		//    if (result != null)
-		//        return Ok(result);
+        //}
+        ////load class data in dropdown by level ID
+        //[HttpGet("GetClassByLevelId{id}")]
+        //public async Task<ActionResult<List<ClassInfo>>> GetClassByLevelId(int id)
+        //{
+        //    var result = await new ClassInfo().GetClassbyLevelId(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
-		//    return NotFound();
+        //    return NotFound();
 
 
-		//}
-		////Load Class data from database to bootstrap table on class dropdown selection
-		//[HttpGet("LoadDataByClassId{id}")]
-		//public async Task<ActionResult<List<LeaveClassSubject>>> LoadDataByClassId(int id)
-		//{
-		//    var result = await new LeaveClassSubject().LoadDataByClassId(id, _context);
-		//    if (result != null)
-		//        return Ok(result);
+        //}
+        ////load subject data in dropdown by Group ID
+        //[HttpGet("GetSubjectByGroupId{id}/{groupId}")]
+        //public async Task<ActionResult<List<SubjectInfo>>> GetSubjectByGroupId(int id, int groupId)
+        //{
+        //    var result = await new SubjectInfo().GetSubjectByGroupId(id, groupId, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
-		//    return NotFound();
+        //    return NotFound();
 
 
-		//}
-		//#endregion
+        //}
+        ////Load Class data from database to bootstrap table on class dropdown selection
+        //[HttpGet("LoadDataByClassId{id}")]
+        //public async Task<ActionResult<List<LeaveClassSubject>>> LoadDataByClassId(int id)
+        //{
+        //    var result = await new LeaveClassSubject().LoadDataByClassId(id, _context);
+        //    if (result != null)
+        //        return Ok(result);
 
+        //    return NotFound();
 
 
+        //}
+        //#endregion
 
 
-	}
+
+
+
+    }
 }

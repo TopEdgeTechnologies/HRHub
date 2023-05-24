@@ -12,4 +12,6 @@ public partial class Policy
     public string? Description { get; set; }
 
     public int? PolicyCategoryId { get; set; }
+
+    public bool? Status { get; set; }
 }

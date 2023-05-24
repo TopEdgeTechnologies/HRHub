@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HRHUBAPI.Models.Leave>
+﻿@model HRHUBAPI.Models.Leave
 
 <style>
 
@@ -62,21 +62,78 @@
                                     <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
                                     <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
                                     <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row" id="IdFilters">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        @using (@Html.BeginForm("SearchList", "Leave", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+                                        {
+                                            <div class="row">
+                                                <input type="hidden" asp-for="StaffId" value="@ViewBag.StaffID" />
+                                                <div class="col-md-12 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Select Leave Type:</label>
+                                                        <select id="LeaveTypeId" name="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
+                                                            <option value="">Select Leave Type</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Select Leave Status:</label>
+                                                        <select id="LeaveStatusId" name="LeaveStatusId" class="form-control" asp-items="@(new SelectList(Model.ListleaveStatus,"LeaveStatusId" ,"Title"))">
+                                                            <option value="">Select Leave Status</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Date From</label>
+                                                        <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Date To</label>
+                                                        <input type="date" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-lg-2">
+                                                    <div class="form-group mt-5">
+                                                        <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                                        <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myTable">
                                     <thead>
                                         <tr>
                                             <th class="border-bottom-0">Sr.#</th>
-                                            <th class="border-bottom-0">Leave Type</th>
+                                            <th class="border-bottom-0">Applied On</th>
                                             @*<th class="border-bottom-0">From</th>
                                             <th class="border-bottom-0">TO</th>*@
                                             @*<th class="border-bottom-0">Leave Date</th>*@
                                             <th class="border-bottom-0">Days</th>
-                                            <th class="border-bottom-0">Reason</th>
+                                            <th class="border-bottom-0" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;">Reason</th>
                                             @*<th class="border-bottom-0">Applied On</th>*@
                                             <th class="border-bottom-0">Status</th>
                                             <th class="border-bottom-0">Action</th>
@@ -85,7 +142,7 @@
                                     <tbody>
                                         @{
                                             int count = 1;
-                                            foreach (var item in Model)
+                                            foreach (var item in Model.ListAllleaves)
                                             {
                                                 <tr>
                                                     <td>
@@ -122,8 +179,8 @@
                                                         //    </td>
                                                         //}
                                                     }
-                                                    <td >@Html.DisplayFor(modelItem => item.Days)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Days)</td>
+                                                    <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
                                                     @*<td>
                                             @Html.DisplayFor(modelItem => item.LeaveAppliedOnDate)
                                             </td>*@
@@ -152,20 +209,20 @@
                                                         @if (item.LeaveStatusId == 1) // New
                                                         {
                                                             <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
-                                                                <i class="feather feather-edit  text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i>
+                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i>
                                                             </a>
                                                         }
-                                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" class="action-btns1">
-                                                            <i class="feather feather-eye  text-success" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
+                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
                                                         </a>
                                                         @if (item.LeaveStatusId == 1) // New
                                                         {
-                                                            <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                                <i class="feather feather-trash-2 text-danger"></i>
+                                                            <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                             </a>
                                                         }
                                                         <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                            <i class="feather feather-info text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
+                                                            <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -416,6 +473,21 @@
 
             }
             $('#myTable').DataTable();
+
+            $('#LeaveStatusId').select2();
+            $('#LeaveTypeId').select2();
+
+            // Show Filters controls
+
+            $("#IdFilters").hide();
+            $('#btn_Filter').click(function () {
+
+                $("#IdFilters").toggle(1000);
+            });
+
+            ////////////////////////////////////
+
+
         })
 
         function ViewLeave(leaveid) {
@@ -461,22 +533,98 @@
 
         }
 
-        //function DateRangeinDays(leavestartdate, leaveenddate) {
-        //    if (leavestartdate != "" && leaveenddate != "") {
+        function SearchLeave() {
+            debugger;
+            var obj = {
+                StaffId: $("#StaffId").val(),
+                LeaveTypeId: $("#LeaveTypeId").val(),
+                LeaveStatusId: $("#LeaveStatusId").val(),
+                StartDate: $("#StartDate").val(),
+                EndDate: $("#EndDate").val(),
 
-        //        var startdate = new Date(leavestartdate);
-        //        var enddate = new Date(leaveenddate);
+            }
 
-        //        // end - start returns difference in milliseconds
-        //        var diff = new Date(enddate - startdate);
 
-        //        // get days
-        //        var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
 
-        //        $("#SelectedDays").text(days);
-        //    }
-        //}
+            $.ajax({
+                url: "/Leave/SearchList",
+                type: "POST",
+                async: false,
+                dataType: "json",
+                data: obj,
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        debugger
+                        var table = $('#myTable').DataTable();
+                        table.clear();
+                        table.draw();
 
+                        var listleave = data.listLeaves
+                        console.log(listleave);
+                        var action = '';
+                        for (var i = 0; i < listleave.length; i++) {
+
+                            action += '';
+                            action += '<tr><td> ' + parseInt(i) + parseInt(1) + ' </td>';
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listleave[i]["leaveTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
+                            action += '<td> ' + listleave[i]["days"] + '</td>';
+                            action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listleave[i]["leaveSubject"] + '</td>';
+
+                            if (listleave[i]["leaveStatusId"] == 1) {
+                                action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
+                            }
+                            else if (listleave[i]["leaveStatusId"] == 2) {
+                                action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
+
+                            }
+                            else if (listleave[i]["leaveStatusId"] == 3) {
+                                action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
+
+
+                            }
+                            else if (listleave[i]["leaveStatusId"] == 4) {
+                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+
+                            }
+
+                            action += '<td class="text-start d-flex">';
+
+                            if (listleave[i]["leaveStatusId"] == 1) {
+                                action += '<a href="/Leave/LeaveCreateOrUpdate/' + listleave[i]["leaveId"] + '"  class="action-btns1">';
+                                action += '<i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i></a>';
+                            }
+
+                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
+                            action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
+                            if (listleave[i]["leaveStatusId"] == 1) {
+
+                                action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
+                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                            }
+                            action += '<a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">';
+                            action += ' <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i> </a></tr>';
+
+                        }
+
+                        $('#myTable tbody').html(action);
+
+
+
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+
+
+
+
+        }
 
 
         function formatDate(date) {
