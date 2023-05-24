@@ -130,12 +130,12 @@
                                                 <div class="d-flex">
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a onclick="editrecord(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="" title="Edit">
+                                                        <a onclick="editrecord(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
                                                             <i class="feather feather-edit primary text-primary mt-1 "></i>
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                     {
-                                                        <a onclick="confirmation(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-toggle="" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <a onclick="confirmation(@item.DepartmentId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                         </a>
                                                     }

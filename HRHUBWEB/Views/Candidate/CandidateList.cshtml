@@ -81,7 +81,7 @@
                 }
             </div>
             <div class="row" id="IdFilters">
-                <div class="col-md-12">
+                <div class="col-md-12 mb-n4" style="margin-bottom: -50px;">
                     <div class="card">
                         <div class="card-body">
                             @using (@Html.BeginForm("SearchList", "Candidate", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
@@ -229,15 +229,15 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a class="action-btns1" href="#" Onclick="loadModal(@item.CandidateId)" data-bs-toggle="" data-bs-placement="top" title="Process" data-bs-original-title="View" aria-label="Process">
+                                                    <a class="action-btns1" href="#" Onclick="loadModal(@item.CandidateId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Process" data-bs-original-title="View" aria-label="Process">
                                                         <i class="feather feather-check text-success mt-1">
                                                         </i>
                                                     </a>
-                                                    <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="View" data-bs-original-title="View" aria-label="View">
+                                                    <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="View" data-bs-original-title="View" aria-label="View">
                                                         <i class="feather feather-eye  text-primary mt-1">
                                                         </i>
                                                     </a>
-                                                    <a  asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                    <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit  text-primary mt-1">
                                                         </i>
                                                     </a>
@@ -245,11 +245,11 @@
                                                 {
                                                     @if (Model.UrlRequestSatausID == 1)
                                                     {
-                                                        <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                        <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                         </a>
                                                     }
-                                                    <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="Download Resume" data-bs-original-title="Download Resume" aria-label="Download Resume">
+                                                    <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Resume" data-bs-original-title="Download Resume" aria-label="Download Resume">
                                                         <i class="feather feather-download  text-secondary mt-1"></i>
                                                     </a>
                                                 }
@@ -387,7 +387,7 @@
 
 
         $(document).ready(function () {
-
+            var table;
              
             $('#myTable thead tr')
                 .clone(true)
@@ -396,12 +396,12 @@
 
 
 
-            var table = $('#myTable').DataTable({
+             table = $('#myTable').DataTable({
                 dom: 'Bfrtip',
                    buttons: [
                     'excelHtml5', 'pdfHtml5', 'csvHtml5','colvis'
                     ],
-                  "columnDefs" : [{ 'visible': false, 'targets': [2,3,5,6,8,9,10] }],
+                  "columnDefs" : [{ 'visible': true, 'targets': [2,3,5,6,8,9,10] }],
                 
                 orderCellsTop: true,
                 fixedHeader: true,
@@ -459,15 +459,16 @@
                 }
             });
 
-            
+            setTimeout(function () {
+              
+                // Change column visibility after form is loaded
+
+                table.columns([2, 3, 5, 6, 8, 9, 10]).visible(false);
+               
+            }, 1000);
 
             /////////////////////////////////////////////////////////
 
-            $('#myTable').on('column-visibility.dt', function (e, settings, column, state) {
-             
-               //var table =  $('#myTable').DataTable();
-              alert("column changed")
-            });
 
 
 
@@ -785,7 +786,7 @@
                 dataType: "json",
                 data: obj,
                 success: function (data) {
-                    console.log(data);
+                  
                     if(data!=null)
                     {      debugger
                           var table = $('#myTable').DataTable();

@@ -68,13 +68,13 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                    <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="Edit" data-bs-original-title="Delete" aria-label="Edit">
+                                                    <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" data-bs-original-title="Delete" aria-label="Edit">
                                                         <i class="feather feather-edit text-primary mt-1">
                                                     </i>
                                                 </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                 </a>}
                                             </div>

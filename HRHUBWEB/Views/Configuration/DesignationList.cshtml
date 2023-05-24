@@ -125,11 +125,11 @@
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
                                                     <a onclick="editrecord(@item.DesignationId)" class="action-btns1 btn-xs ">
-                                                        <i class="feather feather-edit primary text-primary mt-1 "data-bs-placement="top" data-bs-toggle="" title="Edit"></i>
+                                                        <i class="feather feather-edit primary text-primary mt-1 " data-bs-placement="top" data-bs-toggle="tooltip" title="Edit"></i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a onclick="confirmation(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-toggle="" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a onclick="confirmation(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
                                                 }
