@@ -51,8 +51,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                     <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
 
                 </div>
             </div>
@@ -77,7 +77,7 @@
                             @if (Convert.ToBoolean(ViewBag.IsNew))
                             {
 
-                                <a onclick="addnewleavetype()" class="btn btn-primary me-3">Add Leave Type</a>
+                                <a onclick="addnewleavetype()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Leave Type</a>
 
                             }
                             @*  <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
@@ -120,7 +120,7 @@
                                 foreach (var item in Model.ListLeaveTypes)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="text-center">
                                             @count
                                         </td>
                                         <td>
