@@ -3,49 +3,56 @@
     ViewData["Title"] = "Attentance ByUser";
 }
 
-<!--Page header-->
-<div class="page-header d-xl-flex d-block">
-	<div class="page-leftheader">
-		<div class="page-title">Attendance By User</div>
-	</div>
-	<div class="page-rightheader ms-md-auto">
-		<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-			<div class="btn-list">
-			
-				<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-				<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-				<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-			</div>
-		</div>
-	</div>
-</div>
+
 <!--End Page header-->
 <!-- Row -->
 <div class="hrattview-buttons">
-	<a asp-for="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
-	<a asp-for="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
+	<a asp-action="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
+	<a asp-action="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
 </div>
+
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
+			
+			<div class="card-header  border-0">
+				<h4 class="card-title">Attendence By User</h4>
+
+				<div class="page-rightheader ms-md-auto">
+					<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+
+						<div class="d-lg-flex">
+							<div class="btn-list">
+
+								<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+								<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+								<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+				
+			
 			<div class="card-body">
 				<div class="row mb-0 pb-0">
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-primary-transparent" id="TotalCountId">0</span>
-						<h5 class="mb-0 mt-3" id="TotalDayId">Total Days</h5>
+						<h5 class="mb-0 mt-3" id="TotalDayId">Total</h5>
 					</div>	
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-danger-transparent" id="AbsentCountId">0</span>
-						<h5 class="mb-0 mt-3" id="AbsentDayId">Absent Days</h5>
+						<h5 class="mb-0 mt-3" id="AbsentDayId">Absent</h5>
 					</div>
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5 ">
 						<span class="avatar avatar-md bradius fs-20 bg-success-transparent" id="PresentCountId">0</span>
-						<h5 class="mb-0 mt-3" id="PresentDayId">Present Days</h5>
+						<h5 class="mb-0 mt-3" id="PresentDayId">Present</h5>
 					</div>
 					
 					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
 						<span class="avatar avatar-md bradius fs-20 bg-warning-transparent" id="LeaveCountId">0</span>
-						<h5 class="mb-0 mt-3" id="LeaveDayId">Leave Days</h5>
+						<h5 class="mb-0 mt-3" id="LeaveDayId">Leave</h5>
 					</div>
 					
 					
@@ -147,7 +154,27 @@
 
 
 		$(document).ready(function () {
+
+
+
+
 			$("#IdEmployee").select2();
+
+
+			$("#IdEmployee").change(function () {
+				
+				$('#TotalCountId').text(0);
+				$('#AbsentCountId').text(0);
+				$('#PresentCountId').text(0);
+				$('#LeaveCountId').text(0);
+
+				var tbody = $("#emp-attendance tbody");				
+				tbody.empty();
+				
+				
+			});
+
+
 
 			var currentDate = new Date(); // Get the current date
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -334,41 +361,43 @@
 
 		function AtendenceCount(){
 
+			var obj = {
+				staffid: $("#IdEmployee").val()
+				
+
+			}
+
 			$.ajax({
 				url: "/Attentance/GetAttendanceCount",
 				type: "POST",
 				async: false,
+				data: obj,
 				success: function (response) {
-					console.log(response)
+					
 					if (response != null) {
-
-						$('#TotalCountId').text(response.attendenceId);
-						$('#TotalDayId').text(data.titleStatus);
+						debugger
 						
-						
-						
-						
-
 						for (var i = 0; i < response.length; i++) 
-						{
-							if (response.titleStatus == "Total") {
-								$('#TotalCountId').text(response.attendenceId);
-								$('#TotalDayId').text(data.titleStatus);
+						{ 
+							if (response[i].titleStatus == "Total") {
+								$('#TotalCountId').text(response[i].attendanceId);
+								$('#TotalDayId').text(response[i].titleStatus);
 							}	
-							else if (response.titleStatus == "Absent")
+							else if (response[i].titleStatus == "Absent")
 							{
-								$('#AbsentCountId').text(response.attendenceId);
-								$('#AbsentDayId').text(data.titleStatus);
+								$('#AbsentCountId').text(response[i].attendanceId);
+								$('#AbsentDayId').text(response[i].titleStatus);
 							}
-							else if (response.titleStatus == "Present")
+							else if (response[i].titleStatus == "Present")
 							{
-								$('#PresentCountId').text(response.attendenceId);
-								$('#PresentDayId').text(data.titleStatus);
+								$('#PresentCountId').text(response[i].attendanceId);
+								$('#PresentDayId').text(response[i].titleStatus);
 							}
-							else if (response.titleStatus == "Leave")
+							else if (response[i].titleStatus == "Leave")
 							{
-								$('#LeaveCountId').text(response.attendenceId);
-								$('#LeaveDayId').text(data.titleStatus);
+								
+								$('#LeaveCountId').text(response[i].attendanceId);
+								$('#LeaveDayId').text(response[i].titleStatus);
 							}
 							
 						}

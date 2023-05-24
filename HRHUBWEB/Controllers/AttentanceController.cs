@@ -253,7 +253,7 @@ namespace HRHUBWEB.Controllers
 
 
 		//Get Attendance Data Status Staff Vise
-		public async Task<ActionResult<JsonObject>> GetAttendanceCount()
+		public async Task<ActionResult<JsonObject>> GetAttendanceCount(int staffId)
 		{
 
 
@@ -261,7 +261,7 @@ namespace HRHUBWEB.Controllers
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-			var staffId = userObject.StaffId;
+			
 			if (Token != null)
 			{
 
