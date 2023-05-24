@@ -44,6 +44,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<LeaveType>? ListleaveTypes { get; set; }
         [NotMapped]
+        public IEnumerable<LeaveStatus>? ListleaveStatus { get; set; }
+        [NotMapped]
         public IEnumerable<LeaveApproval>? ListLeaveApprovalData { get; set; }
 
         [NotMapped]
@@ -56,14 +58,14 @@ namespace HRHUBAPI.Models
         public IEnumerable<Leave>? ListAllleaves { get; set; }
         [NotMapped]
         public IEnumerable<Leave>? ListNewOrPendingleaves { get; set; }
-        public async Task<List<Leave>> GetLeave(int CompanyId, HrhubContext _context)
+        public async Task<List<Leave>> GetLeave(int CompanyId,int StaffId, HrhubContext _context)
         {
             try
             {
 
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId;
+                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " +StaffId+ " , 0 , 0 , '' , '' ";  
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
@@ -73,7 +75,7 @@ namespace HRHUBAPI.Models
                         LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
                         LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
                         LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
-                        Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Short Day"
+                        Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Quarter Day"
                                               : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() == "1" ?
                                               ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Days",
                         LeaveSubject = row["LeaveSubject"].ToString(),
@@ -82,12 +84,13 @@ namespace HRHUBAPI.Models
                         RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
                         ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
 
+                        StaffId = Convert.ToInt32(row["StaffID"]),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
                         StaffName = row["FirstName"].ToString() + " " + row["LastName"].ToString(),
                         Department = row["Department"].ToString(),
                         Designation = row["Designation"].ToString()
 
-                    })
+                    }).OrderByDescending(x=>x.LeaveId)
                     .ToList();
                 return list;
 
@@ -106,7 +109,7 @@ namespace HRHUBAPI.Models
                 //                      LeaveTypeTitle = lt.Title,
                 //                      LeaveStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
                 //                      LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
-                //                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Short Day" 
+                //                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Quarter Day" 
                 //                      : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() == "1"?
                 //                      ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Days",
                 //                      LeaveSubject = l.LeaveSubject,
@@ -151,7 +154,7 @@ namespace HRHUBAPI.Models
         //                LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
         //                LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
         //                LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
-        //                Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Short Day"
+        //                Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Quarter Day"
         //                                      : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() == "1" ?
         //                                      ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Days",
         //                LeaveSubject = row["LeaveSubject"].ToString(),
@@ -200,7 +203,7 @@ namespace HRHUBAPI.Models
                                       LeaveTypeTitle = lt.Title,
                                       LeaveStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
                                       LeaveEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
-                                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Short Day"
+                                      Days = l.MarkAsHalfLeave == true ? "Half Day" : l.MarkAsShortLeave == true ? "Quarter Day"
                                       : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() == "1" ?
                                       ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Days",
                                       LeaveSubject = l.LeaveSubject,
@@ -220,6 +223,104 @@ namespace HRHUBAPI.Models
                     return null;
 
                 }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        // Search Leave 
+
+        public async Task<List<Leave>> SearchLeaves(int CompanyId, int StaffId, int LeaveTypeId, int LeaveStatusId, DateTime StartDate, DateTime EndDate, HrhubContext _context)
+        {
+            try
+            {
+                DbConnection _db = new DbConnection();
+
+                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " + StaffId + " , " + LeaveTypeId + " , " + LeaveStatusId + " ,'" + StartDate +"' , '" + EndDate + " '";
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var list = dt.AsEnumerable()
+                    .Select(row => new Leave
+                    {
+                        LeaveId = Convert.ToInt32(row["LeaveId"]),
+                        LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
+                        LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
+                        LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
+                        Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Quarter Day"
+                                              : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() == "1" ?
+                                              ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Days",
+                        LeaveSubject = row["LeaveSubject"].ToString(),
+                        LeaveAppliedOnDate = Convert.ToDateTime(row["AppliedOn"]).ToString("dd-MMM-yyyy"),
+                        LeaveStatusId = Convert.ToInt32(row["LeaveStatusId"]),
+                        RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
+                        ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
+
+                        StaffId = Convert.ToInt32(row["StaffID"]),
+                        StaffRegistrationNo = row["RegistrationNo"].ToString(),
+                        StaffName = row["FirstName"].ToString() + " " + row["LastName"].ToString(),
+                        Department = row["Department"].ToString(),
+                        Designation = row["Designation"].ToString()
+
+                    })
+                    .ToList();
+                return list;
+
+
+
+
+                //var query = from cs in _context.Leaves
+                //            join d in _context.Designations on cs.DesignationId equals d.DesignationId
+
+                //            where cs.Name == Name && cs.DesignationId == DesignationId && cs.ExperienceInYears == ExperienceId && cs.CompanyId == CompanyId && cs.IsDeleted == false
+                //            select new Candidate
+                //            {
+                //                CandidateId = cs.CandidateId,
+                //                Name = cs.Name,
+                //                DesignationId = cs.DesignationId,
+                //                DesignationTitle = d.Title,
+                //                CoverLetter = cs.CoverLetter,
+                //                Email = cs.Email,
+                //                Phone = cs.Phone,
+                //                CurrentCompany = cs.CurrentCompany,
+                //                CurrentDesignation = cs.CurrentDesignation,
+                //                CurrentSalary = cs.CurrentSalary,
+                //                ExpectedSalary = cs.ExpectedSalary,
+                //                ExperienceInMonths = cs.ExperienceInMonths,
+                //                ExperienceInYears = cs.ExperienceInYears,
+                //                Dob = cs.Dob,
+                //                Gender = cs.Gender,
+                //                City = cs.City,
+                //                Address = cs.Address,
+                //                Qualification = cs.Qualification,
+                //                ApplyDate = cs.ApplyDate,
+                //                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                //                CompanyId = cs.CompanyId,
+                //                StatusId = cs.StatusId,
+                //                CreatedOn = cs.CreatedOn,
+                //                CreatedBy = cs.CreatedBy,
+                //                AttachmentPath = string.IsNullOrWhiteSpace(cs.AttachmentPath) ? "" : cs.AttachmentPath
+
+
+
+
+                //            };
+
+                return list != null ? list.OrderByDescending(x => x.LeaveId).ToList() : new List<Leave>();
+
+
+
+
+
+
+
+
 
 
 
@@ -555,7 +656,21 @@ namespace HRHUBAPI.Models
 
 
 
+        public async Task<LeaveApprovalSetting> GetLeaveApprovalSetting(int CompanyId, HrhubContext _context)
+        {
 
+            try
+            {
+                return await _context.LeaveApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.IsDeleted == false);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
 
 

@@ -675,12 +675,15 @@ public partial class HrhubContext : DbContext
         {
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.PaySchedule).IsUnicode(false);
+            entity.Property(e => e.PaysOn)
+                .HasMaxLength(10)
+                .IsFixedLength();
             entity.Property(e => e.PaysOnLastWorkingDayOfMonth)
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("PaysOn_LastWorkingDayOfMonth");
             entity.Property(e => e.SalaryCategoryId).HasColumnName("SalaryCategoryID");
+            entity.Property(e => e.SalaryFrequency).IsUnicode(false);
         });
 
         modelBuilder.Entity<StatusInfo>(entity =>
