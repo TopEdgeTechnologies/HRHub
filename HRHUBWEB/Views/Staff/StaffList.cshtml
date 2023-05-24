@@ -1,191 +1,272 @@
 ﻿@model HRHUBAPI.Models.Staff
 
-@*<div class="app-content main-content">*@
-	<div class="side-app main-container">
+<div class="side-app main-container">
 
-		<!--Page header-->
-	@*	<div class="page-header d-xl-flex d-block">
-			<div class="page-leftheader">
-			<div class="page-title">Staff</div>
-			</div>
-			<div class="page-rightheader ms-md-auto">
-				<div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
-					<div class="btn-list">
+    <!-- Main Cards Row-->
+      <div class="row">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="mt-0 text-start">
+                                <span class="font-weight-semibold">Total Staff</span>
+                                <h3 class="mb-0 mt-1 text-success">@Model.TotalActiveStaff</h3>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="icon1 bg-success-transparent my-auto  float-end"> <i class="las la-users IconCenterAlignment"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="mt-0 text-start">
+                                <span class="font-weight-semibold">Male Staff</span>
+                                <h3 class="mb-0 mt-1 text-primary">@Model.TotalMaleStaff</h3>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="icon1 bg-primary-transparent my-auto  float-end"> <i class="las la-male IconCenterAlignment"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="mt-0 text-start">
+                                <span class="font-weight-semibold">Female Staff</span>
+                                <h3 class="mb-0 mt-1 text-secondary">@Model.TotalFemaleStaff</h3>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="icon1 bg-secondary-transparent my-auto  float-end"> <i class="las la-female IconCenterAlignment"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="mt-0 text-start">
+                                <span class="font-weight-semibold">Probation Staff</span>
+                                <h3 class="mb-0 mt-1 text-danger">@Model.TotalProbationStaff</h3>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="icon1 bg-danger-transparent my-auto  float-end"> <i class="las la-user-friends IconCenterAlignment"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Main Cards Row -->
+    <!-- List Row -->
+    <div class="row">
+        <div class="col-xl-12 col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-header  border-0">
+                    <h4 class="card-title">Staff List</h4>
+                    <div class="page-rightheader ms-md-auto">
+                        <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
+                            <div class="btn-list">
+                                @if (Convert.ToBoolean(ViewBag.IsNew))
+                                {
+                                    <a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Staff</a>
+                                }
+                                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                                <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                                <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                            </div>
+                        </div>
+                    </div>
 
-						
-						@if (Convert.ToBoolean(ViewBag.IsNew))
-						{
-							<a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Staff</a>
-						}
-						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-						<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-						<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-					</div>
-				</div>
-			</div>
-		</div>*@
-		<!--End Page header-->
-		<!-- Main Cards Row-->
-		<div class="row">
-			<div class="col-xl-3 col-lg-6 col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-7">
-								<div class="mt-0 text-start">
-								<span class="font-weight-semibold">Total Staff</span>
-									<h3 class="mb-0 mt-1 text-success">@Model.TotalActiveStaff</h3>
-								</div>
-							</div>
-							<div class="col-5">
-								<div class="icon1 bg-success-transparent my-auto  float-end"> <i class="las la-users"></i> </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-7">
-								<div class="mt-0 text-start">
-								<span class="font-weight-semibold">Male Staff</span>
-									<h3 class="mb-0 mt-1 text-primary">@Model.TotalMaleStaff</h3>
-								</div>
-							</div>
-							<div class="col-5">
-								<div class="icon1 bg-primary-transparent my-auto  float-end"> <i class="las la-male"></i> </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-7">
-								<div class="mt-0 text-start">
-								<span class="font-weight-semibold">Female Staff</span>
-									<h3 class="mb-0 mt-1 text-secondary">@Model.TotalFemaleStaff</h3>
-								</div>
-							</div>
-							<div class="col-5">
-								<div class="icon1 bg-secondary-transparent my-auto  float-end"> <i class="las la-female"></i> </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-md-6">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-7">
-								<div class="mt-0 text-start">
-								<span class="font-weight-semibold">Probation Staff</span>
-									<h3 class="mb-0 mt-1 text-danger">@Model.TotalProbationStaff</h3>
-								</div>
-							</div>
-							<div class="col-5">
-								<div class="icon1 bg-danger-transparent my-auto  float-end"> <i class="las la-user-friends"></i> </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Main Cards Row -->
-		<!-- List Row -->
-		<div class="row">
-			<div class="col-xl-12 col-md-12 col-lg-12">
-				<div class="card">
-					<div class="card-header  border-0">
-					<h4 class="card-title">Staff List</h4>
-					<div class="page-rightheader ms-md-auto">
-						<div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
-							<div class="btn-list">
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-table">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0 w-5">Sr.#</th>
+                                    <th class="border-bottom-0">Staff Name</th>
+                                    <th class="border-bottom-0 w-10">Reg.#</th>
+                                    <th class="border-bottom-0">Department</th>
+                                    <th class="border-bottom-0">Designation</th>
+                                    <th class="border-bottom-0">Gender</th>
+                                    <th class="border-bottom-0">Status</th>
+                                    <th class="border-bottom-0">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.StaffList)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelitem => item.SNO)</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <img class="avatar avatar-md brround me-3" src="@item.SnapPath">
+                                                <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                    <h6 class="mb-1 fs-14">@Html.DisplayFor(modelitem => item.FirstName)</h6>
+                                                    <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.ContactNumber1) | @Html.DisplayFor(modelitem => item.Email)</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
+                                        <td>@Html.DisplayFor(modelitem => item.DepartmentTitle)</td>
+                                        <td>@Html.DisplayFor(modelitem => item.DesignationTitle)</td>
+                                        <td>@Html.DisplayFor(modelitem => item.Gender)</td>
+                                        @{
+                                            var isActive = item.Status;
+                                            if (isActive == true)
+                                            {
+                                                <td> <span class="badge badge-success  side-badge">Active</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td> <span class="badge badge-danger  side-badge">In-Active</span></td> 
+                                            }
+                                        }
+                                        <td>
+                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                            {
+                                                <a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm">
+                                                    <i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
+                                                </a>
+                                            }
+                                            @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                            {
+                                                <a class="btn btn-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-original-title="Delete"><i class="feather feather-trash-2"></i></a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End List Row-->
 
-								@* <div class="card-options">
-								<a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary">
-								<i class="fe fe-plus-circle me-1">
-								</i>Add New
-								</a>
-								</div>*@
-								@if (Convert.ToBoolean(ViewBag.IsNew))
-								{
-									<a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3">Add New Staff</a>
-								}
-								<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-								<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-								<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-							</div>
-						</div>
-					</div>
-
-					</div>
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-table">
-								<thead>
-									<tr>
-										<th class="border-bottom-0 w-5">Sr.#</th>
-										<th class="border-bottom-0">Staff Name</th>
-										<th class="border-bottom-0 w-10">Registration #</th>
-										<th class="border-bottom-0">Department</th>
-										<th class="border-bottom-0">Designation</th>
-										<th class="border-bottom-0">Phone Number</th>
-										<th class="border-bottom-0">Gender</th>
-										<th class="border-bottom-0">Status</th>
-										<th class="border-bottom-0">Actions</th>
-									</tr>
-								</thead>
-								<tbody>
-								@foreach(var item in Model.StaffList)
-								{
-									<tr>
-										<td>@Html.DisplayFor(modelitem => item.SNO)</td>
-										<td>
-											<div class="d-flex">
-												<span class="avatar avatar-md brround me-3" style="background-image: url(../assets/images/users/1.jpg)"></span>
-												<div class="me-3 mt-0 mt-sm-1 d-block">
-													<h6 class="mb-1 fs-14">@Html.DisplayFor(modelitem => item.FirstName)</h6>
-													<p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Email)</p>
-												</div>
-											</div>
-										</td>
-										<td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
-										<td>@Html.DisplayFor(modelitem => item.DepartmentTitle)</td>
-										<td>@Html.DisplayFor(modelitem => item.DesignationTitle)</td>
-										<td>@Html.DisplayFor(modelitem => item.ContactNumber1)</td>
-										<td>@Html.DisplayFor(modelitem => item.Gender)</td>
-										<td><span class="badge badge-success">Active</span></td>
-										<td>
-											@if (Convert.ToBoolean(ViewBag.IsEdit))
-											{
-												<a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm">
-													<i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
-												</a>
-												@*<a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm" href="hr-empview.html">
-													<i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
-												</a>*@
-											}
-											@if (Convert.ToBoolean(ViewBag.IsDelete))
-											{
-												<a class="btn btn-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-original-title="Delete"><i class="feather feather-trash-2"></i></a>
-											}
-										</td>
-									</tr>
-								}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End List Row-->
-
-	</div><!-- end app-content-->
+</div><!-- end app-content-->
 @*</div>*@
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $('#hr-table').DataTable({
+                dom: 'Bfrtip',
+                "lengthMenu": [10, 20, 50],
+                buttons: [
+                    'excelHtml5', 'pdfHtml5', 'csvHtml5', 'colvis'
+                ],
+               "columnDefs": [{ 'visible': false, 'targets': [5,6] }],
+
+                orderCellsTop: true,
+                fixedHeader: true,
+                initComplete: function () {
+
+                    var api = this.api();
+
+                    // For each column
+                    api.columns().eq(0).each(function (colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+
+                        var search = $(cell).text();
+                        if (search != "Action" && search != "") 
+                        {
+                            $(cell).html('<input type="text" class="form-control" placeholder="' + search + '" style="max-width: 150px; word-wrap: break-word!important; overflow: hidden;" / >');
+                        }
+                        else 
+                        {
+                            $(cell).empty();
+                        }
+
+                        // On every keypress in this input
+                        $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
+                            .off('keyup change')
+                            .on('change', function (e) {
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != ''
+                                            ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                            : '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+                            })
+                            .on('keyup', function (e) {
+                                e.stopPropagation();
+
+                                $(this).trigger('change');
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
+
+                }
+            });
+
+            // Show notification
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') 
+            {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') 
+            {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') 
+            {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') 
+            {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+        });
+
+    </script>
+
+}
+

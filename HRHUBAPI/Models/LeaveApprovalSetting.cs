@@ -13,6 +13,10 @@ public partial class LeaveApprovalSetting
 
     public int? LeaveApprovalLeaveStatusId { get; set; }
 
+    public bool? AllowApplyHalfDayLeave { get; set; }
+
+    public bool? AllowApplyShortDayLeave { get; set; }
+
     public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }

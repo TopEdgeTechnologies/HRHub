@@ -56,8 +56,18 @@ namespace HRHUBAPI.Models
 
         [NotMapped]
         public IEnumerable<StaffAttachment>? StaffAttachmentList { get; set; }
+   
+        [NotMapped]
+        public IEnumerable<StaffLeaveAllocation>? StaffLeaveAllocationslist { get; set; }
 
-		public async Task<Staff> GetStaffStatisticsByCompanyId(int CompanyId)
+        [NotMapped]
+        public IEnumerable<int>? ListLeaveTypeId { get; set; }
+
+        [NotMapped]
+        public IEnumerable<int>? ListAllowedLeaves { get; set; }
+
+     
+        public async Task<Staff> GetStaffStatisticsByCompanyId(int CompanyId)
 		{
 			DbConnection _db = new DbConnection();
 			try
@@ -68,10 +78,10 @@ namespace HRHUBAPI.Models
 
 				if (dt.Rows.Count > 0)
 				{
-					TotalActiveStaff = Convert.ToInt32(dt.Rows[0]["TotalActiveStaff"]);
-					TotalMaleStaff = Convert.ToInt32(dt.Rows[0]["TotalMaleStaff"]);
-					TotalFemaleStaff = Convert.ToInt32(dt.Rows[0]["TotalFemaleStaff"]);
-					TotalProbationStaff = Convert.ToInt32(dt.Rows[0]["TotalProbationStaff"]);
+					StaffStatistics.TotalActiveStaff = Convert.ToInt32(dt.Rows[0]["TotalActiveStaff"]);
+					StaffStatistics.TotalMaleStaff = Convert.ToInt32(dt.Rows[0]["TotalMaleStaff"]);
+					StaffStatistics.TotalFemaleStaff = Convert.ToInt32(dt.Rows[0]["TotalFemaleStaff"]);
+					StaffStatistics.TotalProbationStaff = Convert.ToInt32(dt.Rows[0]["TotalProbationStaff"]);
 				}
 				return StaffStatistics;
 			}
@@ -89,6 +99,7 @@ namespace HRHUBAPI.Models
                 var staff = dt.AsEnumerable()
                     .Select(row => new Staff
                     {
+                        SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         SNO = Convert.ToInt32(row["SNO"]),
                         FirstName = row["FirstName"].ToString(),
                         LastName = row["LastName"].ToString(),
@@ -131,10 +142,62 @@ namespace HRHUBAPI.Models
             return await hrhubContext.StaffAttachments.Where(x => x.IsDeleted == false && x.StaffId==Id).ToListAsync();     
         }
 
-       
+        public async Task<List<StaffLeaveAllocation>> GetStaffLeaveAllocationsDetail(int CompanyId, int Id, HrhubContext hrhubContext)
+        {
+            DbConnection _db = new DbConnection();
+            try
+            {
+                string query = "EXEC HR.sp_Get_StaffWise_Allowed_Leaves " + CompanyId + ", " + Id;
+                DataTable dt = _db.ReturnDataTable(query);
 
+                var leaveAllocation = dt.AsEnumerable()
+                    .Select(row => new StaffLeaveAllocation
+                    {
+                        //SNO = Convert.ToInt32(row["SNO"]),
+                        LeaveTypeId = Convert.ToInt32(row["LeaveTypeID"]),
+                        LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
+                        NoOfLeavesLimit = string.IsNullOrWhiteSpace(row["NoOfLeaves"].ToString()) ? 0 : Convert.ToInt32(row["NoOfLeaves"]),
+                        LeaveAllocationId = string.IsNullOrWhiteSpace(row["LeaveAllocationID"].ToString()) ? 0 : Convert.ToInt32(row["LeaveAllocationID"]),
 
-        // Get single record of Staff by company ID
+                        StaffId = string.IsNullOrWhiteSpace(row["StaffID"].ToString()) ? 0 : Convert.ToInt32(row["StaffID"]),
+                        AllowedLeaves = string.IsNullOrWhiteSpace(row["AllowedLeaves"].ToString()) ? 0 : Convert.ToInt32(row["AllowedLeaves"]),
+                        //Status = row["Status"].ToString(),
+                        //ContactNumber2 = string.IsNullOrWhiteSpace(row["ContactNumber2"].ToString()) ? "" : row["IsDeleted"].ToString(),
+                        //IsDeleted = row["IsDeleted"].ToString(),
+                        //JoiningDate = DateTime.ParseExact(row["JoiningDate"].ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                        //Status = Convert.ToBoolean(row["Status"])
+                    })
+                    .ToList();
+                //return leaveAllocation;
+                Staff objStaff = new Staff();
+                objStaff.StaffLeaveAllocationslist = leaveAllocation;
+                return objStaff.StaffLeaveAllocationslist.ToList();
+            }
+            catch (Exception e) { throw; }
+
+            //return await hrhubContext.StaffLeaveAllocations.Where(x => x.IsDeleted == false && x.StaffId == Id).ToListAsync();
+
+            //var queryList = (from lt in hrhubContext.LeaveTypes
+            //                 join la in hrhubContext.StaffLeaveAllocations
+            //                    on lt.LeaveTypeId equals la.LeaveTypeId into leaveAllocations
+            //                 from la in leaveAllocations.DefaultIfEmpty()
+            //                 where la.StaffId == Id
+            //                 select new StaffLeaveAllocation
+            //                 {
+            //                     LeaveAllocationId = la.LeaveAllocationId,
+            //                     LeaveTypeId = lt.LeaveTypeId,
+            //                     LeaveTypeTitle = lt.Title,
+            //                     StaffId = la.StaffId,
+            //                     AllowedLeaves = la.AllowedLeaves,
+
+            //                 })?.ToList();
+
+            //Staff objStaff = new Staff();   
+            //objStaff.StaffLeaveAllocationslist = queryList;
+            //return objStaff.StaffLeaveAllocationslist.ToList();
+        }
+
+       // Get single record of Staff by company ID
 		public async Task<Staff> GetStaffCompanyId(int CompanyId, HrhubContext hrhubContext)
 		{
 			try
@@ -151,16 +214,8 @@ namespace HRHUBAPI.Models
 			}
 			catch { throw; }
 		}
-
-
-
-
-
-
-
-
-
-		public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
+        
+        public async Task<Staff> PostStaff(Staff staff, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
@@ -191,7 +246,7 @@ namespace HRHUBAPI.Models
                         dbResult.JoiningDate = staff.JoiningDate;
                         dbResult.ResigningDate = staff.ResigningDate;
                         dbResult.TerminationDate = staff.TerminationDate;
-                        dbResult.SalaryMethod = staff.SalaryMethod;
+                        dbResult.SalaryMethodId = staff.SalaryMethodId;
                         dbResult.SalaryAmount = staff.SalaryAmount;
                         dbResult.AccountTitle = staff.AccountTitle;
                         dbResult.BankAccountNumber = staff.BankAccountNumber;
@@ -205,8 +260,13 @@ namespace HRHUBAPI.Models
                         dbResult.UpdatedOn = DateTime.Now;
 
                         await hrhubContext.SaveChangesAsync();
+
+                        //Staff Leave Details
+                        StaffLeaveAllocationsDetailSave(staff, hrhubContext);
+
                         // Staff Document Details
-                        AttachmentDetailSave(staff, hrhubContext);
+                        DocumentAttachmentDetailSave(staff, hrhubContext);
+                        
                         dbResult.TranFlag = 2;
                         dbContextTransaction.Commit();
                         return dbResult;
@@ -218,8 +278,13 @@ namespace HRHUBAPI.Models
 
                         hrhubContext.Staff.Add(staff);
                         await hrhubContext.SaveChangesAsync();
+
+                        //Staff Leave Details
+                        StaffLeaveAllocationsDetailSave(staff, hrhubContext);
+                        
                         // Staff Document Details
-                        AttachmentDetailSave(staff, hrhubContext);
+                        DocumentAttachmentDetailSave(staff, hrhubContext);
+                        
                         staff.TranFlag = 1;
                         dbContextTransaction.Commit();
                         return staff;
@@ -233,7 +298,45 @@ namespace HRHUBAPI.Models
             }
         }
 
-        private bool AttachmentDetailSave(Staff objstaff, HrhubContext _Context)
+        private bool StaffLeaveAllocationsDetailSave(Staff objStaff, HrhubContext _context)
+        {
+            try
+            {
+                List<StaffLeaveAllocation> ListStaffLeaveAllocation = new List<StaffLeaveAllocation>();
+
+                var result = _context.StaffLeaveAllocations.Where(x => x.StaffId == objStaff.StaffId).ToList();   
+                if (result != null && result.Count > 0)
+                {
+                    _context.StaffLeaveAllocations.RemoveRange(result);
+                    _context.SaveChanges(); 
+                }
+
+                int i = 0;
+                foreach (var item in objStaff.ListAllowedLeaves)
+                {
+                    if(item != null && item > 0)
+                    {
+                        StaffLeaveAllocation staffLeaveAllocation = new StaffLeaveAllocation();
+                        staffLeaveAllocation.LeaveTypeId =  objStaff.ListLeaveTypeId.ToArray()[i];
+                        staffLeaveAllocation.StaffId = objStaff.StaffId;
+                        staffLeaveAllocation.AllowedLeaves = item;
+                        staffLeaveAllocation.IsDeleted = false;
+                        staffLeaveAllocation.Status = true;
+                        staffLeaveAllocation.CreatedBy = objStaff.CreatedBy;
+                        staffLeaveAllocation.CreatedOn = objStaff.CreatedOn;
+
+                        ListStaffLeaveAllocation.Add(staffLeaveAllocation); 
+                    }
+                    i++;
+                }
+
+                _context.StaffLeaveAllocations.AddRange(ListStaffLeaveAllocation);  
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex) { throw; }
+        }
+        private bool DocumentAttachmentDetailSave(Staff objstaff, HrhubContext _Context)
         {
             try
             {

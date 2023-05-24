@@ -1,27 +1,18 @@
 ﻿@model HRHUBAPI.Models.Staff
 
-@*<div class="app-content main-content">*@
+<style>
+.select2-container 
+{
+    width: 100% !important;
+}
+</style>
+
 <div class="side-app main-container">
 
-    <!--Page header-->
-   @* <div class="page-header d-xl-flex d-block">
-        <div class="page-leftheader">
-            <div class="page-title">Add Staff</div>
-        </div>
-        <div class="page-rightheader ms-md-auto">
-            <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
-                <div class="btn-list">
-                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-    <!--End Page header-->
-    <!-- Row -->
+    <!-- Row -->    
     @using (Html.BeginForm("StaffCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
+        <input type="hidden" id="LeaveDetailRowNo" />
         <input type="hidden" id="AttachmentDetailRowNo" />
         <input type="hidden" asp-for="StaffId" />
         <input type="hidden" asp-for="CompanyId" value="@ViewBag.CompanyId" />
@@ -132,8 +123,9 @@
                         <ul class="nav panel-tabs">
                             <li class="ms-4"><a href="#tab5" class="active" data-bs-toggle="tab">Personal Details</a></li>
                             <li><a href="#tab6" data-bs-toggle="tab">Company Details</a></li>
-                            <li><a href="#tab7" data-bs-toggle="tab">Bank Details</a></li>
-                            <li><a href="#tab8" data-bs-toggle="tab">Upload Documents</a></li>
+                            <li><a href="#tab7" data-bs-toggle="tab">Leave Details</a></li>
+                            <li><a href="#tab8" data-bs-toggle="tab">Bank Info</a></li>
+                            <li><a href="#tab9" data-bs-toggle="tab">Documents</a></li>
                         </ul>
                     </div>
                 </div>
@@ -150,23 +142,13 @@
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <input asp-for=FirstName type="text" id="txt_FirstName" oninput="OnTextChangeStaffName()" class="form-control mb-md-0 mb-5" placeholder="First Name">
+                                                    <input asp-for=FirstName type="text" id="txt_FirstName" oninput="OnTextChangeStaffName()" required class="form-control mb-md-0 mb-5" placeholder="First Name">
                                                     <span class="text-muted"></span>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <input asp-for=LastName type="text" id="txt_LastName" oninput="OnTextChangeStaffName()" class="form-control" placeholder="Last Name">
+                                                    <input asp-for=LastName type="text" id="txt_LastName" oninput="OnTextChangeStaffName()" required class="form-control" placeholder="Last Name">
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">National Id</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="NationalIdnumber" type="text" class="form-control" placeholder="National Idendity Number">
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +158,17 @@
                                             <label class="form-label mb-0 mt-2">Parent's Name</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input asp-for=FatherName type="text" class="form-control" placeholder="Parent's or Guardian's Name">
+                                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group ">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label mb-0 mt-2">National Id Number</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +180,7 @@
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <input asp-for=ContactNumber1 type="text" class="form-control mb-md-0 mb-5" placeholder="Contact Number 1">
+                                                    <input asp-for=ContactNumber1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Contact Number 1">
                                                     <span class="text-muted"></span>
                                                 </div>
                                                 <div class="col-md-6">
@@ -206,7 +198,7 @@
                                         <div class="col-md-9">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <input asp-for=EmergencyContact1 type="text" class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
+                                                    <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
                                                     <span class="text-muted"></span>
                                                 </div>
                                                 <div class="col-md-6">
@@ -222,7 +214,7 @@
                                             <label class="form-label mb-0 mt-2">Date Of Birth</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input asp-for="Dob" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                            <input asp-for="Dob" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
                                         </div>
                                     </div>
                                 </div>
@@ -275,7 +267,7 @@
                                             <label class="form-label mb-0 mt-2">Email</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input asp-for=Email type="text" class="form-control" placeholder="email">
+                                            <input asp-for=Email type="text" required class="form-control" placeholder="email">
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +277,7 @@
                                             <label class="form-label mb-0 mt-2">Present Address</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <textarea asp-for=PresentAddress rows="3" class="form-control" placeholder="Address1"></textarea>
+                                            <textarea asp-for=PresentAddress rows="3" required class="form-control" placeholder="Address1"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -307,14 +299,12 @@
                                         <div class="col-md-9">
                                             <div class="form-group">
                                                 <label for="form-label" class="form-label"></label>
-                                                @*<input class="form-control" type="file">*@
                                                 <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 @*<h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>*@
-
                                 <div class="form-group mt-7">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -374,17 +364,19 @@
                                             <label class="form-label mb-0 mt-2">Staff Registration #</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <input asp-for="RegistrationNo" type="text" class="form-control" placeholder="Registration Number">
+                                            <input asp-for="RegistrationNo" type="text" required class="form-control" placeholder="Registration Number">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    
+
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Department</label>
+                                            <label class="form-label mb-0 mt-2">Department  <span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
-                                            <select asp-for=DepartmentId id="DepartmentId" class="form-control custom-select select2" data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjDepartmentList,"DepartmentId", "Title"))">
+                                           <select asp-for=DepartmentId id="DepartmentId" class="form-control custom-select select2" required data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjDepartmentList,"DepartmentId", "Title"))">
                                                 <option label="Select Department"></option>
                                             </select>
                                         </div>
@@ -393,10 +385,10 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Designation</label>
+                                            <label class="form-label mb-0 mt-2">Designation  <span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
-                                            <select asp-for=DesignationId id="DesignationId" onchange="onchangeDesignation()" class="form-control custom-select select2 " data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
+                                            <select asp-for=DesignationId id="DesignationId" required onchange="onchangeDesignation()" class="form-control custom-select select2" data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
                                                 <option label="Select Designation"></option>
                                             </select>
                                         </div>
@@ -418,8 +410,7 @@
                                             <label class="form-label mb-0 mt-2">Date Of Joining</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
-                                            <input asp-for="JoiningDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                            <input asp-for="JoiningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
                                         </div>
                                     </div>
                                 </div>
@@ -429,8 +420,7 @@
                                             <label class="form-label mb-0 mt-2">Resignation Date</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
-                                            <input asp-for="ResigningDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                            <input asp-for="ResigningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
                                         </div>
                                     </div>
                                 </div>
@@ -440,8 +430,7 @@
                                             <label class="form-label mb-0 mt-2">Termination Date</label>
                                         </div>
                                         <div class="col-md-9">
-                                            @*<input type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYYY">*@
-                                            <input asp-for="TerminationDate" type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                            <input asp-for="TerminationDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
                                         </div>
                                     </div>
                                 </div>
@@ -452,8 +441,8 @@
                                             <label class="form-label mb-0 mt-2">Salary Method</label>
                                         </div>
                                         <div class="col-md-9">
-                                            <select asp-for="SalaryMethod" id="SalaryMethod" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethod,"Text" ,"Text"))">
-                                                <option value="">Select Salary Method</option>
+                                            <select asp-for=SalaryMethodId id="SalaryMethodId" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethodList,"SalaryMethodId", "Title"))">
+                                                <option label="Select Salary Method"></option>
                                             </select>
                                         </div>
                                     </div>
@@ -475,7 +464,7 @@
                                         </div>
                                         <div class="col-md-9">
                                             <label class="custom-switch">
-                                                <input asp-for=Status id="chk_StaffStatus" type="checkbox" onchange="StaffStatusChange()" name="custom-switch-checkbox" class="custom-switch-input">
+                                                <input asp-for=Status   type="checkbox" onchange="StaffStatusChange()"  class="custom-switch-input"> @* name="custom-switch-checkbox"*@
                                                 <span class="custom-switch-indicator"></span>
                                                 <span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
                                             </label>
@@ -483,8 +472,52 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>                
                         <div class="tab-pane" id="tab7">
+                            <div class="card-body">
+                                <div>
+                                    <table id="LeaveTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. #</th>
+                                                <th>Leave Type</th>
+                                                <th>Max Limit</th>
+                                                <th>Allowed Leaves</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="LeaveTableBody">
+                                            @{
+                                                int a = 0;
+                                                int b = 1;
+                                                if(Model.StaffLeaveAllocationslist != null && Model.StaffLeaveAllocationslist.Count() > 0)
+                                                {
+                                                    foreach(var item in Model.StaffLeaveAllocationslist)
+                                                    {
+                                                        <tr id="@a">
+                                                            <td>@b</td>
+                                                            <td>
+                                                                <input type="hidden" id="LeaveAllocationId_@a" name="LeaveAllocationId" value="@item.LeaveAllocationId" />
+                                                                <input type="hidden" id="LeaveTypeId_@a" name="ListLeaveTypeId" value="@item.LeaveTypeId" />
+                                                                <input type="text" readonly class="form-control" id="LeaveTypeTitle_@a" name="LeaveTypeTitle" value="@item.LeaveTypeTitle" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" readonly class="form-control" id="NoOfLeavesLimit_@a" name="NoOfLeavesLimit" value="@item.NoOfLeavesLimit" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" id="AllowedLeaves_@a" onkeydown="LeaveExceedLimit(@a)" name="ListAllowedLeaves" value="@item.AllowedLeaves" />
+                                                            </td>
+                                                        </tr>
+                                                        a++;
+                                                        b++;
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab8">
                             <div class="card-body">
                                 <div class="form-group">
                                     <div class="row">
@@ -554,10 +587,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane" id="tab8">
+                        <div class="tab-pane" id="tab9">
                             <div class="card-body">
                                 <div>
-                                    <h3>Documents</h3>
                                     <table id="documentTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
                                         <thead>
                                             <tr>
@@ -613,10 +645,10 @@
     <script>
         $(document).ready(function () {
 
-            $('#DepartmentId').select2({ dropdownAutoWidth: true, width: 'auto' });
+            $('#DepartmentId').select2();
             $('#DesignationId').select2();
             $('#SalaryMethod').select2();
-
+      
             StaffStatusChange();
 
             $('#StaffImageAttachmentFile').change(function () {
@@ -625,21 +657,24 @@
                 var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
                 var fileSize = this.files[0].size;
                 var filePath = fileInput.val();
-                if (!allowedExtensions.exec(filePath)) {
+                if (!allowedExtensions.exec(filePath)) 
+                {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
-                } else if (fileSize > fileSizeLimit) {
+                } else if (fileSize > fileSizeLimit) 
+                {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
-                } else {
+                } else 
+                {
                     readURL(this)
                 }
             });
@@ -647,6 +682,46 @@
             // Staff Document Add
             AddStaffAtachmentData(0, true);
 
+        });
+
+        $("#btnSaveUpdate").click(function () {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            if (validateForm()) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+            else {
+                $.growl.warning({
+                    message: "Please Enter required fields !"
+                });
+            }
+            // $("#myform").submit();
         });
 
         function OnTextChangeStaffName()
@@ -697,7 +772,7 @@
         }
 
         function StaffStatusChange() {
-            var chk_StaffStatus = document.getElementById("chk_StaffStatus");
+            var chk_StaffStatus = document.getElementById("Status");
             var lbl_StaffStatus = document.getElementById("lbl_StaffStatus");
 
             if (chk_StaffStatus.checked) {
@@ -708,97 +783,16 @@
             }
         }
 
-        function ControlValidation() {
-            var status = true;
-            var Data = { id: $("#StaffId").val(), email: $('#nationalId').val() == '' ? '""' : $('#nationalId').val(), CompanyId: $("#CompanyId").val() }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Staff/StaffAlreadyExists",
-                type: "GET",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
-                            // $.growl.warning(b.message);
-                            $.growl.warning({
-                                message: b.message
-                            });
-                            status = false;
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toaste.error("Please Fill Required Field");
-                }
-            })
-
-            if ($("#FirstName").val().trim() == "") {
-                $.growl.warning({
-                    message: "Please Enter NFirstNameame"
-                });
-                $("#FirstName").css("border-color", "red");
-                status = false;
-            }
-            else {
-                $("#FirstName").css("border-color", "#ddd");
-            }
-
-        }
-
-        $("#btnSaveUpdate").click(function () {
-            $("#myform").submit();
-            /*
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonText: 'No, cancel!',
-                confirmButtonText: 'Yes, Save it!',
-                timer: 30000,
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire(
-                        'Saved!',
-                        'Your record has been Saved.',
-                        'success'
-                    )
-                    $("#myform").submit();
-                }
-                else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swalWithBootstrapButtons.fire(
-                        'Cancelled',
-                        'Your record is safe :)',
-                        'error'
-                    )
-                }
-                */
-            //if(ControlValidation())
-            //{
-
-            //}
-        });
-
-        function AddStaffAtachmentData(ThisRowID, FromDocumentDotReady) {
+        function AddStaffAtachmentData(ThisRowID, FromDocumentDotReady) 
+        {
             debugger;
             var dtDetailInfoHtml;
             var totalNullAccountsCount = 0;
 
-            if (FromDocumentDotReady != true) {
-                if (document.getElementById("DocumentTitle_" + ThisRowID).value == '') {
+            if (FromDocumentDotReady != true) 
+            {
+                if (document.getElementById("DocumentTitle_" + ThisRowID).value == '') 
+                {
                     //message empty
                     $.growl.warning({
                         message: "Please Enter Document Title !"
@@ -819,16 +813,21 @@
                 }
             });
 
-            if (insertrow) {
-                if (totalNullAccountsCount < 1) {
-                    if (FromDocumentDotReady != true) {
+            if (insertrow) 
+            {
+                if (totalNullAccountsCount < 1) 
+                {
+                    if (FromDocumentDotReady != true) 
+                    {
                         document.getElementById("AttachmentDetailRowNo").value = $('#TBodyID1 tr:last').attr('id');
                         document.getElementById("AttachmentDetailRowNo").value++;
                     }
-                    else {
+                    else 
+                    {
                         document.getElementById("AttachmentDetailRowNo").value = 0
                     }
                 }
+
                 var q = document.getElementById("AttachmentDetailRowNo").value;
                 var i = parseInt(q) + 1;
 
@@ -868,6 +867,133 @@
                 $(this).find('td:first').text(index + 1);
             });
         }
+
+        function LeaveExceedLimit(id)
+        {
+            var leaveslimit = parseInt($("#NoOfLeavesLimit_"+id).val());
+            var allowedleaves = parseInt($("#AllowedLeaves_"+id).val());
+
+            if (allowedleaves > leaveslimit)
+            {
+                $("#AllowedLeaves_" + id).val(0);
+            }
+        }
+
+        $("#PresentAddress").on("textarea", function () {
+            validateInput($(this));
+        });
+
+
+        $("#txt_FirstName, #txt_LastName, #NationalIdnumber, #FatherName, #ContactNumber1, #EmergencyContact1, #RegistrationNo ").on("input", function () {
+            validateInput($(this));
+        });
+
+        function validateInput(input) 
+        {
+            //alreadyExist();
+            console.log(input)
+            if (input[0].checkValidity()) 
+            {
+                input.removeClass("is-invalid");
+                //input.addClass("is-valid"); //is-valid state-valid
+                //input.addClass("state-valid");
+                //input.next(".invalid-feedback").hide();
+            } else 
+            {
+                input.removeClass("is-valid");
+                input.addClass("is-invalid");
+                input.addClass("state-valid");
+                //input.next(".invalid-feedback").show();
+            }
+
+        }
+
+        function validateForm() 
+        {
+            var form = $("#myform");
+            var inputs = form.find("input");
+            var textareaInputs = form.find("textarea");
+
+            inputs.each(function () {
+                validateInput($(this));
+            });
+
+            textareaInputs.each(function () {
+                validateInput($(this));
+            });
+
+            if (customValidation() && form[0].checkValidity() ) {
+                console.log("Form is valid");
+                // Submit the form or perform other actions here
+                return true;
+            } else {
+                console.log("Form is invalid");
+                return false;
+            }
+            //form.addClass("was-validated");
+        }
+
+        function customValidation()
+        {
+            debugger 
+            var isvalid = true;
+            isvalid = alreadyExist();
+
+            if ($("#DepartmentId").val() == null || $("#DepartmentId").val() == '')
+            {
+                $.growl.warning({
+                    message: "Please Select Department!"
+                });
+                isvalid = false;
+            }
+
+            if ($("#DesignationId").val() == null || $("#DesignationId").val() == '') 
+            {
+                $.growl.warning({
+                    message: "Please Select Designation!"
+                });
+                isvalid = false;
+            }
+            return isvalid;
+       }
+
+       	function alreadyExist() {
+			var status =false
+            var Data = {   id:$("#StaffId").val(), NationalIdnumber: $("#NationalIdnumber").val() }
+			console.log(Data)
+			
+            $.ajax({
+				async: false,
+				url: "/Staff/StaffAlreadyExists",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") 
+                    {
+						debugger
+						var b = JSON.parse(data)
+						if (b.success)
+                        {
+							$.growl.warning({
+								message: b.message
+							});
+			            	$("#NationalIdnumber").addClass("is-invalid");
+							status= false;
+						}
+						else
+						{
+			            	$("#NationalIdnumber").removeClass("is-invalid");
+							status= true;
+						}
+					}
+				},
+				error: function () 
+                {
+					status= false;	
+				}
+			})
+		    return status;
+		}
 
     </script>
 }

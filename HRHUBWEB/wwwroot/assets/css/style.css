@@ -116,6 +116,13 @@ License        :   Licensed under ThemeForest License
 
 /* ###### bootstrap ####### */
 /*------ Accordion -------*/
+
+
+.IconCenterAlignment {
+    margin-top: 15px;
+}
+
+
 .accordion .card:not(:first-of-type):not(:last-of-type) {
     border-bottom: 0;
     border-radius: 0;
