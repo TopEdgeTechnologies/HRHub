@@ -393,6 +393,8 @@ public partial class HrhubContext : DbContext
             entity.ToTable("LeaveApprovalSetting", "HR");
 
             entity.Property(e => e.SettingId).HasColumnName("SettingID");
+            entity.Property(e => e.AllowApplyHalfDayLeave).HasColumnName("Allow_ApplyHalfDayLeave");
+            entity.Property(e => e.AllowApplyShortDayLeave).HasColumnName("Allow_ApplyShortDayLeave");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.FinalApprovalByStaffId).HasColumnName("FinalApprovalBy_StaffID");
@@ -478,7 +480,12 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SalaryComponentId)
                 .ValueGeneratedNever()
                 .HasColumnName("SalaryComponentID");
+            entity.Property(e => e.CalculationMethod)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.CalculationValue).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.Category).IsUnicode(false);
+            entity.Property(e => e.CompanyContribution).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
@@ -627,12 +634,15 @@ public partial class HrhubContext : DbContext
         {
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.PaySchedule).IsUnicode(false);
+            entity.Property(e => e.PaysOn)
+                .HasMaxLength(10)
+                .IsFixedLength();
             entity.Property(e => e.PaysOnLastWorkingDayOfMonth)
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("PaysOn_LastWorkingDayOfMonth");
             entity.Property(e => e.SalaryCategoryId).HasColumnName("SalaryCategoryID");
+            entity.Property(e => e.SalaryFrequency).IsUnicode(false);
         });
 
         modelBuilder.Entity<StatusInfo>(entity =>

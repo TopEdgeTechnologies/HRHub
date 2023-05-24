@@ -94,8 +94,9 @@
                                 <textarea asp-for="LeaveSubject" class="form-control" rows="2">Some text here...</textarea>
                             </div>
 
-                            <div class="form-group">
-                                <div class="col-md-6 mt-2">
+                            <div class="row form-group leavecheckbox">
+                                <div class="col-xl-6 col-md-12 col-lg-12 mt-2 half">
+                               @* <div class="col-md-6 mt-2 half">*@
 
                                     <label class="custom-control custom-checkbox">
                                         <input type="checkbox" asp-for="MarkAsHalfLeave" type="checkbox" class="custom-control-input">
@@ -103,9 +104,10 @@
                                     </label>
 
                                 </div>
-                                <div class="col-md-6 mt-2">
+                                <div class="col-xl-6 col-md-12 col-lg-12 mt-2 short">
+                                @*<div class="col-md-6 mt-2 short">*@
 
-                                    <label class="custom-control custom-checkbox">
+                                    <label class="custom-control custom-checkbox ">
                                         <input type="checkbox" asp-for="MarkAsShortLeave" type="checkbox" class="custom-control-input">
                                         <span class="custom-control-label">Short Leave</span>
                                     </label>
@@ -137,7 +139,7 @@
                         <div class="card-header border-0">
                             <h4 class="card-title">Leave Application</h4>
                         </div>
-                        <textarea asp-for="ApplicationHtml" class="summernote" style=" height: 400px !important;"></textarea>
+                        <textarea asp-for="ApplicationHtml" class="summernote" style=" height: 398px !important;"></textarea>
                     </div>
                 </div>
             </div>
@@ -223,8 +225,37 @@
 
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
             loadChart();
-
+            leaveApprovalSetting()
         })
+
+        function leaveApprovalSetting() {
+            debugger;
+            $.ajax({
+                url: "/Leave/GetLeaveApprovalSettingData",
+                method: 'GET',
+                success: function (response) {
+                    $(".half").prop("hidden", false);
+                    $(".short").prop("hidden", false);
+                    if (response != null) {
+                        var allowhalfleave = response.allowApplyHalfDayLeave
+                        var allowshortleave = response.allowApplyShortDayLeave
+
+                        if (!allowhalfleave) {
+                            $(".half").prop("hidden", true);
+                        }
+                        if (!allowshortleave) {
+                            $(".short").prop("hidden", true);
+                        }
+                    }
+
+
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+        }
 
         function loadChart() {
             //debugger;
@@ -372,7 +403,7 @@
                 $("#LeaveSubject").css("border-color", "#ddd");
             }
             debugger;
-            var Data = { leavetypeid: $("#LeaveTypeId").val()}
+            var Data = { leavetypeid: $("#LeaveTypeId").val() }
             console.log(Data)
             $.ajax({
                 async: false,
@@ -455,7 +486,7 @@
 
 
         $("#daterange-categories").change(function () {
-            //debugger;
+            debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "multiple") {
                 //$("#StartDate").val("");
@@ -471,7 +502,7 @@
         })
 
         $("#StartDate").change(function () {
-            //debugger;
+            debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "single") {
                 var strtdate = $("#StartDate").val();
@@ -484,7 +515,7 @@
         })
 
         $("#EndDate").change(function () {
-            //debugger;
+            debugger;
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })
 

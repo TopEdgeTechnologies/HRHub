@@ -13,6 +13,12 @@ public partial class SalaryComponent
 
     public string? Category { get; set; }
 
+    public string? CalculationMethod { get; set; }
+
+    public decimal? CalculationValue { get; set; }
+
+    public decimal? CompanyContribution { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }

@@ -17,5 +17,7 @@ public partial class StaffSalarySetting
 
     public string? PaysOnLastWorkingDayOfMonth { get; set; }
 
-    public string? PaySchedule { get; set; }
+    public string? SalaryFrequency { get; set; }
+
+    public string? PaysOn { get; set; }
 }
