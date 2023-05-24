@@ -22,8 +22,8 @@
 <!--End Page header-->
 <!-- Row -->
 <div class="hrattview-buttons">
-	<a asp-for="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
-	<a asp-for="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
+	<a asp-action="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
+	<a asp-action="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
 </div>
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
@@ -147,7 +147,27 @@
 
 
 		$(document).ready(function () {
+
+
+
+
 			$("#IdEmployee").select2();
+
+
+			$("#IdEmployee").change(function () {
+				
+				$('#TotalCountId').text(0);
+				$('#AbsentCountId').text(0);
+				$('#PresentCountId').text(0);
+				$('#LeaveCountId').text(0);
+
+				var tbody = $("#emp-attendance tbody");				
+				tbody.empty();
+				
+				
+			});
+
+
 
 			var currentDate = new Date(); // Get the current date
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -346,7 +366,7 @@
 				async: false,
 				data: obj,
 				success: function (response) {
-					console.log(response)
+					
 					if (response != null) {
 						debugger
 						
