@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class FixedComponent
+public partial class ComponentGroup
 {
-    public int FixedComponentId { get; set; }
+    public int ComponentGroupId { get; set; }
 
     public string? Title { get; set; }
 

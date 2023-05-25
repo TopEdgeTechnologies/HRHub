@@ -22,7 +22,7 @@
                         <input asp-for="Title" class="form-control" type="text" placeholder="Enter Salary Method Title">
                     </div>
                     @*
-                    <div class="form-group">
+                <div class="form-group">
                 <label class="form-label">Short Code</label>
                 <input asp-for="ShortCode" class="form-control" type="text" placeholder="Enter Short Code">
                 </div>
@@ -118,7 +118,7 @@
                                                 <div class="d-flex">
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a href ="#" onclick="EditRecord(@item.SalaryMethodId)" class="action-btns1 btn-xs">
+                                                        <a href="#" onclick="EditRecord(@item.SalaryMethodId)" class="action-btns1 btn-xs">
                                                             <i class="feather feather-edit primary text-primary mt-1 "></i>
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
@@ -144,12 +144,11 @@
 
 <!-- End Row -->
 @section scripts
-{
+    {
     <script>
         $(document).ready(function () {
 
-            if(@Model.SalaryMethodId > 0)
-            {
+            if (@Model.SalaryMethodId > 0) {
                 $('#AddGeneralModal').modal.show();
             }
 
@@ -243,7 +242,9 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("SalaryMethodDelete", "PayrollConfiguration")/" + id;
+                    var url = "@Url.Action("SalaryMethodDelete", "PayrollConfiguration")/"+ id;
+
+                    alert(url);
                     window.location.href = url;
                 }
                 else if (result.dismiss === Swal.DismissReason.cancel) {

@@ -25,7 +25,7 @@ namespace HRHUBWEB.Controllers
 		private readonly APIHelper _APIHelper;
         private readonly User _user;
 
-		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper , IHttpContextAccessor httpContextAccessor)
+		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;

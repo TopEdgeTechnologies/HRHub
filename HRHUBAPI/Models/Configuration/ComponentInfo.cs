@@ -3,27 +3,30 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRHUBAPI.Models
 {
-    public partial class SalaryComponent
+    public partial class ComponentInfo
     {
         [NotMapped]
         public int? TranFlag { get; set; }
 
-        public async Task<List<SalaryComponent>> GetSalaryComponentByCompanyId(int CompanyId, HrhubContext hrhubContext)
+        [NotMapped]
+        public IEnumerable<ComponentInfo>? ComponentInfoList { get; set; }
+
+        public async Task<List<ComponentInfo>> GetComponentInfo(HrhubContext hrhubContext)
         {
             try
             {
-                List<SalaryComponent> SalaryComponentes = new List<SalaryComponent>();
-                SalaryComponentes = await hrhubContext.SalaryComponents.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
-                return SalaryComponentes;
+                List<ComponentInfo> ComponentInfo = new List<ComponentInfo>();
+                ComponentInfo = await hrhubContext.ComponentInfos.Where(x => x.IsDeleted == false).ToListAsync();
+                return ComponentInfo;
             }
             catch (Exception ex) { throw; }
         }
 
-        public async Task<SalaryComponent> GetSalaryComponentById(int Id, HrhubContext hrhubContext)
+        public async Task<ComponentInfo> GetComponentInfoById(int Id, HrhubContext hrhubContext)
         {
             try
             {
-                var dbResult = await hrhubContext.SalaryComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryComponentId == Id);
+                var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentId == Id);
                 if (dbResult != null)
                 {
                     return dbResult;
@@ -36,22 +39,24 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
-        public async Task<SalaryComponent> PostSalaryComponent(SalaryComponent objSalaryComponent, HrhubContext hrhubContext)
+        public async Task<ComponentInfo> PostComponentInfo(ComponentInfo objComponentInfo, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
                 try
                 {
-                    var dbResult = await hrhubContext.SalaryComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryComponentId == objSalaryComponent.SalaryComponentId);
-                    if (dbResult != null && objSalaryComponent.SalaryComponentId > 0)
+                    var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentId == objComponentInfo.ComponentId);
+                    if (dbResult != null && objComponentInfo.ComponentId > 0)
                     {
-                        dbResult.SalaryComponentId = objSalaryComponent.SalaryComponentId;
-                        dbResult.Title = objSalaryComponent.Title;
-                        dbResult.Category = objSalaryComponent.Category;
-                        dbResult.ContributionMethod = objSalaryComponent.ContributionMethod;
-                        dbResult.StaffContribution = objSalaryComponent.StaffContribution;
-                        dbResult.CompanyContribution = objSalaryComponent.CompanyContribution;
-                        dbResult.UpdatedBy = objSalaryComponent.UpdatedBy;
+                        dbResult.ComponentId = objComponentInfo.ComponentId;
+                        dbResult.ComponentGroupId = objComponentInfo.ComponentGroupId;
+                        dbResult.Title = objComponentInfo.Title;
+                        dbResult.CalculationMethod = objComponentInfo.CalculationMethod;
+                        dbResult.CompanyContribution = objComponentInfo.CompanyContribution;
+                        dbResult.Category = objComponentInfo.Category;
+                        dbResult.Type = objComponentInfo.Type;
+                        dbResult.Status = objComponentInfo.Status;
+                        dbResult.UpdatedBy = objComponentInfo.UpdatedBy;
                         dbResult.UpdatedOn = DateTime.Now;
                         dbResult.IsDeleted = false;
 
@@ -62,31 +67,31 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
-                        objSalaryComponent.CreatedOn = DateTime.Now;
-                        objSalaryComponent.IsDeleted = false;
+                        objComponentInfo.CreatedOn = DateTime.Now;
+                        objComponentInfo.IsDeleted = false;
 
-                        hrhubContext.Add(objSalaryComponent);
+                        hrhubContext.Add(objComponentInfo);
                         await hrhubContext.SaveChangesAsync();
-                        objSalaryComponent.TranFlag = 1;
+                        objComponentInfo.TranFlag = 1;
                         dbContextTransaction.Commit();
-                        return objSalaryComponent;
+                        return objComponentInfo;
                     }
                 }
                 catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
             }
         }
 
-        public async Task<bool> DeleteSalaryComponent(int Id, int UserId, HrhubContext hrhubContext)
+        public async Task<bool> DeleteComponentInfo(int Id, int UserId, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
                 try
                 {
                     //bool recordDeleted = false;
-                    var dbResult = await hrhubContext.SalaryComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryComponentId == Id);
+                    var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentId == Id);
                     if (dbResult != null)
                     {
-                        dbResult.IsDeleted = false;
+                        dbResult.IsDeleted = true;
                         dbResult.UpdatedBy = UserId;
                         dbResult.UpdatedOn = DateTime.Now;
                         await hrhubContext.SaveChangesAsync();
@@ -105,7 +110,7 @@ namespace HRHUBAPI.Models
             {
                 if (Id > 0)
                 {
-                    var dbResult = await hrhubContext.SalaryComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title && x.SalaryComponentId != Id);
+                    var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title && x.ComponentId != Id);
                     if (dbResult != null)
                     {
                         return true;
@@ -113,7 +118,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var dbResult = await hrhubContext.SalaryComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title);
+                    var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title);
                     if (dbResult != null)
                     {
                         return true;

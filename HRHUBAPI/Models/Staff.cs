@@ -11,6 +11,8 @@ public partial class Staff
 
     public int? DepartmentId { get; set; }
 
+    public string? JobTitle { get; set; }
+
     public string? RegistrationNo { get; set; }
 
     public string? NationalIdnumber { get; set; }
@@ -84,4 +86,8 @@ public partial class Staff
     public int? CompanyId { get; set; }
 
     public int? EmploymentTypeId { get; set; }
+
+    public bool? StaffStatusId { get; set; }
+
+    public string? WorkMode { get; set; }
 }

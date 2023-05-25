@@ -3,27 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRHUBAPI.Models
 {
-    public partial class FixedComponent
+    public partial class ComponentGroup
     {
         [NotMapped]
         public int? TranFlag { get; set; }
 
-        public async Task<List<FixedComponent>> GetFixedComponent(HrhubContext hrhubContext)
+        public async Task<List<ComponentGroup>> GetComponentGroup(HrhubContext hrhubContext)
         {
             try
             {
-                List<FixedComponent> FixedComponentes = new List<FixedComponent>();
-                FixedComponentes = await hrhubContext.FixedComponents.Where(x => x.IsDeleted == false).ToListAsync();
-                return FixedComponentes;
+                List<ComponentGroup> ComponentGroupes = new List<ComponentGroup>();
+                ComponentGroupes = await hrhubContext.ComponentGroups.Where(x => x.IsDeleted == false).ToListAsync();
+                return ComponentGroupes;
             }
             catch (Exception ex) { throw; }
         }
 
-        public async Task<FixedComponent> GetFixedComponentById(int Id, HrhubContext hrhubContext)
+        public async Task<ComponentGroup> GetComponentGroupById(int Id, HrhubContext hrhubContext)
         {
             try
             {
-                var dbResult = await hrhubContext.FixedComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.FixedComponentId == Id);
+                var dbResult = await hrhubContext.ComponentGroups.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentGroupId == Id);
                 if (dbResult != null)
                 {
                     return dbResult;
@@ -36,18 +36,20 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
-        public async Task<FixedComponent> PostFixedComponent(FixedComponent objFixedComponent, HrhubContext hrhubContext)
+        public async Task<ComponentGroup> PostComponentGroup(ComponentGroup objComponentGroup, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
                 try
                 {
-                    var dbResult = await hrhubContext.FixedComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.FixedComponentId == objFixedComponent.FixedComponentId);
-                    if (dbResult != null && objFixedComponent.FixedComponentId > 0)
+                    var dbResult = await hrhubContext.ComponentGroups.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentGroupId == objComponentGroup.ComponentGroupId);
+                    if (dbResult != null && objComponentGroup.ComponentGroupId > 0)
                     {
-                        dbResult.FixedComponentId = objFixedComponent.FixedComponentId;
-                        dbResult.Title = objFixedComponent.Title;
-                        dbResult.UpdatedBy = objFixedComponent.UpdatedBy;
+                        dbResult.ComponentGroupId = objComponentGroup.ComponentGroupId;
+                        dbResult.Title = objComponentGroup.Title;
+                        dbResult.Description = objComponentGroup.Description;
+                        dbResult.Category = objComponentGroup.Category;
+                        dbResult.UpdatedBy = objComponentGroup.UpdatedBy;
                         dbResult.UpdatedOn = DateTime.Now;
                         dbResult.IsDeleted = false;
 
@@ -58,31 +60,31 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
-                        objFixedComponent.CreatedOn = DateTime.Now;
-                        objFixedComponent.IsDeleted = false;
+                        objComponentGroup.CreatedOn = DateTime.Now;
+                        objComponentGroup.IsDeleted = false;
 
-                        hrhubContext.Add(objFixedComponent);
+                        hrhubContext.Add(objComponentGroup);
                         await hrhubContext.SaveChangesAsync();
-                        objFixedComponent.TranFlag = 1;
+                        objComponentGroup.TranFlag = 1;
                         dbContextTransaction.Commit();
-                        return objFixedComponent;
+                        return objComponentGroup;
                     }
                 }
                 catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
             }
         }
 
-        public async Task<bool> DeleteFixedComponent(int Id, int UserId, HrhubContext hrhubContext)
+        public async Task<bool> DeleteComponentGroup(int Id, int UserId, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
                 try
                 {
                     //bool recordDeleted = false;
-                    var dbResult = await hrhubContext.FixedComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.FixedComponentId == Id);
+                    var dbResult = await hrhubContext.ComponentGroups.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentGroupId == Id);
                     if (dbResult != null)
                     {
-                        dbResult.IsDeleted = false;
+                        dbResult.IsDeleted = true;
                         dbResult.UpdatedBy = UserId;
                         dbResult.UpdatedOn = DateTime.Now;
                         await hrhubContext.SaveChangesAsync();
@@ -101,7 +103,7 @@ namespace HRHUBAPI.Models
             {
                 if (Id > 0)
                 {
-                    var dbResult = await hrhubContext.FixedComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title && x.FixedComponentId != Id);
+                    var dbResult = await hrhubContext.ComponentGroups.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title && x.ComponentGroupId != Id);
                     if (dbResult != null)
                     {
                         return true;
@@ -109,7 +111,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var dbResult = await hrhubContext.FixedComponents.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title);
+                    var dbResult = await hrhubContext.ComponentGroups.FirstOrDefaultAsync(x => x.IsDeleted == false && x.Title == Title);
                     if (dbResult != null)
                     {
                         return true;

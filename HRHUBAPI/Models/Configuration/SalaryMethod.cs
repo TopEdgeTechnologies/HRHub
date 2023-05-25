@@ -85,7 +85,7 @@ namespace HRHUBAPI.Models
                     var dbResult = await hrhubContext.SalaryMethods.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryMethodId == Id);
                     if (dbResult != null)
                     {
-                        dbResult.IsDeleted = false;
+                        dbResult.IsDeleted = true;
                         dbResult.UpdatedBy = UserId;
                         dbResult.UpdatedOn = DateTime.Now;
                         await hrhubContext.SaveChangesAsync();

@@ -16,18 +16,23 @@ using System.Collections.Specialized;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace HRHUBWEB.Controllers
 {
     public class StaffController : Controller
     {
-        private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly APIHelper _APIHelper;
+        private readonly User _user;
 
-        public StaffController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment) 
+        public StaffController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor) 
         {
-            _client = httpClientFactory.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
+            _APIHelper = APIHelper;
+            _httpContextAccessor = httpContextAccessor;
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
         }
 
         [CustomAuthorization]
@@ -40,75 +45,45 @@ namespace HRHUBWEB.Controllers
 
             ViewBag.Success = data;
 
-            Staff staff = new Staff();
+            Staff objStaff = new Staff();
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            staff.CompanyId = userObject.CompanyId;
-
-            if( Id > 0)
+            if (Id > 0)
             {
-                staff = await GetStaffById(Id);
+                objStaff = await GetStaffById(Id);
             }
 
-            if(Token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{staff.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();   
-                    staff.StaffList = JsonConvert.DeserializeObject<List<Staff>>(content);
-                }
+            // Fill Main Staff List
+            objStaff.CompanyId = _user.CompanyId;
+            objStaff.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{objStaff.CompanyId}", HttpMethod.Get);
 
-				// Fill StaffStatisticsList
-				HttpResponseMessage response2 = await _client.GetAsync($"api/Staffs/GetStaffStatisticsByCompanyId{staff.CompanyId}");
-				if (response2.IsSuccessStatusCode)
-				{
-					var content = await response2.Content.ReadAsStringAsync();
-					var StaffStatistics = JsonConvert.DeserializeObject<Staff>(content);
+            // Fill BI StaffStatisticsList
+            var StaffStatistics = await _APIHelper.CallApiAsyncGet<Staff>($"api/Staffs/GetStaffStatisticsByCompanyId{objStaff.CompanyId}", HttpMethod.Get);
+            
+            objStaff.TotalActiveStaff = StaffStatistics.TotalActiveStaff;
+            objStaff.TotalMaleStaff = StaffStatistics.TotalMaleStaff;
+            objStaff.TotalFemaleStaff = StaffStatistics.TotalFemaleStaff;
+            objStaff.TotalProbationStaff = StaffStatistics.TotalProbationStaff;
 
-                    staff.TotalActiveStaff = StaffStatistics.TotalActiveStaff;
-                    staff.TotalMaleStaff = StaffStatistics.TotalMaleStaff;
-                    staff.TotalFemaleStaff = StaffStatistics.TotalFemaleStaff;
-                    staff.TotalProbationStaff = StaffStatistics.TotalProbationStaff;
-				}
-			}
-            else
-            {
-                RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-            return View(staff);
+            // End Fill BI StaffStatisticsList
+
+            return View(objStaff);
         }
 
         public async Task<IActionResult> StaffDetails(int Id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            if(Token != null)
-            {
-                Staff staff = await GetStaffById(Id);
-                return View(staff);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+            Staff staff = await GetStaffById(Id);
+            return View(staff);
         }
 
         public async Task<Staff> GetStaffById(int Id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            Staff staff = new Staff();
-            var response = await _client.GetAsync($"api/Staffs/GetStaffById{Id}");
-            if(response.IsSuccessStatusCode) 
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                staff = JsonConvert.DeserializeObject<Staff>(content);
+            Staff objStaff = new Staff();
+            if (Id > 0)
+            {          
+                objStaff = await _APIHelper.CallApiAsyncGet<Staff>($"api/Staffs/GetStaffById{Id}", HttpMethod.Get);
+                return objStaff;
             }
-            return staff;
+            return new Staff();
         }
 
         public async Task<IActionResult> GetStaffCreateOrUpdate(int Id) 
@@ -118,65 +93,24 @@ namespace HRHUBWEB.Controllers
 
             Staff objStaff = new Staff();
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            // Edit/Update Mode
+            objStaff = await GetStaffById(Id);
 
-			if (Token != null)
-			{
+            ViewBag.ObjDepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ObjSalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
 
-                // Edit/Update Mode
-                objStaff = await GetStaffById(Id);
+            objStaff.StaffLeaveAllocationslist = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffLeaveAllocation>>($"api/Staffs/GetStaffLeaveAllocationsDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
 
-                //Populate Department
-                HttpResponseMessage response2 = await _client.GetAsync($"api/Configuration/GetDepartmentByCompanyID{userObject.CompanyId}");
-				if (response2.IsSuccessStatusCode)
-				{
-					var result = response2.Content.ReadAsStringAsync().Result;
-					ViewBag.ObjDepartmentList = JsonConvert.DeserializeObject<List<Department>>(result);
-				}
-				//Populate Designation
-				HttpResponseMessage response3 = await _client.GetAsync($"api/Configuration/GetDesignationInfos{userObject.CompanyId}");
-                if (response3.IsSuccessStatusCode)
-                {
-                    var result = response3.Content.ReadAsStringAsync().Result;
-                    ViewBag.ObjDesignationList = JsonConvert.DeserializeObject<List<Designation>>(result);
-                }
-                //Populate SalaryMethod
-                HttpResponseMessage response4 = await _client.GetAsync("api/PayrollConfiguration/GetSalaryMethod");
-                if (response4.IsSuccessStatusCode)
-                {
-                    var result = response4.Content.ReadAsStringAsync().Result;
-                    ViewBag.ObjSalaryMethodList = JsonConvert.DeserializeObject<List<SalaryMethod>>(result);
-                }
-
-                //Staff Leave Allocation Details
-                HttpResponseMessage response5 = await _client.GetAsync($"api/Staffs/GetStaffLeaveAllocationsDetail{userObject.CompanyId}/{Id}");
-                if (response5.IsSuccessStatusCode)
-                {
-                    var result = response5.Content.ReadAsStringAsync().Result;
-                    objStaff.StaffLeaveAllocationslist = JsonConvert.DeserializeObject<List<StaffLeaveAllocation>>(result);
-                }
-
-                if (Id == 0)
-				{
-                    return View(objStaff);
-				}
-                
-                //Staff Document Details
-                HttpResponseMessage response6 = await _client.GetAsync($"api/Staffs/GetStaffDocumentDetail{Id}");
-                if (response6.IsSuccessStatusCode)
-                {
-                    var result = response6.Content.ReadAsStringAsync().Result;
-                    objStaff.StaffAttachmentList = JsonConvert.DeserializeObject<List<StaffAttachment>>(result);
-                }
-
+            if (Id == 0)
+            {
                 return View(objStaff);
-			}
-			else
-			{
-				return RedirectToAction("Loginpage", "User", new { id = 2 });
-			}
+            }
+
+            //Staff Document Details
+            objStaff.StaffAttachmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffAttachment>>($"api/Staffs/GetStaffDocumentDetail{Id}", HttpMethod.Get);
+            
+            return View(objStaff);
 		}
 
         public List<SelectListItem> GetMaterialStatusList() 
@@ -281,58 +215,36 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffCreateOrUpdate(IFormCollection objForm, Staff objStaff)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-            objStaff.CompanyId = userObject.CompanyId;
-			objStaff.CreatedBy = userObject.UserId;
+            objStaff.CompanyId = _user.CompanyId;
+			objStaff.CreatedBy = _user.UserId;
             objStaff.CreatedOn = DateTime.Now;
 
             var staffImage = objForm.Files.GetFile("StaffImageAttachmentFile");
             objStaff.SnapPath = UploadImage(objStaff.FirstName, staffImage, "StaffImages");
-            //var DepartmentLogo = MyAttachment.Files.GetFile("LogoAttachmentFile");
-            //department.LogoAttachment = uploadImage(department.Title, DepartmentLogo, "DepartmentImages");
 
             SaveStaffAttachmentsDetail(objStaff);
 
-            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Staffs/PostStaff", objStaff);
-
-			if (response.IsSuccessStatusCode) 
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objStaff, "api/Staffs/PostStaff", HttpMethod.Post);
+            if (result.Message.Contains("Insert"))
             {
-                var content = response.Content.ReadAsStringAsync();
-				var result = JsonConvert.DeserializeObject<Response>(content.Result);
-                int status = 0;
-
-                if(result.Success) 
-                {
-                    if (result.Message.Contains("Insert")) 
-                        status = 1;
-                    else if(result.Message.Contains("Update"))
-                        status = 2; 
-                }
-                return RedirectToAction("StaffList", new {data = status});  
+                return RedirectToAction("StaffList", new { data = 1 });
             }
             else
             {
-                return RedirectToAction("Loginpage", "User", new { Id = 2 });
+                return RedirectToAction("StaffList", new { data = 2 });
             }
         }
 
+        //public async Task<IActionResult> DeleteStaff(int Id, int UserId)
+        //{
+        //    var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAlreadyExists{Id}/{UserId}", HttpMethod.Get);
+        //    return RedirectToAction("StaffList", new { data = 3 });
+        //}
+
         public async Task<IActionResult> StaffAlreadyExists(int Id, string NationalIdnumber="0")
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-            NationalIdnumber = string.IsNullOrWhiteSpace(NationalIdnumber) ? "0" : NationalIdnumber;
-            HttpResponseMessage response = await _client.GetAsync($"api/Staffs/StaffAlreadyExists/{CompanyId}/{Id}/{NationalIdnumber}");
-            if(response.IsSuccessStatusCode) 
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                return Json(content);
-            }
-            return RedirectToAction("Loginpage", "User", new { id = 2 });
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAlreadyExists/{_user.CompanyId}/{Id}/{NationalIdnumber}", HttpMethod.Get);
+            return Json(result); 
 		}
 
 		private string UploadImage(string name, IFormFile file, string root)

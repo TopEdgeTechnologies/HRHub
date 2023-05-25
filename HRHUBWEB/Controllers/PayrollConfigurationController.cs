@@ -18,21 +18,17 @@ namespace HRHUBWEB.Controllers
 {
     public class PayrollConfigurationController : Controller
     {
-        private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly string _token;
+        private readonly APIHelper _APIHelper;
         private readonly User _user;
 
-        public PayrollConfigurationController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
+        public PayrollConfigurationController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
             _webHostEnvironment = webHostEnvironment;
-            _client = httpClientFactory.CreateClient("APIClient");
-
+            _APIHelper = APIHelper;
+            _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            _token = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);    
         }
 
         #region Salary Method
@@ -48,105 +44,49 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
 
             SalaryMethod objSalaryMethod = new SalaryMethod();
+
             if (Id > 0)
             {
                 objSalaryMethod = await GetSalaryMethodById(Id);
             }
 
-            if (_token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync("api/PayrollConfiguration/GetSalaryMethod");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    objSalaryMethod.SalaryMethodList = JsonConvert.DeserializeObject<List<SalaryMethod>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { Id = 2 });
-            }
+            objSalaryMethod.SalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
             return View(objSalaryMethod);
         }
 
         public async Task<SalaryMethod> GetSalaryMethodById(int Id)
         {
             SalaryMethod objSalaryMethod = new SalaryMethod();
-            HttpResponseMessage response = await _client.GetAsync($"api/PayrollConfiguration/GetSalaryMethodById/{Id}");
-            if(response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                objSalaryMethod = JsonConvert.DeserializeObject<SalaryMethod>(content); 
-            }
+            objSalaryMethod = await _APIHelper.CallApiAsyncGet<SalaryMethod>($"api/PayrollConfiguration/GetSalaryMethodById/{Id}", HttpMethod.Get);
             return objSalaryMethod;
         }
 
         public async Task<IActionResult> SalaryMethodCreateOrUpdate(SalaryMethod objSalaryMethod)
         {
-            //user get from session
-            
             objSalaryMethod.CreatedBy = _user.UserId;
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objSalaryMethod, "api/PayrollConfiguration/PostSalaryMethod", HttpMethod.Post);
 
-            HttpResponseMessage response = await _client.PostAsJsonAsync("api/PayrollConfiguration/PostSalaryMethod", objSalaryMethod);
-            if(response.IsSuccessStatusCode) 
+            if (result.Message.Contains("Insert"))
             {
-                var content = response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content.Result);
-
-                int status = 0;
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Insert"))
-                    {
-                        status = 1;
-                    }
-                    else if (result.Message.Contains("Update"))
-                    {
-                        status = 2;
-                    }
-                }
-                return RedirectToAction("SalaryMethodList", new { data = status});   
+                return RedirectToAction("SalaryMethodList", new { data = 1 });
             }
             else
             {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
+                return RedirectToAction("SalaryMethodList", new { data = 2 });
             }
         }
 
-        public async Task<IActionResult> DeleteSalaryMethod(int Id, int UserId)
+        public async Task<IActionResult> SalaryMethodDelete(int Id)
         {
-            SalaryMethod objSalaryMethod = new SalaryMethod();
-            HttpResponseMessage response = await _client.GetAsync($"api/PayrollConfiguration/DeleteSalaryMethod/{Id}/{UserId}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response>(content);
-                int status = 0;
-
-                if (result.Success)
-                {
-                    if (result.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-                }
-                return RedirectToAction("SalaryMethodList", new { data = status });
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/DeleteSalaryMethod/{Id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("SalaryMethodList", new { data = 3 });
         }
 
         public async Task<IActionResult> SalaryMethodAlreadyExists(int Id, string Title)
         {
-            HttpResponseMessage response = await _client.GetAsync($"api/PayrollConfiguration/SalaryMethodAlreadyExists/{Id}/{Title}");
-            if(response.IsSuccessStatusCode)
-            {
-                var content = response.Content.ReadAsStringAsync();
-                return Json(content);
-            }
-            return RedirectToAction("Loginpage", "User", new { Id = 2 });
+            SalaryMethod objSalaryMethod = new SalaryMethod();
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/SalaryMethodAlreadyExists/{Id}/{Title}", HttpMethod.Get);
+            return Json(result);
         }
 
         #endregion

@@ -11,6 +11,10 @@ public partial class Designation
 
     public bool Status { get; set; }
 
+    public byte[]? Grade { get; set; }
+
+    public int? Seq { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }

@@ -252,6 +252,7 @@ namespace HRHUBAPI.Models
                         dbResult.BankAccountNumber = staff.BankAccountNumber;
                         dbResult.BankName = staff.BankName;
                         dbResult.BankLocation = staff.BankLocation;
+                        dbResult.BankCode = staff.BankCode;
                         dbResult.TaxPayerNumber = staff.TaxPayerNumber;
                         dbResult.Status = staff.Status;
                         dbResult.JobDescription = staff.JobDescription;

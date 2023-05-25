@@ -84,7 +84,7 @@ namespace HRHUBAPI.Models
                     var dbResult = await hrhubContext.SalaryStatusProcesses.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryStatusProcessId == Id);
                     if (dbResult != null)
                     {
-                        dbResult.IsDeleted = false;
+                        dbResult.IsDeleted = true;
                         dbResult.UpdatedBy = UserId;
                         dbResult.UpdatedOn = DateTime.Now;
                         await hrhubContext.SaveChangesAsync();
