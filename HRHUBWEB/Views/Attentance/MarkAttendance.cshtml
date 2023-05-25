@@ -26,22 +26,48 @@
 				</div>
 
 			</div>
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-12 col-lg-3">
-						<div class="form-group">
-							<label class="form-label">Select Date:</label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="feather feather-calendar"></i>
+			<div class="row" id="IdFilters">
+				<div class="col-md-12 mb-n4" style="margin-bottom: -50px;">
+					<div class="card">
+						<div class="card-body">
+							
+								<div class="row">
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Select Date:</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="feather feather-calendar"></i>
+												</div>
+											</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
+										</div>
 									</div>
-								</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
-							</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Clock In Time</label>
+										<input type="time" class="form-control">
+									</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Clock Out Time</label>
+										<input type="time" class="form-control">
+									</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									
+									</div>
+
+								</div>
+
+							
 						</div>
 					</div>
 				</div>
 			</div>
+			
 			<div class="card-body">
 				<div class="row">
 					<div class="col-md-12">
@@ -64,7 +90,13 @@
 								<th class="border-bottom-0">Clock-In</th>
 								<th class="border-bottom-0">Clock-Out</th>
 								<th class="border-bottom-0">Attendance</th>
-								<th class="border-bottom-0 text-center">Action</th>
+								<th class="border-bottom-0 text-center">
+
+									
+									Action
+									
+								
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -75,20 +107,13 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<a href="javascript:void(0);" class="btn btn-primary float-end">Save All</a>
+				<a href="javascript:void(0);" class="btn btn-primary float-end">Bulk Save</a>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-
-@*
-	<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-			<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-		</a>
-<td><div class="d-flex"><label class="custom-control custom-checkbox-md"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div></td>
-*@
 
 
 
