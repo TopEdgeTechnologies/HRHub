@@ -22,4 +22,16 @@ public partial class LoanApplication
     public int? NoOfInstallments { get; set; }
 
     public decimal? InstallmentPerMonth { get; set; }
+
+    public int? LoanStatusId { get; set; }
+
+    public bool IsDeleted { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 }
