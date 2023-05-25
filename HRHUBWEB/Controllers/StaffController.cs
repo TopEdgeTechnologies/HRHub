@@ -281,10 +281,6 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffCreateOrUpdate(IFormCollection objForm, Staff objStaff)
         {
-
-           
-
-
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");

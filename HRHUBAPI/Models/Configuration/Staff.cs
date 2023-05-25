@@ -258,6 +258,7 @@ namespace HRHUBAPI.Models
                         dbResult.SnapPath = staff.SnapPath;
                         dbResult.UpdatedBy = staff.UpdatedBy;
                         dbResult.UpdatedOn = DateTime.Now;
+                        staff.IsDeleted = false;
 
                         await hrhubContext.SaveChangesAsync();
 

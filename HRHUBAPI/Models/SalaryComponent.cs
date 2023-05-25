@@ -9,6 +9,8 @@ public partial class SalaryComponent
 
     public int? CompanyId { get; set; }
 
+    public int? FixedComponentId { get; set; }
+
     public string? Title { get; set; }
 
     public string? Category { get; set; }

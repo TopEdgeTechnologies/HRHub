@@ -134,7 +134,7 @@ namespace HRHUBAPI.Controllers
             return await new Department().GetDepartment(CompanyId, _context);
         }
 
-        [HttpGet("GetDepartmentById{id}")]
+        [HttpGet("GetDepartmentById{Id}")]
         public async Task<ActionResult<Department>> GetDepartmentById(int Id)
         {
             var dbResult = await new Department().GetDepartmentById(Id, _context);
@@ -168,13 +168,13 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        [HttpGet("DeleteDepartment{id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteDepartment(int id, int UserId)
+        [HttpGet("DeleteDepartment{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteDepartment(int Id, int UserId)
         {
-            if (id > 0)
+            if (Id > 0)
             {
 
-                var dbResult = await new Department().DeleteDepartment(id, UserId, _context);
+                var dbResult = await new Department().DeleteDepartment(Id, UserId, _context);
                 if (dbResult == true)
                 {
                     return Ok(new

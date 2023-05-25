@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class LoanType
+public partial class LoanStatus
 {
-    public int LoanTypeId { get; set; }
-
-    public int? CompanyId { get; set; }
+    public int LoanStatusId { get; set; }
 
     public string? Title { get; set; }
 
-    public bool Status { get; set; }
+    public string? Description { get; set; }
 
-    public bool IsNeedApproval { get; set; }
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

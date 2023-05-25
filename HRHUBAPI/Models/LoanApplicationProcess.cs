@@ -11,7 +11,7 @@ public partial class LoanApplicationProcess
 
     public int? ApprovedByStaffId { get; set; }
 
-    public int? StatusId { get; set; }
+    public int? LoanStatusId { get; set; }
 
     public string? Remarks { get; set; }
 
