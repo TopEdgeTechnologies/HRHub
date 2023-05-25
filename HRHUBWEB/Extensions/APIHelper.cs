@@ -3,6 +3,7 @@ using System.Text;
 using System;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace HRHUBWEB.Extensions
 {
@@ -11,21 +12,21 @@ namespace HRHUBWEB.Extensions
 
 		private readonly HttpClient _client;
 		private IWebHostEnvironment _webHostEnvironment;
-		public APIHelper(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+		private readonly IHttpContextAccessor _httpContextAccessor;
+
+		public APIHelper(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
 		{
 			_client = httpClient.CreateClient("APIClient");
 			_webHostEnvironment = webHostEnvironment;
-		
+			_httpContextAccessor = httpContextAccessor;
+
 
 		}
 
-		public  async Task<T> CallApiAsyncPost<T>(object model, string apiUrl, HttpMethod httpMethod  ,string token)
+		public  async Task<T> CallApiAsyncPost<T>(object model, string apiUrl, HttpMethod httpMethod )
 		{
-			// Replace this with the JWT token you received from the server
-			string jwtToken = token;
-
-			// Create an HttpClient instance
-			//using var httpClient = new HttpClient { BaseAddress = new Uri(apiUrl) };
+			//get Token
+			string jwtToken = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 
 			// Set the Authorization header with the JWT token
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
@@ -43,8 +44,12 @@ namespace HRHUBWEB.Extensions
 			// Handle the response
 			if (response.IsSuccessStatusCode)
 			{
+				JsonSerializerOptions options = new JsonSerializerOptions
+				{
+					PropertyNameCaseInsensitive = true
+				};
 				string content = await response.Content.ReadAsStringAsync();
-				return JsonSerializer.Deserialize<T>(content);
+				return JsonSerializer.Deserialize<T>(content, options);
 			}
 			else
 			{
@@ -54,13 +59,13 @@ namespace HRHUBWEB.Extensions
 
 
 
-		public async Task<T> CallApiAsyncGet<T>( string apiUrl, HttpMethod httpMethod, string token)
+		public async Task<T> CallApiAsyncGet<T>( string apiUrl, HttpMethod httpMethod)
 		{
 			// Replace this with the JWT token you received from the server
-			string jwtToken = token;
+			string jwtToken = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 
 			// Create an HttpClient instance
-			//using var httpClient = new HttpClient { BaseAddress = new Uri(apiUrl) };
+		
 
 			// Set the Authorization header with the JWT token
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
@@ -83,8 +88,6 @@ namespace HRHUBWEB.Extensions
 				{
 					PropertyNameCaseInsensitive = true
 				};
-
-			
 
 				string content = await response.Content.ReadAsStringAsync();
 				return JsonSerializer.Deserialize<T>(content, options);

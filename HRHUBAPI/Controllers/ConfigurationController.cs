@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design;
 using System.Text.Json.Nodes;
+using Newtonsoft.Json;
+
 
 namespace HRHUBAPI.Controllers
 {
@@ -51,7 +53,7 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Designation().PostDesignation(obj, _context);
-            if (result != null && result.DesignationId > 0)
+            if (result != null && result.Flag ==2)
                 return Ok(new
                 {
                     Success = true,
@@ -63,9 +65,6 @@ namespace HRHUBAPI.Controllers
                     Success = true,
                     Message = "Data Insert Successfully!"
                 });
-
-
-
 
 
         }
@@ -89,7 +88,7 @@ namespace HRHUBAPI.Controllers
 
 
         [HttpGet("DesignationCheckData{id}/{title}/{CompanyId}")]
-        public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title, int CompanyId)
+        public async Task<ActionResult<Designation>> DesignationCheckData(int id, string title, int CompanyId)
         {
             if (await new Designation().AlreadyExist(id, title, CompanyId, _context))
             {

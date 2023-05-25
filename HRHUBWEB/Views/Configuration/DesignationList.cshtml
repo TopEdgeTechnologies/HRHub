@@ -235,12 +235,12 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
+                      ///  var b = JSON.parse(data)
+                        if (data.success) {
 
                             // $.growl.warning(b.message);
                             $.growl.warning({
-                                message: b.message
+                                message: data.message
                             });
                             status = false;
                         }

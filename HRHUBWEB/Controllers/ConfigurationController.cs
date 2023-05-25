@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System.Net.NetworkInformation;
 using System.Text.Json;
+using System.Net.WebSockets;
 
 namespace HRHUBWEB.Controllers
 {
@@ -20,14 +21,17 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-        private APIHelper _APIHelper;
+		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly APIHelper _APIHelper;
+        private readonly User _user;
 
-		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper)
+		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper , IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
 			_APIHelper=APIHelper;
-
+			_httpContextAccessor = httpContextAccessor;
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 		}
         
         #region DesignationInfo
@@ -43,60 +47,16 @@ namespace HRHUBWEB.Controllers
 
             ViewBag.Success = data;
             Designation ObjDesignation = new Designation();
+            ObjDesignation.CompanyId = _user.CompanyId;
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ObjDesignation.CompanyId = userObject.CompanyId;
-
-
-			
-
-
-			var adsdas = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>( $"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get, Token);
-
-			//var result = await CallApiAsync<object>(model, apiUrl, HttpMethod.Post);
-
-			if (Token != null)
-            {
-
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjDesignation.Listdesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-
+			ObjDesignation.Listdesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>( $"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get);
 
             return View(ObjDesignation);
         }
         public async Task<IActionResult> DesignationDetails(int id)
         {
-
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            Designation designation = new Designation();
-            var response = await _client.GetAsync($"api/Configuration/GetDesignationInfoId{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                designation = JsonConvert.DeserializeObject<Designation>(content);
-                return Json(designation);
-            }
-            else
-            {
-
-                return Json(null);
-            }
+            var result = await _APIHelper.CallApiAsyncGet<Designation>($"api/Configuration/GetDesignationInfoId{id}", HttpMethod.Get);
+			return Json(result);
 
            
         }
@@ -107,52 +67,20 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+				
+				ObjDesignation.CompanyId = _user.CompanyId;
+				ObjDesignation.CreatedBy = _user.UserId;
+				var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation,"api/Configuration/DesignationAddOrUpdate", HttpMethod.Post);
 
-               // var DesignationResume = my.Files.GetFile("DesignationResume");
+				if (result.Message.Contains("Insert"))
+				{
+					return RedirectToAction("DesignationList", new { data = 1 });
+				}
+				else 
+				{
+					return RedirectToAction("DesignationList", new { data = 2 });
 
-                //ObjDesignation.AttachmentPath = uploadImage(ObjDesignation.Name, DesignationResume, "DesignationAttachment");
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjDesignation.CompanyId = userObject.CompanyId;
-                ObjDesignation.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/DesignationAddOrUpdate", ObjDesignation);
-
-                if (message.IsSuccessStatusCode)
-                {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("DesignationList", new { data = status });
-
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User",  new {id=2 });
-                }
-
+				}
 
 
             }
@@ -164,70 +92,19 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> DesignationDelete(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteDesignationInfo{id}/{userObject.UserId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
-
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                int status = 0;
-                if (model.Success)
-                {
-
-
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-
-
-
-                }
-
-                return RedirectToAction("DesignationList", new { data = status });
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-            }
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteDesignationInfo{id}/{_user.UserId}", HttpMethod.Delete);
+            return RedirectToAction("DesignationList", new { data = 3 });
 
         }
 
         public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
         {
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+		    var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DesignationCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+			return Json(result);
 
 
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/DesignationCheckData{id}/{title}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-            }
         }
 
         #endregion

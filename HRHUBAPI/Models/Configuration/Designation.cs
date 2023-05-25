@@ -13,6 +13,10 @@ namespace HRHUBAPI.Models
     public partial class Designation
     {
 
+
+        [NotMapped]
+        public int? Flag { get; set; } 
+
         [NotMapped]
         public IEnumerable<Designation>? Listdesignation { get; set; }
         public async Task<List<Designation>> GetDesignation(int CompanyId,HrhubContext _context)
@@ -74,8 +78,9 @@ namespace HRHUBAPI.Models
                     checkDesignationInfo.UpdatedOn = DateTime.Now;
                     checkDesignationInfo.Status = ObjDesignationInfo.Status;
                     checkDesignationInfo.UpdatedBy = ObjDesignationInfo.CreatedBy;
-                  
-                    await _context.SaveChangesAsync();
+                   
+					  await _context.SaveChangesAsync();
+					checkDesignationInfo.Flag = 2;
 					return ObjDesignationInfo;
 
 				}
@@ -86,6 +91,7 @@ namespace HRHUBAPI.Models
                     _context.Designations.Add(ObjDesignationInfo);
 					await _context.SaveChangesAsync();
 
+					ObjDesignationInfo.Flag = 1;
 					return ObjDesignationInfo;
 
 				}
