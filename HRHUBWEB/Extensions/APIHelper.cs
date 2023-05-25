@@ -19,11 +19,9 @@ namespace HRHUBWEB.Extensions
 			_client = httpClient.CreateClient("APIClient");
 			_webHostEnvironment = webHostEnvironment;
 			_httpContextAccessor = httpContextAccessor;
-
-
 		}
 
-		public  async Task<T> CallApiAsyncPost<T>(object model, string apiUrl, HttpMethod httpMethod )
+		public  async Task<T> CallApiAsyncPost<T>(object model, string apiUrl, HttpMethod httpMethod)
 		{
 			//get Token
 			string jwtToken = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -57,8 +55,6 @@ namespace HRHUBWEB.Extensions
 			}
 		}
 
-
-
 		public async Task<T> CallApiAsyncGet<T>( string apiUrl, HttpMethod httpMethod)
 		{
 			// Replace this with the JWT token you received from the server
@@ -66,7 +62,6 @@ namespace HRHUBWEB.Extensions
 
 			// Create an HttpClient instance
 		
-
 			// Set the Authorization header with the JWT token
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
 
@@ -83,7 +78,6 @@ namespace HRHUBWEB.Extensions
 			// Handle the response
 			if (response.IsSuccessStatusCode)
 			{
-
 				JsonSerializerOptions options = new JsonSerializerOptions
 				{
 					PropertyNameCaseInsensitive = true
@@ -97,7 +91,6 @@ namespace HRHUBWEB.Extensions
 				throw new Exception($"Error calling API: {response.StatusCode}");
 			}
 		}
-
 
 		//var model = new { Name = "John", Age = 30 };
 
