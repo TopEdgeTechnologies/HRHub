@@ -12,6 +12,4 @@ public partial class StaffSalaryDetail
     public int? SalaryComponentId { get; set; }
 
     public decimal? Amount { get; set; }
-
-    public decimal? CompanyContributionAmount { get; set; }
 }

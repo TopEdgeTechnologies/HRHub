@@ -42,7 +42,9 @@ namespace HRHUBAPI.Models
 
         public async Task<Department> PostDepartment(Department department, HrhubContext hrhubContext)
         {
-            try
+            using(var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
             {
                 var dbResult = await hrhubContext.Departments.FirstOrDefaultAsync(x => x.IsDeleted == false && x.DepartmentId == department.DepartmentId);
                 if (dbResult != null && dbResult.DepartmentId > 0)
@@ -56,6 +58,7 @@ namespace HRHUBAPI.Models
                     dbResult.UpdatedOn = DateTime.Now;
                     await hrhubContext.SaveChangesAsync();
                     dbResult.TransFlag = 2;
+                    dbContextTransaction.Commit();
                     return dbResult;
                 }
                 else
@@ -65,13 +68,15 @@ namespace HRHUBAPI.Models
                     hrhubContext.Departments.Add(department);
                     await hrhubContext.SaveChangesAsync();
                     department.TransFlag = 1;
+                    dbContextTransaction.Commit();
                     return department;
                 }
             }
-            catch { throw; }
+            catch { dbContextTransaction.Rollback(); throw; }
+            }
         }
 
-        public async Task<bool> DeleteDepartment(int id , int userid , HrhubContext hrhubContext)
+        public async Task<bool> DeleteDepartment(int id , int userid, HrhubContext hrhubContext)
         {
             try
             {
