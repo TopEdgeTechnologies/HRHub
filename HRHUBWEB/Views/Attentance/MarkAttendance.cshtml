@@ -3,42 +3,71 @@
     ViewData["Title"] = "Mark Attendance";
 }
 
-<!--Page header-->
-<div class="page-header d-xl-flex d-block">
-	<div class="page-leftheader">
-		<div class="page-title">Mark Attendance</div>
-	</div>
-	<div class="page-rightheader ms-md-auto">
-		<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-			<div class="btn-list">
-				<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-				<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-				<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-			</div>
-		</div>
-	</div>
-</div>
-<!--End Page header-->
+
 <!-- Row -->
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
-			<div class="card-body">
-				<div class="row">
-					<div class="col-md-12 col-lg-3">
-						<div class="form-group">
-							<label class="form-label">Select Date:</label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="feather feather-calendar"></i>
-									</div>
-								</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
+			<div class="card-header  border-0">
+				<h4 class="card-title">Mark Attendance</h4>
+
+				<div class="page-rightheader ms-md-auto">
+					<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+
+						<div class="d-lg-flex">
+							<div class="btn-list">
+
+								<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+								<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+								<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
 							</div>
 						</div>
 					</div>
 				</div>
+
 			</div>
+			<div class="row" id="IdFilters">
+				<div class="col-md-12 mb-n4" style="margin-bottom: -50px;">
+					<div class="card">
+						<div class="card-body">
+							
+								<div class="row">
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Select Date:</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="feather feather-calendar"></i>
+												</div>
+											</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
+										</div>
+									</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Clock In Time</label>
+										<input type="time" class="form-control">
+									</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									<div class="form-group">
+										<label class="form-label">Clock Out Time</label>
+										<input type="time" class="form-control">
+									</div>
+									</div>
+									<div class="col-md-12 col-lg-3">
+									
+									</div>
+
+								</div>
+
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
 			<div class="card-body">
 				<div class="row">
 					<div class="col-md-12">
@@ -60,7 +89,14 @@
 								<th class="border-bottom-0">Status</th>
 								<th class="border-bottom-0">Clock-In</th>
 								<th class="border-bottom-0">Clock-Out</th>
-								<th class="border-bottom-0 text-center">Marks</th>
+								<th class="border-bottom-0">Attendance</th>
+								<th class="border-bottom-0 text-center">
+
+									
+									Action
+									
+								
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -71,20 +107,13 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<a href="javascript:void(0);" class="btn btn-primary float-end">Save All</a>
+				<a href="javascript:void(0);" class="btn btn-primary float-end">Bulk Save</a>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-
-@*
-	<a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1">
-			<i class="feather feather-eye primary text-primary" data-bs-toggle="tooltip" data-original-title="View"></i>
-		</a>
-<td><div class="d-flex"><label class="custom-control custom-checkbox-md"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div></td>
-*@
 
 
 
@@ -98,138 +127,9 @@
 	
 
 			
-			<!--Present Modal -->
-			<div class="modal fade"  id="presentmodal">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Attendance Details</h5>
-							<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row mb-5 mt-4">
-								<div class="col-md-4">
-									<div class="pt-5 text-center">
-										<h6 class="mb-1 fs-16 font-weight-semibold">09:30 AM</h6>
-										<small class="text-muted fs-14">Clock In</small>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="chart-circle chart-circle-md" data-value="100" data-thickness="6" data-color="#0dcd94">
-										<div class="chart-circle-value text-muted">09:00 hrs</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="pt-5 text-center">
-										<h6 class="mb-1 fs-16 font-weight-semibold"> 06:30 PM</h6>
-										<small class="text-muted fs-14">Clock Out</small>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="form-label">IP Address</label>
-								<input type="text" class="form-control" placeholder="225.192.145.1" disabled>
-							</div>
-							<div class="form-group">
-								<label class="form-label">Working Form</label>
-								<select name="projects"  class="form-control custom-select select2" disabled data-placeholder="Select">
-									<option label="Select"></option>
-									<option value="1" selected>Office</option>
-									<option value="2">Home</option>
-									<option value="3">Others</option>
-								</select>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">close</a>
-							<a  href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editmodal" data-bs-dismiss="modal">Edit</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Present Modal  -->
+			
 
-			<!--Edit Modal -->
-			<div class="modal fade"  id="editmodal">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Attendance Details</h5>
-							<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-8">
-									<div class="form-group">
-										<label class="form-label">Clock In</label>
-										<div class="input-group">
-											<input type="text" class="form-control timepicker" value="9:30 AM">
-											<div class="input-group-text">
-												<i class="fa fa-clock-o"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="custom-switch mt-md-6">
-										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input orange">
-										<span class="custom-switch-indicator "></span>
-										<span class="custom-switch-description text-dark">Late</span>
-									</label>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-8">
-									<div class="form-group">
-										<label class="form-label">Clock Out</label>
-										<div class="input-group">
-											<input type="text" class="form-control timepicker" value="06: 30 PM">
-											<div class="input-group-text">
-												<i class="fa fa-clock-o"></i>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label class="custom-switch mt-md-6">
-										<input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input  orange">
-										<span class="custom-switch-indicator"></span>
-										<span class="custom-switch-description text-dark">half Day</span>
-									</label>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="form-label">IP Address</label>
-								<input type="text" class="form-control" placeholder="225.192.145.1" disabled>
-							</div>
-							<div class="form-group">
-								<label class="form-label">Working Form</label>
-								<select name="projects"  class="form-control custom-select select2" disabled data-placeholder="Select">
-									<option label="Select"></option>
-									<option value="1" selected>Office</option>
-									<option value="2">Home</option>
-									<option value="3">Others</option>
-								</select>
-							</div>
-						</div>
-						<div class="modal-footer d-flex">
-							<div>
-								<a  href="javascript:void(0);" class="btn btn-light"  data-bs-toggle="modal" data-bs-target="#presentmodal" data-bs-dismiss="modal"><i class="feather feather-arrow-left me-1"></i>Back</a>
-							</div>
-							<div class="ms-auto">
-								<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">close</a>
-								<a  href="javascript:void(0);" class="btn btn-primary">Save</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Edit Modal  -->
-
+			
 			<!--Present Modal1 -->
 			<div class="modal fade"  id="presentmodal1">
 				<div class="modal-dialog" role="document">
@@ -362,58 +262,7 @@
 			</div>
 			<!-- End Edit1 Modal  -->
 
-			<!--HalfPresent Modal -->
-			<div class="modal fade"  id="halfpresentmodal">
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">Attendance Details <span class="badge badge-orange">Half Day</span></h5>
-							<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">×</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row mb-5 mt-4">
-								<div class="col-md-4">
-									<div class="pt-5 text-center">
-										<h6 class="mb-1 fs-16 font-weight-semibold">09:30 AM</h6>
-										<small class="text-muted fs-14">Clock In</small>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="chart-circle chart-circle-md" data-value=".50" data-thickness="6" data-color="#0dcd94">
-										<div class="chart-circle-value text-muted">04:30 hrs</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<div class="pt-5 text-center">
-										<h6 class="mb-1 fs-16 font-weight-semibold"> 01:30 PM</h6>
-										<small class="text-muted fs-14">Clock Out</small>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="form-label">IP Address</label>
-								<input type="text" class="form-control" placeholder="225.192.145.1" disabled>
-							</div>
-							<div class="form-group">
-								<label class="form-label">Working Form</label>
-								<select name="projects"  class="form-control custom-select select2" disabled data-placeholder="Select">
-									<option label="Select"></option>
-									<option value="1" selected>Office</option>
-									<option value="2">Home</option>
-									<option value="3">Others</option>
-								</select>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">close</a>
-							<a  href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#halfdayeditmodal" data-bs-dismiss="modal">Edit</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- End Present Modal  -->
+			
 
 			
 @section scripts{
@@ -422,6 +271,14 @@
 
 
 		$(document).ready(function () {
+
+
+			$('#checkAll').change(function () {
+			var checkAllChecked = $(this).prop('checked');
+			$('td input[type="checkbox"]').prop('checked', checkAllChecked);
+			});
+
+
 			$('#emp-attendance').DataTable();
 
 			$("#todate").change(function () {
@@ -550,10 +407,11 @@
 
 
 							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
-							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
-							var marks = '<td><div class="d-flex"><label class="custom-control custom-checkbox-md"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div></td>';
+							var statusHtml = '<span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span>';
+							var remarkAttendence = '<span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span>';
+							var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1"><span class="custom-control-label-md success"></span></label><a href="javascript:void(0);" class="action-btns1 bg-light" data-bs-toggle="modal" data-bs-target="#presentmodal1"> <i class="feather feather-eye primary text-primary mt-1" data-bs-toggle="tooltip" data-original-title="View" data-bs-original-title="" title=""></i> </a></div>';
 
-							rowData.push([i + 1, data[i]["staffName"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), marks]);
+							rowData.push([i + 1, data[i]["staffName"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), remarkAttendence, marks]);
 
 
 							table.rows.add(rowData);
