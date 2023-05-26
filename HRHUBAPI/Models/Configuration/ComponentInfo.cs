@@ -9,15 +9,38 @@ namespace HRHUBAPI.Models
         public int? TranFlag { get; set; }
 
         [NotMapped]
+        public string? GroupTitle { get; set; }
+        
+        [NotMapped]
         public IEnumerable<ComponentInfo>? ComponentInfoList { get; set; }
 
         public async Task<List<ComponentInfo>> GetComponentInfo(HrhubContext hrhubContext)
         {
             try
             {
-                List<ComponentInfo> ComponentInfo = new List<ComponentInfo>();
-                ComponentInfo = await hrhubContext.ComponentInfos.Where(x => x.IsDeleted == false).ToListAsync();
-                return ComponentInfo;
+                var queryList = from ci in hrhubContext.ComponentInfos
+                                join cg in hrhubContext.ComponentGroups
+                                on ci.ComponentGroupId equals cg.ComponentGroupId into joinedData
+                                from result in joinedData.DefaultIfEmpty()
+                                orderby result.Title != null ? 1 : 2, result.Title
+                                select new ComponentInfo
+                                {
+                                    ComponentId = ci.ComponentId,
+                                    ComponentGroupId = ci.ComponentGroupId,
+                                    GroupTitle = result.Title != null ? result.Title : string.Empty,
+                                    Title = ci.Title,
+                                    CalculationMethod = ci.CalculationMethod,
+                                    CompanyContribution = ci.CompanyContribution,
+                                    Category = ci.Category,
+                                    Type = ci.Type,
+                                    Status = ci.Status
+                                };
+
+                return await queryList.ToListAsync();
+
+                //List<ComponentInfo> ComponentInfo = new List<ComponentInfo>();
+                //ComponentInfo = await hrhubContext.ComponentInfos.Where(x => x.IsDeleted == false).ToListAsync();
+                //return ComponentInfo;
             }
             catch (Exception ex) { throw; }
         }

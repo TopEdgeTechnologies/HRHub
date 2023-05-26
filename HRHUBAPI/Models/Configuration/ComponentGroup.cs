@@ -12,9 +12,9 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                List<ComponentGroup> ComponentGroupes = new List<ComponentGroup>();
-                ComponentGroupes = await hrhubContext.ComponentGroups.Where(x => x.IsDeleted == false).ToListAsync();
-                return ComponentGroupes;
+                List<ComponentGroup> componentGroup = new List<ComponentGroup>();
+                componentGroup = await hrhubContext.ComponentGroups.Where(x => x.IsDeleted == false).ToListAsync();
+                return componentGroup;
             }
             catch (Exception ex) { throw; }
         }

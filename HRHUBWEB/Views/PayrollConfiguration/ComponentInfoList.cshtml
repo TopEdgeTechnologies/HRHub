@@ -1,0 +1,378 @@
+﻿@model HRHUBAPI.Models.ComponentInfo
+
+@*<input type="hidden" asp-for="CompanyId" />*@
+
+@using (Html.BeginForm("ComponentInfoCreateOrUpdate", "PayrollConfiguration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+    <input type="hidden" asp-for="ComponentId" />
+
+    <!--Add Department Modal -->
+    <div class="modal fade" id="AddGeneralModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Component</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Component Group</label>
+                        <select asp-for=ComponentGroupId id="ComponentGroupId" class="form-control custom-select select2" required data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjComponentGroupList,"ComponentGroupId", "Title"))">
+                            <option label="Select Component Group"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Component Title</label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Component Title">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Calculation Method</label>
+                        <select asp-for="CalculationMethod" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.CalculationMethod,"Text" ,"Text"))">
+                            <option value="">Select Calculation Method</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company Contribution</label>
+                        <input asp-for="CompanyContribution" class="form-control" type="text" placeholder="Enter Company Contribution">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select asp-for="Category" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.Category,"Text" ,"Text"))">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select asp-for="Type" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.Type,"Text" ,"Text"))">
+                            <option value="">Select Type</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                    <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Add Department Modal  -->
+}
+
+<!-- Row -->
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Component Details</h3>
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
+                        <div class="btn-list">
+                            <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Component</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Sr.#</th>
+                                <th class="text-center">Component Group</th>
+                                <th class="border-bottom-0">Component Title</th>
+                                <th class="border-bottom-0">Calculation Method</th>
+                                <th class="border-bottom-0">Company Contribution</th>
+                                <th class="border-bottom-0">Category</th>
+                                <th class="border-bottom-0">Type</th>
+                                <th class="text-center">Status</th>
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 1;
+                                foreach (var item in Model.ComponentInfoList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <span>@count</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.GroupTitle)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
+                                         <td>
+                                            @Html.DisplayFor(modelItem => item.CalculationMethod)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CompanyContribution)
+                                        </td>
+                                         <td>
+                                            @Html.DisplayFor(modelItem => item.Category)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Type)
+                                        </td>
+                                        @{
+                                            var isActive = item.Status;
+                                            if (isActive == true)
+                                            {
+                                                <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+                                            }
+                                        }
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="action-btns1 btn-xs">
+                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a href="#" onclick="DeleteConfirmation(@item.ComponentId)" class="action-btns1 btn-xs">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+
+            if (@Model.ComponentId > 0) {
+                $('#AddGeneralModal').modal.show();
+            }
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+
+        });
+
+        function AddNewRecord() {
+            debugger
+            $("#AddGeneralModal").modal('show');
+            $("#ComponentId").val(0)
+            $("#ComponentGroupID").val(0)
+            $("#Title").val('')
+            $("#CalculationMethod").val(0)
+            $("#CompanyContribution").val(0)
+            $("#Category").val('');
+            $("#Type").val('');
+            $("#Status").prop('checked', false)
+        }
+
+        function EditRecord(id) {
+            AddNewRecord();
+            debugger
+            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/PayrollConfiguration/GetComponentInfoById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        $("#ComponentId").val(data.componentId);
+                        $("#ComponentGroupId").val(data.componentGroupId).trigger("change");
+                        $("#Title").val(data.title);
+                        $("#CalculationMethod").val(data.calculationMethod).trigger("change");
+                        $("#CompanyContribution").val(data.companyContribution)
+                        $("#Category").val(data.category).trigger("change");
+                        $("#Type").val(data.type).trigger("change");
+                        $("#Status").prop('checked', data.status);
+                        $("#AddGeneralModal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            })
+        }
+
+        function DeleteConfirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("ComponentInfoDelete", "PayrollConfiguration")/" + id;
+
+                    alert(url);
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+        function SaveRecord() {
+            var status = true;
+            $("#AddGeneralModal").modal('hide');
+            debugger;
+
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+
+            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/PayrollConfiguration/ComponentInfoAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#AddGeneralModal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+    </script>
+}
