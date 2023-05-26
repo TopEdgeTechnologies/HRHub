@@ -632,6 +632,44 @@ namespace HRHUBWEB.Controllers
             return RedirectToAction("Loginpage", "User", new { id = 2 });
         }
 
+
+        // Filter data through year
+       
+        public async Task<ActionResult<JsonObject>> FilterHolidayData(string selectdate,int monthId, int Yeardate)
+        {
+
+
+
+            var result = await _APIHelper.CallApiAsyncGet<IEnumerable<Holiday>>($"api/Configuration/FilterHolidayList{_user.CompanyId}/{selectdate}/{Yeardate}", HttpMethod.Get);
+
+            if (result != null)
+            {
+                return Json(result);
+
+            }
+
+            else
+            {
+                return Json(new
+
+                {
+                    Success = false,
+                    Message = "Error occur"
+
+                }
+                );
+
+            }
+
+
+
+
+
+        }
+
+
+
+
         #endregion
 
         // Code for save images into database

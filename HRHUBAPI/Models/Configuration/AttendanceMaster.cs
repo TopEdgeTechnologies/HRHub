@@ -119,7 +119,42 @@ namespace HRHUBAPI.Models
         }
 
 
-		
+
+		// Get Attendence Over View List From and To Date Wise
+		public Task<List<AttendanceMaster>> GetAttendanceOverViewList(int Staffid, string datefrom, string dateTo, HrhubContext _context)
+		{
+
+
+			List<AttendanceMaster> lis = new List<AttendanceMaster>();
+
+			try
+			{
+				string query = "EXEC HR.Get_AttendanceDateWise " + Staffid + " ,'" + datefrom + "' , '" + dateTo + "' ";
+				DataTable dt = _db.ReturnDataTable(query);
+
+				lis = dt.AsEnumerable()
+					.Select(row => new AttendanceMaster
+					{
+						AttendanceId = string.IsNullOrWhiteSpace(row["AttendanceId"].ToString()) ? 0 : Convert.ToInt32(row["AttendanceId"]),
+						StaffId = Convert.ToInt32(row["StaffID"]),
+						RegistrationNo = row["RegistrationNo"].ToString(),
+						StaffName = row["FullName"].ToString(),
+						DepartmentName = row["DepartmentName"].ToString(),
+						DesignationName = row["DesignationName"].ToString(),
+						TitleStatus = string.IsNullOrWhiteSpace(row["StatusTitle"].ToString()) ? "" : row["StatusTitle"].ToString(),
+						FirstPunchIn = string.IsNullOrWhiteSpace(row["FirstPunchIn"].ToString()) ? null : (TimeSpan)row["FirstPunchIn"],
+						LastPunchOut = string.IsNullOrWhiteSpace(row["LastPunchOut"].ToString()) ? null : (TimeSpan)row["LastPunchOut"],
+						AttendanceStatusId = string.IsNullOrWhiteSpace(row["AttendanceStatusId"].ToString()) ? null : Convert.ToInt32(row["AttendanceStatusId"]),
+						CssClass = string.IsNullOrWhiteSpace(row["CssClass"].ToString()) ? "" : row["CssClass"].ToString(),
+
+					}).OrderByDescending(x => x.AttendanceId).ToList();
+
+				return null;
+			}
+			catch { throw; }
+
+
+		}
 
 
 

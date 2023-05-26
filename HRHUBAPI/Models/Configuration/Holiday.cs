@@ -29,6 +29,33 @@ namespace HRHUBAPI.Models
         }
 
 
+
+
+
+        //filter holiday
+        public async Task<List<Holiday>> GetFilterHolidayList(int CompanyId, string selectdate, int Yeardate, HrhubContext _context)
+        {
+
+            try
+            {
+                List<Holiday> list = new List<Holiday>();
+
+                list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.HolidayDate == Convert.ToDateTime(selectdate)
+                
+                || x.HolidayDate.Value.Year == Yeardate               
+                
+                
+                ).ToListAsync();
+                return list;
+            }
+            catch (Exception Ex)
+            {
+
+                throw;
+            }
+
+        }
+
         public async Task<Holiday> GetHOlidayByID(int id, HrhubContext _context)
         {
             try
@@ -81,6 +108,8 @@ namespace HRHUBAPI.Models
                 {
 
                     obj.CreatedOn = DateTime.Now;
+                    DateTime dtH = Convert.ToDateTime(obj.HolidayDate);
+                    obj.DayName = dtH.Date.DayOfWeek.ToString();
                     obj.IsDeleted = false;
                     obj.TransFlag = 1; // New Record Inserted
 

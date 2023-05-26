@@ -534,8 +534,8 @@
 								<div class="col-md-3">
 									<label class="form-label mb-0 mt-2">Leave Status</label>
 								</div>
-								<div class="col-md-9">
-									<select asp-for="LeaveStatusId" class="form-control custom-select select2" asp-items="@(new SelectList(@ViewBag.LeaveStatusList,"LeaveStatusId" ,"Title"))">
+								<div class="col-md-3">
+									<select asp-for="LeaveStatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.LeaveStatusList,"LeaveStatusId" ,"Title"))">
 										<option value="">Select Leave Status</option>
 									</select>
 									

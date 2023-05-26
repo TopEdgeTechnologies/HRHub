@@ -171,12 +171,6 @@ namespace HRHUBWEB.Controllers
 			
 		}
 
-
-
-		
-
-
-
 		//Get Mark table Attendance Data Company Vise 
 		public async Task<ActionResult<JsonObject>> ListMarkAttendanceData(int DepartmentId,string todate)
 		{
@@ -243,10 +237,6 @@ namespace HRHUBWEB.Controllers
 		}
 
 
-
-
-
-
 		public async Task<IActionResult> AttentanceOverView(string data = "")
 		{
 
@@ -286,9 +276,6 @@ namespace HRHUBWEB.Controllers
 
 		}
 
-
-
-
 		public async Task<IActionResult> AttentanceByUser(string data = "")
 		{
 
@@ -307,9 +294,6 @@ namespace HRHUBWEB.Controllers
 
 	    public async Task<IActionResult> AttendanceView(string data = "")
 		{
-
-			
-
 			return View();
 		}
 		public async Task<IActionResult> OverviewCalendar(string data = "")

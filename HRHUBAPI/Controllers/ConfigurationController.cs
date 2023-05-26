@@ -409,6 +409,19 @@ namespace HRHUBAPI.Controllers
         }
 
 
+
+        [HttpGet("FilterHolidayList{CompanyId}/{selectdate}/{Yeardate}")]
+        public async Task<ActionResult<List<Holiday>>> FilterHolidayList(int CompanyId, string selectdate, int Yeardate)
+        {
+
+            return await new Holiday().GetFilterHolidayList(CompanyId, selectdate, Yeardate, _context);
+        }
+
+
+
+
+
+
         #endregion
 
 
