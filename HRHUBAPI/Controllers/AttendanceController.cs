@@ -37,10 +37,11 @@ namespace HRHUBAPI.Controllers
 		public async Task<ActionResult<List<AttendanceMaster>>> StaffAttendanceOverViewList(int StaffId, string datefrom, string dateto)
 		{
 
-			List<AttendanceMaster>? Result = await new AttendanceMaster().GetAttendanceOverViewList(StaffId, datefrom, dateto, _context);
+			//List<AttendanceMaster>? Result = await new AttendanceMaster().GetAttendanceOverViewList(StaffId, datefrom, dateto, _context);
 
 
-			return Result;
+			//return Result;
+			return null;
 
 		}
 
