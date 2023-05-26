@@ -1,4 +1,5 @@
 ﻿using HRHUBAPI.Models;
+using HRHUBAPI.Models.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +25,45 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<List<AttendanceMaster>>> GetStaffAttendanceList(int StaffId, string datefrom, string dateto)
         {
 
-            return await new AttendanceMaster().GetAttendance(StaffId, datefrom, dateto, _context);
-        }
+			List<AttendanceMaster>? Result = await new AttendanceMaster().GetAttendance(StaffId, datefrom, dateto, _context);
 
-		[HttpGet("MarkStaffAttendanceList{CompanyId}/{dateto}")]
-		public async Task<ActionResult<List<AttendanceMaster>>> MarkStaffAttendanceList(int CompanyId, string dateto)
+
+			return Result;
+
+		}
+
+
+		[HttpGet("StaffAttendanceOverViewList{StaffId}/{datefrom}/{dateto}")]
+		public async Task<ActionResult<List<AttendanceMaster>>> StaffAttendanceOverViewList(int StaffId, string datefrom, string dateto)
 		{
 
-			return await new AttendanceMaster().GetAttendancedatevise(CompanyId, dateto, _context);
+			List<AttendanceMaster>? Result = await new AttendanceMaster().GetAttendanceOverViewList(StaffId, datefrom, dateto, _context);
+
+
+			return Result;
+
+		}
+
+
+
+
+		[HttpGet("MarkStaffAttendanceList{CompanyId}/{DepartmentId}/{dateto}")]
+		public async Task<ActionResult<List<AttendanceMaster>>> MarkStaffAttendanceList(int CompanyId,int DepartmentId, string dateto)
+		{
+
+			return await new AttendanceMaster().GetAttendancedatevise(CompanyId, DepartmentId, dateto, _context);
 		}
         [HttpPost("MarkStaffAttendance")]
 		public async Task<ActionResult<AttendanceMaster>> MarkStaffAttendance(AttendanceMaster obj)
 		{
 
 			return await new AttendanceMaster().PostAttendence(obj, _context);
+		} 
+		[HttpPost("StaffMarksAttendance")]
+		public async Task<ActionResult<AttendanceMaster>> StaffMarksAttendance(AttendanceMaster obj)
+		{
+
+			return await new AttendanceMaster().PostMarkAttendenceInBulk(obj, _context);
 		}
 
 		[HttpGet("CheckData{StaffId}")]

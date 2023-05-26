@@ -115,7 +115,7 @@
 							<div class="row mt-4">
 								<div class="col-md-6">
 									<div class="control-group form-group">
-										<label class="form-label">Email <span class="text-danger">*</span><span id="alreadyexistUser" class="text-danger"></span></label>
+										<label class="form-label">Email <span class="text-danger">* </span><span id="alreadyexistUser" class="text-danger"></span></label>
 										<input asp-for="Username" type="email" class="form-control" placeholder="Enter your Email Address" required>
 							</div>
 							</div>
@@ -170,6 +170,7 @@
 
 		
 		$(document).ready(function () {
+
 			$('#CompanyLogo').change(function () {
 				var fileInput = $(this);
 				var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
@@ -198,14 +199,12 @@
 			});
 
 
-
+			// Validation check here......
 			function validateForm() {
 				debugger;
 
 				var form = $("#myform");
 				var inputs = form.find("input");
-
-
 
 				inputs.each(function () {
 					validateInput($(this));
@@ -257,7 +256,7 @@
 					//input.next(".invalid-feedback").show();
 				}
 			}
-
+			// This function for custom Input Validation 
 			function customervalidationInValid()
 			{
 				$('#alreadyexistid').text('')
@@ -266,12 +265,17 @@
 				$('#CompanyLogo').removeClass("is-valid");
 				$('#CompanyLogo').removeClass("state-valid");
 			}
-
+			/////
 			$("#CompanyName,#Email,#Staffname,#StaffDepartment,#StaffEmail,#StaffDesignation,#Username,#UserPassword ").on("input", function () {
 				validateInput($(this));
 			});
+			/////////////////////////////////////////////
 
 
+
+
+
+			// Post Data here ...........................
 			$('#finish').click(function (event) {
 
 
@@ -328,7 +332,7 @@
 				}
 				
 			});
-
+			//////////////////////////////////////////////
 			$("#StaffEmail").change(function () {
 				var email = $("#StaffEmail").val();
 				
@@ -350,43 +354,27 @@
 			}
 		}
 
-
-
-
 		$("#CompanyLogo").change(function () {
             debugger
 			readURL(this);
         });
-
-
-		//$("#CompanyName,#Email").(function () {
-		//	alreadyExist();
-		//});
-
+		////////
 
 		$("#Email").on("keyup", function (event) {
-			// Code to be executed when a key is pressed
-			console.log("Key pressed: " + event.key);
-			// Additional code...
+			.
 			alreadyEmailExist();
 		});
 		$("#CompanyName").on("keyup", function (event) {
-			// Code to be executed when a key is pressed
-			console.log("Key pressed: " + event.key);
-			// Additional code...
+			
 			alreadyNameExist();
 		});
 
 		$("#StaffEmail").on("keyup", function (event) {
-			// Code to be executed when a key is pressed
-			console.log("Key pressed: " + event.key);
-			// Additional code...
+			
 			alreadyUserExist();
 		});
 		$("#Username").on("keyup", function (event) {
-			// Code to be executed when a key is pressed
-			console.log("Key pressed: " + event.key);
-			// Additional code...
+			
 			alreadyUserExist();
 		});
 
@@ -394,14 +382,14 @@
 
 
 
-		////////
+		
 
 
 	
 		function alreadyEmailExist() {
 			var status =false
 			var Data = { id: $("#CompanyId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val() }
-			console.log(Data)
+			
 			$.ajax({
 				async: false,
 				url: "/Company/CompanyEmailCheckData",
@@ -465,7 +453,7 @@
 		function alreadyNameExist() {
 			var status = false
 			var Data = { id: $("#CompanyId").val(), companyName: $('#CompanyName').val() == '' ? '""' : $('#CompanyName').val() }
-			console.log(Data)
+			
 			$.ajax({
 				async: false,
 				url: "/Company/CompanyNameCheckData",
@@ -527,7 +515,7 @@
 		function alreadyUserExist() {
 			var status = false
 			var Data = { id: $("#UserId").val(), username: $('#Username').val() == '' ? '""' : $('#Username').val() }
-			console.log(Data)
+			
 			$.ajax({
 				async: false,
 				url: "/Company/UserCheckData",
@@ -544,7 +532,7 @@
 							//	message: b.message
 							//});
 							//$('#myForm').invalid();
-							//$('#alreadyexistUser').text(b.message)
+							$('#alreadyexistUser').text(b.message)
 							$("#Username").addClass("is-invalid");
 							////$("#Email").addClass("is-invalid");
 							//$("#Username").addClass("state-valid");

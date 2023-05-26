@@ -32,7 +32,70 @@
 						<div class="card-body">
 							
 								<div class="row">
-									<div class="col-md-12 col-lg-3">
+
+
+									<div class="col-md-3">
+									<div class="form-group">
+										<label class="form-label">Department:</label>
+										<select id="IdDepartment" name="IdDepartment" class="form-control custom-select select2">
+											<option value="">Select Department</option>
+											@foreach (var item in ViewBag.ListDepartment)
+											{
+												<option value="@item.DepartmentId">@item.Title</option>
+											}
+										</select>
+									</div>
+
+									</div>
+									<div class="col-md-2">
+
+									<div class="form-group">
+										<label class="form-label">Select Date:</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<div class="input-group-text">
+													<i class="feather feather-calendar"></i>
+												</div>
+											</div><input id="todate" name="todate" class="form-control fc-datepicker " type="text">
+										</div>
+									</div>
+									</div>
+									<div class="col-md-2">
+									<div class="form-group">
+										<label class="form-label">Clock-In</label>
+										<input type="time" class="form-control" id="checkInId" name="checkInId">
+									</div>
+									</div>
+								<div class="col-md-2">
+
+									<div class="form-group">
+										<label class="form-label">Clock-Out</label>
+										<input type="time" class="form-control" id="checkOutId" name="checkOutId">
+									</div>
+								</div>
+
+								<div class="col-md-2">
+
+									<div class="hr-checkall">
+										<label class="custom-control custom-checkbox mb-0" @*style="margin-left:-170px;margin-top:31px;"*@>
+											<input type="checkbox" class="custom-control-input" id="checkAll">
+											<span class="custom-control-label">Check All</span>
+										</label>
+									</div>
+								</div>
+
+								<div class="col-md-2">
+
+									<button class="btn btn-primary" type="button" id="BulkSaveBtn" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+
+
+
+										@*<a id="BulkSaveBtn" class="btn btn-primary float-end mt-1">Bulk Save</a>*@
+									<div class="form-group">
+									</div>
+								</div>
+
+								@*	<div class="col-md-12 col-lg-3">
 									<div class="form-group">
 										<label class="form-label">Select Date:</label>
 										<div class="input-group">
@@ -69,7 +132,7 @@
 										</div>
 									</div>
 									</div>
-
+*@
 								</div>
 
 							
@@ -86,10 +149,13 @@
 							<tr>
 								<th class="border-bottom-0">Sr.#</th>
 
+								<th class="border-bottom-0">Registration No</th>
 								<th class="border-bottom-0">Name</th>
-								<th class="border-bottom-0 ">Status</th>
+								<th class="border-bottom-0">Department</th>
+								<th class="border-bottom-0">Designation</th>
 								<th class="border-bottom-0">Clock-In</th>
 								<th class="border-bottom-0">Clock-Out</th>								
+								<th class="border-bottom-0 ">Status</th>
 								<th class="border-bottom-0 text-center">
 
 									
@@ -132,6 +198,7 @@
 
 		$(document).ready(function () {
 
+			$("#IdDepartment").select2();
 
 			$('#checkAll').change(function () {
 			var checkAllChecked = $(this).prop('checked');
@@ -225,11 +292,11 @@
 
 
 			var obj = {								
-				todate: $("#todate").val()
-
+				todate: $("#todate").val(),
+				DepartmentId:$("#IdDepartment").val()
 			}
-			console.log(obj)
-
+			
+			console.log(obj);
 
 
 			$.ajax({
@@ -263,22 +330,20 @@
 
 
 							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
-							var statusHtml = '<span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span>';
-						
-							if (data[i]["attendancestatus"]=="Present")
-							{
+							var statusHtml = '<span class="badge ' + data[i]["cssClass"] + '">' + data[i]["titleStatus"] + '</span>';
+
+							if (data[i]["titleStatus"] == "Present") {
 							var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked><span class="custom-control-label-md success"></span></label></div>';
 							}
-							else if (data[i]["attendancestatus"] == "Present Half Day") 
-							{
+							else if (data[i]["titleStatus"] == "Present Half Day") {
 								var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1"><span class="custom-control-label-md success"></span></label></div>';
 
 							}
-							else if (data[i]["attendancestatus"] == "Short Day") {
+							else if (data[i]["titleStatus"] == "Short Day") {
 								var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1"><span class="custom-control-label-md success"></span></label></div>';
 
 							}
-							else if (data[i]["attendancestatus"] == "Leave") {
+							else if (data[i]["titleStatus"] == "Leave") {
 								var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1"><span class="custom-control-label-md success"></span></label></div>';
 
 							}else
@@ -286,7 +351,7 @@
 								var marks = '<div class="d-flex"><label class="custom-control custom-checkbox-md me-5"><input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1"><span class="custom-control-label-md success"></span></label></div>';
 
 							}
-							rowData.push([i + 1, data[i]["staffName"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), marks]);
+							rowData.push([i + 1, data[i]["registrationNo"], data[i]["staffName"], data[i]["departmentName"], data[i]["designationName"], convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), statusHtml, marks]);
 
 
 							table.rows.add(rowData);
@@ -336,9 +401,39 @@
 			
 		});
 
-		//function MarkAttendance()
-		//{
+		function MarkAttendance()
+		{
+			var obj = {
+				staffid: $("#IdEmployee").val()
 
-		//}
+
+			}
+
+			$.ajax({
+				url: "/Attentance/GetAttendanceCount",
+				type: "POST",
+				async: false,
+				data: obj,
+				success: function (response) {
+
+					if (response != null) {
+						debugger
+
+						
+					}
+
+
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+		}
+
+
+
+
+
 	</script>
 	}
