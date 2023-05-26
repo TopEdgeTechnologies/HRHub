@@ -20,8 +20,6 @@ namespace HRHUBWEB.Controllers
 	
 		}
 
-
-
 		[Route("Error")]
         public async Task<IActionResult> Error()
         {

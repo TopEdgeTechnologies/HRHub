@@ -12,7 +12,7 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System.Net.NetworkInformation;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HRHUBWEB.Controllers
 {
@@ -90,5 +90,94 @@ namespace HRHUBWEB.Controllers
         }
 
         #endregion
+
+        #region Component Info
+
+        [CustomAuthorization]
+        public async Task<IActionResult> ComponentInfoList(string data = "", int Id = 0)
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+            
+            ViewBag.Success = data;
+
+            ComponentInfo objComponentInfo = new ComponentInfo();
+            if (Id > 0)
+            {
+                objComponentInfo = await GetComponentInfoById(Id);
+            }
+
+            ViewBag.CalculationMethod = GetCalculationMethodList();
+            ViewBag.Category = GetCategoryList();
+            ViewBag.Type = GetTypeList();
+            ViewBag.ObjComponentGroupList = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentGroup>>("api/PayrollConfiguration/GetComponentGroup", HttpMethod.Get);
+
+            objComponentInfo.ComponentInfoList = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentInfo>>("api/PayrollConfiguration/GetComponentInfo", HttpMethod.Get);
+            return View(objComponentInfo);
+        }
+
+        public async Task<ComponentInfo> GetComponentInfoById(int Id)
+        {
+            ComponentInfo objComponentInfo = new ComponentInfo();
+            objComponentInfo = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/PayrollConfiguration/GetComponentInfoById/{Id}", HttpMethod.Get);
+            return objComponentInfo;
+        }
+
+        public List<SelectListItem> GetCalculationMethodList()
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "Percentage", Value = "1" });
+            listobj.Add(new SelectListItem { Text = "Amount", Value = "2" });
+            return listobj;
+        }
+
+        public List<SelectListItem> GetCategoryList()
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "Earning", Value = "1" });
+            listobj.Add(new SelectListItem { Text = "Deduction", Value = "2" });
+            return listobj;
+        }
+
+        public List<SelectListItem> GetTypeList()
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "Fixed", Value = "1" });
+            listobj.Add(new SelectListItem { Text = "Variable", Value = "2" });
+            return listobj;
+        }
+
+        public async Task<IActionResult> ComponentInfoCreateOrUpdate(ComponentInfo objComponentInfo)
+        {
+            objComponentInfo.CreatedBy = _user.UserId;
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objComponentInfo, "api/PayrollConfiguration/PostComponentInfo", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("ComponentInfoList", new { data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("ComponentInfoList", new { data = 2 });
+            }
+        }
+
+        public async Task<IActionResult> ComponentInfoDelete(int Id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/DeleteComponentInfo/{Id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("ComponentInfoList", new { data = 3 });
+        }
+
+        public async Task<IActionResult> ComponentInfoAlreadyExists(int Id, string Title)
+        {
+            ComponentInfo objComponentInfo = new ComponentInfo();
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/ComponentInfoAlreadyExists/{Id}/{Title}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        #endregion
+
     }
 }
