@@ -5,7 +5,7 @@ namespace HRHUBAPI.Models;
 
 public partial class ClearenceProcess
 {
-    public int? ClearenceProcessId { get; set; }
+    public int ClearenceProcessId { get; set; }
 
     public int? OffBoardingId { get; set; }
 

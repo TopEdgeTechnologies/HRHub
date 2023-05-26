@@ -277,9 +277,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<ClearenceProcess>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ClearenceProcess");
+            entity.ToTable("ClearenceProcess");
 
             entity.Property(e => e.ClearenceProcessId).HasColumnName("ClearenceProcessID");
             entity.Property(e => e.ClearenceProcessStatusId).HasColumnName("ClearenceProcessStatusID");
@@ -784,15 +782,21 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<StaffOffBoarding>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("StaffOffBoarding");
+            entity.HasKey(e => e.OffBoardingId);
 
+            entity.ToTable("StaffOffBoarding");
+
+            entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
             entity.Property(e => e.ApplicationDate).HasColumnType("date");
             entity.Property(e => e.ApplicationHtml)
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
-            entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
+            entity.Property(e => e.InteriewRemarks)
+                .IsUnicode(false)
+                .HasColumnName("Interiew_Remarks");
+            entity.Property(e => e.InterviewDate).HasColumnType("date");
+            entity.Property(e => e.InterviewDoneByStaffId).HasColumnName("InterviewDoneByStaffID");
+            entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
         });
