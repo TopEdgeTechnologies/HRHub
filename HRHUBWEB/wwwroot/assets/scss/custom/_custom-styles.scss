@@ -410,11 +410,12 @@ div {
 }
 
 @media (min-width: 992px) {
-	.hr-checkall .custom-checkbox{
+	.hr-checkall .custom-checkbox {
 		position: absolute;
-		left: 13rem;
-		top: -0.2rem;
+		left: 1rem;
+		top: 1.2rem;
 	}
+
 	.hor-header.hor-top-header {
 		.header-brand-img {
 			display: none;

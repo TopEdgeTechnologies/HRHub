@@ -373,30 +373,30 @@
 				async: false,
 				data: obj,
 				success: function (response) {
-					
+					debugger
 					if (response != null) {
 						debugger
 						
 						for (var i = 0; i < response.length; i++) 
 						{ 
 							if (response[i].titleStatus == "Total") {
-								$('#TotalCountId').text(response[i].attendanceId);
+								$('#TotalCountId').text(response[i].totalCount);
 								$('#TotalDayId').text(response[i].titleStatus);
 							}	
 							else if (response[i].titleStatus == "Absent")
 							{
-								$('#AbsentCountId').text(response[i].attendanceId);
+								$('#AbsentCountId').text(response[i].totalCount);
 								$('#AbsentDayId').text(response[i].titleStatus);
 							}
 							else if (response[i].titleStatus == "Present")
 							{
-								$('#PresentCountId').text(response[i].attendanceId);
+								$('#PresentCountId').text(response[i].totalCount);
 								$('#PresentDayId').text(response[i].titleStatus);
 							}
 							else if (response[i].titleStatus == "Leave")
 							{
-								
-								$('#LeaveCountId').text(response[i].attendanceId);
+
+								$('#LeaveCountId').text(response[i].totalCount);
 								$('#LeaveDayId').text(response[i].titleStatus);
 							}
 							
