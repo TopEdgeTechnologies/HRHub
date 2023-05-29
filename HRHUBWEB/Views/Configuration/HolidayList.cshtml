@@ -35,13 +35,14 @@
                     <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
                     <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
                     <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
                 </div>
             </div>
         </div>
     </div>
     <!--End Page header-->
     <!-- Row -->
-<div class="row" >
+<div class="row" id="IdFilters">
         <div class="col-xl-12 col-md-12 col-lg-12" > 
             <div class="card">
                 <div class="card-body">
@@ -61,7 +62,7 @@
                             </div>
                         </div>
                         </div>
-                        <div class="col-md-12 col-lg-3">
+                       @* <div class="col-md-12 col-lg-3">
                             <div class="form-group">
                                 <label class="form-label">Month:</label>
                                 <select id="monthId" name="monthId" class="form-control custom-select select2" data-placeholder="Select Month">
@@ -80,7 +81,7 @@
                                     <option value="12">December</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>*@
                         <div class="col-md-12 col-lg-3">
                         <div class="form-group">
 							<label class="form-label">Select year:</label>
@@ -95,7 +96,7 @@
                         </div>
                         <div class="col-md-12 col-lg-3">
                             <div class="form-group mt-5">
-                            <a onclick="ApplyFilter()" class="btn btn-primary btn-block">Search</a>
+                           @* <a onclick="ApplyFilter()" class="btn btn-primary btn-block">Search</a>*@
                             </div>
                         </div>
                     </div>
@@ -249,8 +250,16 @@
 
         $(document).ready(function () {
 
-            $('#Yeardate').change(function () {
+            $('#selectdate').change(function () {
+                $("#Yeardate").val("");
                ApplyFilter();
+                //$("#Yeardate").prop("disabled", true);
+            });
+             $('#Yeardate').change(function () {
+               
+
+               ApplyFilter();
+                //$("#selectdate").prop("disabled", true);
             });
 
 
@@ -272,6 +281,12 @@
 
             //});
 
+
+            $("#IdFilters").hide();
+            $('#btn_Filter').click(function () {
+
+                $("#IdFilters").toggle(1000);
+            });
 
 
           

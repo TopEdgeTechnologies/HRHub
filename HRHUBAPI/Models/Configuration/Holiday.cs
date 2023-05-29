@@ -40,12 +40,18 @@ namespace HRHUBAPI.Models
             {
                 List<Holiday> list = new List<Holiday>();
 
-                list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.HolidayDate == Convert.ToDateTime(selectdate)
-                
-                || x.HolidayDate.Value.Year == Yeardate               
-                
-                
-                ).ToListAsync();
+                if (Yeardate == 0)
+                {
+                    list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.HolidayDate == Convert.ToDateTime(selectdate)).ToListAsync();
+
+
+                }
+                else
+                {
+                    list = await _context.Holidays.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.HolidayDate.Value.Year == Yeardate).ToListAsync();
+
+                }
+
                 return list;
             }
             catch (Exception Ex)
