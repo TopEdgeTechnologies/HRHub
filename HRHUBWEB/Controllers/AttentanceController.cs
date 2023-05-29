@@ -241,15 +241,20 @@ namespace HRHUBWEB.Controllers
 		{
 
 			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+			ViewBag.ListDepartment = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+
+
+
+
 			return View();
 		}
 
 
 		//Attendance Over View List Company Wise
-		public async Task<ActionResult<JsonObject>> AttendanceOverViewListCompanyWise(int Staffid, string fromdate, string todate)
+		public async Task<ActionResult<JsonObject>> AttendanceOverViewListCompanyWise(int StaffId, int DepartmentId, int monthId, int yearId)
 		{
 
-			var result = await _APIHelper.CallApiAsyncGet<IEnumerable<AttendanceMaster>>($"api/Attendance/StaffAttendanceOverViewList{Staffid}/{fromdate}/{todate}", HttpMethod.Get);
+			var result = await _APIHelper.CallApiAsyncGet<IEnumerable<dynamic>>($"api/Attendance/StaffAttendanceOverViewList{StaffId}/{DepartmentId}/{monthId}/{yearId}", HttpMethod.Get);
 
 			if (result != null)
 			{

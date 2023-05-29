@@ -33,15 +33,13 @@ namespace HRHUBAPI.Controllers
 		}
 
 
-		[HttpGet("StaffAttendanceOverViewList{StaffId}/{datefrom}/{dateto}")]
-		public async Task<ActionResult<List<AttendanceMaster>>> StaffAttendanceOverViewList(int StaffId, string datefrom, string dateto)
+		[HttpGet("StaffAttendanceOverViewList{StaffId}/{DepartmentId}/{monthId}/{yearId}")]
+		public async Task<ActionResult<List<dynamic>>> StaffAttendanceOverViewList(int StaffId, int DepartmentId, int monthId, int yearId)
 		{
 
-			//List<AttendanceMaster>? Result = await new AttendanceMaster().GetAttendanceOverViewList(StaffId, datefrom, dateto, _context);
+			var Result = await new AttendanceMaster().GetAttendanceOverViewList(StaffId, DepartmentId, monthId,yearId, _context);
 
-
-			//return Result;
-			return null;
+			return Result;
 
 		}
 

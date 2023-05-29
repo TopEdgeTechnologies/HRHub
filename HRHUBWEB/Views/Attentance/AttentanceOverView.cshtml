@@ -3,6 +3,24 @@
     ViewData["Title"] = "Attentance OverView";
 }
 
+@{
+	int currentYear = DateTime.Now.Year;
+
+	// Generate current ten years
+	int[] currentTenYears = new int[10];
+	for (int i = currentYear; i >= currentYear - 9; i--)
+	{
+		currentTenYears[currentYear - i] = i;
+	}
+
+	// Generate previous ten years
+	int[] previousTenYears = new int[10];
+	for (int i = currentYear - 1; i >= currentYear - 10; i--)
+	{
+		previousTenYears[currentYear - 1 - i] = i;
+	}
+}
+
 
 <!-- Row -->
 <div class="hrattview-buttons">
@@ -13,8 +31,8 @@
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
 			<div class="card-header  border-0">
-				<h4 class="card-title">Attendence OverView</h4>
-
+				<h4 class="card-title me-5">Attendence OverView</h4>
+				
 				<div class="page-rightheader ms-md-auto">
 					<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
 
@@ -30,9 +48,19 @@
 				</div>
 
 			</div>
+
 			<div class="card-body">
-				<div class="row mt-5">
-					<div class="col-md-6 col-lg-3">
+				<div class="mb-6">
+
+					<div>
+						<span class="badge badge-success-light me-2"><i class="feather feather-check-circle text-success mt-1"></i> ---> Present</span>
+						<span class="badge badge-danger-light me-2"><i class="feather feather-x-circle text-danger mt-1"></i> ---> Absent</span>
+						<span class="badge badge-warning-light me-2"><i class="fa fa-star text-warning mt-1"></i> ---> Holiday</span>
+						<span class="badge badge-orange-light me-2"><i class="fa fa-adjust text-orange mt-1"></i>  ---> Half Day</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-lg-3">
 						<div class="form-group">
 							<label class="form-label">Employee Name:</label>
 							<select id="IdEmployee" name="IdEmployee" class="form-control custom-select select2">
@@ -44,1555 +72,79 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-3 col-lg-3">
 						<div class="form-group">
-							<label class="form-label">From:</label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">
-										<i class="feather feather-calendar"></i>
-									</div>
-								</div>
-
-								<input id="fromdate" name="fromdate" class="form-control fc-datepicker "  type="text" >
-
-							</div>
+							<label class="form-label">Department Name:</label>
+							<select id="IdDepartment" name="IdDepartment" class="form-control custom-select select2">
+								<option value="">Select Department</option>
+								@foreach (var item in ViewBag.ListDepartment)
+								{
+									<option value="@item.DepartmentId">@item.Title</option>
+								}
+							</select>
 						</div>
 					</div>
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-2">
 						<div class="form-group">
-						<label class="form-label">To:</label>  
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="feather feather-calendar"></i>
-								</div>
-							</div>	<input id="todate" name="todate" class="form-control fc-datepicker " type="text">
+							<label class="form-label">Select Month:</label>
+							<select id="monthId" name="monthId" class="form-control custom-select select2">
+								
+								<option value="1">January</option>
+								<option value="2">February</option>
+								<option value="3">March</option>
+								<option value="4">April</option>
+								<option value="5">May</option>
+								<option value="6">June</option>
+								<option value="7">July</option>
+								<option value="8">August</option>
+								<option value="9">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+								
+							</select>
 						</div>
 					</div>
+					<div class="col-md-2">
+						<div class="form-group">
+							<label class="form-label">Select year:</label>
+							<select id="yearId" name="yearId" class="form-control custom-select select2">
+
+								@foreach (var year in currentTenYears)
+								{
+								
+									<option value="@year">@year</option>
+								}
+							</select>
+						</div>
 					</div>
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-2">
 						<div class="form-group mt-5">
-							<a id="searchbtn" class="btn btn-primary btn-block">Search</a>
+
+							<button class="btn btn-primary" id="searchbtn"> <i class="si si-magnifier"></i> Search </button>
+
+
+							@*<a id="searchbtn" class="btn btn-primary"><i class="fe fe-search">Search</i></a>*@
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="card-body">
-				<div class="d-flex mb-6 mt-5">
-					<div class="me-3">
-						<label class="form-label">Note:</label>
-					</div>
-					<div>
-						<span class="badge badge-success-light me-2"><i class="feather feather-check-circle text-success"></i> ---> Present</span>
-						<span class="badge badge-danger-light me-2"><i class="feather feather-x-circle text-danger"></i> ---> Absent</span>
-						<span class="badge badge-warning-light me-2"><i class="fa fa-star text-warning"></i> ---> Holiday</span>
-						<span class="badge badge-orange-light me-2"><i class="fa fa-adjust text-orange"></i>  ---> Half Day</span>
-					</div>
-				</div>
+				
 				<div class="table-responsive hr-attlist">
 					<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-attendance">
+						
+						
 						<thead>
-							<tr>
-								<th class="border-bottom-0">Employee Name</th>
-								<th class="border-bottom-0 w-5">1</th>
-								<th class="border-bottom-0 w-5">2</th>
-								<th class="border-bottom-0 w-5">3</th>
-								<th class="border-bottom-0 w-5">4</th>
-								<th class="border-bottom-0 w-5">5</th>
-								<th class="border-bottom-0 w-5">6</th>
-								<th class="border-bottom-0 w-5">7</th>
-								<th class="border-bottom-0 w-5">8</th>
-								<th class="border-bottom-0 w-5">9</th>
-								<th class="border-bottom-0 w-5">10</th>
-								<th class="border-bottom-0 w-5">11</th>
-								<th class="border-bottom-0 w-5">12</th>
-								<th class="border-bottom-0 w-5">13</th>
-								<th class="border-bottom-0 w-5">14</th>
-								<th class="border-bottom-0 w-5">15</th>
-								<th class="border-bottom-0 w-5">16</th>
-								<th class="border-bottom-0 w-5">17</th>
-								<th class="border-bottom-0 w-5">18</th>
-								<th class="border-bottom-0 w-5">19</th>
-								<th class="border-bottom-0 w-5">20</th>
-								<th class="border-bottom-0 w-5">21</th>
-								<th class="border-bottom-0 w-5">22</th>
-								<th class="border-bottom-0 w-5">23</th>
-								<th class="border-bottom-0 w-5">24</th>
-								<th class="border-bottom-0 w-5">25</th>
-								<th class="border-bottom-0 w-5">26</th>
-								<th class="border-bottom-0 w-5">27</th>
-								<th class="border-bottom-0 w-5">28</th>
-								<th class="border-bottom-0 w-5">29</th>
-								<th class="border-bottom-0 w-5">30</th>
-								<th class="border-bottom-0 w-5">31</th>
-								<th class="border-bottom-0">Total</th>
-							</tr>
+							<tr></tr>
 						</thead>
-						
-						@*<tbody>
-						</tbody>*@
-						
-						
 						<tbody>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/1.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Faith Harris</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning " data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning " data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger "></span></td>
-								<td><span class="feather feather-x-circle text-danger "></span></td>
-								<td><span class="feather feather-x-circle text-danger "></span></td>
-								<td><span class="feather feather-x-circle text-danger "></span></td>
-								<td><span class="fa fa-star text-warning " data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning " data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">21</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							@*<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/9.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Austin Bell</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">24</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/2.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Maria Bower</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">17</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/10.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Peter Hill</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">25</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/3.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Victoria Lyman</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">26</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/11.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Adam Quinn</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">16</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/4.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Melanie Coleman</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange"></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">23</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/12.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Max Wilson</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="fa fa-adjust text-orange "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">21</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<span class="avatar avatar brround me-3" style="background-image: url(../assets/images/users/5.jpg)"></span>
-										<div class="me-3 mt-0 mt-sm-2 d-block">
-											<h6 class="mb-1 fs-14">Amelia Russell</h6>
-										</div>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#halfpresentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="feather feather-x-circle text-danger"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Sunday"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td><span class="fa fa-star text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Republic Day"></span></td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<div class="hr-listd">
-										<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#presentmodal" class="hr-listmodal"></a>
-										<span class="feather feather-check-circle text-success "></span>
-									</div>
-								</td>
-								<td>
-									<h6 class="mb-0">
-										<span class="text-primary">24</span>
-										<span class="my-auto fs-8 font-weight-normal text-muted">/</span>
-										<span class="">31</span>
-									</h6>
-								</td>
-							</tr>*@
+							
 						</tbody>
+						
+						
+						
+					
 					</table>
 				</div>
 			</div>
@@ -1610,38 +162,23 @@
 
 
 
-			$("#IdEmployee").select2();
-
-
-			var currentDate = new Date(); // Get the current date
-			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-			var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-			$('#fromdate').datepicker({
-				dateFormat: 'dd M yy',
-				autoHide: true
+			$("#IdEmployee,#monthId,#yearId,#IdDepartment").select2();
 
 
 
-			});
-
-			$('#fromdate').datepicker('setDate', firstDayOfMonth);
-
-			$('#todate').datepicker({
-				dateFormat: 'dd M yy',
-				autoHide: true
+			//$('#hr-attendance').DataTable();
 
 
 
-			});
-			$('#todate').datepicker('setDate', lastDayOfMonth);
+			//$("#IdEmployee").change(function () {
+			//	var table = $("#hr-attendance").DataTable();
+			//	table.clear().draw();
 
 
-
-			$('#hr-attendance').DataTable();
-
+			//});
 
 			$('#searchbtn').click(function () {
-			
+				
 				LoadAttendance();
 				
 			});
@@ -1654,12 +191,13 @@
 
 		function LoadAttendance() {
 
-
+			
 
 			var obj = {
 				Staffid: $("#IdEmployee").val(),
-				fromdate: $("#fromdate").val(),
-				todate: $("#todate").val()
+				DepartmentId: $("#IdDepartment").val(),
+				monthId: $("#monthId").val(),
+				yearId: $("#yearId").val()
 
 			}
 
@@ -1673,33 +211,29 @@
 				data: obj,
 				success: function (data) {
 
+					
+					var table;
 					if (data != null) {
 
-						debugger;
-						var table = $('#hr-attendance').DataTable();
-						table.clear();
-						table.draw();
+						var columns = Object.keys(data[0]);
+					
+						var columnDefs = columns.map(function (column) {
+							return { data: column, title: column };
+						});
 
+						// Move the last two columns to the start
+						var lastTwoColumns = columnDefs.splice(-2);
+						columnDefs = lastTwoColumns.concat(columnDefs);					
 
+							
+						 table = $("#hr-attendance").DataTable({
+							data: data,
+							columns: columnDefs,
+							pageLength: 50
+						});
 
-						for (var i = 0; i < data.length; i++) {
-
-							var rowData = [];					
-
-							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
-							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
-							var progress = '<div class="progress progress-sm d-block"   data-toggle="tooltip" title="' + Totalhours + ':' + TotalremainingMinutes + '"   ><div class="progress-bar bg-success w-' + parseInt(percenatge) + '"   data-toggle="tooltip" title="' + Emphours + ':' + EmpremainingMinutes + '" > </div>	</div>';
-
-							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), progress]);
-
-
-							table.rows.add(rowData);
-							table.draw();
-
-						}
-
-
-
+						
+						
 					}
 
 
@@ -1714,85 +248,7 @@
 		}
 
 
-		function convertTimeToAMPM(timeString) {
-			if (timeString != null && timeString != '' && timeString != 'NaN') {
-				var time = timeString.split(':');
 
-				var hours = parseInt(time[0]);
-				var minutes = parseInt(time[1]);
-
-				var ampm = hours >= 12 ? 'PM' : 'AM';
-				hours = hours % 12;
-				hours = hours ? hours : 12; // '0' should be converted to '12'
-
-				var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
-				return formattedTime;
-
-			}
-			else {
-				return '';
-			}
-
-		}
-
-
-
-
-
-
-
-
-
-
-
-		//function AtendenceCount() {
-
-		//	var obj = {
-		//		staffid: $("#IdEmployee").val()
-
-
-		//	}
-
-		//	$.ajax({
-		//		url: "/Attentance/GetAttendanceCount",
-		//		type: "POST",
-		//		async: false,
-		//		data: obj,
-		//		success: function (response) {
-		//			debugger
-		//			if (response != null) {
-		//				debugger
-
-		//				for (var i = 0; i < response.length; i++) {
-		//					if (response[i].titleStatus == "Total") {
-		//						$('#TotalCountId').text(response[i].totalCount);
-		//						$('#TotalDayId').text(response[i].titleStatus);
-		//					}
-		//					else if (response[i].titleStatus == "Absent") {
-		//						$('#AbsentCountId').text(response[i].totalCount);
-		//						$('#AbsentDayId').text(response[i].titleStatus);
-		//					}
-		//					else if (response[i].titleStatus == "Present") {
-		//						$('#PresentCountId').text(response[i].totalCount);
-		//						$('#PresentDayId').text(response[i].titleStatus);
-		//					}
-		//					else if (response[i].titleStatus == "Leave") {
-
-		//						$('#LeaveCountId').text(response[i].totalCount);
-		//						$('#LeaveDayId').text(response[i].titleStatus);
-		//					}
-
-		//				}
-		//			}
-
-
-
-		//		},
-		//		error: function (jqXHR, textStatus, errorThrown) {
-		//			console.log(textStatus, errorThrown);
-		//		}
-		//	});
-		//}
 
 
 
