@@ -635,7 +635,7 @@ namespace HRHUBWEB.Controllers
 
         // Filter data through year
        
-        public async Task<ActionResult<JsonObject>> FilterHolidayData(string selectdate,int monthId, int Yeardate)
+        public async Task<ActionResult<JsonObject>> FilterHolidayData(int Yeardate,string selectdate)
         {
 
 

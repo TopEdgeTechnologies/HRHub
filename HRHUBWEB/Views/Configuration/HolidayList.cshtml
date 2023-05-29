@@ -85,14 +85,17 @@
                         <div class="col-md-12 col-lg-3">
                         <div class="form-group">
 							<label class="form-label">Select year:</label>
-                            <select id="Yeardate" name="Yeardate" class="form-control custom-select select2">
+                            <select id="Yeardatesss" name="Yeardatesss" class="form-control custom-select select2">
 										
                                 @foreach (var year in currentTenYears)
 										{
-                                    <option value="@year">@year</option>
+                                               <option value="@year">@year</option>
 										}
 									</select>
 								</div>
+
+                               
+								
                         </div>
                         <div class="col-md-12 col-lg-3">
                             <div class="form-group mt-5">
@@ -250,20 +253,45 @@
 
         $(document).ready(function () {
 
+            $("#selectdate").val("");
+
             $('#selectdate').change(function () {
-                $("#Yeardate").val("");
+                
                ApplyFilter();
-                //$("#Yeardate").prop("disabled", true);
-            });
-             $('#Yeardate').change(function () {
+               var datenow= $("#selectdate").val();
+                var selectedDate = new Date(datenow);
+                if (!isNaN(selectedDate)) {
+                   debugger
+                    var year = selectedDate.getFullYear();                   
+                  
+                    $("#Yeardatesss").val(year).change();
+
+                                    
+
+                
+                }else{
+                    
+                }
                
-
+            });
+            $('#Yeardatesss').change(function () {
+                debugger
+                var value = $("#selectdate").val();
+                if(value!=null && value!=""){
+                    return;
+                
+                }else{
+                              
                ApplyFilter();
-                //$("#selectdate").prop("disabled", true);
+                }
+
+               
             });
 
 
-
+            function disableEventTrigger() {
+                $("#dropdown").off("change", dropdownChangeHandler);
+            }
 
 
 
@@ -308,18 +336,7 @@
 
             });
 
-           // $('#Yeardate').datepicker('setDate', currentDate);
-            $('#selectdate').datepicker('setDate', currentDate);
-
-
-            //$('#searchbtn').click(function () {
-
-            //   ApplyFilter();
-
-            //});
-
-
-
+          
 
 
             $('#hr-holiday').DataTable();
@@ -541,9 +558,11 @@
 
 
             var obj = {
-                //Staffid: $("#IdEmployee").val(),
-                selectdate: $("#selectdate").val(),
-                Yeardate: $("#Yeardate").val()
+
+                selectdate: $('#selectdate').val() == '' ? '""' : $('#selectdate').val(),
+                Yeardatesss: $("#Yeardatesss").val()
+
+                                       
 
             }
 
