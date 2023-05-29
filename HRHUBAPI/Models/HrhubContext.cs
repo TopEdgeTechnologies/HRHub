@@ -19,6 +19,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ActivityType> ActivityTypes { get; set; }
 
+    public virtual DbSet<Announcement> Announcements { get; set; }
+
     public virtual DbSet<AttendanceDetail> AttendanceDetails { get; set; }
 
     public virtual DbSet<AttendanceMaster> AttendanceMasters { get; set; }
@@ -82,6 +84,8 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<OffBoardingProcessSetting> OffBoardingProcessSettings { get; set; }
 
     public virtual DbSet<OffBoardingType> OffBoardingTypes { get; set; }
+
+    public virtual DbSet<PerformanceReview> PerformanceReviews { get; set; }
 
     public virtual DbSet<Policy> Policies { get; set; }
 
@@ -150,6 +154,19 @@ public partial class HrhubContext : DbContext
             entity.ToTable("ActivityType");
 
             entity.Property(e => e.ActivityTypeId).HasColumnName("ActivityTypeID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Announcement>(entity =>
+        {
+            entity.ToTable("Announcement");
+
+            entity.Property(e => e.AnnouncementId).HasColumnName("AnnouncementID");
+            entity.Property(e => e.AnnouncementDate).HasColumnType("date");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
@@ -281,9 +298,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<ClearenceProcess>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ClearenceProcess");
+            entity.ToTable("ClearenceProcess");
 
             entity.Property(e => e.ClearenceProcessId).HasColumnName("ClearenceProcessID");
             entity.Property(e => e.ClearenceProcessStatusId).HasColumnName("ClearenceProcessStatusID");
@@ -609,10 +624,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.OffboardingProcessSettingId).HasColumnName("OffboardingProcessSettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.NeedClearenceFromStaffId).HasColumnName("NeedClearenceFrom_StaffID");
-            entity.Property(e => e.NeedClearenceFromTitle)
-                .IsUnicode(false)
-                .HasColumnName("NeedClearenceFrom_Title");
+            entity.Property(e => e.NeedClearenceFromDepartmentId).HasColumnName("NeedClearenceFrom_DepartmentID");
+            entity.Property(e => e.NeedClearenceFromDesignationId).HasColumnName("NeedClearenceFrom_DesignationID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -622,6 +635,19 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<PerformanceReview>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("PerformanceReview");
+
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
+            entity.Property(e => e.StartDate).HasColumnType("date");
             entity.Property(e => e.Title).IsUnicode(false);
         });
 
@@ -788,15 +814,20 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<StaffOffBoarding>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("StaffOffBoarding");
+            entity.HasKey(e => e.OffBoardingId);
 
+            entity.ToTable("StaffOffBoarding");
+
+            entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
             entity.Property(e => e.ApplicationDate).HasColumnType("date");
             entity.Property(e => e.ApplicationHtml)
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
-            entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
+            entity.Property(e => e.InteriewRemarks)
+                .IsUnicode(false)
+                .HasColumnName("Interiew_Remarks");
+            entity.Property(e => e.InterviewDate).HasColumnType("date");
+            entity.Property(e => e.InterviewDoneByStaffId).HasColumnName("InterviewDoneByStaffID");
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");

@@ -670,11 +670,76 @@ namespace HRHUBWEB.Controllers
 
 
 
-        #endregion
+		#endregion
 
-        // Code for save images into database
 
-        private string uploadImage(string name, IFormFile file, string root)
+		#region Announcement Info
+
+		[CustomAuthorization]
+		public async Task<IActionResult> AnnouncementList(string data = "")
+		{
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+			ViewBag.Success = data;
+
+			Announcement Announcements = new Announcement();
+			Announcements.CompanyId = _user.CompanyId;
+			Announcements.ListAnnouncements = await _APIHelper.CallApiAsyncGet<IEnumerable<Announcement>>($"api/Configuration/GetAnnouncementByCompanyID{Announcements.CompanyId}", HttpMethod.Get);
+
+			return View(Announcements);
+		}
+
+		public async Task<IActionResult> GetAnnouncementById(int id)
+		{
+			Announcement Announcement = new Announcement();
+			Announcement = await _APIHelper.CallApiAsyncGet<Announcement>($"api/Configuration/GetAnnouncementById{id}", HttpMethod.Get);
+			return Json(Announcement);
+		}		
+
+		public async Task<IActionResult> AnnouncementCreateOrUpdate(Announcement Announcement)
+		{
+			
+			
+
+			Announcement.CompanyId = _user.CompanyId;
+			Announcement.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(Announcement, "api/Configuration/PostAnnouncement", HttpMethod.Post);
+
+			if (result.Message.Contains("Insert"))
+			{
+				return RedirectToAction("AnnouncementList", new { data = 1 });
+			}
+			else
+			{
+				return RedirectToAction("AnnouncementList", new { data = 2 });
+			}
+		}
+
+		public async Task<IActionResult> AnnouncementDelete(int id)
+		{
+			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteAnnouncement{id}/{_user.UserId}", HttpMethod.Get);
+			return RedirectToAction("AnnouncementList", new { data = 3 });
+		}
+
+		public async Task<IActionResult> AnnouncementAlreadyExists(int id, string title)
+		{
+			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/AnnouncementAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		#endregion
+
+
+
+
+
+		// Code for save images into database
+
+		private string uploadImage(string name, IFormFile file, string root)
         {
 
             try

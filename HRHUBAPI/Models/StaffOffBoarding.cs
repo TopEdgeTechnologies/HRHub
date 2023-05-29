@@ -5,7 +5,7 @@ namespace HRHUBAPI.Models;
 
 public partial class StaffOffBoarding
 {
-    public int? OffBoardingId { get; set; }
+    public int OffBoardingId { get; set; }
 
     public int? OffboardingTypeId { get; set; }
 
@@ -16,4 +16,10 @@ public partial class StaffOffBoarding
     public string? Reason { get; set; }
 
     public string? ApplicationHtml { get; set; }
+
+    public string? InteriewRemarks { get; set; }
+
+    public DateTime? InterviewDate { get; set; }
+
+    public int? InterviewDoneByStaffId { get; set; }
 }
