@@ -125,6 +125,10 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -793,6 +797,7 @@ public partial class HrhubContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
             entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
+            entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
         });
