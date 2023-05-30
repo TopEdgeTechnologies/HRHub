@@ -425,9 +425,6 @@ namespace HRHUBAPI.Controllers
         #endregion
 
 
-
-
-
         #region WeekendRule
 
         [HttpGet("GetWeekendRuleByCompanyID{CompanyID}")]
@@ -478,9 +475,96 @@ namespace HRHUBAPI.Controllers
 
 
 
-        #endregion
+		#endregion
 
-        private string uploadImage(string name, IFormFile file, string root)
+		#region Announcement Info
+
+		[HttpGet("GetAnnouncementByCompanyID{CompanyId}")]
+		public async Task<ActionResult<List<Announcement>>> GetAnnouncement(int CompanyId)
+		{
+			return await new Announcement().GetAnnouncement(CompanyId, _context);
+		}
+
+		[HttpGet("GetAnnouncementById{Id}")]
+		public async Task<ActionResult<Announcement>> GetAnnouncementById(int Id)
+		{
+			var dbResult = await new Announcement().GetAnnouncementById(Id, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+		[HttpPost("PostAnnouncement")]
+		public async Task<ActionResult<Announcement>> PostAnnouncement(Announcement Announcement)
+		{
+
+			var dbResult = await new Announcement().PostAnnouncement(Announcement, _context);
+			if (dbResult != null)
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Updated Successfully"
+				});
+			}
+			else
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Inserted Successfully"
+				});
+			}
+		}
+
+		[HttpGet("DeleteAnnouncement{Id}/{UserId}")]
+		public async Task<ActionResult<bool>> DeleteAnnouncement(int Id, int UserId)
+		{
+			if (Id > 0)
+			{
+
+				var dbResult = await new Announcement().DeleteAnnouncement(Id, UserId, _context);
+				if (dbResult == true)
+				{
+					return Ok(new
+					{
+						Success = true,
+						Message = "Data Deleted Successfully"
+					});
+				}
+			}
+			return NotFound("Data Not Found!");
+		}
+
+		[HttpGet("AnnouncementAlreadyExists{CompanyId}/{id}/{title}")]
+		public async Task<ActionResult<bool>> AnnouncementAlreadyExists(int CompanyId, int Id, string title)
+		{
+			var dbResult = await new Announcement().AlreadyExists(CompanyId, Id, title, _context);
+			if (dbResult == true)
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Record Already Exists"
+				});
+			}
+			else
+			{
+				return Ok(new
+				{
+					Success = false,
+					Message = "Data Not Found!"
+				});
+			}
+		}
+
+		#endregion
+
+
+
+		private string uploadImage(string name, IFormFile file, string root)
         {
 
             try

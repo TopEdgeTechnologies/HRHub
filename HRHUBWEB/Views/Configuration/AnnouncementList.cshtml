@@ -1,0 +1,418 @@
+﻿@model HRHUBAPI.Models.Announcement
+
+
+<input type="hidden" asp-for="CompanyId" />
+<!--Add Announcement Modal -->
+@using (@Html.BeginForm("AnnouncementCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+
+    <input type="hidden" asp-for="AnnouncementId" />
+
+    <div class="modal fade" id="addAnnouncementmodal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Announcement</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Announcement Title: <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Announcement Title">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Announcement Date: <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div>
+
+                            <input asp-for="AnnouncementDate" class="form-control fc-datepicker " type="date">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description: <span class="text-danger">*</span></label>
+                        <textarea asp-for="Description" class="summernote"></textarea>
+                    </div>
+                    <div class="form-group">                       
+
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+
+                    </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+<!-- End Add Announcement Modal  -->
+<!-- Row -->
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Announcement Details</h3>
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
+                        <div class="btn-list">
+                            <a onclick="addnewAnnouncement()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Announcement</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+                   
+                }
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0">Sr.#</th>
+                                <th class="border-bottom-0">Title</th>                               
+                                <th class="border-bottom-0">Description</th>                               
+                                <th class="border-bottom-0">Date</th>                               
+                                <th class="text-center">Status</th>
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                int count = 1;
+                                foreach (var item in Model.ListAnnouncements)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <span>@count</span>
+                                            </div>
+                                        </td>
+                                        
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
+
+                                        <td>
+                                            @Html.Raw(item.Description)
+                                        </td>
+                                         <td>
+                                            @item.AnnouncementDate.Value.ToString("yyyy-MMM-dd")
+                                        </td>
+
+
+                                        @if (item.Status == true)
+                                        {
+                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                        }
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a onclick="editrecord(@item.AnnouncementId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a onclick="confirmation(@item.AnnouncementId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts{
+
+    <script>
+
+
+
+        $(document).ready(function () {
+
+
+            $('#AnnouncementDate').datepicker({
+                dateFormat: 'dd M yy',
+                autoHide: true
+
+            });
+            var currentDate = new Date();
+            $('#AnnouncementDate').datepicker('setDate', currentDate);
+
+
+
+
+            if (@Model.AnnouncementId > 0) // for Edit Record
+            {
+                $("#addAnnouncementmodal").modal('show');
+            }
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+       
+        });
+
+
+      
+
+        function postdata() {
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+
+
+            if ($("#AnnouncementDate").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Date"
+                });
+                $("#AnnouncementDate").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#AnnouncementDate").css("border-color", "#ddd");
+            }
+
+            if ($("#Description").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Description"
+                });
+                $("#Description").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Description").css("border-color", "#ddd");
+            }
+
+
+
+
+
+            var Data = { id: $("#AnnouncementId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/AnnouncementAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger                      
+                        if (data.success) {                           
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addAnnouncementmodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                   
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+        function editrecord(id) {
+            addnewAnnouncement();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetAnnouncementById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#AnnouncementId").val(data.announcementId);
+                        $("#Title").val(data.title);
+
+                        var dateTimeString = data.announcementDate;
+                        var Date = dateTimeString.split("T")[0];
+
+                        var date = $("#AnnouncementDate").val(Date);
+                        alert(date)
+                        $('#Description').summernote('code', data.description);                      
+
+                        $("#Status").prop('checked', data.status);
+                     
+                        $("#addAnnouncementmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                   
+                }
+            })
+
+
+        }
+
+        function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) 
+                {
+                    var url = "@Url.Action("AnnouncementDelete", "Configuration")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+
+        function addnewAnnouncement() {
+
+            $("#addAnnouncementmodal").modal('show');
+            $("#AnnouncementId").val(0)
+            $("#Title").val('')
+            $("#Description").val('')
+            $('#Description').summernote('code', '');                 
+            $("#Status").prop('checked', false)
+
+
+        }
+
+    </script>
+
+}
