@@ -2,8 +2,6 @@
 
 
 
-
-
 <input type="hidden" asp-for="CompanyId" />
 <!--Add Designation Modal -->
 @using (@Html.BeginForm("DesignationCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
@@ -68,9 +66,9 @@
                     <div class="card-options">
                         <div class="btn-list">
                             <a onclick="addnewdesignation()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Designation</a>
-                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                         </div>
                     </div>
                 }
@@ -124,14 +122,14 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                   
-                                                    <a onclick="editrecord(@item.DesignationId)" class="action-btns1 btn-xs" data-toggle="tooltip" title="Edit"  >
+
+                                                    <a onclick="editrecord(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
                                                         <i class="feather feather-edit primary text-primary mt-1"></i>
                                                     </a>
                                                  
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a onclick="confirmation(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a onclick="confirmation(@item.DesignationId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
                                                 }
@@ -163,10 +161,13 @@
 
 
 @section scripts{
-
+       
     <script>
+     
+     
         $(document).ready( function () {
 
+           
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
 
