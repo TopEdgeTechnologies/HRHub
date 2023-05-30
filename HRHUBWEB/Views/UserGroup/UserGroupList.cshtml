@@ -13,8 +13,17 @@
                 <h3 class="card-title">User Group Details</h3>
         @if (Convert.ToBoolean(ViewBag.IsNew))
         {
-                <div class="card-options"> <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add New</a> </div>
-        }
+                <div class="card-options">
+                        <div class="btn-list">
+                    <a asp-action="UserGroupCreateOrUpdate" asp-controller="UserGroup" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add New</a>
+                    
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+                </div>
+
+                }
         </div>
             <div class="card-body">
                 <div class="table-responsive">
