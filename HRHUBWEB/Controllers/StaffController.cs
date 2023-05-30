@@ -102,6 +102,8 @@ namespace HRHUBWEB.Controllers
 
             objStaff.StaffLeaveAllocationslist = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffLeaveAllocation>>($"api/Staffs/GetStaffLeaveAllocationsDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
 
+            objStaff.StaffSalaryComponentList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/Staffs/GetStaffSalaryDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
+
             if (Id == 0)
             {
                 return View(objStaff);

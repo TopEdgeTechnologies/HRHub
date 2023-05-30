@@ -55,6 +55,12 @@ namespace HRHUBAPI.Controllers
             return await new Staff().GetStaffLeaveAllocationsDetail(CompanyId, StaffId, _context); 
         }
 
+        [HttpGet("GetStaffSalaryDetail{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<List<StaffSalaryComponent>>> GetStaffSalaryDetail(int CompanyId, int StaffId)
+        {
+            return await new Staff().GetStaffSalaryDetail(CompanyId, StaffId, _context);
+        }
+
         [HttpGet("GetStaffById{Id}")]
         public async Task<ActionResult<Staff>> GetStaffById(int Id)
         {

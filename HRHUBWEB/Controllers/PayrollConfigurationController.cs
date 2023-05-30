@@ -151,6 +151,7 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> ComponentInfoCreateOrUpdate(ComponentInfo objComponentInfo)
         {
+            objComponentInfo.CompanyId = _user.CompanyId;
             objComponentInfo.CreatedBy = _user.UserId;
             var result = await _APIHelper.CallApiAsyncPost<Response>(objComponentInfo, "api/PayrollConfiguration/PostComponentInfo", HttpMethod.Post);
 
