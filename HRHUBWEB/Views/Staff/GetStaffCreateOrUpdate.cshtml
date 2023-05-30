@@ -26,6 +26,7 @@
                                 string pathfile = Model.SnapPath != null ? @Model.SnapPath : " /Images/Avatar.png";
                             }
                             <img class="avatar avatar-xxl brround rounded-circle" id="viewUserImage" alt="user-img" src="@pathfile">
+@*                            <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">*@
                         </div>
                         <div class="pro-user mt-3">
                             @{
@@ -121,11 +122,11 @@
                     <div class="tabs-menu1">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs">
-                            <li class="ms-4"><a href="#tab5" class="active" data-bs-toggle="tab">Personal Details</a></li>
+                            <li class="ms-4"><a href="#tab5" class="active" data-bs-toggle="tab">Personal Info</a></li>
                             <li><a href="#tab6" data-bs-toggle="tab">Company Details</a></li>
-                            <li><a href="#tab7" data-bs-toggle="tab">Leave Details</a></li>
-                            <li><a href="#tab8" data-bs-toggle="tab">Bank Info</a></li>
-                            <li><a href="#tab9" data-bs-toggle="tab">Documents</a></li>
+                            <li><a href="#tab7" data-bs-toggle="tab">Salary Info</a></li>
+                            <li><a href="#tab8" data-bs-toggle="tab">Leave Details</a></li>
+                            <li><a href="#tab10" data-bs-toggle="tab">Documents</a></li>
                         </ul>
                     </div>
                 </div>
@@ -137,7 +138,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">User Name</label>
+                                            <label class="form-label mb-0 mt-2">Name<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
@@ -155,7 +156,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Parent's Name</label>
+                                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
@@ -165,7 +166,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">National Id Number</label>
+                                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
@@ -175,7 +176,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Contact Number</label>
+                                            <label class="form-label mb-0 mt-2">Contact Number<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
@@ -193,7 +194,7 @@
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Emergency Contact Number</label>
+                                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row">
@@ -274,7 +275,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Present Address</label>
+                                            <label class="form-label mb-0 mt-2">Present Address<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <textarea asp-for=PresentAddress rows="3" required class="form-control" placeholder="Address1"></textarea>
@@ -284,7 +285,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Permanent Address</label>
+                                            <label class="form-label mb-0 mt-2">Permanent Address<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <textarea asp-for=PermanentAddress rows="3" class="form-control" placeholder="Address2"></textarea>
@@ -369,11 +370,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    
-
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Department  <span class="text-danger">*</span></label>
+                                            <label class="form-label mb-0 mt-2">Department<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                            <select asp-for=DepartmentId id="DepartmentId" class="form-control custom-select select2" required data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjDepartmentList,"DepartmentId", "Title"))">
@@ -385,12 +384,22 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Designation  <span class="text-danger">*</span></label>
+                                            <label class="form-label mb-0 mt-2">Designation<span class="text-danger">*</span></label>
                                         </div>
                                         <div class="col-md-9">
                                             <select asp-for=DesignationId id="DesignationId" required onchange="onchangeDesignation()" class="form-control custom-select select2" data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.ObjDesignationList,"DesignationId", "Title"))">
                                                 <option label="Select Designation"></option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label mb-0 mt-2">Job Title<span class="text-danger">*</span></label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input asp-for="JobTitle" type="text" required class="form-control" placeholder="Registration Number">
                                         </div>
                                     </div>
                                 </div>
@@ -434,29 +443,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h4 class="mb-5 mt-7 font-weight-bold">Salary</h4>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Salary Method</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <select asp-for=SalaryMethodId id="SalaryMethodId" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethodList,"SalaryMethodId", "Title"))">
-                                                <option label="Select Salary Method"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Salary</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for=SalaryAmount type="text" class="form-control" placeholder="$Salary">
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="form-group mt-7">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -464,61 +450,14 @@
                                         </div>
                                         <div class="col-md-9">
                                             <label class="custom-switch">
-                                                <input asp-for=Status   type="checkbox" onchange="StaffStatusChange()"  class="custom-switch-input"> @* name="custom-switch-checkbox"*@
+                                                <input asp-for=Status type="checkbox" onchange="StaffStatusChange()" class="custom-switch-input"> @* name="custom-switch-checkbox"*@
                                                 <span class="custom-switch-indicator"></span>
                                                 <span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>                
-                        <div class="tab-pane" id="tab7">
-                            <div class="card-body">
-                                <div>
-                                    <table id="LeaveTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
-                                        <thead>
-                                            <tr>
-                                                <th>Sr. #</th>
-                                                <th>Leave Type</th>
-                                                <th>Max Limit</th>
-                                                <th>Allowed Leaves</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="LeaveTableBody">
-                                            @{
-                                                int a = 0;
-                                                int b = 1;
-                                                if(Model.StaffLeaveAllocationslist != null && Model.StaffLeaveAllocationslist.Count() > 0)
-                                                {
-                                                    foreach(var item in Model.StaffLeaveAllocationslist)
-                                                    {
-                                                        <tr id="@a">
-                                                            <td>@b</td>
-                                                            <td>
-                                                                <input type="hidden" id="LeaveAllocationId_@a" name="LeaveAllocationId" value="@item.LeaveAllocationId" />
-                                                                <input type="hidden" id="LeaveTypeId_@a" name="ListLeaveTypeId" value="@item.LeaveTypeId" />
-                                                                <input type="text" readonly class="form-control" id="LeaveTypeTitle_@a" name="LeaveTypeTitle" value="@item.LeaveTypeTitle" />
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" readonly class="form-control" id="NoOfLeavesLimit_@a" name="NoOfLeavesLimit" value="@item.NoOfLeavesLimit" />
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control" id="AllowedLeaves_@a" onkeydown="LeaveExceedLimit(@a)" name="ListAllowedLeaves" value="@item.AllowedLeaves" />
-                                                            </td>
-                                                        </tr>
-                                                        a++;
-                                                        b++;
-                                                    }
-                                                }
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab8">
-                            <div class="card-body">
+                                <h4 class="mb-5 mt-7 font-weight-bold">Bank Details</h4>
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -586,8 +525,118 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>                
+                        <div class="tab-pane" id="tab7">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label mb-0 mt-2">Salary Method</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <select asp-for=SalaryMethodId id="SalaryMethodId" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethodList,"SalaryMethodId", "Title"))">
+                                                <option label="Select Salary Method"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="form-label mb-0 mt-2">Gross Salary</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input asp-for=SalaryAmount type="number" class="form-control" placeholder="$Salary">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="mb-4 font-weight-bold">Earning
+                                        <span id="lbl_Earning" class="fs-18 text-success">0</span>
+                                    </h4>
+                                    <table id="StaffEarningTable" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                            <thead>
+                                                 <tr>
+                                                    <th>Title</th>
+                                                    <th style="width:40px">Percentage</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="EarningTableBody">
+                                                @{
+                                                    int m = 0;
+                                                    if (Model.StaffSalaryComponentList != null && Model.StaffSalaryComponentList.Count() > 0)
+                                                    {
+                                                        foreach (var item in Model.StaffSalaryComponentList.Where(x => x.Category == "Earning"))
+                                                        {
+                                                            <tr id="row_@m">
+                                                                <td>
+                                                                    <input type="hidden" id="StaffSalaryComponentId_@m@item.Category" name="StaffSalaryComponentId" value="@item.StaffSalaryComponentId" />
+                                                                    <input type="hidden" id="ComponentId_@m@item.Category" name="ListComponentId" value="@item.ComponentId" />
+                                                                    <input type="hidden" id="Category_@m@item.Category" name="Category_@item.Category" value="@item.Category" />
+                                                                    @item.ComponentTitle
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" style="padding-left:3px; padding-right:3px" min="0" max="100" class="form-control" id="PercentageValue_@m@item.Category" name="ListComponentPercentageEarning" value="@item.PercentageValue" title="Component Percentage" placeholder="Enter Percentage" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" style="padding-left:3px; padding-right:3px" min="0" class="form-control" id="ComponentAmount_@m@item.Category" name="ListComponentAmountEarning" value="@item.ComponentAmount" title="Component Amount" placeholder="Enter Amount" oninput="SalaryExceedLimit('@item.Category')" />
+                                                                </td>
+                                                            </tr>
+                                                            m++;
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                </div>
+                            </div>
                         </div>
-                        <div class="tab-pane" id="tab9">
+                        <div class="tab-pane" id="tab8">
+                            <div class="card-body">
+                                <div>
+                                    <table id="LeaveTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
+                                        <thead>
+                                            <tr>
+                                                <th>Sr. #</th>
+                                                <th>Leave Type</th>
+                                                <th>Max Limit</th>
+                                                <th>Allowed Leaves</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="LeaveTableBody">
+                                            @{
+                                                int a = 0;
+                                                int b = 1;
+                                                if(Model.StaffLeaveAllocationslist != null && Model.StaffLeaveAllocationslist.Count() > 0)
+                                                {
+                                                    foreach(var item in Model.StaffLeaveAllocationslist)
+                                                    {
+                                                        <tr id="@a">
+                                                            <td>@b</td>
+                                                            <td>
+                                                                <input type="hidden" id="LeaveAllocationId_@a" name="LeaveAllocationId" value="@item.LeaveAllocationId" />
+                                                                <input type="hidden" id="LeaveTypeId_@a" name="ListLeaveTypeId" value="@item.LeaveTypeId" />
+                                                                <input type="text" readonly class="form-control" id="LeaveTypeTitle_@a" name="LeaveTypeTitle" value="@item.LeaveTypeTitle" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" readonly class="form-control" id="NoOfLeavesLimit_@a" name="NoOfLeavesLimit" value="@item.NoOfLeavesLimit" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" id="AllowedLeaves_@a" onkeydown="LeaveExceedLimit(@a)" name="ListAllowedLeaves" value="@item.AllowedLeaves" />
+                                                            </td>
+                                                        </tr>
+                                                        a++;
+                                                        b++;
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab10">
                             <div class="card-body">
                                 <div>
                                     <table id="documentTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
@@ -649,7 +698,7 @@
             $('#DesignationId').select2();
             $('#SalaryMethod').select2();
       
-            StaffStatusChange();
+            //StaffStatusChange();
 
             $('#StaffImageAttachmentFile').change(function () {
                 var fileInput = $(this);
@@ -682,6 +731,8 @@
             // Staff Document Add
             AddStaffAtachmentData(0, true);
 
+            SalaryExceedLimit('Earning');
+            onchangeDesignation();
         });
 
         $("#btnSaveUpdate").click(function () {
@@ -724,6 +775,23 @@
             // $("#myform").submit();
         });
 
+        $("#viewUserImage").click(function () {
+            // Create a hidden file input element
+            var input = $("#StaffImageAttachmentFile");
+           // input.type = 'file';
+         ///   input.accept = 'image/*';
+
+            // Handle file selection
+            input.onchange = function (e) {
+                var file = e.target.files[0];
+                // Perform further operations with the selected file as needed
+                console.log('Selected file:', file);
+            };
+
+            // Trigger the file dialog
+            input.click();
+        });
+
         function OnTextChangeStaffName()
         {
             var txt_Name = document.getElementById("txt_FirstName");
@@ -753,7 +821,8 @@
             }
         }
 
-        function AccountLoginControls() {
+        function AccountLoginControls() 
+        {
             var chk_AccountLogin = document.getElementById('chk_AccountLoginSwitch');
             var txt_Email = document.getElementById('txt_OfficialEmailAddress');
             var txt_Pass = document.getElementById('txt_OfficialEmailPassword');
@@ -771,7 +840,8 @@
             }
         }
 
-        function StaffStatusChange() {
+        function StaffStatusChange() 
+        {
             var chk_StaffStatus = document.getElementById("Status");
             var lbl_StaffStatus = document.getElementById("lbl_StaffStatus");
 
@@ -785,7 +855,7 @@
 
         function AddStaffAtachmentData(ThisRowID, FromDocumentDotReady) 
         {
-            debugger;
+         
             var dtDetailInfoHtml;
             var totalNullAccountsCount = 0;
 
@@ -868,6 +938,55 @@
             });
         }
 
+        function SalaryExceedLimit(category) 
+        {
+            var grossSalary = parseFloat($('#SalaryAmount').val());
+            var isExceed = false;
+            var totalEarning = 0.0;
+            var lbl_Earning_element = document.getElementById('lbl_Earning');
+            var lbl_Earning_value = 0.0;
+            
+            if(category == 'Earning')
+            {
+                //Earning Section
+                $("#EarningTableBody tr").each(function (index) {
+                var EarningAmount = $("#ComponentAmount_" + index + category).val();
+                if (!isNaN(EarningAmount) && EarningAmount!='' && EarningAmount!=null) 
+                {
+                    totalEarning += parseFloat(EarningAmount);
+                    // setting value
+                    lbl_Earning_element.innerHTML = totalEarning;
+                    
+                    // getting value
+                    //lbl_Earning_value = lbl_Earning_element.innerHTML;
+                    
+                    //get Percentage
+                    //var EarningPercentage = EarningAmount * 100.0 / lbl_Earning_value;
+                    //console.log("EarningPercentage" + EarningPercentage);
+                    //$("#ComponentAmount_" + index + category).val() = EarningPercentage;
+
+                    isExceed = true;
+                } 
+                });
+            }
+            // getting value
+            lbl_Earning_value = lbl_Earning_element.innerHTML;
+
+            //Check Gross Salary Exceed Limit
+            console.log("Gross Salary:" + grossSalary);
+            if (lbl_Earning_value > grossSalary) 
+            {
+                console.log("Gross Salary:" + grossSalary);
+                $.growl.warning({
+                    message: "Please Adjust Salary Details according to Gross Salary!"
+                });
+                isExceed = false;
+            }
+
+            console.log("lbl_Earning_value:" + lbl_Earning_value);
+            return isExceed;
+        }
+
         function LeaveExceedLimit(id)
         {
             var leaveslimit = parseInt($("#NoOfLeavesLimit_"+id).val());
@@ -935,7 +1054,6 @@
 
         function customValidation()
         {
-            debugger 
             var isvalid = true;
             isvalid = alreadyExist();
 
@@ -970,7 +1088,7 @@
 				success: function (data) {
 					if (data != "") 
                     {
-						debugger
+					
 						//var b = JSON.parse(data)
 						if (data.success)
                         {

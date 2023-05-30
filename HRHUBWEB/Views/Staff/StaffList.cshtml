@@ -119,7 +119,10 @@
                                             <div class="d-flex">
                                                 <img class="avatar avatar-md brround me-3" src="@item.SnapPath">
                                                 <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-1 fs-14">@Html.DisplayFor(modelitem => item.FirstName)</h6>
+                                                    @{
+                                                        string fullName = item.FirstName + " " + item.LastName;
+                                                    }
+                                                    <h6 class="mb-1 fs-14">@fullName</h6>
                                                     <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.ContactNumber1) | @Html.DisplayFor(modelitem => item.Email)</p>
                                                 </div>
                                             </div>

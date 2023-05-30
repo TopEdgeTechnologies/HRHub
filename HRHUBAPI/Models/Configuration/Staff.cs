@@ -12,61 +12,76 @@ namespace HRHUBAPI.Models
 {
     public partial class Staff
     {
-        [NotMapped]
-        public int? TotalActiveStaff { get; set; }
 
-        [NotMapped]
-        public int? TotalMaleStaff { get; set; }
+        #region [NotMapped]
 
-        [NotMapped]
-        public int? TotalFemaleStaff { get; set; }
+            [NotMapped]
+            public int? TotalActiveStaff { get; set; }
+
+            [NotMapped]
+            public int? TotalMaleStaff { get; set; }
+
+            [NotMapped]
+            public int? TotalFemaleStaff { get; set; }
         
-        [NotMapped]
-        public int? TotalProbationStaff { get; set; }
+            [NotMapped]
+            public int? TotalProbationStaff { get; set; }
 
-        [NotMapped]
-        public IEnumerable<Staff>? StaffList { get; set; }
+            [NotMapped]
+            public IEnumerable<Staff>? StaffList { get; set; }
 
-        [NotMapped]
-        public int? TranFlag { get; set; }
+            [NotMapped]
+            public int? TranFlag { get; set; }
 
-        [NotMapped]
-        public int? SNO { get; set; }
+            [NotMapped]
+            public int? SNO { get; set; }
 
-        [NotMapped]
-        public string? DepartmentTitle { get; set; }
+            [NotMapped]
+            public string? DepartmentTitle { get; set; }
 
-        [NotMapped]
-        public string? DesignationTitle { get; set; }
+            [NotMapped]
+            public string? DesignationTitle { get; set; }
 
-        [NotMapped]
-        public IEnumerable<Department>? DepartmentList { get; set; }
+            [NotMapped]
+            public IEnumerable<Department>? DepartmentList { get; set; }
 
-        [NotMapped]
-        public IEnumerable<Designation>? DesignationList { get; set; }
+            [NotMapped]
+            public IEnumerable<Designation>? DesignationList { get; set; }
 
-        [NotMapped]
-        public IEnumerable<string>? DocumentTitle { get; set; }
+            [NotMapped]
+            public IEnumerable<string>? DocumentTitle { get; set; }
 
-        [NotMapped]
-        public IEnumerable<IFormFile>? DocFiles { get; set; }
+            [NotMapped]
+            public IEnumerable<IFormFile>? DocFiles { get; set; }
 
-        [NotMapped]
-        public IEnumerable<string>? DocumentPath { get; set; }
+            [NotMapped]
+            public IEnumerable<string>? DocumentPath { get; set; }
 
-        [NotMapped]
-        public IEnumerable<StaffAttachment>? StaffAttachmentList { get; set; }
+            [NotMapped]
+            public IEnumerable<StaffAttachment>? StaffAttachmentList { get; set; }
    
-        [NotMapped]
-        public IEnumerable<StaffLeaveAllocation>? StaffLeaveAllocationslist { get; set; }
+            [NotMapped]
+            public IEnumerable<StaffLeaveAllocation>? StaffLeaveAllocationslist { get; set; }
 
-        [NotMapped]
-        public IEnumerable<int>? ListLeaveTypeId { get; set; }
+            [NotMapped]
+            public IEnumerable<int>? ListLeaveTypeId { get; set; }
 
-        [NotMapped]
-        public IEnumerable<int>? ListAllowedLeaves { get; set; }
+            [NotMapped]
+            public IEnumerable<int>? ListAllowedLeaves { get; set; }
 
-     
+            [NotMapped]
+            public IEnumerable<StaffSalaryComponent>? StaffSalaryComponentList { get; set; }
+
+            [NotMapped]
+            public IEnumerable<int>? ListComponentId { get; set; }
+
+            [NotMapped]
+            public IEnumerable<decimal>? ListComponentPercentageEarning { get; set; }
+            [NotMapped]
+            public IEnumerable<decimal>? ListComponentAmountEarning { get; set; }    
+
+        #endregion
+
         public async Task<Staff> GetStaffStatisticsByCompanyId(int CompanyId)
 		{
 			DbConnection _db = new DbConnection();
@@ -197,8 +212,76 @@ namespace HRHUBAPI.Models
             //return objStaff.StaffLeaveAllocationslist.ToList();
         }
 
-       // Get single record of Staff by company ID
-		public async Task<Staff> GetStaffCompanyId(int CompanyId, HrhubContext hrhubContext)
+        public async Task<List<StaffSalaryComponent>> GetStaffSalaryDetail(int CompanyId, int StaffId, HrhubContext hrhubContext)
+        {
+            DbConnection _db = new DbConnection();
+            try
+            {
+                var queryList = from ci in hrhubContext.ComponentInfos
+                                join ssc in (
+                                    from s in hrhubContext.StaffSalaryComponents
+                                    where s.StaffId == StaffId
+                                    select new
+                                    {
+                                        s.StaffSalaryComponentId,
+                                        s.ComponentId,
+                                        s.PercentageValue,
+                                        s.ComponentAmount
+                                    }
+                                ) on ci.ComponentId equals ssc.ComponentId into joinedData
+                                from result in joinedData.DefaultIfEmpty()
+                                where ci.CompanyId == CompanyId &&
+                                      ci.Status == true &&
+                                      ci.IsDeleted == false &&
+                                      (ci.Category == "Earning" || ci.Category == "Deduction") &&
+                                      (ci.CompanyContribution == null || ci.CompanyContribution == 0)
+                                orderby ci.Category descending, ci.Title
+                                select new StaffSalaryComponent
+                                {
+                                    ComponentId = ci.ComponentId,
+                                    Category = ci.Category,
+                                    ComponentTitle = ci.Title,
+                                    PercentageValue = result.PercentageValue ?? 0,
+                                    ComponentAmount = result.ComponentAmount ?? 0,
+                                };
+
+                return await queryList.ToListAsync();
+
+                //var queryList = from ci in hrhubContext.ComponentInfos
+                //                join ssc in (
+                //                    from s in hrhubContext.StaffSalaryComponents
+                //                    where s.StaffId == CompanyId
+                //                    select new
+                //                    {
+                //                        s.StaffSalaryComponentId,
+                //                        s.ComponentId,
+                //                        s.PercentageValue,
+                //                        s.ComponentAmount
+                //                    }
+                //                ) on ci.ComponentId equals ssc.ComponentId into joinedData
+                //                from result in joinedData.DefaultIfEmpty()
+                //                where ci.CompanyId == StaffId && 
+                //                      ci.Status == true && ci.IsDeleted == false &&
+                //                      (ci.Category == "Earning" || ci.Category == "Deduction") &&
+                //                      (ci.CompanyContribution == null || ci.CompanyContribution == 0)
+                //                orderby ci.Category descending, ci.Title
+                //                select new StaffSalaryComponent
+                //                {
+                //                    StaffSalaryComponentId = result.StaffSalaryComponentId,
+                //                    ComponentId = ci.ComponentId,
+                //                    Category = ci.Category,
+                //                    ComponentTitle = ci.Title,
+                //                    PercentageValue = result.PercentageValue,
+                //                    ComponentAmount = result.ComponentAmount
+                //                };
+
+                //return await queryList.ToListAsync();
+            }
+            catch (Exception e) { throw; }
+        }
+
+        // Get single record of Staff by company ID
+        public async Task<Staff> GetStaffCompanyId(int CompanyId, HrhubContext hrhubContext)
 		{
 			try
 			{
@@ -256,12 +339,16 @@ namespace HRHUBAPI.Models
                         dbResult.TaxPayerNumber = staff.TaxPayerNumber;
                         dbResult.Status = staff.Status;
                         dbResult.JobDescription = staff.JobDescription;
+                        dbResult.JobTitle = staff.JobTitle;
                         dbResult.SnapPath = staff.SnapPath;
                         dbResult.UpdatedBy = staff.UpdatedBy;
                         dbResult.UpdatedOn = DateTime.Now;
                         staff.IsDeleted = false;
 
                         await hrhubContext.SaveChangesAsync();
+
+                        //Staff Salary
+                        StaffSalaryDetailSave(staff, hrhubContext);
 
                         //Staff Leave Details
                         StaffLeaveAllocationsDetailSave(staff, hrhubContext);
@@ -281,6 +368,9 @@ namespace HRHUBAPI.Models
                         hrhubContext.Staff.Add(staff);
                         await hrhubContext.SaveChangesAsync();
 
+                        //Staff Salary
+                        StaffSalaryDetailSave(staff, hrhubContext);
+
                         //Staff Leave Details
                         StaffLeaveAllocationsDetailSave(staff, hrhubContext);
                         
@@ -298,6 +388,42 @@ namespace HRHUBAPI.Models
                     throw;
                 }
             }
+        }
+
+        private bool StaffSalaryDetailSave(Staff objStaff, HrhubContext hrhubContext)
+        {
+            try
+            {
+                var result = hrhubContext.StaffSalaryComponents.Where(x => x.StaffId == objStaff.StaffId).ToList();
+                if (result != null && result.Count > 0)
+                {
+                    hrhubContext.StaffSalaryComponents.RemoveRange(result);
+                    hrhubContext.SaveChanges();
+                }
+
+                List<StaffSalaryComponent> ListStaffSalaryComponents = new List<StaffSalaryComponent>();
+                int i = 0;
+                
+                foreach (var item in objStaff.ListComponentAmountEarning)
+                {
+                    if (item != null && item > 0)
+                    {
+                        StaffSalaryComponent staffSalaryComponent = new StaffSalaryComponent();
+                        staffSalaryComponent.StaffId = objStaff.StaffId;
+                        staffSalaryComponent.ComponentId = objStaff.ListComponentId.ToArray()[i];
+                        staffSalaryComponent.ComponentAmount = item;
+                        staffSalaryComponent.PercentageValue = objStaff.ListComponentPercentageEarning.ToArray()[i];
+
+                        ListStaffSalaryComponents.Add(staffSalaryComponent);
+                    }
+                    i++;
+                }
+                hrhubContext.AddRange(ListStaffSalaryComponents);
+                hrhubContext.SaveChanges();
+                return true;
+
+            }
+            catch (Exception ex) { throw; }
         }
 
         private bool StaffLeaveAllocationsDetailSave(Staff objStaff, HrhubContext _context)
@@ -338,6 +464,7 @@ namespace HRHUBAPI.Models
             }
             catch (Exception ex) { throw; }
         }
+
         private bool DocumentAttachmentDetailSave(Staff objstaff, HrhubContext _Context)
         {
             try

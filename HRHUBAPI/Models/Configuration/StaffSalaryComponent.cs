@@ -8,6 +8,13 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public int? TranFlag { get; set; }
 
+        [NotMapped]
+        public string? Category { get; set; }
+
+        [NotMapped]
+        public string? ComponentTitle { get; set; }    
+
+
         public async Task<List<StaffSalaryComponent>> GetSalaryComponent(int CompanyId, HrhubContext hrhubContext)
         {
             try
