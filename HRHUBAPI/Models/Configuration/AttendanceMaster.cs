@@ -249,6 +249,7 @@ namespace HRHUBAPI.Models
 						checkAttendenceInfo.UpdatedBy = ObjAttendanceMaster.CreatedBy;
 						checkAttendenceInfo.LastPunchOut = ObjAttendanceMaster.LastPunchOut;
 						checkAttendenceInfo.TotalWorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, checkAttendenceInfo.FirstPunchIn);
+						checkAttendenceInfo.LateMinutes = Convert.ToInt32(checkAttendenceInfo.TotalDefinedMinutes - checkAttendenceInfo.TotalWorkingMinutes);
 
 						await _context.SaveChangesAsync();
 
@@ -282,7 +283,8 @@ namespace HRHUBAPI.Models
 							objdetail.UpdatedBy = ObjAttendanceMaster.CreatedBy;
 							objdetail.CreatedBy = ObjAttendanceMaster.CreatedBy;
 							objdetail.IsDeleted = false;
-							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);
+							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);						
+
 							_context.AttendanceDetails.Add(objdetail);
 							await _context.SaveChangesAsync();
 

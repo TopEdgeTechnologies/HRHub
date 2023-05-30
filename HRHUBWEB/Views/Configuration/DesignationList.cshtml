@@ -124,9 +124,8 @@
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
-                                                   
-                                                    <a onclick="editrecord(@item.DesignationId)" class="action-btns1 btn-xs" data-toggle="tooltip" title="Edit"  >
-                                                        <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                    <a onclick="editrecord(@item.DesignationId)" class="action-btns1">
+                                                        <i class="feather feather-edit primary text-primary mt-1" data-bs-toggle="tooltip" title="Edit"></i>
                                                     </a>
                                                  
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
