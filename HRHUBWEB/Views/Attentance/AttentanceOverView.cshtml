@@ -20,13 +20,27 @@
 		previousTenYears[currentYear - 1 - i] = i;
 	}
 }
+<style>
 
+	.rotate {
+  animation: rotation 4s infinite linear;
+}
+
+@@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+</style>
 
 <!-- Row -->
-<div class="hrattview-buttons">
+@*<div class="hrattview-buttons">
 	<a asp-action="AttentanceOverView" asp-controller="Attentance" class="active ms-5">Attendance Overview</a>
 	<a asp-action="AttentanceByUser" asp-controller="Attentance" class="">Attendance By User</a>
-</div>
+</div>*@
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
@@ -120,27 +134,27 @@
 					</div>
 					<div class="col-md-2">
 						<div class="form-group mt-5">
-
-							<button class="btn btn-primary" id="searchbtn"> <i class="si si-magnifier"></i> Search </button>
-
-
-							@*<a id="searchbtn" class="btn btn-primary"><i class="fe fe-search">Search</i></a>*@
+							@*<i class="fe fe-refresh-ccw rotation" id="spinner"></i>*@
+							<button class="btn btn-primary" id="searchbtn"> <i id="loadinging"  class="si si-magnifier"></i>    Search  </button>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="card-body">
-				
+				@*<div class="text-center d-none" id="loader">
+					<img src="~/images/loading.gif" alt="Loading..." class="img-fluid img-lg" />
+                   
+				</div>*@
 				<div class="table-responsive hr-attlist">
 					<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-attendance">
 						
 						
-						<thead>
-							<tr></tr>
+						@*<thead>
+					
 						</thead>
 						<tbody>
 							
-						</tbody>
+						</tbody>*@
 						
 						
 						
@@ -158,26 +172,12 @@
 
 
 		$(document).ready(function () {
-
-
-
-
+			//$('#loader').show();
 			$("#IdEmployee,#monthId,#yearId,#IdDepartment").select2();
 
-
-
-			//$('#hr-attendance').DataTable();
-
-
-
-			//$("#IdEmployee").change(function () {
-			//	var table = $("#hr-attendance").DataTable();
-			//	table.clear().draw();
-
-
-			//});
-
 			$('#searchbtn').click(function () {
+				
+
 				
 				LoadAttendance();
 				
@@ -189,10 +189,17 @@
 
 
 
-		function LoadAttendance() {
+		function LoadAttendance() {			
+
+			$("#loadinging").removeClass("si");
+			$("#loadinging").removeClass("si-magnifier");
+
+			$("#loadinging").addClass("fe fe-refresh-ccw rotation");
+			
 
 			
 
+		
 			var obj = {
 				Staffid: $("#IdEmployee").val(),
 				DepartmentId: $("#IdDepartment").val(),
@@ -211,34 +218,53 @@
 				data: obj,
 				success: function (data) {
 
-					
-					var table;
-					if (data != null) {
+						if (data != null) {
+							// Clear the existing table
+							$('#hr-attendance').empty();
 
-						var columns = Object.keys(data[0]);
-					
-						var columnDefs = columns.map(function (column) {
-							return { data: column, title: column };
-						});
+							var columns = Object.keys(data[0]);
 
-						// Move the last two columns to the start
-						var lastTwoColumns = columnDefs.splice(-2);
-						columnDefs = lastTwoColumns.concat(columnDefs);					
+							// Move the last two columns to the start
+							var lastTwoColumns = columns.splice(-2);
+							columns = lastTwoColumns.concat(columns);
 
-							
-						 table = $("#hr-attendance").DataTable({
-							data: data,
-							columns: columnDefs,
-							pageLength: 50
-						});
+
+							var columnHeaders = columns.map(function (column) {
+								return " <th>" + column + "</th>";
+							});
+
+						// Create the table header
+						$("<thead>").appendTo("#hr-attendance");
+						$("<tr>").html(columnHeaders).appendTo("#hr-attendance thead");
+
+						// Apply CSS styles to the table header
+						$("#hr-attendance thead th").css("font-size", "16px");
+							// Iterate over the data and create table rows
+							$.each(data, function (index, item) {
+								var rowData = columns.map(function (column) {
+									return "<td>" + item[column] + "</td>";
+								});
+								$("<tr>").html(rowData).appendTo("#hr-attendance");
+							});
+						}
+
+
+
+					$("#loadinging").addClass("si si-magnifier");
+
+					// Stop the interval after 3 seconds
+					setTimeout(function () {
+						$("#loadinging").removeClass("fe fe-refresh-ccw rotation");
+
+						clearInterval();
+					}, 2000);
+
 
 						
-						
-					}
-
-
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
+					$("#loadinging").addClass("si si-magnifier");
+					$("#loadinging").removeClass("fe fe-refresh-ccw rotation");
 					console.log(textStatus, errorThrown);
 				}
 			});

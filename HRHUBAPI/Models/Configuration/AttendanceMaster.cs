@@ -142,9 +142,33 @@ namespace HRHUBAPI.Models
 		}
 
 
+        // Get Attendence Over View List From and To Date Wise
+        public async Task<List<dynamic>> GetAttendanceLeaveWiseList(int StaffId, int DepartmentId, string datefrom, string dateTo, HrhubContext _context)
+        {
 
-		// Get Attendence date vise
-		public async Task<List<AttendanceMaster>> GetAttendancedatevise(int CompanyId,int DepartmentId, string Attendencedate,  HrhubContext _context)
+
+
+
+            try
+            {
+                string query = "EXEC dbo.sp_getAttendanceMonthlyReport " + datefrom + "," + dateTo + "," + DepartmentId + "," + StaffId + " ";
+                return _db.ReturnDataTable(query).ToDynamicList();
+
+
+
+
+
+            }
+            catch { throw; }
+
+
+        }
+
+
+
+
+        // Get Attendence date vise
+        public async Task<List<AttendanceMaster>> GetAttendancedatevise(int CompanyId,int DepartmentId, string Attendencedate,  HrhubContext _context)
 		{
 			List<AttendanceMaster> lis = new List<AttendanceMaster>();
 			

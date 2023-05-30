@@ -243,14 +243,11 @@ namespace HRHUBWEB.Controllers
 			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
 			ViewBag.ListDepartment = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
 
-
-
-
 			return View();
 		}
 
 
-		//Attendance Over View List Company Wise
+		//Attendance Over View List Company Wise filter 
 		public async Task<ActionResult<JsonObject>> AttendanceOverViewListCompanyWise(int StaffId, int DepartmentId, int monthId, int yearId)
 		{
 
@@ -281,7 +278,40 @@ namespace HRHUBWEB.Controllers
 
 		}
 
-		public async Task<IActionResult> AttentanceByUser(string data = "")
+
+        //Attendance Leave Wise List filter
+        public async Task<ActionResult<JsonObject>> AttendanceLeaveWiseList(int StaffId, int DepartmentId, string datefrom, string dateTo)
+        {
+
+            var result = await _APIHelper.CallApiAsyncGet<IEnumerable<dynamic>>($"api/Attendance/StaffAttendanceLeaveWiseList{StaffId}/{DepartmentId}/{datefrom}/{dateTo}", HttpMethod.Get);
+
+            if (result != null)
+            {
+                return Json(result);
+
+            }
+
+            else
+            {
+                return Json(new
+
+                {
+                    Success = false,
+                    Message = "Error occur"
+
+                }
+                );
+
+            }
+
+
+
+
+
+        }
+
+
+        public async Task<IActionResult> AttentanceByUser(string data = "")
 		{
 
 
@@ -299,6 +329,9 @@ namespace HRHUBWEB.Controllers
 
 	    public async Task<IActionResult> AttendanceView(string data = "")
 		{
+			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+			ViewBag.ListDepartment = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+
 			return View();
 		}
 		public async Task<IActionResult> OverviewCalendar(string data = "")

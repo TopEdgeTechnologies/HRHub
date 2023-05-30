@@ -32,7 +32,7 @@ namespace HRHUBAPI.Controllers
 
 		}
 
-
+		// filter 
 		[HttpGet("StaffAttendanceOverViewList{StaffId}/{DepartmentId}/{monthId}/{yearId}")]
 		public async Task<ActionResult<List<dynamic>>> StaffAttendanceOverViewList(int StaffId, int DepartmentId, int monthId, int yearId)
 		{
@@ -43,10 +43,20 @@ namespace HRHUBAPI.Controllers
 
 		}
 
+        // filter
+        [HttpGet("StaffAttendanceLeaveWiseList{StaffId}/{DepartmentId}/{datefrom}/{dateTo}")]
+        public async Task<ActionResult<List<dynamic>>> StaffAttendanceLeaveWiseList(int StaffId, int DepartmentId, string datefrom, string dateTo)
+        {
+
+            var Result = await new AttendanceMaster().GetAttendanceLeaveWiseList(StaffId, DepartmentId, datefrom, dateTo, _context);
+
+            return Result;
+
+        }
 
 
 
-		[HttpGet("MarkStaffAttendanceList{CompanyId}/{DepartmentId}/{dateto}")]
+        [HttpGet("MarkStaffAttendanceList{CompanyId}/{DepartmentId}/{dateto}")]
 		public async Task<ActionResult<List<AttendanceMaster>>> MarkStaffAttendanceList(int CompanyId,int DepartmentId, string dateto)
 		{
 
