@@ -315,7 +315,100 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
+        #region LoanTypeInfo
 
+        [HttpGet("GetLoanTypeInfos{CompanyId}")]
+        public async Task<ActionResult<List<LoanType>>> GetLoanTypeInfos(int CompanyId)
+        {
+
+            return await new LoanType().GetLoanType(CompanyId, _context);
+        }
+
+
+        [HttpGet("GetLoanTypeInfoId{id}")]
+        public async Task<ActionResult<LoanType>> GetLoanTypeInfoId(int id)
+        {
+            var result = await new LoanType().GetLoanTypeById(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+        [HttpPost("LoanTypeAddOrUpdate")]
+        public async Task<ActionResult<LoanType>> LoanTypeAddOrUpdate(LoanType obj)
+        {
+
+
+            var result = await new LoanType().PostLoanType(obj, _context);
+            if (result != null && result.LoanTypeId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+
+
+
+
+
+        }
+
+        [HttpDelete("DeleteLoanTypeInfo{id}")]
+        public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int id)
+        {
+            var result = await new LoanType().DeleteLoanTypeInfo(id, _context);
+            if (id > 0)
+                return Ok(new
+                {
+
+                    Success = true,
+                    Message = "Data Delete Successfully!"
+
+
+                });
+
+            return NotFound("Data Not Found!");
+        }
+
+
+        [HttpGet("LoanTypeAlreadyExists{id}/{title}/{CompanyId}")]
+        public async Task<ActionResult<bool>> LoanTypeAlreadyExists(int id, string title, int CompanyId)
+        {
+            var dbResult = await new LoanType().AlreadyExist(id, title, CompanyId, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+
+
+
+
+
+        #endregion
 
         #region Holiday
         [HttpGet("GetHolidaysByCompanyID{CompanyID}")]

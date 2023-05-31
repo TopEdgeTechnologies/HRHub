@@ -3,23 +3,25 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class SalaryComponent
+public partial class ComponentInfo
 {
-    public int SalaryComponentId { get; set; }
+    public int ComponentId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public int? FixedComponentId { get; set; }
+    public int? ComponentGroupId { get; set; }
 
     public string? Title { get; set; }
 
-    public string? Category { get; set; }
-
-    public string? ContributionMethod { get; set; }
-
-    public decimal? StaffContribution { get; set; }
+    public string? CalculationMethod { get; set; }
 
     public decimal? CompanyContribution { get; set; }
+
+    public string? Category { get; set; }
+
+    public string? Type { get; set; }
+
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

@@ -13,11 +13,5 @@ public partial class StaffSalarySetting
 
     public bool? IsOverTimeApplicable { get; set; }
 
-    public int? SalaryCategoryId { get; set; }
-
-    public string? PaysOnLastWorkingDayOfMonth { get; set; }
-
     public string? SalaryFrequency { get; set; }
-
-    public string? PaysOn { get; set; }
 }

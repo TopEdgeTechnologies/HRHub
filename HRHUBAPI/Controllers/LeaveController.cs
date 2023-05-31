@@ -245,7 +245,7 @@ namespace HRHUBAPI.Controllers
             return await new Leave().GetLeaveApprovalSetting(CompanyId, _context);
         }
 
-        // search data Candidate by Name , Designation and ExperienceId
+        // search leave by LeaveType , LeaveStatus and Date
 
         [HttpGet("SearchAllLeaves{CompanyId}/{StaffId}/{LeaveTypeId}/{LeaveStatusId}/{StartDate}/{EndDate}")]
         public async Task<ActionResult<List<Leave>>> SearchAllLeaves(int CompanyId, int StaffId,int LeaveTypeId, int LeaveStatusId, DateTime StartDate, DateTime EndDate)
@@ -254,7 +254,7 @@ namespace HRHUBAPI.Controllers
             if (result != null)
                 return Ok(result);
 
-            return NotFound(); // where clause lgyae hen na where me is me data ka to data ni aye ga na..
+            return NotFound(); 
 
 
         }

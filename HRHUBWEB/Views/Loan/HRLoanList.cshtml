@@ -1,0 +1,643 @@
+﻿@model HRHUBAPI.Models.LoanApplication
+
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
+        background-color: #3366FF !important;
+        color: white !important
+    }
+
+</style>
+<!-- Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Loan Detail</h4>
+                <div class="card-options">
+                    <div class="btn-list">
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="IdFilters">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @using (@Html.BeginForm("SearchList", "Loan", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+                            {
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Select Staff:</label>
+                                            <select id="StaffId" name="StaffId" class="form-control" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                                                <option value="">Select Staff</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Select Loan Type:</label>
+                                            <select id="LoanTypeId" name="LoanTypeId" class="form-control" asp-items="@(new SelectList(Model.ListLoanTypes,"LoanTypeId" ,"Title"))">
+                                                <option value="">Select Loan Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                            <label class="form-label">Select Loan Status:</label>
+                                            <select id="LoanStatusId" name="LoanStatusId" class="form-control" asp-items="@(new SelectList(Model.ListLoanStatus,"LoanStatusId" ,"Title"))">
+                                                <option value="">Select Loan Status</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-label">Date From</label>
+                                            <input type="date" id="ApplicationDateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-2">
+                                        <div class="form-group">
+                                            <label class="form-label">Date To</label>
+                                            <input type="date" id="ApplicationDateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-2">
+                                        <div class="form-group mt-5">
+                                            <button type="button" onclick="SearchLoan()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                            <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0 w-5">Sr.#</th>
+                                <th class="border-bottom-0 w-5">Staff</th>
+                                <th class="border-bottom-0">Applied Date</th>
+                                <th class="border-bottom-0" >Loan</th>
+                                <th class="border-bottom-0" title="Installment Per Month">IMP</th>
+                                <th class="border-bottom-0">Reason</th>
+                                <th class="border-bottom-0">Status</th>
+                                <th class="border-bottom-0">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 1;
+                                foreach (var item in Model.ListLoanData)
+                                {
+
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>
+
+                                            <div class="d-flex">
+                                                <div class="table_img brround bg-light me-3">
+                                                    <img src="@item.StaffSnap" alt="img" class="">
+                                                </div>
+                                                <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                    <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId"><h6 class="mb-0 fs-13 font-weight-semibold">@item.StaffRegistrationNo - @item.StaffName</h6></a>
+                                                    <div class="clearfix"></div>
+                                                    <small class="text-muted">@item.Designation</small>
+                                                </div>
+                                            </div>
+
+
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="me-3 d-block">
+                                                    <span class="mb-0 fs-15 ">@item.LoanTypeTitle</span>
+                                                    <div class="clearfix"></div>
+                                                    <small class="text-muted"> @item.LoanApplicationDate</small>
+                                                </div>
+                                            </div>
+
+
+                                        </td>
+                                        <td>@Convert.ToDecimal(item.Amount).ToString("N2")</td>
+                                        <td>@Convert.ToDecimal(item.InstallmentPerMonth).ToString("N2")</td>
+                                        <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@item.Reason</td>
+
+
+                                        @if (item.LoanStatusId == 1) // Approved
+                                        {
+                                            <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
+
+                                        }
+                                        else if (item.LoanStatusId == 2) // Rejected
+                                        {
+                                            <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
+
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
+
+                                        }
+
+                                        <td class="text-start d-flex">
+                                            <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,1)" class="action-btns1" >
+                                                <i class="feather feather-check text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve"></i>
+                                            </a>
+                                            <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,2)" class="action-btns1" >
+                                                <i class="feather feather-x text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected"></i>
+                                            </a>
+                                            @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
+                                            {
+                                                <a href="#" onclick="showforwardloanmodel(@item.LoanApplicationId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
+                                                    <i class="text-warning fe fe-arrow-right-circle mt-1"></i>
+                                                </a>
+                                                <a asp-action="LoanDelete" asp-route-id="@item.LoanApplicationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                </a>
+                                            }
+                                            <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="action-btns1">
+                                                <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                            </a>
+
+
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row-->
+<!-- Add Loan Approval Modal -->
+<div class="modal fade" id="loanapprovalmodal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Loan Process</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <input type="hidden" id="LoanApplicationID" />
+            <input type="hidden" id="LoanStatusID" />
+            <div class="modal-body">
+                <div class="form-group" id="div_Date">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Payment Date</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="date" id="PaymentDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Remarks</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input id="Remarks" class="form-control" type="text" placeholder="Enter Remarks">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                <input type="button" value="submit" id="btnsave" onclick="postdata()" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Report Modal  -->
+<!--My Leave FOrward Modal -->
+@using (@Html.BeginForm("ForwardLoanToStaff", "Leave", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+    <div class="modal fade" id="loanforwardmodal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Forward Loan Approval Process</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <input type="hidden" asp-for="LoanApplicationId" />
+                <div class="modal-body">
+
+                    <div class="p-0 mt-3">
+                        <div class="form-group">
+                            <label class="form-label">Forward to Staff:</label>
+                            <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                    <input type="submit" value="submit" id="btnsave" onclick="forwardloan()" class="btn btn-primary" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- End Report Modal  -->
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+            $('#myTable').DataTable();
+            $('#LoanStatusId').select2();
+            $('#LoanTypeId').select2();
+            $('#StaffId').select2();
+            // Show Filters controls
+
+            $("#IdFilters").hide();
+            $('#btn_Filter').click(function () {
+
+                $("#IdFilters").toggle(1000);
+            });
+
+            ////////////////////////////////////
+
+
+            $("#ForwardToStaffID").select2({
+                placeholder: "Select Item",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+        })
+
+
+
+
+        function showloanApprovalmodel(loanapplicationid, approvalstatusid) {
+            debugger;
+            $("#Remarks").val('')
+            $("#LoanApplicationID").val(loanapplicationid);
+            $("#LoanStatusID").val(approvalstatusid);
+            $("#Remarks").css("border-color", "#ddd");
+            var currentRow = $('#hr-leaves tbody').closest('tr');
+            var col1 = currentRow.find("td div.d-flex div h6.staff").text();
+            $("#div_Date").attr("hidden", false);
+            if (approvalstatusid == 2) {
+                $("#div_Date").attr("hidden", true);
+            }
+            $("#loanapprovalmodal").modal('show');
+
+        }
+
+
+        function showforwardloanmodel(loanapplicationid) {
+            debugger;
+            $("#Remarks").val('')
+            $("#LoanApplicationId").val(loanapplicationid);
+            $("#loanforwardmodal").modal('show');
+
+        }
+
+        function forwardloan() {
+            debugger
+            var status = true;
+
+            if ($("#ForwardToStaffID").val() == "" || $("#ForwardToStaffID").val() == null) {
+                $.growl.warning({
+                    message: "Please Select Staffs"
+                });
+                $("#ForwardToStaffID").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#ForwardToStaffID").css("border-color", "#ddd");
+            }
+
+
+
+            if (status) {
+                $("#myform").submit();
+            }
+
+
+        }
+
+        function SearchLoan() {
+            debugger;
+            var obj = {
+                StaffId: $("#StaffId").val(),
+                LoanTypeId: $("#LoanTypeId").val(),
+                LoanStatusId: $("#LoanStatusId").val(),
+                ApplicationDateFrom: $("#ApplicationDateFrom").val(),
+                ApplicationDateTo: $("#ApplicationDateTo").val(),
+
+            }
+
+            $.ajax({
+                url: "/Loan/SearchList",
+                type: "POST",
+                async: false,
+                dataType: "json",
+                data: obj,
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        debugger
+                        var table = $('#myTable').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        var listloan = data.listLoans
+                        console.log(listloan);
+                        var action = '';
+                        for (var i = 0; i < listloan.length; i++) {
+
+                            var count = i + 1;
+                            action += '';
+                            action += '<tr><td> ' + count + ' </td>';
+
+                            action += '<td> <div class="d-flex"> <div class="table_img brround bg-light me-3" > <img src="' + listloan[i]["staffSnap"] + '" alt = "img" class="" > </div>';
+                            action += '<div class="me-3 mt-0 mt-sm-2 d-block">';
+                            action += '<a href="/Loan/LoanApproval/' + listloan[i]["loanApplicationId"] + '?staffid=' + listloan[i]["staffId"] + '"  > <h6 class="mb-0 fs-13 font-weight-semibold" > ' + listloan[i]["staffRegistrationNo"] + ' - ' + listloan[i]["staffName"] + '</h6></a >';
+                            action += '<div class="clearfix"></div> <small class="text-muted" > ' + listloan[i]["designation"] + ' </small> </div> </div>  </td>';
+
+
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listloan[i]["loanTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listloan[i]["loanApplicationDate"] + '</small></div></div></td>';
+                            action += '<td> ' + listloan[i]["amount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
+                            action += '<td> ' + listloan[i]["installmentPerMonth"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
+                            action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listloan[i]["reason"] + '</td>';
+
+                            if (listloan[i]["loanStatusId"] == 1) {
+                                action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
+                            }
+                            else if (listloan[i]["loanStatusId"] == 2) {
+                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+                                action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
+
+                            }
+                            else {
+                                action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
+                            }
+
+                            action += '<td class="text-start d-flex">';
+
+                            action += '<a href="#" onclick="showloanApprovalmodel(' + listloan[i]["loanApplicationId"] + ',1)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">';
+                            action += '<i class="feather feather-check text-success mt-1"></i></a>';
+
+
+                            action += '<a href="#" onclick="showloanApprovalmodel(' + listloan[i]["loanApplicationId"] + ',2)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">';
+                            action += '<i class="feather feather-x text-danger mt-1"></i></a>';
+
+
+                            if (listloan[i]["loanStatusId"] != 1 && listloan[i]["loanStatusId"] != 2) {
+                                action += '<a href="#" onclick="showforwardloanmodel(' + listloan[i]["loanApplicationId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
+                                action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
+
+                                action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Loan/LoanDelete/' + listloan[i]["loanApplicationId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
+                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                            }
+
+
+                            action += '<a href="/Loan/LoanApproval/' + listloan[i]["loanApplicationId"] + '?staffid=' + listloan[i]["staffId"] + '"  class="action-btns1">';
+                            action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
+
+
+                        }
+
+
+                        $('#myTable tbody').html(action);
+
+
+
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+
+
+
+
+        }
+
+        function postdata() {
+            debugger
+
+            if ($("#Remarks").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Remarks"
+                });
+                $("#Remarks").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Remarks").css("border-color", "#ddd");
+            }
+
+            if ($("#LoanStatusID").val() == 1 && $("#PaymentDate").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Payment Date"
+                });
+                $("#PaymentDate").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#PaymentDate").css("border-color", "#ddd");
+            }
+
+            var Data = { id: $("#LoanApplicationID").val(), loanstatusid: $("#LoanStatusID").val(), remarks: $("#Remarks").val(), paymentdate: $("#PaymentDate").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Loan/SaveLoanApprovalData",
+                type: "Post",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRLoanList", "Loan")';
+                            window.location.href = url;
+
+                        }
+                        else {
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRLoanList", "Loan")';
+                            window.location.href = url;
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function ViewLeave(leaveid) {
+            debugger
+
+
+            var Data = { id: leaveid }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/ViewLeaveDetail",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $('#LeaveType').text(data[0].leaveTypeTitle);
+                        if (data[0].leaveStartDate == data[0].leaveEndDate) {
+                            $('#DateRange').text(data[0].leaveStartDate);  //formatDate(new Date(data[0].leaveStartDate))
+                        }
+                        else {
+                            $('#DateRange').text(data[0].leaveStartDate + " - " + data[0].leaveEndDate);
+                        }
+
+                        $('#SelectedDays').text(data[0].days);
+                        $('#LeaveSubject').text(data[0].leaveSubject);
+                        $('#AppliedOn').text(data[0].leaveAppliedOnDate);
+
+                        $("#Application").summernote("code", data[0].applicationHtml);
+
+
+
+                        $("#leaveapplictionmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        //function DateRangeinDays(leavestartdate, leaveenddate) {
+        //    if (leavestartdate != "" && leaveenddate != "") {
+
+        //        var startdate = new Date(leavestartdate);
+        //        var enddate = new Date(leaveenddate);
+
+        //        // end - start returns difference in milliseconds
+        //        var diff = new Date(enddate - startdate);
+
+        //        // get days
+        //        var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
+
+        //        $("#SelectedDays").text(days);
+        //    }
+        //}
+
+
+
+        function formatDate(date) {
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            ];
+
+
+            var d = new Date(date),
+                month = '' + (d.getMonth()),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+
+            return [day, monthNames[parseInt(month)], year].join('-');
+        }
+
+
+    </script>
+
+}

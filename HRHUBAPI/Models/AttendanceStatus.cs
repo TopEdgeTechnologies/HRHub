@@ -24,4 +24,6 @@ public partial class AttendanceStatus
     public DateTime? UpdatedOn { get; set; }
 
     public string? CssClass { get; set; }
+
+    public string? IconClass { get; set; }
 }

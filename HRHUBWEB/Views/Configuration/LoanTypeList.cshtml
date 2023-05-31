@@ -1,21 +1,21 @@
-﻿@model HRHUBAPI.Models.LeaveType
+﻿@model HRHUBAPI.Models.LoanType
 
 
 
 
 
-<!--Add LeaveType Modal -->
-@using (@Html.BeginForm("LeaveTypeCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+<!--Add LoanType Modal -->
+@using (@Html.BeginForm("LoanTypeCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
     <input type="hidden" asp-for="CompanyId" />
-    <input type="hidden" asp-for="LeaveTypeId" />
+    <input type="hidden" asp-for="LoanTypeId" />
 
-    <div class="modal fade" id="addleavetypemodal">
+    <div class="modal fade" id="addLoanTypemodal">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Leave Type</h5>
+                    <h5 class="modal-title">Add Loan Type</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -24,10 +24,6 @@
                     <div class="form-group">
                         <label class="form-label">Title</label>
                         <input asp-for="Title" class="form-control" type="text" placeholder="Enter Title">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Leave Count</label>
-                        <input asp-for="NoOfLeaves" class="form-control" type="number" placeholder="Enter Leave Count">
                     </div>
                     <div class="form-group">
 
@@ -39,11 +35,9 @@
 
                     </div>
                     <div class="form-group">
-
-
                         <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="IsNonPaid" class="custom-control-input">
-                            <span class="custom-control-label">Is Non-Paid</span>
+                            <input type="checkbox" asp-for="IsNeedApproval" class="custom-control-input">
+                            <span class="custom-control-label">Is Need Approval</span>
                         </label>
 
                     </div>
@@ -60,7 +54,7 @@
     </div>
 
 }
-<!-- End Add LeaveType Modal  -->
+<!-- End Add LoanType Modal  -->
 <!-- Row -->
 <div class="row row-sm mt-4">
 
@@ -74,18 +68,18 @@
                     <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
                         <div class="btn-list">
 
-                            @if (Convert.ToBoolean(ViewBag.IsNew))
-                            {
+                            @* @if (Convert.ToBoolean(ViewBag.IsNew))
+                            {*@
 
-                                <a onclick="addnewleavetype()" class="btn btn-primary me-3">Add Leave Type</a>
+                            <a onclick="addnewLoanType()" class="btn btn-primary me-3">Add Loan Type</a>
 
-                            }
-                            @*  <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
-                            <i class="feather feather-mail"></i>
+                            @*         }*@
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
+                                <i class="feather feather-mail"></i>
                             </button>
                             <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact" fdprocessedid="8etyje">
-                            <i class="feather feather-phone-call"></i>
-                            </button>*@
+                                <i class="feather feather-phone-call"></i>
+                            </button>
                             <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info" fdprocessedid="32j8uv">
                                 <i class="feather feather-info"></i>
                             </button>
@@ -96,7 +90,7 @@
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
 
-                <div class="card-options"> <a asp-action="LeaveTypeCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add Leave Type</a> </div>
+                <div class="card-options"> <a asp-action="LoanTypeCreateOrUpdate" asp-controller="Configuration" class="btn btn-primary">Add Leave Type</a> </div>
 
                 }*@
             </div>
@@ -106,9 +100,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Sr.#</th>
-                                <th class="border-bottom-0">LeaveType Title</th>
-                                <th class="border-bottom-0">No. of Leaves</th>
-                                <th class="text-center">Non Paid leave</th>
+                                <th class="border-bottom-0">Loan Type</th>
+                                <th class="text-center">Need Approval</th>
                                 <th class="text-center">Status</th>
                                 <th class="col-md-1">Action</th>
                             </tr>
@@ -117,7 +110,7 @@
 
                             @{
                                 int count = 1;
-                                foreach (var item in Model.ListLeaveTypes)
+                                foreach (var item in Model.ListLoanTypes)
                                 {
                                     <tr>
                                         <td>
@@ -126,17 +119,14 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Title)
                                         </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.NoOfLeaves)
-                                        </td>
 
-                                        @if (item.IsNonPaid == true)
+                                        @if (item.IsNeedApproval == true)
                                         {
-                                            <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
+                                            <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Yes</span></td>
                                         }
                                         else
                                         {
-                                            <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
+                                            <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> No</span></td>
 
                                         }
 
@@ -168,13 +158,13 @@
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
 
-                                                        <a href="#" onclick="editrecord(@item.LeaveTypeId)" class="action-btns1 btn-xs">
-                                                            <i class="feather feather-edit primary text-primary mt-1" data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title=""></i>
+                                                        <a href="#" onclick="editrecord(@item.LoanTypeId)" class="action-btns1 btn-xs ">
+                                                            <i class="feather feather-edit primary text-primary  mt-1" data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title=""></i>
                                                         </a>
 
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                     {
-                                                        <a href="#" onclick="confirmation(@item.LeaveTypeId)" >
+                                                        <a href="#" onclick="confirmation(@item.LoanTypeId)" class="action-btns1" >
                                                             <i class="feather feather-trash-2 text-danger mt-1" data-bs-toggle="tooltip" data-original-title="Delete" data-bs-original-title=""></i>
                                                         </a>
                                                     }
@@ -257,23 +247,11 @@
                 status = false;
                 return false;
             }
-            else if ($("#NoOfLeaves").val() == "0" || $("#NoOfLeaves").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Leave Count"
-                });
-                $("#NoOfLeaves").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#NoOfLeaves").css("border-color", "#ddd");
-                $("#Title").css("border-color", "#ddd");
-            }
-            var Data = { id: $("#LeaveTypeId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            var Data = { id: $("#LoanTypeId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/Configuration/LeaveTypeAlreadyExists",
+                url: "/Configuration/LoanTypeAlreadyExists",
                 type: "GET",
                 data: Data,
                 success: function (data) {
@@ -289,7 +267,7 @@
                             status = false;
                         }
                         else {
-                            $("#addleavetypemodal").modal('hide');
+                            $("#addLoanTypemodal").modal('hide');
                         }
                     }
                 },
@@ -335,25 +313,24 @@
         }
         function editrecord(id) {
             debugger;
-            addnewleavetype();
+            addnewLoanType();
             var Data = { id: id }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/Configuration/GetLeaveTypeById",
+                url: "/Configuration/GetLoanTypeById",
                 type: "GET",
                 data: Data,
                 success: function (data) {
                     if (data != "") {
                         debugger
 
-                        $("#LeaveTypeId").val(data.leaveTypeId);
+                        $("#LoanTypeId").val(data.loanTypeId);
                         $("#Title").val(data.title);
-                        $("#NoOfLeaves").val(data.noOfLeaves);
 
                         $("#Status").prop('checked', data.status)
-                        $("#IsNonPaid").prop('checked', data.isNonPaid)
-                        $("#addleavetypemodal").modal('show');
+                        $("#IsNeedApproval").prop('checked', data.isNeedApproval)
+                        $("#addLoanTypemodal").modal('show');
                     }
                 },
                 error: function () {
@@ -386,7 +363,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
 
-                    var url = "@Url.Action("LeaveTypeDelete", "Configuration")/" + id; // replace with the desired action and controller names
+                    var url = "@Url.Action("LoanTypeDelete", "Configuration")/" + id; // replace with the desired action and controller names
                     window.location.href = url;
                 }
                 else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -401,18 +378,16 @@
 
 
 
-        function addnewleavetype() {
+        function addnewLoanType() {
 
 
-            $("#LeaveTypeId").val(0)
+            $("#LoanTypeId").val(0)
             $("#Title").val('')
-            $("#NoOfLeaves").val('')
             $("#Status").prop('checked', false)
-            $("#IsNonPaid").prop('checked', false)
-            $("#NoOfLeaves").css("border-color", "#ddd");
+            $("#IsNeedApproval").prop('checked', false)
             $("#Title").css("border-color", "#ddd");
 
-            $("#addleavetypemodal").modal('show');
+            $("#addLoanTypemodal").modal('show');
 
         }
 

@@ -3,17 +3,21 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class Designation
+public partial class SalaryComponent1
 {
-    public int DesignationId { get; set; }
+    public int SalaryComponentId { get; set; }
+
+    public int? CompanyId { get; set; }
 
     public string? Title { get; set; }
 
-    public bool Status { get; set; }
+    public string? Category { get; set; }
 
-    public byte[]? Grade { get; set; }
+    public string? CalculationMethod { get; set; }
 
-    public int? Seq { get; set; }
+    public decimal? CalculationValue { get; set; }
+
+    public decimal? CompanyContribution { get; set; }
 
     public bool? IsDeleted { get; set; }
 
@@ -24,6 +28,4 @@ public partial class Designation
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public int? CompanyId { get; set; }
 }
