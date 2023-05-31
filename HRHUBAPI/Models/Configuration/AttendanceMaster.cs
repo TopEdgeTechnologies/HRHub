@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using System.Data;
+using System;
 
 
 namespace HRHUBAPI.Models
@@ -223,8 +224,33 @@ namespace HRHUBAPI.Models
 	 
 
 		}
-		
-		
+
+		// Check Attendence weekend wise and holiday wise
+		private bool CheckAttendanceIN(DateTime? holidaydate, HrhubContext _context)
+		{
+			try
+			{
+				var checkHoliday =_context.Holidays.Any(x => x.HolidayDate == holidaydate);
+				var checkWeek = _context.WeekendRules.Any(x => x.DayName == Convert.ToString(holidaydate.Value.DayOfWeek));
+				if(checkHoliday == true || checkWeek == true)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+
+
+
 		// post Attendence
 
 		public async Task<AttendanceMaster> PostAttendence(AttendanceMaster ObjAttendanceMaster, HrhubContext _context)
@@ -241,8 +267,8 @@ namespace HRHUBAPI.Models
 				try
 				{
 					string msg = "";
-					var checkAttendenceInfo = await _context.AttendanceMasters.FirstOrDefaultAsync(x => x.AttendanceDate == ObjAttendanceMaster.AttendanceDate 
-					&& x.StaffId==ObjAttendanceMaster.StaffId  && x.IsDeleted == false);
+					var checkAttendenceInfo = await _context.AttendanceMasters.FirstOrDefaultAsync(x => x.AttendanceDate == ObjAttendanceMaster.AttendanceDate
+					&& x.StaffId == ObjAttendanceMaster.StaffId && x.IsDeleted == false);
 					if (checkAttendenceInfo != null && checkAttendenceInfo.AttendanceId > 0)
 					{
 						checkAttendenceInfo.UpdatedOn = DateTime.Now;
@@ -255,7 +281,7 @@ namespace HRHUBAPI.Models
 
 
 
-						var detailAttendance=_context.AttendanceDetails.Where(x => x.AttendanceId == checkAttendenceInfo.AttendanceId).OrderByDescending(x => x.AttendanceDetailId).FirstOrDefault();
+						var detailAttendance = _context.AttendanceDetails.Where(x => x.AttendanceId == checkAttendenceInfo.AttendanceId).OrderByDescending(x => x.AttendanceDetailId).FirstOrDefault();
 
 
 
@@ -283,7 +309,7 @@ namespace HRHUBAPI.Models
 							objdetail.UpdatedBy = ObjAttendanceMaster.CreatedBy;
 							objdetail.CreatedBy = ObjAttendanceMaster.CreatedBy;
 							objdetail.IsDeleted = false;
-							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);						
+							detailAttendance.WorkingMinutes = calculteHourstoMinute(ObjAttendanceMaster.LastPunchOut, detailAttendance.TimeIn);
 
 							_context.AttendanceDetails.Add(objdetail);
 							await _context.SaveChangesAsync();
@@ -300,7 +326,7 @@ namespace HRHUBAPI.Models
 					}
 					else
 					{
-
+						if (!CheckAttendanceIN(ObjAttendanceMaster.AttendanceDate, _context)) { return new AttendanceMaster(); }
 
 
 						/// Intial Entry Attendence Master						
@@ -309,7 +335,7 @@ namespace HRHUBAPI.Models
 						ObjAttendanceMaster.LastPunchOut = null;
 
 						ObjAttendanceMaster.IsDeleted = false;
-						ObjAttendanceMaster.TotalDefinedMinutes= calculteHourstoMinute(companyobj.OfficeEndTime, companyobj.OfficeStartTime);
+						ObjAttendanceMaster.TotalDefinedMinutes = calculteHourstoMinute(companyobj.OfficeEndTime, companyobj.OfficeStartTime);
 						_context.AttendanceMasters.Add(ObjAttendanceMaster);
 						await _context.SaveChangesAsync();
 
@@ -322,18 +348,20 @@ namespace HRHUBAPI.Models
 						objdetail.TimeIn = ObjAttendanceMaster.FirstPunchIn;
 						objdetail.TimeOut = null;
 
-						objdetail.IsDeleted = false ;
+						objdetail.IsDeleted = false;
 						objdetail.CreatedBy = ObjAttendanceMaster.CreatedBy;
-						objdetail.CreatedOn= DateTime.Now;
+						objdetail.CreatedOn = DateTime.Now;
 						_context.AttendanceDetails.Add(objdetail);
 						await _context.SaveChangesAsync();
 
 						dbContextTransaction.Commit();
 						return ObjAttendanceMaster;
 
-					}
-					
 				
+					
+				}
+					
+
 				}
 				catch (Exception ex)
 				{

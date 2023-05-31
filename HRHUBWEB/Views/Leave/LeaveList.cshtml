@@ -59,10 +59,10 @@
 
 
                                     }
-                                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-                                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-                                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
+                                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                                    <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                                    <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                                    <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Filter" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
                                 </div>
                             </div>
                         </div>
@@ -209,20 +209,20 @@
                                                         @if (item.LeaveStatusId == 1) // New
                                                         {
                                                             <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
-                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i>
+                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"></i>
                                                             </a>
                                                         }
                                                         <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
                                                         </a>
                                                         @if (item.LeaveStatusId == 1) // New
                                                         {
-                                                            <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                            <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
                                                                 <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                             </a>
                                                         }
                                                         <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                            <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
+                                                            <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Report"></i>
                                                         </a>
                                                     </td>
                                                 </tr>
