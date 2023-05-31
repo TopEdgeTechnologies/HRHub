@@ -159,6 +159,11 @@
 
 
 		$(document).ready(function () {
+
+
+			$('[data-toggle="tooltip"]').tooltip({
+				container: 'body'
+			});
 			//$('#loader').show();
 			$("#IdEmployee,#monthId,#yearId,#IdDepartment").select2();
 
