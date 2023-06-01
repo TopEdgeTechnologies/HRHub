@@ -58,8 +58,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                     <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
                 </div>
             </div>
         </div>
@@ -78,9 +78,9 @@
                     <div class="card-options">
                         <div class="btn-list">
                             <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Component</a>
-                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                            <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                         </div>
                     </div>
                 }
@@ -152,12 +152,12 @@
                                                 <div class="d-flex">
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="action-btns1 btn-xs">
+                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                             <i class="feather feather-edit primary text-primary mt-1 "></i>
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                     {
-                                                        <a href="#" onclick="DeleteConfirmation(@item.ComponentId)" class="action-btns1 btn-xs">
+                                                        <a href="#" onclick="DeleteConfirmation(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                         </a>
                                                     }

@@ -511,7 +511,11 @@ namespace HRHUBAPI.Controllers
         }
 
 
-
+        [HttpGet("GetLoadCalanderEvent{CompanyID}/{month}/{year}")]
+        public async Task<ActionResult<List<Holiday>>> GetLoadCalanderEvent(int CompanyID, int month, int year)
+        {
+            return await new Holiday().LoadCalanderEvent(CompanyID,month,year);
+        }
 
 
 
