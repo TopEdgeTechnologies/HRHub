@@ -218,8 +218,23 @@
 							var columns = Object.keys(data[0]);
 
 							// Move the last two columns to the start
-							var lastTwoColumns = columns.splice(-3);
-							columns = lastTwoColumns.concat(columns);
+							//var lastTwoColumns = columns.splice(-3);
+						//columns = lastTwoColumns.concat(columns); H	A	L	W	P	HD
+
+
+						var columnsToMove = ['Reg#', 'Staff Name', 'H','A','SD'	,'L','W','P','HD']; // Specify the column names to move
+
+							// Move the specified columns to the start
+							var movedColumns = [];
+							var remainingColumns = [];
+							for (var i = 0; i < columns.length; i++) {
+							  if (columnsToMove.includes(columns[i])) {
+							    movedColumns.push(columns[i]);
+							  } else {
+							    remainingColumns.push(columns[i]);
+							  }
+							}
+							columns = movedColumns.concat(remainingColumns);
 
 
 							var columnHeaders = columns.map(function (column) {
