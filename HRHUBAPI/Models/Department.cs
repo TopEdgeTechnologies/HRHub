@@ -11,6 +11,8 @@ public partial class Department
 
     public string? ShortCode { get; set; }
 
+    public int? Seq { get; set; }
+
     public string? LogoAttachment { get; set; }
 
     public bool Status { get; set; }

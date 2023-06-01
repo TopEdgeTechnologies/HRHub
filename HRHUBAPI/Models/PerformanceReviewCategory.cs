@@ -3,17 +3,13 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class PerformanceReview
+public partial class PerformanceReviewCategory
 {
-    public int ReviewFormId { get; set; }
+    public int ReviewCategoryId { get; set; }
 
     public int? CompanyId { get; set; }
 
     public string? Title { get; set; }
 
     public string? Description { get; set; }
-
-    public DateTime? StartDate { get; set; }
-
-    public DateTime? EndDate { get; set; }
 }

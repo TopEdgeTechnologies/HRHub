@@ -17,6 +17,8 @@ public partial class TaxSlabSetting
 
     public decimal? TaxRatePercentage { get; set; }
 
+    public decimal? FixedAmount { get; set; }
+
     public bool IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }

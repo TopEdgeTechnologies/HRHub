@@ -23,301 +23,301 @@ namespace HRHUBAPI.Controllers
 
         #region SalaryMethod
 
-            [HttpGet("GetSalaryMethod")]
-            public async Task<ActionResult<List<SalaryMethod>>> GetSalaryMethod()
-            {
-                return await new SalaryMethod().GetSalaryMethod(_context);
-            }
+        [HttpGet("GetSalaryMethod")]
+        public async Task<ActionResult<List<SalaryMethod>>> GetSalaryMethod()
+        {
+            return await new SalaryMethod().GetSalaryMethod(_context);
+        }
 
-            [HttpGet("GetSalaryMethodById/{Id}")]
-            public async Task<ActionResult<SalaryMethod>> GetSalaryMethodById(int Id)
-            {
-                return await new SalaryMethod().GetSalaryMethodById(Id, _context);
-            }
+        [HttpGet("GetSalaryMethodById/{Id}")]
+        public async Task<ActionResult<SalaryMethod>> GetSalaryMethodById(int Id)
+        {
+            return await new SalaryMethod().GetSalaryMethodById(Id, _context);
+        }
 
-            [HttpPost("PostSalaryMethod")]
-            public async Task<ActionResult<SalaryMethod>> PostSalaryMethod(SalaryMethod salaryMethod)
+        [HttpPost("PostSalaryMethod")]
+        public async Task<ActionResult<SalaryMethod>> PostSalaryMethod(SalaryMethod salaryMethod)
+        {
+            var dbResult = await new SalaryMethod().PostSalaryMethod(salaryMethod, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
             {
-                var dbResult = await new SalaryMethod().PostSalaryMethod(salaryMethod, _context);
-                if (dbResult != null && dbResult.TranFlag == 2)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Updated Successfully"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Inserted Successfully"
-                    });
-                }
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
 
-            [HttpGet("DeleteSalaryMethod/{Id}/{UserId}")]
-            public async Task<ActionResult<bool>> DeleteSalaryMethod(int Id, int UserId)
+        [HttpGet("DeleteSalaryMethod/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteSalaryMethod(int Id, int UserId)
+        {
+            var dbResult = await new SalaryMethod().DeleteSalaryMethod(Id, UserId, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryMethod().DeleteSalaryMethod(Id, UserId, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Deleted Successfully"
-                    });
-                }
-                return NotFound("Data Not Found!");
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
             }
+            return NotFound("Data Not Found!");
+        }
 
-            [HttpGet("SalaryMethodAlreadyExists/{Id}/{Title}")]
-            public async Task<ActionResult<SalaryMethod>> SalaryMethodAlreadyExists(int Id, string Title)
+        [HttpGet("SalaryMethodAlreadyExists/{Id}/{Title}")]
+        public async Task<ActionResult<SalaryMethod>> SalaryMethodAlreadyExists(int Id, string Title)
+        {
+            var dbResult = await new SalaryMethod().AlreadyExists(Id, Title, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryMethod().AlreadyExists(Id, Title, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Record Already Exists"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Data Not Found!"
-                    });
-                }
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #endregion
 
         #region Salary Status
 
-            [HttpGet("GetSalaryStatus")]
-            public async Task<ActionResult<List<SalaryStatus>>> GetSalaryStatus()
-            {
-                return await new SalaryStatus().GetSalaryStatus(_context);
-            }
+        [HttpGet("GetSalaryStatus")]
+        public async Task<ActionResult<List<SalaryStatus>>> GetSalaryStatus()
+        {
+            return await new SalaryStatus().GetSalaryStatus(_context);
+        }
 
-            [HttpGet("GetSalaryStatusById/{Id}")]
-            public async Task<ActionResult<SalaryStatus>> GetSalaryStatusById(int Id)
-            {
-                return await new SalaryStatus().GetSalaryStatusById(Id, _context);
-            }
+        [HttpGet("GetSalaryStatusById/{Id}")]
+        public async Task<ActionResult<SalaryStatus>> GetSalaryStatusById(int Id)
+        {
+            return await new SalaryStatus().GetSalaryStatusById(Id, _context);
+        }
 
-            [HttpPost("PostSalaryStatus")]
-            public async Task<ActionResult<SalaryStatus>> PostSalaryStatus(SalaryStatus SalaryStatus)
+        [HttpPost("PostSalaryStatus")]
+        public async Task<ActionResult<SalaryStatus>> PostSalaryStatus(SalaryStatus SalaryStatus)
+        {
+            var dbResult = await new SalaryStatus().PostSalaryStatus(SalaryStatus, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
             {
-                var dbResult = await new SalaryStatus().PostSalaryStatus(SalaryStatus, _context);
-                if (dbResult != null && dbResult.TranFlag == 2)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Updated Successfully"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Inserted Successfully"
-                    });
-                }
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
 
-            [HttpGet("DeleteSalaryStatus/{Id}/{UserId}")]
-            public async Task<ActionResult<bool>> DeleteSalaryStatus(int Id, int UserId)
+        [HttpGet("DeleteSalaryStatus/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteSalaryStatus(int Id, int UserId)
+        {
+            var dbResult = await new SalaryStatus().DeleteSalaryStatus(Id, UserId, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryStatus().DeleteSalaryStatus(Id, UserId, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Deleted Successfully"
-                    });
-                }
-                return NotFound("Data Not Found!");
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
             }
+            return NotFound("Data Not Found!");
+        }
 
-            [HttpGet("SalaryStatusAlreadyExists/{Id}/{Title}")]
-            public async Task<ActionResult<SalaryStatus>> SalaryStatusAlreadyExists(int Id, string Title)
+        [HttpGet("SalaryStatusAlreadyExists/{Id}/{Title}")]
+        public async Task<ActionResult<SalaryStatus>> SalaryStatusAlreadyExists(int Id, string Title)
+        {
+            var dbResult = await new SalaryStatus().AlreadyExists(Id, Title, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryStatus().AlreadyExists(Id, Title, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Record Already Exists"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Data Not Found!"
-                    });
-                }
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #endregion
 
         #region Salary Status Process
 
-            [HttpGet("GetSalaryStatusProcess")]
-            public async Task<ActionResult<List<SalaryStatusProcess>>> GetSalaryStatusProcess()
-            {
-                return await new SalaryStatusProcess().GetSalaryStatusProcess(_context);
-            }
+        [HttpGet("GetSalaryStatusProcess")]
+        public async Task<ActionResult<List<SalaryStatusProcess>>> GetSalaryStatusProcess()
+        {
+            return await new SalaryStatusProcess().GetSalaryStatusProcess(_context);
+        }
 
-            [HttpGet("GetSalaryStatusProcessById/{Id}")]
-            public async Task<ActionResult<SalaryStatusProcess>> GetSalaryStatusProcessById(int Id)
-            {
-                return await new SalaryStatusProcess().GetSalaryStatusProcessById(Id, _context);
-            }
+        [HttpGet("GetSalaryStatusProcessById/{Id}")]
+        public async Task<ActionResult<SalaryStatusProcess>> GetSalaryStatusProcessById(int Id)
+        {
+            return await new SalaryStatusProcess().GetSalaryStatusProcessById(Id, _context);
+        }
 
-            [HttpPost("PostSalaryStatusProcess")]
-            public async Task<ActionResult<SalaryStatusProcess>> PostSalaryStatusProcess(SalaryStatusProcess SalaryStatusProcess)
+        [HttpPost("PostSalaryStatusProcess")]
+        public async Task<ActionResult<SalaryStatusProcess>> PostSalaryStatusProcess(SalaryStatusProcess SalaryStatusProcess)
+        {
+            var dbResult = await new SalaryStatusProcess().PostSalaryStatusProcess(SalaryStatusProcess, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
             {
-                var dbResult = await new SalaryStatusProcess().PostSalaryStatusProcess(SalaryStatusProcess, _context);
-                if (dbResult != null && dbResult.TranFlag == 2)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Updated Successfully"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Inserted Successfully"
-                    });
-                }
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
 
-            [HttpGet("DeleteSalaryStatusProcess/{Id}/{UserId}")]
-            public async Task<ActionResult<bool>> DeleteSalaryStatusProcess(int Id, int UserId)
+        [HttpGet("DeleteSalaryStatusProcess/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteSalaryStatusProcess(int Id, int UserId)
+        {
+            var dbResult = await new SalaryStatusProcess().DeleteSalaryStatusProcess(Id, UserId, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryStatusProcess().DeleteSalaryStatusProcess(Id, UserId, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Deleted Successfully"
-                    });
-                }
-                return NotFound("Data Not Found!");
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
             }
+            return NotFound("Data Not Found!");
+        }
 
-            [HttpGet("SalaryStatusProcessAlreadyExists/{Id}/{Title}")]
-            public async Task<ActionResult<SalaryStatusProcess>> SalaryStatusProcessAlreadyExists(int Id, DateTime ProcessDate)
+        [HttpGet("SalaryStatusProcessAlreadyExists/{Id}/{Title}")]
+        public async Task<ActionResult<SalaryStatusProcess>> SalaryStatusProcessAlreadyExists(int Id, DateTime ProcessDate)
+        {
+            var dbResult = await new SalaryStatusProcess().AlreadyExists(Id, ProcessDate, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new SalaryStatusProcess().AlreadyExists(Id, ProcessDate, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Record Already Exists"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Data Not Found!"
-                    });
-                }
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #endregion
 
         #region Component Group
 
-            [HttpGet("GetComponentGroup")]
-            public async Task<ActionResult<List<ComponentGroup>>> GetComponentGroup()
-            {
-                return await new ComponentGroup().GetComponentGroup(_context);
-            }
+        [HttpGet("GetComponentGroup")]
+        public async Task<ActionResult<List<ComponentGroup>>> GetComponentGroup()
+        {
+            return await new ComponentGroup().GetComponentGroup(_context);
+        }
 
-            [HttpGet("GetComponentGroupById/{Id}")]
-            public async Task<ActionResult<ComponentGroup>> GetComponentGroupById(int Id)
-            {
-                return await new ComponentGroup().GetComponentGroupById(Id, _context);
-            }
+        [HttpGet("GetComponentGroupById/{Id}")]
+        public async Task<ActionResult<ComponentGroup>> GetComponentGroupById(int Id)
+        {
+            return await new ComponentGroup().GetComponentGroupById(Id, _context);
+        }
 
-            [HttpPost("PostComponentGroup")]
-            public async Task<ActionResult<ComponentGroup>> PostComponentGroup(ComponentGroup ComponentGroup)
+        [HttpPost("PostComponentGroup")]
+        public async Task<ActionResult<ComponentGroup>> PostComponentGroup(ComponentGroup ComponentGroup)
+        {
+            var dbResult = await new ComponentGroup().PostComponentGroup(ComponentGroup, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
             {
-                var dbResult = await new ComponentGroup().PostComponentGroup(ComponentGroup, _context);
-                if (dbResult != null && dbResult.TranFlag == 2)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Updated Successfully"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Inserted Successfully"
-                    });
-                }
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
 
-            [HttpGet("DeleteComponentGroup/{Id}/{UserId}")]
-            public async Task<ActionResult<bool>> DeleteComponentGroup(int Id, int UserId)
+        [HttpGet("DeleteComponentGroup/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteComponentGroup(int Id, int UserId)
+        {
+            var dbResult = await new ComponentGroup().DeleteComponentGroup(Id, UserId, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new ComponentGroup().DeleteComponentGroup(Id, UserId, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Deleted Successfully"
-                    });
-                }
-                return NotFound("Data Not Found!");
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
             }
+            return NotFound("Data Not Found!");
+        }
 
-            [HttpGet("ComponentGroupAlreadyExists/{Id}/{Title}")]
-            public async Task<ActionResult<ComponentGroup>> ComponentGroupAlreadyExists(int Id, string Title)
+        [HttpGet("ComponentGroupAlreadyExists/{Id}/{Title}")]
+        public async Task<ActionResult<ComponentGroup>> ComponentGroupAlreadyExists(int Id, string Title)
+        {
+            var dbResult = await new ComponentGroup().AlreadyExists(Id, Title, _context);
+            if (dbResult == true)
             {
-                var dbResult = await new ComponentGroup().AlreadyExists(Id, Title, _context);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Record Already Exists"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Data Not Found!"
-                    });
-                }
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #endregion
 
@@ -470,7 +470,7 @@ namespace HRHUBAPI.Controllers
         }
 
         #endregion
-        #region StaffLoan
+       
 
         [HttpGet("GetLoanInfos{CompanyId}/{StaffId}")]
         public async Task<ActionResult<List<LoanApplication>>> GetLoanInfos(int CompanyId, int StaffId)
@@ -480,7 +480,7 @@ namespace HRHUBAPI.Controllers
         [HttpGet("GetLoanStatusInfos")]
         public async Task<ActionResult<List<LoanStatus>>> GetLoanStatusInfos()
         {
-            return await new LoanApplication().GetLoanStatus( _context);
+            return await new LoanApplication().GetLoanStatus(_context);
         }
         [HttpGet("GetLoanInfoId{id}")]
         public async Task<ActionResult<Leave>> GetLoanInfoId(int id)
@@ -520,17 +520,23 @@ namespace HRHUBAPI.Controllers
             if (result != null)
                 return Ok(result);
 
-            return NotFound(); 
+            return NotFound();
 
 
         }
         [HttpDelete("DeleteLoanInfo{id}/{UserId}")]
         public async Task<ActionResult<bool>> DeleteLoanInfo(int id, int UserId)
         {
-            var result = await new LoanApplication().DeleteLoanInfo(id, UserId ,_context);
+            var result = await new LoanApplication().DeleteLoanInfo(id, UserId, _context);
             if (id > 0)
                 return Ok(new
                 {
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
+            return NotFound("Data Not Found!");
+        }
+
 
     }
 }
