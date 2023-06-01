@@ -89,12 +89,13 @@
                     <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0 w-5">Sr.#</th>
+                                <th class="border-bottom-0 w-5">#</th>
                                 <th class="border-bottom-0 w-5">Staff</th>
                                 <th class="border-bottom-0">Applied Date</th>
-                                <th class="border-bottom-0" >Loan</th>
+                                <th class="border-bottom-0">Loan</th>
                                 <th class="border-bottom-0" title="Installment Per Month">IMP</th>
-                                <th class="border-bottom-0">Reason</th>
+                                @*<th class="border-bottom-0">Reason</th>*@
+                                @*<th class="border-bottom-0">Loan Detail</th>*@
                                 <th class="border-bottom-0">Status</th>
                                 <th class="border-bottom-0">Actions</th>
                             </tr>
@@ -133,11 +134,28 @@
 
 
                                         </td>
-                                        <td>@Convert.ToDecimal(item.Amount).ToString("N2")</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="me-3 d-block">
+                                                    <span class="mb-0 fs-15 ">@Convert.ToDecimal(item.Amount).ToString("N2")</span>
+                                                    <div class="clearfix"></div>
+                                                    <div class="progress progress-sm d-block mt-2">
+
+                                                        <div class="progress-bar bg-success" style="width:@item.PaidPercentage%" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Paid: @Convert.ToDecimal(item.PaidLoanAmount).ToString("N2")" data-bs-original-title="Paid: @item.PaidLoanAmount">  </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                        
+                                        </td>
                                         <td>@Convert.ToDecimal(item.InstallmentPerMonth).ToString("N2")</td>
-                                        <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@item.Reason</td>
+                                        @*<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@item.Reason</td>*@
+                                        @*<td>
+                                            <div class="progress progress-sm d-block">
 
-
+                                                <div class="progress-bar bg-success" style="width:@item.PaidPercentage%" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Paid: @Convert.ToDecimal(item.PaidLoanAmount).ToString("N2")" data-bs-original-title="Paid: @item.PaidLoanAmount">  </div>
+                                            </div>
+                                        </td>*@
                                         @if (item.LoanStatusId == 1) // Approved
                                         {
                                             <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
@@ -155,19 +173,16 @@
                                         }
 
                                         <td class="text-start d-flex">
-                                            <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,1)" class="action-btns1" >
+                                            <a href="#" onclick="showloanApprovalmodel(this,@item.LoanApplicationId,1)" class="action-btns1">
                                                 <i class="feather feather-check text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
-                                            <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,2)" class="action-btns1" >
+                                            <a href="#" onclick="showloanApprovalmodel(this,@item.LoanApplicationId,2)" class="action-btns1">
                                                 <i class="feather feather-x text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
                                             @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
                                             {
-                                                <a href="#" onclick="showforwardloanmodel(@item.LoanApplicationId)" class="action-btns1" >
+                                                <a href="#" onclick="showforwardloanmodel(this,@item.LoanApplicationId)" class="action-btns1">
                                                     <i class="text-warning fe fe-arrow-right-circle mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
-                                                </a>
-                                                <a asp-action="LoanDelete" asp-route-id="@item.LoanApplicationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="">
-                                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                 </a>
                                             }
                                             <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="action-btns1">
@@ -194,7 +209,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Loan Process</h5>
+                <h5 class="modal-title" id="approvalmodel">Loan Approval</h5>
                 <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -203,6 +218,50 @@
             <input type="hidden" id="LoanStatusID" />
             <div class="modal-body">
                 <div class="form-group" id="div_Date">
+                    @*<div class="row text-center">
+                    <div class="col-xl-3 col-lg-6 col-md-6">
+                    <div class="card plan-card">
+                    <div class="card-block">
+                    <div class="pt-4 pb-4">
+                    <div class="mb-4">
+                    <img id="staffimg" src="" alt="img" class="" width="130px" height="130px">
+                    </div>
+                    <h6 id="staffname" class="text-uppercase font-weight-semibold text-primary">Starter Pack</h6>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-6 col-md-6">
+                    <div class="row">
+                    <div class="col-md-6">
+
+                    <div class="col-md-3">
+                    <label class="form-label mb-0 mt-2">Amount</label>
+                    </div>
+                    <div class="col-md-9">
+                    <div class="input-group">
+                    <input asp-for="Amount" class="form-control" type="number" />
+                    </div>
+                    </div>
+
+                    </div>
+                    <div class="col-md-6">
+                    <div class="form-group">
+                    <label class="form-label">Installment Per Month:</label>
+                    <input asp-for="InstallmentPerMonth" class="form-control" type="number" />
+                    </div>
+                    </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-12">
+                    <div class="form-group">
+                    <label class="form-label">Reason:</label>
+                    <textarea asp-for="Reason" class="form-control" rows="2">Type Reason here...</textarea>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>*@
                     <div class="row">
                         <div class="col-md-3">
                             <label class="form-label mb-0 mt-2">Payment Date</label>
@@ -240,7 +299,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Forward Loan Approval Process</h5>
+                    <h5 class="modal-title" id="forwardprcess">Forward Loan Approval Process</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -334,27 +393,47 @@
 
 
 
-        function showloanApprovalmodel(loanapplicationid, approvalstatusid) {
+        function showloanApprovalmodel(control, loanapplicationid, approvalstatusid) {
             debugger;
             $("#Remarks").val('')
+            $("#PaymentDate").val('')
             $("#LoanApplicationID").val(loanapplicationid);
             $("#LoanStatusID").val(approvalstatusid);
             $("#Remarks").css("border-color", "#ddd");
-            var currentRow = $('#hr-leaves tbody').closest('tr');
-            var col1 = currentRow.find("td div.d-flex div h6.staff").text();
+            var currentRow = $(control).closest('tr');
+            var staffimg = currentRow.find('td:nth-child(2) .table_img img').attr('src');
+            var staffname = currentRow.find('td:nth-child(2) h6').text();
+            var loanamount = currentRow.find('td:nth-child(4)').text();
+            var installmentpermonth = currentRow.find('td:nth-child(5)').text();
+            var reason = currentRow.find('td:nth-child(6)').text();
             $("#div_Date").attr("hidden", false);
             if (approvalstatusid == 2) {
                 $("#div_Date").attr("hidden", true);
             }
+            $("#approvalmodel").text("Loan Approval for " + staffname.split("-")[1])
+
+            $("#staffimg").attr("src", staffimg)
+            $("#staffname").text(staffname)
+            $("#Amount").val(loanamount)
+            $("#InstallmentPerMonth").val(installmentpermonth)
+            $("#Reason").val(reason)
+
             $("#loanapprovalmodal").modal('show');
 
         }
 
 
-        function showforwardloanmodel(loanapplicationid) {
+        function showforwardloanmodel(control, loanapplicationid) {
             debugger;
             $("#Remarks").val('')
             $("#LoanApplicationId").val(loanapplicationid);
+
+            var currentRow = $(control).closest('tr');
+            var staffimg = currentRow.find('td:nth-child(2) .table_img img').attr('src');
+            var staffname = currentRow.find('td:nth-child(2) h6').text();
+
+            $("#forwardprocess").text("Forward Loan Approval Process for " + staffname)
+
             $("#loanforwardmodal").modal('show');
 
         }
@@ -425,9 +504,18 @@
 
 
                             action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listloan[i]["loanTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listloan[i]["loanApplicationDate"] + '</small></div></div></td>';
-                            action += '<td> ' + listloan[i]["amount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
+
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listloan[i]["amount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</h6><div class="clearfix"> </div><div class="progress progress-sm d-block mt-2">  <div class="progress-bar bg-success" style="width:' + listloan[i]["paidPercentage"] + '%" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Paid:' + listloan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + ' " data-bs-original-title="Paid: ' + listloan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '">  </div> </div></div></div></td>';
+                            
+                            
+                            
+                           // action += '<td> ' + listloan[i]["amount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
                             action += '<td> ' + listloan[i]["installmentPerMonth"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
-                            action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listloan[i]["reason"] + '</td>';
+
+
+
+
+                          //  action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listloan[i]["reason"] + '</td>';
 
                             if (listloan[i]["loanStatusId"] == 1) {
                                 action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
@@ -454,9 +542,6 @@
                             if (listloan[i]["loanStatusId"] != 1 && listloan[i]["loanStatusId"] != 2) {
                                 action += '<a href="#" onclick="showforwardloanmodel(' + listloan[i]["loanApplicationId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
                                 action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
-
-                                action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Loan/LoanDelete/' + listloan[i]["loanApplicationId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
                             }
 
 

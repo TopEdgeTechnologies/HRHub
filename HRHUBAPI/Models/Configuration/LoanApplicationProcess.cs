@@ -38,7 +38,7 @@ namespace HRHUBAPI.Models
                                       ApprovedByStaffName = sa.FirstName,
                                       LoanProcessDate = la.ProcessDate == null ? "DD-MMM-YYYY" : Convert.ToDateTime(la.ProcessDate).ToString("dd-MMM-yyyy"),
 
-                                      ApprovedByStaffSnap = string.IsNullOrWhiteSpace(sa.SnapPath) ? "/Images/Avatar.png" : sa.SnapPath.ToString(),
+                                      ApprovedByStaffSnap = string.IsNullOrWhiteSpace(sa.SnapPath) ? "/Images/StaffImageEmpty.jpg" : sa.SnapPath.ToString(),
                                       ApprovedByDesignation = d.Title,
                                       Remarks = la.Remarks,
                                       LoanStatusId = la.LoanStatusId

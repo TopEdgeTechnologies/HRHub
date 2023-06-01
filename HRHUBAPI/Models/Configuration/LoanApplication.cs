@@ -39,6 +39,10 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? Designation { get; set; }
         [NotMapped]
+        public decimal? PaidLoanAmount { get; set; }
+        [NotMapped]
+        public int? PaidPercentage { get; set; }
+        [NotMapped]
         public int[]? ForwardToStaffID { get; set; }
 
         [NotMapped]
@@ -54,43 +58,77 @@ namespace HRHUBAPI.Models
         public IEnumerable<LoanApplication>? ListLoanData { get; set; }
         [NotMapped]
         public IEnumerable<LoanApplication>? ListNewOrPendingleaves { get; set; }
-        public async Task<List<LoanApplication>> GetLoanInfo(int CompanyId,int StaffId, HrhubContext _context)
+        public async Task<List<LoanApplication>> GetLoanInfo(int CompanyId, int StaffId, HrhubContext _context)
         {
             try
             {
+                DbConnection _db = new DbConnection();
 
-                var list = await (from l in _context.LoanApplications
-                                  join lt in _context.LoanTypes on l.LoanTypeId equals lt.LoanTypeId
-                                  join s in _context.Staff on l.StaffId equals s.StaffId
-                                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
-                                  join di in _context.Designations on s.DesignationId equals di.DesignationId
+                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + " ,0 , 0 , '', '' " ;
+                DataTable dt = _db.ReturnDataTable(query);
 
-                                  where l.IsDeleted == false
-                                  && lt.IsDeleted == false
-                                  && s.CompanyId == CompanyId       
-                                  && s.StaffId == StaffId       
-                                  select new LoanApplication()
-                                  {
-                                      LoanApplicationId = l.LoanApplicationId,
-                                      LoanTypeTitle = lt.Title,
-                                      LoanApplicationDate = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
-                                      //LoanPaymentDate = String.IsNullOrWhiteSpace(l.PaymentDate.ToString()) ? DateTime.Now: Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
-                                      Amount = l.Amount,
-                                      NoOfInstallments = l.NoOfInstallments,
-                                      InstallmentPerMonth = l.InstallmentPerMonth,
-                                      Reason = l.Reason,
-                                      LoanStatusId = l.LoanStatusId,
+                var list = dt.AsEnumerable()
+                    .Select(row => new LoanApplication
+                    {
+                        LoanApplicationId = Convert.ToInt32(row["LoanApplicationId"]) ,
+                        LoanTypeTitle = row["Title"].ToString(),
+                        LoanApplicationDate = Convert.ToDateTime(row["ApplicationDate"]).ToString("dd-MMM-yyyy"),
+                        //LoanPaymentDate = String.IsNullOrWhiteSpace(l.PaymentDate.ToString()) ? DateTime.Now: Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
+                        Amount = Convert.ToDecimal(row["Amount"]),
+                        NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]),
+                        InstallmentPerMonth = Convert.ToInt32(row["InstallmentPerMonth"]) ,
+                        Reason = row["Reason"].ToString(),
+                        LoanStatusId = Convert.ToInt32(row["LoanStatusId"]),
 
-                                      StaffId = s.StaffId,
-                                      StaffRegistrationNo = s.RegistrationNo,
-                                      StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/Avatar.png" : s.SnapPath.ToString(),
-                                      StaffName = s.FirstName,
-                                      Department = dep.Title,
-                                      Designation = di.Title
+                        PaidLoanAmount = Convert.ToDecimal(row["PaidLoan"]),
+                        PaidPercentage = Convert.ToInt32(row["PaidLoanPercentage"]),
 
-                                  }).OrderByDescending(x => x.LoanApplicationId).ToListAsync();
+                        StaffId = Convert.ToInt32(row["StaffId"]),
+                        StaffRegistrationNo = row["RegistrationNo"].ToString(),
+                        StaffSnap =  string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/StaffImageEmpty.jpg" : row["SnapPath"].ToString(),
+                        StaffName = row["FirstName"].ToString(),
+                        Department = row["Department"].ToString(),
+                        Designation = row["Designation"].ToString() 
 
+                    }).OrderByDescending(x => x.LoanApplicationId)
+                    .ToList();
                 return list;
+
+
+
+
+                //var list = await (from l in _context.LoanApplications
+                //                  join lt in _context.LoanTypes on l.LoanTypeId equals lt.LoanTypeId
+                //                  join s in _context.Staff on l.StaffId equals s.StaffId
+                //                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                //                  join di in _context.Designations on s.DesignationId equals di.DesignationId
+
+                //                  where l.IsDeleted == false
+                //                  && lt.IsDeleted == false
+                //                  && s.CompanyId == CompanyId       
+                //                  && s.StaffId == StaffId       
+                //                  select new LoanApplication()
+                //                  {
+                //                      LoanApplicationId = l.LoanApplicationId,
+                //                      LoanTypeTitle = lt.Title,
+                //                      LoanApplicationDate = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
+                //                      //LoanPaymentDate = String.IsNullOrWhiteSpace(l.PaymentDate.ToString()) ? DateTime.Now: Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
+                //                      Amount = l.Amount,
+                //                      NoOfInstallments = l.NoOfInstallments,
+                //                      InstallmentPerMonth = l.InstallmentPerMonth,
+                //                      Reason = l.Reason,
+                //                      LoanStatusId = l.LoanStatusId,
+
+                //                      StaffId = s.StaffId,
+                //                      StaffRegistrationNo = s.RegistrationNo,
+                //                      StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath.ToString(),
+                //                      StaffName = s.FirstName,
+                //                      Department = dep.Title,
+                //                      Designation = di.Title
+
+                //                  }).OrderByDescending(x => x.LoanApplicationId).ToListAsync();
+
+                //return list;
 
 
 
@@ -159,42 +197,86 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                var list = await (from l in _context.LoanApplications
-                                  join lt in _context.LoanTypes on l.LoanTypeId equals lt.LoanTypeId
-                                  join s in _context.Staff on l.StaffId equals s.StaffId
-                                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
-                                  join di in _context.Designations on s.DesignationId equals di.DesignationId
 
-                                  where l.IsDeleted == false
-                                  && lt.IsDeleted == false
-                                  && l.LoanTypeId == LoanTypeId
-                                  && l.LoanStatusId == LoanStatusId
-                                  && (l.ApplicationDate >= ApplicationDateFrom && l.ApplicationDate <= ApplicationDateTo)
-                                  && s.CompanyId == CompanyId
-                                  && s.StaffId == StaffId
-                                  select new LoanApplication()
-                                  {
-                                      LoanApplicationId = l.LoanApplicationId,
-                                      LoanTypeTitle = lt.Title,
-                                      LoanApplicationDate = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
-                                      LoanPaymentDate = Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
-                                      Amount = l.Amount,
-                                      NoOfInstallments = l.NoOfInstallments,
-                                      InstallmentPerMonth = l.InstallmentPerMonth,
-                                      Reason = l.Reason,
-                                      LoanStatusId = l.LoanStatusId,
+                DbConnection _db = new DbConnection();
 
-                                      StaffId = s.StaffId,
-                                      StaffRegistrationNo = s.RegistrationNo,
-                                      StaffName = s.FirstName,
-                                      StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/Avatar.png" : s.SnapPath.ToString(),
-                                      Department = dep.Title,
-                                      Designation = di.Title
+                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + "," + LoanTypeId+"," + LoanStatusId + ", '"+ ApplicationDateFrom + "', '" + ApplicationDateTo + "'";
+                DataTable dt = _db.ReturnDataTable(query);
 
-                                  }).ToListAsync();
+                var list = dt.AsEnumerable()
+                    .Select(row => new LoanApplication
+                    {
+                        LoanApplicationId = Convert.ToInt32(row["LoanApplicationId"]),
+                        LoanTypeTitle = row["Title"].ToString(),
+                        LoanApplicationDate = Convert.ToDateTime(row["ApplicationDate"]).ToString("dd-MMM-yyyy"),
+                        //LoanPaymentDate = String.IsNullOrWhiteSpace(l.PaymentDate.ToString()) ? DateTime.Now: Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
+                        Amount = Convert.ToDecimal(row["Amount"]),
+                        NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]),
+                        InstallmentPerMonth = Convert.ToInt32(row["InstallmentPerMonth"]),
+                        Reason = row["Reason"].ToString(),
+                        LoanStatusId = Convert.ToInt32(row["LoanStatusId"]),
+
+                        PaidLoanAmount = Convert.ToDecimal(row["PaidLoan"]),
+                        PaidPercentage = Convert.ToInt32(row["PaidLoanPercentage"]),
+
+                        StaffId = Convert.ToInt32(row["StaffId"]),
+                        StaffRegistrationNo = row["RegistrationNo"].ToString(),
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/StaffImageEmpty.jpg" : row["SnapPath"].ToString(),
+                        StaffName = row["FirstName"].ToString(),
+                        Department = row["Department"].ToString(),
+                        Designation = row["Designation"].ToString()
+
+                    }).OrderByDescending(x => x.LoanApplicationId)
+                    .ToList();
+                return list;
 
 
-                return list != null ? list.OrderByDescending(x => x.LoanApplicationId).ToList() : new List<LoanApplication>();
+
+
+
+
+
+
+
+
+
+
+                //var list = await (from l in _context.LoanApplications
+                //                  join lt in _context.LoanTypes on l.LoanTypeId equals lt.LoanTypeId
+                //                  join s in _context.Staff on l.StaffId equals s.StaffId
+                //                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                //                  join di in _context.Designations on s.DesignationId equals di.DesignationId
+
+                //                  where l.IsDeleted == false
+                //                  && lt.IsDeleted == false
+                //                  && l.LoanTypeId == LoanTypeId
+                //                  && l.LoanStatusId == LoanStatusId
+                //                  && (l.ApplicationDate >= ApplicationDateFrom && l.ApplicationDate <= ApplicationDateTo)
+                //                  && s.CompanyId == CompanyId
+                //                  && s.StaffId == StaffId
+                //                  select new LoanApplication()
+                //                  {
+                //                      LoanApplicationId = l.LoanApplicationId,
+                //                      LoanTypeTitle = lt.Title,
+                //                      LoanApplicationDate = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
+                //                      LoanPaymentDate = Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
+                //                      Amount = l.Amount,
+                //                      NoOfInstallments = l.NoOfInstallments,
+                //                      InstallmentPerMonth = l.InstallmentPerMonth,
+                //                      Reason = l.Reason,
+                //                      LoanStatusId = l.LoanStatusId,
+
+                //                      StaffId = s.StaffId,
+                //                      StaffRegistrationNo = s.RegistrationNo,
+                //                      StaffName = s.FirstName,
+                //                      StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath.ToString(),
+                //                      Department = dep.Title,
+                //                      Designation = di.Title
+
+                //                  }).ToListAsync();
+
+
+                //return list != null ? list.OrderByDescending(x => x.LoanApplicationId).ToList() : new List<LoanApplication>();
 
 
 
@@ -267,7 +349,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    obj.CreatedBy =obj.CreatedBy;
+                    obj.CreatedBy = obj.CreatedBy;
                     obj.CreatedOn = DateTime.Now;
                     _context.LoanApplications.Add(obj);
                 }
@@ -327,7 +409,7 @@ namespace HRHUBAPI.Models
                     var checkLeaveInfo = await _context.LoanApplications.FirstOrDefaultAsync(x => x.LoanApplicationId == LeaveInfo.LoanApplicationId);// && x.IsDeleted == false);
                     if (checkLeaveInfo != null && checkLeaveInfo.LoanApplicationId > 0)
                     {
-                       // checkLeaveInfo.LeaveStatusId = 2; // Pending
+                        // checkLeaveInfo.LeaveStatusId = 2; // Pending
 
                         await _context.SaveChangesAsync();
 
@@ -352,7 +434,7 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<bool> DeleteLoanInfo(int id,int userid, HrhubContext _context)
+        public async Task<bool> DeleteLoanInfo(int id, int userid, HrhubContext _context)
         {
             try
             {
@@ -499,7 +581,7 @@ namespace HRHUBAPI.Models
 
 
 
-      
+
 
 
 
