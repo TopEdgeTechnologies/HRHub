@@ -980,13 +980,50 @@ namespace HRHUBWEB.Controllers
 
 
 
+        // Load calander Event
+        [HttpGet]
+        public async Task<ActionResult<JsonObject>> LoadCalander(int month, int year)
+        {
 
-		#endregion
 
 
-		#region Announcement Info
+            var result = await _APIHelper.CallApiAsyncGet<IEnumerable<Holiday>>($"api/Configuration/GetLoadCalanderEvent{_user.CompanyId}/{month}/{year}", HttpMethod.Get);
 
-		[CustomAuthorization]
+            if (result != null)
+            {
+                return Json(result);
+
+            }
+
+            else
+            {
+                return Json(new
+
+                {
+                    Success = false,
+                    Message = "Error occur"
+
+                }
+                );
+
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+        #endregion
+
+
+        #region Announcement Info
+
+        [CustomAuthorization]
 		public async Task<IActionResult> AnnouncementList(string data = "")
 		{
 			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);

@@ -14,17 +14,17 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Company Details</h3>
-                @* @if (Convert.ToBoolean(ViewBag.IsNew))
-                {*@
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
                     <div class="card-options">
                         <div class="btn-list">
                         <a asp-action="CompanyCreateOrUpdate" asp-controller="Company" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Company</a>
-                        <button class="btn btn-light" data-bs-toggle="" data-bs-placement="top" title="E-mail" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="" title="Contact" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="Info" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="E-mail" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Contact" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Info" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                         </div>
                     </div>
-               @* }*@
+                }
             </div>
                 <div class="card-body">
                 <div class="table-responsive">
@@ -79,11 +79,11 @@
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
                                                     <a asp-action="CompanySetting" asp-route-id="@item.CompanyId" class="action-btns1 btn-xs">
-                                                        <i class="feather feather-edit primary text-primary mt-1 " data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title="" title="Edit"></i>
+                                                        <i class="feather feather-edit primary text-primary mt-1 " data-bs-toggle="tooltip" data-original-title="Edit" data-bs-placement="bottom" data-bs-original-title="" title="Edit"></i>
                                                     </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="CompanyCreateOrUpdate" asp-route-id="@item.CompanyId" onclick="return confirm('Are you sure you want to delete')"  class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a asp-action="CompanyCreateOrUpdate" asp-route-id="@item.CompanyId" onclick="return confirm('Are you sure you want to delete')" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                     </a>
                                                 }

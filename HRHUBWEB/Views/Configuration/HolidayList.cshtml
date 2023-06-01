@@ -30,12 +30,12 @@
                 {
                     <a href="#" onclick="AddHoliday()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#holidaymodal"><i class="fe fe-plus-circle me-1"></i>Add Holiday</a>
                 }
-                
-                   
-                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-                <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
+
+
+                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Filter" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
                 </div>
             </div>
         </div>
@@ -668,19 +668,19 @@
                         element.find(".fc-event-time").after($("<span class=\"fc-event-icons\"></span>").html("<i class='fe fe-view'></i> "));
                     }
                 }
-                //,
-                //events: [
-                //    {
-                       
-                //        start: '2023-05-14',
-                //        color: 'rgba(255, 173, 0, 0.1)',
-                //    },
-                //    {
-                //        title: 'EID',
-                //        start: '2023-05-26',
-                //        color: 'rgba(255, 173, 0, 0.1)',
-                //    },
-                //]
+                ,
+                events: [
+                    {
+                        title: 'Holiday',
+                        start: '2023-05-14',
+                        color: 'rgba(255, 173, 0, 0.1)',
+                    },
+                    {
+                        title: 'EID',
+                        start: '2023-05-26',
+                        color: 'rgba(255, 173, 0, 0.1)',
+                    },
+                ]
             });
             calendar.render();
         });

@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HRHUBAPI.Models.Configuration;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 
 namespace HRHUBAPI.Models
 {
@@ -9,6 +11,45 @@ namespace HRHUBAPI.Models
         public IEnumerable<Holiday>? ListOfHolidays { get; set; }
         [NotMapped]
         public int TransFlag { get; set; }
+
+       
+
+
+
+       
+
+        // Get Attendence date vise
+        public async Task<List<Holiday>> LoadCalanderEvent(int CompanyId, int month, int year)
+        {
+            DbConnection _db = new DbConnection();
+
+
+            try
+            {
+                string query = "EXEC dbo.sp_GetHoliday_Events " + CompanyId + ", " + month + " , "+ year +" ";
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var List = dt.AsEnumerable()
+
+                    .Select(row => new Holiday
+                    {
+                        HolidayDate = Convert.ToDateTime(row["HolidayDate"]),
+                        Title = row["Title"].ToString(),
+                        
+                    })
+                    .ToList();
+                return List;
+            }
+            catch { throw; }
+
+
+
+
+
+        }
+
+
+
 
         public async Task<List<Holiday>> GetHolidays(int CompanyID, HrhubContext _context)
         {

@@ -38,9 +38,9 @@
 							<div class="d-lg-flex">
 								<div class="btn-list">
 									
-									<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-									<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-									<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+									<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="E-mail"> <i class="feather feather-mail"></i> </button>
+									<button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+									<button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
 								</div>
 							</div>
 						</div>
@@ -290,14 +290,8 @@
 		$("#timeInId").click(function () { 
 			debugger;
 			
-			var test = $("#timeInId").text();
 			CheckAtendence();
-			if (test == "Check In") {
-				$("#timeInId").text('Check Out');
-			}
-			else{
-				$("#timeInId").text('Check In');
-			}
+			
 			
 		 });
 		 
@@ -308,16 +302,36 @@
 				type: "POST",
 				async: false,				
 				success: function (response) {
+					debugger
 					if(response!=null)
 					{
-						notif({
-							msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + $("#timeInId").text() + " Succesfully.",
-							type: "success"
-						});
-						$('#searchbtn').click()
-					}
+						if (response.attendanceId == 0) {
+							notif({
+								msg: "<i class='fa fa-info-circle fs-15 me-2'></i><b>Warning:</b> Today is Rest Day.",
+								type: "warning"
+							});
+						}
+						else
+						{
 
+							notif({
+								msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + $("#timeInId").text() + " Succesfully.",
+								type: "success"
+							});
+							var test = $("#timeInId").text();
+							if (test == "Check In") {
+								$("#timeInId").text('Check Out');
+							}
+							else {
+								$("#timeInId").text('Check In');
+							}
+							$('#searchbtn').click();
+
+						}
+						
+					}
 					
+
 
 				},
 				error: function (jqXHR, textStatus, errorThrown) {

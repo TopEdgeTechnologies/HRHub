@@ -61,7 +61,7 @@ namespace HRHUBWEB.Controllers
 			obj.FirstPunchIn = DateTime.Now.TimeOfDay;
 			obj.LastPunchOut = DateTime.Now.TimeOfDay;
 
-			var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Attendance/MarkStaffAttendance", HttpMethod.Post);
+			var result = await _APIHelper.CallApiAsyncPost<AttendanceMaster>(obj, "api/Attendance/MarkStaffAttendance", HttpMethod.Post);
 
 			if (result != null)
 			{
