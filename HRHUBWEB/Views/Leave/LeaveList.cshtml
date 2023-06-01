@@ -565,8 +565,9 @@
                         var action = '';
                         for (var i = 0; i < listleave.length; i++) {
 
+                            var count = i + 1;
                             action += '';
-                            action += '<tr><td> ' + parseInt(i) + parseInt(1) + ' </td>';
+                            action += '<tr><td> ' + count + ' </td>';
                             action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listleave[i]["leaveTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
                             action += '<td> ' + listleave[i]["days"] + '</td>';
                             action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listleave[i]["leaveSubject"] + '</td>';

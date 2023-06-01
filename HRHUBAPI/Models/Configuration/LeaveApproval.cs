@@ -16,6 +16,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? ApprovedByStaffName { get; set; }
         [NotMapped]
+        public string? ApprovedByStaffSnap{ get; set; }
+        [NotMapped]
         public string? ApprovedByDesignation { get; set; }
         [NotMapped]
         public string? LeaveApprovalDate{ get; set; }
@@ -33,7 +35,8 @@ namespace HRHUBAPI.Models
                                   from ct in a.DefaultIfEmpty()
                                   join sf in _context.Staff on la.ForwardedByStaffId equals sf.StaffId into g
                                   from cct in g.DefaultIfEmpty()
-
+                                  join sff in _context.Designations on cct.DesignationId equals sff.DesignationId into d
+                                  from cctt in d.DefaultIfEmpty()
 
                                   where la.LeaveId == LeaveId
                                   select new LeaveApproval()
@@ -46,7 +49,8 @@ namespace HRHUBAPI.Models
                                       ApprovedByStaffName = ct.FirstName,
                                       LeaveApprovalDate = la.ApprovalDate == null? "DD-MMM-YYYY" : Convert.ToDateTime(la.ApprovalDate).ToString("dd-MMM-yyyy"),
 
-                                      //ApprovedByDesignation = ct.Title,
+                                      ApprovedByStaffSnap = string.IsNullOrWhiteSpace(cct.SnapPath.ToString()) ? "/Images/Avatar.png" : cct.SnapPath.ToString(),
+                                      ApprovedByDesignation = cctt.Title,
                                       Remarks = la.Remarks,
                                       LeaveStatusId = la.LeaveStatusId
 

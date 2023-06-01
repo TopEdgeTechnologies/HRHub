@@ -475,6 +475,317 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
+
+        #region LoanTypeInfo
+        //[CustomAuthorization]
+        //public async Task<IActionResult> LoanTypeList(string data = "")
+        //{
+
+        //    ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+        //    ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+        //    ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+        //    ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+
+        //    ViewBag.Success = data;
+        //    LoanType LoanTypes = new LoanType();
+
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+        //    var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+        //    var CompanyId = userObject.CompanyId;
+
+
+
+        //    if (Token != null)
+        //    {
+
+
+        //        HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{CompanyId}");
+        //        if (message.IsSuccessStatusCode)
+        //        {
+
+        //            var content = await message.Content.ReadAsStringAsync();
+        //            LoanTypes.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(content);
+
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+        //    }
+
+
+        //    return View(LoanTypes);
+        //}
+
+
+        [CustomAuthorization]
+        public async Task<IActionResult> LoanTypeList(string data = "")
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+
+            LoanType LoanTypes = new LoanType();
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            LoanTypes.CompanyId = userObject.CompanyId;
+
+
+            if (Token != null)
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{LoanTypes.CompanyId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    LoanTypes.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(content);
+                }
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+            return View(LoanTypes);
+        }
+
+
+        //public async Task<IActionResult> LoanTypeDetails(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+        //    if (Token != null)
+        //    {
+
+        //        LoanType ObjLoanType = await GetLoanTypebyID(id);
+
+        //        return View(ObjLoanType);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+
+        //    }
+        //}
+        //private async Task<LoanType> GetLoanTypebyID(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+        //    LoanType ObjLoanType = new LoanType();
+
+
+
+
+        //    HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetLoanTypeInfoId{id}");
+        //    if (message.IsSuccessStatusCode)
+        //    {
+        //        var result = message.Content.ReadAsStringAsync().Result;
+        //        ObjLoanType = JsonConvert.DeserializeObject<LoanType>(result);
+
+        //    }
+
+        //    return ObjLoanType;
+        //}
+
+        public async Task<IActionResult> GetLoanTypeById(int id)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            LoanType LoanType = new LoanType();
+            var response = await _client.GetAsync($"api/Configuration/GetLoanTypeInfoId{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                LoanType = JsonConvert.DeserializeObject<LoanType>(content);
+                return Json(LoanType);
+            }
+            else
+            {
+
+                return Json(null);
+            }
+
+
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> LoanTypeCreateOrUpdate(int id)
+        //{
+        //    var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+        //    _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+        //    //Get Instutute ID through Sessions
+        //    var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+        //    ViewBag.CompanyId = userObject.CompanyId;
+
+        //    if (Token != null)
+        //    {
+
+
+
+
+
+        //        if (id == 0)
+        //        {
+        //            LoanType Info = new LoanType();
+
+        //            return View(Info);
+        //        }
+        //        LoanType LoanTypeinfo = await GetLoanTypebyID(id);
+
+        //        return View(LoanTypeinfo);
+        //    }
+        //    else
+        //    {
+        //        return RedirectToAction("Loginpage", "User", new { id = 2 });
+
+        //    }
+        //}
+
+
+        [HttpPost]
+        public async Task<IActionResult> LoanTypeCreateOrUpdate(LoanType ObjLoanType)
+        {
+            try
+            {
+                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+                ObjLoanType.CompanyId = userObject.CompanyId;
+                ObjLoanType.CreatedBy = userObject.UserId;
+                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LoanTypeAddOrUpdate", ObjLoanType);
+
+                if (message.IsSuccessStatusCode)
+                {
+
+                    var body = message.Content.ReadAsStringAsync();
+
+
+                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+
+                    int status = 0;
+                    if (model.Success)
+                    {
+
+
+                        if (model.Message.Contains("Insert"))
+                        {
+                            status = 1;
+                        }
+                        else if (model.Message.Contains("Update"))
+                        {
+                            status = 2;
+                        }
+
+
+                    }
+
+                    return RedirectToAction("LoanTypeList", new { data = status });
+
+                }
+                else
+                {
+                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+                return View();
+            }
+        }
+        public async Task<IActionResult> LoanTypeDelete(int id)
+        {
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLoanTypeInfo{id}");
+            if (message.IsSuccessStatusCode)
+            {
+                var body = message.Content.ReadAsStringAsync();
+
+                var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+
+                int status = 0;
+                if (model.Success)
+                {
+
+
+                    if (model.Message.Contains("Delete"))
+                    {
+                        status = 3;
+                    }
+
+
+
+                }
+
+                return RedirectToAction("LoanTypeList", new { data = status });
+
+            }
+
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+
+        }
+
+        public async Task<ActionResult<JsonObject>> LoanTypeAlreadyExists(int id, string title)
+        {
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            var CompanyId = userObject.CompanyId;
+
+
+
+            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LoanTypeAlreadyExists{id}/{title}/{CompanyId}");
+            if (message.IsSuccessStatusCode)
+            {
+                var result = message.Content.ReadAsStringAsync().Result;
+                return Json(result);
+
+            }
+
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+        }
+
+
+
+
+        #endregion
+
+
+
+
+
         #region HOliday
 
         [CustomAuthorization]

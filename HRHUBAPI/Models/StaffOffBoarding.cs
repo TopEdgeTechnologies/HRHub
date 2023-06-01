@@ -19,6 +19,10 @@ public partial class StaffOffBoarding
 
     public string? ApplicationHtml { get; set; }
 
+    public bool? IsImmediate { get; set; }
+
+    public DateTime? LastWorkingDay { get; set; }
+
     public string? InteriewRemarks { get; set; }
 
     public DateTime? InterviewDate { get; set; }

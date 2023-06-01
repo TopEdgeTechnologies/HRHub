@@ -35,6 +35,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? StaffName { get; set; }
         [NotMapped]
+        public string? StaffSnap { get; set; }
+        [NotMapped]
         public string? Department { get; set; }
         [NotMapped]
         public string? Designation { get; set; }
@@ -87,6 +89,7 @@ namespace HRHUBAPI.Models
                         StaffId = Convert.ToInt32(row["StaffID"]),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
                         StaffName = row["FirstName"].ToString() + " " + row["LastName"].ToString(),
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         Department = row["Department"].ToString(),
                         Designation = row["Designation"].ToString()
 
@@ -265,6 +268,7 @@ namespace HRHUBAPI.Models
                         StaffId = Convert.ToInt32(row["StaffID"]),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
                         StaffName = row["FirstName"].ToString() + " " + row["LastName"].ToString(),
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         Department = row["Department"].ToString(),
                         Designation = row["Designation"].ToString()
 

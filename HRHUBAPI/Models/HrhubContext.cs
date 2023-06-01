@@ -561,6 +561,7 @@ public partial class HrhubContext : DbContext
         modelBuilder.Entity<LoanApplication>(entity =>
         {
             entity.ToTable("LoanApplication");
+            entity.ToTable("LoanApplication", "Payroll");
 
             entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
             entity.Property(e => e.Amount).HasColumnType("money");
@@ -603,6 +604,37 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+        modelBuilder.Entity<LoanApplicationProcess>(entity =>
+        {
+            entity.HasKey(e => e.ProcessId);
+
+            entity.ToTable("LoanApplicationProcess", "Payroll");
+
+            entity.Property(e => e.ProcessId).HasColumnName("ProcessID");
+            entity.Property(e => e.ApprovedByStaffId).HasColumnName("ApprovedBy_StaffID");
+            entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
+            entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
+            entity.Property(e => e.ProcessDate).HasColumnType("date");
+            entity.Property(e => e.Remarks).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<LoanRepayment>(entity =>
+        {
+            entity.ToTable("LoanRepayments", "Payroll");
+
+            entity.Property(e => e.LoanRepaymentId).HasColumnName("LoanRepaymentID");
+            entity.Property(e => e.Amount).HasColumnType("money");
+            entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
+            entity.Property(e => e.PaymentDate).HasColumnType("date");
+            entity.Property(e => e.StaffSalaryId).HasColumnName("StaffSalaryID");
+        });
+
+        modelBuilder.Entity<LoanStatus>(entity =>
+        {
+            entity.ToTable("LoanStatus", "Payroll");
+
+            entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -610,7 +642,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LoanType>(entity =>
         {
-            entity.ToTable("LoanType");
+            entity.ToTable("LoanType", "Payroll");
 
             entity.Property(e => e.LoanTypeId).HasColumnName("LoanTypeID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");

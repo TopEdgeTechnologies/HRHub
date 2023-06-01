@@ -9,12 +9,23 @@ public partial class ComponentInfo
 
     public int? CompanyId { get; set; }
 
+<<<<<<<< HEAD:HRHUBAPI/Models/ComponentInfo.cs
     public int? ComponentGroupId { get; set; }
+========
+    public int? FixedComponentId { get; set; }
+
+    public string? Title { get; set; }
+>>>>>>>> LoanModule24-May-2023:HRHUBAPI/Models/SalaryComponent.cs
 
     public string? Title { get; set; }
 
-    public string? CalculationMethod { get; set; }
+    public string? ContributionMethod { get; set; }
 
+<<<<<<<< HEAD:HRHUBAPI/Models/ComponentInfo.cs
+========
+    public decimal? StaffContribution { get; set; }
+
+>>>>>>>> LoanModule24-May-2023:HRHUBAPI/Models/SalaryComponent.cs
     public decimal? CompanyContribution { get; set; }
 
     public string? Category { get; set; }
