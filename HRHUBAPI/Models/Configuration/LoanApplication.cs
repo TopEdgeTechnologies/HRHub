@@ -258,6 +258,7 @@ namespace HRHUBAPI.Models
                     checkLoanInfo.Amount = obj.Amount;
                     checkLoanInfo.NoOfInstallments = obj.NoOfInstallments;
                     checkLoanInfo.InstallmentPerMonth = obj.InstallmentPerMonth;
+                    checkLoanInfo.Reason = obj.Reason;
                     checkLoanInfo.UpdatedOn = DateTime.Now;
                     checkLoanInfo.UpdatedBy = obj.CreatedBy;
 
