@@ -156,22 +156,22 @@
 
                                         <td class="text-start d-flex">
                                             <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,1)" class="action-btns1" >
-                                                <i class="feather feather-check text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve"></i>
+                                                <i class="feather feather-check text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
                                             <a href="#" onclick="showloanApprovalmodel(@item.LoanApplicationId,2)" class="action-btns1" >
-                                                <i class="feather feather-x text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected"></i>
+                                                <i class="feather feather-x text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
                                             @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
                                             {
-                                                <a href="#" onclick="showforwardloanmodel(@item.LoanApplicationId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
-                                                    <i class="text-warning fe fe-arrow-right-circle mt-1"></i>
+                                                <a href="#" onclick="showforwardloanmodel(@item.LoanApplicationId)" class="action-btns1" >
+                                                    <i class="text-warning fe fe-arrow-right-circle mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                                 </a>
-                                                <a asp-action="LoanDelete" asp-route-id="@item.LoanApplicationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                <a asp-action="LoanDelete" asp-route-id="@item.LoanApplicationId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="">
                                                     <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                 </a>
                                             }
                                             <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                                <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
 
 
@@ -234,7 +234,7 @@
 </div>
 <!-- End Report Modal  -->
 <!--My Leave FOrward Modal -->
-@using (@Html.BeginForm("ForwardLoanToStaff", "Leave", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+@using (@Html.BeginForm("ForwardLoanToStaff", "Loan", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
     <div class="modal fade" id="loanforwardmodal">
         <div class="modal-dialog modal-lg" role="document">

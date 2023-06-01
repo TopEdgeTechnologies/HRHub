@@ -216,20 +216,20 @@
                                                             @if (item.LoanStatusId != 1 && item.LoanStatusId !=2) // New
                                                         {
                                                                 <a href="#" onclick="editrecord(@item.LoanApplicationId)" class="action-btns1">
-                                                                    <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-original-title="Edit" data-bs-original-title=""></i>
+                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title=""></i>
                                                                 </a>
                                                         }
                                                             <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                                             </a>
                                                             @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
                                                         {
                                                                 <a href="#" onclick="confirmation(@item.LoanApplicationId)" class="action-btns1">
-                                                                    <i class="feather feather-trash-2 text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"></i>
+                                                                    <i class="feather feather-trash-2 text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                                                 </a>
                                                         }
                                                             <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                                <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i>
+                                                                <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                                             </a>
                                                         </td>
                                                     </tr>

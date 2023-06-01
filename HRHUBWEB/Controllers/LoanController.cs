@@ -629,7 +629,7 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("LoanList", new { data = status });
+                    return RedirectToAction("HRLoanList", new { data = status });
 
                 }
                 else
