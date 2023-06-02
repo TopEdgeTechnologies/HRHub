@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class Department
+public partial class Announcement
 {
-    public int DepartmentId { get; set; }
+    public int AnnouncementId { get; set; }
+
+    public int? CompanyId { get; set; }
 
     public string? Title { get; set; }
 
-    public string? ShortCode { get; set; }
+    public DateTime? AnnouncementDate { get; set; }
 
-    public int? Seq { get; set; }
-
-    public string? LogoAttachment { get; set; }
+    public string? Description { get; set; }
 
     public bool Status { get; set; }
 
@@ -26,6 +26,4 @@ public partial class Department
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public int? CompanyId { get; set; }
 }

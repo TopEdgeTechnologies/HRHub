@@ -9,9 +9,9 @@ public partial class OffBoardingProcessSetting
 
     public int? CompanyId { get; set; }
 
-    public string? NeedClearenceFromTitle { get; set; }
+    public int? NeedClearenceFromDepartmentId { get; set; }
 
-    public int? NeedClearenceFromStaffId { get; set; }
+    public int? NeedClearenceFromDesignationId { get; set; }
 
     public bool? IsDeleted { get; set; }
 

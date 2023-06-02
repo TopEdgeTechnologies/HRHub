@@ -472,16 +472,22 @@ namespace HRHUBAPI.Controllers
 
         #region Staff Salary
 
-        [HttpGet("GetStaffSalary")]
+            [HttpGet("GetStaffSalary")]
             public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
             {
                 return await new StaffSalary().GetStaffSalary(_context);
             }
 
-            [HttpGet("GetStaffSalaryById/{Id}")]
-            public async Task<ActionResult<StaffSalary>> GetStaffSalaryById(int Id)
+            [HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
             {
-                return await new StaffSalary().GetStaffSalaryById(Id, _context);
+                return await new StaffSalary().GetStaffSalaryByCompanyId(CompanyId, month, year);
+            }
+
+            [HttpGet("GetStaffSalaryById/{CompanyId}/{month}/{year}/{StaffId}")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryById(int CompanyId, int month, int year, int StaffId)
+            {
+                return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
             }
 
             [HttpPost("PostStaffSalary")]

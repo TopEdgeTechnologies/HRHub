@@ -180,5 +180,36 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
+        #region Staff Salary
+
+        [CustomAuthorization]
+        public async Task<IActionResult> StaffSalaryList(string data ="", int Id = 0)
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+
+            StaffSalary objStaffSalary = new StaffSalary();
+            var month = 5;
+            var year = 2023;
+            objStaffSalary.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryByCompanyId/{_user.CompanyId}/{month}/{year}", HttpMethod.Get);
+
+            return View(objStaffSalary);
+        }
+
+        public async Task<List<StaffSalary>> GetStaffSalaryById(int month, int year, int StaffId)
+        {
+            if(month > 0 && year > 0 && StaffId > 0)
+            {
+                var staffSalaryCardList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{StaffId}", HttpMethod.Get);
+				return staffSalaryCardList;
+			}
+            return null;
+        }
+
+        #endregion
     }
 }

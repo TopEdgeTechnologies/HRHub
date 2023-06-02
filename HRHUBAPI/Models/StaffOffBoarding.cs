@@ -9,8 +9,6 @@ public partial class StaffOffBoarding
 
     public int? OffboardingTypeId { get; set; }
 
-    //public int? OffboardingTypeId { get; set; }
-
     public int? StaffId { get; set; }
 
     public DateTime? ApplicationDate { get; set; }
@@ -18,6 +16,10 @@ public partial class StaffOffBoarding
     public string? Reason { get; set; }
 
     public string? ApplicationHtml { get; set; }
+
+    public bool? IsImmediate { get; set; }
+
+    public DateTime? LastWorkingDay { get; set; }
 
     public string? InteriewRemarks { get; set; }
 

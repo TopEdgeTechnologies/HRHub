@@ -19,6 +19,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ActivityType> ActivityTypes { get; set; }
 
+    public virtual DbSet<Announcement> Announcements { get; set; }
+
     public virtual DbSet<AttendanceDetail> AttendanceDetails { get; set; }
 
     public virtual DbSet<AttendanceMaster> AttendanceMasters { get; set; }
@@ -83,9 +85,19 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<OffBoardingType> OffBoardingTypes { get; set; }
 
+    public virtual DbSet<PerformanceReview> PerformanceReviews { get; set; }
+
+    public virtual DbSet<PerformanceReviewCategory> PerformanceReviewCategories { get; set; }
+
     public virtual DbSet<Policy> Policies { get; set; }
 
     public virtual DbSet<PolicyCategory> PolicyCategories { get; set; }
+
+    public virtual DbSet<ReviewSection> ReviewSections { get; set; }
+
+    public virtual DbSet<ReviewSectionAnswer> ReviewSectionAnswers { get; set; }
+
+    public virtual DbSet<ReviewSectionQuestion> ReviewSectionQuestions { get; set; }
 
     public virtual DbSet<SalaryMethod> SalaryMethods { get; set; }
 
@@ -124,11 +136,7 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<UserForm> UserForms { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -150,6 +158,19 @@ public partial class HrhubContext : DbContext
             entity.ToTable("ActivityType");
 
             entity.Property(e => e.ActivityTypeId).HasColumnName("ActivityTypeID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<Announcement>(entity =>
+        {
+            entity.ToTable("Announcement");
+
+            entity.Property(e => e.AnnouncementId).HasColumnName("AnnouncementID");
+            entity.Property(e => e.AnnouncementDate).HasColumnType("date");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
@@ -543,7 +564,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LoanApplication>(entity =>
         {
-            entity.ToTable("LoanApplication");
+            entity.ToTable("LoanApplication", "Payroll");
 
             entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
             entity.Property(e => e.Amount).HasColumnType("money");
@@ -560,19 +581,22 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LoanApplicationProcess>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("LoanApplicationProcess");
+            entity.HasKey(e => e.ProcessId);
 
+            entity.ToTable("LoanApplicationProcess", "Payroll");
+
+            entity.Property(e => e.ProcessId).HasColumnName("ProcessID");
             entity.Property(e => e.ApprovedByStaffId).HasColumnName("ApprovedBy_StaffID");
             entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
             entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
-            entity.Property(e => e.ProcessId).HasColumnName("ProcessID");
+            entity.Property(e => e.ProcessDate).HasColumnType("date");
             entity.Property(e => e.Remarks).IsUnicode(false);
         });
 
         modelBuilder.Entity<LoanRepayment>(entity =>
         {
+            entity.ToTable("LoanRepayments", "Payroll");
+
             entity.Property(e => e.LoanRepaymentId).HasColumnName("LoanRepaymentID");
             entity.Property(e => e.Amount).HasColumnType("money");
             entity.Property(e => e.LoanApplicationId).HasColumnName("LoanApplicationID");
@@ -582,7 +606,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LoanStatus>(entity =>
         {
-            entity.ToTable("LoanStatus");
+            entity.ToTable("LoanStatus", "Payroll");
 
             entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
@@ -593,7 +617,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<LoanType>(entity =>
         {
-            entity.ToTable("LoanType");
+            entity.ToTable("LoanType", "Payroll");
 
             entity.Property(e => e.LoanTypeId).HasColumnName("LoanTypeID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
@@ -607,10 +631,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.OffboardingProcessSettingId).HasColumnName("OffboardingProcessSettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.NeedClearenceFromStaffId).HasColumnName("NeedClearenceFrom_StaffID");
-            entity.Property(e => e.NeedClearenceFromTitle)
-                .IsUnicode(false)
-                .HasColumnName("NeedClearenceFrom_Title");
+            entity.Property(e => e.NeedClearenceFromDepartmentId).HasColumnName("NeedClearenceFrom_DepartmentID");
+            entity.Property(e => e.NeedClearenceFromDesignationId).HasColumnName("NeedClearenceFrom_DesignationID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -619,6 +641,36 @@ public partial class HrhubContext : DbContext
             entity.ToTable("OffBoardingType");
 
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<PerformanceReview>(entity =>
+        {
+            entity.HasKey(e => e.ReviewFormId);
+
+            entity.ToTable("PerformanceReview");
+
+            entity.Property(e => e.ReviewFormId)
+                .ValueGeneratedNever()
+                .HasColumnName("ReviewFormID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.StartDate).HasColumnType("date");
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<PerformanceReviewCategory>(entity =>
+        {
+            entity.HasKey(e => e.ReviewCategoryId);
+
+            entity.ToTable("PerformanceReviewCategory");
+
+            entity.Property(e => e.ReviewCategoryId)
+                .ValueGeneratedNever()
+                .HasColumnName("ReviewCategoryID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
         });
@@ -643,6 +695,52 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ReviewSection>(entity =>
+        {
+            entity.HasKey(e => e.SectionId);
+
+            entity.ToTable("ReviewSection");
+
+            entity.Property(e => e.SectionId)
+                .ValueGeneratedNever()
+                .HasColumnName("SectionID");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.ReviewCategoryId).HasColumnName("ReviewCategoryID");
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ReviewSectionAnswer>(entity =>
+        {
+            entity.HasKey(e => e.AnswerId);
+
+            entity.ToTable("ReviewSectionAnswer");
+
+            entity.Property(e => e.AnswerId)
+                .ValueGeneratedNever()
+                .HasColumnName("AnswerID");
+            entity.Property(e => e.AnswerComments).IsUnicode(false);
+            entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
+            entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
+            entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
+        });
+
+        modelBuilder.Entity<ReviewSectionQuestion>(entity =>
+        {
+            entity.HasKey(e => e.QuestionId);
+
+            entity.ToTable("ReviewSectionQuestion");
+
+            entity.Property(e => e.QuestionId)
+                .ValueGeneratedNever()
+                .HasColumnName("QuestionID");
+            entity.Property(e => e.QuestionText).IsUnicode(false);
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
         });
 
         modelBuilder.Entity<SalaryMethod>(entity =>
@@ -795,7 +893,12 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ApplicationHtml)
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
-            entity.Property(e => e.OffBoardingId).HasColumnName("OffBoardingID");
+            entity.Property(e => e.InteriewRemarks)
+                .IsUnicode(false)
+                .HasColumnName("Interiew_Remarks");
+            entity.Property(e => e.InterviewDate).HasColumnType("date");
+            entity.Property(e => e.InterviewDoneByStaffId).HasColumnName("InterviewDoneByStaffID");
+            entity.Property(e => e.LastWorkingDay).HasColumnType("date");
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
@@ -876,11 +979,12 @@ public partial class HrhubContext : DbContext
         {
             entity.HasKey(e => e.SlabId);
 
-            entity.ToTable("TaxSlabSetting");
+            entity.ToTable("TaxSlabSetting", "Payroll");
 
-            entity.Property(e => e.SlabId).ValueGeneratedNever();
+            entity.Property(e => e.SlabId).HasColumnName("SlabID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FixedAmount).HasColumnType("money");
             entity.Property(e => e.MaxIncome)
                 .HasColumnType("money")
                 .HasColumnName("Max_Income");
