@@ -147,7 +147,135 @@ namespace HRHUBAPI.Controllers
 			return NotFound();
 		}
 
+
+
+
+
+
 		#endregion
+
+
+		#region Staff Contract
+
+
+		// Load all contract Staff List
+		[HttpGet("ListStaffAllContract{CompanyId}")]
+		public async Task<ActionResult<List<StaffContract>>> ListStaffAllContract(int CompanyId)
+		{
+			return await new StaffContract().GetStaffAllContract(CompanyId, _context);
+		}
+
+		// Load all contract Staff List
+		[HttpGet("ListStaffExpiredContract{CompanyId}")]
+		public async Task<ActionResult<List<StaffContract>>> ListStaffExpiredContract(int CompanyId)
+		{
+			return await new StaffContract().GetStaffExpiredContract(CompanyId, _context);
+		}
+
+		
+
+
+		[HttpGet("GetStaffContractById{Id}")]
+		public async Task<ActionResult<StaffContract>> GetStaffContractById(int Id)
+		{
+			var dbResult = await new StaffContract().StaffContractById(Id, _context);
+			if (dbResult != null)
+			{
+				return Ok(dbResult);
+			}
+			return NotFound();
+		}
+
+		[HttpPost("PostStaffContract")]
+		public async Task<ActionResult<StaffContract>> PostStaffContract(StaffContract ObjStaffContract)
+		{
+
+			var dbResult = await new StaffContract().PostStaffContract(ObjStaffContract, _context);
+			if (dbResult != null)
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Updated Successfully"
+				});
+			}
+			else
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Inserted Successfully"
+				});
+			}
+		}
+
+		[HttpGet("DeleteStaffContract{Id}/{UserId}")]
+		public async Task<ActionResult<bool>> DeleteStaffContract(int Id, int UserId)
+		{
+			if (Id > 0)
+			{
+
+				var dbResult = await new StaffContract().DeleteStaffContractInfo(Id, UserId, _context);
+				if (dbResult == true)
+				{
+					return Ok(new
+					{
+						Success = true,
+						Message = "Data Deleted Successfully"
+					});
+				}
+			}
+			return NotFound("Data Not Found!");
+		}
+
+		[HttpGet("StaffContractAlreadyExists{id}/{Enddate}/{StaffId}")]
+		public async Task<ActionResult<bool>> StaffContractAlreadyExists(int id, DateTime Enddate, int StaffId)
+		{
+			var dbResult = await new StaffContract().AlreadyExists(id, Enddate, StaffId, _context);
+			if (dbResult == true)
+			{
+				return Ok(new
+				{
+					Success = true,
+					Message = "Contract Already Exists"
+				});
+			}
+			else
+			{
+				return Ok(new
+				{
+					Success = false,
+					Message = "Data Not Found!"
+				});
+			}
+		}
+
+
+
+
+
+
+
+
+		//Load dropdown WeekendRule
+		[HttpGet("GetEmploymentTypeInfos{CompnayId}")]
+		public async Task<ActionResult<List<EmploymentType>>> GetEmploymentTypeInfos(int CompnayId)
+		{
+
+			return await new StaffContract().GetEmploymentType(CompnayId, _context);
+		}
+
+
+
+
+
+
+
+		#endregion
+
+
+
+
 
 	}
 }
