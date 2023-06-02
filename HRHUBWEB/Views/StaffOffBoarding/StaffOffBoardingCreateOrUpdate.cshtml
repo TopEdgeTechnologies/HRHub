@@ -1,0 +1,404 @@
+﻿@model HRHUBAPI.Models.StaffOffBoarding
+
+
+@{
+    ViewData["Title"] = "ApplyResignation";
+}
+
+
+<div class="side-app main-container">
+
+    <!--Page header-->
+    <div class="page-header d-xl-flex d-block">
+        <div class="page-leftheader">
+            <div class="page-title">Apply Resignation</div>
+        </div>
+        <div class="page-rightheader ms-md-auto">
+            <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
+                <div class="btn-list">
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Page header-->
+    @using (@Html.BeginForm("StaffOffBoardingCreateOrUpdate", "StaffOffBoarding", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+    {
+        <!-- Row -->
+        <div class="row">
+            <div class="col-xl-4 col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header  border-0">
+                        <h4 class="card-title">Apply Resignation</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="leave-types">
+                            <div class="form-group">
+                                <label class="form-label">Staff</label>
+                                <select asp-for="StaffId" class="form-control" asp-items="@(new SelectList(Model.ListStaffs,"StaffId" ,"FirstName"))">
+                                    <option value="">Select Staff</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Type</label>
+                                <select asp-for="OffboardingTypeId" class="form-control" asp-items="@(new SelectList(Model.ListOffBoardingTypes,"OffboardingTypeId" ,"Title"))">
+                                    <option value="">Select Type</option>
+                                </select>
+                            </div>
+                            <div class="leave-content active" id="single">
+                                <div class="form-group">
+                                    <label class="form-label">Last Working Day Date</label>
+                                    <input type="date" asp-for="LastWorkingDay" name="LastWorkingDay" class="form-control" placeholder="select dates" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Reason:</label>
+                                <textarea asp-for="Reason" class="form-control" rows="2">Some text here...</textarea>
+                            </div>
+                            <label class="custom-switch">
+                                <label class="form-label">
+                                    Is Immediate Resign: <input type="checkbox" asp-for="IsImmediate" name="IsImmediate" class="custom-switch-input" id="check-IsDelete">
+                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                </label>
+
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex">
+                            <div class="ms-auto">
+                                <a value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary my-1">Submit</a>
+                                <a asp-action="StaffOffBoardingList" asp-controller="StaffOffBoarding" class="btn btn-danger my-1">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 col-lg-12 col-xl-8">
+                <div class="card" style="min-height:540px;">
+                    <div class="card-header border-bottom-0">
+                        <h3 class="card-title">Resignation Application</h3>
+                    </div>
+                    <div class="card-body">
+                        @* <div class="summernote"><p>Hello Summernote</p></div>*@
+                        <textarea asp-for="ApplicationHtml" class="summernote" style=" height: 398px !important;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Row-->
+    }
+</div><!-- end app-content-->
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+            $('#StaffId').select2();
+            $('#OffboardingTypeId').select2();
+
+
+            leaveApprovalSetting()
+        })
+
+        function leaveApprovalSetting() {
+            debugger;
+            $.ajax({
+                url: "/Leave/GetLeaveApprovalSettingData",
+                method: 'GET',
+                success: function (response) {
+                    $(".half").prop("hidden", false);
+                    $(".short").prop("hidden", false);
+                    if (response != null) {
+                        var allowhalfleave = response.allowApplyHalfDayLeave
+                        var allowshortleave = response.allowApplyShortDayLeave
+
+                        if (!allowhalfleave) {
+                            $(".half").prop("hidden", true);
+                        }
+                        if (!allowshortleave) {
+                            $(".short").prop("hidden", true);
+                        }
+                    }
+
+
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+        }
+
+        function loadChart() {
+            //debugger;
+            /*----- Overview ------*/
+            var options = {
+                series: [],
+                chart: {
+                    height: 310,
+                    type: 'donut',
+                },
+                dataLabels: {
+                    enabled: false
+                },
+
+                legend: {
+                    show: false,
+                },
+                stroke: {
+                    show: true,
+                    width: 0
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '85%',
+                            background: 'transparent',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: true,
+                                    fontSize: '29px',
+                                    color: '#6c6f9a',
+                                    offsetY: -10
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '26px',
+                                    color: undefined,
+                                    offsetY: 16,
+                                },
+                                total: {
+                                    show: true,
+                                    showAlways: false,
+                                    label: 'Total Leaves',
+                                    fontSize: '22px',
+                                    fontWeight: 600,
+                                    color: '#373d3f',
+                                    // formatter: function (w) {
+                                    //   return w.globals.seriesTotals.reduce((a, b) => {
+                                    // 	return a + b
+                                    //   }, 0)
+                                    // }
+                                }
+
+                            }
+                        }
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            show: false,
+                        }
+                    }
+                }],
+                labels: [],
+                //css: []
+                colors: ['#3366ff', '#f7284a', '#fe7f00', '#01c353'],
+            };
+
+            // Make an AJAX request to fetch the data from the database
+            // Assuming the response is an array of numbers corresponding to each category of leaves
+            $.ajax({
+                url: "/Leave/GetLeaveChartData",
+                method: 'GET',
+                success: function (response) {
+                    // Update the series property with the fetched data
+
+                    for (var i = 0; i < response.length; i++) {
+
+                        options.series.push(response[i].consumedLeave);
+                        options.labels.push(response[i].title);
+                        //options.class.push(response[i].cssclass);
+                    }
+
+                    // Create and render the chart with the updated options
+                    var chart = new ApexCharts(document.querySelector("#leavesoverview"), options);
+                    chart.render();
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+
+
+
+        }
+
+
+        function postdata() {
+            //debugger;
+            var status = true;
+
+            if ($("#StaffId").val() == "") {
+
+                $.growl.warning({
+                    message: "Please Select Staff"
+                });
+
+                $("#StaffId").css("border-color", "red");
+                status = false;
+
+            }
+            else if ($("#OffBoardingTypeId").val() == "") {
+
+                $.growl.warning({
+                    message: "Please Select Type"
+                });
+
+                $("#OffBoardingTypeId").css("border-color", "red");
+                status = false;
+
+            }
+            else if ($("#Reason").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Reason"
+                });
+
+                $("#Reason").css("border-color", "red");
+                status = false;
+            }
+            else {
+                $("#StaffId").css("border-color", "#ddd");
+                $("#OffBoardingTypeId").css("border-color", "#ddd");
+                $("#Reason").css("border-color", "#ddd");
+            }
+            debugger;
+           
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+
+
+                    }
+                    else if (
+
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+
+
+        $("#daterange-categories").change(function () {
+            debugger;
+            var leavecategory = $("#daterange-categories").val();
+            if (leavecategory == "multiple") {
+                //$("#StartDate").val("");
+                //$("#EndDate").val("");
+                $("#divMultipleDate").attr("hidden", false);
+            }
+            else {
+                var strtdate = $("#StartDate").val();
+                $("#EndDate").val(strtdate);
+                $("#divMultipleDate").attr("hidden", true);
+            }
+            DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
+        })
+
+        $("#StartDate").change(function () {
+            debugger;
+            var leavecategory = $("#daterange-categories").val();
+            if (leavecategory == "single") {
+                var strtdate = $("#StartDate").val();
+                $("#EndDate").val(strtdate);
+            }
+            else {
+                $("#EndDate").val("");
+            }
+            DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
+        })
+
+        $("#EndDate").change(function () {
+            debugger;
+            DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
+        })
+
+        function DateRangeinDays(startdate, enddate) {
+            if (startdate != "" && enddate != "") {
+
+                var startdate = new Date($("#StartDate").val());
+                var enddate = new Date($("#EndDate").val());
+
+                // end - start returns difference in milliseconds
+                var diff = new Date(enddate - startdate);
+
+                // get days
+                var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
+
+                $("#SelectedDays").text(days);
+            }
+        }
+
+    </script>
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

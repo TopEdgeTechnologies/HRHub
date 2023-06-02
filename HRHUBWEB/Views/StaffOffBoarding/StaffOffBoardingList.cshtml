@@ -1,0 +1,446 @@
+﻿@model HRHUBAPI.Models.StaffOffBoarding
+
+<!-- Row -->
+<div class="row row-sm mt-4">
+
+    <div class="col-lg-12">
+
+        <div class="card">
+
+            <div class="row">
+                <div class="col-xl-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header border-bottom-0">
+                            <h4 class="card-title">Off Boarding Details</h4>
+                            @if (Convert.ToBoolean(ViewBag.IsNew))
+                            {
+                                <div class="card-options">
+                                    <div class="btn-list">
+                                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                                        <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                                        <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="row" id="IdFilters">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        @using (@Html.BeginForm("SearchList", "StaffOffBoarding", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+                                        {
+                                            <div class="row">
+                                                <div class="col-md-12 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Select Department:</label>
+                                                        <select id="DepartmentId" name="DepartmentId" class="form-control" asp-items="@(new SelectList(Model.ListDepartments,"DepartmentId" ,"Title"))">
+                                                            <option value="">Select Department</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-lg-3">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Select Designation:</label>
+                                                        <select id="DesignationId" name="DesignationId" class="form-control" asp-items="@(new SelectList(Model.ListDesignations,"DesignationId" ,"Title"))">
+                                                            <option value="">Select Designation</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="month" asp-for="ApplicationDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12 col-lg-2">
+                                                    <div class="form-group mt-5">
+                                                        <button type="button" onclick="SearchList()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                                        <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+
+
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-menu-heading table_tabs mt-2 p-0 ">
+                            <div class="tabs-menu1">
+                                <!-- Tabs -->
+                                <ul class="nav panel-tabs">
+                                    <li class="ms-sm-4"><a href="#tab5" class="active" data-bs-toggle="tab"> Action Required</a></li>
+                                    <li><a href="#tab6" data-bs-toggle="tab">All Resignation</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab5">
+
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-bottom-0">#</th>
+                                                        <th class="border-bottom-0">Staff Name</th>
+                                                        <th class="text-center">Department</th>
+                                                        <th class="text-center">Applied On</th>
+                                                        <th class="text-center">Status</th>
+                                                        <th class="">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        int count = 1;
+                                                        List<HRHUBAPI.Models.StaffOffBoarding> list = (Model.ListAllStaffOffBoardings.Where(x => x.StaffStatusId == 2).OrderByDescending(x => x.OffBoardingId)).ToList(); // OFF Boarding Status
+                                                        foreach (var item in list)
+                                                        {
+                                                            <tr>
+                                                                <td>@count</td>
+                                                                <td>
+                                                                    <div class="d-flex">
+                                                                        <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
+                                                                        <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                                            <h6 class="mb-1 fs-14">@item.StaffName</h6>
+                                                                            <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td>@item.Department</td>
+                                                                <td class="text-center">
+                                                                    <span class="badge badge-primary  side-badge">@Html.DisplayFor(modelitem => item.AppliedOn)</span>
+                                                                </td>
+
+                                                                @if (item.StaffStatusId == 2)  //Off Boarding
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 3) // Terminated
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-success side-badge"> Terminated</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 5)  //Resigned
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">Resigned</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 6)  //Deseased
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-danger side-badge"> Deseased</span></td>
+
+                                                                }
+
+
+                                                                @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                                                {
+                                                                    <th class="d-none">
+                                                                    </th>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-end">
+                                                                        <div class="d-flex">
+                                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                            {
+                                                                                <a href="#" onclick="EditRecord(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                                    <i class="feather feather-eye primary text-primary mt-1 "></i>
+                                                                                </a>
+                                                                            }
+                                                                            @*if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                                {
+                                                                <a href="#" onclick="DeleteConfirmation(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                </a>
+                                                                }*@
+                                                                        </div>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                            count++;
+                                                        }
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane" id="tab6">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered text-nowrap border-bottom" id="AllResignation">
+
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-bottom-0">#</th>
+                                                        <th class="border-bottom-0">Staff Name</th>
+                                                        <th class="text-center">Department</th>
+                                                        <th class="text-center">Applied On</th>
+                                                        <th class="text-center">Status</th>
+                                                        <th class="">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        int i = 1;
+                                                        foreach (var item in Model.ListAllStaffOffBoardings)
+                                                        {
+                                                            <tr>
+                                                                <td>@i</td>
+                                                                <td>
+                                                                    <div class="d-flex">
+                                                                        <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
+                                                                        <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                                            <h6 class="mb-1 fs-14">@item.StaffName</h6>
+                                                                            <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+
+                                                                <td>@item.Department</td>
+                                                                <td class="text-center">
+                                                                    <span class="badge badge-primary  side-badge">@Html.DisplayFor(modelitem => item.AppliedOn)</span>
+                                                                </td>
+
+                                                                @if (item.StaffStatusId == 2)  //Off Boarding
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 3) // Terminated
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-success side-badge"> Terminated</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 5)  //Resigned
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">Resigned</span></td>
+
+                                                                }
+                                                                else if (item.StaffStatusId == 6)  //Deseased
+                                                                {
+                                                                    <td class="text-center"> <span class="badge badge-danger side-badge"> Deseased</span></td>
+
+                                                                }
+
+
+                                                                @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                                                {
+                                                                    <th class="d-none">
+                                                                    </th>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td class="text-end">
+                                                                        <div class="d-flex">
+                                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                            {
+                                                                                <a href="#" onclick="EditRecord(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                                    <i class="feather feather-eye primary text-primary mt-1 "></i>
+                                                                                </a>
+                                                                            }
+                                                                            @*if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                                {
+                                                                <a href="#" onclick="DeleteConfirmation(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                </a>
+                                                                }*@
+                                                                        </div>
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                            i++;
+                                                        }
+                                                    }
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts{
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+            $('#myTable').DataTable();
+            $('#AllResignation').DataTable();
+
+            $('#DepartmentId').select2();
+            $('#DesignationId').select2();
+
+            // Show Filters controls
+
+            $("#IdFilters").hide();
+            $('#btn_Filter').click(function () {
+
+                $("#IdFilters").toggle(1000);
+            });
+
+            ////////////////////////////////////
+
+
+        })
+
+        function SearchList() {
+            debugger;
+            var obj = {
+
+                DepartmentId: $("#DepartmentId").val(),
+                DesignationId: $("#DesignationId").val(),
+                Date: $("#ApplicationDate").val(),
+
+            }
+
+
+
+            $.ajax({
+                url: "/StaffOffBoarding/SearchList",
+                type: "POST",
+                async: false,
+                dataType: "json",
+                data: obj,
+                success: function (data) {
+                    console.log(data);
+                    if (data != null) {
+                        debugger
+                        var table = $('#myTable').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        var table1 = $('#AllResignation').DataTable();
+                        table1.clear();
+                        table1.draw();
+
+                        var listoffboarding = data.listStaffOffBoardings
+                        console.log(listleave);
+                        var action = '';
+                        for (var i = 0; i < listoffboarding.length; i++) {
+
+                            var count = i + 1;
+                            action += '';
+                            action += '<tr><td> ' + count + ' </td>';
+
+                            action += '<td> <div class="d-flex">  <img src="../assets/images/png/task1.png" alt = "img" class="" > ';
+                            action += '<div class="me-3 mt-0 mt-sm-1 d-block">';
+                            action += '<a href="/OffBoarding/View/' + listoffboarding[i]["offBoardingId"] +'"  > <h6 class="mb-1 fs-14"> ' + listoffboarding[i]["staffName"] + '</h6><p class="text-muted mb-0 fs-12">'+listoffboarding[i]["designation"]+'</p></a >';
+                            action += ' </div>  </td>';
+                            action += '<td> ' + listoffboarding[i]["department"] + '</td>';
+                            action += '<td class="text-center"> <span class="badge badge-primary  side-badge">'+listoffboarding[i]["appliedOn"]+'</span> </td>';
+
+                            if (listoffboarding[i]["staffStatusId"] == 2) { // Off Boarding
+                                action += '<td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>';
+                            }
+                            else if (listoffboarding[i]["staffStatusId"] == 3) { // Terminated
+                                action += '<td class="text-center"> <span class="badge badge-success side-badge"> Terminated</span></td>';
+
+                            }
+                            else if (listoffboarding[i]["staffStatusId"] == 5) { // Resigned
+                                action += ' <td class="text-center"> <span class="badge badge-danger  side-badge">Resigned</span></td>';
+
+
+                            }
+                            else if (listoffboarding[i]["staffStatusId"] == 6) { // Deseased
+                                action += '<td class="text-center"> <span class="badge badge-danger side-badge"> Deseased</span></td>';
+
+                            }
+
+
+
+                        }
+
+                        $('#myTable tbody').html(action);
+
+                        $('#AllResignation tbody').html(action);
+
+                    }
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+
+
+
+
+
+        }
+
+
+
+    </script>
+
+}

@@ -85,19 +85,11 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<OffBoardingType> OffBoardingTypes { get; set; }
 
-    public virtual DbSet<PerformanceReview> PerformanceReviews { get; set; }
-
-    public virtual DbSet<PerformanceReviewCategory> PerformanceReviewCategories { get; set; }
+    public virtual DbSet<PerformanceForm> PerformanceForms { get; set; }
 
     public virtual DbSet<Policy> Policies { get; set; }
 
     public virtual DbSet<PolicyCategory> PolicyCategories { get; set; }
-
-    public virtual DbSet<ReviewSection> ReviewSections { get; set; }
-
-    public virtual DbSet<ReviewSectionAnswer> ReviewSectionAnswers { get; set; }
-
-    public virtual DbSet<ReviewSectionQuestion> ReviewSectionQuestions { get; set; }
 
     public virtual DbSet<SalaryMethod> SalaryMethods { get; set; }
 
@@ -137,6 +129,9 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -646,34 +641,20 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Title).IsUnicode(false);
         });
 
-        modelBuilder.Entity<PerformanceReview>(entity =>
+        modelBuilder.Entity<PerformanceForm>(entity =>
         {
             entity.HasKey(e => e.ReviewFormId);
 
-            entity.ToTable("PerformanceReview");
+            entity.ToTable("PerformanceForm");
 
-            entity.Property(e => e.ReviewFormId)
-                .ValueGeneratedNever()
-                .HasColumnName("ReviewFormID");
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.EndDate).HasColumnType("date");
             entity.Property(e => e.StartDate).HasColumnType("date");
             entity.Property(e => e.Title).IsUnicode(false);
-        });
-
-        modelBuilder.Entity<PerformanceReviewCategory>(entity =>
-        {
-            entity.HasKey(e => e.ReviewCategoryId);
-
-            entity.ToTable("PerformanceReviewCategory");
-
-            entity.Property(e => e.ReviewCategoryId)
-                .ValueGeneratedNever()
-                .HasColumnName("ReviewCategoryID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Policy>(entity =>
@@ -696,52 +677,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<ReviewSection>(entity =>
-        {
-            entity.HasKey(e => e.SectionId);
-
-            entity.ToTable("ReviewSection");
-
-            entity.Property(e => e.SectionId)
-                .ValueGeneratedNever()
-                .HasColumnName("SectionID");
-            entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.ReviewCategoryId).HasColumnName("ReviewCategoryID");
-            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
-            entity.Property(e => e.Title).IsUnicode(false);
-        });
-
-        modelBuilder.Entity<ReviewSectionAnswer>(entity =>
-        {
-            entity.HasKey(e => e.AnswerId);
-
-            entity.ToTable("ReviewSectionAnswer");
-
-            entity.Property(e => e.AnswerId)
-                .ValueGeneratedNever()
-                .HasColumnName("AnswerID");
-            entity.Property(e => e.AnswerComments).IsUnicode(false);
-            entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
-            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-            entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
-            entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
-            entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
-        });
-
-        modelBuilder.Entity<ReviewSectionQuestion>(entity =>
-        {
-            entity.HasKey(e => e.QuestionId);
-
-            entity.ToTable("ReviewSectionQuestion");
-
-            entity.Property(e => e.QuestionId)
-                .ValueGeneratedNever()
-                .HasColumnName("QuestionID");
-            entity.Property(e => e.QuestionText).IsUnicode(false);
-            entity.Property(e => e.SectionId).HasColumnName("SectionID");
-            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
         });
 
         modelBuilder.Entity<SalaryMethod>(entity =>
@@ -848,6 +783,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffContractId).HasColumnName("StaffContractID");
             entity.Property(e => e.AdditionalDetails).IsUnicode(false);
             entity.Property(e => e.Attachment).IsUnicode(false);
+            entity.Property(e => e.ContractDuration).IsUnicode(false);
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.EmploymentTypeId).HasColumnName("EmploymentTypeID");
             entity.Property(e => e.EndDate).HasColumnType("date");
@@ -894,6 +830,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ApplicationHtml)
                 .IsUnicode(false)
                 .HasColumnName("Application_HTML");
+            entity.Property(e => e.CreatedOn).HasColumnType("date");
             entity.Property(e => e.InteriewRemarks)
                 .IsUnicode(false)
                 .HasColumnName("Interiew_Remarks");
@@ -903,6 +840,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("date");
         });
 
         modelBuilder.Entity<StaffSalary>(entity =>
@@ -928,6 +866,9 @@ public partial class HrhubContext : DbContext
             entity.ToTable("StaffSalaryComponent", "Payroll");
 
             entity.Property(e => e.StaffSalaryComponentId).HasColumnName("StaffSalaryComponentID");
+            entity.Property(e => e.CompanyContributionAmount).HasColumnType("money");
+            entity.Property(e => e.CompanyContributionCalculationMethod).IsUnicode(false);
+            entity.Property(e => e.CompanyContributionValue).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.ComponentAmount).HasColumnType("money");
             entity.Property(e => e.ComponentId).HasColumnName("ComponentID");
             entity.Property(e => e.PercentageValue).HasColumnType("decimal(18, 0)");

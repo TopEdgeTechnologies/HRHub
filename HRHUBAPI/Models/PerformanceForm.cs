@@ -3,25 +3,19 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class StaffContract
+public partial class PerformanceForm
 {
-    public int StaffContractId { get; set; }
+    public int ReviewFormId { get; set; }
 
-    public int? StaffId { get; set; }
+    public int? CompanyId { get; set; }
 
-    public int? EmploymentTypeId { get; set; }
+    public string? Title { get; set; }
 
-    public string? ContractDuration { get; set; }
+    public string? Description { get; set; }
 
     public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
-
-    public string? Attachment { get; set; }
-
-    public string? AdditionalDetails { get; set; }
-
-    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

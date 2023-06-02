@@ -87,7 +87,7 @@ public partial class Staff
 
     public int? EmploymentTypeId { get; set; }
 
-    public bool? StaffStatusId { get; set; }
+    public int? StaffStatusId { get; set; }
 
     public string? WorkMode { get; set; }
 }

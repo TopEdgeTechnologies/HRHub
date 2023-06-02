@@ -14,4 +14,10 @@ public partial class StaffSalaryComponent
     public decimal? PercentageValue { get; set; }
 
     public decimal? ComponentAmount { get; set; }
+
+    public string? CompanyContributionCalculationMethod { get; set; }
+
+    public decimal? CompanyContributionValue { get; set; }
+
+    public decimal? CompanyContributionAmount { get; set; }
 }
