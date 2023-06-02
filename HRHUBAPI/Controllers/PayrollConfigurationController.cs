@@ -472,24 +472,23 @@ namespace HRHUBAPI.Controllers
         #endregion
 
 
-        #region StaffLoan
+            [HttpGet("GetStaffSalary")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
+            {
+                return await new StaffSalary().GetStaffSalary(_context);
+            }
 
-        [HttpGet("GetLoanInfos{CompanyId}/{StaffId}")]
-        public async Task<ActionResult<List<LoanApplication>>> GetLoanInfos(int CompanyId, int StaffId)
-        {
-            return await new LoanApplication().GetLoanInfo(CompanyId, StaffId, _context);
-        }
-        [HttpGet("GetLoanStatusInfos")]
-        public async Task<ActionResult<List<LoanStatus>>> GetLoanStatusInfos()
-        {
-            return await new LoanApplication().GetLoanStatus(_context);
-        }
-        [HttpGet("GetLoanInfoId{id}")]
-        public async Task<ActionResult<Leave>> GetLoanInfoId(int id)
-        {
-            var result = await new LoanApplication().GetLoanById(id, _context);
-            if (result != null)
-                return Ok(result);
+            [HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
+            {
+                return await new StaffSalary().GetStaffSalaryByCompanyId(CompanyId, month, year);
+            }
+
+            [HttpGet("GetStaffSalaryById/{CompanyId}/{month}/{year}/{StaffId}")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryById(int CompanyId, int month, int year, int StaffId)
+            {
+                return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
+            }
 
             return NotFound();
 

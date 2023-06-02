@@ -136,8 +136,7 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<UserForm> UserForms { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
-
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -643,6 +642,22 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.OffboardingTypeId).HasColumnName("OffboardingTypeID");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<PerformanceReview>(entity =>
+        {
+            entity.HasKey(e => e.ReviewFormId);
+
+            entity.ToTable("PerformanceReview");
+
+            entity.Property(e => e.ReviewFormId)
+                .ValueGeneratedNever()
+                .HasColumnName("ReviewFormID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EndDate).HasColumnType("date");
+            entity.Property(e => e.StartDate).HasColumnType("date");
             entity.Property(e => e.Title).IsUnicode(false);
         });
 
