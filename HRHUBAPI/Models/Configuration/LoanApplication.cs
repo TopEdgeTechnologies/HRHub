@@ -43,6 +43,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public int? PaidPercentage { get; set; }
         [NotMapped]
+        public Boolean? IsNeedApproval { get; set; }
+
+        [NotMapped]
         public int[]? ForwardToStaffID { get; set; }
 
         [NotMapped]
@@ -56,8 +59,6 @@ namespace HRHUBAPI.Models
         public int? ForwardByStaffID { get; set; }
         [NotMapped]
         public IEnumerable<LoanApplication>? ListLoanData { get; set; }
-        [NotMapped]
-        public IEnumerable<LoanApplication>? ListNewOrPendingleaves { get; set; }
         public async Task<List<LoanApplication>> GetLoanInfo(int CompanyId, int StaffId, HrhubContext _context)
         {
             try
@@ -79,6 +80,7 @@ namespace HRHUBAPI.Models
                         InstallmentPerMonth = Convert.ToInt32(row["InstallmentPerMonth"]) ,
                         Reason = row["Reason"].ToString(),
                         LoanStatusId = Convert.ToInt32(row["LoanStatusId"]),
+                        IsNeedApproval = Convert.ToBoolean(row["IsNeedApproval"]),
 
                         PaidLoanAmount = Convert.ToDecimal(row["PaidLoan"]),
                         PaidPercentage = Convert.ToInt32(row["PaidLoanPercentage"]),

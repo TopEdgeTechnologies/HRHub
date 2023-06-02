@@ -13,5 +13,7 @@ public partial class StaffSalarySetting
 
     public bool? IsOverTimeApplicable { get; set; }
 
+    public bool? IsShortMinutesDeductionApplicable { get; set; }
+
     public string? SalaryFrequency { get; set; }
 }

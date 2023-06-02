@@ -17,7 +17,7 @@ public partial class StaffOffBoarding
 
     public string? ApplicationHtml { get; set; }
 
-    public bool? IsImmediate { get; set; }
+    public bool IsImmediate { get; set; }
 
     public DateTime? LastWorkingDay { get; set; }
 
@@ -26,4 +26,14 @@ public partial class StaffOffBoarding
     public DateTime? InterviewDate { get; set; }
 
     public int? InterviewDoneByStaffId { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 }

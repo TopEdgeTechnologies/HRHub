@@ -80,6 +80,7 @@ namespace HRHUBAPI.Models
                     checkLoanTypeInfo.LoanTypeId = ObjLoanTypeInfo.LoanTypeId;
                     checkLoanTypeInfo.Title = ObjLoanTypeInfo.Title;
                     checkLoanTypeInfo.Status = ObjLoanTypeInfo.Status;
+                    checkLoanTypeInfo.IsNeedApproval = ObjLoanTypeInfo.IsNeedApproval;
                     checkLoanTypeInfo.UpdatedOn = DateTime.Now;
                     checkLoanTypeInfo.UpdatedBy = ObjLoanTypeInfo.CreatedBy;
                     checkLoanTypeInfo.CompanyId = ObjLoanTypeInfo.CompanyId;

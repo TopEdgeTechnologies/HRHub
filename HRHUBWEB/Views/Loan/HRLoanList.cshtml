@@ -179,7 +179,7 @@
                                             <a href="#" onclick="showloanApprovalmodel(this,@item.LoanApplicationId,2)" class="action-btns1">
                                                 <i class="feather feather-x text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                             </a>
-                                            @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
+                                            @if (item.LoanStatusId != 1 && item.LoanStatusId != 2 && item.IsNeedApproval == true) // New
                                             {
                                                 <a href="#" onclick="showforwardloanmodel(this,@item.LoanApplicationId)" class="action-btns1">
                                                     <i class="text-warning fe fe-arrow-right-circle mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
@@ -539,7 +539,7 @@
                             action += '<i class="feather feather-x text-danger mt-1"></i></a>';
 
 
-                            if (listloan[i]["loanStatusId"] != 1 && listloan[i]["loanStatusId"] != 2) {
+                            if (listloan[i]["loanStatusId"] != 1 && listloan[i]["loanStatusId"] != 2 && listloan[i]["isNeedApproval"] == true ) {
                                 action += '<a href="#" onclick="showforwardloanmodel(' + listloan[i]["loanApplicationId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
                                 action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
                             }
