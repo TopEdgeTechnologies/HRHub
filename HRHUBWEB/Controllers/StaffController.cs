@@ -249,6 +249,83 @@ namespace HRHUBWEB.Controllers
             return Json(result); 
 		}
 
+
+
+        #region Staff Contract
+
+
+        // staff Contract By Waheed
+        [CustomAuthorization]
+        public async Task<IActionResult> ContractList(String data = "")
+		{
+
+
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+			ViewBag.Success = data;
+
+			ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+
+			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+
+			ViewBag.ContractType = await _APIHelper.CallApiAsyncGet<IEnumerable<EmploymentType>>($"api/Staffs/GetEmploymentTypeInfos{_user.CompanyId}", HttpMethod.Get);
+
+			ViewBag.ExpireContract = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffContract>>($"api/Staffs/ListStaffExpiredContract{_user.CompanyId}", HttpMethod.Get);
+			StaffContract ObjStaffContract = new StaffContract();
+
+
+			ObjStaffContract.AllStaffContract = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffContract>>($"api/Staffs/ListStaffAllContract{_user.CompanyId}", HttpMethod.Get);
+
+			return View(ObjStaffContract);
+		}
+
+
+		public async Task<IActionResult> GetContractById(int id)
+		{
+			StaffContract ObjStaffContract = new StaffContract();
+			ObjStaffContract = await _APIHelper.CallApiAsyncGet<StaffContract>($"api/Staffs/GetStaffContractById{id}", HttpMethod.Get);
+			return Json(ObjStaffContract);
+		}
+
+		public async Task<IActionResult> StaffContractCreateOrUpdate(IFormCollection MyAttachment, StaffContract ObjStaffContract)
+		{
+			var Attachment = MyAttachment.Files.GetFile("ContractAttachment");
+			ObjStaffContract.Attachment = UploadImage(ObjStaffContract.ContractDuration, Attachment, "ContractAttachment");			
+			ObjStaffContract.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjStaffContract, "api/Staffs/PostStaffContract", HttpMethod.Post);
+
+			if (result.Message.Contains("Insert"))
+			{
+				return RedirectToAction("ContractList", new { data = 1 });
+			}
+			else
+			{
+				return RedirectToAction("ContractList", new { data = 2 });
+			}
+		}
+
+		public async Task<IActionResult> StaffContractDelete(int id)
+		{
+			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/DeleteStaffContract{id}/{_user.UserId}", HttpMethod.Get);
+			return RedirectToAction("ContractList", new { data = 3 });
+		}
+
+		public async Task<IActionResult> StaffContractAlreadyExist(int id, DateTime EndDate, int StaffId)
+		{
+			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffContractAlreadyExists{id}/{EndDate.ToString("dd-MMM-yyyy")}/{StaffId}", HttpMethod.Get);
+			return Json(result);
+		}
+
+
+
+
+
+
+		#endregion
 		private string UploadImage(string name, IFormFile file, string root)
         {
             try
