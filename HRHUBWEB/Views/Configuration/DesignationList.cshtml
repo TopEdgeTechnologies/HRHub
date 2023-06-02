@@ -227,7 +227,7 @@
                 $("#Title").css("border-color", "#ddd");
             }
             var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
-            console.log(Data)
+           
             $.ajax({
                 async: false,
                 url: "/Configuration/DesignationCheckData",
