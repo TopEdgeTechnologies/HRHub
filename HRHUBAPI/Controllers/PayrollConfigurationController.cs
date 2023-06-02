@@ -490,10 +490,10 @@ namespace HRHUBAPI.Controllers
                 return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
             }
 
-            return NotFound();
+           // return NotFound();
 
 
-        }
+       // }
         [HttpPost("LoanAddOrCreate")]
         public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
         {
@@ -597,7 +597,7 @@ namespace HRHUBAPI.Controllers
 
             return await new LoanApplication().GetStaffLoanRemainingAmountDetail(StaffId, _context);
         }
-        #endregion
+    ///    #endregion
 
 
     }
