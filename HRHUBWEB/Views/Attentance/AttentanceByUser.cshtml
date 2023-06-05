@@ -168,29 +168,18 @@
 
 
 		$(document).ready(function () {
-
-
-
-
 			$("#IdEmployee").select2();
-
-
-			$("#IdEmployee").change(function () {
-				
+			$("#IdEmployee").change(function () {				
 				$('#TotalCountId').text(0);
 				$('#AbsentCountId').text(0);
 				$('#PresentCountId').text(0);
 				$('#LeaveCountId').text(0);
 				$('#HolydayCountId').text(0);
 				$('#WeekendCountId').text(0);
-
 				var tbody = $("#emp-attendance tbody");				
-				tbody.empty();
-				
+				tbody.empty();			
 				
 			});
-
-
 
 			var currentDate = new Date(); // Get the current date
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -199,34 +188,20 @@
 				dateFormat: 'dd M yy',
 				autoHide: true
 
-
-
 			});
 
 			$('#fromdate').datepicker('setDate', firstDayOfMonth);
-
 			$('#todate').datepicker({
 				 dateFormat: 'dd M yy',
 				autoHide: true
-
-
-
 			});
 			$('#todate').datepicker('setDate', lastDayOfMonth);
-
-
-
-
 			var msg = '@ViewBag.Success';
 			if (msg !== "" && msg == '1') {
-
 				notif({
 					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
 					type: "success"
 				});
-
-
-
 			}
 			if (msg !== "" && msg == '2') {
 
