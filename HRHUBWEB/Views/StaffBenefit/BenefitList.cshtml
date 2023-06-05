@@ -1,55 +1,33 @@
 ﻿@model HRHUBAPI.Models.ComponentInfo
+@{
+    ViewData["Title"] = "Benefit List";
+}
 
-@*<input type="hidden" asp-for="CompanyId" />*@
-
-@using (Html.BeginForm("ComponentInfoCreateOrUpdate", "StaffBenefit", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("BenefitCreateOrUpdate", "StaffBenefit", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
     <input type="hidden" asp-for="ComponentId" />
+   
 
     <!--Add Department Modal -->
     <div class="modal fade" id="AddGeneralModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Component</h5>
+                    <h5 class="modal-title">Add Benefit</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
+                  
                     <div class="form-group">
-                        <label class="form-label">Component Group</label>
-                        <select asp-for=ComponentGroupId id="ComponentGroupId" class="form-control custom-select select2" required data-placeholder="Select Department" asp-items="@(new SelectList(@ViewBag.ObjComponentGroupList,"ComponentGroupId", "Title"))">
-                            <option label="Select Component Group"></option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Component Title</label>
-                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Component Title">
+                        <label class="form-label">Benefit <span class="text-danger">*</span></label>
+                        <input asp-for="Title" class="form-control" type="text" placeholder="Enter Benefit Title">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Calculation Method</label>
-                        <select asp-for="CalculationMethod" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.CalculationMethod,"Text" ,"Text"))">
-                            <option value="">Select Calculation Method</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Company Contribution</label>
-                        <input asp-for="CompanyContribution" class="form-control" type="text" placeholder="Enter Company Contribution">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select asp-for="Category" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.Category,"Text" ,"Text"))">
-                            <option value="">Select Category</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Type</label>
-                        <select asp-for="Type" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.Type,"Text" ,"Text"))">
-                            <option value="">Select Type</option>
-                        </select>
-                    </div>
+                 
+                   
+                  
                     <div class="form-group">
                         <label class="custom-control custom-checkbox">
                             <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
@@ -72,12 +50,12 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Component Details</h3>
+                <h3 class="card-title">Benefits Details</h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
                     <div class="card-options">
                         <div class="btn-list">
-                            <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Component</a>
+                            <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Benefit</a>
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
@@ -90,45 +68,24 @@
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                <th class="text-center">Sr.#</th>
-                                <th class="text-center">Component Group</th>
-                                <th class="border-bottom-0">Component Title</th>
-                                <th class="border-bottom-0">Calculation Method</th>
-                                <th class="border-bottom-0">Company Contribution</th>
-                                <th class="border-bottom-0">Category</th>
-                                <th class="border-bottom-0">Type</th>
-                                <th class="text-center">Status</th>
+                                <th class="text-center">Sr.#</th>                              
+                                <th class="border-bottom-0">Benefits</th>                                                                           
+                                <th class="border-bottom-0 text-center">Status</th>                                                                           
                                 <th class="">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @{
                                 int count = 1;
-                                foreach (var item in Model.ComponentInfoList)
+                                foreach (var item in ViewBag.ComponentList)
                                 {
                                     <tr>
+                                        <td class="text-center">                                          
+                                                <span>@count</span>                                           
+                                        </td>
+                                       
                                         <td>
-                                            <div class="d-flex">
-                                                <span>@count</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.GroupTitle)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Title)
-                                        </td>
-                                         <td>
-                                            @Html.DisplayFor(modelItem => item.CalculationMethod)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CompanyContribution)
-                                        </td>
-                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Category)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Type)
+                                            @item.Title
                                         </td>
                                         @{
                                             var isActive = item.Status;
@@ -141,6 +98,7 @@
                                                 <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
                                             }
                                         }
+                                      
                                         @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                         {
                                             <th class="d-none">
@@ -161,6 +119,7 @@
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                         </a>
                                                     }
+                                               
                                                 </div>
                                             </td>
                                         }
@@ -219,38 +178,25 @@
         function AddNewRecord() {
             debugger
             $("#AddGeneralModal").modal('show');
-            $("#ComponentId").val(0)
-            $("#ComponentGroupID").val(0)
-            $("#Title").val('')
-            $("#CalculationMethod").val(0)
-            $("#CompanyContribution").val(0)
-            $("#Category").val('');
-            $("#Type").val('');
-            $("#Status").prop('checked', false)
+            ClearControl();
+            $("#Status").prop('checked', true)
         }
 
         function EditRecord(id) {
             AddNewRecord();
             debugger
-            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
-            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
-            var Data = { id: id }
-            console.log(Data)
+            var Data = { Id: id }
+            
             $.ajax({
                 async: false,
-                url: "/PayrollConfiguration/GetComponentInfoById",
+                url: "/StaffBenefit/BenefitDetails",
                 type: "GET",
                 data: Data,
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        $("#ComponentId").val(data.componentId);
-                        $("#ComponentGroupId").val(data.componentGroupId).trigger("change");
-                        $("#Title").val(data.title);
-                        $("#CalculationMethod").val(data.calculationMethod).trigger("change");
-                        $("#CompanyContribution").val(data.companyContribution)
-                        $("#Category").val(data.category).trigger("change");
-                        $("#Type").val(data.type).trigger("change");
+                        $("#ComponentId").val(data.componentId);                      
+                        $("#Title").val(data.title);                                      
                         $("#Status").prop('checked', data.status);
                         $("#AddGeneralModal").modal('show');
                     }
@@ -260,7 +206,11 @@
                 }
             })
         }
-
+        function ClearControl(){
+            $("#ComponentId").val(0)            
+            $("#Title").val('')                        
+           
+        }
         function DeleteConfirmation(id) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -281,9 +231,9 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("ComponentInfoDelete", "PayrollConfiguration")/" + id;
+                    var url = "@Url.Action("BenefitInfoDelete", "StaffBenefit")/" + id;
 
-                    alert(url);
+                   
                     window.location.href = url;
                 }
                 else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -298,7 +248,7 @@
 
         function SaveRecord() {
             var status = true;
-            $("#AddGeneralModal").modal('hide');
+           
             debugger;
 
             if ($("#Title").val() == "") {
@@ -313,21 +263,18 @@
                 $("#Title").css("border-color", "#ddd");
             }
 
-            //var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
+            
             var Data = { id: $("#ComponentId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/PayrollConfiguration/ComponentInfoAlreadyExists",
+                url: "/StaffBenefit/BenefitInfoAlreadyExists",
                 type: "GET",
                 data: Data,
                 success: function (data) {
                     if (data != "") {
-                        debugger
-                        //var b = JSON.parse(data)
-                        if (data.success) {
-
-                            // $.growl.warning(b.message);
+                        debugger                        
+                        if (data.success) {                           
                             $.growl.warning({
                                 message: data.message
                             });

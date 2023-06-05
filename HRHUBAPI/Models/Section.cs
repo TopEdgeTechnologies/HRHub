@@ -3,17 +3,23 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class LeavePolicy
+public partial class Section
 {
-    public int LeavePolicyId { get; set; }
+    public int SectionId { get; set; }
+
+    public int? ReviewFormId { get; set; }
 
     public string? Title { get; set; }
 
-    public int? PolicyId { get; set; }
+    public string? Description { get; set; }
 
-    public int? CompanyId { get; set; }
+    public int? OrderNo { get; set; }
 
-    public bool Status { get; set; }
+    public bool? IsAnswerWeightage { get; set; }
+
+    public bool? AllowSelfScoring { get; set; }
+
+    public int? QuestionMaxLimit { get; set; }
 
     public bool? IsDeleted { get; set; }
 

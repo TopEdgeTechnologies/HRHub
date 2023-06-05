@@ -13,5 +13,9 @@ public partial class ClearenceProcess
 
     public string? Remarks { get; set; }
 
+    public DateTime? ProcessDate { get; set; }
+
+    public string? Attachment { get; set; }
+
     public int? ClearenceProcessStatusId { get; set; }
 }
