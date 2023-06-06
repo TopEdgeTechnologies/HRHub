@@ -131,11 +131,11 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        [HttpGet("DeleteStaffSalaryComponent{Id}")]
-        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id)
+        [HttpGet("DeleteStaffSalaryComponent{Id}/{UserId}")]
+        public async Task<ActionResult<StaffSalaryComponent>> DeleteStaffSalaryComponent(int Id,int UserId)
         {
-            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, _context);
-            if (dbResult == true)
+            var dbResult = await new StaffSalaryComponent().DeleteStaffBenefitComponent(Id, UserId, _context);
+            if (dbResult !=null)
             {
                 return Ok(new
                 {
