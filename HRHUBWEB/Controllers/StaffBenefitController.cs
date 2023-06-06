@@ -64,11 +64,15 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-
+            ComponentInfo obj = new ComponentInfo();
+            
             StaffSalaryComponent ObjComponentInfo = new StaffSalaryComponent();
             ObjComponentInfo.ComponentId= Id;
-           // ObjComponentInfo = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
-			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+           obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
+            ViewBag.title = obj.Title;
+           // ViewBag.staffcount = obj.StaffCount;
+
+            ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
 
             ViewBag.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/StaffBenefits/GetSalaryComponent/{_user.CompanyId}/{ObjComponentInfo.ComponentId}", HttpMethod.Get);
 
@@ -99,8 +103,8 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffSalaryCreateOrUpdate(StaffSalaryComponent objStaffSalaryComponent)
         {
-          
-           
+
+            objStaffSalaryComponent.CreatedBy = _user.CreateBy;
             var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalaryComponent, "api/StaffBenefits/PostStaffSalaryComponent", HttpMethod.Post);
 
             if (result.Message.Contains("Insert"))
@@ -129,8 +133,13 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffSalaryInfoDelete(int Id)
         {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/StaffBenefits/DeleteStaffSalaryComponent{Id}", HttpMethod.Get);
-            return RedirectToAction("BenefitDetails", new { data = 3 });
+            var result = await _APIHelper.CallApiAsyncGet<StaffSalaryComponent>($"api/StaffBenefits/DeleteStaffSalaryComponent{Id}/{_user.UserId}", HttpMethod.Get);
+
+            return RedirectToAction("BenefitDetails", new { data = 3 ,Id= result.ComponentId });
+
+           
+            
+            
         }
 
         public async Task<IActionResult> StaffSalaryInfoAlreadyExists(int Id,int StaffId, int Componentid)

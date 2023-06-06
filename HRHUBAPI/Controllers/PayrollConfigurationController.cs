@@ -433,9 +433,9 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("DeleteStaffSalaryComponent/{Id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id)
+        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id, int UserId)
         {
-            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, _context);
+            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, UserId, _context);
             if (dbResult == true)
             {
                 return Ok(new
