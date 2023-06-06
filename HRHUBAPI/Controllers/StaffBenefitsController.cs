@@ -95,6 +95,82 @@ namespace HRHUBAPI.Controllers
         #endregion
 
 
+        #region Staff Salary Component
+
+        [HttpGet("GetSalaryComponent/{CompanyId}/{ComponentId}")]
+        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId, int ComponentId)
+        {
+            return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, ComponentId, _context);
+        }
+
+        [HttpGet("GetStaffSalaryComponentById/{Id}")]
+        public async Task<ActionResult<StaffSalaryComponent>> GetStaffSalaryComponentById(int Id)
+        {
+            return await new StaffSalaryComponent().GetStaffSalaryComponentById(Id, _context);
+        }
+
+        [HttpPost("PostStaffSalaryComponent")]
+        public async Task<ActionResult<StaffSalaryComponent>> PostStaffSalaryComponent(StaffSalaryComponent staffSalaryComponent)
+        {
+            var dbResult = await new StaffSalaryComponent().PostStaffSalaryComponent(staffSalaryComponent, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("DeleteStaffSalaryComponent{Id}")]
+        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id)
+        {
+            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpGet("StaffSalaryComponentAlreadyExists/{Id}/{StaffId}/{ComponentId}")]
+        public async Task<ActionResult<StaffSalaryComponent>> StaffSalaryComponentAlreadyExists(int Id, int StaffId, int ComponentId)
+        {
+            var dbResult = await new StaffSalaryComponent().AlreadyExists(Id, StaffId, ComponentId, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+        #endregion
+
+
 
     }
 }

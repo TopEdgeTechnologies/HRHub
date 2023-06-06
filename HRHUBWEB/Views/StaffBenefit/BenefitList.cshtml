@@ -70,6 +70,7 @@
                             <tr>
                                 <th class="text-center">Sr.#</th>                              
                                 <th class="border-bottom-0">Benefits</th>                                                                           
+                                <th class="border-bottom-0 text-center">Staff Count</th>                                                                           
                                 <th class="border-bottom-0 text-center">Status</th>                                                                           
                                 <th class="">Action</th>
                             </tr>
@@ -85,7 +86,10 @@
                                         </td>
                                        
                                         <td>
-                                            @item.Title
+                                            <a asp-action="BenefitDetails" asp-route-id="@item.ComponentId"><h6> @item.Title</h6></a>                                           
+                                        </td>
+                                        <td class="text-center">
+                                            @item.StaffCount
                                         </td>
                                         @{
                                             var isActive = item.Status;
@@ -98,7 +102,6 @@
                                                 <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
                                             }
                                         }
-                                      
                                         @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                         {
                                             <th class="d-none">

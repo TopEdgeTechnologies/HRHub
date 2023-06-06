@@ -399,9 +399,9 @@ namespace HRHUBAPI.Controllers
         #region Staff Salary Component
 
         [HttpGet("GetSalaryComponent")]
-        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId)
+        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId,int ComponentId)
         {
-            return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, _context);
+            return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, ComponentId, _context);
         }
 
         [HttpGet("GetStaffSalaryComponentById/{Id}")]
@@ -433,9 +433,9 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("DeleteStaffSalaryComponent/{Id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id, int UserId)
+        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id)
         {
-            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, UserId, _context);
+            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, _context);
             if (dbResult == true)
             {
                 return Ok(new

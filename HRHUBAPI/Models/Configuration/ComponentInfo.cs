@@ -1,14 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HRHUBAPI.Models.Configuration;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HRHUBAPI.Models
 {
     public partial class ComponentInfo
     {
+
+        DbConnection _db = new DbConnection();
+
+
+
         [NotMapped]
         public int? TranFlag { get; set; }
+        
+        [NotMapped]
+        public int? StaffCount { get; set; }
 
         [NotMapped]
         public string? GroupTitle { get; set; }
@@ -16,63 +26,49 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<ComponentInfo>? ComponentInfoList { get; set; }
 
-        //public async Task<List<ComponentInfo>> GetComponentInfo(HrhubContext hrhubContext)
-        //{
-        //    try
-        //    {
-        //        var queryList = from ci in hrhubContext.ComponentInfos
-        //                        join cg in hrhubContext.ComponentGroups
-        //                        on ci.ComponentGroupId equals cg.ComponentGroupId into joinedData
-        //                        from result in joinedData.DefaultIfEmpty()
-        //                        orderby result.Title != null ? 1 : 2, result.Title
-        //                        select new ComponentInfo
-        //                        {
-        //                            ComponentId = ci.ComponentId,
-        //                            ComponentGroupId = ci.ComponentGroupId,
-        //                            GroupTitle = result.Title != null ? result.Title : string.Empty,
-        //                            Title = ci.Title,
-        //                            CalculationMethod = ci.CalculationMethod,
-        //                            CompanyContribution = ci.CompanyContribution,
-        //                            Category = ci.Category,
-        //                            Type = ci.Type,
-        //                            Status = ci.Status
-        //                        };
 
-        //        return await queryList.ToListAsync();
-
-        //        //List<ComponentInfo> ComponentInfo = new List<ComponentInfo>();
-        //        //ComponentInfo = await hrhubContext.ComponentInfos.Where(x => x.IsDeleted == false).ToListAsync();
-        //        //return ComponentInfo;
-        //    }
-        //    catch (Exception ex) { throw; }
-        //}
         public async Task<List<ComponentInfo>> GetBenefitInfo(int CompanyId, HrhubContext hrhubContext)
         {
-            try
-            {
+           
+                try
+                {
 
-                //var queryList = from ss in hrhubContext.StaffSalaryComponents
-                //                join ComponentInfo ci in hrhubContext.StaffSalaryComponents on ss.ComponentId equals ci.ComponentId
+                    List<ComponentInfo> list = new List<ComponentInfo>();
+
+                    string query = "EXEC dbo.sp_Benefit_Count_Staff " + CompanyId + "  ";
+                    DataTable dt = _db.ReturnDataTable(query);
+
+                    list = dt.AsEnumerable()
+                        .Select(row => new ComponentInfo
+                        {
 
 
-                //                where ci.IsBenefit == true && ci.CompanyId == CompanyId && ci.IsDeleted == false
-                //                select new ComponentInfo()
-                //                {
-                //                    ComponentId = ci.ComponentId,
-                //                    Title = ci.Title,
-                //                    Status= ci.Status
+                            ComponentId = Convert.ToInt32(row["ComponentID"]),                           
+                            Title = row["Title"].ToString(),
+                            Status= Convert.ToBoolean(row["Status"]),
+                            StaffCount = Convert.ToInt32(row["StaffCount"])
+                           
+
+                        }).OrderByDescending(x => x.ComponentId).ToList();
+                    return list;
 
 
-                //                };
-                //return queryList != null ? queryList.OrderByDescending(x => x.ComponentId).ToList() : new List<ComponentInfo>();
-                // }
 
-                List<ComponentInfo> ComponentInfo = new List<ComponentInfo>();
-                ComponentInfo = await hrhubContext.ComponentInfos.Where(x => x.IsDeleted == false && x.IsBenefit == true && x.CompanyId == CompanyId).ToListAsync();
-                return ComponentInfo;
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+
+                }
+
             }
-            catch (Exception ex) { throw; }
-        }
+
+          
+          
+           
+       
         public async Task<ComponentInfo> GetBenefitInfoById(int Id, HrhubContext hrhubContext)
         {
             try

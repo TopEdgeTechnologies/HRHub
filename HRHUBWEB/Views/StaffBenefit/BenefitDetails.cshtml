@@ -1,7 +1,439 @@
-﻿
+﻿@model HRHUBAPI.Models.StaffSalaryComponent
 @{
     ViewData["Title"] = "Benefit Details";
 }
+<style>
+    .card-title {
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }
 
-<h1>BenefitDetails</h1>
+    .fixed-width {
+        width: 60px;
+    }
+</style>
+@using (Html.BeginForm("StaffSalaryCreateOrUpdate", "StaffBenefit", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+    <input type="hidden" asp-for="StaffSalaryComponentId" />
+    <input type="hidden" asp-for="ComponentId" />
+
+
+    <!--Add Department Modal -->
+    <div class="modal fade" id="AddGeneralModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enroll Employees</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="form-label">Staff Name <span class="text-danger">*</span></label>
+                        <select asp-for=StaffId class="form-control " data-placeholder="Select Staff" asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
+                            <option label="Select Staff">Select Staff</option>
+                        </select>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header border-bottom-0">
+                                    <h3 class="card-title">
+                                        Amount Fixed
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="greeting" href="#"></a>
+
+                                    </h3>
+                                    <div class="card-options">
+                                        <label class="custom-switch m-0">
+                                            <input type="checkbox" value="1" class="custom-switch-input" id="mycheckbox">
+                                            <span class="custom-switch-indicator"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                   
+                                        <div class="row">
+                                            <div class="form-group">
+                                            <label class="form-label">Employes Contribution <span class="text-danger">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <span class="input-group-text fixed-width">Fixed</span>
+                                                    <input asp-for="ComponentAmount" type="number" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                            <label class="form-label">Employer's Contribution <span class="text-danger">*</span></label>
+                                                <div class="input-group mb-4">
+                                                    <span class="input-group-text fixed-width">Fixed</span>
+                                                    <input asp-for="CompanyContributionAmount" type="number" class="form-control">
+                                                </div>
+                                            </div>
+                                      
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+                                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <!-- End Add Department Modal  -->
+}
+
+<!-- Row -->
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"></h3>
+                <h3 class="card-title"></h3>
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
+                        <div class="btn-list">
+                            <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Enroll Employee</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Sr.#</th>
+                                <th class="border-bottom-0">Staff Name</th>
+                                <th class="border-bottom-0 text-center">Employes Contribution</th>
+                                <th class="border-bottom-0 text-center">Employer's Contribution</th>
+                               
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count = 1;
+                                foreach (var item in ViewBag.StaffSalaryList)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <span>@count</span>
+                                        </td>
+
+                                        <td>
+                                            @item.StaffFName @item.StaffSName
+                                        </td>
+
+
+                                        <td class="text-center">
+                                            @Convert.ToDecimal(item.ComponentAmount).ToString("N2")
+                                            
+                                        </td>
+
+                                        <td class="text-center">
+                                            @Convert.ToDecimal(item.CompanyContributionAmount).ToString("N2")
+                                          
+                                        </td>
+                                       
+                                        
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a href="#" onclick="EditRecord(@item.StaffSalaryComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a href="#" onclick="DeleteConfirmation(@item.StaffSalaryComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
+
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts
+    {
+    <script>
+       
+        $(document).ready(function () {
+
+
+            $("#StaffId").select2()
+
+
+
+
+
+            let checkbox = document.querySelector('#mycheckbox');
+            let cardTitle = document.querySelector('.card-title');
+            let inputGroupText = document.querySelectorAll('.input-group-text');
+            console.log(inputGroupText)
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    cardTitle.style.opacity = "0";
+                    setTimeout(function () {
+                        cardTitle.textContent = "Percentage";
+                        inputGroupText.forEach(function (text) {
+                            text.textContent = "Per %";
+                        })
+                        cardTitle.style.opacity = "1";
+                    }, 300)
+                }
+                else {
+                    cardTitle.style.opacity = "0";
+                    setTimeout(function () {
+                        cardTitle.innerHTML = "Amount"
+                        inputGroupText.forEach(function (text) {
+                            text.textContent = "Fixed";
+                        })
+                        cardTitle.style.opacity = "1";
+                    }, 300)
+                }
+            })
+
+
+
+
+            if (@Model.StaffSalaryComponentId > 0) {
+                $('#AddGeneralModal').modal.show();
+            }
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+
+        });
+
+        function AddNewRecord() {
+            debugger
+            $("#AddGeneralModal").modal('show');
+            ClearControl();
+            $("#Status").prop('checked', true)
+        }
+
+        function EditRecord(id) {
+            AddNewRecord();
+            debugger
+            var Data = { Id: id }
+
+            $.ajax({
+                async: false,
+                url: "/StaffBenefit/StaffSalaryDetails",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        $("#StaffSalaryComponentId").val(data.staffSalaryComponentId);
+                        $("#ComponentId").val(data.componentId);
+                        $("#StaffId").val(data.staffId).trigger("change");
+                        $("#ComponentAmount").val(data.componentAmount);
+                        $("#CompanyContributionAmount").val(data.companyContributionAmount);
+                       
+                        $("#AddGeneralModal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            })
+        }
+        function ClearControl() {
+            $("#ComponentId").val(0)
+            $("#Title").val('')
+
+        }
+        function DeleteConfirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("StaffSalaryInfoDelete", "StaffBenefit")/" + id;
+
+
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+        function SaveRecord() {
+            var status = true;
+
+            debugger;
+            if ($("#StaffId").val() == null || $("#StaffId").val() == "Select Staff") {
+
+                $.growl.warning({
+                    message: "Please Select Staff Name"
+                });
+                $("#StaffId").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#StaffId").css("border-color", "#ddd");
+            }
+            if ($("#ComponentAmount").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Employes Contribution"
+                });
+                $("#ComponentAmount").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#ComponentAmount").css("border-color", "#ddd");
+            }
+
+            if ($("#CompanyContributionAmount").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Employer's Contribution"
+                });
+                $("#CompanyContributionAmount").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#CompanyContributionAmount").css("border-color", "#ddd");
+            }
+
+
+            var Data = { Id: $("#StaffSalaryComponentId").val(), ComponentId: $("#ComponentId").val(), StaffId: $("#StaffId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/StaffBenefit/StaffSalaryInfoAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        if (data.success) {
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#AddGeneralModal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+    </script>
+}
+
 
