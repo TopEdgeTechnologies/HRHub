@@ -9,6 +9,9 @@ using System.Data;
 using HRHUBAPI.Models.Configuration;
 using System.Runtime.Intrinsics.Arm;
 using System.ComponentModel.Design;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Nodes;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HRHUBAPI.Models
 {
@@ -17,6 +20,8 @@ namespace HRHUBAPI.Models
 
     public partial class StaffOffBoarding
     {
+        [NotMapped]
+        public int ClearenceProcessID { get; set; }
         [NotMapped]
         public string? OffBoardingTypeTitle { get; set; }
         [NotMapped]
@@ -34,16 +39,49 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? Designation { get; set; }
         [NotMapped]
+        public string? RemarksStaffName { get; set; }
+        [NotMapped]
+        public string? RemarksStaffSnap { get; set; }
+        [NotMapped]
+        public string? RemarksDepartment { get; set; }
+        [NotMapped]
+        public string? RemarksDesignation { get; set; }
+        [NotMapped]
+        public string? ContactNumber1 { get; set; }
+        [NotMapped]
+        public string? Email { get; set; }
+        [NotMapped]
+        public string? PermanentAddress { get; set; }
+        [NotMapped]
+        public string? NationalIdnumber { get; set; }
+        [NotMapped]
+        public string? JoiningDate { get; set; }
+        [NotMapped]
+        public int? RemarksFromStaffId { get; set; }
+        [NotMapped]
+        public string? Remarks { get; set; }
+        [NotMapped]
+        public string? Attachment { get; set; }
+        [NotMapped]
+        public string? ClearenceProcessDate { get; set; }
+        [NotMapped]
+        public bool? IsClearenceFromDepartment { get; set; }
+        [NotMapped]
+        public bool? AllowExitInterview { get; set; }
+        [NotMapped]
+        public bool? VisibleExitButton { get; set; }
+        [NotMapped]
         public IEnumerable<StaffOffBoarding>? ListAllStaffOffBoardings { get; set; }
         [NotMapped]
         public IEnumerable<Department>? ListDepartments { get; set; }
         [NotMapped]
+        public IEnumerable<StaffOffBoarding>? ListClearenceDepartments { get; set; }
+        [NotMapped]
         public IEnumerable<Designation>? ListDesignations { get; set; }
         [NotMapped]
-        public IEnumerable<StaffOffBoarding>? ListStaffOffBoardingsAction { get; set; }
-
-        [NotMapped]
         public IEnumerable<OffBoardingType>? ListOffBoardingTypes { get; set; }
+        [NotMapped]
+        public IEnumerable<StaffOffBoarding>? ListClearenceProcess { get; set; }
         [NotMapped]
         public IEnumerable<Staff>? ListStaffs { get; set; }
         public async Task<List<StaffOffBoarding>> GetStaffOffBoarding(int CompanyId, HrhubContext _context)
@@ -74,7 +112,7 @@ namespace HRHUBAPI.Models
                                       Designation = di.Title,
                                       StaffStatusId = s.StaffStatusId,
 
-                                  }).ToListAsync();
+                                  }).OrderByDescending(x => x.OffBoardingId).ToListAsync();
 
                 return list;
             }
@@ -119,7 +157,7 @@ namespace HRHUBAPI.Models
                                       Designation = di.Title,
                                       StaffStatusId = s.StaffStatusId,
 
-                                  }).ToListAsync();
+                                  }).OrderByDescending(x => x.OffBoardingId).ToListAsync();
 
                 return list;
             }
@@ -147,134 +185,92 @@ namespace HRHUBAPI.Models
         }
 
 
-        //public async Task<List<StaffOffBoarding>> GetStaffOffBoardingAction(int CompanyId, HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        var list = await (from l in _context.StaffOffBoardings
-        //                          join lt in _context.OffBoardingTypes on l.OffboardingTypeId equals lt.OffboardingTypeId
-        //                          join s in _context.Staff on l.StaffId equals s.StaffId
-        //                          join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
-        //                          join di in _context.Designations on s.DesignationId equals di.DesignationId
+        public async Task<StaffOffBoarding> GetStaffOffBoardingById(int id, HrhubContext _context)
+        {
+            try
+            {
 
-        //                          where l.IsDeleted == false
-        //                          && s.CompanyId == CompanyId
-        //                          && s.StaffId == 2 // active
-        //                          select new StaffOffBoarding()
-        //                          {
-        //                              OffBoardingId = l.OffBoardingId,
-        //                              OffBoardingTypeTitle = lt.Title,
-        //                              AppliedOn = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
-        //                              Reason = l.Reason,
+                var obj = await (from l in _context.StaffOffBoardings
+                                 join lt in _context.OffBoardingTypes on l.OffboardingTypeId equals lt.OffboardingTypeId
+                                 join s in _context.Staff on l.StaffId equals s.StaffId
+                                 join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                                 join di in _context.Designations on s.DesignationId equals di.DesignationId
 
-        //                              StaffId = s.StaffId,
-        //                              StaffRegistrationNo = s.RegistrationNo,
-        //                              StaffName = s.FirstName + " " + s.LastName,
-        //                              StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath,
-        //                              Department = dep.Title,
-        //                              Designation = di.Title,
-        //                              StaffStatusId = s.StaffStatusId,
+                                 where l.IsDeleted == false
+                                 && l.OffBoardingId == id
+                                 select new StaffOffBoarding()
+                                 {
+                                     OffBoardingId = l.OffBoardingId,
+                                     OffBoardingTypeTitle = lt.Title,
+                                     AppliedOn = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
+                                     Reason = l.Reason,
+                                     InterviewDoneByStaffId = String.IsNullOrWhiteSpace(l.InterviewDoneByStaffId.ToString()) ? 0: l.InterviewDoneByStaffId,
+                                     InterviewDate = l.InterviewDate,
 
-        //                          }).ToListAsync();
+                                     StaffId = s.StaffId,
+                                     StaffRegistrationNo = s.RegistrationNo,
+                                     StaffName = s.FirstName + " " + s.LastName,
+                                     StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath,
+                                     ContactNumber1 = s.ContactNumber1,
+                                     Email = s.Email,
+                                     PermanentAddress = s.PermanentAddress,
+                                     NationalIdnumber = s.NationalIdnumber,
+                                     JoiningDate = Convert.ToDateTime(s.JoiningDate).ToString("dd-MMM-yyyy"),
+                                     Department = dep.Title,
+                                     Designation = di.Title,
+                                     StaffStatusId = s.StaffStatusId,
 
-        //        return list;
-        //    }
-        //    catch (Exception ex)
-        //    {
+                                 }).FirstOrDefaultAsync();
 
-        //        throw;
-
-        //    }
-        //}
-
+                return obj;
 
 
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        public async Task<List<StaffOffBoarding>> GetClearenceProcessData(int id, HrhubContext _context)
+        {
+            try
+            {
+
+                var list = await (from l in _context.ClearenceProcesses
+                                  join s in _context.Staff on l.RemarksFromStaffId equals s.StaffId
+                                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+                                  join di in _context.Designations on s.DesignationId equals di.DesignationId
+
+                                  where l.OffBoardingId == id
+                                  select new StaffOffBoarding()
+                                  {
+                                      ClearenceProcessID = l.ClearenceProcessId,
+                                      OffBoardingId = l.OffBoardingId,
+                                      RemarksFromStaffId = l.RemarksFromStaffId,
+                                      ClearenceProcessDate = l.ProcessDate.ToString(),
+                                      RemarksStaffName = s.FirstName + " " + s.LastName,
+                                      RemarksStaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath,
+                                      RemarksDepartment = dep.Title,
+                                      RemarksDesignation = di.Title,
+                                      Remarks = l.Remarks,
+                                      Attachment = l.Attachment,
+
+                                  }).OrderByDescending(x => x.ClearenceProcessID).ToListAsync();
+
+                return list;
 
 
+            }
+            catch (Exception ex)
+            {
 
-        //public async Task<List<StaffOffBoarding>> GetStaffOffBoardingDetailById(int id, HrhubContext _context)
-        //{
-        //    try
-        //    {
+                throw;
 
-
-        //        var list = await (from l in _context.StaffOffBoardings
-        //                          join lt in _context.StaffOffBoardingTypes on l.StaffOffBoardingTypeId equals lt.StaffOffBoardingTypeId
-
-        //                          where l.StaffOffBoardingId == id && l.IsDeleted == false
-        //                            && lt.IsDeleted == false
-
-        //                          select new StaffOffBoarding()
-        //                          {
-        //                              StaffOffBoardingId = l.StaffOffBoardingId,
-        //                              StaffOffBoardingTypeTitle = lt.Title,
-        //                              StaffOffBoardingStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
-        //                              StaffOffBoardingEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
-        //                              Days = l.MarkAsHalfStaffOffBoarding == true ? "Half Day" : l.MarkAsShortStaffOffBoarding == true ? "Quarter Day"
-        //                              : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() == "1" ?
-        //                              ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Days",
-        //                              StaffOffBoardingSubject = l.StaffOffBoardingSubject,
-        //                              ApplicationHtml = l.ApplicationHtml,
-        //                              StaffOffBoardingAppliedOnDate = Convert.ToDateTime(l.AppliedOn).ToString("dd-MMM-yyyy"),
-        //                              StaffOffBoardingStatusId = l.StaffOffBoardingStatusId
-
-
-        //                          }).ToListAsync();
-
-        //        if (list != null)
-        //        {
-        //            return list;
-        //        }
-        //        else
-        //        {
-        //            return null;
-
-        //        }
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
-
-        // Search StaffOffBoarding 
-
-
-
-        //public async Task<StaffOffBoarding> GetStaffOffBoardingById(int id, HrhubContext _context)
-        //{
-        //    try
-        //    {
-
-        //        var result = await _context.StaffOffBoardings.FirstOrDefaultAsync(x => x.StaffOffBoardingId == id && x.IsDeleted == false);
-
-        //        if (result != null)
-        //        {
-        //            return result;
-        //        }
-        //        else
-        //        {
-        //            return null;
-
-        //        }
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
-
-
+            }
+        }
         public async Task<StaffOffBoarding> PostStaffOffBoarding(StaffOffBoarding StaffOffBoardingInfo, HrhubContext _context)
         {
             using (var dbContextTransaction = _context.Database.BeginTransaction())
@@ -332,6 +328,202 @@ namespace HRHUBAPI.Models
                 }
             }
         }
+
+        public async Task<ClearenceProcess> PostClearenceProcess(ClearenceProcess StaffOffBoardingInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkStaffOffBoardingInfo = await _context.ClearenceProcesses.FirstOrDefaultAsync(x => x.OffBoardingId == StaffOffBoardingInfo.OffBoardingId && x.RemarksFromStaffId == StaffOffBoardingInfo.RemarksFromStaffId);
+                if (checkStaffOffBoardingInfo != null && checkStaffOffBoardingInfo.OffBoardingId > 0)
+                {
+                    checkStaffOffBoardingInfo.OffBoardingId = StaffOffBoardingInfo.OffBoardingId;
+                    checkStaffOffBoardingInfo.RemarksFromStaffId = StaffOffBoardingInfo.RemarksFromStaffId;
+                    checkStaffOffBoardingInfo.Remarks = StaffOffBoardingInfo.Remarks;
+                    checkStaffOffBoardingInfo.ProcessDate = StaffOffBoardingInfo.ProcessDate;
+                    checkStaffOffBoardingInfo.Attachment = StaffOffBoardingInfo.Attachment;
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    _context.ClearenceProcesses.Add(StaffOffBoardingInfo);
+                }
+                await _context.SaveChangesAsync();
+
+
+                return checkStaffOffBoardingInfo;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+        public async Task<StaffOffBoarding> PostInterviewDetail(StaffOffBoarding StaffOffBoardingInfo, HrhubContext _context)
+        {
+            try
+            {
+                var checkStaffOffBoardingInfo = await _context.StaffOffBoardings.FirstOrDefaultAsync(x => x.OffBoardingId == StaffOffBoardingInfo.OffBoardingId && x.IsDeleted == false);
+                if (checkStaffOffBoardingInfo != null && checkStaffOffBoardingInfo.OffBoardingId > 0)
+                {
+                    checkStaffOffBoardingInfo.OffBoardingId = StaffOffBoardingInfo.OffBoardingId;
+                    checkStaffOffBoardingInfo.InterviewDoneByStaffId = StaffOffBoardingInfo.InterviewDoneByStaffId;
+                    checkStaffOffBoardingInfo.InterviewDate = StaffOffBoardingInfo.InterviewDate;
+                    checkStaffOffBoardingInfo.InteriewRemarks = StaffOffBoardingInfo.InteriewRemarks;
+
+                    await _context.SaveChangesAsync();
+
+                }
+
+                var checkStaffInfo = await _context.Staff.FirstOrDefaultAsync(x => x.StaffId == StaffOffBoardingInfo.StaffId && x.IsDeleted == false);
+                if (checkStaffInfo != null && checkStaffInfo.StaffId > 0)
+                {
+                    checkStaffInfo.StaffStatusId = 5;// Resigned
+                    checkStaffInfo.UpdatedBy = StaffOffBoardingInfo.UpdatedBy;
+                    checkStaffInfo.UpdatedOn = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+
+                }
+
+                return checkStaffOffBoardingInfo;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        public async Task<List<StaffOffBoarding>> GetClearenceDepartment(int CompanyId,int id,int LoginStaffId, HrhubContext hrhubContext)
+        {
+            try
+            {
+
+                DbConnection _db = new DbConnection();
+
+                string query = "EXEC Get_ClearenceDepartments " + CompanyId + " , " + id + " , "+ LoginStaffId;
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var list = dt.AsEnumerable()
+                    .Select(row => new StaffOffBoarding
+                    {
+                        ClearenceProcessDate = String.IsNullOrWhiteSpace(row["ProcessDate"].ToString())? "" : Convert.ToDateTime(row["ProcessDate"]).ToString("dd-MMM-yyyy"),
+                        IsClearenceFromDepartment = Convert.ToBoolean(row["IsClearenceFromDepartment"]),
+                        Department = row["Department"].ToString(),
+                        AllowExitInterview = Convert.ToBoolean(row["AllowExitInterview"]),
+                        VisibleExitButton = Convert.ToBoolean(row["VisibleExitButton"]),
+
+                    }).ToList();
+                return list;
+
+
+            }
+
+            catch { throw; }
+        }
+
+        public async Task<bool> GetClearenceInfo(int id, HrhubContext _context)
+        {
+            try
+            {
+                bool check = false;
+
+                var obj = await (from l in _context.ClearenceProcesses
+                                 join s in _context.Staff on l.RemarksFromStaffId equals s.StaffId
+                                 join o in _context.OffBoardingProcessSettings on s.DepartmentId equals o.NeedClearenceFromDepartmentId
+
+
+                                 //new { s.DepartmentId, s.DesignationId } equals new { o.NeedClearenceFromDepartmentId, o.NeedClearenceFromDesignationId }
+
+
+                                 where l.OffBoardingId == id
+                                 select new ClearenceProcess()
+                                 {
+                                     ClearenceProcessId = l.ClearenceProcessId
+
+                                 }).FirstOrDefaultAsync();
+
+                if (obj != null)
+                {
+                    check = true;
+                }
+
+                return check;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+        }
+
+        //public async Task<List<StaffOffBoarding>> GetStaffOffBoardingDetailById(int id, HrhubContext _context)
+        //{
+        //    try
+        //    {
+
+
+        //        var list = await (from l in _context.StaffOffBoardings
+        //                          join lt in _context.StaffOffBoardingTypes on l.StaffOffBoardingTypeId equals lt.StaffOffBoardingTypeId
+
+        //                          where l.StaffOffBoardingId == id && l.IsDeleted == false
+        //                            && lt.IsDeleted == false
+
+        //                          select new StaffOffBoarding()
+        //                          {
+        //                              StaffOffBoardingId = l.StaffOffBoardingId,
+        //                              StaffOffBoardingTypeTitle = lt.Title,
+        //                              StaffOffBoardingStartDate = Convert.ToDateTime(l.StartDate).ToString("dd-MMM-yyyy"),
+        //                              StaffOffBoardingEndDate = Convert.ToDateTime(l.EndDate).ToString("dd-MMM-yyyy"),
+        //                              Days = l.MarkAsHalfStaffOffBoarding == true ? "Half Day" : l.MarkAsShortStaffOffBoarding == true ? "Quarter Day"
+        //                              : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() == "1" ?
+        //                              ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(l.EndDate) - Convert.ToDateTime(l.StartDate)).Days + 1).ToString() + " Days",
+        //                              StaffOffBoardingSubject = l.StaffOffBoardingSubject,
+        //                              ApplicationHtml = l.ApplicationHtml,
+        //                              StaffOffBoardingAppliedOnDate = Convert.ToDateTime(l.AppliedOn).ToString("dd-MMM-yyyy"),
+        //                              StaffOffBoardingStatusId = l.StaffOffBoardingStatusId
+
+
+        //                          }).ToListAsync();
+
+        //        if (list != null)
+        //        {
+        //            return list;
+        //        }
+        //        else
+        //        {
+        //            return null;
+
+        //        }
+
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+
+        //    }
+        //}
+
+        // Search StaffOffBoarding 
+
+
+
+
+
 
         //public async Task<StaffOffBoarding> PostStaffOffBoardingApproval(StaffOffBoarding StaffOffBoardingInfo, HrhubContext _context)
         //{
@@ -424,160 +616,6 @@ namespace HRHUBAPI.Models
 
 
         }
-
-        public async Task<bool> CheckStaffOffBoarding(int StaffId, int StaffOffBoardingTypeID, HrhubContext _context)
-        {
-            try
-            {
-
-                DbConnection _db = new DbConnection();
-
-                string query = "Select [dbo].[Get_RemainingStaffOffBoardingsByStaffID]( " + StaffId + " , " + StaffOffBoardingTypeID + " ) as RemainingStaffOffBoarding";
-                int RemainingStaffOffBoarding = Convert.ToInt32(_db.ReturnColumn(query, "RemainingStaffOffBoarding"));
-                if (RemainingStaffOffBoarding == 0)
-                {
-                    return true;
-                }
-
-
-                return false;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-
-        public async Task<bool> AlreadyExist(int StaffOffBoardingInfoId, string email, HrhubContext _context)
-        {
-            try
-            {
-                //if (StaffOffBoardingInfoId > 0)
-                //{
-                //    var result = await _context.StaffOffBoardings.FirstOrDefaultAsync(x => x.Email == email && x.StaffOffBoardingId != StaffOffBoardingInfoId && x.IsDeleted==false);
-                //    if (result != null)
-                //    {
-                //        return true;
-                //    }
-
-
-                //}
-                //else
-                //{
-                //    var result = await _context.StaffOffBoardings.FirstOrDefaultAsync(x => x.Email == email && x.IsDeleted == false);
-                //    if (result != null)
-                //    {
-                //        return true;
-                //    }
-
-                //}
-
-                return false;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        //public async Task<List<StaffOffBoardingStatus>> GetStaffOffBoardingStatus(HrhubContext hrhubContext)
-        //{
-        //    try
-        //    {
-        //        List<StaffOffBoardingStatus> objStaffOffBoardingStatus = new List<StaffOffBoardingStatus>();
-        //        objStaffOffBoardingStatus = await hrhubContext.StaffOffBoardingStatuses.Where(x => x.IsDeleted == false && x.Status == true).ToListAsync();
-        //        return objStaffOffBoardingStatus;
-        //    }
-        //    catch { throw; }
-        //}
-
-
-
-
-        //Load dropdown WeekendRule
-        public async Task<List<WeekendRule>> GetWeekendRule(HrhubContext hrhubContext)
-        {
-            try
-            {
-                List<WeekendRule> objWeekendRule = new List<WeekendRule>();
-                objWeekendRule = await hrhubContext.WeekendRules.Where(x => x.IsDeleted == false && x.Status == true).ToListAsync();
-                return objWeekendRule;
-            }
-            catch { throw; }
-        }
-
-
-
-
-
-
-
-        //Load dropdown StaffOffBoarding data Id vise
-        //public async Task<List<StaffOffBoarding>> GetStaffOffBoardingIdVise(int StaffOffBoardingId,HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        //var list = await _context.StaffOffBoardingInfos.Where(x=>x.IsDeleted==false).ToListAsync();
-        //        var list = await (from c in _context.StaffOffBoardings
-        //                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-        //                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
-        //                          join s in _context.Sessions on c.SessionId equals s.SessionId
-
-        //                          where c.IsDeleted == false
-        //                          && cl.IsDeleted == false
-        //                          && g.IsDeleted == false
-        //                          && s.IsDeleted == false
-        //                          && c.StaffOffBoardingId == StaffOffBoardingId
-        //                          select new StaffOffBoarding()
-        //                          {
-        //                              StaffOffBoardingId = c.StaffOffBoardingId,
-        //                              Name = c.Name,
-        //                              AppliedForClassId = cl.ClassId,
-        //                              ClassTitle = cl.Title,
-        //                              GroupId = g.GroupId,
-        //                              GroupName = g.Title,
-        //                              SessionId = s.SessionId,
-        //                              SessionName = s.Title,
-        //                              Cnic = c.Cnic,
-        //                              AdmissionDate = c.AdmissionDate,
-        //                              StaffOffBoardingNo = c.StaffOffBoardingNo,
-        //                              Dob = c.Dob,
-        //                              FatherName = c.FatherName,
-        //                              Gender = c.Gender,
-        //                              Address= c.Address,
-        //                              City= c.City,
-        //                              Mobile = c.Mobile,
-        //                              Email= c.Email,
-        //                              PreviousSchool= c.PreviousSchool,
-        //                              FatherQualification = c.FatherQualification,
-        //                              MotherQualification = c.MotherQualification,
-        //                              MotherName= c.MotherName,
-        //                              ParentStaffId= c.ParentStaffId,
-        //                              FirstName = c.FirstName,
-        //                              LastName = c.LastName,
-        //                              IsActive = c.IsActive
-
-
-        //                          }).ToListAsync();
-
-        //        return list;
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
-
-
-
 
 
     }

@@ -111,14 +111,19 @@
                                                             <tr>
                                                                 <td>@count</td>
                                                                 <td>
-                                                                    <div class="d-flex">
-                                                                        <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
-                                                                        <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                                            <h6 class="mb-1 fs-14">@item.StaffName</h6>
-                                                                            <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+                                                                    
+                                                                        <div class="d-flex">
+                                                                        <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId">
+                                                                            <img class="avatar avatar-md brround me-3" src="@item.StaffSnap"></a>
+                                                                            <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                                               <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <h6 class="mb-1 fs-14">@item.StaffName</h6>
+                                                                                <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+                                                                            </a>
 
+                                                                            </div>
+                                                                        
                                                                         </div>
-                                                                    </div>
+                                                                    
                                                                 </td>
 
                                                                 <td>@item.Department</td>
@@ -128,22 +133,27 @@
 
                                                                 @if (item.StaffStatusId == 2)  //Off Boarding
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-warning  side-badge">Off Boarding</span></a></td>
+
 
                                                                 }
                                                                 else if (item.StaffStatusId == 3) // Terminated
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-success side-badge"> Terminated</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-success side-badge"> Terminated</span></a></td>
 
                                                                 }
                                                                 else if (item.StaffStatusId == 5)  //Resigned
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">Resigned</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-danger  side-badge">Resigned</span></a></td>
 
                                                                 }
                                                                 else if (item.StaffStatusId == 6)  //Deseased
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-danger side-badge"> Deseased</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-danger side-badge"> Deseased</span></a></td>
 
                                                                 }
 
@@ -159,16 +169,10 @@
                                                                         <div class="d-flex">
                                                                             @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                                             {
-                                                                                <a href="#" onclick="EditRecord(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                                <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                                                     <i class="feather feather-eye primary text-primary mt-1 "></i>
                                                                                 </a>
                                                                             }
-                                                                            @*if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                                {
-                                                                <a href="#" onclick="DeleteConfirmation(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                </a>
-                                                                }*@
                                                                         </div>
                                                                     </td>
                                                                 }
@@ -207,13 +211,19 @@
                                                                 <td>@i</td>
                                                                 <td>
                                                                     <div class="d-flex">
-                                                                        <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
+                                                                        <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId">
+                                                                            <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
+                                                                        </a>
                                                                         <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                                            <h6 class="mb-1 fs-14">@item.StaffName</h6>
-                                                                            <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+                                                                            <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId">
+                                                                                <h6 class="mb-1 fs-14">@item.StaffName</h6>
+                                                                                <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
+                                                                            </a>
 
                                                                         </div>
+
                                                                     </div>
+                                                                   
                                                                 </td>
 
                                                                 <td>@item.Department</td>
@@ -223,22 +233,27 @@
 
                                                                 @if (item.StaffStatusId == 2)  //Off Boarding
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-warning  side-badge">Off Boarding</span></a></td>
+
 
                                                                 }
                                                                 else if (item.StaffStatusId == 3) // Terminated
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-success side-badge"> Terminated</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-success side-badge"> Terminated</span></a></td>
 
                                                                 }
                                                                 else if (item.StaffStatusId == 5)  //Resigned
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">Resigned</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-danger  side-badge">Resigned</span></a></td>
 
                                                                 }
                                                                 else if (item.StaffStatusId == 6)  //Deseased
                                                                 {
-                                                                    <td class="text-center"> <span class="badge badge-danger side-badge"> Deseased</span></td>
+
+                                                                    <td class="text-center"><a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId"> <span class="badge badge-danger side-badge"> Deseased</span></a></td>
 
                                                                 }
 
@@ -254,16 +269,10 @@
                                                                         <div class="d-flex">
                                                                             @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                                             {
-                                                                                <a href="#" onclick="EditRecord(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                                <a asp-action="OffBoardingCommentsScreen" asp-route-id="@item.OffBoardingId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                                                     <i class="feather feather-eye primary text-primary mt-1 "></i>
                                                                                 </a>
                                                                             }
-                                                                            @*if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                                {
-                                                                <a href="#" onclick="DeleteConfirmation(@item.OffBoardingId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                </a>
-                                                                }*@
                                                                         </div>
                                                                     </td>
                                                                 }
@@ -394,10 +403,10 @@
 
                             action += '<td> <div class="d-flex">  <img src="../assets/images/png/task1.png" alt = "img" class="" > ';
                             action += '<div class="me-3 mt-0 mt-sm-1 d-block">';
-                            action += '<a href="/OffBoarding/View/' + listoffboarding[i]["offBoardingId"] +'"  > <h6 class="mb-1 fs-14"> ' + listoffboarding[i]["staffName"] + '</h6><p class="text-muted mb-0 fs-12">'+listoffboarding[i]["designation"]+'</p></a >';
+                            action += '<a href="/OffBoarding/View/' + listoffboarding[i]["offBoardingId"] + '"  > <h6 class="mb-1 fs-14"> ' + listoffboarding[i]["staffName"] + '</h6><p class="text-muted mb-0 fs-12">' + listoffboarding[i]["designation"] + '</p></a >';
                             action += ' </div>  </td>';
                             action += '<td> ' + listoffboarding[i]["department"] + '</td>';
-                            action += '<td class="text-center"> <span class="badge badge-primary  side-badge">'+listoffboarding[i]["appliedOn"]+'</span> </td>';
+                            action += '<td class="text-center"> <span class="badge badge-primary  side-badge">' + listoffboarding[i]["appliedOn"] + '</span> </td>';
 
                             if (listoffboarding[i]["staffStatusId"] == 2) { // Off Boarding
                                 action += '<td class="text-center"> <span class="badge badge-warning  side-badge">Off Boarding</span></td>';

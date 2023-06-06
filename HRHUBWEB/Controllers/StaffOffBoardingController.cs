@@ -60,6 +60,72 @@ namespace HRHUBWEB.Controllers
                 throw ex;
             }
         }
+        public async Task<IActionResult> OffBoardingCommentsScreen(int id)
+        {
+            try
+            {
+                ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+                ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+                ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+                ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+                StaffOffBoarding ObjStaffOffBoarding = new StaffOffBoarding();
+                var CompanyId = _user.CompanyId;
+                var LoginStaffId = _user.StaffId;
+
+                ObjStaffOffBoarding = await _APIHelper.CallApiAsyncGet<StaffOffBoarding>($"api/StaffOffBoarding/GetStaffOffBoardingInfoId{id}", HttpMethod.Get);
+                ObjStaffOffBoarding.ListClearenceProcess = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffOffBoarding>>($"api/StaffOffBoarding/GetStaffClearenceProcessData{id}", HttpMethod.Get);
+                ObjStaffOffBoarding.ListClearenceDepartments = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffOffBoarding>>($"api/StaffOffBoarding/GetClearenceDepartmentByCompanyID{CompanyId}/{id}/{LoginStaffId}", HttpMethod.Get);
+                
+                return View(ObjStaffOffBoarding);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveStaffClearenceProcess(IFormCollection MyAttachment, StaffOffBoarding obj)
+        {
+            ClearenceProcess CP = new ClearenceProcess();
+
+            var Attachmentfile = MyAttachment.Files.GetFile("LogoAttachmentFile");
+            CP.Attachment = uploadImage(obj.StaffName, Attachmentfile, "ClearenceAttachment");
+
+            CP.OffBoardingId = obj.OffBoardingId;
+            CP.RemarksFromStaffId = _user.StaffId;
+            CP.ProcessDate = DateTime.Now;
+            CP.Remarks = obj.Remarks;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(CP, "api/StaffOffBoarding/SaveClearenceProcess", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("OffBoardingCommentsScreen", new { id = obj.OffBoardingId, data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("OffBoardingCommentsScreen", new { id = obj.OffBoardingId, data = 2 });
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveExitInterviewDetail(StaffOffBoarding obj)
+        {
+            obj.InterviewDoneByStaffId = _user.StaffId;
+            obj.UpdatedBy = _user.UserId;
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/StaffOffBoarding/SaveInterviewDetail", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("OffBoardingCommentsScreen", new { id = obj.OffBoardingId,data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("OffBoardingCommentsScreen", new { id = obj.OffBoardingId,data = 2 });
+            }
+        }
         public async Task<IActionResult> StaffOffBoardingDetails(int id)
         {
             try
@@ -178,138 +244,7 @@ namespace HRHUBWEB.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> StaffOffBoardingDelete(int id)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                HttpResponseMessage message = await _client.DeleteAsync($"api/StaffOffBoarding/DeleteStaffOffBoardingInfo{id}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var body = message.Content.ReadAsStringAsync();
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Delete"))
-                        {
-                            status = 3;
-                        }
-
-
-
-                    }
-
-                    return RedirectToAction("StaffOffBoardingList", new { data = status });
-
-                }
-
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<ActionResult<JsonObject>> StaffOffBoardingCheckData(int StaffOffBoardingtypeid)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var staffid = userObject.StaffId;
-
-                HttpResponseMessage message = await _client.GetAsync($"api/StaffOffBoarding/StaffOffBoardingCheckData{staffid}/{StaffOffBoardingtypeid}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    return Json(result);
-
-                }
-
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        //public async Task<IActionResult> GetStaffOffBoardingApprovalSettingData()
-        //{
-        //    try
-        //    {
-        //        var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-        //        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-        //        //Get Instutute ID through Sessions
-        //        var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-        //        var CompanyId = userObject.CompanyId;
-
-
-        //        StaffOffBoardingApprovalSetting StaffOffBoardingtype = new StaffOffBoardingApprovalSetting();
-        //        var response = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingApprovalSettingInfos{CompanyId}");
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            var content = await response.Content.ReadAsStringAsync();
-        //            StaffOffBoardingtype = JsonConvert.DeserializeObject<StaffOffBoardingApprovalSetting>(content);
-        //            return Json(StaffOffBoardingtype);
-        //        }
-        //        else
-        //        {
-
-        //            return Json(null);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-
-        //}
-        public async Task<IActionResult> ViewStaffOffBoardingDetail(int id)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                List<StaffOffBoarding> StaffOffBoarding = new List<StaffOffBoarding>();
-                var response = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingDetailInfoId{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    StaffOffBoarding = JsonConvert.DeserializeObject<List<StaffOffBoarding>>(content);
-                    return Json(StaffOffBoarding);
-                }
-                else
-                {
-
-                    return Json(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
+      
 
         // Load filter vise data from database
         [HttpPost]
@@ -361,254 +296,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
 
-        #region HRStaffOffBoardingApplicationInfo
-
-        public async Task<IActionResult> HRStaffOffBoardingList(string data = "")
-        {
-            try
-            {
-
-                ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-                ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-                ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-                ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-
-
-                ViewBag.Success = data;
-                StaffOffBoarding ObjStaffOffBoarding = new StaffOffBoarding();
-
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = userObject.StaffId;
-
-                if (Token != null)
-                {
-                    HttpResponseMessage message = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); 
-                    if (message.IsSuccessStatusCode)
-                    {
-                        var result = message.Content.ReadAsStringAsync().Result;
-                        ViewBag.Staffs = JsonConvert.DeserializeObject<List<Staff>>(result);
-
-                    }
-
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingInfos{CompanyId}/{StaffId}");
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        ObjStaffOffBoarding.ListAllStaffOffBoardings = JsonConvert.DeserializeObject<List<StaffOffBoarding>>(result);
-
-                    }
-
-                    //HttpResponseMessage message3 = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingStatusInfos");
-                    //if (message3.IsSuccessStatusCode)
-                    //{
-                    //    var result = message3.Content.ReadAsStringAsync().Result;
-                    //    ObjStaffOffBoarding.ListStaffOffBoardingStatus = JsonConvert.DeserializeObject<List<StaffOffBoardingStatus>>(result);
-
-                    //}
-
-                    //HttpResponseMessage message2 = await _client.GetAsync($"api/Configuration/GetStaffWiseStaffOffBoardingTypeInfos{StaffId}");
-                    //if (message2.IsSuccessStatusCode)
-                    //{
-                    //    var result = message2.Content.ReadAsStringAsync().Result;
-                    //    ObjStaffOffBoarding.ListStaffOffBoardingTypes = JsonConvert.DeserializeObject<List<StaffOffBoardingType>>(result);
-
-                    //}
-
-
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-
-                return View(ObjStaffOffBoarding);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public async Task<IActionResult> HRRecentStaffOffBoardings(string data = "")
-        {
-            try
-            {
-                ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-                ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-                ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-                ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-
-
-                ViewBag.Success = data;
-                StaffOffBoarding ObjStaffOffBoarding = new StaffOffBoarding();
-
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = userObject.StaffId;
-
-                if (Token != null)
-                {
-                    HttpResponseMessage message = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); // Staffs must be gotten from Staff api
-                    if (message.IsSuccessStatusCode)
-                    {
-                        var result = message.Content.ReadAsStringAsync().Result;
-                        ViewBag.Staffs = JsonConvert.DeserializeObject<List<Staff>>(result);
-
-                    }
-
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingInfos{CompanyId}/{StaffId}");
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        ObjStaffOffBoarding.ListAllStaffOffBoardings = JsonConvert.DeserializeObject<List<StaffOffBoarding>>(result);
-
-                    }
-
-                    //HttpResponseMessage message1 = await _client.GetAsync($"api/StaffOffBoarding/GetNewOrPendingStaffOffBoardingInfos{CompanyId}");
-                    //if (message1.IsSuccessStatusCode)
-                    //{
-                    //    var result = message1.Content.ReadAsStringAsync().Result;
-                    //    ObjStaffOffBoarding.ListNewOrPendingStaffOffBoardings = JsonConvert.DeserializeObject<List<StaffOffBoarding>>(result);
-
-                    //}
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-
-
-                return View(ObjStaffOffBoarding);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ForwardStaffOffBoardingToStaff(StaffOffBoarding ObjStaffOffBoarding)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/StaffOffBoarding/SaveForwardStaffOffBoardingDetail", ObjStaffOffBoarding);
-
-                if (message.IsSuccessStatusCode)
-                {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("HRStaffOffBoardingList", new { data = status });
-
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-
-
-
-            }
-            catch (Exception)
-            {
-
-                return View();
-            }
-        }
-
-
-        public async Task<IActionResult> StaffOffBoardingApproval(int id , int staffid)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                //Get Instutute ID through Sessions
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = staffid;
-
-                if (Token != null)
-                {
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); // Staffs must be gotten from Staff api
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        ViewBag.Staffs = JsonConvert.DeserializeObject<List<Staff>>(result);
-
-                    }
-
-                    StaffOffBoarding ObjStaffOffBoarding = await GetStaffOffBoardingbyID(id);
-
-                    //HttpResponseMessage message2 = await _client.GetAsync($"api/StaffOffBoarding/GetStaffOffBoardingApprovalByStaffOffBoardingId{id}"); //
-                    //if (message2.IsSuccessStatusCode)
-                    //{
-                    //    var result = message2.Content.ReadAsStringAsync().Result;
-                    //    ObjStaffOffBoarding.ListStaffOffBoardingApprovalData = JsonConvert.DeserializeObject<List<StaffOffBoardingApproval>>(result);
-
-                    //}
-                    //HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetStaffWiseStaffOffBoardingTypeInfos{StaffId}");
-                    //if (message.IsSuccessStatusCode)
-                    //{
-                    //    var result = message.Content.ReadAsStringAsync().Result;
-                    //    //ViewBag.StaffOffBoardingTypes = JsonConvert.DeserializeObject<List<StaffOffBoardingType>>(result);
-                    //    ObjStaffOffBoarding.ListStaffOffBoardingTypes = JsonConvert.DeserializeObject<List<StaffOffBoardingType>>(result);
-                    //}
-
-
-                    return View(ObjStaffOffBoarding);
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        #endregion
-
-
-
-
-
+       
 
 
 
