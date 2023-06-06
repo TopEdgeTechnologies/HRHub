@@ -27,8 +27,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<AttendanceStatus> AttendanceStatuses { get; set; }
 
-    public virtual DbSet<AttendanceStatusSetting> AttendanceStatusSettings { get; set; }
-
     public virtual DbSet<Candidate> Candidates { get; set; }
 
     public virtual DbSet<CandidateScreening> CandidateScreenings { get; set; }
@@ -65,8 +63,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<LeaveApprovalSetting> LeaveApprovalSettings { get; set; }
 
-    public virtual DbSet<LeavePolicy> LeavePolicies { get; set; }
-
     public virtual DbSet<LeaveStatus> LeaveStatuses { get; set; }
 
     public virtual DbSet<LeaveType> LeaveTypes { get; set; }
@@ -90,6 +86,8 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<Policy> Policies { get; set; }
 
     public virtual DbSet<PolicyCategory> PolicyCategories { get; set; }
+
+    public virtual DbSet<PolicyConfiguration> PolicyConfigurations { get; set; }
 
     public virtual DbSet<Question> Questions { get; set; }
 
@@ -228,19 +226,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.IconClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<AttendanceStatusSetting>(entity =>
-        {
-            entity.ToTable("AttendanceStatusSetting", "HR");
-
-            entity.Property(e => e.AttendanceStatusSettingId).HasColumnName("AttendanceStatusSettingID");
-            entity.Property(e => e.AttendanceStatusId).HasColumnName("AttendanceStatusID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            entity.Property(e => e.WorkingMinutesFrom).HasColumnName("WorkingMinutes_From");
-            entity.Property(e => e.WorkingMinutesTo).HasColumnName("WorkingMinutes_To");
         });
 
         modelBuilder.Entity<Candidate>(entity =>
@@ -528,20 +513,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AllowApplyShortDayLeave).HasColumnName("Allow_ApplyShortDayLeave");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.FinalApprovalByStaffId).HasColumnName("FinalApprovalBy_StaffID");
+            entity.Property(e => e.FinalApprovalByDesignationId).HasColumnName("FinalApprovalBy_DesignationID");
             entity.Property(e => e.LeaveApprovalLeaveStatusId).HasColumnName("LeaveApproval_LeaveStatusID");
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<LeavePolicy>(entity =>
-        {
-            entity.ToTable("LeavePolicy");
-
-            entity.Property(e => e.LeavePolicyId).HasColumnName("LeavePolicyID");
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.PolicyId).HasColumnName("PolicyID");
-            entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -688,6 +661,20 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.PolicyCategoryId).HasColumnName("PolicyCategoryID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<PolicyConfiguration>(entity =>
+        {
+            entity.HasKey(e => e.PolicyConfigurationId).HasName("PK_LeavePolicy");
+
+            entity.ToTable("PolicyConfiguration");
+
+            entity.Property(e => e.PolicyConfigurationId).HasColumnName("PolicyConfigurationID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.PolicyId).HasColumnName("PolicyID");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -947,8 +934,10 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyContributionValue).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.ComponentAmount).HasColumnType("money");
             entity.Property(e => e.ComponentId).HasColumnName("ComponentID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.PercentageValue).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<StaffSalaryDetail>(entity =>

@@ -13,6 +13,8 @@ public partial class OffBoardingProcessSetting
 
     public int? NeedClearenceFromDesignationId { get; set; }
 
+    public bool? AllowExitInterview { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }

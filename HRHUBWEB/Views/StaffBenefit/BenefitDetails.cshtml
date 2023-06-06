@@ -92,6 +92,7 @@
 <!-- Row -->
 <div class="row row-sm mt-4">
     <div class="col-lg-12">
+
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title"></h3>
@@ -100,6 +101,8 @@
                 {
                     <div class="card-options">
                         <div class="btn-list">
+                   <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fa fa-arrow-left"></i> </button>
+
                             <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Enroll Employee</a>
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
@@ -109,6 +112,7 @@
                 }
             </div>
             <div class="card-body">
+
                 <div class="table-responsive">
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>

@@ -99,8 +99,8 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffSalaryCreateOrUpdate(StaffSalaryComponent objStaffSalaryComponent)
         {
-          
-           
+
+            objStaffSalaryComponent.CreatedBy = _user.CreateBy;
             var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalaryComponent, "api/StaffBenefits/PostStaffSalaryComponent", HttpMethod.Post);
 
             if (result.Message.Contains("Insert"))
@@ -129,8 +129,13 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffSalaryInfoDelete(int Id)
         {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/StaffBenefits/DeleteStaffSalaryComponent{Id}", HttpMethod.Get);
-            return RedirectToAction("BenefitDetails", new { data = 3 });
+            var result = await _APIHelper.CallApiAsyncGet<StaffSalaryComponent>($"api/StaffBenefits/DeleteStaffSalaryComponent{Id}/{_user.UserId}", HttpMethod.Get);
+
+            return RedirectToAction("BenefitDetails", new { data = 3 ,Id= result.ComponentId });
+
+           
+            
+            
         }
 
         public async Task<IActionResult> StaffSalaryInfoAlreadyExists(int Id,int StaffId, int Componentid)

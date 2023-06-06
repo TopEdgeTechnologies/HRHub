@@ -26,7 +26,7 @@ namespace HRHUBAPI.Models
 
                 var List = from SC in hrhubContext.StaffSalaryComponents
                            join s in hrhubContext.Staff on SC.StaffId equals s.StaffId                          
-                           where s.CompanyId == CompanyId && s.IsDeleted == false &&  s.Status == true && SC.ComponentId== ComponentId
+                           where s.CompanyId == CompanyId && s.IsDeleted == false &&  s.Status == true && SC.ComponentId== ComponentId && SC.IsDeleted== false
 
                            select new StaffSalaryComponent
                            {
@@ -86,7 +86,9 @@ namespace HRHUBAPI.Models
                         dbResult.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionAmount;
                         dbResult.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
                         dbResult.CompanyContributionCalculationMethod = objStaffSalaryComponent.CompanyContributionCalculationMethod;
-                        
+
+                        dbResult.UpdatedBy = objStaffSalaryComponent.CreatedBy;
+                        dbResult.UpdatedOn = DateTime.Now;
                         await hrhubContext.SaveChangesAsync();
                         dbResult.TranFlag = 2;
                         dbContextTransaction.Commit();
@@ -94,6 +96,7 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
+                        objStaffSalaryComponent.CreatedOn = DateTime.Now;
                         hrhubContext.Add(objStaffSalaryComponent);
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
@@ -105,7 +108,7 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<bool> DeleteStaffSalaryComponent(int Id, HrhubContext hrhubContext)
+        public async Task<bool> DeleteStaffSalaryComponent(int Id,int UserId, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
@@ -114,12 +117,35 @@ namespace HRHUBAPI.Models
                     var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffSalaryComponentId == Id);
                     if (dbResult != null)
                     {
+                       
                         await hrhubContext.SaveChangesAsync();
                         dbContextTransaction.Commit();
                     }
                     return true;
                 }
                 catch (Exception e) { dbContextTransaction.Rollback(); return false; throw; }
+            }
+        }
+
+
+        public async Task<StaffSalaryComponent> DeleteStaffBenefitComponent(int Id,int UserId, HrhubContext hrhubContext)
+        {
+            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    StaffSalaryComponent? dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffSalaryComponentId == Id);
+                    if (dbResult != null)
+                    {
+                        dbResult.IsDeleted = true;
+                        dbResult.UpdatedOn= DateTime.Now;
+                        dbResult.UpdatedBy = UserId;
+                        await hrhubContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                    }
+                    return dbResult;
+                }
+                catch (Exception e) { dbContextTransaction.Rollback(); return null; throw; }
             }
         }
 
