@@ -56,6 +56,20 @@
 					</div>
 					
 					
+					
+					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
+						<span class="avatar avatar-md bradius fs-20 bg-primary-transparent" id="WeekendCountId">0</span>
+						<h5 class="mb-0 mt-3" id="WeekendId">Weekend</h5>
+					</div>
+					
+					<div class="col-md-6 col-lg-2 col-sm-6 text-center py-5">
+						<span class="avatar avatar-md bradius fs-20 bg-warning-transparent" id="HolydayCountId">0</span>
+						<h5 class="mb-0 mt-3" id="HolydayId">Holyday</h5>
+					</div>
+					
+					
+					
+					
 				
 				
 				
@@ -154,27 +168,18 @@
 
 
 		$(document).ready(function () {
-
-
-
-
 			$("#IdEmployee").select2();
-
-
-			$("#IdEmployee").change(function () {
-				
+			$("#IdEmployee").change(function () {				
 				$('#TotalCountId').text(0);
 				$('#AbsentCountId').text(0);
 				$('#PresentCountId').text(0);
 				$('#LeaveCountId').text(0);
-
+				$('#HolydayCountId').text(0);
+				$('#WeekendCountId').text(0);
 				var tbody = $("#emp-attendance tbody");				
-				tbody.empty();
-				
+				tbody.empty();			
 				
 			});
-
-
 
 			var currentDate = new Date(); // Get the current date
 			var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -183,34 +188,20 @@
 				dateFormat: 'dd M yy',
 				autoHide: true
 
-
-
 			});
 
 			$('#fromdate').datepicker('setDate', firstDayOfMonth);
-
 			$('#todate').datepicker({
 				 dateFormat: 'dd M yy',
 				autoHide: true
-
-
-
 			});
 			$('#todate').datepicker('setDate', lastDayOfMonth);
-
-
-
-
 			var msg = '@ViewBag.Success';
 			if (msg !== "" && msg == '1') {
-
 				notif({
 					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
 					type: "success"
 				});
-
-
-
 			}
 			if (msg !== "" && msg == '2') {
 
@@ -376,7 +367,7 @@
 					debugger
 					if (response != null) {
 						debugger
-						
+						console.log(response)
 						for (var i = 0; i < response.length; i++) 
 						{ 
 							if (response[i].titleStatus == "Total") {
@@ -398,6 +389,16 @@
 
 								$('#LeaveCountId').text(response[i].totalCount);
 								$('#LeaveDayId').text(response[i].titleStatus);
+							}
+							else if (response[i].titleStatus == "Weekend") {
+
+								$('#WeekendCountId').text(response[i].totalCount);
+								$('#WeekendId').text(response[i].titleStatus);
+							}
+							else if (response[i].titleStatus == "Holyday") {
+
+								$('#HolydayCountId').text(response[i].totalCount);
+								$('#HolydayId').text(response[i].titleStatus);
 							}
 							
 						}

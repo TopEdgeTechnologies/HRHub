@@ -21,6 +21,8 @@ public partial class ComponentInfo
 
     public string? Type { get; set; }
 
+    public bool? IsBenefit { get; set; }
+
     public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }

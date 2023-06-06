@@ -321,87 +321,87 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
-        #region Component Info
+        //#region Component Info
 
-        [HttpGet("GetComponentInfo")]
-        public async Task<ActionResult<List<ComponentInfo>>> GetComponentInfo()
-        {
-            return await new ComponentInfo().GetComponentInfo(_context);
-        }
+        //[HttpGet("GetComponentInfo")]
+        //public async Task<ActionResult<List<ComponentInfo>>> GetComponentInfo()
+        //{
+        //    return await new ComponentInfo().GetComponentInfo(_context);
+        //}
 
-        [HttpGet("GetComponentInfoById/{Id}")]
-        public async Task<ActionResult<ComponentInfo>> GetComponentInfoById(int Id)
-        {
-            return await new ComponentInfo().GetComponentInfoById(Id, _context);
-        }
+        //[HttpGet("GetComponentInfoById/{Id}")]
+        //public async Task<ActionResult<ComponentInfo>> GetComponentInfoById(int Id)
+        //{
+        //    return await new ComponentInfo().GetComponentInfoById(Id, _context);
+        //}
 
-        [HttpPost("PostComponentInfo")]
-        public async Task<ActionResult<ComponentInfo>> PostComponentInfo(ComponentInfo componentInfo)
-        {
-            var dbResult = await new ComponentInfo().PostComponentInfo(componentInfo, _context);
-            if (dbResult != null && dbResult.TranFlag == 2)
-            {
-                return Ok(new
-                {
-                    success = true,
-                    Message = "Data Updated Successfully"
-                });
-            }
-            else
-            {
-                return Ok(new
-                {
-                    success = true,
-                    Message = "Data Inserted Successfully"
-                });
-            }
-        }
+        //[HttpPost("PostComponentInfo")]
+        //public async Task<ActionResult<ComponentInfo>> PostComponentInfo(ComponentInfo componentInfo)
+        //{
+        //    var dbResult = await new ComponentInfo().PostComponentInfo(componentInfo, _context);
+        //    if (dbResult != null && dbResult.TranFlag == 2)
+        //    {
+        //        return Ok(new
+        //        {
+        //            success = true,
+        //            Message = "Data Updated Successfully"
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return Ok(new
+        //        {
+        //            success = true,
+        //            Message = "Data Inserted Successfully"
+        //        });
+        //    }
+        //}
 
-        [HttpGet("DeleteComponentInfo/{Id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteComponentInfo(int Id, int UserId)
-        {
-            var dbResult = await new ComponentInfo().DeleteComponentInfo(Id, UserId, _context);
-            if (dbResult == true)
-            {
-                return Ok(new
-                {
-                    success = true,
-                    Message = "Data Deleted Successfully"
-                });
-            }
-            return NotFound("Data Not Found!");
-        }
+        //[HttpGet("DeleteComponentInfo/{Id}/{UserId}")]
+        //public async Task<ActionResult<bool>> DeleteComponentInfo(int Id, int UserId)
+        //{
+        //    var dbResult = await new ComponentInfo().DeleteComponentInfo(Id, UserId, _context);
+        //    if (dbResult == true)
+        //    {
+        //        return Ok(new
+        //        {
+        //            success = true,
+        //            Message = "Data Deleted Successfully"
+        //        });
+        //    }
+        //    return NotFound("Data Not Found!");
+        //}
 
-        [HttpGet("ComponentInfoAlreadyExists/{Id}/{Title}")]
-        public async Task<ActionResult<ComponentInfo>> ComponentInfoAlreadyExists(int Id, string Title)
-        {
-            var dbResult = await new ComponentInfo().AlreadyExists(Id, Title, _context);
-            if (dbResult == true)
-            {
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Record Already Exists"
-                });
-            }
-            else
-            {
-                return Ok(new
-                {
-                    Success = false,
-                    Message = "Data Not Found!"
-                });
-            }
-        }
+        //[HttpGet("ComponentInfoAlreadyExists/{Id}/{Title}")]
+        //public async Task<ActionResult<ComponentInfo>> ComponentInfoAlreadyExists(int Id, string Title)
+        //{
+        //    var dbResult = await new ComponentInfo().AlreadyExists(Id, Title, _context);
+        //    if (dbResult == true)
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Record Already Exists"
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = false,
+        //            Message = "Data Not Found!"
+        //        });
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region Staff Salary Component
 
         [HttpGet("GetSalaryComponent")]
-        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId)
+        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId,int ComponentId)
         {
-            return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, _context);
+            return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, ComponentId, _context);
         }
 
         [HttpGet("GetStaffSalaryComponentById/{Id}")]
@@ -433,9 +433,9 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("DeleteStaffSalaryComponent/{Id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id, int UserId)
+        public async Task<ActionResult<bool>> DeleteStaffSalaryComponent(int Id)
         {
-            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, UserId, _context);
+            var dbResult = await new StaffSalaryComponent().DeleteStaffSalaryComponent(Id, _context);
             if (dbResult == true)
             {
                 return Ok(new

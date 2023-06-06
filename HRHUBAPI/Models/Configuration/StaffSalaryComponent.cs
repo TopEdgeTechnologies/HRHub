@@ -12,16 +12,42 @@ namespace HRHUBAPI.Models
         public string? Category { get; set; }
 
         [NotMapped]
-        public string? ComponentTitle { get; set; }    
+        public string? ComponentTitle { get; set; }
 
-
-        public async Task<List<StaffSalaryComponent>> GetSalaryComponent(int CompanyId, HrhubContext hrhubContext)
+        [NotMapped]
+        public string? StaffFName { get; set; } 
+        [NotMapped]
+        public string? StaffSName { get; set; }
+        public async Task<List<StaffSalaryComponent>> GetSalaryComponent(int CompanyId,int ComponentId, HrhubContext hrhubContext)
         {
             try
             {
-                List<StaffSalaryComponent> staffSalaryComponent = new List<StaffSalaryComponent>();
-                staffSalaryComponent = await hrhubContext.StaffSalaryComponents.ToListAsync();
-                return staffSalaryComponent;
+
+
+                var List = from SC in hrhubContext.StaffSalaryComponents
+                           join s in hrhubContext.Staff on SC.StaffId equals s.StaffId                          
+                           where s.CompanyId == CompanyId && s.IsDeleted == false &&  s.Status == true && SC.ComponentId== ComponentId
+
+                           select new StaffSalaryComponent
+                           {
+
+                              StaffSalaryComponentId = SC.StaffSalaryComponentId,
+                              StaffId= SC.StaffId,
+                              ComponentId = SC.ComponentId,
+                              StaffFName = s.FirstName,
+                              StaffSName = s.LastName,
+                              PercentageValue = SC.PercentageValue,
+                              ComponentAmount = SC.ComponentAmount,
+                              CompanyContributionValue= SC.CompanyContributionValue,
+                              CompanyContributionCalculationMethod = SC.CompanyContributionCalculationMethod,
+                              CompanyContributionAmount = SC.CompanyContributionAmount,
+                               
+
+                           };
+                return List != null ? List.OrderByDescending(x => x.StaffSalaryComponentId).ToList() : new List<StaffSalaryComponent>();
+
+
+
             }
             catch (Exception ex) { throw; }
         }
@@ -57,6 +83,9 @@ namespace HRHUBAPI.Models
                         dbResult.ComponentId = objStaffSalaryComponent.ComponentId;
                         dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
                         dbResult.ComponentAmount = objStaffSalaryComponent.ComponentAmount;
+                        dbResult.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionAmount;
+                        dbResult.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
+                        dbResult.CompanyContributionCalculationMethod = objStaffSalaryComponent.CompanyContributionCalculationMethod;
                         
                         await hrhubContext.SaveChangesAsync();
                         dbResult.TranFlag = 2;
@@ -76,7 +105,7 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<bool> DeleteStaffSalaryComponent(int Id, int UserId, HrhubContext hrhubContext)
+        public async Task<bool> DeleteStaffSalaryComponent(int Id, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
