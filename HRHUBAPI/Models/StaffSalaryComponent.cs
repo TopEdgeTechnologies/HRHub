@@ -20,4 +20,14 @@ public partial class StaffSalaryComponent
     public decimal? CompanyContributionValue { get; set; }
 
     public decimal? CompanyContributionAmount { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 }

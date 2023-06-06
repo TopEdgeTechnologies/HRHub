@@ -9,7 +9,7 @@ public partial class LeaveApprovalSetting
 
     public int? CompanyId { get; set; }
 
-    public int? FinalApprovalByStaffId { get; set; }
+    public int? FinalApprovalByDesignationId { get; set; }
 
     public int? LeaveApprovalLeaveStatusId { get; set; }
 

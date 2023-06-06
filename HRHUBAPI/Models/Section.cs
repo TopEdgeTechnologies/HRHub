@@ -21,6 +21,10 @@ public partial class Section
 
     public int? QuestionMaxLimit { get; set; }
 
+    public decimal? TotalWeightage { get; set; }
+
+    public decimal? EarnedWeightage { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }
