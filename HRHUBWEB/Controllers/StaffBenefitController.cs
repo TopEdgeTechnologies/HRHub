@@ -64,11 +64,15 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-
+            ComponentInfo obj = new ComponentInfo();
+            
             StaffSalaryComponent ObjComponentInfo = new StaffSalaryComponent();
             ObjComponentInfo.ComponentId= Id;
-           // ObjComponentInfo = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
-			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+           obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
+            ViewBag.title = obj.Title;
+           // ViewBag.staffcount = obj.StaffCount;
+
+            ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
 
             ViewBag.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/StaffBenefits/GetSalaryComponent/{_user.CompanyId}/{ObjComponentInfo.ComponentId}", HttpMethod.Get);
 

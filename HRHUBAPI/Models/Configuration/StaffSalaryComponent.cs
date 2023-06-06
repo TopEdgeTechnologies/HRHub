@@ -8,6 +8,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public int? TranFlag { get; set; }
 
+
+        [NotMapped]
+        public string? Check { get; set; }
         [NotMapped]
         public string? Category { get; set; }
 
@@ -73,19 +76,39 @@ namespace HRHUBAPI.Models
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
+
+                var staffGet = await hrhubContext.Staff.FirstOrDefaultAsync(x => x.StaffId == objStaffSalaryComponent.StaffId);
+                decimal GrossSalary = Convert.ToDecimal(staffGet.SalaryAmount);
                 try
                 {
                     var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffSalaryComponentId == objStaffSalaryComponent.StaffSalaryComponentId);
                     if (dbResult != null && objStaffSalaryComponent.StaffSalaryComponentId > 0)
                     {
+
+                        if (dbResult.CompanyContributionCalculationMethod == "Percentage" || objStaffSalaryComponent.Check == "Per %")
+                        {
+                            dbResult.CompanyContributionCalculationMethod = "Percentage";
+                            dbResult.CompanyContributionAmount = (GrossSalary * objStaffSalaryComponent.CompanyContributionValue) / 100; // for company
+                            dbResult.ComponentAmount = (GrossSalary * objStaffSalaryComponent.PercentageValue) / 100; // for staff
+                        }
+                        else
+                        {
+                            dbResult.CompanyContributionCalculationMethod = "Amount";
+                            dbResult.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionValue;
+                            dbResult.ComponentAmount = objStaffSalaryComponent.PercentageValue;
+
+                        }
+
+
                         dbResult.StaffSalaryComponentId = objStaffSalaryComponent.StaffSalaryComponentId;
                         dbResult.StaffId = objStaffSalaryComponent.StaffId;
                         dbResult.ComponentId = objStaffSalaryComponent.ComponentId;
                         dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
-                        dbResult.ComponentAmount = objStaffSalaryComponent.ComponentAmount;
-                        dbResult.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionAmount;
+                                             
                         dbResult.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
-                        dbResult.CompanyContributionCalculationMethod = objStaffSalaryComponent.CompanyContributionCalculationMethod;
+                        
+                       
+
 
                         dbResult.UpdatedBy = objStaffSalaryComponent.CreatedBy;
                         dbResult.UpdatedOn = DateTime.Now;
@@ -96,7 +119,30 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
+
+
+
                         objStaffSalaryComponent.CreatedOn = DateTime.Now;
+                        objStaffSalaryComponent.IsDeleted = false;
+                       
+                        
+
+                        if (objStaffSalaryComponent.Check == "Per %")
+                        {
+                            objStaffSalaryComponent.CompanyContributionCalculationMethod = "Percentage";
+                            objStaffSalaryComponent.CompanyContributionAmount = (GrossSalary * objStaffSalaryComponent.CompanyContributionValue) / 100; // for company
+                            objStaffSalaryComponent.ComponentAmount = (GrossSalary * objStaffSalaryComponent.PercentageValue) / 100; // for staff
+                        }
+                        else
+                        {
+                            objStaffSalaryComponent.CompanyContributionCalculationMethod = "Amount";
+                            objStaffSalaryComponent.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionValue;
+                            objStaffSalaryComponent.ComponentAmount = objStaffSalaryComponent.PercentageValue;
+                          
+                        }
+
+
+
                         hrhubContext.Add(objStaffSalaryComponent);
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
@@ -155,7 +201,7 @@ namespace HRHUBAPI.Models
             {
                 if (Id > 0)
                 {
-                    var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffId == StaffId && x.ComponentId == ComponentId && x.StaffSalaryComponentId != Id);
+                    var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffId == StaffId && x.ComponentId == ComponentId && x.StaffSalaryComponentId != Id && x.IsDeleted==false);
                     if (dbResult != null)
                     {
                         return true;
@@ -163,7 +209,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffId == StaffId && x.ComponentId == ComponentId);
+                    var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffId == StaffId && x.ComponentId == ComponentId && x.IsDeleted==false);
                     if (dbResult != null)
                     {
                         return true;

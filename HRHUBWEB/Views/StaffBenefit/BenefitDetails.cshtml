@@ -16,6 +16,7 @@
 {
     <input type="hidden" asp-for="StaffSalaryComponentId" />
     <input type="hidden" asp-for="ComponentId" />
+        <input type="hidden" asp-for="Check" value="Fixed" />
 
 
     <!--Add Department Modal -->
@@ -60,14 +61,14 @@
                                             <label class="form-label">Employes Contribution <span class="text-danger">*</span></label>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text fixed-width">Fixed</span>
-                                                    <input asp-for="ComponentAmount" type="number" class="form-control">
+                                                     <input asp-for="PercentageValue" type="number" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                             <label class="form-label">Employer's Contribution <span class="text-danger">*</span></label>
                                                 <div class="input-group mb-4">
                                                     <span class="input-group-text fixed-width">Fixed</span>
-                                                    <input asp-for="CompanyContributionAmount" type="number" class="form-control">
+                                                   <input asp-for="CompanyContributionValue" type="number" class="form-control">
                                                 </div>
                                             </div>
                                       
@@ -95,7 +96,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"></h3>
+                <h3 class="card-title">@ViewBag.title</h3>
                 <h3 class="card-title"></h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
@@ -204,29 +205,41 @@
             let checkbox = document.querySelector('#mycheckbox');
             let cardTitle = document.querySelector('.card-title');
             let inputGroupText = document.querySelectorAll('.input-group-text');
-            console.log(inputGroupText)
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    cardTitle.style.opacity = "0";
-                    setTimeout(function () {
-                        cardTitle.textContent = "Percentage";
-                        inputGroupText.forEach(function (text) {
-                            text.textContent = "Per %";
-                        })
-                        cardTitle.style.opacity = "1";
-                    }, 300)
-                }
-                else {
-                    cardTitle.style.opacity = "0";
-                    setTimeout(function () {
-                        cardTitle.innerHTML = "Amount"
-                        inputGroupText.forEach(function (text) {
-                            text.textContent = "Fixed";
-                        })
-                        cardTitle.style.opacity = "1";
-                    }, 300)
-                }
-            })
+           
+
+
+                    $("#mycheckbox").change(function() {
+                               if (checkbox.checked) {
+                                             cardTitle.style.opacity = "0";
+                                             setTimeout(function () {
+                                                 cardTitle.textContent = "Percentage";
+                                                 inputGroupText.forEach(function (text) {
+                                                     text.textContent = "Per %";
+                                                         $("#Check").val("");
+                                                     var id = $("#Check").val(text.textContent)
+
+                                                 })
+                                                 cardTitle.style.opacity = "1";
+                                             }, 300)
+                                         }
+                                         else {
+                                             cardTitle.style.opacity = "0";
+                                             setTimeout(function () {
+                                                 cardTitle.innerHTML = "Amount"
+                                                 inputGroupText.forEach(function (text) {
+                                                     text.textContent = "Fixed";
+                                                     $("#Check").val(text.textContent)
+                                                 })
+                                                 cardTitle.style.opacity = "1";
+                                             }, 300)
+                                         }
+                    });
+
+
+
+            //checkbox.addEventListener('change', () => {
+                
+            //})
 
 
 
@@ -268,8 +281,8 @@
         function AddNewRecord() {
             debugger
             $("#AddGeneralModal").modal('show');
-            ClearControl();
-            $("#Status").prop('checked', true)
+            ClearControl()
+           
         }
 
         function EditRecord(id) {
@@ -288,9 +301,19 @@
                         $("#StaffSalaryComponentId").val(data.staffSalaryComponentId);
                         $("#ComponentId").val(data.componentId);
                         $("#StaffId").val(data.staffId).trigger("change");
-                        $("#ComponentAmount").val(data.componentAmount);
-                        $("#CompanyContributionAmount").val(data.companyContributionAmount);
-                       
+                        $("#PercentageValue").val(data.percentageValue);
+                        $("#CompanyContributionValue").val(data.companyContributionValue);
+                        
+                        $("#Check").val(data.companyContributionCalculationMethod);
+                        console.log(data);
+                            if(data.companyContributionCalculationMethod=="Percentage")
+                            {                                   
+                            
+                               $('#mycheckbox').prop('checked', true);
+
+                               $("#mycheckbox").trigger("change");
+                                      
+                            }
                         $("#AddGeneralModal").modal('show');
                     }
                 },
@@ -300,8 +323,12 @@
             })
         }
         function ClearControl() {
-            $("#ComponentId").val(0)
-            $("#Title").val('')
+
+            $("#StaffSalaryComponentId").val(0)
+           
+            $("#StaffId").val("").trigger("change");
+                $("#PercentageValue").val('')
+                $("#CompanyContributionValue").val('')
 
         }
         function DeleteConfirmation(id) {
@@ -355,28 +382,28 @@
             else {
                 $("#StaffId").css("border-color", "#ddd");
             }
-            if ($("#ComponentAmount").val() == "") {
+                if ($("#PercentageValue").val() == "") {
                 $.growl.warning({
                     message: "Please Enter Employes Contribution"
                 });
-                $("#ComponentAmount").css("border-color", "red");
+                    $("#PercentageValue").css("border-color", "red");
                 status = false;
                 return false;
             }
             else {
-                $("#ComponentAmount").css("border-color", "#ddd");
+                    $("#PercentageValue").css("border-color", "#ddd");
             }
 
-            if ($("#CompanyContributionAmount").val() == "") {
+                if ($("#CompanyContributionValue").val() == "") {
                 $.growl.warning({
                     message: "Please Enter Employer's Contribution"
                 });
-                $("#CompanyContributionAmount").css("border-color", "red");
+                    $("#CompanyContributionValue").css("border-color", "red");
                 status = false;
                 return false;
             }
             else {
-                $("#CompanyContributionAmount").css("border-color", "#ddd");
+                    $("#CompanyContributionValue").css("border-color", "#ddd");
             }
 
 
@@ -425,6 +452,8 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $("#myform").submit();
+                         ClearControl();
+
                     }
                     else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
