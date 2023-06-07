@@ -93,61 +93,35 @@ public partial class VInfoStaff
 
     public int? Expr1 { get; set; }
 
-    public string? Title { get; set; }
+    public string? SalaryMethodTitle { get; set; }
 
-    public bool? Expr2 { get; set; }
-
-    public int? Expr3 { get; set; }
-
-    public int? Expr4 { get; set; }
-
-    public DateTime? Expr5 { get; set; }
-
-    public DateTime? Expr6 { get; set; }
+    public bool? SalaryMethodIsDeleted { get; set; }
 
     public int Expr7 { get; set; }
 
-    public string? Expr8 { get; set; }
+    public string? DesignationTitle { get; set; }
 
-    public bool Expr9 { get; set; }
+    public bool DesignationStatus { get; set; }
 
-    public byte[]? Grade { get; set; }
+    public byte[]? DesignationGrade { get; set; }
 
-    public int? Seq { get; set; }
+    public int? DesignationSeq { get; set; }
 
-    public bool? Expr10 { get; set; }
-
-    public int? Expr11 { get; set; }
-
-    public int? Expr12 { get; set; }
-
-    public DateTime? Expr13 { get; set; }
-
-    public DateTime? Expr14 { get; set; }
-
-    public int? Expr15 { get; set; }
+    public bool? DesignationIsDeleted { get; set; }
 
     public int Expr16 { get; set; }
 
-    public string? Expr17 { get; set; }
+    public string? DepartmentTitle { get; set; }
 
-    public string? ShortCode { get; set; }
+    public string? DepartmentShortCode { get; set; }
 
-    public int? Expr18 { get; set; }
+    public int? DepartmentSeq { get; set; }
 
-    public string? LogoAttachment { get; set; }
+    public string? DepartmentLogoAttachment { get; set; }
 
-    public bool Expr19 { get; set; }
+    public bool DepartmentStatus { get; set; }
 
-    public bool? Expr20 { get; set; }
-
-    public int? Expr21 { get; set; }
-
-    public int? Expr22 { get; set; }
-
-    public DateTime? Expr23 { get; set; }
-
-    public DateTime? Expr24 { get; set; }
+    public bool? DepartmentIsDeleted { get; set; }
 
     public int? Expr25 { get; set; }
 
@@ -157,43 +131,35 @@ public partial class VInfoStaff
 
     public string? CompanyName { get; set; }
 
-    public string? Address { get; set; }
+    public string? CompanyAddress { get; set; }
 
-    public string? Expr27 { get; set; }
+    public string? CompanyEmail { get; set; }
 
-    public string? Phone { get; set; }
+    public string? CompanyPhone { get; set; }
 
-    public string? WebUrl { get; set; }
+    public string? CompanyWebUrl { get; set; }
 
-    public string? Expr28 { get; set; }
+    public string? CompanyLogoAttachment { get; set; }
 
-    public string? Language { get; set; }
+    public string? CompanyLanguage { get; set; }
 
-    public string? Currency { get; set; }
+    public string? CompanyCurrency { get; set; }
 
-    public bool? AttendanceByRosters { get; set; }
+    public bool? CompanyAttendanceByRosters { get; set; }
 
-    public TimeSpan? OfficeStartTime { get; set; }
+    public TimeSpan? CompanyOfficeStartTime { get; set; }
 
-    public TimeSpan? OfficeEndTime { get; set; }
+    public TimeSpan? CompanyOfficeEndTime { get; set; }
 
-    public bool? EmployeeWebCheckIn { get; set; }
+    public bool? CompanyEmployeeWebCheckIn { get; set; }
 
-    public int? StartTimeGraceMinutes { get; set; }
+    public int? CompanyStartTimeGraceMinutes { get; set; }
 
-    public int? MarkHalfDayAfterLateMinutes { get; set; }
+    public int? CompanyMarkHalfDayAfterLateMinutes { get; set; }
 
-    public bool Expr29 { get; set; }
+    public bool CompanyStatus { get; set; }
 
-    public bool? Expr30 { get; set; }
-
-    public int? Expr31 { get; set; }
-
-    public int? Expr32 { get; set; }
-
-    public DateTime? Expr33 { get; set; }
-
-    public DateTime? Expr34 { get; set; }
+    public bool? CompanyIsDeleted { get; set; }
 
     public int StaffSalarySettingId { get; set; }
 

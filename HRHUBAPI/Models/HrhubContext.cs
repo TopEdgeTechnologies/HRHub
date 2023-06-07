@@ -795,6 +795,46 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
         });
 
+        modelBuilder.Entity<Section>(entity =>
+        {
+            entity.ToTable("Section", "Performance");
+
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.EarnedWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.TotalWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<SectionAnswer>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("SectionAnswer", "Performance");
+
+            entity.Property(e => e.AnswerComments).IsUnicode(false);
+            entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
+            entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
+            entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+        });
+
+        modelBuilder.Entity<SectionQuestion>(entity =>
+        {
+            entity.ToTable("SectionQuestion", "Performance");
+
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
+        });
+
         modelBuilder.Entity<Staff>(entity =>
         {
             entity.ToTable("Staff", "HR");
@@ -922,6 +962,21 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Reason).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.UpdatedOn).HasColumnType("date");
+        });
+
+        modelBuilder.Entity<StaffReviewFormProcessed>(entity =>
+        {
+            entity.HasKey(e => e.ReviewFormProcessedId);
+
+            entity.ToTable("StaffReviewFormProcessed", "Performance");
+
+            entity.Property(e => e.ReviewFormProcessedId).HasColumnName("ReviewFormProcessedID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.EarnedWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
+            entity.Property(e => e.TotalWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<StaffReviewFormProcessed>(entity =>
@@ -1079,78 +1134,63 @@ public partial class HrhubContext : DbContext
                 .ToView("v_Info_Staff", "HR");
 
             entity.Property(e => e.AccountTitle).IsUnicode(false);
-            entity.Property(e => e.Address).IsUnicode(false);
             entity.Property(e => e.BankAccountNumber).IsUnicode(false);
             entity.Property(e => e.BankCode).IsUnicode(false);
             entity.Property(e => e.BankLocation).IsUnicode(false);
             entity.Property(e => e.BankName).IsUnicode(false);
             entity.Property(e => e.BloodGroup).IsUnicode(false);
-            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CompanyAddress).IsUnicode(false);
+            entity.Property(e => e.CompanyCurrency).IsUnicode(false);
+            entity.Property(e => e.CompanyEmail).IsUnicode(false);
+            entity.Property(e => e.CompanyEmployeeWebCheckIn).HasColumnName("CompanyEmployeeWebCheckIN");
+            entity.Property(e => e.CompanyLanguage).IsUnicode(false);
+            entity.Property(e => e.CompanyLogoAttachment).IsUnicode(false);
             entity.Property(e => e.CompanyName).IsUnicode(false);
+            entity.Property(e => e.CompanyPhone).IsUnicode(false);
+            entity.Property(e => e.CompanyWebUrl)
+                .IsUnicode(false)
+                .HasColumnName("CompanyWebURL");
             entity.Property(e => e.ContactNumber1).IsUnicode(false);
             entity.Property(e => e.ContactNumber2).IsUnicode(false);
             entity.Property(e => e.ContactPerson).IsUnicode(false);
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-            entity.Property(e => e.Currency).IsUnicode(false);
             entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
-            entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
+            entity.Property(e => e.DepartmentLogoAttachment).IsUnicode(false);
+            entity.Property(e => e.DepartmentShortCode)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.DepartmentTitle).IsUnicode(false);
+            entity.Property(e => e.DesignationGrade).HasMaxLength(50);
+            entity.Property(e => e.DesignationTitle).IsUnicode(false);
             entity.Property(e => e.Dob)
                 .HasColumnType("date")
                 .HasColumnName("DOB");
             entity.Property(e => e.Email).IsUnicode(false);
             entity.Property(e => e.EmergencyContact1).IsUnicode(false);
             entity.Property(e => e.EmergencyContact2).IsUnicode(false);
-            entity.Property(e => e.EmployeeWebCheckIn).HasColumnName("EmployeeWebCheckIN");
             entity.Property(e => e.EmploymentTypeId).HasColumnName("EmploymentTypeID");
-            entity.Property(e => e.Expr13).HasColumnType("datetime");
-            entity.Property(e => e.Expr14).HasColumnType("datetime");
-            entity.Property(e => e.Expr17).IsUnicode(false);
-            entity.Property(e => e.Expr23).HasColumnType("datetime");
-            entity.Property(e => e.Expr24).HasColumnType("datetime");
-            entity.Property(e => e.Expr27).IsUnicode(false);
-            entity.Property(e => e.Expr28).IsUnicode(false);
-            entity.Property(e => e.Expr33).HasColumnType("datetime");
-            entity.Property(e => e.Expr34).HasColumnType("datetime");
-            entity.Property(e => e.Expr5).HasColumnType("datetime");
-            entity.Property(e => e.Expr6).HasColumnType("datetime");
-            entity.Property(e => e.Expr8).IsUnicode(false);
             entity.Property(e => e.FatherName).IsUnicode(false);
             entity.Property(e => e.FirstName).IsUnicode(false);
             entity.Property(e => e.Gender).IsUnicode(false);
-            entity.Property(e => e.Grade).HasMaxLength(50);
             entity.Property(e => e.JobDescription).IsUnicode(false);
             entity.Property(e => e.JobTitle).IsUnicode(false);
             entity.Property(e => e.JoiningDate).HasColumnType("date");
-            entity.Property(e => e.Language).IsUnicode(false);
             entity.Property(e => e.LastName).IsUnicode(false);
-            entity.Property(e => e.LogoAttachment).IsUnicode(false);
             entity.Property(e => e.MaterialStatus).IsUnicode(false);
             entity.Property(e => e.NationalIdnumber)
                 .IsUnicode(false)
                 .HasColumnName("NationalIDNumber");
             entity.Property(e => e.PermanentAddress).IsUnicode(false);
-            entity.Property(e => e.Phone).IsUnicode(false);
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
-            entity.Property(e => e.SalaryMethodId)
-                .IsUnicode(false)
-                .HasColumnName("SalaryMethodID");
-            entity.Property(e => e.ShortCode)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.SalaryMethodTitle).IsUnicode(false);
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
             entity.Property(e => e.TerminationDate).HasColumnType("date");
-            entity.Property(e => e.Title).IsUnicode(false);
-            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-            entity.Property(e => e.WebUrl)
-                .IsUnicode(false)
-                .HasColumnName("WebURL");
             entity.Property(e => e.WorkMode).IsUnicode(false);
         });
 

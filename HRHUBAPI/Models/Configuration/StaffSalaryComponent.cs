@@ -104,46 +104,16 @@ namespace HRHUBAPI.Models
                         dbResult.StaffId = objStaffSalaryComponent.StaffId;
                         dbResult.ComponentId = objStaffSalaryComponent.ComponentId;
                         dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
-                                             
-                        dbResult.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
-                        
-                       
+                        dbResult.ComponentAmount = objStaffSalaryComponent.ComponentAmount;
 
-
-                        dbResult.UpdatedBy = objStaffSalaryComponent.CreatedBy;
-                        dbResult.UpdatedOn = DateTime.Now;
-                        await hrhubContext.SaveChangesAsync();
+						await hrhubContext.SaveChangesAsync();
                         dbResult.TranFlag = 2;
                         dbContextTransaction.Commit();
                         return dbResult;
                     }
                     else
                     {
-
-
-
-                        objStaffSalaryComponent.CreatedOn = DateTime.Now;
-                        objStaffSalaryComponent.IsDeleted = false;
-                       
-                        
-
-                        if (objStaffSalaryComponent.Check == "Per %")
-                        {
-                            objStaffSalaryComponent.CompanyContributionCalculationMethod = "Percentage";
-                            objStaffSalaryComponent.CompanyContributionAmount = (GrossSalary * objStaffSalaryComponent.CompanyContributionValue) / 100; // for company
-                            objStaffSalaryComponent.ComponentAmount = (GrossSalary * objStaffSalaryComponent.PercentageValue) / 100; // for staff
-                        }
-                        else
-                        {
-                            objStaffSalaryComponent.CompanyContributionCalculationMethod = "Amount";
-                            objStaffSalaryComponent.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionValue;
-                            objStaffSalaryComponent.ComponentAmount = objStaffSalaryComponent.PercentageValue;
-                          
-                        }
-
-
-
-                        hrhubContext.Add(objStaffSalaryComponent);
+						hrhubContext.Add(objStaffSalaryComponent);
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
                         dbContextTransaction.Commit();
