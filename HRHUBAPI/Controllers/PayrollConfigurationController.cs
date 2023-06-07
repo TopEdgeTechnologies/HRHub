@@ -469,10 +469,11 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        #endregion
+		#endregion
 
+		#region Staff Salary
 
-            [HttpGet("GetStaffSalary")]
+		[HttpGet("GetStaffSalary")]
             public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
             {
                 return await new StaffSalary().GetStaffSalary(_context);
@@ -490,11 +491,10 @@ namespace HRHUBAPI.Controllers
                 return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
             }
 
-           // return NotFound();
+		#endregion
 
 
-       // }
-        [HttpPost("LoanAddOrCreate")]
+		[HttpPost("LoanAddOrCreate")]
         public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
         {
             var result = await new LoanApplication().PostLoan(obj, _context);
@@ -597,7 +597,8 @@ namespace HRHUBAPI.Controllers
 
             return await new LoanApplication().GetStaffLoanRemainingAmountDetail(StaffId, _context);
         }
-    ///    #endregion
+
+       
 
 
     }

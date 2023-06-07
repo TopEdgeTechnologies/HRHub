@@ -57,15 +57,15 @@ namespace HRHUBAPI.Models
                         dbResult.ComponentId = objStaffSalaryComponent.ComponentId;
                         dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
                         dbResult.ComponentAmount = objStaffSalaryComponent.ComponentAmount;
-                        
-                        await hrhubContext.SaveChangesAsync();
+
+						await hrhubContext.SaveChangesAsync();
                         dbResult.TranFlag = 2;
                         dbContextTransaction.Commit();
                         return dbResult;
                     }
                     else
                     {
-                        hrhubContext.Add(objStaffSalaryComponent);
+						hrhubContext.Add(objStaffSalaryComponent);
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
                         dbContextTransaction.Commit();

@@ -1,5 +1,4 @@
-﻿@using Newtonsoft.Json;
-@model HRHUBAPI.Models.StaffSalary
+﻿@model HRHUBAPI.Models.StaffSalary
 
 <!--Add expense Modal -->
 <div class="modal fade" id="viewsalarymodal">
@@ -12,22 +11,9 @@
 				</button>
 			</div>
 			<div class="modal-header">
-
-				@*@{
-
-
-					string jsonUser = HttpContextAccessor.HttpContext.Session.GetString("AuthenticatedUser");
-					var myObjectUser = JsonSerializer.Deserialize<HRHUBAPI.Models.User>(jsonUser);
-					var imagesComapny = myObjectUser.LogoAttachment == null ? @"~\Images\Avatar.png" : myObjectUser.LogoAttachment;
-					
-
-
-				}*@
 				<div class="d-flex">
 					<img id="imgLogo" src="../assets/images/brand/logo.png" class="avatar avatar-md brround me-3"> Top Edge Technologies
-                    @*<img id="imgLogo" src="../assets/images/brand/logo.png" class="header-brand-img" alt="Dayonelogo">*@
                 </div>
-
 				<div class="ms-auto">
 					<div class="font-weight-bold text-md-right mt-3">Date: 01-02-2021</div>
 				</div>
@@ -127,11 +113,11 @@
 			</div>
 			<div class="p-5 border-top text-center">
 				<div class="text-center">
-					<h6 class="mb-2">Top Edge Technologies Pvt Ltd.</h6>
-					<p class="mb-1 fs-12">Royal Orchard, Business Plaza Basement, Multan, South Punjab Pakistan</p>
+					<h6 id="lbl_CompanyName" class="mb-2">Top Edge Technologies Pvt Ltd.</h6>
+					<p id="lbl_CompanyAddress" class="mb-1 fs-12">Royal Orchard, Business Plaza Basement, Multan, South Punjab Pakistan</p>
 					<div>
-						<small>Tel No: 99488 67536,</small>
-						<small>Email: info@topedgetechnologies.com</small>
+						<small id="lbl_CompanyPhone">Tel No: 99488 67536,</small>
+						<small id="lbl_CompanyEmail">Email: info@topedgetechnologies.com</small>
 					</div>
 				</div>
 			</div>
@@ -152,6 +138,7 @@
 
 		<input type="hidden" id="salaryMonth" value="5" />
 		<input type="hidden" id="salaryYear" value="2023"/>
+		
 		<!--Page header-->
 		
 		<!--End Page header-->
@@ -189,7 +176,9 @@
 										<th class="border-bottom-0">Reg.#</th>
 										<th class="border-bottom-0">Department</th>
 										<th class="border-bottom-0">Designation</th>
-										<th class="border-bottom-0">Salary</th>
+										<th class="border-bottom-0">Earning</th>
+										<th class="border-bottom-0">Deduction</th>
+										<th class="border-bottom-0">Payable</th>
 										<th class="border-bottom-0">Status</th>
 										<th class="border-bottom-0">Actions</th>
 									</tr>
@@ -216,7 +205,7 @@
 																snapPath = "/Images/Avatar.png";
 															}
 														}
-														<img class="avatar avatar-md brround me-3" src="@snapPath">
+														<img id="viewUserImage" onclick="ViewSalaryCard(@item.StaffId)" class="avatar avatar-md brround me-3" src="@snapPath">
 
 														<div class="me-3 mt-0 mt-sm-1 d-block">
 															@{
@@ -230,7 +219,9 @@
 												<td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
 												<td>@Html.DisplayFor(modelitem => item.DepartmentTitle)</td>
 												<td>@Html.DisplayFor(modelitem => item.DesignationTitle)</td>
-												<td class="font-weight-semibold"> @Convert.ToDecimal(item.CalculatedSalaryAmount).ToString("N2")</td>
+												<td>@Convert.ToDecimal(item.OV_EarningAmount).ToString("N2")</td>
+												<td>@Convert.ToDecimal(item.OV_DeductionAmount).ToString("N2")</td>
+												<td class="font-weight-semibold">@Convert.ToDecimal(item.OV_PayableAmount).ToString("N2")</td>
 												@{
 													string SalaryStatusTitle = "";
 													if(item.SalaryStatusTitle == "")
@@ -244,17 +235,13 @@
 												}
 												<td><span class="badge badge-success">@SalaryStatusTitle</span></td>
 												<td class="text-start">
-												
 													<a onclick="ViewSalaryCard(@item.StaffId)" class="action-btns" data-bs-toggle="modal">
 														<i class="feather feather-eye text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></i>
 													</a>
-													@*
-													<a href="javascript:void(0);" class="action-btns" data-bs-toggle="modal" data-bs-target="#viewsalarymodal">
-														<i class="feather feather-eye text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></i>
-													</a>*@
-													<a href="hr-editpayroll.html" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+													<a onclick="StaffSalaryEdit(@item.StaffId, @item.OV_PayableAmount)" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
 														<i class="feather feather-edit text-info"></i>
 													</a>
+													@*
 													<a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
 														<i class="feather feather-download  text-secondary"></i>
 													</a>
@@ -266,7 +253,7 @@
 													</a>
 													<a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
 														<i class="feather feather-x text-danger"></i>
-													</a>
+													</a>*@
 												</td>
 											</tr>
 										}
@@ -306,83 +293,7 @@
 					{
 						console.log(data)
 						debugger
-						
-						var netSalary = 0.0
-						var netSalaryInWords = ''
-						var cardEarningHtml = ''
-						var cardDeductionHtml = ''
-						var totalEarningComponentAmount = 0.0
-						var totalDeductionComponentAmount = 0.0
-						
-						/*
-						//Apply filter to data array
-						data = data.filter(function (item) {
-							// Apply your filter condition here
-							// For example, let's assume we want to include only components with amounts greater than 1000
-							//return item.componentAmount > 1000;
-							return item.category == "Deduction";
-						});
-						*/
-						var regNo = ''
-						var empName = ''
-						var department = ''
-						
-						if(data.length > 0)
-						{
-							regNo = data[0].registrationNo
-							$('#lbl_regNo').text(regNo)
-							empName = data[0].firstName + ' ' + data[0].lastName
-							$('#lbl_firstName').text(empName)
-							department = data[0].departmentTitle
-							$('#lbl_Department').text(department)							
-							$('#lbl_SalaryPeriod').text($('#salaryMonth').val() + ' - ' + $('#salaryYear').val())
-							//"/Images/Avatar.png"
-							if (data[0].snapPath != null && data[0].snapPath != '') 
-							{
-								$('#imgLogo').attr('src', data[0].snapPath)
-							}
-							else
-							{
-								$('#imgLogo').attr('src', '/Images/Avatar.png')
-							}
-							
-						}
-
-						var j = 0
-						for(var i = 0; i< data.length; i++) 
-						{
-							if (data[i].category == "Earning")
-							{
-								cardEarningHtml += '<tr id="' + i + '">'
-								cardEarningHtml += '<td> ' + data[i].componentTitle + ' </td>'
-								cardEarningHtml += '<td class="border-start"> ' + data[i].componentAmount.toLocaleString() + ' </td>'
-								cardEarningHtml += '</tr>'
-								totalEarningComponentAmount += parseFloat(data[i].componentAmount)
-							}
-							else if (data[i].category == "Deduction") 
-							{
-								cardDeductionHtml += '<tr id="' + j + '">'
-								cardDeductionHtml += '<td> ' + data[i].componentTitle + ' </td>'
-								cardDeductionHtml += '<td class="border-start"> ' + data[i].componentAmount.toLocaleString() + ' </td>'
-								cardDeductionHtml += '</tr>'
-								totalDeductionComponentAmount += parseFloat(data[i].componentAmount)
-								j++
-							}
-						}
-
-						$("#tBodyEarning").html(cardEarningHtml)
-						var lbl_earnings = document.getElementById("lbl_earnings")
-						lbl_earnings.innerText = totalEarningComponentAmount.toLocaleString()
-
-						$("#tBodyDeduction").html(cardDeductionHtml)
-						var lbl_deductions = document.getElementById("lbl_deductions")
-						lbl_deductions.innerText = totalDeductionComponentAmount.toLocaleString()
-
-						netSalary = totalEarningComponentAmount - totalDeductionComponentAmount
-						var lbl_netSalary = document.getElementById("lbl_netSalary")
-						lbl_netSalary.innerText = netSalary.toLocaleString(undefined, { maximumFractionDigits: 0 });
-						$('#lbl_netSalaryInWords').text(numberToWords(netSalary.toFixed(0)))
-						
+						GetStaffSalaryByIdData(data)
 						$("#viewsalarymodal").modal('show')
 					}
 				},
@@ -391,6 +302,99 @@
 					//   toastr.error("Please Fill Required Field");
 				}
 			})
+		}
+
+		function GetStaffSalaryByIdData(data) 
+		{
+			var netSalary = 0.0
+			var netSalaryInWords = ''
+			var cardEarningHtml = ''
+			var cardDeductionHtml = ''
+			var totalEarningComponentAmount = 0.0
+			var totalDeductionComponentAmount = 0.0
+			
+			/*
+			//Apply filter to data array
+			data = data.filter(function (item) {
+				// Apply your filter condition here
+				// For example, let's assume we want to include only components with amounts greater than 1000
+				//return item.componentAmount > 1000;
+				return item.category == "Deduction";
+			});
+			*/
+
+			if (data.length > 0) 
+			{
+				$('#lbl_regNo').text(data[0].registrationNo)
+				$('#lbl_firstName').text(data[0].firstName + ' ' + data[0].lastName)
+				$('#lbl_Department').text(data[0].departmentTitle)
+				$('#lbl_SalaryPeriod').text($('#salaryMonth').val() + ' - ' + $('#salaryYear').val())
+
+				if (data[0].companyLogoAttachment != null && data[0].companyLogoAttachment != '') 
+				{
+					$('#imgLogo').attr('src', data[0].companyLogoAttachment)
+				}
+				else 
+				{
+					$('#imgLogo').attr('src', '/Images/Avatar.png')
+				}
+
+				$('#lbl_CompanyName').text(data[0].companyName)
+				$('#lbl_CompanyAddress').text(data[0].companyAddress)
+				$('#lbl_CompanyPhone').text(data[0].companyPhone)
+				$('#lbl_CompanyEmail').text(data[0].companyEmail)
+			}
+
+			var j = 0
+			for (var i = 0; i < data.length; i++) 
+			{
+				debugger
+				if (data[i].category == "Earning") 
+				{
+					cardEarningHtml += '<tr id="' + i + '">'
+					cardEarningHtml += '<td> ' + data[i].componentTitle + ' </td>'
+					cardEarningHtml += '<td class="border-start"> ' + data[i].componentAmount.toLocaleString() + ' </td>'
+					cardEarningHtml += '</tr>'
+
+					totalEarningComponentAmount += parseFloat(data[i].componentAmount)
+
+					//cardDeductionHtml += '<td> ' + ' ' + ' </td>'
+					//cardDeductionHtml += '<td> ' + ' ' + ' </td>'
+				}
+				
+				else if (data[i].category == "Deduction") 
+				{
+					cardDeductionHtml += '<tr id="' + j + '">'
+					cardDeductionHtml += '<td> ' + data[i].componentTitle + ' </td>'
+					cardDeductionHtml += '<td class="border-start"> ' + data[i].componentAmount.toLocaleString() + ' </td>'
+					cardDeductionHtml += '</tr>'
+
+					totalDeductionComponentAmount += parseFloat(data[i].componentAmount)
+					//cardEarningHtml += '<td> ' + ' ' + ' </td>'
+					//cardEarningHtml += '<td> ' + ' ' + ' </td>'
+					j++
+				}
+			}
+
+			$("#tBodyEarning").html(cardEarningHtml)
+			var lbl_earnings = document.getElementById("lbl_earnings")
+			lbl_earnings.innerText = totalEarningComponentAmount.toLocaleString()
+
+			$("#tBodyDeduction").html(cardDeductionHtml)
+			var lbl_deductions = document.getElementById("lbl_deductions")
+			lbl_deductions.innerText = totalDeductionComponentAmount.toLocaleString()
+
+			netSalary = totalEarningComponentAmount - totalDeductionComponentAmount
+			var lbl_netSalary = document.getElementById("lbl_netSalary")
+			lbl_netSalary.innerText = netSalary.toLocaleString(undefined, { maximumFractionDigits: 0 });
+			$('#lbl_netSalaryInWords').text(numberToWords(netSalary.toFixed(0)))
+		}
+
+		function StaffSalaryEdit(staffId,amount) 
+		{
+			debugger
+			var url = "/PayrollConfiguration/GetStaffSalaryCreateOrUpdate?month=" + encodeURIComponent($("#salaryMonth").val()) + "&year=" + encodeURIComponent($("#salaryYear").val()) + "&staffId=" + encodeURIComponent(staffId) + "&GrossAmount=" + encodeURIComponent(amount);
+			window.location.href = url;
 		}
 
 </script>

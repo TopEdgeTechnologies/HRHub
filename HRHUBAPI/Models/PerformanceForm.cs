@@ -3,17 +3,19 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class OffBoardingProcessSetting
+public partial class PerformanceForm
 {
-    public int OffboardingProcessSettingId { get; set; }
+    public int ReviewFormId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public int? NeedClearenceFromDepartmentId { get; set; }
+    public string? Title { get; set; }
 
-    public int? NeedClearenceFromDesignationId { get; set; }
+    public string? Description { get; set; }
 
-    public bool? AllowExitInterview { get; set; }
+    public DateTime? StartDate { get; set; }
+
+    public DateTime? EndDate { get; set; }
 
     public bool? IsDeleted { get; set; }
 

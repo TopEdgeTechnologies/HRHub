@@ -1,0 +1,243 @@
+﻿@model HRHUBAPI.Models.StaffSalary
+
+<div class="side-app main-container">
+
+	<!--Page header-->
+	
+	<!--End Page header-->
+	<!-- Row -->
+
+	<!-- End Row -->
+	<!-- Row -->
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-body">
+					<div class="page-header d-xl-flex d-block">
+						<div class="page-leftheader">
+							<div class="page-title">Edit Payroll</div>
+						</div>
+						<div class="page-rightheader ms-md-auto">
+							<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+								<div class="btn-list">
+									<a href="hr-addpayroll.html" class="btn btn-primary me-3">Add New Payroll</a>
+									<button class="btn btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#excelmodal">
+										<i class="las la-file-excel"></i>  Download Monthly Excel Report
+									</button>
+									<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+									<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+									<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group ">
+						<div class="row">
+							<div class="col-md-12 col-lg-2">
+								<label class="form-label mb-0 mt-2">Salary</label>
+							</div>
+							<div class="col-md-12 col-lg-8">
+								<input id="SalaryAmount" type="text" readonly class="form-control" placeholder="0" value=@Model.OV_PayableAmount>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6">
+							<h4 class="card-title">Allowances</h4>
+								<table id="tbl_Earning" class="table table-vcenter text-nowrap table-bordered border-bottom">
+									<thead>
+										<tr>
+											<th>Title</th>
+											<th>Amount</th>
+										</tr>
+									</thead>
+									<tbody id="tbl_Earning_Body">
+									@{
+										decimal total_earnings = 0;
+										if (Model.StaffSalaryEditList != null && Model.StaffSalaryEditList.Count() > 0)
+										{
+											int a = 0;
+											foreach (var item in Model.StaffSalaryEditList.Where(x => x.Category == "Earning"))
+											{
+												if (item.Category == "Earning")
+												{
+													<tr>
+														<td>@item.ComponentTitle</td>
+														<td>
+															<input id="ComponentAmount_Earning_@a" type="number" min="0" class="form-control" placeholder="0" value="@item.ComponentAmount" oninput="OnTextChangeEarning()">
+														</td>
+													</tr>
+													total_earnings += Convert.ToDecimal(item.ComponentAmount);
+												}
+												a++;
+											}
+										}
+									}
+									</tbody>
+									<tfoot>
+										<tr class="border-top">
+											<td class="font-weight-semibold">Total Earning</td>
+										<td id="lbl_earnings" class="font-weight-semibold border-start">@total_earnings.ToString("N")</td>
+										</tr>
+									</tfoot>
+								</table>
+							@*<input type="button" class="btn btn-primary btn-lg" value="Insert Row" onclick="insertRow()" />*@
+						</div>
+
+						<div class="col-md-6">
+							<h4 class="card-title">Deduction</h4>
+							<table id="tbl_Deduction" class="table table-vcenter text-nowrap table-bordered border-bottom">
+								<thead>
+									<tr>
+										<th>Title</th>
+										<th>Amount</th>
+									</tr>
+								</thead>
+								<tbody id="tbl_Deduction_Body">
+									@{
+										decimal total_deductions = 0;
+										if (Model.StaffSalaryEditList != null && Model.StaffSalaryEditList.Count() > 0)
+										{
+											int b = 0;
+											foreach (var item in Model.StaffSalaryEditList.Where(x => x.Category == "Deduction"))
+											{
+												if (item.Category == "Deduction")
+												{
+													<tr>
+														<td id="ComponentTitle_Deduction_@b">@item.ComponentTitle</td>
+														<td>
+															<input id="ComponentAmount_Deduction_@b" type="number" min="0" class="form-control" placeholder="0" value="@item.ComponentAmount" oninput="OnTextChangeDeduction()">
+														</td>
+													</tr>
+													total_deductions += Convert.ToDecimal(item.ComponentAmount);
+												}
+												b++;
+											}
+										}
+									}
+								</tbody>
+								<tfoot>
+									<tr class="border-top">
+										<td class="font-weight-semibold">Total Deduction</td>
+										<td id="lbl_deductions" class="font-weight-semibold border-start">@total_deductions.ToString("N")</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+			
+				<div class="card-body">
+					<h4 class="card-title">Gross Salary</h4>
+					@*<div class="form-group">
+						<div class="row">
+							<div class="col-md-12 col-lg-2">
+								<label class="form-label mb-0 mt-2">Total Allowances</label>
+							</div>
+							<div class="col-md-12 col-lg-8">
+								<input type="text" class="form-control" placeholder="0" value="0.00">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12 col-lg-2">
+								<label class="form-label mb-0 mt-2">Total Deduction</label>
+							</div>
+							<div class="col-md-12 col-lg-8">
+								<input type="text" class="form-control" placeholder="0" value="0.00">
+							</div>
+						</div>
+					</div>*@
+					<div class="form-group">
+						<div class="row">
+							<div class="col-md-12 col-lg-2">
+								<label class="form-label mb-0 mt-2">Net Salary</label>
+							</div>
+							<div class="col-md-12 col-lg-8">
+								@{
+									var net = @total_earnings - @total_deductions;
+								}
+								<input id="NetSalary" type="text" readonly min="0" class="form-control" placeholder="0" value=@net.ToString("N")>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12 col-lg-2">
+						</div>
+						<div class="col-md-12 col-lg-8">
+							<a href="javascript:void(0);" class="btn btn-primary btn-lg">Save</a>
+							<a href="javascript:void(0);" class="btn btn-danger btn-lg">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Row -->
+
+</div><!-- end app-content-->
+
+@section scripts{
+	<script>
+		$(document).ready(function () {
+
+
+		});
+
+		function OnTextChangeEarning() 
+		{
+			debugger
+			var totalEarning = 0.0
+			
+			$("#tbl_Earning_Body tr").each(function (index) {
+				debugger
+				var EarningAmount = $("#ComponentAmount_Earning_" + index).val()
+				if (!isNaN(EarningAmount) && EarningAmount != '' && EarningAmount != null)
+				{
+					debugger
+					totalEarning += parseFloat(EarningAmount)
+					$("#lbl_earnings").text(totalEarning.toLocaleString())
+				}
+			});
+			calculateNetSalary()
+		}
+
+		function OnTextChangeDeduction()
+		{
+			var totalDeduction = 0.0
+
+			$("#tbl_Deduction_Body tr").each(function (index) {
+				debugger
+				var DeductionTitle = $("#ComponentTitle_Deduction_" + index).text()
+				var DeductionAmount = $("#ComponentAmount_Deduction_" + index).val()
+			if (!isNaN(DeductionAmount) && DeductionAmount != '' && DeductionAmount != null) 
+				{
+					totalDeduction += parseFloat(DeductionAmount)
+					$("#lbl_deductions").text(totalDeduction.toLocaleString())
+				}
+			});
+			calculateNetSalary()
+		}
+
+		function calculateNetSalary()
+		{
+			debugger
+			var earnings = parseFloat($("#lbl_earnings").text().replace(/,/g, ''));
+			var deductions = parseFloat($("#lbl_deductions").text().replace(/,/g, ''));
+
+			var netSalary = earnings - deductions;
+			$("#NetSalary").val(netSalary.toLocaleString()); // Using toLocaleString() to format the net salary with thousands separators
+		}
+
+
+
+
+	</script>
+
+}

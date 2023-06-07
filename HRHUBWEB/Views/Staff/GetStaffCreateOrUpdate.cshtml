@@ -23,7 +23,7 @@
                     <div class="card-body text-center">
                         <div class="widget-user-image mx-auto text-center">
                             @{
-                                string pathfile = Model.SnapPath != null ? @Model.SnapPath : " /Images/Avatar.png";
+                                string pathfile = Model.SnapPath != null ? Model.SnapPath : " /Images/Avatar.png";
                             }
                             <img class="avatar avatar-xxl brround rounded-circle" id="viewUserImage" alt="user-img" src="@pathfile">
 @*                            <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">*@
@@ -577,7 +577,7 @@
                                                                     @item.ComponentTitle
                                                                 </td>
                                                                 <td>
-                                                                    <input type="number" style="padding-left:3px; padding-right:3px" min="0" max="100" class="form-control" id="PercentageValue_@m@item.Category" name="ListComponentPercentageEarning" value="@item.PercentageValue" title="Component Percentage" placeholder="Enter Percentage" />
+                                                                    <input type="number" style="padding-left:3px; padding-right:3px" min="0" max="100" class="form-control" id="PercentageValue_@m@item.Category" name="ListComponentPercentageEarning" value="@item.PercentageValue" title="Component Percentage" placeholder="Enter Percentage" oninput="SalaryPercentageExceedLimit('@item.Category')"/>
                                                                 </td>
                                                                 <td>
                                                                     <input type="number" style="padding-left:3px; padding-right:3px" min="0" class="form-control" id="ComponentAmount_@m@item.Category" name="ListComponentAmountEarning" value="@item.ComponentAmount" title="Component Amount" placeholder="Enter Amount" oninput="SalaryExceedLimit('@item.Category')" />
@@ -594,7 +594,8 @@
                         </div>
                         <div class="tab-pane" id="tab8">
                             <div class="card-body">
-                                <div>
+                                <div class="row">
+                                    <div class="col-md-8">
                                     <table id="LeaveTable" class="table  table-vcenter text-nowrap table-bordered border-bottom">
                                         <thead>
                                             <tr>
@@ -617,13 +618,15 @@
                                                             <td>
                                                                 <input type="hidden" id="LeaveAllocationId_@a" name="LeaveAllocationId" value="@item.LeaveAllocationId" />
                                                                 <input type="hidden" id="LeaveTypeId_@a" name="ListLeaveTypeId" value="@item.LeaveTypeId" />
-                                                                <input type="text" readonly class="form-control" id="LeaveTypeTitle_@a" name="LeaveTypeTitle" value="@item.LeaveTypeTitle" />
+                                                                @*<input type="text" readonly class="form-control" id="LeaveTypeTitle_@a" name="LeaveTypeTitle" value="@item.LeaveTypeTitle" />*@
+                                                                @item.LeaveTypeTitle
                                                             </td>
                                                             <td>
-                                                                <input type="text" readonly class="form-control" id="NoOfLeavesLimit_@a" name="NoOfLeavesLimit" value="@item.NoOfLeavesLimit" />
+                                                                @*<input type="text" readonly class="form-control" id="NoOfLeavesLimit_@a" name="NoOfLeavesLimit" value="@item.NoOfLeavesLimit" />*@
+                                                                @item.NoOfLeavesLimit
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control" id="AllowedLeaves_@a" onkeydown="LeaveExceedLimit(@a)" name="ListAllowedLeaves" value="@item.AllowedLeaves" />
+                                                                <input type="number" class="form-control" min="0" max="999" id="AllowedLeaves_@a" onkeydown="LeaveExceedLimit(@a)" name="ListAllowedLeaves" value="@item.AllowedLeaves" />
                                                             </td>
                                                         </tr>
                                                         a++;
@@ -633,6 +636,9 @@
                                             }
                                         </tbody>
                                     </table>
+
+                                   </div>
+
                                 </div>
                             </div>
                         </div>
@@ -643,7 +649,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Sr. #</th>
-                                                <th>Document ID</th>
+                                                <th>Document Title</th>
                                                 <th>Document Path</th>
                                                 <th></th>
                                             </tr>
@@ -828,12 +834,14 @@
             var txt_Pass = document.getElementById('txt_OfficialEmailPassword');
             var chk_EmailNotification = document.getElementById('chk_EmailNotification');
 
-            if (chk_AccountLogin.checked) {
+            if (chk_AccountLogin.checked) 
+            {
                 txt_Email.disabled = false;
                 txt_Pass.disabled = false;
                 chk_EmailNotification.disabled = false;
             }
-            else {
+            else 
+            {
                 txt_Email.disabled = true;
                 txt_Pass.disabled = true;
                 chk_EmailNotification.disabled = true;
@@ -940,61 +948,111 @@
 
         function SalaryExceedLimit(category) 
         {
+            debugger
             var grossSalary = parseFloat($('#SalaryAmount').val());
             var isExceed = false;
             var totalEarning = 0.0;
-            var lbl_Earning_element = document.getElementById('lbl_Earning');
-            var lbl_Earning_value = 0.0;
-            
+
             if(category == 'Earning')
             {
-                //Earning Section
                 $("#EarningTableBody tr").each(function (index) {
-                var EarningAmount = $("#ComponentAmount_" + index + category).val();
-                if (!isNaN(EarningAmount) && EarningAmount!='' && EarningAmount!=null) 
-                {
-                    totalEarning += parseFloat(EarningAmount);
-                    // setting value
-                    lbl_Earning_element.innerHTML = totalEarning;
-                    
-                    // getting value
-                    //lbl_Earning_value = lbl_Earning_element.innerHTML;
-                    
-                    //get Percentage
-                    //var EarningPercentage = EarningAmount * 100.0 / lbl_Earning_value;
-                    //console.log("EarningPercentage" + EarningPercentage);
-                    //$("#ComponentAmount_" + index + category).val() = EarningPercentage;
-
-                    isExceed = true;
-                } 
+                
+                    var EarningAmount = $("#ComponentAmount_" + index + category).val()
+                    if (!isNaN(EarningAmount) && EarningAmount != '' && EarningAmount != null) 
+                    {
+                        //Calculate Total Amount
+                        totalEarning += parseFloat(EarningAmount)
+                        $("#lbl_Earning").text(totalEarning.toLocaleString());
+                        
+                        //Calculate Percentage
+                        var PercentageValue = $("#PercentageValue_" + index + category).val()
+                        if(!isNaN(PercentageValue) && PercentageValue != '' && PercentageValue != null)
+                        {
+                            PercentageValue = EarningAmount * 100 / grossSalary
+                            $("#PercentageValue_" + index + category).val(PercentageValue)
+                        }
+                        isExceed = true
+                    } 
                 });
             }
-            // getting value
-            lbl_Earning_value = lbl_Earning_element.innerHTML;
-
+            
             //Check Gross Salary Exceed Limit
-            console.log("Gross Salary:" + grossSalary);
-            if (lbl_Earning_value > grossSalary) 
+            if (totalEarning > grossSalary) 
             {
-                console.log("Gross Salary:" + grossSalary);
                 $.growl.warning({
                     message: "Please Adjust Salary Details according to Gross Salary!"
                 });
-                isExceed = false;
+                isExceed = false
             }
 
-            console.log("lbl_Earning_value:" + lbl_Earning_value);
-            return isExceed;
+            return isExceed
+        }
+
+        function SalaryPercentageExceedLimit(category) 
+        {
+            var grossSalary = parseFloat($('#SalaryAmount').val());
+            var isExceed = false
+            var totalEarning = 0.0
+            var totalEarningPercentage = 0.0
+
+            if(category == 'Earning')
+            {
+                $("#EarningTableBody tr").each(function (index) {
+
+                    var EarningPercentage = $("#PercentageValue_" + index + category).val()
+                    if (!isNaN(EarningPercentage) && EarningPercentage != '' && EarningPercentage != null && EarningPercentage <= 100.0) 
+                    {
+                        //Calculate Total Amount
+                        totalEarningPercentage += parseFloat(EarningPercentage)
+                        //Calculate Earning Amount
+                        var EarningAmount = $("#ComponentAmount_" + index + category).val()
+                        if(!isNaN(EarningAmount) && EarningAmount != '' && EarningAmount != null)
+                        {
+                            EarningAmount = EarningPercentage * grossSalary / 100
+                            $("#ComponentAmount_" + index + category).val(EarningAmount)
+                            //Calculate Total Amount
+                            totalEarning += parseFloat(EarningAmount)
+                            $("#lbl_Earning").text(totalEarning.toLocaleString());
+                        }
+                        isExceed = true
+                    } 
+                });
+            }
+            
+            //Check Gross Salary Exceed Limit
+            if (totalEarningPercentage > 100) {
+                $.growl.warning({
+                    message: "Please Adjust Salary Percentage, it should not more than 100%!"
+                });
+                isExceed = false
+            }
+
+            //Check Gross Salary Exceed Limit
+            if (totalEarning > grossSalary) 
+            {
+                $.growl.warning({
+                    message: "Please Adjust Salary Details according to Gross Salary!"
+                });
+                isExceed = false
+            }
+
+            return isExceed
         }
 
         function LeaveExceedLimit(id)
         {
+            var isExceed = false;
             var leaveslimit = parseInt($("#NoOfLeavesLimit_"+id).val());
             var allowedleaves = parseInt($("#AllowedLeaves_"+id).val());
 
-            if (allowedleaves > leaveslimit)
+            //Check Leave Exceed Limit
+            if (allowedleaves > leaveslimit) 
             {
                 $("#AllowedLeaves_" + id).val(0);
+                $.growl.warning({
+                    message: "Please Adjust Leaves according to Max Limit!"
+                });
+                isExceed = true
             }
         }
 

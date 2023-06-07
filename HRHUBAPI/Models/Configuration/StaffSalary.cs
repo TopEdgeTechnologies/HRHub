@@ -21,7 +21,6 @@ namespace HRHUBAPI.Models
             [NotMapped]
             public string? LastName { get; set; }
 
-
             [NotMapped]
             public string? RegistrationNo { get; set; }
 
@@ -44,7 +43,13 @@ namespace HRHUBAPI.Models
 		    public string? Email { get; set; }
 
 		    [NotMapped]
-            public decimal? CalculatedSalaryAmount { get; set; }
+		    public decimal? OV_EarningAmount { get; set; }
+
+		    [NotMapped]
+		    public decimal? OV_DeductionAmount { get; set; }
+
+		    [NotMapped]
+            public decimal? OV_PayableAmount { get; set; }
 
             [NotMapped]
 		    public string? SalaryStatusTitle { get; set; }
@@ -63,6 +68,24 @@ namespace HRHUBAPI.Models
 
             [NotMapped]
 		    public decimal? ComponentAmount { get; set; }
+
+            [NotMapped]
+            public string? CompanyName { get; set; }
+
+            [NotMapped]
+            public string? CompanyAddress { get; set; }
+
+		    [NotMapped]
+		    public string? CompanyPhone { get; set; }
+
+		    [NotMapped]
+		    public string? CompanyEmail { get; set; }
+
+		    [NotMapped]
+            public string? CompanyLogoAttachment { get; set; }
+
+            [NotMapped]
+            public IEnumerable<StaffSalary>? StaffSalaryEditList { get; set; }  
 
 		#endregion
 
@@ -97,7 +120,9 @@ namespace HRHUBAPI.Models
 					SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "" : row["SnapPath"].ToString(),
 					ContactNumber = string.IsNullOrWhiteSpace(row["ContactNumber"].ToString()) ? "" : row["ContactNumber"].ToString(),
 					Email = string.IsNullOrWhiteSpace(row["Email"].ToString()) ? "" : row["Email"].ToString(),
-					CalculatedSalaryAmount = Convert.ToDecimal(row["WorkingMinutesSalaryAmount"]),
+					OV_EarningAmount = string.IsNullOrWhiteSpace(row["OV_EarningAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_EarningAmount"]),
+					OV_DeductionAmount = string.IsNullOrWhiteSpace(row["OV_DeductionAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_DeductionAmount"]),
+					OV_PayableAmount = string.IsNullOrWhiteSpace(row["OV_PayableAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_PayableAmount"]),
 					SalaryStatusTitle = string.IsNullOrWhiteSpace(row["SalaryStatusTitle"].ToString()) ? "" : row["SalaryStatusTitle"].ToString(),
 
 				}).ToList();    
@@ -115,13 +140,17 @@ namespace HRHUBAPI.Models
 				DataTable dt = dbConnection.ReturnDataTable(query);
 				var resultRows = dt.AsEnumerable().Select(row => new StaffSalary
 				{
+                    CompanyName = string.IsNullOrWhiteSpace(row["CompanyName"].ToString()) ? "" : row["CompanyName"].ToString(),
+                    CompanyAddress = string.IsNullOrWhiteSpace(row["CompanyAddress"].ToString()) ? "" : row["CompanyAddress"].ToString(),
+					CompanyPhone = string.IsNullOrWhiteSpace(row["CompanyPhone"].ToString()) ? "" : row["CompanyPhone"].ToString(),
+					CompanyEmail = string.IsNullOrWhiteSpace(row["CompanyEmail"].ToString()) ? "" : row["CompanyEmail"].ToString(),
+                    CompanyLogoAttachment = string.IsNullOrWhiteSpace(row["CompanyLogoAttachment"].ToString()) ? "" : row["CompanyLogoAttachment"].ToString(),
 					StaffId = Convert.ToInt32(row["StaffId"]),
 					RegistrationNo = string.IsNullOrWhiteSpace(row["RegistrationNo"].ToString()) ? "" : row["RegistrationNo"].ToString(),
 					FirstName = string.IsNullOrWhiteSpace(row["FirstName"].ToString()) ? "" : row["FirstName"].ToString(),
 					LastName = string.IsNullOrWhiteSpace(row["LastName"].ToString()) ? "" : row["LastName"].ToString(),
 					DesignationTitle = string.IsNullOrWhiteSpace(row["DesignationTitle"].ToString()) ? "" : row["DesignationTitle"].ToString(),
 					DepartmentTitle = string.IsNullOrWhiteSpace(row["DepartmentTitle"].ToString()) ? "" : row["DepartmentTitle"].ToString(),
-					SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "" : row["SnapPath"].ToString(),
 					Category = string.IsNullOrWhiteSpace(row["Category"].ToString()) ? "" : row["Category"].ToString(),
 					ComponentTitle = string.IsNullOrWhiteSpace(row["ComponentTitle"].ToString()) ? "" : row["ComponentTitle"].ToString(),
 					ComponentAmount = Convert.ToDecimal(row["ComponentAmount"]),

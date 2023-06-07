@@ -14,4 +14,20 @@ public partial class StaffSalaryComponent
     public decimal? PercentageValue { get; set; }
 
     public decimal? ComponentAmount { get; set; }
+
+    public string? CompanyContributionCalculationMethod { get; set; }
+
+    public decimal? CompanyContributionValue { get; set; }
+
+    public decimal? CompanyContributionAmount { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 }

@@ -11,6 +11,8 @@ public partial class StaffContract
 
     public int? EmploymentTypeId { get; set; }
 
+    public string? ContractDuration { get; set; }
+
     public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
@@ -18,6 +20,8 @@ public partial class StaffContract
     public string? Attachment { get; set; }
 
     public string? AdditionalDetails { get; set; }
+
+    public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
 

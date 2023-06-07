@@ -200,16 +200,29 @@ namespace HRHUBWEB.Controllers
             return View(objStaffSalary);
         }
 
-        public async Task<List<StaffSalary>> GetStaffSalaryById(int month, int year, int StaffId)
+        public async Task<List<StaffSalary>> GetStaffSalaryById(int month, int year, int staffId)
         {
-            if(month > 0 && year > 0 && StaffId > 0)
+            if(month > 0 && year > 0 && staffId > 0)
             {
-                var staffSalaryCardList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{StaffId}", HttpMethod.Get);
+                var staffSalaryCardList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{staffId}", HttpMethod.Get);
 				return staffSalaryCardList;
 			}
             return null;
         }
 
-        #endregion
-    }
+        public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId, decimal GrossAmount)
+        { 
+            StaffSalary objStaffSalary = new StaffSalary();
+			objStaffSalary.StaffSalaryEditList = await GetStaffSalaryById(month, year, staffId);
+            ViewBag.SalaryMonth = month;
+            ViewBag.SalaryYear = year;  
+            objStaffSalary.OV_PayableAmount = GrossAmount;
+
+            //StaffSalary objStaffSalary = new StaffSalary();
+            //         objStaffSalary = await _APIHelper.CallApiAsyncGet<StaffSalary>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{StaffId}", HttpMethod.Get);
+            return View(objStaffSalary);
+        }
+
+		#endregion
+	}
 }
