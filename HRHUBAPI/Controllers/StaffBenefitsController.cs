@@ -137,11 +137,7 @@ namespace HRHUBAPI.Controllers
             var dbResult = await new StaffSalaryComponent().DeleteStaffBenefitComponent(Id, UserId, _context);
             if (dbResult !=null)
             {
-                return Ok(new
-                {
-                    success = true,
-                    Message = "Data Deleted Successfully"
-                });
+                return Ok(dbResult);
             }
             return NotFound("Data Not Found!");
         }
