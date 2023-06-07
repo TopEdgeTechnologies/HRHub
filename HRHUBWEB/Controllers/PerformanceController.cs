@@ -59,7 +59,64 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
+        #region Performance
+        [CustomAuthorization]
+        public async Task<IActionResult> PerformanceList(String data = "")
+        {
 
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+             StaffContract ObjStaffContract = new StaffContract();
+
+
+            ObjStaffContract.AllStaffContract = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffContract>>($"api/Staffs/ListStaffAllContract{_user.CompanyId}", HttpMethod.Get);
+
+            return View(ObjStaffContract);
+        }
+
+
+        public async Task<IActionResult> GetPerformanceById(int id)
+        {
+            StaffContract ObjStaffContract = new StaffContract();
+            ObjStaffContract = await _APIHelper.CallApiAsyncGet<StaffContract>($"api/Staffs/GetStaffContractById{id}", HttpMethod.Get);
+            return Json(ObjStaffContract);
+        }
+
+        public async Task<IActionResult> PerformanceCreateOrUpdate(IFormCollection MyAttachment, StaffContract ObjStaffContract)
+        {
+            var Attachment = MyAttachment.Files.GetFile("ContractAttachment");
+            ObjStaffContract.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjStaffContract, "api/Staffs/PostStaffContract", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("ContractList", new { data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("ContractList", new { data = 2 });
+            }
+        }
+
+        public async Task<IActionResult> PerformanceDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/DeleteStaffContract{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("ContractList", new { data = 3 });
+        }
+
+        public async Task<IActionResult> PerformanceAlreadyExist(int id, DateTime EndDate, int StaffId)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffContractAlreadyExists{id}/{EndDate.ToString("dd-MMM-yyyy")}/{StaffId}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        #endregion
         // Code for save images into database
 
         private string uploadImage(string name, IFormFile file, string root)
