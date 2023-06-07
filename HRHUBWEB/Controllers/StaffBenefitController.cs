@@ -54,32 +54,15 @@ namespace HRHUBWEB.Controllers
                 return RedirectToAction("BenefitList", new { data = 2 });
             }
         }
+		public async Task<IActionResult> BenefitDetail(int Id)
+		{
+			ComponentInfo obj = new ComponentInfo();
 
-        [CustomAuthorization]
-        public async Task<IActionResult> BenefitDetails(string data = "", int Id = 0)
-        {
-            ViewBag.Success = data;
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+			obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
 
-            ComponentInfo obj = new ComponentInfo();
-            
-            StaffSalaryComponent ObjComponentInfo = new StaffSalaryComponent();
-            ObjComponentInfo.ComponentId= Id;
-           obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
-            ViewBag.title = obj.Title;
-           // ViewBag.staffcount = obj.StaffCount;
-
-            ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
-
-            ViewBag.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/StaffBenefits/GetSalaryComponent/{_user.CompanyId}/{ObjComponentInfo.ComponentId}", HttpMethod.Get);
-
-
-            return View(ObjComponentInfo);
-        }
-
+			return Json(obj);
+		}
+		
 
 
         public async Task<IActionResult> BenefitInfoDelete(int Id)
@@ -95,13 +78,37 @@ namespace HRHUBWEB.Controllers
             return Json(result);
         }
 
-        #endregion
+		#endregion
 
-        #region Staff Salary Component       
+		#region Staff Salary Component       
 
-       
+		[CustomAuthorization]
+		public async Task<IActionResult> BenefitDetails(string data = "", int Id = 0)
+		{
+			ViewBag.Success = data;
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-        public async Task<IActionResult> StaffSalaryCreateOrUpdate(StaffSalaryComponent objStaffSalaryComponent)
+			ComponentInfo obj = new ComponentInfo();
+
+			StaffSalaryComponent ObjComponentInfo = new StaffSalaryComponent();
+			ObjComponentInfo.ComponentId = Id;
+			obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
+			ViewBag.title = obj.Title;
+			// ViewBag.staffcount = obj.StaffCount;
+
+			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+
+			ViewBag.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/StaffBenefits/GetSalaryComponent/{_user.CompanyId}/{ObjComponentInfo.ComponentId}", HttpMethod.Get);
+
+
+			return View(ObjComponentInfo);
+		}
+
+
+		public async Task<IActionResult> StaffSalaryCreateOrUpdate(StaffSalaryComponent objStaffSalaryComponent)
         {
 
             objStaffSalaryComponent.CreatedBy = _user.CreateBy;
