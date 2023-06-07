@@ -76,8 +76,8 @@ namespace HRHUBAPI.Models
                             select new Section
                             {
                                 Title = s.Title,
-                                TotalWeightage = s.TotalWeightage,
-                                EarnedWeightage = s.EarnedWeightage
+                                TotalWeightage = s.TotalWeightage
+                             
 
                             };
 

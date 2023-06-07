@@ -7,6 +7,8 @@ public partial class Question
 {
     public int QuestionId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public string? Title { get; set; }
 
     public bool? IsDeleted { get; set; }

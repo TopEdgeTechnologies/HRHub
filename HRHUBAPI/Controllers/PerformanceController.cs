@@ -144,11 +144,11 @@ namespace HRHUBAPI.Controllers
 
         #region Performance Sections
 
-        [HttpGet("GetPerformanceSectionInfos")]
-        public async Task<ActionResult<List<Section>>> GetPerformanceSectionInfos()
+        [HttpGet("GetPerformanceSectionInfos{ReviewFormId}")]
+        public async Task<ActionResult<List<Section>>> GetPerformanceSectionInfos(int ReviewFormId)
         {
 
-            return await new Section().GetSection(_context);
+            return await new Section().GetSection(ReviewFormId,_context);
         }
 
 
@@ -170,7 +170,7 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Section().PostSection(obj, _context);
-            if (result != null)
+            if (result != null && result.SectionId>0)
                 return Ok(new
                 {
                     Success = true,
@@ -234,9 +234,101 @@ namespace HRHUBAPI.Controllers
 
 
 
-        #endregion
+		#endregion
+
+		#region Performance Question
+
+		[HttpGet("GetQuestionInfos{CompanyId}")]
+		public async Task<ActionResult<List<Question>>> GetQuestionInfos(int CompanyId)
+		{
+
+			return await new Section().GetQuestion(CompanyId, _context);
+		}
+
+
+		[HttpGet("GetQuestionInfoId{id}")]
+		public async Task<ActionResult<Question>> GetQuestionInfoId(int id)
+		{
+			var result = await new Section().SectionById(id, _context);
+			if (result != null)
+				return Ok(result);
+
+			return NotFound();
+
+
+		}
+
+		[HttpPost("QuestionAddOrUpdate")]
+		public async Task<ActionResult<Question>> QuestionAddOrUpdate(Question obj)
+		{
+
+
+			var result = await new Section().PostQuestion(obj, _context);
+			if (result != null && result.QuestionId > 0)
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Update Successfully!"
+				});
+			else
+				return Ok(new
+				{
+					Success = true,
+					Message = "Data Insert Successfully!"
+				});
+
+
+		}
+
+		[HttpGet("DeleteQuestionInfo{id}/{UserId}")]
+		public async Task<ActionResult<Question>> DeleteQuestionInfo(int id, int UserId)
+		{
+			var result = await new Section().DeleteQuestionInfo(id, UserId, _context);
+			if (result != null && id > 0)
+				return Ok(result);
+
+			return NotFound("Data Not Found!");
+		}
+
+
+		[HttpGet("QuestionCheckData{id}/{title}/{CompanyId}")]
+		public async Task<ActionResult<Question>> QuestionCheckData(int id, string title,int CompanyId)
+		{
+			if (await new Section().AlreadyExistQuestion(id, title,CompanyId, _context))
+			{
+				return Ok(new
+				{
+
+					Success = true,
+					Message = "Question Already Exist!"
+
+
+				});
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					Message = "Not found"
+
+
+				});
+			}
+
+		}
 
 
 
-    }
+
+
+
+
+
+
+		#endregion
+
+	}
 }

@@ -147,11 +147,12 @@ namespace HRHUBWEB.Controllers
 			ObjPerformanceForm = await _APIHelper.CallApiAsyncGet<PerformanceForm>($"api/Performance/GetPerformanceInfoId{id}", HttpMethod.Get);
             ViewBag.Name = ObjPerformanceForm.Title;
 
+			TempData["ReviewFormId"] = id;
 
 			Section ObjSection = new Section();
 
             ObjSection.ReviewFormId= id;
-            ObjSection.AllSection = await _APIHelper.CallApiAsyncGet<IEnumerable<Section>>("api/Performance/GetPerformanceSectionInfos", HttpMethod.Get);
+            ObjSection.AllSection = await _APIHelper.CallApiAsyncGet<IEnumerable<Section>>($"api/Performance/GetPerformanceSectionInfos{ObjSection.ReviewFormId}", HttpMethod.Get);
 
 			return View(ObjSection);
 		}
@@ -166,14 +167,17 @@ namespace HRHUBWEB.Controllers
 		}
 
 
-
         [HttpGet]
-        public async Task<IActionResult> PerformanceSectionCreateOrUpdate(int id)
+        public async Task<IActionResult> PerformanceSectionCreateOrUpdate(string data = "",int id =0)
         {
-           
-                if (id == 0)
+			ViewBag.Success = data;
+			ViewBag.QuestionList = await _APIHelper.CallApiAsyncGet<IEnumerable<Question>>($"api/Performance/GetQuestionInfos{_user.CompanyId}", HttpMethod.Get);
+
+			int ReviewFormId = Convert.ToInt16(TempData["ReviewFormId"]);
+			if (id == 0)
                 {
                     Section objInfo = new Section();
+                    objInfo.ReviewFormId = ReviewFormId;
                     return View(objInfo);
                 }
                 Section obj =  await GetPerformanceSectionById(id);
@@ -190,18 +194,18 @@ namespace HRHUBWEB.Controllers
 
 			if (result.Message.Contains("Insert"))
 			{
-				return RedirectToAction("PerformanceSectionList", new { data = 1 });
+				return RedirectToAction("PerformanceSectionList", new { data = 1, id = ObjSection.ReviewFormId });
 			}
 			else
 			{
-				return RedirectToAction("PerformanceSectionList", new { data = 2 });
+				return RedirectToAction("PerformanceSectionList", new { data = 2, id = ObjSection.ReviewFormId });
 			}
 		}
 
 		public async Task<IActionResult> PerformanceSectionDelete(int id)
 		{
 			var result = await _APIHelper.CallApiAsyncGet<Section>($"api/Performance/DeletePerformanceSectionInfo{id}/{_user.UserId}", HttpMethod.Get);
-			return RedirectToAction("PerformanceSectionList", new { id = result.ReviewFormId });
+			return RedirectToAction("PerformanceSectionList", new { data = 3,id = result.ReviewFormId });
 		}
 
 		public async Task<ActionResult<JsonObject>> PerformanceSectionCheckData(int id, string title)
@@ -212,7 +216,39 @@ namespace HRHUBWEB.Controllers
 
 		#endregion
 
+		#region Question 
+		[HttpPost]
+		public async Task<IActionResult> PerformanceQuestionCreateOrUpdate(Question ObjQuestion)
+		{
 
+			ObjQuestion.CompanyId = _user.CompanyId;
+			ObjQuestion.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjQuestion, "api/Performance/QuestionAddOrUpdate", HttpMethod.Post);
+
+
+			if (result.Message.Contains("Insert"))
+			{
+				return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=1,id = 0 });
+			}
+			else
+			{
+				return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=2,id = 0 });
+			}
+
+		}
+
+
+
+		public async Task<ActionResult<JsonObject>> PerformanceQuestionCheckData(int id, string title)
+		{
+			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/QuestionCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+			return Json(result);
+		}
+
+
+
+		#endregion
 
 		// Code for save images into database
 
