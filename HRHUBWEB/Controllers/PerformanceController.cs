@@ -84,48 +84,49 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
             ViewBag.Success = data;
-             StaffContract ObjStaffContract = new StaffContract();
+             PerformanceForm ObjPerformanceForm = new PerformanceForm();
 
 
-            ObjStaffContract.AllStaffContract = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffContract>>($"api/Staffs/ListStaffAllContract{_user.CompanyId}", HttpMethod.Get);
+            ObjPerformanceForm.ListPerformanceForm = await _APIHelper.CallApiAsyncGet<IEnumerable<PerformanceForm>>($"api/Performance/GetPerformanceInfos{_user.CompanyId}", HttpMethod.Get);
 
-            return View(ObjStaffContract);
+            return View(ObjPerformanceForm);
         }
 
 
         public async Task<IActionResult> GetPerformanceById(int id)
         {
-            StaffContract ObjStaffContract = new StaffContract();
-            ObjStaffContract = await _APIHelper.CallApiAsyncGet<StaffContract>($"api/Staffs/GetStaffContractById{id}", HttpMethod.Get);
-            return Json(ObjStaffContract);
+            PerformanceForm ObjPerformanceForm = new PerformanceForm();
+
+            ObjPerformanceForm = await _APIHelper.CallApiAsyncGet<PerformanceForm>($"api/Performance/GetPerformanceInfoId{id}", HttpMethod.Get);
+            return Json(ObjPerformanceForm);
         }
 
-        public async Task<IActionResult> PerformanceCreateOrUpdate(IFormCollection MyAttachment, StaffContract ObjStaffContract)
+        public async Task<IActionResult> PerformanceCreateOrUpdate(PerformanceForm ObjPerformanceForm)
         {
-            var Attachment = MyAttachment.Files.GetFile("ContractAttachment");
-            ObjStaffContract.CreatedBy = _user.UserId;
 
-            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjStaffContract, "api/Staffs/PostStaffContract", HttpMethod.Post);
+            ObjPerformanceForm.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjPerformanceForm, "api/Performance/PerformanceAddOrUpdate", HttpMethod.Post);
 
             if (result.Message.Contains("Insert"))
             {
-                return RedirectToAction("ContractList", new { data = 1 });
+                return RedirectToAction("PerformanceList", new { data = 1 });
             }
             else
             {
-                return RedirectToAction("ContractList", new { data = 2 });
+                return RedirectToAction("PerformanceList", new { data = 2 });
             }
         }
 
         public async Task<IActionResult> PerformanceDelete(int id)
         {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/DeleteStaffContract{id}/{_user.UserId}", HttpMethod.Get);
-            return RedirectToAction("ContractList", new { data = 3 });
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/DeletePerformanceInfo{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("PerformanceList", new { data = 3 });
         }
 
-        public async Task<IActionResult> PerformanceAlreadyExist(int id, DateTime EndDate, int StaffId)
+        public async Task<ActionResult<JsonObject>> PerformanceCheckData(int id, string title)
         {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffContractAlreadyExists{id}/{EndDate.ToString("dd-MMM-yyyy")}/{StaffId}", HttpMethod.Get);
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/PerformanceCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
             return Json(result);
         }
 
