@@ -46,15 +46,28 @@ namespace HRHUBWEB.Controllers
                 ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
                 StaffReviewFormProcessed obj = new StaffReviewFormProcessed();
-                
+
                 obj.ListStaffAppraisal = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>("api/Performance/GetPerformanceAppraisalInfos", HttpMethod.Get);
-                
+
                 return View(obj);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        public async Task<IActionResult> ViewPerformanceIndicatorDetail(int id, int staffid)
+        {
+            try
+            {
+                var list = await _APIHelper.CallApiAsyncGet<IEnumerable<Section>>($"api/Performance/GetPerformanceReviewSections{id}/{staffid}", HttpMethod.Get);
+                return Json(list);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         #endregion
