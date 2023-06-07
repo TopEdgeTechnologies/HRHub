@@ -28,6 +28,17 @@ namespace HRHUBAPI.Controllers
             return await new StaffReviewFormProcessed().GetPerformanceAppraisal( _context);
         }
 
+        [HttpGet("GetPerformanceReviewSections{Id}/{staffid}")]
+        public async Task<ActionResult<List<Section>>> GetPerformanceReviewSections(int Id, int staffid)
+        {
+            var result = await new StaffReviewFormProcessed().GetReviewSections(Id,staffid,  _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
         #endregion
 
     }

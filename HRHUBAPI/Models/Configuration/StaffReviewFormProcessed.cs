@@ -44,7 +44,7 @@ namespace HRHUBAPI.Models
                     .Select(row => new StaffReviewFormProcessed
                     {
                         ReviewFormId = Convert.ToInt32(row["ReviewFormId"]),
-                        ReviewedStaffId = Convert.ToInt32(row["ReviewedStaffId"]),
+                        ReviewedStaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
                         StaffName = row["StaffName"].ToString(),
                         StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
@@ -65,6 +65,33 @@ namespace HRHUBAPI.Models
 
             }
         }
+        public async Task<List<Section>> GetReviewSections(int Id,int staffid, HrhubContext _context)
+        {
+            try
+            {
+                var list = from s in _context.Sections
+                            join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
+
+                            where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
+                            select new Section
+                            {
+                                Title = s.Title,
+                                TotalWeightage = s.TotalWeightage,
+                                EarnedWeightage = s.EarnedWeightage
+
+                            };
+
+                return list != null ? list.ToList() : new List<Section>();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
 
     }
 }
