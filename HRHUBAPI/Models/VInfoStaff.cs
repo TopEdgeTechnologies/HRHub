@@ -7,8 +7,6 @@ public partial class VInfoStaff
 {
     public int StaffId { get; set; }
 
-    public int? DesignationId { get; set; }
-
     public int? DepartmentId { get; set; }
 
     public string? JobTitle { get; set; }
@@ -51,8 +49,6 @@ public partial class VInfoStaff
 
     public DateTime? TerminationDate { get; set; }
 
-    public string? SalaryMethodId { get; set; }
-
     public decimal? SalaryAmount { get; set; }
 
     public string? AccountTitle { get; set; }
@@ -74,16 +70,6 @@ public partial class VInfoStaff
     public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
-
-    public int? CreatedBy { get; set; }
-
-    public int? UpdatedBy { get; set; }
-
-    public DateTime? CreatedOn { get; set; }
-
-    public DateTime? UpdatedOn { get; set; }
-
-    public int? CompanyId { get; set; }
 
     public int? EmploymentTypeId { get; set; }
 
@@ -123,8 +109,6 @@ public partial class VInfoStaff
 
     public bool? DepartmentIsDeleted { get; set; }
 
-    public int? Expr25 { get; set; }
-
     public int Expr26 { get; set; }
 
     public string? ContactPerson { get; set; }
@@ -162,8 +146,6 @@ public partial class VInfoStaff
     public bool? CompanyIsDeleted { get; set; }
 
     public int StaffSalarySettingId { get; set; }
-
-    public int? Expr35 { get; set; }
 
     public bool? IsIncomeTaxApplicable { get; set; }
 
