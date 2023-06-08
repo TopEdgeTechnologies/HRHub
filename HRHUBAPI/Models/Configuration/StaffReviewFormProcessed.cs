@@ -17,6 +17,10 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public decimal? AppraisalPercentage { get; set; }
         [NotMapped]
+        public bool? IsAppraisalSet { get; set; }
+        [NotMapped]
+        public decimal? CurrentSalary { get; set; }
+        [NotMapped]
         public string? Weightage { get; set; }
         [NotMapped]
         public string? AppraisalDate { get; set; }
@@ -30,7 +34,7 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? Designation { get; set; }
         [NotMapped]
-        public IEnumerable<StaffReviewFormProcessed>? ListStaffAppraisal{ get; set; }
+        public IEnumerable<StaffReviewFormProcessed>? ListStaffAppraisal { get; set; }
         public async Task<List<StaffReviewFormProcessed>> GetPerformanceAppraisal(HrhubContext _context)
         {
             try
@@ -50,8 +54,10 @@ namespace HRHUBAPI.Models
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
                         Department = row["Department"].ToString(),
                         Designation = row["Designation"].ToString(),
+                        CurrentSalary = Convert.ToDecimal(row["SalaryAmount"]),
                         Weightage = row["EarnedWeightage"].ToString() + "/" + row["TotalWeightage"].ToString(),
-                        AppraisalPercentage = Convert.ToDecimal(row["AppraisalPercentage"])
+                        AppraisalPercentage = Convert.ToDecimal(row["AppraisalPercentage"]),
+                        IsAppraisalSet = Convert.ToBoolean(row["IsAppraisalSet"])
 
                     }).ToList();
 
@@ -65,21 +71,38 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<List<Section>> GetReviewSections(int Id,int staffid, HrhubContext _context)
+        public async Task<List<Section>> GetReviewSections(int Id, int staffid, HrhubContext _context)
         {
             try
             {
-                var list = from s in _context.Sections
-                            join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
+                DbConnection _db = new DbConnection();
 
-                            where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
-                            select new Section
-                            {
-                                Title = s.Title,
-                                TotalWeightage = s.TotalWeightage,
-                                EarnedWeightage = s.EarnedWeightage
+                string query = "EXEC Get_StaffSectionWeightageList " + Id + " , "+ staffid;
+                DataTable dt = _db.ReturnDataTable(query);
 
-                            };
+                var list = dt.AsEnumerable()
+                    .Select(row => new Section
+                    {
+
+                        Title = row["Title"].ToString(),
+                        TotalWeightage = Convert.ToDecimal(row["TotalWeightage"]),
+                        EarnedWeightage = Convert.ToDecimal(row["EarnedWeightage"])
+
+                    }).ToList();
+
+
+
+                //var list = from s in _context.Sections
+                //           join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
+
+                //           where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
+                //           select new Section
+                //           {
+                //               Title = s.Title,
+                //               TotalWeightage = s.TotalWeightage,
+                //               EarnedWeightage = s.EarnedWeightage
+
+                //           };
 
                 return list != null ? list.ToList() : new List<Section>();
 
@@ -91,7 +114,100 @@ namespace HRHUBAPI.Models
 
             }
         }
+        public async Task<Appraisal> PostStaffAppraisal(List<Appraisal> listAppraisalInfo, HrhubContext _context)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var checkappraisalInfo = new Appraisal();
+                    if (listAppraisalInfo.Count() > 0)
+                    {
+                        // save Appraisal data 
+                        _context.Appraisals.AddRange(listAppraisalInfo);
+                        await _context.SaveChangesAsync();
 
+                        // Update salary in staff table
+                        foreach (var item in listAppraisalInfo)
+                        {
+                            var checkStaffInfo = await _context.Staff.FirstOrDefaultAsync(x => x.StaffId == item.StaffId && x.IsDeleted == false);
+                            if (checkStaffInfo != null && checkStaffInfo.StaffId > 0)
+                            {
+                                checkStaffInfo.SalaryAmount = item.NewMonthlySalary;
+                                checkStaffInfo.UpdatedBy = item.CreatedBy;
+                                checkStaffInfo.UpdatedOn = DateTime.Now;
+
+                                await _context.SaveChangesAsync();
+
+                            }
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+                    return checkappraisalInfo;
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+
+                }
+            }
+        }
+        public async Task<Appraisal> EditStaffAppraisal(Appraisal objAppraisalInfo, HrhubContext _context)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    decimal incrementedsalary = 0;
+                    var checkAppraisalInfo = await _context.Appraisals.FirstOrDefaultAsync(x => x.StaffId == objAppraisalInfo.StaffId && x.ReviewFormId == objAppraisalInfo.ReviewFormId);
+                    if (checkAppraisalInfo != null && checkAppraisalInfo.AppraisalId > 0)
+                    {
+                        checkAppraisalInfo.AppraisalPercentage = objAppraisalInfo.AppraisalPercentage;
+                        decimal raiseamount = Convert.ToDecimal((checkAppraisalInfo.CurrentMonthlySalary * objAppraisalInfo.AppraisalPercentage) / 100);
+                        decimal currentMonthlySalary = Convert.ToDecimal(checkAppraisalInfo.CurrentMonthlySalary);
+                        incrementedsalary = raiseamount + currentMonthlySalary;
+                        checkAppraisalInfo.NewMonthlySalary = incrementedsalary;
+                        checkAppraisalInfo.UpdatedBy = objAppraisalInfo.CreatedBy;
+                        checkAppraisalInfo.UpdatedOn = DateTime.Now;
+
+                        await _context.SaveChangesAsync();
+
+                    }
+                    else{
+                        objAppraisalInfo.AppraisalDate = DateTime.Now;
+                        objAppraisalInfo.CreatedOn = DateTime.Now;
+                        _context.Appraisals.Add(objAppraisalInfo);
+                    }
+
+
+
+                    var checkStaffInfo = await _context.Staff.FirstOrDefaultAsync(x => x.StaffId == objAppraisalInfo.StaffId && x.IsDeleted == false);
+                    if (checkStaffInfo != null && checkStaffInfo.StaffId > 0)
+                    {
+                        checkStaffInfo.SalaryAmount = objAppraisalInfo.NewMonthlySalary;
+                        checkStaffInfo.UpdatedBy = objAppraisalInfo.CreatedBy;
+                        checkStaffInfo.UpdatedOn = DateTime.Now;
+
+                        await _context.SaveChangesAsync();
+
+                    }
+
+                    dbContextTransaction.Commit();
+                    return checkAppraisalInfo;
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+
+                }
+            }
+        }
 
     }
 }

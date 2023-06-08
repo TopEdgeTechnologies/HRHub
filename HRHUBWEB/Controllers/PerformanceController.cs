@@ -48,6 +48,7 @@ namespace HRHUBWEB.Controllers
                 StaffReviewFormProcessed obj = new StaffReviewFormProcessed();
 
                 obj.ListStaffAppraisal = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>("api/Performance/GetPerformanceAppraisalInfos", HttpMethod.Get);
+                ViewBag.UserId = _user.UserId;
 
                 return View(obj);
             }
@@ -67,6 +68,36 @@ namespace HRHUBWEB.Controllers
             {
                 throw ex;
             }
+
+        }
+
+        public async Task<IActionResult> SaveStaffAppraisalDetail(List<Appraisal> list)
+        {
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(list, "api/Performance/PostStaffAppraisal", HttpMethod.Post);
+
+            return Json(new
+            {
+                success = true,
+                message = result.Message
+            });
+
+
+        }
+        public async Task<IActionResult> EditStaffAppraisalDetail(Appraisal obj)
+        {
+            decimal AppraisalAmount = Convert.ToDecimal((obj.AppraisalPercentage * obj.CurrentMonthlySalary) / 100);
+            obj.NewMonthlySalary = obj.CurrentMonthlySalary + AppraisalAmount;
+            obj.CreatedBy = _user.UserId;
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Performance/EditStaffAppraisal", HttpMethod.Post);
+
+            return Json(new
+            {
+                success = true,
+                message = result.Message
+            });
+
+            //return RedirectToAction("PerformanceAppraisalList", new { data = 1 });
 
         }
 
