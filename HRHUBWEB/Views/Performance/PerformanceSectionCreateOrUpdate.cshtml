@@ -71,7 +71,7 @@
                                             <thead>
                                                 <tr>
 
-                                            <th class="wd-15p col-10 border-bottom-0">Questions <a onclick="addnewdesignation()" class="btn btn-primary btn-sm mb-1">Add</a></th>
+                                            <th class="wd-15p col-10 border-bottom-0">Questions <a onclick="addnewQuestion()" class="btn btn-primary btn-sm mb-1">Add</a></th>
                                                     <th class="wd-15p col-2 border-bottom-0">Weightage</th>
                                                     <th class="wd-15p col-2 border-bottom-0">Action</th>
                                                 </tr>
@@ -81,8 +81,8 @@
                                                 <tr>
                                                     <td>
                                                         <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
-                                                            <option value="">Select Question</option>
-                                                  
+
+                                                    <option value="Add-New"><b><---Add New---></></b></option>
                                                             @foreach (var item in ViewBag.QuestionList)
                                                             {
                                                                 <option value="@item.QuestionId">@item.Title</option>
@@ -124,7 +124,8 @@
                                                     <tr>
                                                     <td>
                                                         <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
-                                                            <option value="">Select Question</option>
+                                                               <option value="Add-New"><b><---Add New---></b></option>
+
                                                             @foreach (var item in ViewBag.QuestionList)
                                                             {
                                                                 <option value="@item.QuestionId">@item.Title</option>
@@ -138,9 +139,9 @@
 
                                                     </td>
                                                     <td class="text-center">                                                       
-                                                            <a id="btn_AddClass">
-                                                                <i class="fe fe-plus-circle primary text-primary me-3"></i>
-                                                            </a>                                                          
+                                                     <a id="btn_AddClass">
+                                                         <i class="fe fe-plus-circle primary text-primary me-3"></i>
+                                                     </a>                                                          
                                                        
                                                     </td>
                                                 </tr>
@@ -275,7 +276,8 @@
 
 
         $(document).ready(function () {
-            //$("#QuestionId").select2();
+
+            $('#QuestionId').select2({ placeholder: 'Select Placeholder Athar', width: '100%', allowClear: true }).val("").trigger('change');
             $('#weightId').keypress(function (event) {
              if (event.keyCode === 13) {
                     $('#btn_AddClass').click()
@@ -301,7 +303,7 @@
                     $('#QuestionMaxLimit').prop('readonly', true);
                     noWeightTable.hide();
                 }
-            })
+            });
 
           
 
@@ -446,12 +448,11 @@
 
 
         // Working on Question form submition
-        function addnewdesignation() {
+        function addnewQuestion() {
 
-            $("#adddesignationmodal").modal('show');
-            $("#DesignationId").val(0);
-            $("#Title").val('');
-            $("#Status").prop('checked', false);
+            $("#adddesignationmodal").modal('show');          
+            $("#title").val('');
+          
 
 
         }
@@ -529,7 +530,7 @@
                     });
                 }
                }
-
+         //Question Submit Form
          $(document).ready(function () {
              $('#myformQuestion').submit(function (event) {
                  event.preventDefault();
@@ -544,7 +545,7 @@
          
                              // Data saved successfully
                              Swal.fire('Success', 'Data saved!', 'success');
-                             $('#QuestionId').select2({ placeholder: "Select Question" }).val(null).trigger('change');
+                             $('#QuestionId').select2({ placeholder: "Select Question",width: '100%', allowClear: true }).val("").trigger('change');
                               $('#title').val('');
                          } else {
                              // Error occurred while saving data
@@ -558,46 +559,6 @@
              });
          });
          
-         
-         $(document).ready(function() {
-           // Initialize Select2
-           $('#customDropdown').select2();
-         
-           // Add options with buttons
-           var options = [
-                         { button: '<button onclick="addnewdesignation()" class="btn btn-primary btn-sm mb-1">Add</button>' },
-             
-           ];
-                     options.sort(function (a, b) {
-                         return b.text.localeCompare(a.text);
-                     });
-         
-             $('#QuestionId').select2({
-             data: options,
-             escapeMarkup: function(markup) {
-               return markup;
-             },
-             templateResult: function(data) {
-               if (data.button) {
-                 return $(data.button);
-               }
-               return data.text;
-             }
-           });
-         
-           // Handle button clicks
-           $('#customDropdown').on('select2:select', function(e) {
-             var selectedOption = e.params.data;
-             if (selectedOption.button) {
-               // Perform an action based on the selected option with a button
-               console.log('Button clicked:', selectedOption.text);
-             }
-           });
-         });
-                    
-
-
-           
 
         $("#btn_AddClass").click(function () {
             debugger;
@@ -668,8 +629,7 @@
             debugger
             var IsFound = false;
            
-            var Question = $("#QuestionId").val();
-            
+            var Question = $("#QuestionId").val();           
 
             $('#weight-table > tbody  > tr').each(function (index, tr) {
 
@@ -696,14 +656,21 @@
         function Account_ClearControls() {
             debugger         
             
-            $('#QuestionId').select2({ placeholder: "Select Question" }).val('').trigger('change');
+            $('#QuestionId').select2({ placeholder: "Select Question", width: '100%', allowClear: true }).val('').trigger('change');
+
 
 
 
 
         }
 
-
+        $('#QuestionId').select2().on('change', function () {
+            var value = $("#QuestionId").val();
+            
+            if (value == "Add-New") {
+                addnewQuestion();
+                }
+            });
 
         //Remove data from bootstrap table
         //function Remove(button) {
@@ -756,14 +723,6 @@
 
         });
 
-                //////////////////////////////////////////
-
-
-
-      
-
-
-
 
 
                                 //////////////////////////
@@ -776,78 +735,7 @@
 
 
 
-        //$("#btn_AddQuestion").click(function () {
-        //    debugger;
-        //    var QuestionMax = $("#QuestionMaxLimit").val();
-           
-        //    if ($("#IdQuestion").val() == "") {
-        //        $.growl.warning({
-        //            message: "Please Enter Question"
-        //        });
-        //        return;
-        //    }
-
-        //    if ($("#QuestionMaxLimit").val() == "" || $("#QuestionMaxLimit").val() == null) {
-        //        $.growl.warning({
-        //            message: "Please Enter Limit Question"
-        //        });
-        //        return;
-        //    }
-
-        //     var rowCount = $("#weight-table tr").length;
-        //     debugger
-        //    if (QuestionMax == rowCount) {
-        //        $.growl.warning({
-        //            message: "Please Check Limit Question"
-        //        });
-        //        return;
-        //    }
-
-            
-
-
-
-        //    else {
-        //        if (IsRowAlreadyExist()) {
-
-        //            $.growl.warning({
-        //                message: "This Record is Already Inserted ."
-        //            });
-
-        //        }
-        //        else {
-
-        //            debugger
-
-
-        //            var newRow = $("<tr>");
-
-        //            var questionCell = $("<td>  " + $("#IdQuestion").val() + " <input type='hidden'   value='" + $("#IdQuestion").val() + "' name='ListQuestion'  />");
-        //            questionCell.attr("TD_IdQuestion", $("#IdQuestion").val())
-        //            newRow.append(questionCell);
-
-        //            //var weightCell = $("<td> " + $("#weightId").val() + " <input type='hidden' value='" + $("#QuestionMaxLimit").val() + "' name='ListWeight'  />");
-
-        //            //newRow.append(weightCell);
-
-        //            var actionCell = $("<td class='text-center'>");
-        //            var actionDiv = $("<div>", { class: "" });
-        //            var addIcon = $("<i>", { class: "fe fe-minus-circle primary text-primary me-3" });
-        //            addIcon.click(function () {
-        //                newRow.remove(); // Remove the current row when the icon is clicked
-        //            });
-        //            actionDiv.append(addIcon);
-        //            actionCell.append(actionDiv);
-        //            newRow.append(actionCell);
-
-        //            $("#no-weight-table tbody").append(newRow);
-
-
-        //            Account_ClearControls();
-        //        }
-        //    }
-
-        //});
+       
 
     </script>
 
