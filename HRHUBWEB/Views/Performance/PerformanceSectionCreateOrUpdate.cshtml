@@ -71,7 +71,7 @@
                                             <thead>
                                                 <tr>
 
-                                            <th class="wd-15p col-10 border-bottom-0">Questions <a onclick="addnewQuestion()" class="btn btn-primary btn-sm mb-1">Add</a></th>
+                                            <th class="wd-15p col-10 border-bottom-0">Questions </th>
                                                     <th class="wd-15p col-2 border-bottom-0">Weightage</th>
                                                     <th class="wd-15p col-2 border-bottom-0">Action</th>
                                                 </tr>
@@ -82,7 +82,7 @@
                                                     <td>
                                                         <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
 
-                                                    <option value="Add-New"><b><---Add New---></></b></option>
+                                                    <option value="Add-New"><b>---Add New---</b></option>
                                                             @foreach (var item in ViewBag.QuestionList)
                                                             {
                                                                 <option value="@item.QuestionId">@item.Title</option>
@@ -277,7 +277,7 @@
 
         $(document).ready(function () {
 
-            $('#QuestionId').select2({ placeholder: 'Select Placeholder Athar', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
             $('#weightId').keypress(function (event) {
              if (event.keyCode === 13) {
                     $('#btn_AddClass').click()
@@ -545,7 +545,7 @@
          
                              // Data saved successfully
                              Swal.fire('Success', 'Data saved!', 'success');
-                             $('#QuestionId').select2({ placeholder: "Select Question",width: '100%', allowClear: true }).val("").trigger('change');
+                            $('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
                               $('#title').val('');
                          } else {
                              // Error occurred while saving data
@@ -558,8 +558,7 @@
                  });
              });
          });
-         
-
+         //Add multiple row data
         $("#btn_AddClass").click(function () {
             debugger;
 
@@ -621,9 +620,6 @@
             }
 
         });
-
-
-
 
         function IsRowAlreadyExist() {
             debugger
