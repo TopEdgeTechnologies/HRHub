@@ -147,9 +147,10 @@ namespace HRHUBWEB.Controllers
 			ObjPerformanceForm = await _APIHelper.CallApiAsyncGet<PerformanceForm>($"api/Performance/GetPerformanceInfoId{id}", HttpMethod.Get);
             ViewBag.Name = ObjPerformanceForm.Title;
 
-			TempData["ReviewFormId"] = id;
 
 			Section ObjSection = new Section();
+        
+
 
             ObjSection.ReviewFormId= id;
             ObjSection.AllSection = await _APIHelper.CallApiAsyncGet<IEnumerable<Section>>($"api/Performance/GetPerformanceSectionInfos{ObjSection.ReviewFormId}", HttpMethod.Get);
@@ -168,20 +169,22 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> PerformanceSectionCreateOrUpdate(string data = "",int id =0)
+        public async Task<IActionResult> PerformanceSectionCreateOrUpdate(string data = "",int id =0  ,int ReviewFormId=0) 
         {
 			ViewBag.Success = data;
 			ViewBag.QuestionList = await _APIHelper.CallApiAsyncGet<IEnumerable<Question>>($"api/Performance/GetQuestionInfos{_user.CompanyId}", HttpMethod.Get);
 
-			int ReviewFormId = Convert.ToInt16(TempData["ReviewFormId"]);
-			if (id == 0)
+           
+            if (id == 0)
                 {
                     Section objInfo = new Section();
                     objInfo.ReviewFormId = ReviewFormId;
                     return View(objInfo);
                 }
                 Section obj =  await GetPerformanceSectionById(id);
-                return View(obj);
+                ViewBag.QuestionSectionList = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetQuestionSectionInfos{id}", HttpMethod.Get);
+
+            return View(obj);
 
         }
         [HttpPost]
@@ -225,16 +228,16 @@ namespace HRHUBWEB.Controllers
 			ObjQuestion.CreatedBy = _user.UserId;
 
 			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjQuestion, "api/Performance/QuestionAddOrUpdate", HttpMethod.Post);
+            return Json(result);
 
-
-			if (result.Message.Contains("Insert"))
-			{
-				return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=1,id = 0 });
-			}
-			else
-			{
-				return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=2,id = 0 });
-			}
+			//if (result.Message.Contains("Insert"))
+			//{
+			//	return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=1,id = 0 });
+			//}
+			//else
+			//{
+			//	return RedirectToAction("PerformanceSectionCreateOrUpdate", new { data=2,id = 0 });
+			//}
 
 		}
 

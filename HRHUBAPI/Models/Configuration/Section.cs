@@ -14,8 +14,9 @@ namespace HRHUBAPI.Models
     {
         DbConnection _db = new DbConnection();
 
+       
         [NotMapped]
-        public string? DesigantionName { get; set; }
+        public int? Flag { get; set; } 
         [NotMapped]
         public string? EmployementType { get; set; }
         [NotMapped]
@@ -37,6 +38,8 @@ namespace HRHUBAPI.Models
 		public IEnumerable<string>? ListQuestion { get; set; }
 		[NotMapped]
 		public IEnumerable<decimal>? ListWeight { get; set; }
+
+
 
 		#region Section
 
@@ -112,7 +115,7 @@ namespace HRHUBAPI.Models
                         checkSectionInfo.TotalWeightage = ObjSectionInfo.TotalWeightage;                     
                              
                         checkSectionInfo.UpdatedBy = ObjSectionInfo.CreatedBy;
-
+                        ObjSectionInfo.Flag = 2;
                         await _context.SaveChangesAsync();
 
 
@@ -120,7 +123,7 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
-
+                        // Section Table Entry 
 
 
                         ObjSectionInfo.CreatedOn = DateTime.Now;
@@ -128,11 +131,63 @@ namespace HRHUBAPI.Models
                       
                         ObjSectionInfo.IsDeleted = false;
                         _context.Sections.Add(ObjSectionInfo);
+                        ObjSectionInfo.Flag = 1;
                         await _context.SaveChangesAsync();
 
 
+                        ///////
+
 
                     }
+
+                    // ---------------------------------------------Save and update Candidate Skills records
+
+
+
+                    var acadresult = _context.SectionQuestions.Where(x => x.SectionId == ObjSectionInfo.SectionId).ToList();
+                    if (acadresult != null && acadresult.Count() > 0)
+                    {
+                        foreach (var item in acadresult)
+                        {
+                            
+                            item.UpdatedBy = ObjSectionInfo.CreatedBy;
+                            item.UpdatedOn = DateTime.Now;
+                            _context.SectionQuestions.RemoveRange(item);
+                        }
+
+                        await _context.SaveChangesAsync();
+
+                    }
+
+                    List<SectionQuestion> lsobjAca = new List<SectionQuestion>();
+
+                    int a = 0;
+                    if (ObjSectionInfo.ListQuestion != null)
+                    {
+
+                        foreach (var item in ObjSectionInfo.ListQuestion)
+                        {
+
+                            SectionQuestion objAca = new SectionQuestion();
+
+                            objAca.QuestionId = Convert.ToInt32(item);
+                            objAca.Weightage = ObjSectionInfo.ListWeight.ToArray()[a]!=null? ObjSectionInfo.ListWeight.ToArray()[a]:null;
+                            objAca.CreatedOn = DateTime.Now;
+                            objAca.SectionId = ObjSectionInfo.SectionId;
+                            objAca.CreatedBy = ObjSectionInfo.CreatedBy;                            
+                            lsobjAca.Add(objAca);
+                            a++;
+
+                        }
+
+                        _context.SectionQuestions.AddRange(lsobjAca);
+                        await _context.SaveChangesAsync();
+                    }
+
+
+
+
+
                     await _context.SaveChangesAsync();
                     dbContextTransaction.Commit();
                     return ObjSectionInfo;
@@ -282,9 +337,8 @@ namespace HRHUBAPI.Models
 						checkSectionInfo.QuestionId = ObjQuestionInfo.QuestionId;
 						checkSectionInfo.Title = ObjQuestionInfo.Title;					
 
-						checkSectionInfo.UpdatedBy = ObjQuestionInfo.CreatedBy;
-
-						await _context.SaveChangesAsync();
+						checkSectionInfo.UpdatedBy = ObjQuestionInfo.CreatedBy;                      
+                        await _context.SaveChangesAsync();
 
 
 
@@ -384,7 +438,45 @@ namespace HRHUBAPI.Models
 			}
 		}
 
-		#endregion
+        #endregion
 
-	}
+
+        #region Section Question
+        public async Task<List<SectionQuestion>> GetSectionQuestion(int SectionId, HrhubContext _context)
+        {
+            try
+            {
+
+                
+
+
+                var List = from SQ in _context.SectionQuestions
+                           join Q in _context.Questions on SQ.QuestionId equals Q.QuestionId
+                           where SQ.SectionId == SectionId && Q.IsDeleted == false
+                           select new SectionQuestion
+                           {
+                               SectionQuestionId = SQ.SectionQuestionId,
+                               QuestionId = SQ.QuestionId,
+                               Weightage = SQ.Weightage,
+                               QuestionName = Q.Title
+
+                           };
+                return List != null ? List.OrderByDescending(x => x.SectionQuestionId).ToList() : new List<SectionQuestion>();
+
+
+
+
+
+                
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        } 
+        #endregion
+    }
 }

@@ -7,220 +7,257 @@
 
 <style>
 
-	.btn-icon {
-		width: 2.4rem;
-		height: 2.4rem;
-		background-color: #e5f3ff;
-		align-items: center;
-		justify-content: center;
-		font-size: 1rem;
-		margin-right: 8px;
-		border-radius: 50%;
-		border: none;
-		cursor: pointer;
-	}
+    .btn-icon {
+        width: 2.4rem;
+        height: 2.4rem;
+        background-color: #e5f3ff;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        margin-right: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
 
-	#no-weight-table {
-		display: none;
-	}
+    #no-weight-table {
+        display: none;
+    }
 
-	.child-center {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
+    .child-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
 
 
 @using (Html.BeginForm("PerformanceSectionCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
-<div class="row">
-	<input type="hidden" asp-for="SectionId"/>
-	<input type="hidden" asp-for="ReviewFormId"/>
-	<div class="col-xl-8">
-		<div class="card">
-			<div class="card-header d-flex justify-content-between align-items-center  border-0">
-				<h4 class="card-title">Performance Evaluation</h4>
-				<a class="text-primary d-none fs-17 font-weight-semibold" id="btnPreview" href="#"><i class="fe fe-eye"></i> Preview</a>
+    <div class="row">
+        <input type="hidden" asp-for="SectionId" />
+        <input type="hidden" asp-for="ReviewFormId" />
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center  border-0">
+                    <h4 class="card-title">Performance Evaluation</h4>
+                    <a class="text-primary d-none fs-17 font-weight-semibold" id="btnPreview" href="#"><i class="fe fe-eye"></i> Preview</a>
 
-			</div>
-			<div class="card-body">
-				<div class="card border">
-					<div class="card-header border-0">
-						<h4 class="card-title fs-22">KPI Indicator</h4>
-						
-					</div>
-					<div class="card-body">
-						<div class="form-group">
-							<label class="form-label fs-18">
-								Section							
-							</label>
-							<input asp-for="Title" class="form-control mb-4"  placeholder="Add Section" type="text">
-						</div>
-						<div class="form-group">
-							<label class="form-label fs-18">
-								Description
-								
-							</label>
-								<textarea asp-for="Description" rows="2" class="form-control"  placeholder="something text here..."></textarea>
-						</div>
+                </div>
+                <div class="card-body">
+                    <div class="card border">
+                        <div class="card-header border-0">
+                            <h4 class="card-title fs-22">KPI Indicator</h4>
 
-						<div class="card">
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="form-label fs-18">
+                                    Section
+                                </label>
+                                <input asp-for="Title" class="form-control mb-4" placeholder="Add Section" type="text">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label fs-18">
+                                    Description
 
-							<div class="card-body">
-								<div class="table-responsive">
-									<table class="table table-bordered text-nowrap border-bottom" id="weight-table">
-										<thead>
-											<tr>
+                                </label>
+                                <textarea asp-for="Description" rows="2" class="form-control" placeholder="something text here..."></textarea>
+                            </div>
 
-													<th class="wd-15p col-10 border-bottom-0">Questions <a onclick="addnewdesignation()" class="btn btn-primary btn-xl-sm"><i class="fe fe-plus-circle me-1"></i></a> </th>
-												<th class="wd-15p col-2 border-bottom-0">Weightage</th>
-												<th class="wd-15p col-2 border-bottom-0">Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
+                           
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-nowrap border-bottom" id="weight-table">
+                                            <thead>
+                                                <tr>
 
+                                            <th class="wd-15p col-10 border-bottom-0">Questions <a onclick="addnewdesignation()" class="btn btn-primary btn-sm mb-1">Add</a></th>
+                                                    <th class="wd-15p col-2 border-bottom-0">Weightage</th>
+                                                    <th class="wd-15p col-2 border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            @if(Model.SectionId>0){
 
-														<select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
-																<option value="">Select Question</option>
-																@foreach (var item in ViewBag.QuestionList)
-																{
-																	<option value="@item.QuestionId">@item.Title</option>
-																}
-															</select>
-														
-												</td>
-												<td>
-													
-														<input id="weightId" class="form-control" type="number" placeholder="01" />														
-													
+                                                <tr>
+                                                    <td>
+                                                        <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
+                                                            <option value="">Select Question</option>
+                                                  
+                                                            @foreach (var item in ViewBag.QuestionList)
+                                                            {
+                                                                <option value="@item.QuestionId">@item.Title</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td>
 
-												</td>
-												<td>
-												
-												<div class="d-flex">
-															<a id="btn_AddClass">
-													<i class="fe fe-plus-circle primary text-primary me-3"></i>
-													</a>
-													@*<a onclick="return confirm('Are you sure you want to delete')">
-														<i class="feather feather-trash-2 text-danger"></i>
-													</a>*@
-												</div>
-												
-												</td>
-											</tr>
-											<tr id="TBodyID">
-
-											</tr>
-										</tbody>
-									</table>
-
-									<table class="table table-bordered text-nowrap border-bottom" id="no-weight-table">
-										<thead>
-											<tr>
-												<th class="wd-15p border-bottom-0">Questions</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>
-													<div class="input-group">
-														<input type="text" class="form-control" placeholder="What's your Question?'">
-														<span class="input-group-text bg-info fs-18 text-white">+</span>
-														<a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
-													</div>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-xl-4">
-
-		<div class="card border">
-			<div class="card-header border-0">
-				<h4 class="card-title">Settings</h4>				
-			</div>
-			<div class="card-body">
-				<div class="form-group">
-					<label class="form-label fs-18">Order No.</label>
-						<input asp-for="OrderNo" class="form-control mb-4" placeholder="Endter Order No" type="number">
-
-				</div>
-				<div class="mb-6">
-					<label class="custom-switch form-switch mb-0">
-						<input asp-for="AllowSelfScoring" type="checkbox"  class="custom-switch-input">
-						<span class="custom-switch-indicator"></span>
-						<span class="custom-switch-description fs-18">Allow Self Storing</span>
-					</label>
-				</div>
-
-				<div class="mb-6">
-					<label class="custom-switch form-switch mb-0">
-						<input asp-for="IsAnswerWeightage" type="checkbox" class="custom-switch-input">
-						<span class="custom-switch-indicator"></span>
-						<span class="custom-switch-description fs-18">Is weighting</span>
-					</label>
-				</div>
+                                                        <input id="weightId" class="form-control" type="number" placeholder="01" />
 
 
-				<div class="form-group mt-3">
-					<label class="form-label fs-18">Limit Question</label>
-					<input asp-for="QuestionMaxLimit" class="form-control mb-4" placeholder="01" type="number">
-				</div>
-				<div class="form-group mt-3">
-						<input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
-						<button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>						
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-	}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a id="btn_AddClass">
+                                                            <i class="fe fe-plus-circle primary text-primary me-3"></i>
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+                                                @foreach (var item in ViewBag.QuestionSectionList)
+                                                {
+                                                    <tr>
+                                                        <td TD_QuestionId="@item.QuestionId"><input type='hidden' value="@item.QuestionId" name='ListQuestion' /> @item.QuestionName</td>
+                                                        <td class="text-center" TD_Weightage="@item.Weightage"><input type='hidden' value="@item.Weightage" name='ListWeight' /> @item.Weightage</td>
+
+                                                        <td class="text-center">
+                                                            <a>
+                                                                <i class="fe fe-minus-circle primary text-primary me-3"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                        
+
+                                        }
+                                            else{
+                                                <tbody>
+                                               
+                                                    <tr>
+                                                    <td>
+                                                        <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
+                                                            <option value="">Select Question</option>
+                                                            @foreach (var item in ViewBag.QuestionList)
+                                                            {
+                                                                <option value="@item.QuestionId">@item.Title</option>
+                                                            }
+                                                        </select>
+                                                    </td>
+                                                    <td>
+
+                                                    <input id="weightId" class="form-control number" type="number" placeholder="01" />
+
+
+                                                    </td>
+                                                    <td class="text-center">                                                       
+                                                            <a id="btn_AddClass">
+                                                                <i class="fe fe-plus-circle primary text-primary me-3"></i>
+                                                            </a>                                                          
+                                                       
+                                                    </td>
+                                                </tr>
+                                              
+                                            </tbody>
+                                        }</table>
+
+                                        <table class="table table-bordered text-nowrap border-bottom" id="no-weight-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="wd-15p border-bottom-0">Questions</th>
+                                                    <th class="wd-15p border-bottom-0 text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    
+                                                    <td>
+                                                        
+                                                            <input id="IdQuestion" type="text" class="form-control" placeholder="What's your Question?'">                                                        
+                                                           
+                                                      
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a id="btn_AddQuestion">
+                                                    <i class="btn btn-warning btn-sm mb-1"></i>
+                                                        </a>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+          
+        <div class="col-xl-4">
+
+            <div class="card border">
+                <div class="card-header border-0">
+                    <h4 class="card-title">Settings</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label fs-18">Order No.</label>
+                        <input asp-for="OrderNo" class="form-control number mb-4" placeholder="Enter Order No" type="number">
+
+                    </div>
+                    <div class="mb-6">
+                        <label class="custom-switch form-switch mb-0">
+                            <input asp-for="AllowSelfScoring" type="checkbox" class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description fs-18">Allow Self Storing</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="custom-switch form-switch mb-0">
+                            <input asp-for="IsAnswerWeightage" type="checkbox" class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description fs-18">Is weighting</span>
+                        </label>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="form-label fs-18">Limit Question</label>
+                        <input asp-for="QuestionMaxLimit" class="form-control number mb-4" placeholder="01" type="number">
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+                        <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 
 @using (@Html.BeginForm("PerformanceQuestionCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myformQuestion", enctype = "multipart/form-data" }))
 {
 
-	<input type="hidden" id="QuestionId" name="QuestionId" />
+    <input type="hidden" id="QuestionId" name="QuestionId" />
 
-	<div class="modal fade" id="adddesignationmodal">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Add Question</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label class="form-label">Question Title</label>
-						<input Id="title" name="title" class="form-control" type="text" placeholder="Enter Question Title">
-					</div>
-
-					
+    <div class="modal fade" id="adddesignationmodal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Question</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Question Title</label>
+                        <input Id="title" name="title" class="form-control" type="text" placeholder="Enter Question Title">
+                    </div>
 
 
 
-				</div>
-				<div class="modal-footer">
-					<input type="button" value="Save" id="btnsave" onclick="Questionpostdata()" class="btn btn-primary" />
-					<a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
 
-				</div>
-			</div>
-		</div>
-	</div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="Save" id="btnsave" onclick="Questionpostdata()" class="btn btn-primary" />
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 }
 
@@ -234,449 +271,584 @@
 
 @section scripts{
 
-	<script>
-
-
-		$(document).ready(function () {
-
-			$("#QuestionId").select2();
-
-
-
-			var weightCheckBox = $('#IsAnswerWeightage');
-			var answerCheckBox = $('#AllowSelfScoring');
-			var weightTable = $('#weight-table');
-			var noWeightTable = $('#no-weight-table');
-			//weightCheckBox.prop('checked', true);
-			weightTable.hide();
-			weightCheckBox.on('change', function () {
-				if (!weightCheckBox.is(':checked')) {
-					weightTable.hide();
-					noWeightTable.hide();
-					$('#QuestionMaxLimit').prop('readonly', false);
-				}
-				else {
-					weightTable.show();
-					$('#QuestionMaxLimit').prop('readonly', true);
-					noWeightTable.hide();
-				}
-			})
-
-			answerCheckBox.on('change', function () {
-				if (!answerCheckBox.is(':checked')) {
-					weightTable.hide();
-					noWeightTable.hide();
-					
-				}
-				else {
-					weightTable.hide();					
-					noWeightTable.show();
-				}
-			})
-
-
-			var msg = '@ViewBag.Success';
-			if (msg !== "" && msg == '1') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '2') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '3') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '0') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
-					type: "error"
-				});
-			}
-
-
-
-		});
-
-
-		function SaveRecord() {
-			var status = true;
-			
-			debugger;
-
-
-
-			if ($("#Title").val() == "") {
-				$.growl.warning({
-					message: "Enter Section"
-				});
-				$("#Title").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#Title").css("border-color", "#ddd");
-			}
-
-
-
-			if ($("#Description").val() == "") {
-				$.growl.warning({
-					message: "Please Enter Description"
-				});
-				$("#Description").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#Description").css("border-color", "#ddd");
-			}
-
-			if ($("#OrderNo").val() == "") {
-				$.growl.warning({
-					message: "Please Enter Order No"
-				});
-				$("#OrderNo").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#OrderNo").css("border-color", "#ddd");
-			}
-
-
-
-			var Data = { id: $("#SectionId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
-
-			$.ajax({
-				async: false,
-				url: "/Performance/PerformanceSectionCheckData",
-				type: "GET",
-				data: Data,
-				success: function (data) {
-					if (data != "") {
-						debugger						
-						if (data.success) {							
-							$.growl.warning({
-								message: data.message
-							});
-							status = false;
-						}
-						else {
-							
-						}
-					}
-				},
-				error: function () {
-					status = false;
-					//   toastr.error("Please Fill Required Field");
-				}
-			})
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			});
-			if (status) {
-				swalWithBootstrapButtons.fire({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: 'No, cancel!',
-					confirmButtonText: 'Yes, Save it!',
-					timer: 30000,
-					reverseButtons: true
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$("#myform").submit();
-						
-					}
-					else if (result.dismiss === Swal.DismissReason.cancel) {
-						swalWithBootstrapButtons.fire(
-							'Cancelled',
-							'Your record is safe :)',
-							'error'
-						)
-					}
-				});
-			}
-		}
-
-	
-
-
-		// Working on Question form submition
-		function addnewdesignation() {
-
-			$("#adddesignationmodal").modal('show');
-			$("#DesignationId").val(0);
-			$("#Title").val('');
-			$("#Status").prop('checked', false);
-
-
-		}
-
-		function Questionpostdata() {
-			var status = true;
-			debugger;
-			if ($("#title").val() == "") {
-				$.growl.warning({
-					message: "Please Enter Title"
-				});
-				$("#title").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#title").css("border-color", "#ddd");
-			}
-			var Data = { id: $("#QuestionId").val(), title: $('#title').val() == '' ? '""' : $('#title').val() }
-
-			$.ajax({
-				async: false,
-				url: "/Performance/PerformanceQuestionCheckData",
-				type: "GET",
-				data: Data,
-				success: function (data) {
-					if (data != "") {
-						debugger
-						
-						if (data.success) {
-
-							
-							$.growl.warning({
-								message: data.message
-							});
-							status = false;
-						}
-						else {
-							$("#adddesignationmodal").modal('hide');
-						}
-					}
-				},
-				error: function () {
-					status = false;
-					//   toastr.error("Please Fill Required Field");
-				}
-			})
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			});
-			if (status) {
-				swalWithBootstrapButtons.fire({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: 'No, cancel!',
-					confirmButtonText: 'Yes, Save it!',
-					timer: 30000,
-					reverseButtons: true
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$("#myformQuestion").submit();
-					}
-					else if (result.dismiss === Swal.DismissReason.cancel) {
-						swalWithBootstrapButtons.fire(
-							'Cancelled',
-							'Your record is safe :)',
-							'error'
-						)
-					}
-				});
-
-
-			}
-
-
-		}
-
-		////
-
-		//Set add TO cart table data
-		// Check Duplicate data in table
-
-
-		$("#btn_AddClass").click(function () {
-			debugger;
-
-
-			if ($("#QuestionId").val() == null || $("#QuestionId").val() == "Select Question") {
-				$.growl.warning({
-					message: "Please Select Question"
-				});
-				return;
-			}
-
-
-		if ($("#weightId").val() == "") {
-				$.growl.warning({
-				message: "Please Enter weight"
-				});
-				return;
-			}
-
-			
-
-			else {
-				if (IsRowAlreadyExist()) {
-
-					$.growl.warning({
-						message: "This Record is Already Inserted ."
-					});
-
-				}
-				else {
-
-
-					debugger					
-
-				var tBody = $("#weight-table > TBODY>")[0];
-
-					//Add Row.
-					var row = tBody.insertRow(-1);
-					//row.attr("id", $("#AcademicRecordId").val());
-					row.id = $("#QuestionId").val();
-
-					//Add SkillTitle cell.
-					var cell = $(row.insertCell(-1));
-
-				cell.html($("#QuestionId").val() + "<input type='hidden' value='" + $("#ListQuestion").val() + "' name='ListQuestion'  />");
-				cell.attr("TD_QuestionId", $("#QuestionId").val());
-
-
-					//Add SkillStatus cell.
-					var cell = $(row.insertCell(-1));
-
-				cell.html($("#weightId").val() + "<input type='hidden' value='" + $("#ListWeight").val() + "' name='ListWeight'  />");
-				cell.attr("TD_weightId", $("#weightId").val());
-
-
-
-
-
-
-
-					//Add Button cell.
-					cell = $(row.insertCell(-1));
-					var Buttons =
-					'<div class="d-flex"><a   QuestionId = "' + $("#QuestionId").val() + '"><i class="feather feather-trash-2 text-danger"></i></a></div>';
-
-
-					cell.append(Buttons);
-					Account_ClearControls();
-				}
-			}
-
-		});
-		
-		
-		
-		
-		function IsRowAlreadyExist() {
-			debugger
-			var IsFound = false;
-
-			var SkillTitle = $("#QuestionId").val();
-			//var SubjectID = $("#SubjectId").val();
-
-			$('#AccountTable > tbody  > tr').each(function (index, tr) {
-
-
-				var dID = $(this).find("TD").eq(0).attr("TD_QuestionId");
-				////var SID = $(this).find("TD").eq(2).attr("TD_SubjectID");
-				if (SkillTitle == dID) {
-					IsFound = true;
-				}
-
-				//console.log($(this).find("TD").eq(1).attr("TD_ClassID"));
-				console.log(index);
-
-				console.log(tr);
-
-			});
-
-
-
-			return IsFound;
-		}
-
-
-
-
-
-
-		$("#weight-table").on('click', '.feather-trash-2', function () {
-			debugger;
-			var currentRow = $(this).closest("tr");
-
-			var PrimaryKey = currentRow.attr("id");
-
-			var CandidateClassSubjectID = PrimaryKey;
-
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			})
-
-			swalWithBootstrapButtons.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				cancelButtonText: 'No, cancel!',
-				confirmButtonText: 'Yes, delete it!',
-				timer: 30000,
-				reverseButtons: true
-			}).then((result) => {
-				if (result.isConfirmed) {
-					swalWithBootstrapButtons.fire(
-						'Deleted!',
-						'Your record has been deleted.',
-						'success'
-					)
-					var table = $("#AccountTable")[0];
-					currentRow.remove();
-				} else if (
-
-					result.dismiss === Swal.DismissReason.cancel
-				) {
-					swalWithBootstrapButtons.fire(
-						'Cancelled',
-						'Your record is safe :)',
-						'error'
-					)
-				}
-			})
-
-
-		});
-		
-		
-		
-		
-		
-		//////////////////////////
-
-
-
-	</script>
+    <script>
+
+
+        $(document).ready(function () {
+            //$("#QuestionId").select2();
+            $('#weightId').keypress(function (event) {
+             if (event.keyCode === 13) {
+                    $('#btn_AddClass').click()
+             }
+             });
+
+
+            var weightCheckBox = $('#IsAnswerWeightage');
+            var answerCheckBox = $('#AllowSelfScoring');
+            var weightTable = $('#weight-table');
+            var noWeightTable = $('#no-weight-table');
+            
+            weightTable.hide();
+            weightCheckBox.on('change', function () {
+                if (!weightCheckBox.is(':checked')) {
+                    weightTable.hide();
+                    noWeightTable.hide();
+                    $("#answerCheckBox").attr("disabled", true);
+                    $('#QuestionMaxLimit').prop('readonly', false);
+                }
+                else {
+                    weightTable.show();
+                    $('#QuestionMaxLimit').prop('readonly', true);
+                    noWeightTable.hide();
+                }
+            })
+
+          
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+
+
+        });
+
+
+        function SaveRecord() {
+            var status = true;
+
+            debugger;
+
+
+
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Enter Section"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+
+
+
+            if ($("#Description").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Description"
+                });
+                $("#Description").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Description").css("border-color", "#ddd");
+            }
+
+            if ($("#OrderNo").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Order No"
+                });
+                $("#OrderNo").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#OrderNo").css("border-color", "#ddd");
+            }
+
+
+
+            var Data = { id: $("#SectionId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+
+            $.ajax({
+                async: false,
+                url: "/Performance/PerformanceSectionCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        if (data.success) {
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+
+
+
+        // Working on Question form submition
+        function addnewdesignation() {
+
+            $("#adddesignationmodal").modal('show');
+            $("#DesignationId").val(0);
+            $("#Title").val('');
+            $("#Status").prop('checked', false);
+
+
+        }
+        function Questionpostdata() {
+                var status = true;
+
+                if ($("#title").val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Title"
+                    });
+                    $("#title").css("border-color", "red");
+                    status = false;
+                    return false;
+                } else {
+                    $("#title").css("border-color", "#ddd");
+                }
+
+                var Data = {
+                    id: $("#QuestionId").val(),
+                    title: $('#title').val() == '' ? '""' : $('#title').val()
+                };
+
+                $.ajax({
+                    async: false,
+                    url: "/Performance/PerformanceQuestionCheckData",
+                    type: "GET",
+                    data: Data,
+                    success: function (data) {
+                        if (data != "") {
+                            if (data.success) {
+                                $.growl.warning({
+                                    message: data.message
+                                });
+                                status = false;
+                            } else {
+                                $("#adddesignationmodal").modal('hide');
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
+                    }
+                });
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+                if (status) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'No, cancel!',
+                        confirmButtonText: 'Yes, Save it!',
+                        timer: 30000,
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#myformQuestion').submit(); // Submit the form
+
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your record is safe :)',
+                                'error'
+                            );
+                        }
+                    });
+                }
+               }
+
+         $(document).ready(function () {
+             $('#myformQuestion').submit(function (event) {
+                 event.preventDefault();
+                 var formData = $(this).serialize();
+         
+                 $.ajax({
+                     url: '/Performance/PerformanceQuestionCreateOrUpdate',
+                     type: 'POST',
+                     data: formData,
+                     success: function (response) {
+                         if (response.success) {
+         
+                             // Data saved successfully
+                             Swal.fire('Success', 'Data saved!', 'success');
+                             $('#QuestionId').select2({ placeholder: "Select Question" }).val(null).trigger('change');
+                              $('#title').val('');
+                         } else {
+                             // Error occurred while saving data
+                             Swal.fire('Error', 'Error saving data.', 'error');
+                         }
+                     },
+                     error: function () {
+                         Swal.fire('Error', 'An error occurred while saving data.', 'error');
+                     }
+                 });
+             });
+         });
+         
+         
+         $(document).ready(function() {
+           // Initialize Select2
+           $('#customDropdown').select2();
+         
+           // Add options with buttons
+           var options = [
+                         { button: '<button onclick="addnewdesignation()" class="btn btn-primary btn-sm mb-1">Add</button>' },
+             
+           ];
+                     options.sort(function (a, b) {
+                         return b.text.localeCompare(a.text);
+                     });
+         
+             $('#QuestionId').select2({
+             data: options,
+             escapeMarkup: function(markup) {
+               return markup;
+             },
+             templateResult: function(data) {
+               if (data.button) {
+                 return $(data.button);
+               }
+               return data.text;
+             }
+           });
+         
+           // Handle button clicks
+           $('#customDropdown').on('select2:select', function(e) {
+             var selectedOption = e.params.data;
+             if (selectedOption.button) {
+               // Perform an action based on the selected option with a button
+               console.log('Button clicked:', selectedOption.text);
+             }
+           });
+         });
+                    
+
+
+           
+
+        $("#btn_AddClass").click(function () {
+            debugger;
+
+          
+            if ($("#QuestionId").val() == "" || $("#QuestionId").val() == "Select Question") {
+                $.growl.warning({
+                    message: "Please Select Question"
+                });
+                return;
+            }
+
+
+            if ($("#weightId").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter weight"
+                });
+                return;
+            }
+
+            
+            else {
+                if (IsRowAlreadyExist()) {
+
+                    $.growl.warning({
+                        message: "This Record is Already Inserted ."
+                    });
+
+                }
+                else {
+
+                    debugger
+
+
+                    var newRow = $("<tr>");
+
+                    var questionCell = $("<td>  " + $("#QuestionId option:selected").text() + " <input type='hidden'   value='" + $("#QuestionId").val() + "' name='ListQuestion'  />");
+                    questionCell.attr("TD_QuestionId", $("#QuestionId").val())
+                    newRow.append(questionCell);
+
+                    var weightCell = $("<td class='text-center'> " + $("#weightId").val() + " <input type='hidden' value='" + $("#weightId").val() + "' name='ListWeight'  />");
+                  
+                    newRow.append(weightCell);
+
+                    var actionCell = $("<td class='text-center'>");
+                    var actionDiv = $("<div>", { class: "" });
+                    var addIcon = $("<i>", { class: "fe fe-minus-circle primary text-primary me-3" });
+                    //addIcon.click(function () {
+                    //    newRow.remove(); // Remove the current row when the icon is clicked
+                    //});
+                    actionDiv.append(addIcon);
+                    actionCell.append(actionDiv);
+                    newRow.append(actionCell);
+
+                    $("#weight-table tbody").append(newRow);
+
+                    
+                    Account_ClearControls();
+                }
+            }
+
+        });
+
+
+
+
+        function IsRowAlreadyExist() {
+            debugger
+            var IsFound = false;
+           
+            var Question = $("#QuestionId").val();
+            
+
+            $('#weight-table > tbody  > tr').each(function (index, tr) {
+
+
+                var dID = $(this).find("TD").eq(0).attr("TD_QuestionId");
+                ////var SID = $(this).find("TD").eq(2).attr("TD_SubjectID");
+                if (Question == dID) {
+                    IsFound = true;
+                }
+               
+                //console.log($(this).find("TD").eq(1).attr("TD_ClassID"));
+              
+
+               
+
+            });
+
+
+
+            return IsFound;
+        }
+
+
+        function Account_ClearControls() {
+            debugger         
+            
+            $('#QuestionId').select2({ placeholder: "Select Question" }).val('').trigger('change');
+
+
+
+
+        }
+
+
+
+        //Remove data from bootstrap table
+        //function Remove(button) {
+        $("#weight-table").on('click', '.fe-minus-circle', function () {
+            debugger;
+            var currentRow = $(this).closest("tr");
+
+            var PrimaryKey = currentRow.attr("id");
+
+            var CandidateClassSubjectID = PrimaryKey;
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            })
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, delete it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire(
+                        'Deleted!',
+                        'Your record has been deleted.',
+                        'success'
+                    )
+                    var table = $("#weight-table")[0];
+                    currentRow.remove();
+                } else if (
+
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            })
+
+
+        });
+
+                //////////////////////////////////////////
+
+
+
+      
+
+
+
+
+
+                                //////////////////////////
+
+
+
+
+
+
+
+
+
+        //$("#btn_AddQuestion").click(function () {
+        //    debugger;
+        //    var QuestionMax = $("#QuestionMaxLimit").val();
+           
+        //    if ($("#IdQuestion").val() == "") {
+        //        $.growl.warning({
+        //            message: "Please Enter Question"
+        //        });
+        //        return;
+        //    }
+
+        //    if ($("#QuestionMaxLimit").val() == "" || $("#QuestionMaxLimit").val() == null) {
+        //        $.growl.warning({
+        //            message: "Please Enter Limit Question"
+        //        });
+        //        return;
+        //    }
+
+        //     var rowCount = $("#weight-table tr").length;
+        //     debugger
+        //    if (QuestionMax == rowCount) {
+        //        $.growl.warning({
+        //            message: "Please Check Limit Question"
+        //        });
+        //        return;
+        //    }
+
+            
+
+
+
+        //    else {
+        //        if (IsRowAlreadyExist()) {
+
+        //            $.growl.warning({
+        //                message: "This Record is Already Inserted ."
+        //            });
+
+        //        }
+        //        else {
+
+        //            debugger
+
+
+        //            var newRow = $("<tr>");
+
+        //            var questionCell = $("<td>  " + $("#IdQuestion").val() + " <input type='hidden'   value='" + $("#IdQuestion").val() + "' name='ListQuestion'  />");
+        //            questionCell.attr("TD_IdQuestion", $("#IdQuestion").val())
+        //            newRow.append(questionCell);
+
+        //            //var weightCell = $("<td> " + $("#weightId").val() + " <input type='hidden' value='" + $("#QuestionMaxLimit").val() + "' name='ListWeight'  />");
+
+        //            //newRow.append(weightCell);
+
+        //            var actionCell = $("<td class='text-center'>");
+        //            var actionDiv = $("<div>", { class: "" });
+        //            var addIcon = $("<i>", { class: "fe fe-minus-circle primary text-primary me-3" });
+        //            addIcon.click(function () {
+        //                newRow.remove(); // Remove the current row when the icon is clicked
+        //            });
+        //            actionDiv.append(addIcon);
+        //            actionCell.append(actionDiv);
+        //            newRow.append(actionCell);
+
+        //            $("#no-weight-table tbody").append(newRow);
+
+
+        //            Account_ClearControls();
+        //        }
+        //    }
+
+        //});
+
+    </script>
 
 }

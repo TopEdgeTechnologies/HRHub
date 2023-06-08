@@ -170,7 +170,7 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Section().PostSection(obj, _context);
-            if (result != null && result.SectionId>0)
+            if (result != null && result.Flag == 2)
                 return Ok(new
                 {
                     Success = true,
@@ -328,7 +328,17 @@ namespace HRHUBAPI.Controllers
 
 
 
-		#endregion
+        #endregion
 
-	}
+        #region QuestionSection
+        [HttpGet("GetQuestionSectionInfos{id}")]
+        public async Task<ActionResult<List<SectionQuestion>>> GetQuestionSectionInfos(int id)
+        {
+
+            return await new Section().GetSectionQuestion(id, _context);
+        }
+        #endregion
+
+
+    }
 }
