@@ -1,13 +1,140 @@
 ﻿@model HRHUBAPI.Models.StaffReviewFormProcessed
 
-<style>
 
-    .note-editor {
+<style>
+    .appraisal {
         pointer-events: none;
     }
 
-</style>
+    .child-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
+    .personal-info li .text {
+        color: #888888;
+        display: block;
+        overflow: hidden;
+    }
+
+    .img-fit {
+        object-fit: cover;
+    }
+
+    .border-dashed-right {
+        border-right: 2px dashed #cccccc;
+    }
+
+    .border-dashed-top {
+        border-top: 2px dashed #cccccc;
+    }
+
+    .arrow-ribbone-left.bg-danger:before {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        content: "";
+        right: -12px;
+        border-top: 12px solid transparent;
+        border-left: 12px solid #f7284a;
+        ;
+        border-bottom: 12px solid transparent;
+        width: 0;
+    }
+
+    .message-feed:not(.right) .mf-content:before {
+        content: "";
+        position: absolute;
+        top: 9px;
+        border-bottom: 8px solid #128af9;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        right: auto;
+        left: -12px;
+        transform: rotate(-90deg);
+        display: block;
+    }
+
+    .comment-section {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        border: 2px solid #5fb2ff;
+        border-radius: 45px;
+        padding: 9px 9px;
+        margin-bottom: 1rem;
+    }
+
+    input.comment-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px 10px;
+        font-size: 1.2rem;
+    }
+
+        input.comment-input::placeholder {
+            font-size: 1.1rem
+        }
+
+    .comment-icons {
+        display: flex;
+    }
+
+    .btn-icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: #e5f3ff;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-right: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+
+    a.attachement-btn {
+        width: 105px;
+        text-align: center;
+        border: 1px solid #e5f3ff;
+        padding: 2px 9px;
+        border-radius: 45px;
+        margin-right: 9px;
+        background: #e5f3ff;
+    }
+
+    ul.timeline > li.resignation-pending:before {
+        content: " ";
+        background: #f7284a;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 4px solid #fdedef;
+        left: -2px;
+        width: 20px;
+        height: 20px;
+        z-index: 1;
+        margin: 2px;
+    }
+
+    ul.timeline > li.resignation-approved:before {
+        content: " ";
+        background: #0dcd94;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 4px solid #fdedef;
+        left: -2px;
+        width: 20px;
+        height: 20px;
+        z-index: 1;
+        margin: 2px;
+    }
+</style>
 
 <!-- Row -->
 <div class="row row-sm mt-4">
@@ -22,10 +149,15 @@
                             <h4 class="card-title">Staff Performance Appraisal</h4>
                             <div class="card-options">
                                 <div class="btn-list">
+
+
+                                    <a onclick="raiseappraisal()" class="btn btn-primary me-3">Raise Appraisal</a>
+
+
                                     <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="E-mail"> <i class="feather feather-mail"></i> </button>
                                     <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
                                     <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-                                    <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Filter" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>
+                                    @*<button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Filter" data-bs-original-title="Filter" id="btn_Filter" fdprocessedid="gkh46"> <i class="feather feather-filter"></i> </button>*@
                                 </div>
                             </div>
                         </div>
@@ -79,11 +211,24 @@
                         </div>
 
                         <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="hr-checkall">
+                                        <label class="custom-control custom-checkbox mb-0">
+                                            <input type="checkbox" class="custom-control-input" id="checkAll">
+                                            <span class="custom-control-label">Check All</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myTable">
                                     <thead>
                                         <tr>
                                             <th class="border-bottom-0">Sr.#</th>
+                                            <th hidden class="border-bottom-0">ReviewFormID</th>
+                                            <th hidden class="border-bottom-0">StaffID</th>
+                                            <th hidden class="border-bottom-0">CurrentSalary</th>
                                             <th class="border-bottom-0">Staff</th>
                                             <th class="border-bottom-0">Department</th>
                                             <th class="border-bottom-0">Weightage</th>
@@ -96,31 +241,55 @@
                                             int count = 1;
                                             foreach (var item in Model.ListStaffAppraisal)
                                             {
-                                                <tr>
-                                                    <td>
-                                                        @count
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
-                                                            <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                                <h6 class="mb-1 fs-14">@item.StaffName</h6>
-                                                                <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.Designation)</p>
-                                                            </div>
+                                                        <tr>
+                                                            <td>
+                                                                @count
+                                                            </td>
+                                                            <td hidden>
+                                                                @item.ReviewFormId
+                                                            </td>
+                                                            <td hidden>
+                                                                @item.ReviewedStaffId
+                                                            </td>
+                                                            <td hidden>
+                                                                @item.CurrentSalary
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex">
+                                                                    <label class="custom-control custom-checkbox-md me-7 p-0 s @(item.IsAppraisalSet == true?"appraisal" : "")">
+                                                                        <input type="checkbox" class="custom-control-input-success @(item.IsAppraisalSet == true?"appraisal" : "")" name="example-checkbox1" value="option1">
+                                                                        <span class="custom-control-label-md success"></span>
+                                                                    </label>
+                                                                    <img class="avatar avatar-md brround me-3 staffsnap" src="@item.StaffSnap">
+                                                                    <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                                        <h6 class="mb-1 fs-14 staff">@item.StaffName</h6>
+                                                                        <p class="text-muted mb-0 fs-12 designation">@item.Designation</p>
+                                                                    </div>
 
-                                                        </div>
-                                                    </td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Department)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Weightage)</td>
-                                                    <td>@Html.TextBoxFor(modelItem => item.AppraisalPercentage, new { @class = "form-control"})</td>
+                                                                </div>
+                                                            </td>
+                                                            <td>@item.Department</td>
+                                                            <td>@item.Weightage</td>
+                                                            <td>
+                                                                <input class="form-control @(item.IsAppraisalSet == true?"appraisal" : "")" id="item_AppraisalPercentage" name="item.AppraisalPercentage" type="number" value="@item.AppraisalPercentage">
 
-                                                    <td class="text-start d-flex">
+                                                                @*Html.TextBoxFor(modelItem => item.AppraisalPercentage, new { @class = "form-control" , @disabled = attr })*@
+                                                            </td>
 
-                                                        <a href="#" onclick="showPerformanceSectionModel(@item.ReviewFormId,@item.ReviewedStaffId)" class="action-btns1">
-                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                            <td class="text-start d-flex">
+
+                                                                @* <a href="#" onclick="showPerformanceSectionModel(@item.ReviewFormId,@item.ReviewedStaffId)" class="action-btns1">
+                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
+                                                </a>*@
+                                                                @*if (item.IsAppraisalSet == true)
+                                                {*@
+                                                                <a href="#" onclick="showPerformanceSectionModel(this,@item.ReviewFormId,@item.ReviewedStaffId)" class="action-btns1">
+                                                                    <i class="feather feather-edit primary text-primary  mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
+                                                                </a>
+                                                                @*}*@
+
+                                                            </td>
+                                                        </tr>
                                                 count++;
                                             }
                                         }
@@ -147,6 +316,91 @@
                 </button>
             </div>
             <div class="card-body">
+                <input type="hidden" asp-for="ReviewedStaffId" />
+                <input type="hidden" asp-for="ReviewFormId" />
+                <input type="hidden" id="CurrentSalary" />
+
+                <div class="row">
+                    <div class="col-md-6 border-dashed-right">
+                        <div class="row">
+                            <div class="col-md-4 text-center text-md-start">
+                                <img id="StaffImg" src="~/assets/images/users/staff-pic.jpg" class="img-fluid img-fit rounded-circle" style="width:140px; height:140px" />
+                            </div>
+                            <div class="col-md-8 mt-3">
+                                <div class="profile-info text-center text-md-start mt-2 mt-md-0">
+                                    <h3 class="user-name fs-20 mb-2" id="Staff">John Doe</h3>
+                                    <h6 class="text-primary fs-18 mb-2" id="Department">Software Department</h6>
+                                    <small class="text-muted fs-16 mb-1" id="Designation">Web Designer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Total Weightage:</div>
+                                    </div>
+                                    <div class="col-6 col-md-7">
+                                        <div class="text"><span id="TotalWeightage"></span></div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Earned Weightage:</div>
+                                    </div>
+                                    <div class="col-6 col-md-7">
+                                        <div class="text"><span id="EarnedWeightage"></span></div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Appraisal %:</div>
+                                    </div>
+                                    <div class=" col-6 col-md-7">
+                                        <div class="text"><input id="AppraisalPercentage" style="width:100px" class="form-control" type="number"></div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+
+
+                @* <div class="row form-group">
+                <div class="col-xl-6 col-md-12 col-lg-12">
+                <label class="form-label">Staff</label>
+                <input id="Staff" class="form-control appraisal" type="text">
+                </div>
+                <div class="col-xl-6 col-md-12 col-lg-12">
+                <label class="form-label">Department</label>
+                <input id="Department" class="form-control appraisal" type="text">
+                </div>
+
+                </div>
+                <div class="row form-group">
+                <div class="col-xl-6 col-md-12 col-lg-12">
+                <label class="form-label">Designation</label>
+                <input id="Designation" class="form-control appraisal" type="text">
+                </div>
+                <div class="col-xl-3 col-md-12 col-lg-12">
+                <label class="form-label">Weightage</label>
+                <input id="Weightage" class="form-control appraisal" type="text">
+                </div>
+                <div class="col-xl-3 col-md-12 col-lg-12">
+                <label class="form-label">Appraisal Percentage</label>
+                <input id="AppraisalPercentage" class="form-control" type="number">
+                </div>
+                </div>*@
+                <label class="form-label">Section Weightage</label>
                 <div class="table-responsive">
                     <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myAppraisalTable">
                         <thead>
@@ -162,7 +416,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="javascript:void(0);" class="btn btn-primary" data-bs-dismiss="modal">Close</a>
+                <a class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                <input type="button" value="submit" id="btnsave" onclick="editStaffAppraisal()" class="btn btn-primary" />
             </div>
         </div>
     </div>
@@ -212,7 +467,6 @@
 
             }
             $('#myTable').DataTable();
-            $('#myAppraisalTable').DataTable();
 
 
             // Show Filters controls
@@ -228,9 +482,174 @@
 
         })
 
-        function showPerformanceSectionModel(ReviewFormId,ReviewStaffId) {
-            debugger
+        function editStaffAppraisal() {
+            debugger;
+            var appraisal = {};
+            appraisal.ReviewFormId = $("#ReviewFormId").val();
+            appraisal.StaffId = $("#ReviewedStaffId").val();
+            appraisal.CurrentMonthlySalary = $("#CurrentSalary").val();
+            appraisal.AppraisalPercentage = $("#AppraisalPercentage").val();
 
+            $("#sectionmodal").modal('hide');
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { obj: appraisal }
+                    $.ajax({
+                        async: false,
+                        url: "/Performance/EditStaffAppraisalDetail",
+                        type: "POST",
+                        data: Data,
+                        success: function (data) {
+
+                            if (data != "") {
+                                debugger
+                                if (data.success) {
+                                    notif({
+                                        msg: data.message,
+                                        type: "success"
+                                    });
+                                    var url = '@Url.Action("PerformanceAppraisalList", "Performance")';
+                                    window.location.href = url;
+                                }
+                                else {
+                                    $.growl.warning({
+                                        message: data.message
+                                    });
+
+                                }
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+        }
+
+
+
+        function raiseappraisal() {
+            debugger;
+            var appraisallist = new Array();
+            $("#myTable TBODY TR").each(function () {
+                var row = $(this);
+                var checkbox = row.find('input[type="checkbox"]');
+                var isChecked = checkbox.is(':checked');
+                var appraisal = {};
+                if (isChecked) {
+                    appraisal.ReviewFormId = parseInt(row.find("TD").eq(1).html());
+                    appraisal.StaffId = parseInt(row.find("TD").eq(2).html());
+                    appraisal.CurrentMonthlySalary = parseFloat(row.find("TD").eq(3).html()).toFixed(2);
+                    appraisal.AppraisalPercentage = row.find("TD").eq(7).find("input").val();
+
+                    var appraisalamount = (appraisal.CurrentMonthlySalary * appraisal.AppraisalPercentage) / 100;
+
+                    appraisal.NewMonthlySalary = parseFloat(appraisalamount) + parseFloat(appraisal.CurrentMonthlySalary);
+                    appraisal.AppraisalDate = '@DateTime.Now.ToString("dd-MMM-yyyy")';
+                    appraisal.Createdby = @ViewBag.UserId;
+                    appraisal.CreatedOn = '@DateTime.Now.ToString("dd-MMM-yyyy")';
+
+                    appraisallist.push(appraisal);
+                }
+            })
+
+            if (appraisallist.length > 0) {
+                var Data = { list: appraisallist }
+                $.ajax({
+                    async: false,
+                    url: "/Performance/SaveStaffAppraisalDetail",
+                    type: "POST",
+                    data: Data,
+                    success: function (data) {
+
+                        if (data != "") {
+                            debugger
+                            if (data.success) {
+                                notif({
+                                    msg: data.message,
+                                    type: "success"
+                                });
+                                var url = '@Url.Action("PerformanceAppraisalList", "Performance")';
+                                window.location.href = url;
+                            }
+                            else {
+                                $.growl.warning({
+                                    message: data.message
+                                });
+
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
+                    }
+                })
+            }
+            else {
+                $.growl.warning({
+                    message: "Please Select Staff"
+                });
+            }
+
+
+
+        }
+
+
+        function showPerformanceSectionModel(control, ReviewFormId, ReviewStaffId) {
+            debugger
+            var currentRow = $(control).closest('tr');
+            var ReviewFormId = parseInt(currentRow.find("TD").eq(1).html());
+            var StaffId = parseInt(currentRow.find("TD").eq(2).html());
+            var CurrentSalary = parseFloat(currentRow.find("TD").eq(3).html()).toFixed(2);
+            var StaffImage = currentRow.find("td .staffsnap").attr("src");   //currentRow.find('td:nth-child(4) h6').text();
+            var StaffName = currentRow.find("td div .staff").text();   //currentRow.find('td:nth-child(4) h6').text();
+            var Designation = currentRow.find("td div .designation").text(); // currentRow.find("TD p").eq(4).text();
+            var Department = currentRow.find("TD").eq(5).html();
+            var Weightage = currentRow.find("TD").eq(6).html();
+            var AppraisalPercentage = currentRow.find("TD").eq(7).find("input").val();
+            var Updatedby = @ViewBag.UserId;
+            var TotalWeightage = Weightage.split("/")[1];
+            var EarnedWeightage = Weightage.split("/")[0];
+
+            $("#ReviewFormId").val(ReviewFormId);
+            $("#ReviewedStaffId").val(StaffId);
+            $("#CurrentSalary").val(CurrentSalary);
+            $("#Staff").text(StaffName);
+            $("#StaffImg").attr('src', StaffImage);
+            $("#Designation").text(Designation);
+            $("#Department").text(Department);
+            $("#TotalWeightage").text(TotalWeightage);
+            $("#EarnedWeightage").text(EarnedWeightage);
+            $("#AppraisalPercentage").val(AppraisalPercentage);
 
             var Data = { id: ReviewFormId, staffid: ReviewStaffId }
             console.log(Data)
@@ -243,21 +662,18 @@
                     if (data != "") {
                         debugger
 
-                        var table = $('#myAppraisalTable').DataTable();
-                        table.clear();
-                        table.draw();
-
                         var action = '';
                         for (var i = 0; i < data.length; i++) {
 
                             action += '<tr><td>' + data[i]["title"] + '</td>';
                             action += '<td>' + data[i]["earnedWeightage"] + '/' + data[i]["totalWeightage"] + '</td>';
                             action += '<td>' + parseFloat((data[i]["earnedWeightage"] / data[i]["totalWeightage"]) * 100).toFixed(1) + '</td></tr>';
-                            
+
                         }
 
                         $('#myAppraisalTable tbody').html(action);
 
+                        //table.refresh();
 
                         $("#sectionmodal").modal('show');
                     }
@@ -270,6 +686,18 @@
 
 
         }
+
+        $('#checkAll').change(function () {
+            debugger;
+            var checkAllChecked = $(this).prop('checked');
+            //$("td input[type='checkbox']:not(.appraisal)").not(":disabled").prop("checked", checkAllChecked);
+
+            $("td input[type='checkbox']:not(.appraisal)").prop("checked", checkAllChecked);
+
+            //$('td input[type="checkbox"]').not(":disabled").prop('checked', checkAllChecked);
+        });
+
+
 
         function SearchLeave() {
             debugger;
