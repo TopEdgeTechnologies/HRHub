@@ -497,7 +497,7 @@ namespace HRHUBAPI.Models
 
         }
 
-        public async Task<bool> CheckLeave(int StaffId, int LeaveTypeID, HrhubContext _context)
+        public async Task<decimal> CheckLeaveCount(int StaffId, int LeaveTypeID, HrhubContext _context)
         {
             try
             {
@@ -505,14 +505,9 @@ namespace HRHUBAPI.Models
                 DbConnection _db = new DbConnection();
 
                 string query = "Select [dbo].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
-                int RemainingLeave = Convert.ToInt32(_db.ReturnColumn(query, "RemainingLeave"));
-                if (RemainingLeave == 0)
-                {
-                    return true;
-                }
-
-
-                return false;
+                decimal RemainingLeave = Convert.ToInt32(_db.ReturnColumn(query, "RemainingLeave"));
+                
+                return RemainingLeave;
             }
             catch (Exception)
             {

@@ -11,6 +11,10 @@
     .note-editing-area {
         height: 400px !important
     }
+    .chkboxdisable {
+        pointer-events: none;
+
+    }
 
 </style>
 
@@ -19,7 +23,7 @@
     <!--Page header-->
     <div class="page-header d-xl-flex d-block">
         <div class="page-leftheader">
-            <div class="page-title">Apply Leaves</div>
+            <div class="page-title">Apply Leave</div>
         </div>
         <div class="page-rightheader ms-md-auto">
             <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -43,7 +47,7 @@
             <div class="col-xl-4 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header  border-0">
-                        <h4 class="card-title">Apply Leaves</h4>
+                        <h4 class="card-title">Parameters</h4>
                     </div>
                     <div class="card-body">
                         <input type="hidden" asp-for="LeaveId" />
@@ -58,7 +62,7 @@
                             <div class="leave-content active" id="single">
                                 <div class="row form-group">
                                     <label class="form-label">Date Range:</label>
-                                    <div class="col-xl-6 col-md-12 col-lg-12">
+                                    <div class="col-xl-12 col-md-12 col-lg-12" id="singledate">
                                         <div class="input-group">
                                             <input type="date" asp-for="StartDate" class="form-control fc-datepicker" placeholder="select date" />
                                             @* <div class="input-group-append">
@@ -96,19 +100,19 @@
 
                             <div class="row form-group leavecheckbox">
                                 <div class="col-xl-6 col-md-12 col-lg-12 mt-2 half">
-                               @* <div class="col-md-6 mt-2 half">*@
+                                    @* <div class="col-md-6 mt-2 half">*@
 
-                                    <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" asp-for="MarkAsHalfLeave" type="checkbox" class="custom-control-input">
+                                    <label class="custom-control custom-checkbox chkbox">
+                                        <input type="checkbox" asp-for="MarkAsHalfLeave" class="custom-control-input">
                                         <span class="custom-control-label">Half Leave</span>
                                     </label>
 
                                 </div>
                                 <div class="col-xl-6 col-md-12 col-lg-12 mt-2 short">
-                                @*<div class="col-md-6 mt-2 short">*@
+                                    @*<div class="col-md-6 mt-2 short">*@
 
-                                    <label class="custom-control custom-checkbox ">
-                                        <input type="checkbox" asp-for="MarkAsShortLeave" type="checkbox" class="custom-control-input">
+                                    <label class="custom-control custom-checkbox chkbox">
+                                        <input type="checkbox" asp-for="MarkAsShortLeave" class="custom-control-input">
                                         <span class="custom-control-label">Short Leave</span>
                                     </label>
 
@@ -137,7 +141,7 @@
                 <div class="card">
                     <div class="p-0">
                         <div class="card-header border-0">
-                            <h4 class="card-title">Leave Application</h4>
+                            <h4 class="card-title">Application</h4>
                         </div>
                         <textarea asp-for="ApplicationHtml" class="summernote" style=" height: 398px !important;"></textarea>
                     </div>
@@ -149,7 +153,7 @@
             <div class="col-xl-4 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header  border-0">
-                        <h4 class="card-title">Leaves Overview</h4>
+                        <h4 class="card-title">Overview</h4>
                     </div>
                     <div class="card-body">
                         <div class="row mb-0 pb-0">
@@ -206,12 +210,18 @@
 
         $(document).ready(function () {
 
+            debugger;
 
             $('#LeaveTypeId').select2();
             if (@Model.LeaveId > 0) {
                 if ($('#StartDate').val() != $('#EndDate').val()) {
                     $('#daterange-categories').val('multiple').change();
                     $("#divMultipleDate").attr("hidden", false);
+                    $("#singledate").attr("class", "col-xl-6 col-md-12 col-lg-12");
+                    $(".chkbox").addClass("chkboxdisable")
+                } else {
+                    $("#singledate").attr("class", "col-xl-12 col-md-12 col-lg-12");
+                    $(".chkbox").removeClass("chkboxdisable")
                 }
             }
 
@@ -344,10 +354,6 @@
                 }
             });
 
-
-
-
-
         }
 
 
@@ -358,13 +364,9 @@
 
             if ($("#LeaveTypeId").val() == "") {
 
-
                 $.growl.warning({
                     message: "Please Select Leave Type"
                 });
-
-
-
                 $("#LeaveTypeId").css("border-color", "red");
                 status = false;
 
@@ -373,8 +375,6 @@
                 $.growl.warning({
                     message: "Please Enter Date Range"
                 });
-
-
 
                 $("#StartDate").css("border-color", "red");
                 $("#EndDate").css("border-color", "red");
@@ -395,31 +395,32 @@
                 $("#LeaveSubject").css("border-color", "#ddd");
             }
             debugger;
+
             var Data = { leavetypeid: $("#LeaveTypeId").val() }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/Leave/LeaveCheckData",
+                url: "/Leave/CheckLeaveCountOnApply",
                 type: "GET",
                 data: Data,
                 success: function (data) {
-                    if (data != "") {
+                    if (data >0) {
                         debugger
-
-                        var b = JSON.parse(data)
-                        if (b.success) {
-
-
-
-
+                        var selecteddays = $("#SelectedDays").text();
+                        if (selecteddays > data) {
                             // $.growl.warning(b.message);
                             $.growl.warning({
-                                message: b.message
+                                message: "Selected days are greater than allowed leaves!!"
                             });
                             status = false;
                         }
 
-
+                    }
+                    else if(data == 0){
+                        $.growl.warning({
+                            message: "You have Consumed All leaves"
+                        });
+                        status = false;
                     }
                 },
                 error: function () {
@@ -438,9 +439,6 @@
 
 
             if (status) {
-
-
-
 
                 swalWithBootstrapButtons.fire({
                     title: 'Are you sure?',
@@ -475,7 +473,20 @@
 
         }
 
-
+        $("#MarkAsHalfLeave").change(function () {
+            debugger;
+            var check = $(this).prop('checked');
+            if (check) {
+                $("#MarkAsShortLeave").prop('checked', false);
+            }
+        })
+        $("#MarkAsShortLeave").change(function () {
+            debugger;
+            var check = $(this).prop('checked');
+            if (check) {
+                $("#MarkAsHalfLeave").prop('checked', false);
+            }
+        })
 
         $("#daterange-categories").change(function () {
             debugger;
@@ -484,11 +495,15 @@
                 //$("#StartDate").val("");
                 //$("#EndDate").val("");
                 $("#divMultipleDate").attr("hidden", false);
+                $("#singledate").attr("class", "col-xl-6 col-md-12 col-lg-12");
+                $(".chkbox").addClass("chkboxdisable")
             }
             else {
                 var strtdate = $("#StartDate").val();
                 $("#EndDate").val(strtdate);
                 $("#divMultipleDate").attr("hidden", true);
+                $("#singledate").attr("class", "col-xl-12 col-md-12 col-lg-12");
+                $(".chkbox").removeClass("chkboxdisable")
             }
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })

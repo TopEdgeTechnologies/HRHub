@@ -106,29 +106,11 @@ namespace HRHUBAPI.Controllers
         [HttpGet("LeaveCheckData{staffid}/{leavetypeid}")]
         public async Task<ActionResult<JsonObject>> LeaveCheckData(int staffid,int leavetypeid)
         {
-            if (await new Leave().CheckLeave(staffid,leavetypeid,  _context))
-            {
-                return Ok(new
-                {
+            var result = await new Leave().CheckLeaveCount(staffid, leavetypeid, _context);
+            if (result !=null)
+                return Ok(result);
 
-                    Success = true,
-                    Message = "You Have Consumed All leave!"
-
-
-                });
-            }
-            else
-            {
-
-                return Ok(new
-                {
-
-                    Success = false,
-                    Message = "Not found"
-
-
-                });
-            }
+            return NotFound("Data Not Found!");
 
 
         }
