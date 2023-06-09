@@ -250,7 +250,8 @@ namespace HRHUBWEB.Controllers
 
 		#endregion
 
-		#region Question 
+		
+        #region Question 
 		[HttpPost]
 		public async Task<IActionResult> PerformanceQuestionCreateOrUpdate(Question ObjQuestion)
 		{
@@ -282,11 +283,105 @@ namespace HRHUBWEB.Controllers
 
 
 
-		#endregion
+        #endregion
 
-		// Code for save images into database
 
-		private string uploadImage(string name, IFormFile file, string root)
+        #region Staff Performance Evaluation
+        [CustomAuthorization]
+        public async Task<IActionResult> StaffPerformanceList(String data = "")
+        {
+
+            ViewBag.ListPerformanceForm = await _APIHelper.CallApiAsyncGet<IEnumerable<PerformanceForm>>($"api/Performance/GetPerformanceInfos{_user.CompanyId}", HttpMethod.Get);
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+            SectionAnswer ObjSectionAnswer = new SectionAnswer();
+            ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            return View(ObjSectionAnswer);
+        }
+
+
+        public async Task<IActionResult> GetStaffPerformanceById(int id)
+        {
+            PerformanceForm ObjPerformanceForm = new PerformanceForm();
+
+            ObjPerformanceForm = await _APIHelper.CallApiAsyncGet<PerformanceForm>($"api/Performance/GetPerformanceInfoId{id}", HttpMethod.Get);
+            return Json(ObjPerformanceForm);
+        }
+      
+        [HttpGet]
+        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(string data = "", int id = 0, int StaffId = 0, int ReviewFormId = 0)
+        {
+            ViewBag.Success = data;
+            ViewBag.QuestionSectionList = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{_user.CompanyId}/{ReviewFormId}", HttpMethod.Get);
+            SectionAnswer objInfo = new SectionAnswer();
+
+            if (id == 0)
+            {
+               objInfo.ReviewerStaffId = StaffId;
+               objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{StaffId}", HttpMethod.Get);
+
+                return View(objInfo);
+            }
+            objInfo = await GetPerformanceStaffById(id);
+
+            return View(objInfo);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(Section ObjSection)
+        {
+
+            ObjSection.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjSection, "api/Performance/PerformanceSectionAddOrUpdate", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("PerformanceSectionList", new { data = 1, id = ObjSection.ReviewFormId });
+            }
+            else
+            {
+                return RedirectToAction("PerformanceSectionList", new { data = 2, id = ObjSection.ReviewFormId });
+            }
+        }
+        public async Task<IActionResult> StaffPerformanceDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/DeletePerformanceInfo{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("PerformanceList", new { data = 3 });
+        }
+
+        public async Task<ActionResult<JsonObject>> StaffPerformanceCheckData(int id, string title)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/PerformanceCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+            return Json(result);
+        }
+
+
+
+
+
+        private async Task<SectionAnswer> GetPerformanceStaffById(int id)
+        {
+            SectionAnswer ObjSectionAnswer = new SectionAnswer();
+
+            ObjSectionAnswer = await _APIHelper.CallApiAsyncGet<SectionAnswer>($"api/Performance/GetPerformanceSectionInfoId{id}", HttpMethod.Get);
+            return ObjSectionAnswer;
+        }
+
+
+
+
+
+        #endregion
+
+        // Code for save images into database
+
+        private string uploadImage(string name, IFormFile file, string root)
         {
 
             try

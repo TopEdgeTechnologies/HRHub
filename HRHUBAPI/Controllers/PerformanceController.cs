@@ -373,6 +373,106 @@ namespace HRHUBAPI.Controllers
         }
         #endregion
 
+        #region Staff Performance Evaluation    
+
+
+
+
+        [HttpGet("GetSectionQuestionList{CompanyId}/{ReviewFormId}")]
+        public async Task<ActionResult<List<SectionQuestion>>> GetSectionQuestionList(int CompanyId,int ReviewFormId)
+        {
+
+            return await new SectionAnswer().GetSectionQuestion(CompanyId, ReviewFormId, _context);
+        }
+
+
+
+
+
+        [HttpGet("GetStaffProfileId{id}")]
+        public async Task<ActionResult<SectionAnswer>> GetStaffProfileId(int id)
+        {
+            var result = await new SectionAnswer().GetStaffProfile(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+        //[HttpPost("PerformanceSectionAddOrUpdate")]
+        //public async Task<ActionResult<Section>> PerformanceSectionAddOrUpdate(Section obj)
+        //{
+
+
+        //    var result = await new Section().PostSection(obj, _context);
+        //    if (result != null && result.Flag == 2)
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Update Successfully!"
+        //        });
+        //    else
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Insert Successfully!"
+        //        });
+
+
+        //}
+
+        //[HttpGet("DeletePerformanceSectionInfo{id}/{UserId}")]
+        //public async Task<ActionResult<Section>> DeletePerformanceSectionInfo(int id, int UserId)
+        //{
+        //    var result = await new Section().DeleteSectionInfo(id, UserId, _context);
+        //    if (result != null && id > 0)
+        //        return Ok(result);
+
+        //    return NotFound("Data Not Found!");
+        //}
+
+
+        //[HttpGet("PerformanceSectionCheckData{id}/{title}")]
+        //public async Task<ActionResult<Section>> PerformanceSectionCheckData(int id, string title)
+        //{
+        //    if (await new Section().AlreadyExist(id, title, _context))
+        //    {
+        //        return Ok(new
+        //        {
+
+        //            Success = true,
+        //            Message = "Section Already Exist!"
+
+
+        //        });
+        //    }
+        //    else
+        //    {
+
+        //        return Ok(new
+        //        {
+
+        //            Success = false,
+        //            Message = "Not found"
+
+
+        //        });
+        //    }
+
+        //}
+
+
+
+
+
+
+
+
+
+        #endregion
+
 
     }
 }

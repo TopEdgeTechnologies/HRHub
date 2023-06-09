@@ -782,9 +782,11 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AnswerComments).IsUnicode(false);
             entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
             entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
             entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<SectionQuestion>(entity =>
