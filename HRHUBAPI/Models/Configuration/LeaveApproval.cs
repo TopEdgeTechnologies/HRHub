@@ -22,6 +22,20 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? LeaveApprovalDate{ get; set; }
         [NotMapped]
+        public int? LeaveTypeId { get; set; }
+        [NotMapped]
+        public int? CreatedBy { get; set; }
+        [NotMapped]
+        public int? ApplicantStaffId { get; set; }
+        [NotMapped]
+        public DateTime? StartDate { get; set; }
+        [NotMapped]
+        public DateTime? EndDate { get; set; }
+        [NotMapped]
+        public bool? MarkAsShortLeave { get; set; }
+        [NotMapped]
+        public bool? MarkAsHalfLeave { get; set; }
+        [NotMapped]
         public string? LeaveForwardDate { get; set; }
 
 
@@ -49,7 +63,7 @@ namespace HRHUBAPI.Models
                                       ApprovedByStaffName = ct.FirstName,
                                       LeaveApprovalDate = la.ApprovalDate == null? "DD-MMM-YYYY" : Convert.ToDateTime(la.ApprovalDate).ToString("dd-MMM-yyyy"),
 
-                                      ApprovedByStaffSnap = string.IsNullOrWhiteSpace(cct.SnapPath.ToString()) ? "/Images/Avatar.png" : cct.SnapPath.ToString(),
+                                      ApprovedByStaffSnap = string.IsNullOrWhiteSpace(cct.SnapPath) ? "/Images/Avatar.png" : cct.SnapPath.ToString(),
                                       ApprovedByDesignation = cctt.Title,
                                       Remarks = la.Remarks,
                                       LeaveStatusId = la.LeaveStatusId

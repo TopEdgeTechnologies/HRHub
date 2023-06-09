@@ -1,12 +1,146 @@
 ﻿@model HRHUBAPI.Models.Leave
 
+
+
 <style>
-    .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
+    .SumoSelect>.CaptionCont>span.placeholder {
+        color: white !important
+    }
+     .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
         background-color: #3366FF !important;
         color: white !important
     }
 
+    .child-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .personal-info li .text {
+        color: #888888;
+        display: block;
+        overflow: hidden;
+    }
+
+    .img-fit {
+        object-fit: cover;
+    }
+
+    .border-dashed-right {
+        border-right: 2px dashed #cccccc;
+    }
+
+    .border-dashed-top {
+        border-top: 2px dashed #cccccc;
+    }
+
+    .arrow-ribbone-left.bg-danger:before {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        content: "";
+        right: -12px;
+        border-top: 12px solid transparent;
+        border-left: 12px solid #f7284a;
+        ;
+        border-bottom: 12px solid transparent;
+        width: 0;
+    }
+
+    .message-feed:not(.right) .mf-content:before {
+        content: "";
+        position: absolute;
+        top: 9px;
+        border-bottom: 8px solid #128af9;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        right: auto;
+        left: -12px;
+        transform: rotate(-90deg);
+        display: block;
+    }
+
+    .comment-section {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        border: 2px solid #5fb2ff;
+        border-radius: 45px;
+        padding: 9px 9px;
+        margin-bottom: 1rem;
+    }
+
+    input.comment-input {
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 7px 10px;
+        font-size: 1.2rem;
+    }
+
+        input.comment-input::placeholder {
+            font-size: 1.1rem
+        }
+
+    .comment-icons {
+        display: flex;
+    }
+
+    .btn-icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: #e5f3ff;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-right: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+
+    a.attachement-btn {
+        width: 105px;
+        text-align: center;
+        border: 1px solid #e5f3ff;
+        padding: 2px 9px;
+        border-radius: 45px;
+        margin-right: 9px;
+        background: #e5f3ff;
+    }
+
+    ul.timeline > li.resignation-pending:before {
+        content: " ";
+        background: #f7284a;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 4px solid #fdedef;
+        left: -2px;
+        width: 20px;
+        height: 20px;
+        z-index: 1;
+        margin: 2px;
+    }
+
+    ul.timeline > li.resignation-approved:before {
+        content: " ";
+        background: #0dcd94;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 4px solid #fdedef;
+        left: -2px;
+        width: 20px;
+        height: 20px;
+        z-index: 1;
+        margin: 2px;
+    }
 </style>
+
 
 <!-- Row -->
 <div class="row">
@@ -28,6 +162,18 @@
                             if (Count > 4) break;
                             <div class="col-xl-3 col-lg-6 col-md-12">
                                 <div class="card border p-0 shadow-none">
+                                    <input type="hidden" id="CardStaffID" value="@item.StaffId" />
+                                    <input type="hidden" id="CardStaffName" value="@item.StaffName" />
+                                    <input type="hidden" id="CardStaffSnap" value="@item.StaffSnap" />
+                                    <input type="hidden" id="CardLeaveTypeID" value="@item.LeaveTypeId" />
+                                    <input type="hidden" id="CardLeaveType" value="@item.LeaveTypeTitle" />
+                                    <input type="hidden" id="CardStartDate" value="@item.LeaveStartDate" />
+                                    <input type="hidden" id="CardEndDate" value="@item.LeaveEndDate" />
+                                    <input type="hidden" id="CardDays" value="@item.Days" />
+                                    <input type="hidden" id="CardHalfDay" value="@item.MarkAsHalfLeave" />
+                                    <input type="hidden" id="CardShortDay" value="@item.MarkAsShortLeave" />
+                                    <input type="hidden" id="CardDepartment" value="@item.Department" />
+                                    <input type="hidden" id="CardDesignation" value="@item.Designation" />
                                     <div class="card-header border-0">
                                         <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h3 class="card-title">@item.LeaveTypeTitle Leave</h3></a>
                                     </div>
@@ -49,7 +195,7 @@
                                             <small class="text-muted fs-11">Applied On: @item.LeaveAppliedOnDate</small>
                                         </div>
                                         <div class="progress progress-sm mb-2">
-                                            <div class="progress-bar bg-success " style="width: @item.ConsumedLeaves %"></div>
+                                            <div class="progress-bar bg-success " style="width: @item.ConsumedLeaves%"></div>
                                         </div>
                                         <div class="d-flex align-items-end justify-content-between mb-0">
                                             <h6 class="fs-12 mb-0">Remaining Leaves</h6>
@@ -62,9 +208,9 @@
                                     </div>
                                     <div class="card-footer p-0 border-top-0">
                                         <div class="btn-group w-100 leaves-btns">
-                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,3)" class="btn btn-outline-light w-50 text-success">Accept</a>
-                                            <a onclick="showforwardleavemodel(@item.LeaveId)" class="btn btn-outline-light w-50 text-warning">Forward</a>
-                                            <a onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="btn btn-outline-light w-50 text-danger">Reject</a>
+                                            <a onclick="showleaveApprovalmodel(this,@item.LeaveId,3,1)" class="btn btn-outline-light w-50 text-success">Accept</a>
+                                            <a onclick="showforwardleavemodel(this ,@item.LeaveId,1)" class="btn btn-outline-light w-50 text-warning">Forward</a>
+                                            <a onclick="showleaveApprovalmodel(this ,@item.LeaveId,4,1)" class="btn btn-outline-light w-50 text-danger">Reject</a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,21 +273,35 @@
                                     </div>
                                     <div class="col-md-12 col-lg-2">
                                         <div class="form-group">
-                                            <label class="form-label">Date From</label>
-                                            <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                            <label class="form-label">Month</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend border px-1 py-1 border-1 rounded">
+                                                    <div class="input-group-text px-2 bg-white border-0">
+                                                        <label class="custom-switch">
+                                                            <input type="checkbox" id="date-checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator"></span>
+                                                        </label>
+                                                    </div>
+                                                    <input id="date-field" type="month" class="form-control px-1" placeholder="select date">
+                                                </div>
+                                            </div>
+
+
+                                            @*<label class="form-label">Date From</label>
+                                        <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />*@
                                         </div>
                                     </div>
-                                    <div class="col-md-12 col-lg-2">
-                                        <div class="form-group">
-                                            <label class="form-label">Date To</label>
-                                            <input type="date" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
-                                        </div>
-                                    </div>
+                                    @* <div class="col-md-12 col-lg-2">
+                                <div class="form-group">
+                                <label class="form-label">Date To</label>
+                                <input type="date" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                </div>
+                                </div>*@
 
                                     <div class="col-md-12 col-lg-2">
                                         <div class="form-group mt-5">
-                                            <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
-                                            <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+                                            <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                            <button type="button" onclick="SearchClear()" class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
 
 
 
@@ -190,9 +350,10 @@
                                                     <img src="@item.StaffSnap" alt="img" class="">
                                                 </div>
                                                 <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h6 class="mb-0 fs-13 font-weight-semibold">@item.StaffRegistrationNo - @item.StaffName</h6></a>
+                                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h6 class="mb-0 fs-13 font-weight-semibold" data-staffid="@item.StaffId">@item.StaffRegistrationNo - @item.StaffName</h6></a>
                                                     <div class="clearfix"></div>
-                                                    <small class="text-muted">@item.Designation</small>
+                                                    <small class="text-muted designation">@item.Designation</small>
+                                                    <small hidden class="text-muted department">@item.Department</small>
                                                 </div>
                                             </div>
 
@@ -201,7 +362,7 @@
                                         <td>
                                             <div class="d-flex">
                                                 <div class="me-3 d-block">
-                                                    <span class="mb-0 fs-15 ">@item.LeaveTypeTitle</span>
+                                                    <span class="mb-0 fs-15 " data-leavetypeid="@item.LeaveTypeId">@item.LeaveTypeTitle</span>
                                                     <div class="clearfix"></div>
                                                     <small class="text-muted"> @item.LeaveAppliedOnDate</small>
                                                 </div>
@@ -209,30 +370,8 @@
 
 
                                         </td>
-                                        @*<td>@item.@item.LeaveStartDate</td>
-                                <td>@item.LeaveEndDate</td>*@
-                                        @{
-                //    if (item.LeaveStartDate == item.LeaveEndDate)
-                                            //    {
-                                            //        <td>@item.LeaveStartDate</td>
-                                            //    }
-                                            //    else
-                                            //    {
-                                            //        <td>
-                                            //            <div class="d-flex">
-                                            //                <div class="me-3 d-block">
-                                            //                    <span class="mb-0 fs-15 "><small class="text-muted">From:</small> @item.LeaveStartDate</span>
-                                            //                    <div class="clearfix"></div>
 
-                                            //                    <span class="mb-0 fs-15 "><small class="text-muted">To:</small> @item.LeaveEndDate</span>
-
-                                            //                </div>
-                                            //            </div>
-                                            //        </td>
-                                            //    }
-                                        }
-
-                                        <td @*class="font-weight-semibold"*@>@item.Days</td>
+                                        <td data-startdate="@item.LeaveStartDate" data-enddate="@item.LeaveEndDate" data-halfleave="@item.MarkAsHalfLeave" data-shortleave="@item.MarkAsShortLeave">@item.Days</td>
                                         <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@item.LeaveSubject</td>
                                         @*<td>@item.LeaveAppliedOnDate</td>*@
 
@@ -257,20 +396,20 @@
                                         }
 
                                         <td class="text-start d-flex">
-                                            <a href="#" onclick="showleaveApprovalmodel(@item.LeaveId,3)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
+                                            <a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,3,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
                                                 <i class="feather feather-check text-success mt-1"></i>
                                             </a>
-                                            <a href="#" onclick="showleaveApprovalmodel(@item.LeaveId,4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
+                                            <a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,4,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
                                                 <i class="feather feather-x text-danger mt-1"></i>
                                             </a>
                                             @if (item.LeaveStatusId == 1) // New
                                             {
-                                                <a href="#" onclick="showforwardleavemodel(@item.LeaveId)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
+                                                <a href="#" onclick="showforwardleavemodel(this,@item.LeaveId,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
                                                     <i class="text-warning fe fe-arrow-right-circle mt-1"></i>
                                                 </a>
-                                                <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                                @*<a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
                                                     <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                </a>
+                                                </a>*@
                                             }
                                             <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
                                                 <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
@@ -301,10 +440,67 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <input type="hidden" id="LeaveID" />
-            <input type="hidden" id="LeaveStatusID" />
+            <input type="hidden" id="LeaveID_Approval" />
+            <input type="hidden" id="LeaveStatusID_Approval" />
+            <input type="hidden" id="StaffID_Approval" />
+            <input type="hidden" id="LeaveTypeID_Approval" />
+            <input type="hidden" id="StartDate_Approval" />
+            <input type="hidden" id="EndDate_Approval" />
+            <input type="hidden" id="HalfDay_Approval" />
+            <input type="hidden" id="ShortDay_Approval" />
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 border-dashed-right">
+                        <div class="row">
+                            <div class="col-md-4 text-center text-md-start">
+                                <img id="StaffImg" src="~/assets/images/users/staff-pic.jpg" class="img-fluid img-fit rounded-circle" style="width:140px; height:140px" />
+                            </div>
+                            <div class="col-md-8 mt-3">
+                                <div class="profile-info text-center text-md-start mt-2 mt-md-0">
+                                    <h3 class="user-name fs-20 mb-2" id="Staff">John Doe</h3>
+                                    <h6 class="text-primary fs-18 mb-2" id="Department">Software Department</h6>
+                                    <small class="text-muted fs-16 mb-1" id="Designation">Web Designer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Leave Type:</div>
+                                    </div>
+                                    <div class="col-6 col-md-7">
+                                        <div class="text"><span id="LeaveType"></span></div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Leave Date:</div>
+                                    </div>
+                                    <div class="col-6 col-md-7">
+                                        <div class="text"><span id="LeaveDateRange"></span></div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-6 col-md-5">
+                                        <div class="title mb-1 font-weight-bold fs-16">Days:</div>
+                                    </div>
+                                    <div class="col-6 col-md-7">
+                                        <div class="text"><span id="LeaveDays"></span></div>
+                                    </div>
+                                </div>
+                            </li>
 
+                        </ul>
+                    </div>
+
+                </div>
                 <div class="p-0 mt-3">
                     <div class="form-group">
                         <label class="form-label">Remarks</label>
@@ -336,12 +532,69 @@
                 </div>
                 <input type="hidden" asp-for="LeaveId" />
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 border-dashed-right">
+                            <div class="row">
+                                <div class="col-md-4 text-center text-md-start">
+                                    <img id="forwardStaffImg" src="~/assets/images/users/staff-pic.jpg" class="img-fluid img-fit rounded-circle" style="width:140px; height:140px" />
+                                </div>
+                                <div class="col-md-8 mt-3">
+                                    <div class="profile-info text-center text-md-start mt-2 mt-md-0">
+                                        <h3 class="user-name fs-20 mb-2" id="forwardStaff">John Doe</h3>
+                                        <h6 class="text-primary fs-18 mb-2" id="forwardDepartment">Software Department</h6>
+                                        <small class="text-muted fs-16 mb-1" id="forwardDesignation">Web Designer</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-6 col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Leave Type:</div>
+                                        </div>
+                                        <div class="col-6 col-md-7">
+                                            <div class="text"><span id="forwardLeaveType"></span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-6 col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Leave Date:</div>
+                                        </div>
+                                        <div class="col-6 col-md-7">
+                                            <div class="text"><span id="forwardLeaveDateRange"></span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-6 col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Days:</div>
+                                        </div>
+                                        <div class="col-6 col-md-7">
+                                            <div class="text"><span id="forwardLeaveDays"></span></div>
+                                        </div>
+                                    </div>
+                                </li>
 
+                            </ul>
+                        </div>
+
+                    </div>
                     <div class="p-0 mt-3">
                         <div class="form-group">
                             <label class="form-label">Forward to Staff:</label>
-                            <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+
+                             <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
                             </select>
+
+
+                            @*<select asp-for="ForwardToStaffID" multiple="multiple" class="SlectBox-grp-src" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                            </select>*@
+
                         </div>
                     </div>
                 </div>
@@ -457,6 +710,7 @@
 
             }
             $('#myTable').DataTable();
+
             $('#LeaveStatusId').select2();
             $('#LeaveTypeId').select2();
             $('#StaffId').select2();
@@ -470,37 +724,225 @@
 
             ////////////////////////////////////
 
+            var dateCheckBox = $('#date-checkbox');
+            var dateField = $('#date-field');
+            dateCheckBox.prop('checked', false);
+            dateCheckBox.on('change', function () {
+                if (dateCheckBox.is(':checked')) {
+                    dateField.prop('disabled', false);
+                }
+                else {
+                    dateField.prop('disabled', true);
+
+                }
+            })
+
 
             $("#ForwardToStaffID").select2({
                 placeholder: "Select Item",
                 width: '100%',
                 allowClear: true
             }).val('').trigger('change');
+
         })
+        var dataTable = $('#myTable').DataTable();
+        var originalData = dataTable.rows().data().toArray();
+        var originalHTML = $('#myTable tbody').html();
 
 
-
-
-        function showleaveApprovalmodel(leaveid, approvalstatusid) {
+        function showleaveApprovalmodel(control, leaveid, approvalstatusid, fromcarddata) {
             debugger;
             $("#Remarks").val('')
-            $("#LeaveID").val(leaveid);
-            $("#LeaveStatusID").val(approvalstatusid);
             $("#Remarks").css("border-color", "#ddd");
-            var currentRow = $('#hr-leaves tbody').closest('tr');
-            var col1 = currentRow.find("td div.d-flex div h6.staff").text();
+
+            if (fromcarddata == 1) {
+
+                var card = $(control).closest('.card');
+                var staffimg = card.find("#CardStaffSnap").val();
+                var staffid = card.find("#CardStaffID").val();
+                var staffname = card.find("#CardStaffName").val();
+                var designation = card.find("#CardDesignation").val();
+                var department = card.find("#CardDepartment").val();
+                var leavetypeid = card.find("#CardLeaveTypeID").val();
+                var leavetypetitle = card.find("#CardLeaveType").val();
+                var days = card.find("#CardDays").val();
+                var startdate = card.find("#CardStartDate").val();
+                var enddate = card.find("#CardEndDate").val();
+                var halfleave = card.find("#CardHalfDay").val();
+                var shortleave = card.find("#CardShortDay").val();
+
+            }
+            else {
+                var currentRow = $(control).closest('tr');
+                var staffimg = currentRow.find('td:nth-child(2) .table_img img').attr('src');
+                var staffid = currentRow.find('td:nth-child(2) h6').attr("data-staffid");
+                var staffname = currentRow.find('td:nth-child(2) h6').text();
+                var designation = currentRow.find("td div .designation").text();
+                var department = currentRow.find("td div .department").text();
+                var leavetypeid = currentRow.find('td:nth-child(3) span').attr("data-leavetypeid");
+                var leavetypetitle = currentRow.find('td:nth-child(3) span').text();
+                var days = currentRow.find('td:nth-child(4)').text();
+                var startdate = currentRow.find('td:nth-child(4)').attr("data-startdate");
+                var enddate = currentRow.find('td:nth-child(4)').attr("data-enddate");
+                var halfleave = currentRow.find('td:nth-child(4)').attr("data-halfleave");
+                var shortleave = currentRow.find('td:nth-child(4)').attr("data-shortleave");
+            }
+
+            $("#LeaveID_Approval").val(leaveid)
+            $("#LeaveStatusID_Approval").val(approvalstatusid)
+            $("#StaffID_Approval").val(staffid)
+            $("#LeaveTypeID_Approval").val(leavetypeid)
+            $("#StartDate_Approval").val(startdate)
+            $("#EndDate_Approval").val(enddate)
+            $("#HalfDay_Approval").val(halfleave)
+            $("#ShortDay_Approval").val(shortleave)
+
+            $("#Staff").text(staffname)
+            $("#StaffImg").attr('src', staffimg);
+            $("#Designation").text(designation);
+            $("#Department").text(department);
+            $("#LeaveType").text(leavetypetitle);
+            $("#LeaveDays").text(days);
+            if (startdate == enddate) {
+                $("#LeaveDateRange").text(startdate);
+            }
+            else {
+                $("#LeaveDateRange").text(startdate + " - " + enddate);
+            }
+
+
             $("#leaveapprovalmodal").modal('show');
 
         }
 
 
-        function showforwardleavemodel(leaveid) {
+        function showforwardleavemodel(control, leaveid, fromcarddata) {
             debugger;
             $("#Remarks").val('')
             $("#LeaveId").val(leaveid);
+
+            if (fromcarddata == 1) {
+                var card = $(control).closest('.card');
+                var staffimg = card.find("#CardStaffSnap").val();
+                var staffid = card.find("#CardStaffID").val();
+                var staffname = card.find("#CardStaffName").val();
+                var designation = card.find("#CardDesignation").val();
+                var department = card.find("#CardDepartment").val();
+                var leavetypeid = card.find("#CardLeaveTypeID").val();
+                var leavetypetitle = card.find("#CardLeaveType").val();
+                var days = card.find("#CardDays").val();
+                var startdate = card.find("#CardStartDate").val();
+                var enddate = card.find("#CardEndDate").val();
+                var halfleave = card.find("#CardHalfDay").val();
+                var shortleave = card.find("#CardShortDay").val();
+            }
+            else {
+                var currentRow = $(control).closest('tr');
+                var staffimg = currentRow.find('td:nth-child(2) .table_img img').attr('src');
+                var staffid = currentRow.find('td:nth-child(2) h6').attr("data-staffid");
+                var staffname = currentRow.find('td:nth-child(2) h6').text();
+                var designation = currentRow.find("td div .designation").text();
+                var department = currentRow.find("td div .department").text();
+                var leavetypeid = currentRow.find('td:nth-child(3) span').attr("data-leavetypeid");
+                var leavetypetitle = currentRow.find('td:nth-child(3) span').text();
+                var days = currentRow.find('td:nth-child(4)').text();
+                var startdate = currentRow.find('td:nth-child(4)').attr("data-startdate");
+                var enddate = currentRow.find('td:nth-child(4)').attr("data-enddate");
+                var halfleave = currentRow.find('td:nth-child(4)').attr("data-halfleave");
+                var shortleave = currentRow.find('td:nth-child(4)').attr("data-shortleave");
+
+            }
+
+            $("#forwardStaff").text(staffname)
+            $("#forwardStaffImg").attr('src', staffimg);
+            $("#forwardDesignation").text(designation);
+            $("#forwardDepartment").text(department);
+            $("#forwardLeaveType").text(leavetypetitle);
+            $("#forwardLeaveDays").text(days);
+            if (startdate == enddate) {
+                $("#forwardLeaveDateRange").text(startdate);
+            }
+            else {
+                $("#forwardLeaveDateRange").text(startdate + " - " + enddate);
+            }
+
+
             $("#leaveforwardmodal").modal('show');
 
         }
+
+        function postdata() {
+            debugger
+
+            if ($("#Remarks").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Remarks"
+                });
+                $("#Remarks").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Remarks").css("border-color", "#ddd");
+            }
+            //var Data = { id: $("#LeaveID").val(), leavestatusid: $("#LeaveStatusID").val(), remarks: $("#Remarks").val() }
+
+
+            var Data = {
+                id: $("#LeaveID_Approval").val(),
+                staffid: $("#StaffID_Approval").val(),
+                leavetypeid: $("#LeaveTypeID_Approval").val(),
+                leavestatusid: $("#LeaveStatusID_Approval").val(),
+                remarks: $("#Remarks").val(),
+                startdate: $("#StartDate_Approval").val(),
+                enddate: $("#EndDate_Approval").val(),
+                markasshortleave: $("#HalfDay_Approval").val(),
+                markashalfleave: $("#ShortDay_Approval").val()
+            }
+
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/SaveLeaveApprovalData",
+                type: "Post",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var b = JSON.parse(data)
+                        if (b.success) {
+
+
+                            var url = '@Url.Action("HRLeaveList", "Leave")';
+                            window.location.href = url;
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                        }
+                        else {
+                            $.growl.warning({
+                                message: b.message
+                            });
+
+                            var url = '@Url.Action("HRLeaveList", "Leave")';
+                            window.location.href = url;
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
 
         function forwardleaves() {
             debugger
@@ -526,20 +968,16 @@
 
         }
 
+
         function SearchLeave() {
             debugger;
             var obj = {
-
                 StaffId: $("#StaffId").val(),
                 LeaveTypeId: $("#LeaveTypeId").val(),
                 LeaveStatusId: $("#LeaveStatusId").val(),
-                StartDate: $("#StartDate").val(),
-                EndDate: $("#EndDate").val(),
-
+                Month: $("#date-field").val(),
+                DateFilter: $('#date-checkbox').prop('checked')
             }
-
-
-
             $.ajax({
                 url: "/Leave/SearchList",
                 type: "POST",
@@ -563,14 +1001,16 @@
                             action += '';
                             action += '<tr><td> ' + count + ' </td>';
 
-                            action += '<td> <div class="d-flex"> <div class="table_img brround bg-light me-3" > <img src="../assets/images/png/task1.png" alt = "img" class="" > </div>';
+                            action += '<td> <div class="d-flex"> <div class="table_img brround bg-light me-3" > <img src=' + listleave[i]["staffSnap"] + ' alt = "img" class="" > </div>';
+
                             action += '<div class="me-3 mt-0 mt-sm-2 d-block">';
-                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  > <h6 class="mb-0 fs-13 font-weight-semibold" > ' + listleave[i]["staffRegistrationNo"] + ' - ' + listleave[i]["staffName"] + '</h6></a >';
-                            action += '<div class="clearfix"></div> <small class="text-muted" > ' + listleave[i]["designation"] + ' </small> </div> </div>  </td>';
+                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  > <h6 class="mb-0 fs-13 font-weight-semibold" data-staffid=' + listleave[i]["staffId"] + ' > ' + listleave[i]["staffRegistrationNo"] + ' - ' + listleave[i]["staffName"] + '</h6></a >';
+                            action += '<div class="clearfix"></div> <small class="text-muted" > ' + listleave[i]["designation"] + ' </small> <small hidden class="text-muted department">' + listleave[i]["dapartment"] + '</small></div> </div>  </td>';
 
 
-                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listleave[i]["leaveTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
-                            action += '<td> ' + listleave[i]["days"] + '</td>';
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <span class="mb-0 fs-15" data-leavetypeid=' + listleave[i]["leaveTypeId"] + ' > ' + listleave[i]["leaveTypeTitle"] + '</span><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
+
+                            action += '<td data-startdate=' + listleave[i]["leaveStartDate"] + ' data-enddate=' + listleave[i]["leaveEndDate"] + ' data-halfleave=' + listleave[i]["markAsHalfLeave"] + ' data-shortleave=' + listleave[i]["markAsShortLeave"] + ' > ' + listleave[i]["days"] + '</td>';
                             action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listleave[i]["leaveSubject"] + '</td>';
 
                             if (listleave[i]["leaveStatusId"] == 1) {
@@ -604,8 +1044,8 @@
                                 action += '<a href="#" onclick="showforwardleavemodel(' + listleave[i]["leaveId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
                                 action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
 
-                                action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                                //action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
+                                //action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
                             }
 
 
@@ -615,10 +1055,9 @@
 
                         }
 
-                        $('#myTable tbody').html(action);
+                        //$('#myTable tbody').html(action);
 
-
-
+                        table.rows.add($(action)).draw();
                     }
 
 
@@ -632,6 +1071,21 @@
 
 
 
+        }
+
+        function SearchClear() {
+            $('#LeaveStatusId').select2().val('').trigger('change');
+            $('#LeaveTypeId').select2().val('').trigger('change');
+            $('#StaffId').select2().val('').trigger('change');
+            $('#date-field').val('');
+            $('#date-checkbox').prop('checked', false);
+            $('#date-field').prop('disabled', false);
+
+            //Restore the original data
+            dataTable.clear().rows.add(originalData).draw();
+
+            $('#myTable tbody').html(originalHTML);
+            
         }
 
 
@@ -690,62 +1144,6 @@
 
 
         //}
-
-        function postdata() {
-            debugger
-
-            if ($("#Remarks").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Remarks"
-                });
-                $("#Remarks").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#Remarks").css("border-color", "#ddd");
-            }
-            var Data = { id: $("#LeaveID").val(), leavestatusid: $("#LeaveStatusID").val(), remarks: $("#Remarks").val() }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Leave/SaveLeaveApprovalData",
-                type: "Post",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
-                            // $.growl.warning(b.message);
-                            $.growl.warning({
-                                message: b.message
-                            });
-
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
-
-                        }
-                        else {
-                            $.growl.warning({
-                                message: b.message
-                            });
-
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
-
-
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            })
-
-
-        }
 
         function ViewLeave(leaveid) {
             debugger

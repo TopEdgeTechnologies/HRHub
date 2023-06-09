@@ -28,6 +28,13 @@ namespace HRHUBAPI.Controllers
             return await new Leave().GetLeave(CompanyId,StaffId, _context);
         }
 
+        [HttpGet("GetHRLeaveInfos{CompanyId}")]
+        public async Task<ActionResult<List<Leave>>> GetHRLeaveInfos(int CompanyId)
+        {
+
+            return await new Leave().GetHRLeave(CompanyId,_context);
+        }
+
         //[HttpGet("GetNewOrPendingLeaveInfos{CompanyId}")]
         //public async Task<ActionResult<List<Leave>>> GetNewOrPendingLeaveInfos(int CompanyId)
         //{
@@ -106,29 +113,11 @@ namespace HRHUBAPI.Controllers
         [HttpGet("LeaveCheckData{staffid}/{leavetypeid}")]
         public async Task<ActionResult<JsonObject>> LeaveCheckData(int staffid,int leavetypeid)
         {
-            if (await new Leave().CheckLeave(staffid,leavetypeid,  _context))
-            {
-                return Ok(new
-                {
+            var result = await new Leave().CheckLeaveCount(staffid, leavetypeid, _context);
+            if (result !=null)
+                return Ok(result);
 
-                    Success = true,
-                    Message = "You Have Consumed All leave!"
-
-
-                });
-            }
-            else
-            {
-
-                return Ok(new
-                {
-
-                    Success = false,
-                    Message = "Not found"
-
-
-                });
-            }
+            return NotFound("Data Not Found!");
 
 
         }
@@ -247,10 +236,10 @@ namespace HRHUBAPI.Controllers
 
         // search leave by LeaveType , LeaveStatus and Date
 
-        [HttpGet("SearchAllLeaves{CompanyId}/{StaffId}/{LeaveTypeId}/{LeaveStatusId}/{StartDate}/{EndDate}")]
-        public async Task<ActionResult<List<Leave>>> SearchAllLeaves(int CompanyId, int StaffId,int LeaveTypeId, int LeaveStatusId, DateTime StartDate, DateTime EndDate)
+        [HttpGet("SearchAllLeaves{CompanyId}/{StaffId}/{LeaveTypeId}/{LeaveStatusId}/{Month}/{DateFilter}")]
+        public async Task<ActionResult<List<Leave>>> SearchAllLeaves(int CompanyId, int StaffId,int LeaveTypeId, int LeaveStatusId, DateTime Month, bool DateFilter)
         {
-            var result = await new Leave().SearchLeaves(CompanyId, StaffId, LeaveTypeId, LeaveStatusId, StartDate, EndDate, _context);
+            var result = await new Leave().SearchLeaves(CompanyId, StaffId, LeaveTypeId, LeaveStatusId, Month, DateFilter, _context);
             if (result != null)
                 return Ok(result);
 
