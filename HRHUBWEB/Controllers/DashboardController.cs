@@ -1,11 +1,13 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
+using HRHUBWEB.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 
 namespace HRHUBWEB.Controllers
 {
+    [CustomAuthorization]
     public class DashboardController : Controller
     {
         private IWebHostEnvironment _webHostEnvironment;
