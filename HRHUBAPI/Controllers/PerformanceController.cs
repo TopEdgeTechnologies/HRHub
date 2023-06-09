@@ -19,61 +19,61 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        //#region PerformanceAppraisal
+        #region PerformanceAppraisal
 
-        //[HttpGet("GetPerformanceAppraisalInfos")]
-        //public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetPerformanceAppraisalInfos()
-        //{
+        [HttpGet("GetPerformanceAppraisalInfos")]
+        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetPerformanceAppraisalInfos()
+        {
 
-        //    return await new StaffReviewFormProcessed().GetPerformanceAppraisal( _context);
-        //}
+            return await new StaffReviewFormProcessed().GetPerformanceAppraisal(_context);
+        }
 
-        ////[HttpGet("GetPerformanceReviewSections{Id}/{staffid}")]
-        ////public async Task<ActionResult<List<Section>>> GetPerformanceReviewSections(int Id, int staffid)
-        ////{
-        ////    var result = await new StaffReviewFormProcessed().GetReviewSections(Id,staffid,  _context);
-        ////    if (result != null)
-        ////        return Ok(result);
+        [HttpGet("GetPerformanceReviewSections{Id}/{staffid}")]
+        public async Task<ActionResult<List<Section>>> GetPerformanceReviewSections(int Id, int staffid)
+        {
+            var result = await new StaffReviewFormProcessed().GetReviewSections(Id, staffid, _context);
+            if (result != null)
+                return Ok(result);
 
-        ////    return NotFound();
+            return NotFound();
 
+        }
 
-        //}
-        //[HttpPost("PostStaffAppraisal")]
-        //public async Task<ActionResult<Appraisal>> PostStaffAppraisal(List<Appraisal> list)
-        //{
-        //    var result = await new StaffReviewFormProcessed().PostStaffAppraisal(list, _context);
-        //    if (result != null && result.AppraisalId > 0)
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Update Successfully!"
-        //        });
-        //    else
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Insert Successfully!"
-        //        });
-        //}
-        //[HttpPost("EditStaffAppraisal")]
-        //public async Task<ActionResult<Appraisal>> EditStaffAppraisal(Appraisal obj)
-        //{
-        //    var result = await new StaffReviewFormProcessed().EditStaffAppraisal(obj, _context);
-        //    if (result != null && result.AppraisalId > 0)
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Update Successfully!"
-        //        });
-        //    else
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Insert Successfully!"
-        //        });
-        //}
-        //#endregion
+        [HttpPost("PostStaffAppraisal")]
+        public async Task<ActionResult<Appraisal>> PostStaffAppraisal(List<Appraisal> list)
+        {
+            var result = await new StaffReviewFormProcessed().PostStaffAppraisal(list, _context);
+            if (result != null && result.AppraisalId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+        }
+        [HttpPost("EditStaffAppraisal")]
+        public async Task<ActionResult<Appraisal>> EditStaffAppraisal(Appraisal obj)
+        {
+            var result = await new StaffReviewFormProcessed().EditStaffAppraisal(obj, _context);
+            if (result != null && result.AppraisalId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+        }
+        #endregion
 
         #region Performance
 
@@ -182,7 +182,7 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<List<Section>>> GetPerformanceSectionInfos(int ReviewFormId)
         {
 
-            return await new Section().GetSection(ReviewFormId,_context);
+            return await new Section().GetSection(ReviewFormId, _context);
         }
 
 
@@ -224,7 +224,7 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<Section>> DeletePerformanceSectionInfo(int id, int UserId)
         {
             var result = await new Section().DeleteSectionInfo(id, UserId, _context);
-            if (result !=null && id > 0)
+            if (result != null && id > 0)
                 return Ok(result);
 
             return NotFound("Data Not Found!");
@@ -268,91 +268,91 @@ namespace HRHUBAPI.Controllers
 
 
 
-		#endregion
+        #endregion
 
-		#region Performance Question
+        #region Performance Question
 
-		[HttpGet("GetQuestionInfos{CompanyId}")]
-		public async Task<ActionResult<List<Question>>> GetQuestionInfos(int CompanyId)
-		{
+        [HttpGet("GetQuestionInfos{CompanyId}")]
+        public async Task<ActionResult<List<Question>>> GetQuestionInfos(int CompanyId)
+        {
 
-			return await new Section().GetQuestion(CompanyId, _context);
-		}
-
-
-		[HttpGet("GetQuestionInfoId{id}")]
-		public async Task<ActionResult<Question>> GetQuestionInfoId(int id)
-		{
-			var result = await new Section().SectionById(id, _context);
-			if (result != null)
-				return Ok(result);
-
-			return NotFound();
+            return await new Section().GetQuestion(CompanyId, _context);
+        }
 
 
-		}
+        [HttpGet("GetQuestionInfoId{id}")]
+        public async Task<ActionResult<Question>> GetQuestionInfoId(int id)
+        {
+            var result = await new Section().SectionById(id, _context);
+            if (result != null)
+                return Ok(result);
 
-		[HttpPost("QuestionAddOrUpdate")]
-		public async Task<ActionResult<Question>> QuestionAddOrUpdate(Question obj)
-		{
-
-
-			var result = await new Section().PostQuestion(obj, _context);
-			if (result != null && result.QuestionId > 0)
-				return Ok(new
-				{
-					Success = true,
-					Message = "Data Update Successfully!"
-				});
-			else
-				return Ok(new
-				{
-					Success = true,
-					Message = "Data Insert Successfully!"
-				});
+            return NotFound();
 
 
-		}
+        }
 
-		[HttpGet("DeleteQuestionInfo{id}/{UserId}")]
-		public async Task<ActionResult<Question>> DeleteQuestionInfo(int id, int UserId)
-		{
-			var result = await new Section().DeleteQuestionInfo(id, UserId, _context);
-			if (result != null && id > 0)
-				return Ok(result);
-
-			return NotFound("Data Not Found!");
-		}
+        [HttpPost("QuestionAddOrUpdate")]
+        public async Task<ActionResult<Question>> QuestionAddOrUpdate(Question obj)
+        {
 
 
-		[HttpGet("QuestionCheckData{id}/{title}/{CompanyId}")]
-		public async Task<ActionResult<Question>> QuestionCheckData(int id, string title,int CompanyId)
-		{
-			if (await new Section().AlreadyExistQuestion(id, title,CompanyId, _context))
-			{
-				return Ok(new
-				{
-
-					Success = true,
-					Message = "Question Already Exist!"
-
-
-				});
-			}
-			else
-			{
-
-				return Ok(new
-				{
-
-					Success = false,
-					Message = "Not found"
+            var result = await new Section().PostQuestion(obj, _context);
+            if (result != null && result.QuestionId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
 
 
-				});
-			}
+        }
 
-		}
+        [HttpGet("DeleteQuestionInfo{id}/{UserId}")]
+        public async Task<ActionResult<Question>> DeleteQuestionInfo(int id, int UserId)
+        {
+            var result = await new Section().DeleteQuestionInfo(id, UserId, _context);
+            if (result != null && id > 0)
+                return Ok(result);
+
+            return NotFound("Data Not Found!");
+        }
+
+
+        [HttpGet("QuestionCheckData{id}/{title}/{CompanyId}")]
+        public async Task<ActionResult<Question>> QuestionCheckData(int id, string title, int CompanyId)
+        {
+            if (await new Section().AlreadyExistQuestion(id, title, CompanyId, _context))
+            {
+                return Ok(new
+                {
+
+                    Success = true,
+                    Message = "Question Already Exist!"
+
+
+                });
+            }
+            else
+            {
+
+                return Ok(new
+                {
+
+                    Success = false,
+                    Message = "Not found"
+
+
+                });
+            }
+
+        }
 
 
 

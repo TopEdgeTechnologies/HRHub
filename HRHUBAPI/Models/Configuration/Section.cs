@@ -16,7 +16,9 @@ namespace HRHUBAPI.Models
 
        
         [NotMapped]
-        public int? Flag { get; set; } 
+        public int? Flag { get; set; }
+        [NotMapped]
+        public decimal? EarnedWeightage { get; set; }
         [NotMapped]
         public string? EmployementType { get; set; }
         [NotMapped]
