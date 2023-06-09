@@ -1,6 +1,8 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 
 namespace HRHUBWEB.Controllers
 {
@@ -39,10 +41,10 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> UpcommingEvent()
+        public async Task<IActionResult> UpcommingEvent( int month)
         {
             string procrdure = "BI.sp_UpcommingEvent";
-            object[] parameters = new object[] { _user.CompanyId ?? 0 };
+            object[] parameters = new object[] { month, _user.CompanyId ?? 0 };
             var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
             return Json(result);
         }
@@ -66,6 +68,17 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
             return Json(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> StaffDailyAttendance(DateTime date)
+        {
+            string procrdure = "BI.sp_staffDailyAttendance";
+            object[] parameters = new object[] { "'"+date.ToString("dd-MMM-yyyy")+"'", _user.CompanyId ?? 0 };
+         
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
 
         public async Task<IActionResult> HR()
         {

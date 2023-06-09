@@ -29,6 +29,9 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult> GetDashboardData(int CompanyId, string ProcedureName, [FromBody] object[] parameters)
         {
 
+
+
+
             string parameterString = string.Join(",", parameters);
             DataTable dataTable = await Task.Run(() => _DbCom.ReturnDataTable(ProcedureName + " " + parameterString));
             var result = _DbCom.GetTableRows(dataTable);

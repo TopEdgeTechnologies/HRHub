@@ -23,12 +23,7 @@
 
                     </div>
 
-
-                    @*  <input asp-for="Title" class="form-control" type="text" placeholder="Enter Designation Title">*@
                 </div>
-
-
-
 
             </div>
             <div class="modal-footer">
@@ -40,6 +35,73 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="ModelEvent">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upcoming Events</h5>
+
+                <div class="card-options col-md-3">
+                    <select id="sumaryMonth" class=" form-control custom-select select2">
+
+                        <option value="1">January  </option>
+                        <option value="2">February</option>
+                        <option value="3">March   </option>
+                        <option value="4">April  </option>
+                        <option value="5">May    </option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September </option>
+                        <option value="10">October  </option>
+                        <option value="11">November </option>
+                        <option value="12">December</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+            <div class="modal-body">
+               
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+
+                           
+
+                       
+                        <div class="table-responsive attendance_table mt-4">
+                            <table class="table mb-0 text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">S.No</th>
+                                        <th class="text-start">Employee</th>
+                                       
+                                        <th class="text-center">Date</th>
+                                        <th class="text-center">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody  id="tblEvent" >
+                                      
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+
+                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -120,7 +182,7 @@
                 <div class="card">
 
                     <div class="card-header border-0 responsive-header">
-                        <h4 class="card-title">Salary Summary Year Wise </h4>
+                        <h4 class="card-title">Salary Summary </h4>
                         <div class="card-options col-md-4">
                             <select id="sumaryYear" class=" form-control custom-select select2">
 
@@ -141,7 +203,7 @@
 
                     <div class="card-body" style="padding-top: 45px;">
                         <div style="height:305px;">
-                            <div id="echart1" class="chartsh "></div>
+                            <div id="echartEmployees" class="chartsh "></div>
                         </div>
 
                     </div>
@@ -153,52 +215,31 @@
         <div class="card overflow-hidden">
             <div class="card-header border-0">
                 <h4 class="card-title">Notice Board</h4>
+               
             </div>
 
-            <div id="NoticeBoarddata" class="overflow-auto" style="height:283px"></div>
+            <div id="NoticeBoarddata" class="overflow-auto" style="height:255px"></div>
         </div>
 
         <div class="card overflow-hidden">
             <div class="card-header border-0">
                 <h4 class="card-title">Upcoming Events</h4>
+                 <a href="#" onclick="allEventLoad()" class="text-muted">  
+                    <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
+                 
+                </a>
             </div>
-
+            <div style="height:214px">
             <ul class="vertical-scroll" id="EventBoarddata">
                 <li class="item">
-                    @*<div class="pt-2">	<div class="list-group"><div class="list-group-item d-flex pt-1 pb-1 border-0"><div class="me-3 me-xs-0"><div class="calendar-icon icons"><div class="date_time bg-warning-transparent"> <span class="date">  7 </span> <span class="month">Jun</span> </div></div></div><div class="ms-1"><div class="h5 fs-14 mb-1"> Muhammad  Touqir </div> <small class="text-muted">28th Birthday Celebration</small></div></div></div></div> </li><li class="item"> <div class="pt-2">	<div class="list-group"><div class="list-group-item d-flex pt-1 pb-1 border-0"><div class="me-3 me-xs-0"><div class="calendar-icon icons"><div class="date_time bg-success-transparent"> <span class="date">  28 </span> <span class="month">Apr</span> </div></div></div><div class="ms-1"><div class="h5 fs-14 mb-1"> Muhammad Iftikhar </div> <small class="text-muted">1st Anniversary on 6 Jun</small></div></div></div></div> </li><li class="item"> <div class="pt-2">	<div class="list-group"><div class="list-group-item d-flex pt-1 pb-1 border-0"><div class="me-3 me-xs-0"><div class="calendar-icon icons"><div class="date_time bg-success-transparent"> <span class="date">  5 </span> <span class="month">Jun</span> </div></div></div><div class="ms-1"><div class="h5 fs-14 mb-1"> Muhammad  Asif  </div> <small class="text-muted">28th Birthday Celebration</small></div></div></div></div> </li><li class="item"> <div class="pt-2">	<div class="list-group"><div class="list-group-item d-flex pt-1 pb-1 border-0"><div class="me-3 me-xs-0"><div class="calendar-icon icons"><div class="date_time bg-pink-transparent"> <span class="date">  6 </span> <span class="month">Feb</span> </div></div></div><div class="ms-1"><div class="h5 fs-14 mb-1"> Sobia Akbar </div> <small class="text-muted">1st Anniversary on 3 Jun</small></div></div></div></div> </li><li class="item"> <div class="pt-2">	<div class="list-group"><div class="list-group-item d-flex pt-1 pb-1 border-0"><div class="me-3 me-xs-0"><div class="calendar-icon icons"><div class="date_time bg-warning-transparent"> <span class="date">  20 </span> <span class="month">Dec</span> </div></div></div><div class="ms-1"><div class="h5 fs-14 mb-1"> Rehan Hameed Taj </div> <small class="text-muted">1st Anniversary on 1 Jun</small></div></div></div></div> *@
-                </li>
+                  </li>
                 <li class="item">
                 </li>
                 <li class="item">
                 </li>
 
             </ul>
-
-            @*<div id="EventBoarddata"></div>*@
-            @*  <ul class="vertical-scroll" id="EventBoarddata">
-
-            </ul>
-            *@
-
-            @*       <div class="card p-4 ">
-            <div class="d-flex">
-            <img src="../assets/images/users/16.jpg" alt="img" class="avatar avatar-md bradius me-3">
-            <div class="me-3 mt-0 mt-sm-1 d-block">
-            <h6 class="mb-1">Vanessa James</h6>
-            <span class="clearfix"></span>
-            <small>Birthday on Feb 16</small>
             </div>
-            <span class="avatar bg-primary ms-auto bradius mt-1"> <i class="feather feather-mail text-white"></i> </span>
-            </div>
-            </div>  </li>*@
-
-
-
-
-
-
-
-
 
 
         </div>
@@ -278,17 +319,14 @@
         </div>
     </div>
     <div class="col-xl-4 col-md-12 col-lg-12">
-        <div class="card chart-donut1">
+        <div class="card chart-donut1" style="height: 420px;">
             <div class="card-header  border-0">
                 <h4 class="card-title">Gender by Employees</h4>
             </div>
             <div class="card-body">
 
                 <div id="employeesGender" class="mx-auto apex-dount"></div>
-                @* <div class="sales-chart pt-5 pb-3 d-flex mx-auto text-center justify-content-center ">
-                <div class="d-flex me-5"><span class="dot-label bg-primary me-2 my-auto"></span>Male</div>
-                <div class="d-flex"><span class="dot-label bg-secondary  me-2 my-auto"></span>Female</div>
-                </div>*@
+                
             </div>
         </div>
     </div>
@@ -648,20 +686,22 @@
         <div class="card">
             <div class="card-header border-0">
                 <h3 class="card-title">Attendance</h3>
-                <div class="card-options ">
-                    <a href="javascript:void(0);" class="btn btn-outline-light me-3">View All</a>
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Date <i class="feather feather-chevron-down"></i> </a>
-                        <ul class="dropdown-menu dropdown-menu-end" role="menu">
-                            <li><a href="javascript:void(0);">Monthly</a></li>
-                            <li><a href="javascript:void(0);">Yearly</a></li>
-                            <li><a href="javascript:void(0);">Weekly</a></li>
-                        </ul>
+                <div class="card-options col-md-4">
+                    <div class="form-group">
+                    
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div><input id="fromdate" name="todate" class="form-control fc-datepicker " type="text">
+                        </div>
                     </div>
+
                 </div>
             </div>
-            <div class="table-responsive attendance_table mt-4">
-                <table class="table mb-0 text-nowrap">
+            <div class="table-responsive attendance_table mt-4" style="height: 420px;">
+                <table class="table  card-table  table-sm text-nowrap" id="tableAttendance">
                     <thead>
                         <tr>
                             <th class="text-center">S.No</th>
@@ -669,87 +709,12 @@
                             <th class="text-center">Status</th>
                             <th class="text-center">CheckIn</th>
                             <th class="text-center">CheckOut</th>
-                            <th class="text-center">Actions</th>
+                   
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">1</span></td>
-                            <td class="font-weight-semibold fs-14">Diane Nolan</td>
-                            <td class="text-center"><span class="badge bg-success-transparent">Present</span></td>
-                            <td class="text-center">09:30 Am</td>
-                            <td class="text-center">06:30 Pm</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">2</span></td>
-                            <td class="font-weight-semibold fs-14">Deirdre Russell</td>
-                            <td class="text-center"><span class="badge bg-success-transparent">Present</span></td>
-                            <td class="text-center">09:45 Am</td>
-                            <td class="text-center">06:30 Pm</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">3</span></td>
-                            <td class="font-weight-semibold fs-14">Joanne Hills</td>
-                            <td class="text-center"><span class="badge bg-danger-transparent">Absent</span></td>
-                            <td class="text-center">00:00:00</td>
-                            <td class="text-center">00:00:00</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">4</span></td>
-                            <td class="font-weight-semibold fs-14">Luke Ince</td>
-                            <td class="text-center"><span class="badge bg-success-transparent">Present</span></td>
-                            <td class="text-center">09:30 Am</td>
-                            <td class="text-center">05:15 Pm</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">5</span></td>
-                            <td class="font-weight-semibold fs-14">Grace Mackay</td>
-                            <td class="text-center"><span class="badge bg-danger-transparent">Absent</span></td>
-                            <td class="text-center">00:00:00</td>
-                            <td class="text-center">00:00:00</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr class="border-bottom">
-                            <td class="text-center"><span class="avatar avatar-sm brround">6</span></td>
-                            <td class="font-weight-semibold fs-14">Wanda Quinn</td>
-                            <td class="text-center"><span class="badge bg-success-transparent">Present</span></td>
-                            <td class="text-center">09:30 Am</td>
-                            <td class="text-center">06:30 Pm</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-center"><span class="avatar avatar-sm brround">7</span></td>
-                            <td class="font-weight-semibold fs-14">Liam</td>
-                            <td class="text-center"><span class="badge bg-success-transparent">Present</span></td>
-                            <td class="text-center">09:30 Am</td>
-                            <td class="text-center">06:30 Pm</td>
-                            <td class="text-center">
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"><i class="feather-message-circle  text-success"></i></a>
-                            </td>
-                        </tr>
+                    <tbody id="tbodyAttendance">
+                     
+                    
                     </tbody>
                 </table>
             </div>
@@ -767,18 +732,51 @@
         $(document).ready(function () {
 
             $('#sumaryYear').select2();
+            $('#sumaryMonth').select2();
+
 
             var currentYear = new Date().getFullYear();
+            var currentMonth =new Date().getMonth() + 1;
             $('#sumaryYear').val(currentYear).trigger('change');
+            $('#sumaryMonth').val(currentMonth).trigger('change');
+
+
+            var currentDate = new Date(); // Get the current date
+            $('#fromdate').datepicker({
+                dateFormat: 'dd M yy',
+                autoHide: true
+
+
+
+            });
+
+            $('#fromdate').datepicker('setDate', currentDate);
+
+
+
+
             CheckAtendence();
             CheckAnnounments();
             CheckEvent();
             LoadChartGenderWise();
             loadSalarySummaryGraph();
+            checkdailyAttendance();
 
 
             $('#sumaryYear').change(function () {
                 loadSalarySummaryGraph();
+
+            });
+
+              $('#fromdate').change(function () {
+                checkdailyAttendance();
+
+            });
+
+
+
+            $('#sumaryMonth').change(function () {
+                CheckEvent();
 
             });
 
@@ -792,7 +790,7 @@
             makeAjaxRequest("/Dashboard/DashboardTotals", 'GET', JSON.stringify(requestData), false, function (response) {
 
                 if (response != null) {
-                    console.log(response)
+
                     $('#TotalEmploye').text(response[0].total)
                     $('#lastMonth').text(response[1].total)
                     $('#TotalPresent').text(response[2].total)
@@ -815,7 +813,6 @@
 
                 if (response != null) {
 
-                    console.log(response)
 
                     var html = ''
                     var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning"]; // List of predefined colors
@@ -857,17 +854,16 @@
 
         function CheckEvent() {
 
-            var requestData = {};
-            makeAjaxRequest("/Dashboard/UpcommingEvent", 'GET', JSON.stringify(requestData), true, function (response) {
+            var requestData = { month: $('#sumaryMonth').val() };
+            makeAjaxRequest("/Dashboard/UpcommingEvent", 'GET',requestData, true, function (response) {
 
 
                 if (response != null) {
 
-                    console.log(response)
-
                     //var html = ' <ul class="vertical-scroll">';
                     $('#EventBoarddata').html('')
                     var html = '';
+                    var htmltable='';
 
                     var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning"]; // List of predefined colors
 
@@ -885,9 +881,28 @@
                         html += '<div class="h5 fs-14 mb-1" > ' + response[i]["EmployeeName"] + ' </div> <small class="text-muted">' + response[i]["description"] + '</small ></div></div></div></div> '
                         html += '</li>';
 
+                        ///model tabel load
+
+                        htmltable +='<tr class="border-bottom">' 
+                        htmltable +='<td class="text-center"> <span class="avatar avatar-sm brround" > '+(i+1)+' </span></td>'
+                        htmltable +='<td class="font-weight-semibold fs-14">'
+                        htmltable +='<div class="d-flex">'
+                        htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
+                        htmltable +='<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        htmltable +='<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
+                        htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["department"] + ' | ' + response[i]["designation"] + ' </p>'
+                        htmltable +='</div></div> </td>'
+                        htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["Date"] + ' </span></td>'
+                        htmltable += '<td class="text-center" > ' + response[i]["description"] + '  </td></tr>'
+
+
+
+
                     }
 
                     $('#EventBoarddata').html(html)
+
+                    $('#tblEvent').html(htmltable)
 
 
                 }
@@ -908,8 +923,6 @@
 
                 if (response != null) {
 
-                    debugger;
-                    console.log(response)
                     var labels = [];
                     var values = [];
 
@@ -1000,12 +1013,6 @@
                     chart.render();
 
 
-
-
-
-
-
-
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
@@ -1016,8 +1023,6 @@
 
 
         function loadSalarySummaryGraph() {
-            debugger;
-
 
             var requestData = { year: $('#sumaryYear').val() };
             makeAjaxRequest("/Dashboard/EmployeeSalarySummery", 'GET', requestData, false, function (response) {
@@ -1062,16 +1067,9 @@
                         }
                     ];
 
-                    var chart = document.getElementById('echart1');
-
+                    var chart = document.getElementById('echartEmployees');
 
                     var barChart = echarts.init(chart);
-
-
-
-
-
-
 
                     var option = {
                         grid: {
@@ -1159,6 +1157,65 @@
 
 
         }
+
+        function allEventLoad()
+        {
+        
+           $("#ModelEvent").modal('show');
+        
+        
+        }
+
+
+        function checkdailyAttendance()
+        {
+            debugger
+
+                var requestData = { date: $("#fromdate").val() };
+                makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
+
+                    if (response != null) {
+                    debugger
+
+                        console.log(response)
+                     
+                        var html='';
+                         for (var i = 0; i < response.length; i++) {
+                            html +='<tr class="border-bottom">'
+                            html +='<td class="text-center"><span class="avatar avatar-sm brround">'+(i+1)+'</span></td>'
+                            html +='<td class="font-weight-semibold fs-14"> '
+
+                            html += '<div class="d-flex">'
+                            html += '<img class="avatar avatar-md brround me-3" src ="'+ response[i]["SnapPath"] + '" >'
+                            html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                            html += '<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
+                            html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                            html += '</div></div> </td>'
+                      
+                            html += '<td class="text-center"><span class="badge ' + response[i]["CssClass"].replace('badge','bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span></td>'
+                            html += '<td class="text-center">' + response[i]["FirstPunchIN"] + '</td>'
+                            html += '<td class="text-center">' + response[i]["LastPunchOut"] + '</td>'
+                            html += "</tr>"
+
+                            }
+
+                    $('#tbodyAttendance').html(html)
+
+
+                    //$("#tableAttendance").DataTable();
+
+                    }
+                }, function (errorStatus) {
+                    console.log('Error:', errorStatus);
+                });
+
+
+            
+        
+        }
+
+
+
 
     </script>
 
