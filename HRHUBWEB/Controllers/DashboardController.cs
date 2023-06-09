@@ -7,7 +7,7 @@ using System;
 
 namespace HRHUBWEB.Controllers
 {
-    [CustomAuthorization]
+   
     public class DashboardController : Controller
     {
         private IWebHostEnvironment _webHostEnvironment;
@@ -81,10 +81,9 @@ namespace HRHUBWEB.Controllers
             return Json(result);
         }
 
-
-        public async Task<IActionResult> HR()
+        [CustomAuthorization]
+        public IActionResult  HR()
         {
-
 			
 			return View();
         }
