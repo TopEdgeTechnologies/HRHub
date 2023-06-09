@@ -519,6 +519,50 @@ namespace HRHUBAPI.Controllers
                 } 
             }
 
+		    [HttpPost("PutStaffSalaryMaster")]
+		    public async Task<ActionResult<bool>> PutStaffSalaryMaster(StaffSalary objStaffSalary)
+		    {
+			    var dbResult = await new StaffSalary().PutStaffSalaryMaster(objStaffSalary);
+			    if (dbResult == true)
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Updated Successfully"
+				    });
+			    }
+			    else
+			    {
+				    return Ok(new
+				    {
+					    success = false,
+					    Message = "Data Not Updated!"
+					});
+			    }
+		    }
+
+            [HttpGet("AlreadyExistsMaster")]
+            public async Task<ActionResult<bool>> AlreadyExistsMaster(StaffSalary objStaffSalary)
+            {
+                var dbResult = await new StaffSalary().AlreadyExistsMaster(objStaffSalary, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Record Already Exists"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Data Not Found!"
+                    });
+                }
+            }
+
         #endregion
 
         #region Loan

@@ -187,13 +187,6 @@ namespace HRHUBWEB.Controllers
         [CustomAuthorization]
         public async Task<IActionResult> StaffSalaryMaster()
         {
-			//DateTime DateFrom = DateTime.Now.AddMonths(-11).Date;
-	  //      DateTime DateTo = DateTime.Now.Date;		
-			//ViewBag.SalaryMonth = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
-
-			//StaffSalary objStaffSalary = new StaffSalary();
-   //         objStaffSalary.StaffSalaryMasterList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
-			
 			return View();
 		}
 
@@ -213,6 +206,32 @@ namespace HRHUBWEB.Controllers
 
             return Json(result);    
 		}
+
+		public async Task<IActionResult> PutStaffSalaryMaster(string salaryMonth)
+		{
+			StaffSalary objStaffSalary = new StaffSalary();
+			objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
+			objStaffSalary.CreatedBy = _user.UserId;
+			var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryMaster", HttpMethod.Post);
+			return Json(result);
+		}
+
+        public async Task<IActionResult> AlreadyExistsMaster(int month = 0, int year = 0)
+        {
+            if (month > 0 && year > 0)
+            {
+                StaffSalary objStaffSalary = new StaffSalary();
+
+                var dayMonth = "1";
+                var strSalaryMonth = $"{year}/{month}/{dayMonth}";
+
+                objStaffSalary.SalaryMonth = Convert.ToDateTime(strSalaryMonth);
+
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/AlreadyExistsMaster", HttpMethod.Get);
+                return Json(result);
+            }
+            return Json(null);  
+        }
 
         public async Task<IActionResult> StaffSalaryList(int month = 0, int year = 0)
         {

@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group mt-5">
-                        <select id="attendanceMonth" name="attendanceMonth" class="form-control custom-select select2" data-placeholder="Select Month">
+                        <select id="attendanceMonth" name="attendanceMonth" onchange="onchangeMonthYearCheckAlreadyExistsMaster()" class="form-control custom-select select2" data-placeholder="Select Month">
                             <option label="Select Month"></option>
                             <option value="1">January</option>
                             <option value="2">February</option>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group mt-5">
-                        <select id="attendanceYear" name="attendanceYear" class="form-control custom-select select2" data-placeholder="Select Year">
+                        <select id="attendanceYear" name="attendanceYear" onchange="onchangeMonthYearCheckAlreadyExistsMaster()"  class="form-control custom-select select2" data-placeholder="Select Year">
                             <option label="Select Year"></option>
                             <option value="2030">2030</option>
                             <option value="2029">2029</option>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-6 col-sm-4 col-lg-4">
                                 <p class="text-muted">Pay Date</p>
-                                <span class="text-dark">01 May, 2023</span>
+                                <span id="lbl_SalaryDate" class="text-dark">01 May, 2023</span>
                             </div>
                             <div class="col-6 col-sm-4 col-lg-4">
                                 <p class="text-muted">Employees</p>
@@ -100,6 +100,61 @@
         $("#attendanceYear").val(currentYear).trigger()
 
     });
+
+    function onchangeMonthYearCheckAlreadyExistsMaster() 
+    {
+        debugger
+        var recordInserted = false;
+        var currentMonth = $("#attendanceMonth").val()
+        var currentYear = $("#attendanceYear").val()
+
+        $("#lbl_Duration").text(currentMonth + ' - ' + currentYear)
+        var dayMonth = "1";
+        var strSalaryMonth = currentYear + "/" + currentMonth + "/" + dayMonth;
+        $("#lbl_SalaryDate").text(strSalaryMonth)
+
+        //var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
+        
+        //if(currentMonth == "" && currentYear == "")
+        //{
+        //    $.growl.warning({
+        //        message: "Please select valid Month and Year, try again!"
+        //    });
+        //}
+        //var Data = { month: currentMonth, year: currentYear }
+        //console.log(Data)
+        //$.ajax({
+        //    async: false,
+        //    url: "/PayrollConfiguration/AlreadyExistsMaster",
+        //    type: "GET",
+        //    data: Data,
+        //    success: function (data) {
+        //        if (data != "") {
+        //            console.log(data)
+        //            debugger
+        //            recordInserted = data.success;
+        //        }
+        //    },
+        //    error: function () {
+        //        status = false;
+        //        //   toastr.error("Please Fill Required Field");
+        //    }
+        //})
+
+        //debugger
+        //if(recordInserted)
+        //{
+
+        //}
+        //else 
+        //{
+        //    $.growl.warning({
+        //        message: "Please select valid Month and Year, try again!"
+        //    });
+        //}
+        
+    }
+
 
     $("#btn_GenerateStaffSalary").click(function () {
         var currentMonth = $("#attendanceMonth").val()

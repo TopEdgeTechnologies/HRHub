@@ -239,7 +239,19 @@ namespace HRHUBAPI.Models
             catch (Exception e) { return false; }
         }
 
-        public async Task<StaffSalary> PostStaffSalary(StaffSalary objStaffSalary, HrhubContext hrhubContext)
+		public async Task<bool> PutStaffSalaryMaster(StaffSalary objStaffSalary)
+		{
+			try
+			{
+				DbConnection dbConnection = new DbConnection();
+				string query = " EXEC Payroll.StaffSalary_BulkUpdate '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.CreatedBy;
+				DataTable dt = dbConnection.ReturnDataTable(query);
+				return Convert.ToBoolean(dt.Rows[0][0]);
+			}
+			catch (Exception e) { return false; }
+		}
+
+		public async Task<StaffSalary> PostStaffSalary(StaffSalary objStaffSalary, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {
@@ -302,6 +314,23 @@ namespace HRHUBAPI.Models
                 }
                 catch (Exception e) { dbContextTransaction.Rollback(); return false; throw; }
             }
+        }
+
+        public async Task<bool> AlreadyExistsMaster(StaffSalary objStaffSalary, HrhubContext hrhubContext)
+        {
+            try
+            {
+                if (objStaffSalary.SalaryMonth != null)
+                {
+                    var dbResult = await hrhubContext.StaffSalaries.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryMonth == objStaffSalary.SalaryMonth);
+                    if (dbResult != null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e) { throw; }
         }
 
         public async Task<bool> AlreadyExists(int Id, int StaffId, HrhubContext hrhubContext)
