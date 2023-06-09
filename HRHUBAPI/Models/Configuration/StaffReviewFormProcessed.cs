@@ -86,7 +86,7 @@ namespace HRHUBAPI.Models
 
                         Title = row["Title"].ToString(),
                         TotalWeightage = Convert.ToDecimal(row["TotalWeightage"]),
-                        EarnedWeightage = Convert.ToDecimal(row["EarnedWeightage"])
+                        //EarnedWeightage = Convert.ToDecimal(row["EarnedWeightage"])
 
                     }).ToList();
 

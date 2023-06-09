@@ -9,7 +9,7 @@ public partial class StaffSalaryDetail
 
     public int? StaffSalaryId { get; set; }
 
-    public int? SalaryComponentId { get; set; }
+    public int? ComponentId { get; set; }
 
     public decimal? Amount { get; set; }
 }
