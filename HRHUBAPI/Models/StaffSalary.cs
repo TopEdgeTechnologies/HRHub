@@ -13,9 +13,9 @@ public partial class StaffSalary
 
     public decimal? GrossSalary { get; set; }
 
-    public decimal? TotalDeductions { get; set; }
-
     public decimal? TotalEarnings { get; set; }
+
+    public decimal? TotalDeductions { get; set; }
 
     public decimal? NetSalary { get; set; }
 

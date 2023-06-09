@@ -15,15 +15,13 @@ public partial class Section
 
     public int? OrderNo { get; set; }
 
-    public bool? IsAnswerWeightage { get; set; }
+    public bool IsAnswerWeightage { get; set; }
 
-    public bool? AllowSelfScoring { get; set; }
+    public bool AllowSelfScoring { get; set; }
 
     public int? QuestionMaxLimit { get; set; }
 
     public decimal? TotalWeightage { get; set; }
-
-    public decimal? EarnedWeightage { get; set; }
 
     public bool? IsDeleted { get; set; }
 

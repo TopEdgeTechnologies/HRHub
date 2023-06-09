@@ -1,0 +1,176 @@
+﻿@model HRHUBAPI.Models.Section
+@{
+    ViewData["Title"] = "Section Details";
+}
+
+
+<!-- Row -->
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewBag.Name</h3>
+               
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
+                        <div class="btn-list">
+                   <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fa fa-arrow-left"></i> </button>
+
+                            <a asp-action="PerformanceSectionCreateOrUpdate" asp-controller="Performance" asp-route-ReviewFormId="@Model.ReviewFormId" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Section</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Order No</th>
+                                <th class="border-bottom-0">Section Name</th>
+                                <th class="border-bottom-0">Description</th>                                                             
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                               
+                                foreach (var item in Model.AllSection)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @item.OrderNo
+                                        </td>
+
+                                        <td>
+                                            @item.Title
+                                        </td>
+                                        
+                                        <td>
+                                            @item.Description
+                                        </td>                                      
+                                        
+                                       
+
+                                        
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a asp-action="PerformanceSectionCreateOrUpdate" asp-route-id="@item.SectionId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a href="#" onclick="DeleteConfirmation(@item.SectionId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
+
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts
+    {
+    <script>
+       
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+
+        });
+
+       
+        function DeleteConfirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("PerformanceSectionDelete", "Performance")/" + id;
+
+
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+       
+
+    </script>
+}
+
+

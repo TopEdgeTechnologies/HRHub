@@ -77,13 +77,13 @@ public partial class VInfoStaff
 
     public string? WorkMode { get; set; }
 
-    public int? Expr1 { get; set; }
+    public int? SalaryMethodId { get; set; }
 
     public string? SalaryMethodTitle { get; set; }
 
     public bool? SalaryMethodIsDeleted { get; set; }
 
-    public int Expr7 { get; set; }
+    public int DesignationId { get; set; }
 
     public string? DesignationTitle { get; set; }
 
@@ -109,7 +109,7 @@ public partial class VInfoStaff
 
     public bool? DepartmentIsDeleted { get; set; }
 
-    public int Expr26 { get; set; }
+    public int CompanyId { get; set; }
 
     public string? ContactPerson { get; set; }
 

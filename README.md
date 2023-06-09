@@ -17,7 +17,7 @@ Steps need to follow
 
 3,  Set Json 
 
-	"DevConnect": "Data Source=WebServer;Initial Catalog=SchoolManagementSystem;User ID=team;Password=dynamixsolpassword; TrustServerCertificate=True;"
+	"DevConnect": "Data Source=WebServer;Initial Catalog=HrHub;User ID=team;Password=dynamixsolpassword; TrustServerCertificate=True;"
 
 4, Generate DbContext using scaffold command
 
