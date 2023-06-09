@@ -83,6 +83,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
                                                         <label class="form-label">Select Leave Status:</label>
@@ -91,30 +92,97 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-lg-2">
+                                                <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Date From</label>
-                                                        <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Date To</label>
-                                                        <input type="date" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
-                                                    </div>
-                                                </div>
+                                                        <label class="form-label">Month</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend border px-1 py-1 border-1 rounded">
+                                                                <div class="input-group-text px-2 bg-white border-0">
+                                                                    <label class="custom-switch">
+                                                                        <input type="checkbox" id="date-checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                                                                        <span class="custom-switch-indicator"></span>
+                                                                    </label>
+                                                                </div>
+                                                                <input id="date-field" type="month" class="form-control px-1" placeholder="select date">
+                                                            </div>
+                                                        </div>
 
-                                                <div class="col-md-12 col-lg-2">
+
+                                                        @*<label class="form-label">Date From</label>
+                                                    <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />*@
+                                                    </div>
+                                                </div>
+                                                @* <div class="col-md-12 col-lg-2">
+                                            <div class="form-group">
+                                            <label class="form-label">Date To</label>
+                                            <input type="date" asp-for="EndDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                            </div>
+                                            </div>*@
+
+                                                <div class="col-md-12 col-lg-3">
                                                     <div class="form-group mt-5">
-                                                        <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
-                                                        <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
-
-
+                                                        <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                                        <button type="button" onclick="SearchClear()" class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
 
                                                     </div>
                                                 </div>
 
                                             </div>
+
+
+
+
+                                            @*<div class="row">
+                                        <input type="hidden" asp-for="StaffId" value="@ViewBag.StaffID" />
+                                        <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                        <label class="form-label">Select Leave Type:</label>
+                                        <select id="LeaveTypeId" name="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
+                                        <option value="">Select Leave Type</option>
+                                        </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-3">
+                                        <div class="form-group">
+                                        <label class="form-label">Select Leave Status:</label>
+                                        <select id="LeaveStatusId" name="LeaveStatusId" class="form-control" asp-items="@(new SelectList(Model.ListleaveStatus,"LeaveStatusId" ,"Title"))">
+                                        <option value="">Select Leave Status</option>
+                                        </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-2">
+                                        <div class="form-group">
+                                        <label class="form-label">Month</label>
+                                        <div class="input-group">
+                                        <div class="input-group-prepend border px-1 py-1 border-1 rounded">
+                                        <div class="input-group-text px-2 bg-white border-0">
+                                        <label class="custom-switch">
+                                        <input type="checkbox" id="date-checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                                        <span class="custom-switch-indicator"></span>
+                                        </label>
+                                        </div>
+                                        <input id="date-field" type="month" class="form-control px-1" placeholder="select date">
+                                        </div>
+                                        </div>
+
+
+
+                                        <label class="form-label">Date From</label>
+                                        <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                        </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-2">
+                                        <div class="form-group mt-5">
+                                        <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
+                                        <button type="button" onclick="SearchClear()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+
+
+
+                                        </div>
+                                        </div>
+
+                                        </div>*@
 
                                         }
                                     </div>
@@ -136,7 +204,7 @@
                                             <th class="border-bottom-0" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;">Reason</th>
                                             @*<th class="border-bottom-0">Applied On</th>*@
                                             <th class="border-bottom-0">Status</th>
-                                            <th class="border-bottom-0">Action</th>
+                                            <th class="border-bottom-0 w-4">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -144,22 +212,22 @@
                                             int count = 1;
                                             foreach (var item in Model.ListAllleaves)
                                             {
-                                                <tr>
-                                                    <td>
-                                                        @count
-                                                    </td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <div class="me-3 d-block">
-                                                                <h6 class="mb-0 fs-15 font-weight-semibold">@item.LeaveTypeTitle</h6>
-                                                                <div class="clearfix"></div>
-                                                                <small class="text-muted">@item.LeaveAppliedOnDate</small>
+                                                    <tr>
+                                                        <td>
+                                                            @count
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <div class="me-3 d-block">
+                                                                    <h6 class="mb-0 fs-15 font-weight-semibold">@item.LeaveTypeTitle</h6>
+                                                                    <div class="clearfix"></div>
+                                                                    <small class="text-muted">@item.LeaveAppliedOnDate</small>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </td>
-                                                    @*<td> @Html.DisplayFor(modelItem => item.LeaveStartDate)</td>
+                                                        </td>
+                                                        @*<td> @Html.DisplayFor(modelItem => item.LeaveStartDate)</td>
                                             <td> @Html.DisplayFor(modelItem => item.LeaveEndDate)</td>*@
-                                                    @{
+                                                        @{
                                                         //if (item.LeaveStartDate == item.LeaveEndDate)
                                                         //{
                                                         //    <td>@item.LeaveStartDate</td>
@@ -178,54 +246,54 @@
                                                         //        </div>
                                                         //    </td>
                                                         //}
-                                                    }
-                                                    <td>@Html.DisplayFor(modelItem => item.Days)</td>
-                                                    <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
-                                                    @*<td>
+                                                        }
+                                                        <td>@Html.DisplayFor(modelItem => item.Days)</td>
+                                                        <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
+                                                        @*<td>
                                             @Html.DisplayFor(modelItem => item.LeaveAppliedOnDate)
                                             </td>*@
 
-                                                    @if (item.LeaveStatusId == 1) // New
+                                                        @if (item.LeaveStatusId == 1) // New
                                                     {
-                                                        <td class="text-center"><span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span></td>
+                                                            <td class="text-center"><span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span></td>
                                                     }
                                                     else if (item.LeaveStatusId == 2) // Pending
                                                     {
-                                                        <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
+                                                            <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
 
                                                     }
                                                     else if (item.LeaveStatusId == 3) // Approved
                                                     {
-                                                        <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
+                                                            <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
 
                                                     }
                                                     else if (item.LeaveStatusId == 4) // Rejected
                                                     {
-                                                        <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
+                                                            <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
 
                                                     }
 
-                                                    <td class="text-start d-flex">
-                                                        @if (item.LeaveStatusId == 1) // New
+                                                        <td class="text-start d-flex">
+                                                            @if (item.LeaveStatusId == 1) // New
                                                         {
-                                                            <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
-                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"></i>
-                                                            </a>
+                                                                <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
+                                                                    <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"></i>
+                                                                </a>
                                                         }
-                                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
-                                                        </a>
-                                                        @if (item.LeaveStatusId == 1) // New
+                                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
+                                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
+                                                            </a>
+                                                            @if (item.LeaveStatusId == 1) // New
                                                         {
-                                                            <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
-                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                            </a>
+                                                                <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
+                                                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                </a>
                                                         }
-                                                        <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                            <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Report"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+                                                            <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
+                                                                <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Report"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                 count++;
                                             }
                                         }
@@ -487,8 +555,24 @@
 
             ////////////////////////////////////
 
+            var dateCheckBox = $('#date-checkbox');
+            var dateField = $('#date-field');
+            dateCheckBox.prop('checked', false);
+            dateCheckBox.on('change', function () {
+                if (dateCheckBox.is(':checked')) {
+                    dateField.prop('disabled', false);
+                }
+                else {
+                    dateField.prop('disabled', true);
+
+                }
+            })
 
         })
+
+        var dataTable = $('#myTable').DataTable();
+        var originalData = dataTable.rows().data().toArray();
+        var originalHTML = $('#myTable tbody').html();
 
         function ViewLeave(leaveid) {
             debugger
@@ -539,13 +623,10 @@
                 StaffId: $("#StaffId").val(),
                 LeaveTypeId: $("#LeaveTypeId").val(),
                 LeaveStatusId: $("#LeaveStatusId").val(),
-                StartDate: $("#StartDate").val(),
-                EndDate: $("#EndDate").val(),
+                Month: $("#date-field").val(),
+                DateFilter: $('#date-checkbox').prop('checked')
 
             }
-
-
-
             $.ajax({
                 url: "/Leave/SearchList",
                 type: "POST",
@@ -608,9 +689,9 @@
 
                         }
 
-                        $('#myTable tbody').html(action);
+                        //$('#myTable tbody').html(action);
 
-
+                        table.rows.add($(action)).draw();
 
                     }
 
@@ -621,12 +702,21 @@
                 }
             });
 
+        }
+        function SearchClear() {
+            debugger;
+            $('#LeaveStatusId').select2().val('').trigger('change');
+            $('#LeaveTypeId').select2().val('').trigger('change');
+            $('#date-field').val('');
+            $('#date-checkbox').prop('checked', false);
+            $('#date-field').prop('disabled', false);
 
+            //Restore the original data
+            dataTable.clear().rows.add(originalData).draw();
 
-
+            $('#myTable tbody').html(originalHTML);
 
         }
-
 
         function formatDate(date) {
 

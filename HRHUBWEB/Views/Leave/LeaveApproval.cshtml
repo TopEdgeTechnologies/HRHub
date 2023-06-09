@@ -7,17 +7,19 @@
 
 
 <style>
-
+    .SumoSelect>.CaptionCont>span.placeholder {
+        color: white !important
+    }
     .note-editing-area {
         height: 390px !important
     }
+
     .leavedetail {
         pointer-events: none;
-
     }
 
     #ApplicationHtml {
-        background:white !important;
+        background: white !important;
     }
 
     .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
@@ -32,7 +34,7 @@
     <!--Page header-->
     <div class="page-header d-xl-flex d-block">
         <div class="page-leftheader">
-            <div class="page-title">Leave Approval</div>
+            <div class="page-title">Leave Approval for  @Model.StaffName</div>
         </div>
         <div class="page-rightheader ms-md-auto">
             <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
@@ -57,6 +59,7 @@
                 </div>
                 <div class="card-body">
                     <input type="hidden" asp-for="LeaveId" />
+                    <input type="hidden" asp-for="StaffId" />
                     <div class="leave-types">
                         <div class="form-group">
                             <label class="form-label">Leaves Types</label>
@@ -67,7 +70,7 @@
                         <div class="leave-content active" id="single">
                             <div class="row form-group">
                                 <label class="form-label">Date Range:</label>
-                                <div class="col-xl-6 col-md-12 col-lg-12">
+                                <div class="col-xl-12 col-md-12 col-lg-12" id="singledate">
 
                                     <div class="input-group">
                                         <input type="date" asp-for="StartDate" class="form-control fc-datepicker" placeholder="select date" />
@@ -103,7 +106,7 @@
                             <div class="col-xl-6 col-md-12 col-lg-12 mt-2">
 
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" asp-for="MarkAsHalfLeave" type="checkbox" class="custom-control-input">
+                                    <input type="checkbox" asp-for="MarkAsHalfLeave" class="custom-control-input">
                                     <span class="custom-control-label">Half Leave</span>
                                 </label>
 
@@ -111,7 +114,7 @@
                             <div class="col-xl-6 col-md-12 col-lg-12 mt-2">
 
                                 <label class="custom-control custom-checkbox">
-                                    <input type="checkbox" asp-for="MarkAsShortLeave" type="checkbox" class="custom-control-input">
+                                    <input type="checkbox" asp-for="MarkAsShortLeave" class="custom-control-input">
                                     <span class="custom-control-label">Short Leave</span>
                                 </label>
 
@@ -191,42 +194,42 @@
                                     int count = 1;
                                     foreach (var item in Model.ListLeaveApprovalData)
                                     {
-                                            <tr class="border-bottom">
-                                                <td>@count</td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="table_img brround bg-light me-3">
-                                                        <img src="@item.ApprovedByStaffSnap" alt="img" class="">
+                                                <tr class="border-bottom">
+                                                    <td>@count</td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="table_img brround bg-light me-3">
+                                                                <img src="@item.ApprovedByStaffSnap" alt="img" class="">
+                                                            </div>
+                                                            <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                                <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
+                                                                <div class="clearfix"></div>
+                                                                <small class="text-muted">@item.ApprovedByDesignation</small>
+                                                            </div>
                                                         </div>
-                                                        <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                            <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
-                                                            <div class="clearfix"></div>
-                                                            <small class="text-muted">@item.ApprovedByDesignation</small>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
 
-                                                <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LeaveApprovalDate</td>
-                                                <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
+                                                    <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LeaveApprovalDate</td>
+                                                    <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
 
-                                                @if (item.LeaveStatusId == 1) // New
+                                                    @if (item.LeaveStatusId == 1) // New
                                             {
-                                                    <td class="col-1 text-start"><span class="task-btn bg-primary text-white">New</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-primary text-white">New</span></td>
                                             }
                                             else if (item.LeaveStatusId == 2) // Pending
                                             {
-                                                    <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
                                             }
                                             else if (item.LeaveStatusId == 3) // Approved
                                             {
-                                                    <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
                                             }
                                             else if (item.LeaveStatusId == 4) // Rejected
                                             {
-                                                    <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
                                             }
 
-                                                @* <td class="text-start d-flex mt-1">
+                                                    @* <td class="text-start d-flex mt-1">
                                     <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="feather feather-eye primary text-primary"></i></a>
                                     <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
                                     <ul class="dropdown-menu dropdown-menu-end" role="menu">
@@ -236,7 +239,7 @@
                                     <li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
                                     </ul>
                                     </td>*@
-                                            </tr>
+                                                </tr>
                                         count++;
                                     }
                                 }
@@ -283,14 +286,13 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Leave Approval</h5>
+                <h5 class="modal-title" id="modeltitle">Leave Approval</h5>
                 <button type="button" class="btn-close" onclick="" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <input type="hidden" id="LeaveStatusID" />
             <div class="modal-body">
-
                 <div class="p-0 mt-3">
                     <div class="form-group">
                         <label class="form-label">Remarks</label>
@@ -315,7 +317,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Leave Forward</h5>
+                    <h5 class="modal-title" id="modelforward">Leave Forward</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -326,6 +328,10 @@
                     <div class="p-0 mt-3">
                         <div class="form-group">
                             <label class="form-label">Forward to Staff:</label>
+
+                            @* <select asp-for="ForwardToStaffID" multiple="multiple" class="SlectBox-grp-src" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                        </select>*@
+
                             <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
                             </select>
                         </div>
@@ -354,7 +360,11 @@
                 if ($('#StartDate').val() != $('#EndDate').val()) {
                     $('#daterange-categories').val('multiple').change();
                     $("#divMultipleDate").attr("hidden", false);
+                    $("#singledate").attr("class", "col-xl-6 col-md-12 col-lg-12");
+                } else {
+                    $("#singledate").attr("class", "col-xl-12 col-md-12 col-lg-12");
                 }
+
             }
 
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
@@ -370,8 +380,10 @@
             $("#Remarks").val('')
             $("#LeaveStatusID").val(approvalstatusid);
             $("#Remarks").css("border-color", "#ddd");
-            var currentRow = $('#hr-leaves tbody').closest('tr');
-            var col1 = currentRow.find("td div.d-flex div h6.staff").text();
+
+           
+            //$("#modeltitle").text("Leave Approval for " + name);
+
             $("#leaveapprovalmodal").modal('show');
 
         }
@@ -379,6 +391,10 @@
         function showforwardleavemodel() {
             debugger;
             $("#Remarks").val('')
+
+
+            //$("#modelforward").text("Forward Leave of " + name);
+
             $("#leaveforwardmodal").modal('show');
 
         }
@@ -422,7 +438,17 @@
             else {
                 $("#Remarks").css("border-color", "#ddd");
             }
-            var Data = { id: $("#LeaveId").val(), leavestatusid: $("#LeaveStatusID").val(), remarks: $("#Remarks").val() }
+            var Data = {
+                id: $("#LeaveId").val(),
+                staffid: $("#StaffId").val(),
+                leavetypeid: $("#LeaveTypeId").val(),
+                leavestatusid: $("#LeaveStatusID").val(),
+                remarks: $("#Remarks").val(),
+                startdate: $("#StartDate").val(),
+                enddate: $("#EndDate").val(),
+                markasshortleave: $("#MarkAsShortLeave").prop('checked'),
+                markashalfleave: $("#MarkAsHalfLeave").prop('checked')
+            }
             console.log(Data)
             $.ajax({
                 async: false,

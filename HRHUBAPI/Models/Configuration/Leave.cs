@@ -67,13 +67,14 @@ namespace HRHUBAPI.Models
 
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " +StaffId+ " , 0 , 0 , '' , '' ";  
+                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " +StaffId+ " , 0 , 0 , '' , 0 ";  
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
                     .Select(row => new Leave
                     {
                         LeaveId = Convert.ToInt32(row["LeaveId"]),
+                        LeaveTypeId = Convert.ToInt32(row["LeaveTypeId"]),
                         LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
                         LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
                         LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
@@ -85,6 +86,8 @@ namespace HRHUBAPI.Models
                         LeaveStatusId = Convert.ToInt32(row["LeaveStatusId"]),
                         RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
                         ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
+                        MarkAsHalfLeave = Convert.ToBoolean(row["MarkAs_HalfLeave"]),
+                        MarkAsShortLeave = Convert.ToBoolean(row["MarkAs_ShortLeave"]),
 
                         StaffId = Convert.ToInt32(row["StaffID"]),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
@@ -129,6 +132,56 @@ namespace HRHUBAPI.Models
 
                 //return list;
 
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+        public async Task<List<Leave>> GetHRLeave(int CompanyId, HrhubContext _context)
+        {
+            try
+            {
+
+                DbConnection _db = new DbConnection();
+
+                string query = "EXEC HR.sp_Get_StaffHRLeaves " + CompanyId + " , 0 , 0 , '' , 0 ";
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var list = dt.AsEnumerable()
+                    .Select(row => new Leave
+                    {
+                        LeaveId = Convert.ToInt32(row["LeaveId"]),
+                        LeaveTypeId = Convert.ToInt32(row["LeaveTypeId"]),
+                        LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
+                        LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
+                        LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
+                        Days = Convert.ToBoolean(row["MarkAs_HalfLeave"]) == true ? "Half Day" : Convert.ToBoolean(row["MarkAs_ShortLeave"]) == true ? "Quarter Day"
+                                              : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() == "1" ?
+                                              ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Day" : ((Convert.ToDateTime(row["EndDate"]) - Convert.ToDateTime(row["StartDate"])).Days + 1).ToString() + " Days",
+                        LeaveSubject = row["LeaveSubject"].ToString(),
+                        LeaveAppliedOnDate = Convert.ToDateTime(row["AppliedOn"]).ToString("dd-MMM-yyyy"),
+                        LeaveStatusId = Convert.ToInt32(row["LeaveStatusId"]),
+                        RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
+                        ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
+                        MarkAsHalfLeave = Convert.ToBoolean(row["MarkAs_HalfLeave"]),
+                        MarkAsShortLeave = Convert.ToBoolean(row["MarkAs_ShortLeave"]),
+
+                        StaffId = Convert.ToInt32(row["StaffID"]),
+                        StaffRegistrationNo = row["RegistrationNo"].ToString(),
+                        StaffName = row["FirstName"].ToString() + " " + row["LastName"].ToString(),
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
+                        Department = row["Department"].ToString(),
+                        Designation = row["Designation"].ToString()
+
+                    }).OrderByDescending(x => x.LeaveId)
+                    .ToList();
+                return list;
 
 
             }
@@ -240,19 +293,20 @@ namespace HRHUBAPI.Models
 
         // Search Leave 
 
-        public async Task<List<Leave>> SearchLeaves(int CompanyId, int StaffId, int LeaveTypeId, int LeaveStatusId, DateTime StartDate, DateTime EndDate, HrhubContext _context)
+        public async Task<List<Leave>> SearchLeaves(int CompanyId, int StaffId, int LeaveTypeId, int LeaveStatusId, DateTime Month,bool DateFilter, HrhubContext _context)
         {
             try
             {
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " + StaffId + " , " + LeaveTypeId + " , " + LeaveStatusId + " ,'" + StartDate +"' , '" + EndDate + " '";
+                string query = "EXEC HR.sp_Get_StaffLeaves " + CompanyId + " , " + StaffId + " , " + LeaveTypeId + " , " + LeaveStatusId + " ,'" + Month + "' , "+ DateFilter;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
                     .Select(row => new Leave
                     {
                         LeaveId = Convert.ToInt32(row["LeaveId"]),
+                        LeaveTypeId = Convert.ToInt32(row["LeaveTypeId"]),
                         LeaveTypeTitle = row["LeaveTypeTitle"].ToString(),
                         LeaveStartDate = Convert.ToDateTime(row["StartDate"]).ToString("dd-MMM-yyyy"),
                         LeaveEndDate = Convert.ToDateTime(row["EndDate"]).ToString("dd-MMM-yyyy"),
@@ -264,6 +318,8 @@ namespace HRHUBAPI.Models
                         LeaveStatusId = Convert.ToInt32(row["LeaveStatusId"]),
                         RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
                         ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
+                        MarkAsHalfLeave = Convert.ToBoolean(row["MarkAs_HalfLeave"]),
+                        MarkAsShortLeave = Convert.ToBoolean(row["MarkAs_ShortLeave"]),
 
                         StaffId = Convert.ToInt32(row["StaffID"]),
                         StaffRegistrationNo = row["RegistrationNo"].ToString(),
@@ -342,7 +398,39 @@ namespace HRHUBAPI.Models
             try
             {
 
-                var result = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == id && x.IsDeleted == false);
+                //var result = await _context.Leaves.FirstOrDefaultAsync(x => x.LeaveId == id && x.IsDeleted == false);
+
+                var result = await (from cs in _context.Leaves
+                            join s in _context.Staff on cs.StaffId equals s.StaffId
+                             join d in _context.Designations on s.DesignationId equals d.DesignationId
+                             join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
+
+                             where cs.LeaveId == id && cs.IsDeleted == false
+                            select new Leave
+                            {
+                                LeaveId = cs.LeaveId,
+                                AppliedOn = cs.AppliedOn,
+                                LeaveTypeId = cs.LeaveTypeId,
+                                StartDate = cs.StartDate,
+                                EndDate = cs.EndDate,
+                                LeaveStatusId = cs.LeaveStatusId,
+                                ApplicationHtml = cs.ApplicationHtml,
+                                LeaveSubject = cs.LeaveSubject,
+                                MarkAsHalfLeave = cs.MarkAsHalfLeave,
+                                MarkAsShortLeave = cs.MarkAsShortLeave,
+                                IsDeleted = cs.IsDeleted,
+
+                                StaffId = cs.StaffId,
+                                StaffRegistrationNo = s.RegistrationNo,
+                                StaffName = s.FirstName + " " + s.LastName,
+                                StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/Avatar.png" : s.SnapPath,
+                                Department = dep.Title,
+                                Designation = d.Title
+
+
+                            }).FirstOrDefaultAsync();
+
+
 
                 if (result != null)
                 {
@@ -353,14 +441,11 @@ namespace HRHUBAPI.Models
                     return null;
 
                 }
-
-
-
             }
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
 
             }
         }
@@ -558,14 +643,47 @@ namespace HRHUBAPI.Models
             {
                 try
                 {
+                    // Update Leave status 
                     var Info = await hrhubContext.Leaves.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.IsDeleted == false);
                     if (Info != null && Info.LeaveId > 0)
                     {
                         Info.LeaveStatusId = obj.LeaveStatusId;
+                        Info.UpdatedBy = obj.CreatedBy;
+                        Info.UpdatedOn = DateTime.Now;
 
                         await hrhubContext.SaveChangesAsync();
                     }
 
+                    // Leave Attendance Entry
+                    if (obj.LeaveStatusId == 3)
+                    {
+                        DateTime SelectedDate_From = Convert.ToDateTime(obj.StartDate);
+                        DateTime SelectedDate_To = Convert.ToDateTime(obj.EndDate);
+
+
+                        for (DateTime SelectedDate = SelectedDate_From; SelectedDate.Date <= SelectedDate_To.Date; SelectedDate = SelectedDate.AddDays(1))
+                        {
+                            #region Attendance Entry
+                            AttendanceMaster objModel = new Models.AttendanceMaster();
+                            objModel.AttendanceDate = SelectedDate;
+
+                            objModel.StaffId = obj.ApplicantStaffId;
+                            objModel.MarkAsShortLeave = obj.MarkAsShortLeave;
+                            objModel.MarkAsHalfLeave = obj.MarkAsHalfLeave;
+                            objModel.AttendanceStatusId = 4;
+                            objModel.LeaveTypeId = obj.LeaveTypeId;
+                            objModel.Remarks = "Leave";
+                            objModel.CreatedBy = obj.CreatedBy;
+                            objModel.CreatedOn = DateTime.Now;
+
+                            hrhubContext.AttendanceMasters.Add(objModel);
+                            #endregion
+
+                        }
+                    }
+
+
+                    // Insertion in LeaveApproval Table
                     var dbResult = await hrhubContext.LeaveApprovals.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.ApprovalByStaffId == obj.ApprovalByStaffId);
                     if (dbResult != null)
                     {
@@ -584,19 +702,15 @@ namespace HRHUBAPI.Models
 
                         hrhubContext.LeaveApprovals.Add(obj);
                         await hrhubContext.SaveChangesAsync();
-                        dbContextTransaction.Commit();
-                        return obj;
+                       
                     }
-
-
-
-
-
+                    dbContextTransaction.Commit();
+                    return obj;
 
                 }
-                catch
+                catch(Exception ex)
                 {
-                    dbContextTransaction.Rollback(); throw;
+                    dbContextTransaction.Rollback(); throw ex;
                 }
 
             }
