@@ -63,7 +63,7 @@ namespace HRHUBWEB.Controllers
 							//objco.CompanyName = CompanymodelResponse.companyData["companyName"];
 							HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
                             HttpContext.Session.SetObjectAsJson("AuthenticatedToken", model.Token);
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("HR", "Dashboard");
                         }
 
                     }

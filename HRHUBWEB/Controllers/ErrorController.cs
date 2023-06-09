@@ -25,6 +25,10 @@ namespace HRHUBWEB.Controllers
         {
 
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+			if (userObject==null)
+			{
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
 			var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             var errorViewModel = new ExceptionLog
 			{

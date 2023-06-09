@@ -1,9 +1,13 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
+using HRHUBWEB.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
 
 namespace HRHUBWEB.Controllers
 {
+    [CustomAuthorization]
     public class DashboardController : Controller
     {
         private IWebHostEnvironment _webHostEnvironment;
@@ -18,13 +22,73 @@ namespace HRHUBWEB.Controllers
             _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
         }
-        // // Dashboad/GetData
-        public async Task<IActionResult> GetData()
+       
+        [HttpGet]
+		public async Task<IActionResult> DashboardTotals()
+		{
+			string procrdure = "BI.sp_DashboardTotals";
+			object[] parameters = new object[] { _user.CompanyId ?? 0 };
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Announmnetdata()
+		{
+			string procrdure = "BI.sp_Announmnetdata";
+			object[] parameters = new object[] { _user.CompanyId ?? 0 };
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+
+        [HttpGet]
+        public async Task<IActionResult> UpcommingEvent( int month)
         {
-            object[] parameters = new object[] { 1 };  
-            string procrdure = "dbo.sp_GetUserRightByUser";
-            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters,  $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            string procrdure = "BI.sp_UpcommingEvent";
+            object[] parameters = new object[] { month, _user.CompanyId ?? 0 };
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
             return Json(result);
         }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> EmployeeGenderWiseCount()
+        {
+            string procrdure = "bi.sp_employeeGenderWiseCount";
+            object[] parameters = new object[] { _user.CompanyId ?? 0 };
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EmployeeSalarySummery(int year)
+        {
+            string procrdure = "BI.sp_salaryYearWiseSumary";
+            object[] parameters = new object[] { year, _user.CompanyId??0 };
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> StaffDailyAttendance(DateTime date)
+        {
+            string procrdure = "BI.sp_staffDailyAttendance";
+            object[] parameters = new object[] { "'"+date.ToString("dd-MMM-yyyy")+"'", _user.CompanyId ?? 0 };
+         
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
+
+        public async Task<IActionResult> HR()
+        {
+
+			
+			return View();
+        }
+
+
     }
 }
