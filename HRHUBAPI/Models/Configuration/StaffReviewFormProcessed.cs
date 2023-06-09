@@ -71,49 +71,49 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<List<Section>> GetReviewSections(int Id, int staffid, HrhubContext _context)
-        {
-            try
-            {
-                DbConnection _db = new DbConnection();
+        //public async Task<List<Section>> GetReviewSections(int Id, int staffid, HrhubContext _context)
+        //{
+        //    try
+        //    {
+        //        DbConnection _db = new DbConnection();
 
-                string query = "EXEC Get_StaffSectionWeightageList " + Id + " , "+ staffid;
-                DataTable dt = _db.ReturnDataTable(query);
+        //        string query = "EXEC Get_StaffSectionWeightageList " + Id + " , "+ staffid;
+        //        DataTable dt = _db.ReturnDataTable(query);
 
-                var list = dt.AsEnumerable()
-                    .Select(row => new Section
-                    {
+        //        var list = dt.AsEnumerable()
+        //            .Select(row => new Section
+        //            {
 
-                        Title = row["Title"].ToString(),
-                        TotalWeightage = Convert.ToDecimal(row["TotalWeightage"])
+        //                Title = row["Title"].ToString(),
+        //                TotalWeightage = Convert.ToDecimal(row["TotalWeightage"])
                        
 
-                    }).ToList();
+        //            }).ToList();
 
 
 
-                //var list = from s in _context.Sections
-                //           join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
+        //        //var list = from s in _context.Sections
+        //        //           join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
 
-                //           where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
-                //           select new Section
-                //           {
-                //               Title = s.Title,
-                //               TotalWeightage = s.TotalWeightage,
-                //               EarnedWeightage = s.EarnedWeightage
+        //        //           where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
+        //        //           select new Section
+        //        //           {
+        //        //               Title = s.Title,
+        //        //               TotalWeightage = s.TotalWeightage,
+        //        //               EarnedWeightage = s.EarnedWeightage
 
-                //           };
+        //        //           };
 
-        //        return list != null ? list.ToList() : new List<Section>();
+        ////        return list != null ? list.ToList() : new List<Section>();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw;
+        //        throw;
 
-            }
-        }
+        //    }
+        //}
         public async Task<Appraisal> PostStaffAppraisal(List<Appraisal> listAppraisalInfo, HrhubContext _context)
         {
             using (var dbContextTransaction = _context.Database.BeginTransaction())

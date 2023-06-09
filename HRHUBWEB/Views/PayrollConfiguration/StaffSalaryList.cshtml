@@ -431,7 +431,7 @@
 
 		function ViewSalaryCard(staffId) {
 			debugger
-			var Data = { month: $('#salaryMonth').val(), year: $("#endDate").val(), staffId: staffId }
+			var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
 			//var Data = { month: monthNumber, year: year, staffId: staffId }
 			console.log(Data)
 			$.ajax({
@@ -457,6 +457,7 @@
 
 		function GetStaffSalaryByIdData(data) 
 		{
+			debugger
 			var netSalary = 0.0
 			var netSalaryInWords = ''
 			var cardEarningHtml = ''
@@ -569,6 +570,7 @@
 
 		function GetStaffSalaryHistoryCard(data)
 		{
+			debugger
 			if (data.length > 0) 
 			{
 				$('#lbl_regNo_history').text(data[0].registrationNo)
