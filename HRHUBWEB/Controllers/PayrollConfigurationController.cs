@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
+using System.Threading;
 
 namespace HRHUBWEB.Controllers
 {
@@ -183,18 +185,47 @@ namespace HRHUBWEB.Controllers
         #region Staff Salary
 
         [CustomAuthorization]
-        public async Task<IActionResult> StaffSalaryList(string data ="", int Id = 0)
+        public async Task<IActionResult> StaffSalaryMaster()
+        {
+			//DateTime DateFrom = DateTime.Now.AddMonths(-11).Date;
+	  //      DateTime DateTo = DateTime.Now.Date;		
+			//ViewBag.SalaryMonth = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
+
+			//StaffSalary objStaffSalary = new StaffSalary();
+   //         objStaffSalary.StaffSalaryMasterList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
+			
+			return View();
+		}
+
+        public async Task<IActionResult> PostStaffSalaryMaster(int month = 0, int year = 0)
+        {
+            StaffSalary objStaffSalary = new StaffSalary();
+
+            var dayMonth = "1";
+            var strDateStart = $"{year}/{month}/{dayMonth}";
+            //var strDateEnd = $"{year}/{month}/1";
+
+            objStaffSalary.SalaryMonth = Convert.ToDateTime(strDateStart);
+            objStaffSalary.CompanyId = _user.CompanyId;
+            objStaffSalary.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PostStaffSalaryMaster", HttpMethod.Post);
+
+            return Json(result);    
+		}
+
+        public async Task<IActionResult> StaffSalaryList(int month = 0, int year = 0)
         {
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            ViewBag.Success = data;
-
+            //ViewBag.Success = data;
             StaffSalary objStaffSalary = new StaffSalary();
-            var month = 5;
-            var year = 2023;
+            objStaffSalary.MonthNumber = month;
+            objStaffSalary.Year = year;
+            
             objStaffSalary.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryByCompanyId/{_user.CompanyId}/{month}/{year}", HttpMethod.Get);
 
             return View(objStaffSalary);
@@ -210,13 +241,32 @@ namespace HRHUBWEB.Controllers
             return null;
         }
 
-        public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId, decimal GrossAmount)
+		public async Task<List<StaffSalary>> GetStaffSalaryHistory(DateTime dateFrom, DateTime dateTo, int staffId)
+		{
+			if (dateFrom != null && dateTo != null && staffId > 0)
+			{
+				var staffSalaryHistoryList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryHistory/{_user.CompanyId}/{dateFrom.ToString("dd-MMM-yyyy")}/{dateTo.ToString("dd-MMM-yyyy")}/{staffId}", HttpMethod.Get);
+                //StaffSalary objStaffSalary = new StaffSalary();
+                //objStaffSalary.SalaryStatusTitle = staffSalaryHistoryList.FirstOrDefault()?.SalaryStatusTitle;
+				return staffSalaryHistoryList;
+			}
+			return null;
+		}
+
+		public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId, decimal GrossAmount)
         { 
             StaffSalary objStaffSalary = new StaffSalary();
 			objStaffSalary.StaffSalaryEditList = await GetStaffSalaryById(month, year, staffId);
-            ViewBag.SalaryMonth = month;
-            ViewBag.SalaryYear = year;  
-            objStaffSalary.OV_PayableAmount = GrossAmount;
+            //ViewBag.SalaryMonth = month;
+            //ViewBag.SalaryYear = year;
+
+			objStaffSalary.MonthNumber = month;
+			objStaffSalary.Year = year;
+			objStaffSalary.RegistrationNo = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.RegistrationNo;
+			objStaffSalary.FirstName = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.FirstName;  
+            objStaffSalary.LastName = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.LastName;
+            objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.DepartmentTitle;    
+			objStaffSalary.OV_PayableAmount = GrossAmount;
 
             //StaffSalary objStaffSalary = new StaffSalary();
             //         objStaffSalary = await _APIHelper.CallApiAsyncGet<StaffSalary>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{StaffId}", HttpMethod.Get);

@@ -104,7 +104,7 @@ namespace HRHUBAPI.Models
 
                 //           };
 
-                return list != null ? list.ToList() : new List<Section>();
+        //        return list != null ? list.ToList() : new List<Section>();
 
             }
             catch (Exception ex)

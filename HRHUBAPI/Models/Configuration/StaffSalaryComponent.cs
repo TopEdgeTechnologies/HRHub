@@ -8,7 +8,6 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public int? TranFlag { get; set; }
 
-
         [NotMapped]
         public string? Check { get; set; }
         [NotMapped]
@@ -21,12 +20,11 @@ namespace HRHUBAPI.Models
         public string? StaffFName { get; set; } 
         [NotMapped]
         public string? StaffSName { get; set; }
+
         public async Task<List<StaffSalaryComponent>> GetSalaryComponent(int CompanyId,int ComponentId, HrhubContext hrhubContext)
         {
             try
             {
-
-
                 var List = from SC in hrhubContext.StaffSalaryComponents
                            join s in hrhubContext.Staff on SC.StaffId equals s.StaffId                          
                            where s.CompanyId == CompanyId && s.IsDeleted == false &&  s.Status == true && SC.ComponentId== ComponentId && SC.IsDeleted== false

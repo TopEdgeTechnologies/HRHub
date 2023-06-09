@@ -1,0 +1,225 @@
+﻿@model HRHUBAPI.Models.StaffSalary
+
+<div class="card">
+    @*@using (Html.BeginForm("StaffCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))*@
+    <div class="card-header border-bottom-0">
+        <h3 class="card-title fs-24">
+            Pay Runs
+        </h3>
+    </div>
+    <div class="card-body">
+        <div class="card overflow-hidden">
+            <div class="card-status card-status-left bg-red br-bl-7 br-tl-7"></div>
+            <div class="row">
+                <div class="col-md-12 col-lg-3">
+                    <div class="card-header border-bottom-0 d-flex justify-content-between align-items-center">
+                        <p class="fs-20">Process Pay run from <span id="lbl_Duration" class="font-weight-semibold fs-20">1st May - 31 May</span></p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group mt-5">
+                        <select id="attendanceMonth" name="attendanceMonth" class="form-control custom-select select2" data-placeholder="Select Month">
+                            <option label="Select Month"></option>
+                            <option value="1">January</option>
+                            <option value="2">February</option>
+                            <option value="3">March</option>
+                            <option value="4">April</option>
+                            <option value="5">May</option>
+                            <option value="6">June</option>
+                            <option value="7">July</option>
+                            <option value="8">August</option>
+                            <option value="9">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group mt-5">
+                        <select id="attendanceYear" name="attendanceYear" class="form-control custom-select select2" data-placeholder="Select Year">
+                            <option label="Select Year"></option>
+                            <option value="2030">2030</option>
+                            <option value="2029">2029</option>
+                            <option value="2028">2028</option>
+                            <option value="2027">2027</option>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </div>
+                </div>
+                @*<div class="col-md-12 col-lg-3">
+                    <div class="form-group mt-5">
+                        <a href="javascript:void(0);" class="btn btn-primary btn-block">Generate</a>
+                    </div>
+                </div>*@
+            </div>
+            
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-8 col-lg-9">
+                        <div class="row mb-3">
+                            <div class="mb-3 col-6 col-sm-4 col-lg-4 border-end">
+                                <p class="text-muted">Employes's Net Pay'</p>
+                                <span class="bg-light px-1 py-2">Yet to Process</span>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-4">
+                                <p class="text-muted">Pay Date</p>
+                                <span class="text-dark">01 May, 2023</span>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-4">
+                                <p class="text-muted">Employees</p>
+                                <span class="text-dark">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-lg-3">
+                        <input type="button" id="btn_GenerateStaffSalary" value="Generate Payroll" class="btn btn-primary btn-block" />
+                    </div>
+                </div>
+                <p class="fs-16"><i class="fa fa-info-circle"></i> There are no employees with completed pay roll in this month </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script>
+
+    $(document).ready(function () {
+            
+        //$("#SalaryMonth").select2();
+        var currentMonth = new Date().getMonth()
+        $("#attendanceMonth").val(currentMonth).trigger()
+        var currentYear = new Date().getFullYear()
+        $("#attendanceYear").val(currentYear).trigger()
+
+    });
+
+    $("#btn_GenerateStaffSalary").click(function () {
+        var currentMonth = $("#attendanceMonth").val()
+        var currentYear = $("#attendanceYear").val()
+
+        const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            if (validateForm()) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        if(StaffSalary_BulkInsert(currentMonth, currentYear))
+                        {
+                            // StaffSalaryList
+                            var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear)
+                            window.location.href = url
+                        }
+                        else
+                        {
+                            $.growl.warning({
+                                message: "Record is not Inserted, try again !"
+                            });
+                        }
+                        
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+            else {
+                $.growl.warning({
+                    message: "Please Enter required fields !"
+                });
+            }
+    });
+
+    function validateForm() 
+    {
+        var form = $("#myform");
+        var inputs = form.find("input");
+        
+        if (customValidation()) {
+            console.log("Form is valid");
+            // Submit the form or perform other actions here
+            return true;
+        } else {
+            console.log("Form is invalid");
+            return false;
+        }
+        //form.addClass("was-validated");
+    }
+
+    function customValidation() 
+    {
+        var isvalid = true;
+        if ($("#attendanceMonth").val() == null || $("#attendanceMonth").val() == '') 
+        {
+            $.growl.warning({
+                message: "Please Select Salary Month!"
+            });
+            isvalid = false;
+        }
+
+        if ($("#attendanceYear").val() == null || $("#attendanceYear").val() == '')
+        {
+            $.growl.warning({
+                message: "Please Select Salary Year!"
+            });
+            isvalid = false;
+        }
+        return isvalid;
+    }
+
+    function StaffSalary_BulkInsert(currentMonth, currentYear) 
+    {
+        var status = false;
+        debugger
+        //var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
+        var Data = { month: currentMonth, year: currentYear}
+        console.log(Data)
+        $.ajax({
+            async: false,
+            url: "/PayrollConfiguration/PostStaffSalaryMaster",
+            type: "GET",
+            data: Data,
+            success: function (data) {
+                if (data != "") {
+                    console.log(data)
+                    debugger
+                    status= data.success;
+                }
+            },
+            error: function () 
+            {
+                status = false;
+                //   toastr.error("Please Fill Required Field");
+            }
+        })
+        return status;
+    }
+
+</script>
+}
