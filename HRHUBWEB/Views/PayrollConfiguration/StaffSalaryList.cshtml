@@ -1,6 +1,6 @@
 ﻿@model HRHUBAPI.Models.StaffSalary
 
-<!--Add expense Modal -->
+<!--Add View Salary Modal -->
 <div class="modal fade" id="viewsalarymodal">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -132,12 +132,137 @@
 		</div>
 	</div>
 </div>
-<!-- End Addexpense Modal  -->
+<!-- End View Salary Modal  -->
+
+<!--Add View Staff Salary History Modal -->
+<div class="modal fade" id="viewstaffsalaryhistorymodal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Salary Slip History</h5>
+				<button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-header">
+				<div class="d-flex">
+					<img id="imgLogo_history" src="../assets/images/brand/logo.png" class="avatar avatar-md brround me-3"> Top Edge Technologies
+                </div>
+				<div class="ms-auto">
+					<div class="font-weight-bold text-md-right mt-3">Date: 01-02-2021</div>
+				</div>
+			</div>
+			<div class="modal-body pt-1">
+				<div class="table-responsive mt-3 mb-3">
+					<table class="table mb-0 modal-paytable">
+						<tbody>
+							<tr>
+								<td>
+									<strong>RegistrationNo:</strong>
+									<span id="lbl_regNo_history">2987</span>
+								</td>
+								<td class="text-end">
+									<strong>Name:</strong>
+									<span id="lbl_firstName_history">Faith Harris</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<strong>Department:</strong>
+									<span id="lbl_Department_history">USA</span>
+								</td>
+								<td class="text-end">
+									<strong>Salary Period:</strong>
+									<span id="lbl_SalaryPeriod_history">January-2021</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<table class="table table-bordered text-nowrap mb-0">
+							<thead>
+								<tr>
+									<th class="fs-18" rowspan="1" colspan="2">Earnings</th>
+								</tr>
+								<tr>
+									<th>Sr.</th>
+									<th class="border-start">Month-Year</th>
+									<th class="border-start">Earning</th>
+									<th class="border-start">Deduction</th>
+									<th class="border-start">Net Salary</th>
+									<th class="border-start">Status</th>
+								</tr>
+							</thead>
+							<tbody id="tBodySalaryHistory">
+
+							</tbody>
+							<tfoot>
+								<tr class="border-top">
+									<td class="font-weight-semibold">Total</td>
+									<td class="font-weight-semibold"></td>
+									<td id="lbl_earningsHistory" class="font-weight-semibold border-start">$32,000</td>
+									<td id="lbl_deductionsHistory" class="font-weight-semibold border-start">$32,000</td>
+									<td id="lbl_netSalaryHistory" class="font-weight-semibold border-start">$32,000</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				@*<div class="mt-4 mb-3">
+					<table class="table mb-0">
+						<tbody>
+							<tr>
+								<td class="font-weight-semibold w-20 fs-18 pb-0 pt-0">Net Salary</td>
+								<td class="pb-0 pt-0">
+									<h4 id="lbl_netSalary" class="font-weight-semibold mb-0 fs-24">$32,000</h4>
+								</td>
+							</tr>
+							<tr>
+								<td class="font-weight-semibold w-20 pb-0 pt-1 text-muted">InWords</td>
+								<td class="pb-0 pt-1">
+									<h5 id="lbl_netSalaryInWords" class="mb-0  text-muted">Thirty-Two Thousand only</h5>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>*@
+			</div>
+			<div class="p-5 border-top text-center">
+				<div class="text-center">
+					<h6 id="lbl_CompanyName_history" class="mb-2">Top Edge Technologies Pvt Ltd.</h6>
+					<p id="lbl_CompanyAddress_history" class="mb-1 fs-12">Royal Orchard, Business Plaza Basement, Multan, South Punjab Pakistan</p>
+					<div>
+						<small id="lbl_CompanyPhone_history">Tel No: 199488 67536,</small>
+						<small id="lbl_CompanyEmail_history">Email: info@topedgetechnologies.com</small>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="ms-auto">
+					<a href="javascript:void(0);" class="btn btn-info" onclick="javascript:window.print();"><i class="si si-printer"></i> Print</a>
+					<a href="javascript:void(0);" class="btn btn-success"><i class="feather feather-download"></i> Download</a>
+					<a href="javascript:void(0);" class="btn btn-primary"><i class="si si-paper-plane"></i> Send</a>
+					<a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal"><i class="feather feather-x"></i> Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End View Staff Salary History Modal  -->
 
 <div class="side-app main-container">
-
-		<input type="hidden" id="salaryMonth" value="5" />
-		<input type="hidden" id="salaryYear" value="2023"/>
+	@{
+		var dayMonth = "1";
+		var strDateStart = $"{@Model.Year}/{dayMonth}/{dayMonth}";
+		var strDateEnd = $"{@Model.Year}/{@Model.MonthNumber}/1";
+	}
+		<input type="hidden" id="salaryMonth" value=@Model.MonthNumber />
+		<input type="hidden" id="salaryYear" value=@Model.Year />
+		<input type="hidden" id="startDate" value=@strDateStart />
+		<input type="hidden" id="endDate" value=@strDateEnd />
 		
 		<!--Page header-->
 		
@@ -149,12 +274,18 @@
 					<div class="card-body">
 						<div class="page-header d-xl-flex d-block">
 							<div class="page-leftheader">
-								<div class="page-title">Staff Salary</div>
+								@{
+									var monthNumber = @Model.MonthNumber ?? 1; // Assuming 1 as the default month number
+									var year = @Model.Year ?? 0;
+									var monthName = new DateTime(year, monthNumber, 1).ToString("MMMM");
+									var title = "Staff Salary " + monthName + "-" + year;
+								}
+							<div class="page-title">@title</div>
 							</div>
 							<div class="page-rightheader ms-md-auto">
 								<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
 									<div class="btn-list mt-3 mt-lg-0">
-										<a href="hr-addpayroll.html" class="btn btn-primary me-3">Generate Salaries</a>
+										<input type="button" id="PayAllSalaries" value="Pay all Salaries" class="btn btn-primary me-3" />
 										<button class="btn btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#excelmodal">
 											<i class="las la-file-excel"></i>  Download Monthly Excel Report
 										</button>
@@ -174,8 +305,8 @@
 										<th class="border-bottom-0 w-5">Sr.#</th>
 										<th class="border-bottom-0">Name</th>
 										<th class="border-bottom-0">Reg.#</th>
-										<th class="border-bottom-0">Department</th>
-										<th class="border-bottom-0">Designation</th>
+										@*<th class="border-bottom-0">Department</th>
+									<th class="border-bottom-0">Designation</th>*@
 										<th class="border-bottom-0">Earning</th>
 										<th class="border-bottom-0">Deduction</th>
 										<th class="border-bottom-0">Payable</th>
@@ -207,18 +338,20 @@
 														}
 														<img id="viewUserImage" onclick="ViewSalaryCard(@item.StaffId)" class="avatar avatar-md brround me-3" src="@snapPath">
 
-														<div class="me-3 mt-0 mt-sm-1 d-block">
+														<div onclick="ViewStaffSalaryHistoryCard(@item.StaffId)" class="me-3 mt-0 mt-sm-1 d-block">
 															@{
 																string fullName = item.FirstName + " " + item.LastName;
 															}
 															<h6 class="mb-1 fs-14">@fullName</h6>
-															<p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.ContactNumber) | @Html.DisplayFor(modelitem => item.Email)</p>
+															<p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.DepartmentTitle) | @Html.DisplayFor(modelitem => item.DesignationTitle)</p>
 														</div>
 													</div>
 												</td>
 												<td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
+												@*
 												<td>@Html.DisplayFor(modelitem => item.DepartmentTitle)</td>
 												<td>@Html.DisplayFor(modelitem => item.DesignationTitle)</td>
+												*@
 												<td>@Convert.ToDecimal(item.OV_EarningAmount).ToString("N2")</td>
 												<td>@Convert.ToDecimal(item.OV_DeductionAmount).ToString("N2")</td>
 												<td class="font-weight-semibold">@Convert.ToDecimal(item.OV_PayableAmount).ToString("N2")</td>
@@ -234,7 +367,23 @@
 													}
 												}
 												<td><span class="badge badge-success">@SalaryStatusTitle</span></td>
+												@*<td>
+													<div class="d-flex">
+														<label class="custom-control custom-checkbox-md">
+															<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked="">
+															<span class="custom-control-label-md success"></span>
+														</label>
+														
+													</div>
+												</td>
+												*@
 												<td class="text-start">
+												@*
+													<label class="custom-control custom-checkbox-md">
+														<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked="">
+														<span class="custom-control-label-md success"></span>
+													</label>
+													*@
 													<a onclick="ViewSalaryCard(@item.StaffId)" class="action-btns" data-bs-toggle="modal">
 														<i class="feather feather-eye text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></i>
 													</a>
@@ -281,7 +430,9 @@
 		var dtStaffSalaryCardHtml;
 
 		function ViewSalaryCard(staffId) {
-			var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
+			debugger
+			var Data = { month: $('#salaryMonth').val(), year: $("#endDate").val(), staffId: staffId }
+			//var Data = { month: monthNumber, year: year, staffId: staffId }
 			console.log(Data)
 			$.ajax({
 				async: false,
@@ -389,6 +540,158 @@
 			lbl_netSalary.innerText = netSalary.toLocaleString(undefined, { maximumFractionDigits: 0 });
 			$('#lbl_netSalaryInWords').text(numberToWords(netSalary.toFixed(0)))
 		}
+
+		function ViewStaffSalaryHistoryCard(staffId) 
+		{	
+			var Data = { dateFrom: $('#startDate').val(), dateTo: $("#endDate").val(), staffId: staffId }
+			//var Data = { month: monthNumber, year: year, staffId: staffId }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/PayrollConfiguration/GetStaffSalaryHistory",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") 
+					{
+						console.log(data)
+						debugger
+						GetStaffSalaryHistoryCard(data)
+						$("#viewstaffsalaryhistorymodal").modal('show')
+					}
+				},
+				error: function () {
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+		}
+
+		function GetStaffSalaryHistoryCard(data)
+		{
+			if (data.length > 0) 
+			{
+				$('#lbl_regNo_history').text(data[0].registrationNo)
+				$('#lbl_firstName_history').text(data[0].firstName + ' ' + data[0].lastName)
+				$('#lbl_Department_history').text(data[0].departmentTitle)
+				$('#lbl_SalaryPeriod_history').text(data[0].monthName + ' - ' + data[data.length - 1].monthName + ' (' + data[0].year + ')')
+
+				if (data[0].companyLogoAttachment != null && data[0].companyLogoAttachment != '') 
+				{
+					$('#imgLogo_history').attr('src', data[0].companyLogoAttachment)
+				}
+				else 
+				{
+					$('#imgLogo_history').attr('src', '/Images/Avatar.png')
+				}
+
+				$('#lbl_CompanyName_history').text(data[0].companyName)
+				$('#lbl_CompanyAddress_history').text(data[0].companyAddress)
+				$('#lbl_CompanyPhone_history').text(data[0].companyPhone)
+				$('#lbl_CompanyEmail_history').text(data[0].companyEmail)
+
+				var cardHistoryHtml = ''
+				var totalEarningAmount = 0.0
+				var totalDeductionAmount = 0.0
+				var totalNetAmount = 0.0
+
+				for (var i = 0; i < data.length; i++) 
+				{
+					cardHistoryHtml += '<tr id="' + i + '">'
+					cardHistoryHtml += '<td> ' + data[i].sno + ' </td>'
+					cardHistoryHtml += '<td> ' + data[i].monthName + '-' + data[i].year + ' </td>'
+					cardHistoryHtml += '<td> ' + data[i].oV_EarningAmount.toLocaleString() + ' </td>'
+					cardHistoryHtml += '<td> ' + data[i].oV_DeductionAmount.toLocaleString() + ' </td>'
+					cardHistoryHtml += '<td> ' + data[i].oV_PayableAmount.toLocaleString() + ' </td>'
+
+					if(data[i].salaryStatusTitle == 'Paid')
+					{
+						cardHistoryHtml += '<td> <span class="badge badge-success-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+					}
+					else
+					{
+						cardHistoryHtml += '<td> <span class="badge badge-orange-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+					}
+					cardHistoryHtml += '</tr>'
+					
+					totalEarningAmount += parseFloat(data[i].oV_EarningAmount)
+					totalDeductionAmount += parseFloat(data[i].oV_DeductionAmount)
+					totalNetAmount += parseFloat(data[i].oV_PayableAmount)
+				}
+				debugger
+				$("#tBodySalaryHistory").html(cardHistoryHtml)
+
+				//var lbl_earnings = document.getElementById("lbl_earningsHistory")
+				$('#lbl_earningsHistory').text(totalEarningAmount.toLocaleString())
+				$('#lbl_deductionsHistory').text(totalDeductionAmount.toLocaleString())
+				$('#lbl_netSalaryHistory').text(totalNetAmount.toLocaleString())
+
+				//var lbl_deductions = document.getElementById("lbl_deductionsHistory")
+				//lbl_deductionsHistory.innerText = totalEarningComponentAmount.toLocaleString()
+
+				//var lbl_earnings = document.getElementById("lbl_earnings")
+				//lbl_earningsHistory.innerText = totalEarningComponentAmount.toLocaleString()
+
+				//netSalary = totalEarningComponentAmount - totalDeductionComponentAmount
+				//var lbl_netSalary = document.getElementById("lbl_netSalary")
+				//lbl_netSalary.innerText = netSalary.toLocaleString(undefined, { maximumFractionDigits: 0 });
+				//$('#lbl_netSalaryInWords').text(numberToWords(netSalary.toFixed(0)))
+
+			}
+		}
+
+		$("#PayAllSalaries").click(function() {
+			var currentMonth = $("#endDate").val()
+			var currentYear = $("#endDate").val()
+
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			});
+
+			if (validateForm()) {
+				swalWithBootstrapButtons.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: 'No, cancel!',
+					confirmButtonText: 'Yes, Save it!',
+					timer: 30000,
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
+
+						if (StaffSalary_BulkInsert(currentMonth, currentYear)) {
+							// StaffSalaryList
+							var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear)
+							window.location.href = url
+						}
+						else {
+							$.growl.warning({
+								message: "Record is not Inserted, try again !"
+							});
+						}
+
+					}
+					else if (result.dismiss === Swal.DismissReason.cancel) {
+						swalWithBootstrapButtons.fire(
+							'Cancelled',
+							'Your record is safe :)',
+							'error'
+						)
+					}
+				});
+			}
+			else {
+				$.growl.warning({
+					message: "Please Enter required fields !"
+				});
+			}
+		});
 
 		function StaffSalaryEdit(staffId,amount) 
 		{

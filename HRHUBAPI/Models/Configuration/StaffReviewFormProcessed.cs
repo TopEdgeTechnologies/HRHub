@@ -65,32 +65,32 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<List<Section>> GetReviewSections(int Id,int staffid, HrhubContext _context)
-        {
-            try
-            {
-                var list = from s in _context.Sections
-                            join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
+        //public async Task<List<Section>> GetReviewSections(int Id,int staffid, HrhubContext _context)
+        //{
+        //    try
+        //    {
+        //        var list = from s in _context.Sections
+        //                    join r in _context.StaffReviewFormProcesseds on s.ReviewFormId equals r.ReviewFormId
 
-                            where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
-                            select new Section
-                            {
-                                Title = s.Title,
-                                TotalWeightage = s.TotalWeightage,
-                                EarnedWeightage = s.EarnedWeightage
+        //                    where s.ReviewFormId == Id && r.ReviewedStaffId == staffid
+        //                    select new Section
+        //                    {
+        //                        Title = s.Title,
+        //                        TotalWeightage = s.TotalWeightage,
+        //                        EarnedWeightage = s.EarnedWeightage
 
-                            };
+        //                    };
 
-                return list != null ? list.ToList() : new List<Section>();
+        //        return list != null ? list.ToList() : new List<Section>();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw;
+        //        throw;
 
-            }
-        }
+        //    }
+        //}
 
 
     }

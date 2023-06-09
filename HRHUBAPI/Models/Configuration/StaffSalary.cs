@@ -1,6 +1,7 @@
 ﻿using HRHUBAPI.Models.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.Design;
 using System.Data;
 
 namespace HRHUBAPI.Models
@@ -13,9 +14,33 @@ namespace HRHUBAPI.Models
             public int? TranFlag { get; set; }
 
             [NotMapped]
-            public int? SNO { get; set; }
-            
+            public int? CompanyId { get; set; }
+
             [NotMapped]
+            public int? SNO { get; set; }
+
+		    [NotMapped]
+		    public int? Year { get; set; }
+
+		    [NotMapped]
+		    public int? MonthNumber { get; set; }
+
+		    [NotMapped]
+		    public string? MonthName { get; set; }
+
+		    [NotMapped]
+		    public int? MonthDaysCount { get; set; }
+
+		    //[NotMapped]
+		    //public string? FOMonth { get; set; }
+
+		    //[NotMapped]
+		    //public string? EOMonth { get; set; }
+
+      //      [NotMapped]
+      //      public IEnumerable<StaffSalary>? StaffSalaryHistoryList { get; set; }
+
+		    [NotMapped]
             public string? FirstName { get; set; }
 
             [NotMapped]
@@ -100,6 +125,48 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
+        public async Task<List<StaffSalary>> GetStaffSalaryHistory(int CompanyId, string DateFrom, string DateTo, int StaffId)
+        {
+            try
+            {
+                DbConnection dbConnection = new DbConnection();
+                string query = " SELECT * FROM Payroll.GetStaffSalaryCardOutputHistory("+ CompanyId + ", '" + DateFrom + "', '" + DateTo + "'," + StaffId + ")";
+				
+				DataTable dt = dbConnection.ReturnDataTable(query);
+                var resultRows = dt.AsEnumerable().Select(row => new StaffSalary
+                {
+					SNO = Convert.ToInt32(row["SNO"]),
+					Year = Convert.ToInt32(row["Year"]),
+					MonthNumber = Convert.ToInt32(row["MonthNumber"]),
+					MonthName = string.IsNullOrWhiteSpace(row["MonthName"].ToString()) ? "" : row["MonthName"].ToString(),
+					MonthDaysCount = Convert.ToInt32(row["MonthDaysCount"]),
+
+					CompanyName = string.IsNullOrWhiteSpace(row["CompanyName"].ToString()) ? "" : row["CompanyName"].ToString(),
+					CompanyAddress = string.IsNullOrWhiteSpace(row["CompanyAddress"].ToString()) ? "" : row["CompanyAddress"].ToString(),
+					CompanyPhone = string.IsNullOrWhiteSpace(row["CompanyPhone"].ToString()) ? "" : row["CompanyPhone"].ToString(),
+					CompanyEmail = string.IsNullOrWhiteSpace(row["CompanyEmail"].ToString()) ? "" : row["CompanyEmail"].ToString(),
+					CompanyLogoAttachment = string.IsNullOrWhiteSpace(row["CompanyLogoAttachment"].ToString()) ? "" : row["CompanyLogoAttachment"].ToString(),
+
+					StaffId = Convert.ToInt32(row["StaffId"]),
+					RegistrationNo = string.IsNullOrWhiteSpace(row["RegistrationNo"].ToString()) ? "" : row["RegistrationNo"].ToString(),
+					FirstName = string.IsNullOrWhiteSpace(row["FirstName"].ToString()) ? "" : row["FirstName"].ToString(),
+					LastName = string.IsNullOrWhiteSpace(row["LastName"].ToString()) ? "" : row["LastName"].ToString(),
+					DesignationTitle = string.IsNullOrWhiteSpace(row["DesignationTitle"].ToString()) ? "" : row["DesignationTitle"].ToString(),
+					DepartmentTitle = string.IsNullOrWhiteSpace(row["DepartmentTitle"].ToString()) ? "" : row["DepartmentTitle"].ToString(),
+
+					OV_EarningAmount = string.IsNullOrWhiteSpace(row["OV_EarningAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_EarningAmount"]),
+					OV_DeductionAmount = string.IsNullOrWhiteSpace(row["OV_DeductionAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_DeductionAmount"]),
+					OV_PayableAmount = string.IsNullOrWhiteSpace(row["OV_PayableAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_PayableAmount"]),
+					SalaryStatusTitle = string.IsNullOrWhiteSpace(row["SalaryStatusTitle"].ToString()) ? "" : row["SalaryStatusTitle"].ToString(),
+
+	
+
+				}).ToList();
+                return resultRows;
+			}
+            catch (Exception ex) { throw; }
+        }
+
         public async Task<List<StaffSalary>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
         {
             try
@@ -159,6 +226,18 @@ namespace HRHUBAPI.Models
 			}
 			catch (Exception ex) { throw; }
 		}
+
+        public async Task<bool> PostStaffSalaryMaster(StaffSalary objStaffSalary)
+        {
+            try
+            {
+                DbConnection dbConnection = new DbConnection();
+                string query = " EXEC Payroll.StaffSalary_BulkInsert " + objStaffSalary.CompanyId + ", '" + objStaffSalary.SalaryMonth + "', '" + objStaffSalary.SalaryMonth + "'," + objStaffSalary.CreatedBy;
+                DataTable dt = dbConnection.ReturnDataTable(query);
+                return Convert.ToBoolean(dt.Rows[0][0]);
+            }
+            catch (Exception e) { return false; }
+        }
 
         public async Task<StaffSalary> PostStaffSalary(StaffSalary objStaffSalary, HrhubContext hrhubContext)
         {

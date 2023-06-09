@@ -111,9 +111,9 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpPost("PostSalaryStatus")]
-        public async Task<ActionResult<SalaryStatus>> PostSalaryStatus(SalaryStatus SalaryStatus)
+        public async Task<ActionResult<SalaryStatus>> PostSalaryStatus(SalaryStatus salaryStatus)
         {
-            var dbResult = await new SalaryStatus().PostSalaryStatus(SalaryStatus, _context);
+            var dbResult = await new SalaryStatus().PostSalaryStatus(salaryStatus, _context);
             if (dbResult != null && dbResult.TranFlag == 2)
             {
                 return Ok(new
@@ -473,13 +473,19 @@ namespace HRHUBAPI.Controllers
 
 		#region Staff Salary
 
-		[HttpGet("GetStaffSalary")]
+		    [HttpGet("GetStaffSalary")]
             public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
             {
                 return await new StaffSalary().GetStaffSalary(_context);
             }
 
-            [HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
+            [HttpGet("GetStaffSalaryHistory/{CompanyId}/{DateFrom}/{DateTo}/{StaffId}")]
+            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryHistory(int CompanyId, string DateFrom, string DateTo, int StaffId)
+            {
+                return await new StaffSalary().GetStaffSalaryHistory(CompanyId, DateFrom, DateTo, StaffId);   
+            }
+
+			[HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
             public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
             {
                 return await new StaffSalary().GetStaffSalaryByCompanyId(CompanyId, month, year);
@@ -491,115 +497,137 @@ namespace HRHUBAPI.Controllers
                 return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
             }
 
+            [HttpPost("PostStaffSalaryMaster")]
+            public async Task<ActionResult<bool>> PostStaffSalaryMaster(StaffSalary objStaffSalary)
+            {
+                var dbResult = await new StaffSalary().PostStaffSalaryMaster(objStaffSalary);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        success = true,
+                        Message = "Data Inserted Successfully"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        success = false,
+                        Message = "Data Not Inserted!"
+                    });
+                } 
+            }
+
+        #endregion
+
+        #region Loan
+
+        [HttpPost("LoanAddOrCreate")]
+            public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
+            {
+                var result = await new LoanApplication().PostLoan(obj, _context);
+                if (result != null && result.LoanApplicationId > 0)
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Update Successfully!"
+                    });
+                else
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Insert Successfully!"
+                    });
+            }
+
+            // search data Loan by Status , loantype and dates
+
+            [HttpGet("SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{ApplicationDateFrom}/{ApplicationDateTo}")]
+            public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime ApplicationDateFrom, DateTime ApplicationDateTo)
+            {
+                var result = await new LoanApplication().SearchLoan(CompanyId, StaffId, LoanTypeId, LoanStatusId, ApplicationDateFrom, ApplicationDateTo, _context);
+                if (result != null)
+                    return Ok(result);
+
+                return NotFound();
+
+
+            }
+            [HttpDelete("DeleteLoanInfo{id}/{UserId}")]
+            public async Task<ActionResult<bool>> DeleteLoanInfo(int id, int UserId)
+            {
+                var result = await new LoanApplication().DeleteLoanInfo(id, UserId, _context);
+                if (id > 0)
+                    return Ok(new
+                    {
+
+                        Success = true,
+                        Message = "Data Delete Successfully!"
+
+
+                    });
+
+                return NotFound("Data Not Found!");
+            }
+            [HttpGet("GetLoanApprovalByLoanId{id}")]
+            public async Task<ActionResult<List<LoanApplicationProcess>>> GetLoanApprovalByLoanId(int id)
+            {
+
+                return await new LoanApplicationProcess().GetLoanAprrovalDetail(id, _context);
+
+            }
+            [HttpPost("SaveForwardLoanDetail")]
+            public async Task<ActionResult<LoanApplication>> SaveForwardLoanDetail(LoanApplication obj)
+            {
+
+
+                var result = await new LoanApplicationProcess().PostLoanApprovalProcess(obj, _context);
+                if (result != null && result.LoanApplicationId > 0)
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Update Successfully!"
+                    });
+                else
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Insert Successfully!"
+                    });
+
+            }
+            [HttpPost("SaveLoanApprovalDetail")]  //{id}/{leavestatusid}/{remarks}/{staffid}
+            public async Task<ActionResult<JsonObject>> SaveLoanApprovalDetail(LoanApplicationProcess obj)
+            {
+
+                var dbResult = await new LoanApplicationProcess().SaveLoanApprovalDetail(obj, _context);
+                if (dbResult != null)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = obj.LoanStatusId == 3 ? "Loan Approved Successfully" : "Loan Rejected Successfully"
+                    });
+                }
+                else
+                {
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Not found"
+                    });
+                }
+            }
+
+            [HttpGet("GetStaffLoanRemainingAmount{StaffId}")]
+            public async Task<ActionResult<List<LoanType>>> GetStaffLoanRemainingAmount(int StaffId)
+            {
+
+                return await new LoanApplication().GetStaffLoanRemainingAmountDetail(StaffId, _context);
+            }
+
 		#endregion
 
-
-		[HttpPost("LoanAddOrCreate")]
-        public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
-        {
-            var result = await new LoanApplication().PostLoan(obj, _context);
-            if (result != null && result.LoanApplicationId > 0)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
-        }
-
-        // search data Loan by Status , loantype and dates
-
-        [HttpGet("SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{ApplicationDateFrom}/{ApplicationDateTo}")]
-        public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime ApplicationDateFrom, DateTime ApplicationDateTo)
-        {
-            var result = await new LoanApplication().SearchLoan(CompanyId, StaffId, LoanTypeId, LoanStatusId, ApplicationDateFrom, ApplicationDateTo, _context);
-            if (result != null)
-                return Ok(result);
-
-            return NotFound();
-
-
-        }
-        [HttpDelete("DeleteLoanInfo{id}/{UserId}")]
-        public async Task<ActionResult<bool>> DeleteLoanInfo(int id, int UserId)
-        {
-            var result = await new LoanApplication().DeleteLoanInfo(id, UserId, _context);
-            if (id > 0)
-                return Ok(new
-                {
-
-                    Success = true,
-                    Message = "Data Delete Successfully!"
-
-
-                });
-
-            return NotFound("Data Not Found!");
-        }
-        [HttpGet("GetLoanApprovalByLoanId{id}")]
-        public async Task<ActionResult<List<LoanApplicationProcess>>> GetLoanApprovalByLoanId(int id)
-        {
-
-            return await new LoanApplicationProcess().GetLoanAprrovalDetail(id, _context);
-
-        }
-        [HttpPost("SaveForwardLoanDetail")]
-        public async Task<ActionResult<LoanApplication>> SaveForwardLoanDetail(LoanApplication obj)
-        {
-
-
-            var result = await new LoanApplicationProcess().PostLoanApprovalProcess(obj, _context);
-            if (result != null && result.LoanApplicationId > 0)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
-
-        }
-        [HttpPost("SaveLoanApprovalDetail")]  //{id}/{leavestatusid}/{remarks}/{staffid}
-        public async Task<ActionResult<JsonObject>> SaveLoanApprovalDetail(LoanApplicationProcess obj)
-        {
-
-            var dbResult = await new LoanApplicationProcess().SaveLoanApprovalDetail(obj, _context);
-            if (dbResult != null)
-            {
-                return Ok(new
-                {
-                    Success = true,
-                    Message = obj.LoanStatusId == 3 ? "Loan Approved Successfully" : "Loan Rejected Successfully"
-                });
-            }
-            else
-            {
-                return Ok(new
-                {
-                    Success = false,
-                    Message = "Not found"
-                });
-            }
-        }
-
-        [HttpGet("GetStaffLoanRemainingAmount{StaffId}")]
-        public async Task<ActionResult<List<LoanType>>> GetStaffLoanRemainingAmount(int StaffId)
-        {
-
-            return await new LoanApplication().GetStaffLoanRemainingAmountDetail(StaffId, _context);
-        }
-
-       
-
-
-    }
+	}
 }

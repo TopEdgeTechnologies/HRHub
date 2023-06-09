@@ -142,6 +142,7 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<VInfoStaff> VInfoStaffs { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -714,6 +715,7 @@ public partial class HrhubContext : DbContext
             entity.ToTable("Question", "Performance");
 
             entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -761,7 +763,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.EarnedWeightage).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.TotalWeightage).HasColumnType("decimal(18, 0)");
@@ -978,7 +979,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.StaffSalaryDetailId).HasColumnName("StaffSalaryDetailID");
             entity.Property(e => e.Amount).HasColumnType("money");
-            entity.Property(e => e.SalaryComponentId).HasColumnName("SalaryComponentID");
+            entity.Property(e => e.ComponentId).HasColumnName("ComponentID");
             entity.Property(e => e.StaffSalaryId).HasColumnName("StaffSalaryID");
         });
 
@@ -1087,6 +1088,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyCurrency).IsUnicode(false);
             entity.Property(e => e.CompanyEmail).IsUnicode(false);
             entity.Property(e => e.CompanyEmployeeWebCheckIn).HasColumnName("CompanyEmployeeWebCheckIN");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CompanyLanguage).IsUnicode(false);
             entity.Property(e => e.CompanyLogoAttachment).IsUnicode(false);
             entity.Property(e => e.CompanyName).IsUnicode(false);
@@ -1104,6 +1106,7 @@ public partial class HrhubContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.DepartmentTitle).IsUnicode(false);
             entity.Property(e => e.DesignationGrade).HasMaxLength(50);
+            entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
             entity.Property(e => e.DesignationTitle).IsUnicode(false);
             entity.Property(e => e.Dob)
                 .HasColumnType("date")
@@ -1129,6 +1132,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
+            entity.Property(e => e.SalaryMethodId).HasColumnName("SalaryMethodID");
             entity.Property(e => e.SalaryMethodTitle).IsUnicode(false);
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
