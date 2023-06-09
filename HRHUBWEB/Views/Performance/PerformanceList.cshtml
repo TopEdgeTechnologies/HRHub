@@ -1,0 +1,423 @@
+﻿@model HRHUBAPI.Models.PerformanceForm
+@{
+    ViewData["Title"] = "Performance List";
+}
+
+
+
+
+
+@using (Html.BeginForm("PerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+	<input type="hidden" asp-for="ReviewFormId" />
+	
+
+	
+
+	<!--Add Department Modal -->
+	<div class="modal fade" id="AddGeneralModal"  >
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Add Performance</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+					<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Performance Title <span class="text-danger">*</span></label>
+								<input type="text" asp-for="Title" class="form-control" placeholder="Enter Performance Title" />
+
+							</div>
+					
+					</div>
+				
+					<div class="col-md-3">
+								
+							<div class="form-group">
+								<label class="form-label">Start Date <span class="text-danger">*</span></label>
+								<input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" />
+							</div>
+							
+					</div>
+					<div class="col-md-3">
+							<div class="form-group">
+								<label class="form-label">End Date <span class="text-danger">*</span></label>
+								<input type="date" asp-for="EndDate" class="form-control fc-datepicker " />
+							</div>
+					</div>
+					</div>			
+					
+					<div class="row">
+						<div class="col-md-12">
+							<label class="form-label">Description</label>
+							<div class="form-group local-forms">
+								<textarea asp-for="Description" rows="3" class="form-control" placeholder="Description"></textarea>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="modal-footer">
+					<input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+					<a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Add Department Modal  -->
+}
+
+<!-- Row -->
+<div class="row row-sm mt-4">
+
+	<div class="col-lg-12">
+
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Performance Details</h3>
+				@if (Convert.ToBoolean(ViewBag.IsNew))
+				{
+					<div class="card-options">
+						<div class="btn-list">
+							<a onclick="addnewPerformance()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Performance</a>
+							<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+							<button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+							<button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-bordered text-nowrap border-bottom" id="myTable">
+						<thead>
+							<tr>
+
+								<th class="border-bottom-0">Performance Title</th>
+								<th class="border-bottom-0">Start Date</th>
+								<th class="border-bottom-0">End Date</th>
+								<th class="border-bottom-0">Description</th>								
+								<th class="">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model.ListPerformanceForm)
+							{
+								<tr>
+
+									<td>
+										<a asp-action="PerformanceSectionList" asp-route-id="@item.ReviewFormId"><h6> @item.Title</h6></a>
+									</td>
+
+
+									<td>@item.StartDate.Value.ToString("dd-MMM-yyyy")</td>
+									<td>@item.EndDate.Value.ToString("dd-MMM-yyyy")</td>
+									<td>@item.Description</td>
+
+									@if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+									{
+										<th class="d-none">
+
+										</th>
+									}
+									else
+									{
+										<td class="text-end">
+											<div class="d-flex">
+												@if (Convert.ToBoolean(ViewBag.IsEdit))
+												{
+
+													<a onclick="EditRecord(@item.ReviewFormId)" href="#" class="action-btns1" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+														<i class="feather feather-edit primary text-primary mt-1"></i>
+													</a>
+
+												} @if (Convert.ToBoolean(ViewBag.IsDelete))
+												{
+													<a onclick="DeleteConfirmation(@item.ReviewFormId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+														<i class="feather feather-trash-2 text-danger mt-1"></i>
+													</a>
+													
+												}
+											</div>
+
+										</td>
+									}
+
+
+
+								</tr>
+							}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- End Row -->
+@section scripts{
+
+	<script>
+
+
+		$(document).ready(function () {
+
+
+
+		
+
+
+			$('#myTable').DataTable();
+
+			if (@Model.ReviewFormId > 0) {
+				$('#AddGeneralModal').modal.show();
+			}
+
+			var msg = '@ViewBag.Success';
+			if (msg !== "" && msg == '1') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '2') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '3') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '0') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+					type: "error"
+				});
+			}
+
+		
+
+		});
+
+
+		function addnewPerformance() {
+			debugger
+			$("#AddGeneralModal").modal('show');	
+			
+			
+		}
+
+		function EditRecord(id) {
+			addnewPerformance();
+			debugger
+			
+			var Data = { id: id }
+			
+			$.ajax({
+				async: false,
+				url: "/Performance/GetPerformanceById",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+						var dateTimeString = data.startDate;
+						var dateTime = data.endDate;
+                        var DateStart = dateTimeString.split("T")[0];
+						var DateEnd = dateTime.split("T")[0];
+						$("#ReviewFormId").val(data.reviewFormId);
+						$("#Title").val(data.title);						
+						$("#StartDate").val(DateStart)
+						$("#EndDate").val(DateEnd)
+						$("#Description").val(data.description)						
+						$("#AddGeneralModal").modal('show');
+					}
+				},
+				error: function () {
+					status = false;
+				}
+			})
+		}
+
+		function DeleteConfirmation(id) {
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			});
+
+			swalWithBootstrapButtons.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				cancelButtonText: 'No, cancel!',
+				confirmButtonText: 'Yes, Save it!',
+				timer: 30000,
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					var url = "@Url.Action("PerformanceDelete", "Performance")/" + id;
+
+					//alert(url);
+					window.location.href = url;
+				}
+				else if (result.dismiss === Swal.DismissReason.cancel) {
+					swalWithBootstrapButtons.fire(
+						'Cancelled',
+						'Your record is safe :)',
+						'error'
+					)
+				}
+			});
+		}
+
+		function SaveRecord() {
+			var status = true;
+			//$("#AddGeneralModal").modal('hide');
+			debugger;
+
+
+
+			if ($("#Title").val() == "") {
+				$.growl.warning({
+					message: "Enter Performance Title"
+				});
+				$("#Title").css("border-color", "red");
+				status = false;
+				return false;
+			}
+			else {
+				$("#Title").css("border-color", "#ddd");
+			}
+			
+			
+			
+			if ($("#StartDate").val() == "") {
+				$.growl.warning({
+					message: "Please Select Start Date"
+				});
+				$("#StartDate").css("border-color", "red");
+				status = false;
+				return false;
+			}
+			else {
+				$("#StartDate").css("border-color", "#ddd");
+			}
+
+			if ($("#EndDate").val() == "") {
+				$.growl.warning({
+					message: "Please Select End Date"
+				});
+				$("#EndDate").css("border-color", "red");
+				status = false;
+				return false;
+			}
+			else {
+				$("#EndDate").css("border-color", "#ddd");
+			}
+
+
+
+			var Data = { id: $("#ReviewFormId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+			
+			$.ajax({
+				async: false,
+				url: "/Performance/PerformanceCheckData",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						debugger
+						///  var b = JSON.parse(data)
+						if (data.success) {
+
+							// $.growl.warning(b.message);
+							$.growl.warning({
+								message: data.message
+							});
+							status = false;
+						}
+						else {
+							$("#AddGeneralModal").modal('hide');
+						}
+					}
+				},
+				error: function () {
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			const swalWithBootstrapButtons = Swal.mixin({
+				customClass: {
+					confirmButton: 'btn btn-success',
+					cancelButton: 'btn btn-danger'
+				},
+				buttonsStyling: false
+			});
+			if (status) {
+				swalWithBootstrapButtons.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: 'No, cancel!',
+					confirmButtonText: 'Yes, Save it!',
+					timer: 30000,
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$("#myform").submit();
+						ClearControl();
+					}
+					else if (result.dismiss === Swal.DismissReason.cancel) {
+						swalWithBootstrapButtons.fire(
+							'Cancelled',
+							'Your record is safe :)',
+							'error'
+						)
+					}
+				});
+			}
+		}
+
+		function ClearControl(){
+
+
+
+			$("#ReviewFormId").val(0);
+			$("#StartDate").val('');
+			$("#EndDate").val('');
+			$("#AdditionalDetails").val('');
+
+			
+		
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+}

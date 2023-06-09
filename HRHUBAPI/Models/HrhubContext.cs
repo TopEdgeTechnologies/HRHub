@@ -143,6 +143,10 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -715,6 +719,7 @@ public partial class HrhubContext : DbContext
             entity.ToTable("Question", "Performance");
 
             entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -762,7 +767,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
-            entity.Property(e => e.EarnedWeightage).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.TotalWeightage).HasColumnType("decimal(18, 0)");
