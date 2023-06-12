@@ -305,6 +305,27 @@ namespace HRHUBWEB.Controllers
         }
 
 
+        [CustomAuthorization]
+        public async Task<IActionResult> StaffPerformanceDetail(String data = "", int id = 0, int ReviewFormId = 0)
+        {
+
+            ViewBag.ListAnswerSatff = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionAnswer>>($"api/Performance/GetStaffSectionAnswerList{ReviewFormId}", HttpMethod.Get);
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            ViewBag.Success = data;
+            SectionAnswer ObjSectionAnswer = new SectionAnswer();
+            //ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            return View(ObjSectionAnswer);
+        }
+
+
+
+
+
         public async Task<IActionResult> GetStaffPerformanceById(int id)
         {
             PerformanceForm ObjPerformanceForm = new PerformanceForm();
@@ -317,12 +338,12 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffPerformanceCreateOrUpdate(string data = "", int id = 0, int StaffId = 0, int ReviewFormId = 0)
         {
             ViewBag.Success = data;
-            ViewBag.QuestionSectionList = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{_user.CompanyId}/{ReviewFormId}", HttpMethod.Get);
             SectionAnswer objInfo = new SectionAnswer();
+            objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{_user.CompanyId}/{ReviewFormId}", HttpMethod.Get);
 
             if (id == 0)
             {
-               objInfo.ReviewerStaffId = StaffId;
+               objInfo.ReviewedStaffId = StaffId;
                objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{StaffId}", HttpMethod.Get);
 
                 return View(objInfo);
@@ -333,21 +354,22 @@ namespace HRHUBWEB.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(Section ObjSection)
+        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(List<SectionAnswer> list)
         {
 
-            ObjSection.CreatedBy = _user.UserId;
-
-            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjSection, "api/Performance/PerformanceSectionAddOrUpdate", HttpMethod.Post);
-
-            if (result.Message.Contains("Insert"))
+            foreach (var item in list)
             {
-                return RedirectToAction("PerformanceSectionList", new { data = 1, id = ObjSection.ReviewFormId });
+                item.CreatedBy = _user.UserId;
+                item.UpdatedBy = _user.UserId;
+                item.ReviewerStaffId = _user.StaffId;
+                item.ReviewerDesignationId = _user.DesignationID;
+
             }
-            else
-            {
-                return RedirectToAction("PerformanceSectionList", new { data = 2, id = ObjSection.ReviewFormId });
-            }
+           
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(list, "api/Performance/StaffPerformanceAddOrUpdate", HttpMethod.Post);
+
+            return Json(result);
         }
         public async Task<IActionResult> StaffPerformanceDelete(int id)
         {
@@ -361,15 +383,11 @@ namespace HRHUBWEB.Controllers
             return Json(result);
         }
 
-
-
-
-
         private async Task<SectionAnswer> GetPerformanceStaffById(int id)
         {
             SectionAnswer ObjSectionAnswer = new SectionAnswer();
 
-            ObjSectionAnswer = await _APIHelper.CallApiAsyncGet<SectionAnswer>($"api/Performance/GetPerformanceSectionInfoId{id}", HttpMethod.Get);
+            ObjSectionAnswer = await _APIHelper.CallApiAsyncGet<SectionAnswer>($"api/Performance/GetStaffPerformanceInfoId{id}", HttpMethod.Get);
             return ObjSectionAnswer;
         }
 

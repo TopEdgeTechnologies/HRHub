@@ -9,6 +9,8 @@ public partial class SectionAnswer
 
     public int? SectionQuestionId { get; set; }
 
+    public int? ReviewedStaffId { get; set; }
+
     public int? ReviewerDesignationId { get; set; }
 
     public int? ReviewerStaffId { get; set; }

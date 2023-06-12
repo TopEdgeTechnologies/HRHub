@@ -140,6 +140,8 @@
             <h3 class="card-title">@Model.StaffList.FirstName Performance</h3>
             <div class="card-options">
                 <div class="btn-list">
+                    <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
+
                     <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                     <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                     <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
@@ -154,7 +156,7 @@
                             <img src="@Model.StaffList.SnapPath" class="img-fluid img-fit rounded-circle" style="width:175px; height:175px" />
                         </div>
                         <div class="col-md-7">
-                            <div class="profile-info text-center text-md-start mt-2 mt-md-0">
+                            <div class="profile-info text-center text-md-start mt-md-0">
                                 <h3 class="user-name fs-22 mb-2">@Model.StaffList.FirstName</h3>
                                 <h6 class="text-primary fs-18 mb-2">@Model.StaffList.DepartmentTitle</h6>
                                 <small class="text-muted fs-16 mb-1">@Model.StaffList.DesignationTitle</small>
@@ -218,62 +220,226 @@
 
 </div>
 
-@foreach (var item in ViewBag.QuestionSectionList){
-<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
-    <div class="card-header border-bottom-0">
-    </div>
-    <div class="card-body p-4">
-        <section class="review-section professional-excellence">
 
-            <div class="review-header text-center">
-                    <h3 class="review-title">@item.ReviewName</h3>
-                    <p class="text-muted">@item.ReviewDescription</p>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+    <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+ @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+    {
+      
+        <div class="card-header border-bottom-0">
+        </div>
 
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered review-table mb-0">
-                            <thead>
-                                <tr>
-                                    <th style="width:40px;">#</th>
+    {
+        var CurrentSection = 0;
 
-                                    <th>Questions</th>
-                                    <th>Weightage</th>
-                                    <th>Self Score</th>
-                                    <th>Comment</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
+        foreach (var item in Model.ListSectionQuestion)
+        {
 
 
-
-                                <tr>
-                                    
-
-                                    <td>@item.QuestionName</td>
-                                    <td><input type="text" value="@item.Weightage" class="form-control" readonly="" ></td>
-                                    <td><input type="text" value="" class="form-control"></td>
-                                    <td><input type="text" class="form-control" value="0"></td>
+            if (item.SectionId != CurrentSection)
+            {
+                CurrentSection = Convert.ToInt32(item.SectionId);
+                var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
 
 
-                                </tr>
+                <div class="card-body p-4">
+                    <section class="review-section professional-excellence">
 
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="review-header text-center">
+                            <h3 class="review-title">@item.SectionName</h3>
+                            <p class="text-muted">@item.SectionDescription</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Questions</th>
+                                                <th>Weightage</th>
+                                                <th>Self Score</th>
+                                                <th>Comment</th>
 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
+                                            @foreach (var ItemQuestion in QuestionsList)
+                                            {
+
+                                                <tr>
+                                                    <td>@ItemQuestion.QuestionName<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                    <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                    <td><input asp-for="AnswerWeightage" type="number" class="form-control number"></td>
+                                                    <td><input asp-for="AnswerComments" type="text" class="form-control"></td>
+                                                    <td><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
+                                                   
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </section>
+                   
                 </div>
-            </div>
 
-        </section>
+            }
+
+        }
+
+    }
+
+    <div class="form-group mt-3">
+        <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+        <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
+    </div>
+    }
     </div>
 
 
-</div>
-}
+    @section Scripts{
 
+        <script>
+
+
+        function SaveRecord() {
+            var status = true;
+
+            debugger;
+
+
+
+            if ($("#AnswerWeightage").val() == "") {
+                $.growl.warning({
+                    message: "Enter Answer Weightage"
+                });
+                $("#AnswerWeightage").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#AnswerWeightage").css("border-color", "#ddd");
+            }
+
+
+
+            if ($("#AnswerComments").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Answer Comments"
+                });
+                $("#AnswerComments").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#AnswerComments").css("border-color", "#ddd");
+            }
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        debugger
+                        var Datalist = new Array();
+                        $("#myTable TBODY TR").each(function () {
+                            var row = $(this);                            
+                            var performance = {};
+                            var sectionQuestionIdInput = row.find("TD").eq(0).find("input");
+                            var totalQuestionWeightageInput = row.find("TD").eq(1).find("input");
+                            var answerWeightageInput = row.find("TD").eq(2).find("input");
+                            var answerCommentsInput = row.find("TD").eq(3).find("input");
+                            var ReviewedStaffIdInput = row.find("TD").eq(4).find("input");
+                            
+                            var sectionQuestionIdValue = sectionQuestionIdInput.val();
+                            var totalQuestionWeightageValue = totalQuestionWeightageInput.val();
+                            var answerWeightageValue = answerWeightageInput.val();
+                            var answerCommentsValue = answerCommentsInput.val();
+                            var ReviewedStaffIdValue = ReviewedStaffIdInput.val();
+
+                            if (sectionQuestionIdValue !== "" && !isNaN(sectionQuestionIdValue)) {
+                                performance.SectionQuestionId = parseInt(sectionQuestionIdValue);
+                            }
+                            if (totalQuestionWeightageValue !== "" && !isNaN(totalQuestionWeightageValue)) {
+                                performance.totalQuestionWeightage = parseInt(totalQuestionWeightageValue);
+                            }
+
+                            if (answerWeightageValue !== "" && !isNaN(answerWeightageValue)) {
+                                performance.AnswerWeightage = parseInt(answerWeightageValue);
+                            }
+                            if (ReviewedStaffIdValue !== "" && !isNaN(ReviewedStaffIdValue)) {
+                                performance.ReviewedStaffId = parseInt(ReviewedStaffIdValue);
+                            }
+
+                            if (answerCommentsValue !== "") {
+                                performance.AnswerComments = answerCommentsValue;
+                            }
+                            console.log(performance);
+                            Datalist.push(performance);
+                            console.log(Datalist);
+                          
+                        })
+
+
+
+
+
+                        if (Datalist.length > 0) {
+                            var Data = { list: Datalist }
+                        $.ajax({
+                            url: '@Url.Action("StaffPerformanceCreateOrUpdate", "Performance")',
+                            type: 'POST',
+                            data: Data,
+                            success: function (result) {
+                                // Handle the success response
+                                    Swal.fire('Success', 'Data saved!', 'success');
+
+                            },
+                            error: function (xhr, status, error) {
+                                // Handle the error response
+                            }
+                        });
+
+                    }
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+               
+            }
+        }
+
+
+
+
+        </script>
+
+
+
+
+    }
 

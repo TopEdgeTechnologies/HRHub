@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using HRHUBAPI.Models.Configuration;
 using System.Data;
+using System.ComponentModel.Design;
 
 namespace HRHUBAPI.Models
 {
@@ -17,8 +18,48 @@ namespace HRHUBAPI.Models
     {
 		DbConnection _db = new DbConnection();
 
-		[NotMapped]
-		public string? DesigantionName { get; set; }
+
+        [NotMapped]
+        public int? StaffId { get; set; }
+        [NotMapped]
+        public int? DesignationId { get; set; }
+        [NotMapped]
+		public string? DepartmentTitle { get; set; }
+		
+       [NotMapped]
+		public string? FirstName { get; set; }
+		
+        [NotMapped]
+		public string? LastName { get; set; }
+		
+        [NotMapped]
+		public string? DesignationTitle { get; set; }
+	    [NotMapped]
+		public string? SnapPath { get; set; }
+		
+       
+		 [NotMapped]
+		public string? PerformanceFormTitle { get; set; }
+		
+        [NotMapped]
+		public string? QuestionTitle { get; set; }
+		
+       
+		
+		 [NotMapped]
+		public int? TotalWeightage { get; set; }
+		
+       
+		 [NotMapped]
+		public int? TotalQuestionWeightage { get; set; }
+		
+       
+		
+        
+		 [NotMapped]
+		public int? EarnedWeightage { get; set; }
+		
+       
 		
 
 		[NotMapped]
@@ -27,6 +68,45 @@ namespace HRHUBAPI.Models
         public Staff? StaffList { get; set; }
         [NotMapped]
         public IEnumerable<PerformanceForm>? ListPerformanceForm { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SectionQuestion>? ListSectionQuestion { get; set; }
+
+
+        // list all Comments staff List
+        public async Task<List<SectionAnswer>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
+        {
+            try
+            {
+                string query = "EXEC dbo.sp_List_Answer_Comment " + ReviewFormId;
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var obj = dt.AsEnumerable()
+                    .Select(row => new SectionAnswer
+                    {
+                        SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
+                        AnswerId = Convert.ToInt32(row["AnswerID"]),
+                        FirstName = row["FirstName"].ToString(),
+                        LastName = row["LastName"].ToString(),                       
+                        StaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
+                        PerformanceFormTitle = row["PerformanceFormTitle"].ToString(),
+						QuestionTitle = row["QuestionTitle"].ToString(),
+                        TotalWeightage = Convert.ToInt32(row["TotalWeightage"]),
+                        EarnedWeightage = Convert.ToInt32(row["EarnedWeightage"])
+
+                    })
+                    .ToList();
+                return obj;
+            }
+            catch { throw; }
+        }
+
+
+
+
+
+
+
 
         // list all active contract data
         public async Task<Staff> GetStaffProfile(int StaffId,HrhubContext _context)
@@ -80,7 +160,7 @@ namespace HRHUBAPI.Models
                            join Q in _context.Questions on S.QuestionId equals Q.QuestionId
                            join section in _context.Sections on S.SectionId equals section.SectionId
                            join Performance in _context.PerformanceForms on section.ReviewFormId equals Performance.ReviewFormId
-                           where Q.CompanyId== CompanyId && Q.IsDeleted == false && Performance.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
+                           where Q.CompanyId== CompanyId && Q.IsDeleted == false && section.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
 
                            select new SectionQuestion
                            {
@@ -138,7 +218,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<SectionAnswer> PostSectionAnswer(SectionAnswer ObjSectionAnswerInfo, HrhubContext _context)
+        public async Task<SectionAnswer> PostSectionAnswer(List<SectionAnswer> listSectionAnswerInfo, HrhubContext _context)
         {
 
 
@@ -148,65 +228,48 @@ namespace HRHUBAPI.Models
 			try
             {
 
+                    var ObjsectionAnswer = new SectionAnswer();
+                    if (listSectionAnswerInfo.Count() > 0)
+                    {
+                        // save Appraisal data 
+                        foreach (var item in listSectionAnswerInfo)
+                        {
+                            item.CreatedOn = DateTime.Now;
+                            item.UpdatedOn = DateTime.Now; 
 
-                string msg = "";
-                var checkSectionAnswerInfo = await _context.SectionAnswers.FirstOrDefaultAsync(x => x.AnswerId == ObjSectionAnswerInfo.AnswerId);
-                if (checkSectionAnswerInfo != null && checkSectionAnswerInfo.AnswerId > 0 && ObjSectionAnswerInfo.Renew==0)
-                {
-                   // checkSectionAnswerInfo.SectionAnswerId = ObjSectionAnswerInfo.SectionAnswerId;
-                   // checkSectionAnswerInfo.StaffId = ObjSectionAnswerInfo.StaffId;
-                   // checkSectionAnswerInfo.EmploymentTypeId = ObjSectionAnswerInfo.EmploymentTypeId;                   
-                   // checkSectionAnswerInfo.ContractDuration = ObjSectionAnswerInfo.ContractDuration;
-                   // checkSectionAnswerInfo.Attachment = ObjSectionAnswerInfo.Attachment;
-                   // checkSectionAnswerInfo.AdditionalDetails = ObjSectionAnswerInfo.AdditionalDetails;
-                   //checkSectionAnswerInfo.StartDate = ObjSectionAnswerInfo.StartDate;
-                   //checkSectionAnswerInfo.EndDate = ObjSectionAnswerInfo.EndDate;
-                   // checkSectionAnswerInfo.UpdatedOn = DateTime.Now;
-                   // checkSectionAnswerInfo.Status = ObjSectionAnswerInfo.Status;
-                    //checkSectionAnswerInfo.UpdatedBy = ObjSectionAnswerInfo.CreatedBy;
+                        }
+                        foreach (var item in listSectionAnswerInfo)
+                        {
+                            var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == item.ReviewedStaffId);
+                            if (checkStaffReview != null && checkStaffReview.ReviewedStaffId > 0)
+                            {
+
+                                decimal? sumAnser = listSectionAnswerInfo.Sum(answer => answer.AnswerWeightage);
+                                decimal? sumQuestion = listSectionAnswerInfo.Sum(total => total.TotalQuestionWeightage);
+                                checkStaffReview.TotalWeightage = sumQuestion;
+                                checkStaffReview.EarnedWeightage = sumAnser;
+                                checkStaffReview.UpdatedBy = item.CreatedBy;
+                                checkStaffReview.UpdatedOn = DateTime.Now;
+
+                                await _context.SaveChangesAsync();
+
+                            }
+                        }
+
+
+
+                        _context.SectionAnswers.AddRange(listSectionAnswerInfo);
+                        await _context.SaveChangesAsync();                     
+                      
+                    }
 
                     await _context.SaveChangesAsync();
-                   
-                  
+                    dbContextTransaction.Commit();
+                    return ObjsectionAnswer;
+
+
 
                 }
-                else
-                {
-
-
-     //           var result=    _context.SectionAnswers.Where(x => x.StaffId == ObjSectionAnswerInfo.StaffId && x.IsDeleted == false);
-     //               if (result!=null && result.Count()>0)
-     //               {
-     //                   foreach (var item in result)
-     //                   {
-     //                       item.Status = false;
-     //                       item.UpdatedOn = DateTime.Now;
-     //                       item.UpdatedBy = ObjSectionAnswerInfo.CreatedBy;
-     //                       item.IsDeleted = true;
-					//	}
-					//	await _context.SaveChangesAsync();
-					//}
-     //                   if (ObjSectionAnswerInfo.Renew == 1)
-     //                       ObjSectionAnswerInfo.SectionAnswerId = 0;
-
-
-                    ///new button bit in object , check the current object staffid in contract , previous records of indiviual staffid  status inactive (0)
-
-                    //ObjSectionAnswerInfo.CreatedOn = DateTime.Now;
-                    //ObjSectionAnswerInfo.IsDeleted = false;
-                    _context.SectionAnswers.Add(ObjSectionAnswerInfo);
-                    await _context.SaveChangesAsync();
-
-						
-
-                }
-					await _context.SaveChangesAsync();
-					dbContextTransaction.Commit();
-					return ObjSectionAnswerInfo;
-
-
-
-				}
             catch (Exception ex)
             {
 					dbContextTransaction.Rollback();
@@ -247,56 +310,42 @@ namespace HRHUBAPI.Models
         }
 
 
-        //public async Task<bool> AlreadyExists(int SectionAnswerInfoId, DateTime enddate, int staffId, HrhubContext _context)
-        //{
-        //    try
-        //    {
+        public async Task<bool> AlreadyExists(int SectionAnswerInfoId, DateTime enddate, int staffId, HrhubContext _context)
+        {
+            try
+            {
 
-        //        if (SectionAnswerInfoId > 0)
-        //        {
-        //            var result = await _context.SectionAnswers.FirstOrDefaultAsync(x => x.EndDate == enddate && x.StaffId == staffId && x.SectionAnswerId != SectionAnswerInfoId && x.IsDeleted == false && x.Status==true);
-        //            if (result != null)
-        //            {
-        //                return true;
-        //            }
-
-
-        //        }
-        //        else
-        //        {
-        //            var result = await _context.SectionAnswers.FirstOrDefaultAsync(x => x.EndDate == enddate && x.StaffId == staffId && x.IsDeleted == false && x.Status == true);
-        //            if (result != null)
-        //            {
-        //                return true;
-        //            }
-
-        //        }
-
-        //        return false;
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
+                //if (SectionAnswerInfoId > 0)
+                //{
+                //    var result = await _context.SectionAnswers.FirstOrDefaultAsync(x => x.EndDate == enddate && x.StaffId == staffId && x.SectionAnswerId != SectionAnswerInfoId && x.IsDeleted == false && x.Status == true);
+                //    if (result != null)
+                //    {
+                //        return true;
+                //    }
 
 
+                //}
+                //else
+                //{
+                //    var result = await _context.SectionAnswers.FirstOrDefaultAsync(x => x.EndDate == enddate && x.StaffId == staffId && x.IsDeleted == false && x.Status == true);
+                //    if (result != null)
+                //    {
+                //        return true;
+                //    }
 
-  //      //Load dropdown Employeement Type
-  //      public async Task<List<EmploymentType>> GetEmploymentType(int CompnayId, HrhubContext hrhubContext)
-		//{
-		//	try
-		//	{
-		//		List<EmploymentType> objEmploymentType = new List<EmploymentType>();
-		//		objEmploymentType = await hrhubContext.EmploymentTypes.Where(x => x.IsDeleted == false && x.Status == true && x.CompanyId== CompnayId).ToListAsync();
-		//		return objEmploymentType;
-		//	}
-		//	catch { throw; }
-		//}
+                //}
+
+                return false;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
 
 
 
 
-	}
+    }
 }

@@ -376,6 +376,12 @@ namespace HRHUBAPI.Controllers
         #region Staff Performance Evaluation    
 
 
+        [HttpGet("GetStaffSectionAnswerList{ReviewFormId}")]
+        public async Task<ActionResult<List<SectionAnswer>>> GetStaffSectionAnswerList(int ReviewFormId)
+        {
+
+            return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, _context);
+        }
 
 
         [HttpGet("GetSectionQuestionList{CompanyId}/{ReviewFormId}")]
@@ -385,6 +391,18 @@ namespace HRHUBAPI.Controllers
             return await new SectionAnswer().GetSectionQuestion(CompanyId, ReviewFormId, _context);
         }
 
+
+        [HttpGet("GetStaffPerformanceInfoId{id}")]
+        public async Task<ActionResult<SectionAnswer>> GetStaffPerformanceInfoId(int id)
+        {
+            var result = await new SectionAnswer().SectionAnswerById(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
 
 
 
@@ -401,67 +419,74 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        //[HttpPost("PerformanceSectionAddOrUpdate")]
-        //public async Task<ActionResult<Section>> PerformanceSectionAddOrUpdate(Section obj)
-        //{
+        [HttpPost("StaffPerformanceAddOrUpdate")]
+        public async Task<ActionResult<SectionAnswer>> StaffPerformanceAddOrUpdate(List<SectionAnswer> list)
+        {
 
 
-        //    var result = await new Section().PostSection(obj, _context);
-        //    if (result != null && result.Flag == 2)
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Update Successfully!"
-        //        });
-        //    else
-        //        return Ok(new
-        //        {
-        //            Success = true,
-        //            Message = "Data Insert Successfully!"
-        //        });
+            var result = await new SectionAnswer().PostSectionAnswer(list, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
 
 
-        //}
+        }
 
-        //[HttpGet("DeletePerformanceSectionInfo{id}/{UserId}")]
-        //public async Task<ActionResult<Section>> DeletePerformanceSectionInfo(int id, int UserId)
-        //{
-        //    var result = await new Section().DeleteSectionInfo(id, UserId, _context);
-        //    if (result != null && id > 0)
-        //        return Ok(result);
+        [HttpGet("DeleteStaffPerformanceInfo{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteStaffPerformanceInfo(int id, int UserId)
+        {
+            var result = await new SectionAnswer().DeleteSectionAnswerInfo(id, UserId, _context);
+            if (id > 0)
+                return Ok(new
+                {
 
-        //    return NotFound("Data Not Found!");
-        //}
-
-
-        //[HttpGet("PerformanceSectionCheckData{id}/{title}")]
-        //public async Task<ActionResult<Section>> PerformanceSectionCheckData(int id, string title)
-        //{
-        //    if (await new Section().AlreadyExist(id, title, _context))
-        //    {
-        //        return Ok(new
-        //        {
-
-        //            Success = true,
-        //            Message = "Section Already Exist!"
+                    Success = true,
+                    Message = "Data Delete Successfully!"
 
 
-        //        });
-        //    }
-        //    else
-        //    {
+                });
 
-        //        return Ok(new
-        //        {
-
-        //            Success = false,
-        //            Message = "Not found"
+            return NotFound("Data Not Found!");
+        }
 
 
-        //        });
-        //    }
+        [HttpGet("StaffPerformanceCheckData{id}/{title}")]
+        public async Task<ActionResult<SectionAnswer>> StaffPerformanceCheckData(int id, string title)
+        {
+            if (await new Section().AlreadyExist(id, title, _context))
+            {
+                return Ok(new
+                {
 
-        //}
+                    Success = true,
+                    Message = "Section Already Exist!"
+
+
+                });
+            }
+            else
+            {
+
+                return Ok(new
+                {
+
+                    Success = false,
+                    Message = "Not found"
+
+
+                });
+            }
+
+        }
 
 
 

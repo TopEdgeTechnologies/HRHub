@@ -4,7 +4,8 @@
 }
 
 
-
+@using (Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Get, new { @id = "myform", enctype = "multipart/form-data" }))
+{
 <div class="modal fade" id="AddGeneralModal">
     <div class="modal-dialog" role="document">
         <input type="hidden" asp-for="ReviewerStaffId" />
@@ -15,11 +16,12 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body" style="z-index:99999">
+            <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
 
                         <div class="form-group">
+                                <input type="hidden" name="StaffId" id="StaffId" />
                             <label>Review type <span class="text-danger">*</span></label>
                             <select id="ReviewFormId" name="ReviewFormId" class="form-control custom-select select2" data-placeholder="Select Review">
 
@@ -38,13 +40,16 @@
                 
             </div>
             <div class="modal-footer">
-                <a onclick="PerformanceForm()" class="btn btn-primary">GO</a>
+                    <button type="submit" onclick="return PerformanceForm()" class="btn btn-primary">GO</button>
 
                 <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
             </div>
         </div>
     </div>
 </div>
+
+}
+
 <div class="row row-sm mt-4">
     <div class="col-lg-12">
         <div class="card">
@@ -165,41 +170,50 @@
         });
         function addnewPerformance(id) {
 
-            $("#ReviewerStaffId").val(id);
+            
+            $("#StaffId").val(id);
             $("#AddGeneralModal").modal('show');
 
 
         }
         function PerformanceForm() {
-
+            var status = true;
             if ($("#ReviewFormId").val() == null || $("#ReviewFormId").val() == "Select Review") {
                 $.growl.warning({
                     message: "Please Select Review"
                 });
-                return;
-            }
-            var Data = {
-                StaffId: $("#ReviewerStaffId").val(),
-                ReviewFormId: $("#ReviewFormId").val()
-            }
+                status = false;
+                return false;
+            }            
+            
 
-            $.ajax({
-                async: false,
-                url: "/Performance/StaffPerformanceCreateOrUpdate",
-                type: "GET",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
+            if (status) {
+            $('#myForm').submit(function (e) {
 
+                e.preventDefault(); // Prevent the form from submitting normally
 
+                var Data = {
+                    StaffId: $("#ReviewerStaffId").val(),
+                    ReviewFormId: $("#ReviewFormId").val()
+                } // Serialize the form data
+
+                $.ajax({
+                    url: '@Url.Action("StaffPerformanceCreateOrUpdate", "Performance")', // Replace "ControllerName" with your actual controller name
+                    type: 'Get',
+                    data: Data,
+                    success: function (result) {
+                        $('#ReviewFormId').select2({ placeholder: 'Select Review', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error response
                     }
-                },
-                error: function () {
-                    status = false;
-                }
-            })
+                });
+            });
+            }
+           
         }
-
+       
     </script>
 
 }

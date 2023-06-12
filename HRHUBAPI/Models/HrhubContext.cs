@@ -141,6 +141,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<VInfoStaff> VInfoStaffs { get; set; }
 
+    public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
+
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -783,6 +785,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
             entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
             entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
             entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
@@ -1146,6 +1149,25 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.WorkMode).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ViewPerformanceForm>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("view_PerformanceForm");
+
+            entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.PerformanceFormTitle).IsUnicode(false);
+            entity.Property(e => e.QuestionTitle).IsUnicode(false);
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
+            entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
+            entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.SectionTitle).IsUnicode(false);
         });
 
         modelBuilder.Entity<WeekendRule>(entity =>
