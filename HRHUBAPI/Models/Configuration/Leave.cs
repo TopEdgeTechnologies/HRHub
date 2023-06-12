@@ -143,14 +143,14 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<List<Leave>> GetHRLeave(int CompanyId, HrhubContext _context)
+        public async Task<List<Leave>> GetHRLeave(int CompanyId,int LoginStaffId, HrhubContext _context)
         {
             try
             {
 
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC HR.sp_Get_StaffHRLeaves " + CompanyId + " , 0 , 0 , '' , 0 ";
+                string query = "EXEC HR.sp_Get_StaffHRLeaves " + CompanyId + " , "+ LoginStaffId + " , 0 , 0 , '' , 0 ";
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
@@ -649,45 +649,47 @@ namespace HRHUBAPI.Models
             {
                 try
                 {
-                    // Update Leave status 
-                    var Info = await hrhubContext.Leaves.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.IsDeleted == false);
-                    if (Info != null && Info.LeaveId > 0)
+                    if(obj.ApprovedByDesignationID == obj.FinalApprovalDesignationID)
                     {
-                        Info.LeaveStatusId = obj.LeaveStatusId;
-                        Info.UpdatedBy = obj.CreatedBy;
-                        Info.UpdatedOn = DateTime.Now;
-
-                        await hrhubContext.SaveChangesAsync();
-                    }
-
-                    // Leave Attendance Entry
-                    if (obj.LeaveStatusId == 3)
-                    {
-                        DateTime SelectedDate_From = Convert.ToDateTime(obj.StartDate);
-                        DateTime SelectedDate_To = Convert.ToDateTime(obj.EndDate);
-
-
-                        for (DateTime SelectedDate = SelectedDate_From; SelectedDate.Date <= SelectedDate_To.Date; SelectedDate = SelectedDate.AddDays(1))
+                        // Update Leave status 
+                        var Info = await hrhubContext.Leaves.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.IsDeleted == false);
+                        if (Info != null && Info.LeaveId > 0)
                         {
-                            #region Attendance Entry
-                            AttendanceMaster objModel = new Models.AttendanceMaster();
-                            objModel.AttendanceDate = SelectedDate;
+                            Info.LeaveStatusId = obj.LeaveStatusId;
+                            Info.UpdatedBy = obj.CreatedBy;
+                            Info.UpdatedOn = DateTime.Now;
 
-                            objModel.StaffId = obj.ApplicantStaffId;
-                            objModel.MarkAsShortLeave = obj.MarkAsShortLeave;
-                            objModel.MarkAsHalfLeave = obj.MarkAsHalfLeave;
-                            objModel.AttendanceStatusId = 4;
-                            objModel.LeaveTypeId = obj.LeaveTypeId;
-                            objModel.Remarks = "Leave";
-                            objModel.CreatedBy = obj.CreatedBy;
-                            objModel.CreatedOn = DateTime.Now;
+                            await hrhubContext.SaveChangesAsync();
+                        }
 
-                            hrhubContext.AttendanceMasters.Add(objModel);
-                            #endregion
+                        // Leave Attendance Entry
+                        if (obj.LeaveStatusId == 3)
+                        {
+                            DateTime SelectedDate_From = Convert.ToDateTime(obj.StartDate);
+                            DateTime SelectedDate_To = Convert.ToDateTime(obj.EndDate);
 
+
+                            for (DateTime SelectedDate = SelectedDate_From; SelectedDate.Date <= SelectedDate_To.Date; SelectedDate = SelectedDate.AddDays(1))
+                            {
+                                #region Attendance Entry
+                                AttendanceMaster objModel = new Models.AttendanceMaster();
+                                objModel.AttendanceDate = SelectedDate;
+
+                                objModel.StaffId = obj.ApplicantStaffId;
+                                objModel.MarkAsShortLeave = obj.MarkAsShortLeave;
+                                objModel.MarkAsHalfLeave = obj.MarkAsHalfLeave;
+                                objModel.AttendanceStatusId = 4;
+                                objModel.LeaveTypeId = obj.LeaveTypeId;
+                                objModel.Remarks = "Leave";
+                                objModel.CreatedBy = obj.CreatedBy;
+                                objModel.CreatedOn = DateTime.Now;
+
+                                hrhubContext.AttendanceMasters.Add(objModel);
+                                #endregion
+
+                            }
                         }
                     }
-
 
                     // Insertion in LeaveApproval Table
                     var dbResult = await hrhubContext.LeaveApprovals.FirstOrDefaultAsync(x => x.LeaveId == obj.LeaveId && x.ApprovalByStaffId == obj.ApprovalByStaffId);
@@ -722,29 +724,6 @@ namespace HRHUBAPI.Models
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //Load dropdown Leave data Id vise
-        //public async Task<List<Leave>> GetLeaveIdVise(int LeaveId,HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        //var list = await _context.LeaveInfos.Where(x=>x.IsDeleted==false).ToListAsync();
-        //        var list = await (from c in _context.Leaves
-        //                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-        //                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
-        //                          join s in _context.Sessions on c.SessionId equals s.SessionId
-        //Load dropdown LeaveStatus
         public async Task<List<LeaveStatus>> GetLeaveStatus(HrhubContext hrhubContext)
         {
             try
@@ -755,24 +734,6 @@ namespace HRHUBAPI.Models
             }
             catch { throw; }
         }
-
-
-
-
-        //Load dropdown WeekendRule
-        public async Task<List<WeekendRule>> GetWeekendRule(HrhubContext hrhubContext)
-        {
-            try
-            {
-                List<WeekendRule> objWeekendRule = new List<WeekendRule>();
-                objWeekendRule = await hrhubContext.WeekendRules.Where(x => x.IsDeleted == false && x.Status == true).ToListAsync();
-                return objWeekendRule;
-            }
-            catch { throw; }
-        }
-
-
-
 
 
         public async Task<LeaveApprovalSetting> GetLeaveApprovalSetting(int CompanyId, HrhubContext _context)
@@ -790,75 +751,6 @@ namespace HRHUBAPI.Models
 
             }
         }
-
-
-
-
-
-
-        //Load dropdown Leave data Id vise
-        //public async Task<List<Leave>> GetLeaveIdVise(int LeaveId,HrhubContext _context)
-        //{
-        //    try
-        //    {
-        //        //var list = await _context.LeaveInfos.Where(x=>x.IsDeleted==false).ToListAsync();
-        //        var list = await (from c in _context.Leaves
-        //                          join cl in _context.ClassInfos on c.AppliedForClassId equals cl.ClassId
-        //                          join g in _context.GroupInfos on c.GroupId equals g.GroupId
-        //                          join s in _context.Sessions on c.SessionId equals s.SessionId
-
-        //                          where c.IsDeleted == false
-        //                          && cl.IsDeleted == false
-        //                          && g.IsDeleted == false
-        //                          && s.IsDeleted == false
-        //                          && c.LeaveId == LeaveId
-        //                          select new Leave()
-        //                          {
-        //                              LeaveId = c.LeaveId,
-        //                              Name = c.Name,
-        //                              AppliedForClassId = cl.ClassId,
-        //                              ClassTitle = cl.Title,
-        //                              GroupId = g.GroupId,
-        //                              GroupName = g.Title,
-        //                              SessionId = s.SessionId,
-        //                              SessionName = s.Title,
-        //                              Cnic = c.Cnic,
-        //                              AdmissionDate = c.AdmissionDate,
-        //                              LeaveNo = c.LeaveNo,
-        //                              Dob = c.Dob,
-        //                              FatherName = c.FatherName,
-        //                              Gender = c.Gender,
-        //                              Address= c.Address,
-        //                              City= c.City,
-        //                              Mobile = c.Mobile,
-        //                              Email= c.Email,
-        //                              PreviousSchool= c.PreviousSchool,
-        //                              FatherQualification = c.FatherQualification,
-        //                              MotherQualification = c.MotherQualification,
-        //                              MotherName= c.MotherName,
-        //                              ParentStaffId= c.ParentStaffId,
-        //                              FirstName = c.FirstName,
-        //                              LastName = c.LastName,
-        //                              IsActive = c.IsActive
-
-
-        //                          }).ToListAsync();
-
-        //        return list;
-
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw;
-
-        //    }
-        //}
-
-
-
 
 
     }

@@ -7,9 +7,10 @@
 
 
 <style>
-    .SumoSelect>.CaptionCont>span.placeholder {
+    .SumoSelect > .CaptionCont > span.placeholder {
         color: white !important
     }
+
     .note-editing-area {
         height: 390px !important
     }
@@ -178,8 +179,8 @@
                     <h4 class="card-title">Leaves Approval Detail</h4>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive recent_jobs p-0 card-body">
-                        <table class="table mg-b-0 text-nowrap">
+                    <div class="table-responsive recent_jobs p-0 card-body" >
+                        <table class="table mg-b-0 text-nowrap" id="myTable">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0 w-5 col-1">Sr.#</th>
@@ -194,42 +195,42 @@
                                     int count = 1;
                                     foreach (var item in Model.ListLeaveApprovalData)
                                     {
-                                                <tr class="border-bottom">
-                                                    <td>@count</td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <div class="table_img brround bg-light me-3">
-                                                                <img src="@item.ApprovedByStaffSnap" alt="img" class="">
-                                                            </div>
-                                                            <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                                <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
-                                                                <div class="clearfix"></div>
-                                                                <small class="text-muted">@item.ApprovedByDesignation</small>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                        <tr class="border-bottom">
+                                            <td>@count</td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="table_img brround bg-light me-3">
+                                                        <img src="@item.ApprovedByStaffSnap" alt="img" class="">
+                                                    </div>
+                                                    <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                        <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
+                                                        <div class="clearfix"></div>
+                                                        <small class="text-muted">@item.ApprovedByDesignation</small>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                                    <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LeaveApprovalDate</td>
-                                                    <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
+                                            <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LeaveApprovalDate</td>
+                                            <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
 
-                                                    @if (item.LeaveStatusId == 1) // New
+                                            @if (item.LeaveStatusId == 1) // New
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-primary text-white">New</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-primary text-white">New</span></td>
                                             }
                                             else if (item.LeaveStatusId == 2) // Pending
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
                                             }
                                             else if (item.LeaveStatusId == 3) // Approved
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
                                             }
                                             else if (item.LeaveStatusId == 4) // Rejected
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
                                             }
 
-                                                    @* <td class="text-start d-flex mt-1">
+                                            @* <td class="text-start d-flex mt-1">
                                     <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="View"><i class="feather feather-eye primary text-primary"></i></a>
                                     <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
                                     <ul class="dropdown-menu dropdown-menu-end" role="menu">
@@ -239,7 +240,7 @@
                                     <li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
                                     </ul>
                                     </td>*@
-                                                </tr>
+                                        </tr>
                                         count++;
                                     }
                                 }
@@ -268,10 +269,16 @@
                     <div class="d-flex">
 
                         <div class="ms-auto">
-                            <a onclick="showleaveApprovalmodel(3)" class="btn btn-success my-1">Approve</a>
-                            <a onclick="showleaveApprovalmodel(4)" class="btn btn-danger my-1">Reject</a>
-                            <a onclick="showforwardleavemodel()" class="btn btn-primary my-1">Forward</a>
-                            <a asp-action="HRLeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                            @if (ViewBag.ApprovalBtnVisibility == true)
+                            {
+                                <a onclick="showleaveApprovalmodel(3)" class="btn btn-success my-1">Approve</a>
+                                <a onclick="showleaveApprovalmodel(4)" class="btn btn-danger my-1">Reject</a>
+                                <a onclick="showforwardleavemodel()" class="btn btn-primary my-1">Forward</a>
+                                <a asp-action="HRLeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                            }
+                            else{
+                                <a asp-action="LeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                            }
 
                         </div>
                     </div>
@@ -366,6 +373,7 @@
                 }
 
             }
+            $('#myTable').DataTable();
 
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
 
@@ -381,7 +389,7 @@
             $("#LeaveStatusID").val(approvalstatusid);
             $("#Remarks").css("border-color", "#ddd");
 
-           
+
             //$("#modeltitle").text("Leave Approval for " + name);
 
             $("#leaveapprovalmodal").modal('show');
