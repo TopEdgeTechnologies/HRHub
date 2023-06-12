@@ -220,17 +220,16 @@ namespace HRHUBWEB.Controllers
         {
             if (month > 0 && year > 0)
             {
-                StaffSalary objStaffSalary = new StaffSalary();
+                //var dayMonth = "01";
+                //var strSalaryMonth = $"{year}-{month}-{dayMonth}";
 
-                var dayMonth = "1";
-                var strSalaryMonth = $"{year}/{month}/{dayMonth}";
+                //StaffSalary objStaffSalary = new StaffSalary();
+                //objStaffSalary.SalaryMonth = Convert.ToDateTime(strSalaryMonth);
 
-                objStaffSalary.SalaryMonth = Convert.ToDateTime(strSalaryMonth);
-
-                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/AlreadyExistsMaster", HttpMethod.Get);
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/AlreadyExistsMaster/{month}/{year}", HttpMethod.Get);
                 return Json(result);
             }
-            return Json(null);  
+            return Json(null);
         }
 
         public async Task<IActionResult> StaffSalaryList(int month = 0, int year = 0)

@@ -316,13 +316,16 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<bool> AlreadyExistsMaster(StaffSalary objStaffSalary, HrhubContext hrhubContext)
+        public async Task<bool> AlreadyExistsMaster(int month, int year, HrhubContext hrhubContext)
         {
             try
             {
-                if (objStaffSalary.SalaryMonth != null)
+                if (month > 0 && year > 0)
                 {
-                    var dbResult = await hrhubContext.StaffSalaries.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryMonth == objStaffSalary.SalaryMonth);
+                    var dayMonth = "01";
+                    var strSalaryMonth = $"{year}-{month}-{dayMonth}";
+
+                    var dbResult = await hrhubContext.StaffSalaries.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryMonth == Convert.ToDateTime(strSalaryMonth));
                     if (dbResult != null)
                     {
                         return true;

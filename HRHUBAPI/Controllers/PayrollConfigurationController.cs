@@ -541,10 +541,10 @@ namespace HRHUBAPI.Controllers
 			    }
 		    }
 
-            [HttpGet("AlreadyExistsMaster")]
-            public async Task<ActionResult<bool>> AlreadyExistsMaster(StaffSalary objStaffSalary)
+            [HttpGet("AlreadyExistsMaster/{month}/{year}")]
+            public async Task<ActionResult<StaffSalary>> AlreadyExistsMaster(int month, int year)
             {
-                var dbResult = await new StaffSalary().AlreadyExistsMaster(objStaffSalary, _context);
+            var dbResult = await new StaffSalary().AlreadyExistsMaster(month, year, _context);
                 if (dbResult == true)
                 {
                     return Ok(new

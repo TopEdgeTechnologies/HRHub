@@ -265,9 +265,15 @@
 		var dayMonth = "1";
 		var strDateStart = $"{@Model.Year}/{dayMonth}/{dayMonth}";
 		var strDateEnd = $"{@Model.Year}/{@Model.MonthNumber}/1";
+
+		var year = @Model.Year ?? 0;
+		DateTime date = new DateTime(@Model.Year.Value, @Model.MonthNumber.Value, 1);
+		string monthName = date.ToString("MMMM");
+
 	}
 		<input type="hidden" id="salaryMonth" value=@Model.MonthNumber />
 		<input type="hidden" id="salaryYear" value=@Model.Year />
+		<input type="hidden" id="salaryMonthName" value=@monthName />
 		<input type="hidden" id="startDate" value=@strDateStart />
 		<input type="hidden" id="endDate" value=@strDateEnd />
 		
@@ -282,10 +288,10 @@
 						<div class="page-header d-xl-flex d-block">
 							<div class="page-leftheader">
 								@{
-									var monthNumber = @Model.MonthNumber ?? 1; // Assuming 1 as the default month number
-									var year = @Model.Year ?? 0;
-									var monthName = new DateTime(year, monthNumber, 1).ToString("MMMM");
-									var title = "Staff Salary " + monthName + "-" + year;
+									//var monthNumber = @Model.MonthNumber ?? 1; // Assuming 1 as the default month number
+									//var year = @Model.Year ?? 0;
+									//var monthName = new DateTime(year, monthNumber, 1).ToString("MMMM");
+								var title = "Staff Salary " + monthName + "-" + year;
 								}
 							<div class="page-title">@title</div>
 							</div>
@@ -497,7 +503,7 @@
 				$('#lbl_regNo').text(data[0].registrationNo)
 				$('#lbl_firstName').text(data[0].firstName + ' ' + data[0].lastName)
 				$('#lbl_Department').text(data[0].departmentTitle)
-				$('#lbl_SalaryPeriod').text($('#salaryMonth').val() + ' - ' + $('#salaryYear').val())
+				$('#lbl_SalaryPeriod').text($('#salaryMonthName').val() + ' - ' + $('#salaryYear').val())
 
 				if (data[0].companyLogoAttachment != null && data[0].companyLogoAttachment != '') 
 				{
