@@ -55,84 +55,11 @@
         transform: rotate(-90deg);
         display: block;
     }
-
-    .comment-section {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        border: 2px solid #5fb2ff;
-        border-radius: 45px;
-        padding: 9px 9px;
-        margin-bottom: 1rem;
-    }
-
-    input.comment-input {
-        width: 100%;
-        border: none;
-        outline: none;
-        padding: 7px 10px;
-        font-size: 1.2rem;
-    }
-
-        input.comment-input::placeholder {
-            font-size: 1.1rem
-        }
-
-    .comment-icons {
-        display: flex;
-    }
-
-    .btn-icon {
-        width: 3rem;
-        height: 3rem;
-        background-color: #e5f3ff;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        margin-right: 8px;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
+    .fixed-card-height{
+        min-height:490px;
     }
 
 
-    a.attachement-btn {
-        width: 105px;
-        text-align: center;
-        border: 1px solid #e5f3ff;
-        padding: 2px 9px;
-        border-radius: 45px;
-        margin-right: 9px;
-        background: #e5f3ff;
-    }
-
-    ul.timeline > li.resignation-pending:before {
-        content: " ";
-        background: #f7284a;
-        display: inline-block;
-        position: absolute;
-        border-radius: 50%;
-        border: 4px solid #fdedef;
-        left: -2px;
-        width: 20px;
-        height: 20px;
-        z-index: 1;
-        margin: 2px;
-    }
-
-    ul.timeline > li.resignation-approved:before {
-        content: " ";
-        background: #0dcd94;
-        display: inline-block;
-        position: absolute;
-        border-radius: 50%;
-        border: 4px solid #fdedef;
-        left: -2px;
-        width: 20px;
-        height: 20px;
-        z-index: 1;
-        margin: 2px;
-    }
 </style>
 
 
@@ -159,61 +86,61 @@
 
                         foreach (var item in list)
                         {
-                            <div class="col-xl-3 col-lg-6 col-md-12">
-                                <div class="card border p-0 shadow-none">
-                                    <input type="hidden" id="CardStaffID" value="@item.StaffId" />
-                                    <input type="hidden" id="CardStaffName" value="@item.StaffName" />
-                                    <input type="hidden" id="CardStaffSnap" value="@item.StaffSnap" />
-                                    <input type="hidden" id="CardLeaveTypeID" value="@item.LeaveTypeId" />
-                                    <input type="hidden" id="CardLeaveType" value="@item.LeaveTypeTitle" />
-                                    <input type="hidden" id="CardStartDate" value="@item.LeaveStartDate" />
-                                    <input type="hidden" id="CardEndDate" value="@item.LeaveEndDate" />
-                                    <input type="hidden" id="CardDays" value="@item.Days" />
-                                    <input type="hidden" id="CardHalfDay" value="@item.MarkAsHalfLeave" />
-                                    <input type="hidden" id="CardShortDay" value="@item.MarkAsShortLeave" />
-                                    <input type="hidden" id="CardDepartment" value="@item.Department" />
-                                    <input type="hidden" id="CardDesignation" value="@item.Designation" />
-                                    <div class="card-header border-0">
-                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h3 class="card-title">@item.LeaveTypeTitle Leave</h3></a>
-                                    </div>
-                                    <div class="d-flex p-4">
-                                        <div>
-                                            <div class="avatar avatar-lg brround d-block cover-image" data-bs-image-src="@item.StaffSnap"></div>
+                                <div class="col-xl-3 col-lg-6 col-md-12">
+                                    <div class="card border p-0 shadow-none fixed-card-height">
+                                        <input type="hidden" id="CardStaffID" value="@item.StaffId" />
+                                        <input type="hidden" id="CardStaffName" value="@item.StaffName" />
+                                        <input type="hidden" id="CardStaffSnap" value="@item.StaffSnap" />
+                                        <input type="hidden" id="CardLeaveTypeID" value="@item.LeaveTypeId" />
+                                        <input type="hidden" id="CardLeaveType" value="@item.LeaveTypeTitle" />
+                                        <input type="hidden" id="CardStartDate" value="@item.LeaveStartDate" />
+                                        <input type="hidden" id="CardEndDate" value="@item.LeaveEndDate" />
+                                        <input type="hidden" id="CardDays" value="@item.Days" />
+                                        <input type="hidden" id="CardHalfDay" value="@item.MarkAsHalfLeave" />
+                                        <input type="hidden" id="CardShortDay" value="@item.MarkAsShortLeave" />
+                                        <input type="hidden" id="CardDepartment" value="@item.Department" />
+                                        <input type="hidden" id="CardDesignation" value="@item.Designation" />
+                                        <div class="card-header border-0">
+                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h3 class="card-title">@item.LeaveTypeTitle Leave</h3></a>
                                         </div>
-                                        <div class="ps-3">
-                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h5 class="mb-0 mt-2 text-dark fs-18">@item.StaffName</h5></a>
-                                            <p class="text-muted fs-12 mt-1 mb-0">@item.Department <span class="my-auto fs-9 font-weight-normal  ms-1 me-1 text-black-20">/</span> @item.Designation</p>
-                                        </div>
-                                    </div>
-                                    <div class="card-body pt-2 bg-light">
-                                        <div class="mt-3 mb-3">
-                                            <div class="h5 mb-1">
-                                                <span class="feather feather-calendar"></span> : @(item.LeaveStartDate == item.LeaveEndDate ? item.LeaveStartDate : item.LeaveStartDate + " - " + item.LeaveEndDate)
-                                                <span class="badge badge-md badge-primary-light ms-1">@item.Days </span>
+                                        <div class="d-flex p-4">
+                                            <div>
+                                                <div class="avatar avatar-lg brround d-block cover-image" data-bs-image-src="@item.StaffSnap"></div>
                                             </div>
-                                            <small class="text-muted fs-11">Applied On: @item.LeaveAppliedOnDate</small>
+                                            <div class="ps-3">
+                                                <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h5 class="mb-0 mt-2 text-dark fs-18">@item.StaffName</h5></a>
+                                                <p class="text-muted fs-12 mt-1 mb-0">@item.Department <span class="my-auto fs-9 font-weight-normal  ms-1 me-1 text-black-20">/</span> @item.Designation</p>
+                                            </div>
                                         </div>
-                                        <div class="progress progress-sm mb-2">
-                                            <div class="progress-bar bg-success " style="width: @item.ConsumedLeaves%"></div>
+                                        <div class="card-body pt-2 bg-light">
+                                            <div class="mt-3 mb-3">
+                                                <div class="h5 mb-1">
+                                                    <span class="feather feather-calendar"></span> : @(item.LeaveStartDate == item.LeaveEndDate ? item.LeaveStartDate : item.LeaveStartDate + " - " + item.LeaveEndDate)
+                                                    <span class="badge badge-md badge-primary-light ms-1">@item.Days </span>
+                                                </div>
+                                                <small class="text-muted fs-11">Applied On: @item.LeaveAppliedOnDate</small>
+                                            </div>
+                                            <div class="progress progress-sm mb-2">
+                                                <div class="progress-bar bg-success " style="width: @item.ConsumedLeaves%"></div>
+                                            </div>
+                                            <div class="d-flex align-items-end justify-content-between mb-0">
+                                                <h6 class="fs-12 mb-0">Remaining Leaves</h6>
+                                                <h6 class="font-weight-bold fs-12 mb-0">@item.RemainingLeaves</h6>
+                                            </div>
                                         </div>
-                                        <div class="d-flex align-items-end justify-content-between mb-0">
-                                            <h6 class="fs-12 mb-0">Remaining Leaves</h6>
-                                            <h6 class="font-weight-bold fs-12 mb-0">@item.RemainingLeaves</h6>
+                                        <div class="p-4">
+                                            <label class="form-label">Reason:</label>
+                                            <p class="text-muted leave-text">@item.LeaveSubject</p>
                                         </div>
-                                    </div>
-                                    <div class="p-4">
-                                        <label class="form-label">Reason:</label>
-                                        <p class="text-muted leave-text">@item.LeaveSubject</p>
-                                    </div>
-                                    <div class="card-footer p-0 border-top-0">
-                                        <div class="btn-group w-100 leaves-btns">
-                                            <a onclick="showleaveApprovalmodel(this,@item.LeaveId,3 )" class="btn btn-outline-light w-50 text-success">Accept</a>
-                                            <a onclick="showforwardleavemodel(this,@item.LeaveId)" class="btn btn-outline-light w-50 text-warning">Forward</a>
-                                            <a onclick="showleaveApprovalmodel(this,@item.LeaveId,4)" class="btn btn-outline-light w-50 text-danger">Reject</a>
+                                        <div class="card-footer p-0 border-top-0">
+                                            <div class="btn-group w-100 leaves-btns">
+                                                <a onclick="showleaveApprovalmodel(this,@item.LeaveId,3 )" class="btn btn-outline-light w-50 text-success">Accept</a>
+                                                <a onclick="showforwardleavemodel(this,@item.LeaveId)" class="btn btn-outline-light w-50 text-warning">Forward</a>
+                                                <a onclick="showleaveApprovalmodel(this,@item.LeaveId,4)" class="btn btn-outline-light w-50 text-danger">Reject</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         }
                     }
                 </div>

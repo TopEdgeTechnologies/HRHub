@@ -86,9 +86,16 @@ namespace HRHUBAPI.Controllers
                     Message = "Data Insert Successfully!"
                 });
 
+        }
 
+        [HttpGet("GetStaffLeaveApprovalComments{id}/{approvalstatusid}/{loginstaffid}")]
+        public async Task<ActionResult<List<LeaveApproval>>> GetStaffLeaveApprovalComments(int Id, int approvalstatusid, int loginstaffid)
+        {
+            var result = await new Leave().GetStaffComments(Id, approvalstatusid, loginstaffid, _context);
+            if (result != null)
+                return Ok(result);
 
-
+            return NotFound();
 
         }
 

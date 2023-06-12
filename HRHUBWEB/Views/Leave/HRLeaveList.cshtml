@@ -3,10 +3,11 @@
 
 
 <style>
-    .SumoSelect>.CaptionCont>span.placeholder {
+    .SumoSelect > .CaptionCont > span.placeholder {
         color: white !important
     }
-     .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
         background-color: #3366FF !important;
         color: white !important
     }
@@ -48,7 +49,6 @@
         border-bottom: 12px solid transparent;
         width: 0;
     }
-
     .message-feed:not(.right) .mf-content:before {
         content: "";
         position: absolute;
@@ -61,84 +61,10 @@
         transform: rotate(-90deg);
         display: block;
     }
-
-    .comment-section {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        border: 2px solid #5fb2ff;
-        border-radius: 45px;
-        padding: 9px 9px;
-        margin-bottom: 1rem;
+    .fixed-card-height{
+        min-height:490px;
     }
 
-    input.comment-input {
-        width: 100%;
-        border: none;
-        outline: none;
-        padding: 7px 10px;
-        font-size: 1.2rem;
-    }
-
-        input.comment-input::placeholder {
-            font-size: 1.1rem
-        }
-
-    .comment-icons {
-        display: flex;
-    }
-
-    .btn-icon {
-        width: 3rem;
-        height: 3rem;
-        background-color: #e5f3ff;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.3rem;
-        margin-right: 8px;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-    }
-
-
-    a.attachement-btn {
-        width: 105px;
-        text-align: center;
-        border: 1px solid #e5f3ff;
-        padding: 2px 9px;
-        border-radius: 45px;
-        margin-right: 9px;
-        background: #e5f3ff;
-    }
-
-    ul.timeline > li.resignation-pending:before {
-        content: " ";
-        background: #f7284a;
-        display: inline-block;
-        position: absolute;
-        border-radius: 50%;
-        border: 4px solid #fdedef;
-        left: -2px;
-        width: 20px;
-        height: 20px;
-        z-index: 1;
-        margin: 2px;
-    }
-
-    ul.timeline > li.resignation-approved:before {
-        content: " ";
-        background: #0dcd94;
-        display: inline-block;
-        position: absolute;
-        border-radius: 50%;
-        border: 4px solid #fdedef;
-        left: -2px;
-        width: 20px;
-        height: 20px;
-        z-index: 1;
-        margin: 2px;
-    }
 </style>
 
 
@@ -161,7 +87,7 @@
                         {
                             if (Count > 4) break;
                             <div class="col-xl-3 col-lg-6 col-md-12">
-                                <div class="card border p-0 shadow-none">
+                                <div class="card border p-0 shadow-none fixed-card-height">
                                     <input type="hidden" id="CardStaffID" value="@item.StaffId" />
                                     <input type="hidden" id="CardStaffName" value="@item.StaffName" />
                                     <input type="hidden" id="CardStaffSnap" value="@item.StaffSnap" />
@@ -346,15 +272,20 @@
                                         <td>
 
                                             <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <img src="@item.StaffSnap" alt="img" class="">
-                                                </div>
-                                                <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h6 class="mb-0 fs-13 font-weight-semibold" data-staffid="@item.StaffId">@item.StaffRegistrationNo - @item.StaffName</h6></a>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted designation">@item.Designation</small>
-                                                    <small hidden class="text-muted department">@item.Department</small>
-                                                </div>
+                                                
+                                                    <div class="table_img brround bg-light me-3">
+                                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId">
+                                                        <img src="@item.StaffSnap" alt="img" class="">    </a>
+                                                    </div>
+                                                    <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                        <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId"><h6 class="mb-0 fs-13 font-weight-semibold" data-staffid="@item.StaffId">@item.StaffRegistrationNo - @item.StaffName</h6>
+                                                        <div class="clearfix"></div>
+                                                        <small class="text-muted designation">@item.Designation</small>
+                                                    </a>
+
+                                                        <small hidden class="text-muted department">@item.Department</small>
+                                                    </div>
+                                            
                                             </div>
 
 
@@ -396,24 +327,41 @@
                                         }
 
                                         <td class="text-start d-flex">
-                                            <a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,3,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
-                                                <i class="feather feather-check text-success mt-1"></i>
-                                            </a>
-                                            <a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,4,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
-                                                <i class="feather feather-x text-danger mt-1"></i>
-                                            </a>
-                                            @if (item.LeaveStatusId == 1) // New
-                                            {
-                                                <a href="#" onclick="showforwardleavemodel(this,@item.LeaveId,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
-                                                    <i class="text-warning fe fe-arrow-right-circle mt-1"></i>
-                                                </a>
-                                                @*<a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                </a>*@
-                                            }
-                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
-                                            </a>
+
+                                            <div class="btn-group ms-3 mb-0">
+                                                <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-start" style="">
+                                                    <a onclick="showleaveApprovalmodel(this,@item.LeaveId,3,0)" href="#" class="dropdown-item"><i class="feather feather-check me-2"></i> Accept</a>
+                                                    <a onclick="showleaveApprovalmodel(this,@item.LeaveId,4,0)" href="#" class="dropdown-item"><i class="feather feather-x me-2"></i> Reject</a>
+                                                    @if (item.LeaveStatusId == 1) // New
+                                                    {
+                                                        <a onclick="showforwardleavemodel(this,@item.LeaveId,0)" href="#" class="dropdown-item"><i class="fe fe-arrow-right-circle me-2"></i> Forward</a>
+                                                    }
+                                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="dropdown-item"><i class="fe fe-eye me-2"></i> View</a>
+                                                    <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                </div>
+                                            </div>
+
+
+
+                                            @*<a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,3,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
+                                    <i class="feather feather-check text-success mt-1"></i>
+                                    </a>
+                                    <a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,4,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">
+                                    <i class="feather feather-x text-danger mt-1"></i>
+                                    </a>
+                                    @if (item.LeaveStatusId == 1) // New
+                                    {
+                                    <a href="#" onclick="showforwardleavemodel(this,@item.LeaveId,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">
+                                    <i class="text-warning fe fe-arrow-right-circle mt-1"></i>
+                                    </a>
+                                    @*<a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
+                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                    </a>
+                                    }
+                                    <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
+                                    <i class="feather feather-eye  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i>
+                                    </a>*@
 
 
                                         </td>
@@ -588,12 +536,12 @@
                         <div class="form-group">
                             <label class="form-label">Forward to Staff:</label>
 
-                             <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                            <select required asp-for="ForwardToStaffID" class="form-control select2" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
                             </select>
 
 
                             @*<select asp-for="ForwardToStaffID" multiple="multiple" class="SlectBox-grp-src" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
-                            </select>*@
+                        </select>*@
 
                         </div>
                     </div>
@@ -711,9 +659,29 @@
             }
             $('#myTable').DataTable();
 
-            $('#LeaveStatusId').select2();
-            $('#LeaveTypeId').select2();
-            $('#StaffId').select2();
+            //$('#LeaveStatusId').select2();
+            //$('#LeaveTypeId').select2();
+            //$('#StaffId').select2();
+
+
+            $("#LeaveStatusId").select2({
+                placeholder: "Select Leave Status",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+
+            $("#LeaveTypeId").select2({
+                placeholder: "Select Leave Type",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+
+            $("#StaffId").select2({
+                placeholder: "Select Staff",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+
             // Show Filters controls
 
             $("#IdFilters").hide();
@@ -754,6 +722,28 @@
             debugger;
             $("#Remarks").val('')
             $("#Remarks").css("border-color", "#ddd");
+
+            // get remarks to show in approval model if need to update remarks
+            var Data = { id: leaveid, approvalstatusid: approvalstatusid }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Leave/GetLeaveApprovalComments",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        $("#Remarks").val(data.remarks)
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
 
             if (fromcarddata == 1) {
 
@@ -1001,11 +991,11 @@
                             action += '';
                             action += '<tr><td> ' + count + ' </td>';
 
-                            action += '<td> <div class="d-flex"> <div class="table_img brround bg-light me-3" > <img src=' + listleave[i]["staffSnap"] + ' alt = "img" class="" > </div>';
+                            action += '<td> <div class="d-flex"> <div class="table_img brround bg-light me-3" > <a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  > <img src=' + listleave[i]["staffSnap"] + ' alt = "img" class="" > </a> </div>';
 
                             action += '<div class="me-3 mt-0 mt-sm-2 d-block">';
-                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  > <h6 class="mb-0 fs-13 font-weight-semibold" data-staffid=' + listleave[i]["staffId"] + ' > ' + listleave[i]["staffRegistrationNo"] + ' - ' + listleave[i]["staffName"] + '</h6></a >';
-                            action += '<div class="clearfix"></div> <small class="text-muted" > ' + listleave[i]["designation"] + ' </small> <small hidden class="text-muted department">' + listleave[i]["dapartment"] + '</small></div> </div>  </td>';
+                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  > <h6 class="mb-0 fs-13 font-weight-semibold" data-staffid=' + listleave[i]["staffId"] + ' > ' + listleave[i]["staffRegistrationNo"] + ' - ' + listleave[i]["staffName"] + '</h6>';
+                            action += '<div class="clearfix"></div> <small class="text-muted" > ' + listleave[i]["designation"] + ' </small> </a> <small hidden class="text-muted department">' + listleave[i]["dapartment"] + '</small></div> </div>  </td>';
 
 
                             action += '<td><div class="d-flex"><div class="me-3 d-block"> <span class="mb-0 fs-15" data-leavetypeid=' + listleave[i]["leaveTypeId"] + ' > ' + listleave[i]["leaveTypeTitle"] + '</span><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
@@ -1031,26 +1021,39 @@
                             }
 
                             action += '<td class="text-start d-flex">';
-
-                            action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',3)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">';
-                            action += '<i class="feather feather-check text-success mt-1"></i></a>';
-
-
-                            action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">';
-                            action += '<i class="feather feather-x text-danger mt-1"></i></a>';
-
-
-                            if (listleave[i]["leaveStatusId"] == 1) {
-                                action += '<a href="#" onclick="showforwardleavemodel(' + listleave[i]["leaveId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
-                                action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
-
-                                //action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                                //action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                            action += '<div class="btn-group ms-3 mb-0">';
+                            action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>';
+                            action += '<div class="dropdown-menu dropdown-menu-start" style="">';
+                            action += '<a onclick="showleaveApprovalmodel(this,' + listleave[i]["leaveId"] + ',3,0)" href="#" class="dropdown-item"><i class="feather feather-check me-2"></i> Accept</a>';
+                            action += '<a onclick="showleaveApprovalmodel(this,' + listleave[i]["leaveId"] + ',4,0)" href="#" class="dropdown-item"><i class="feather feather-x me-2"></i> Reject</a>';
+                            if (item.LeaveStatusId == 1) // New
+                            {
+                                action += '<a onclick="showforwardleavemodel(this,' + listleave[i]["leaveId"] + ',0)" href = "#" class="dropdown-item" > <i class="fe fe-arrow-right-circle me-2" > </i> Forward</a>';
                             }
 
+                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '" class="dropdown-item"> <i class="fe fe-eye me-2" > </i> View</a>';
+                            action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a > </div> </div> </td> </tr>';
 
-                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
-                            action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
+
+                            //action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',3)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">';
+                            //action += '<i class="feather feather-check text-success mt-1"></i></a>';
+
+
+                            //action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">';
+                            //action += '<i class="feather feather-x text-danger mt-1"></i></a>';
+
+
+                            //if (listleave[i]["leaveStatusId"] == 1) {
+                            //    action += '<a href="#" onclick="showforwardleavemodel(' + listleave[i]["leaveId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
+                            //    action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
+
+                            //    //action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
+                            //    //action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                            //}
+
+
+                            //action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
+                            //action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
 
 
                         }
@@ -1085,7 +1088,7 @@
             dataTable.clear().rows.add(originalData).draw();
 
             $('#myTable tbody').html(originalHTML);
-            
+
         }
 
 

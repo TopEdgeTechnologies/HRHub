@@ -374,16 +374,6 @@ namespace HRHUBAPI.Models
 
                 return list != null ? list.OrderByDescending(x => x.LeaveId).ToList() : new List<Leave>();
 
-
-
-
-
-
-
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -556,6 +546,22 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public async Task<LeaveApproval> GetStaffComments(int Id,int statusid, int staffid, HrhubContext _context)
+        {
+            try
+            {
+                var LeaveInfo = await _context.LeaveApprovals.FirstOrDefaultAsync(x => x.LeaveId == Id && x.LeaveStatusId == statusid && x.ApprovalByStaffId == staffid);
+
+                return LeaveInfo != null ? LeaveInfo : new LeaveApproval();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
         public async Task<bool> DeleteLeaveInfo(int id, HrhubContext _context)
         {
             try

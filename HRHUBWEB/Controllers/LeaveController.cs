@@ -699,6 +699,20 @@ namespace HRHUBWEB.Controllers
             }
         }
 
+        public async Task<IActionResult> GetLeaveApprovalComments(int id, int approvalstatusid)
+        {
+            try
+            {
+                var loginstaffid = _user.StaffId;
+                var obj = await _APIHelper.CallApiAsyncGet<LeaveApproval>($"api/Leave/GetStaffLeaveApprovalComments{id}/{approvalstatusid}/{loginstaffid}", HttpMethod.Get);
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
 
         public async Task<IActionResult> LeaveApproval(int id, int staffid)
         {

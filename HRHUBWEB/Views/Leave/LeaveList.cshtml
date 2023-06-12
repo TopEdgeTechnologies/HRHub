@@ -204,7 +204,7 @@
                                             <th class="border-bottom-0" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;">Reason</th>
                                             @*<th class="border-bottom-0">Applied On</th>*@
                                             <th class="border-bottom-0">Status</th>
-                                            <th class="border-bottom-0 w-4">Action</th>
+                                            <th class="border-bottom-0" style="padding: 10px 22px !important;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -212,22 +212,24 @@
                                             int count = 1;
                                             foreach (var item in Model.ListAllleaves)
                                             {
-                                                    <tr>
-                                                        <td>
-                                                            @count
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex">
-                                                                <div class="me-3 d-block">
+                                                <tr>
+                                                    <td>
+                                                        @count
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="me-3 d-block">
+                                                                <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId">
                                                                     <h6 class="mb-0 fs-15 font-weight-semibold">@item.LeaveTypeTitle</h6>
                                                                     <div class="clearfix"></div>
                                                                     <small class="text-muted">@item.LeaveAppliedOnDate</small>
-                                                                </div>
+                                                                </a>
                                                             </div>
-                                                        </td>
-                                                        @*<td> @Html.DisplayFor(modelItem => item.LeaveStartDate)</td>
+                                                        </div>
+                                                    </td>
+                                                    @*<td> @Html.DisplayFor(modelItem => item.LeaveStartDate)</td>
                                             <td> @Html.DisplayFor(modelItem => item.LeaveEndDate)</td>*@
-                                                        @{
+                                                    @{
                                                         //if (item.LeaveStartDate == item.LeaveEndDate)
                                                         //{
                                                         //    <td>@item.LeaveStartDate</td>
@@ -246,54 +248,74 @@
                                                         //        </div>
                                                         //    </td>
                                                         //}
-                                                        }
-                                                        <td>@Html.DisplayFor(modelItem => item.Days)</td>
-                                                        <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
-                                                        @*<td>
+                                                    }
+                                                    <td>@Html.DisplayFor(modelItem => item.Days)</td>
+                                                    <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.LeaveSubject)</td>
+                                                    @*<td>
                                             @Html.DisplayFor(modelItem => item.LeaveAppliedOnDate)
                                             </td>*@
 
-                                                        @if (item.LeaveStatusId == 1) // New
+                                                    @if (item.LeaveStatusId == 1) // New
                                                     {
-                                                            <td class="text-center"><span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span></td>
+                                                        <td class="text-center"><span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span></td>
                                                     }
                                                     else if (item.LeaveStatusId == 2) // Pending
                                                     {
-                                                            <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
+                                                        <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
 
                                                     }
                                                     else if (item.LeaveStatusId == 3) // Approved
                                                     {
-                                                            <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
+                                                        <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
 
                                                     }
                                                     else if (item.LeaveStatusId == 4) // Rejected
                                                     {
-                                                            <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
+                                                        <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
 
                                                     }
 
-                                                        <td class="text-start d-flex">
-                                                            @if (item.LeaveStatusId == 1) // New
-                                                        {
-                                                                <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
-                                                                    <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"></i>
-                                                                </a>
-                                                        }
-                                                            <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
-                                                            </a>
-                                                            @if (item.LeaveStatusId == 1) // New
-                                                        {
-                                                                <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
-                                                                    <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                </a>
-                                                        }
-                                                            <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                                <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Report"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                    <td class="text-center" style="padding: 10px 8px !important;">
+
+
+                                                        <div class="btn-group ms-3 mb-0">
+                                                            <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-start" style="">
+                                                                @if (item.LeaveStatusId == 1) // New
+                                                                {
+                                                                    <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                    <a onclick="confirmation(@item.LeaveId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                }
+                                                                <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="dropdown-item"><i class="fe fe-eye me-2"></i> View</a>
+                                                                <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        @*if (item.LeaveStatusId == 1) // New
+                                                {
+                                                <a asp-action="LeaveCreateOrUpdate" asp-route-id="@item.LeaveId" class="action-btns1">
+                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"></i>
+                                                </a>
+                                                }
+                                                <a asp-action="LeaveApproval" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1">
+                                                <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"></i>
+                                                </a>
+                                                @if (item.LeaveStatusId == 1) // New
+                                                {
+                                                <a asp-action="LeaveDelete" asp-route-id="@item.LeaveId" asp-route-staffid="@item.StaffId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete">
+                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                </a>
+                                                }
+                                                <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
+                                                <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Report"></i>
+                                                </a>*@
+
+
+
+                                                    </td>
+                                                </tr>
                                                 count++;
                                             }
                                         }
@@ -303,42 +325,6 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xxl-3">
-                <div class="card">
-                <div class="card-header  border-0">
-                <h4 class="card-title">Leaves Overview</h4>
-                </div>
-                <div class="card-body">
-                <div id="leavesoverview" class="mx-auto pt-2"></div>
-                <div class="row pt-7 pb-5  mx-auto text-center">
-                <div class="col-md-7 mx-auto d-block">
-                <div class="row">
-                <div class="col-md-12">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-primary me-2 my-auto"></span>Casual Leaves
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label badge-danger me-2 my-auto"></span>Sick Leaves
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-secondary me-2 my-auto"></span>Gifted Leaves
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-success me-2 my-auto"></span>Remaining Leaves
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>*@
             </div>
             <!-- End Row-->
             @* <div class="card-body">
@@ -542,8 +528,21 @@
             }
             $('#myTable').DataTable();
 
-            $('#LeaveStatusId').select2();
-            $('#LeaveTypeId').select2();
+            //$('#LeaveStatusId').select2();
+            //$('#LeaveTypeId').select2();
+
+            $("#LeaveStatusId").select2({
+                placeholder: "Select Leave Status",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+
+            $("#LeaveTypeId").select2({
+                placeholder: "Select Leave Type",
+                width: '100%',
+                allowClear: true
+            }).val('').trigger('change');
+
 
             // Show Filters controls
 
@@ -617,6 +616,40 @@
 
         }
 
+         function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var url = "@Url.Action("LeaveDelete", "Leave")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
         function SearchLeave() {
             debugger;
             var obj = {
@@ -670,22 +703,40 @@
 
                             }
 
-                            action += '<td class="text-start d-flex">';
 
-                            if (listleave[i]["leaveStatusId"] == 1) {
-                                action += '<a href="/Leave/LeaveCreateOrUpdate/' + listleave[i]["leaveId"] + '"  class="action-btns1">';
-                                action += '<i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i></a>';
+                            action += '<td class="text-center" style = "padding: 10px 8px !important;" >';
+                            action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > <i class="fa fa-ellipsis-v" > </i></a>';
+                            action += '<div class="dropdown-menu dropdown-menu-start">';
+
+                            if (listleave[i]["leaveStatusId"] == 1) // New
+                            {
+                                action += '<a href="/Leave/LeaveCreateOrUpdate/' + listleave[i]["leaveId"] + '" class="dropdown-item" > <i class="fe fe-edit me-2" > </i> Edit</a>';
+                                action += '<a onclick="confirmation(' + listleave[i]["leaveId"] + ')" href="#" class="dropdown-item" > <i class="fe fe-trash me-2" > </i> Delete</a>';
+
                             }
 
-                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
-                            action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
-                            if (listleave[i]["leaveStatusId"] == 1) {
+                            action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="dropdown-item" > <i class="fe fe-eye me-2" > </i> View</a >';
+                            action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
+                            
 
-                                action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
-                            }
-                            action += '<a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">';
-                            action += ' <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i> </a></tr>';
+
+
+                            //action += '<td class="text-start d-flex">';
+
+                            //if (listleave[i]["leaveStatusId"] == 1) {
+                            //    action += '<a href="/Leave/LeaveCreateOrUpdate/' + listleave[i]["leaveId"] + '"  class="action-btns1">';
+                            //    action += '<i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i></a>';
+                            //}
+
+                            //action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
+                            //action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
+                            //if (listleave[i]["leaveStatusId"] == 1) {
+
+                            //    action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
+                            //    action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
+                            //}
+                            //action += '<a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">';
+                            //action += ' <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i> </a></tr>';
 
                         }
 
