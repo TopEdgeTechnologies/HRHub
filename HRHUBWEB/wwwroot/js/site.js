@@ -55,3 +55,35 @@
 
     return words.join(" ");
 }
+
+
+function makeAjaxRequest(url, method, data, async,  successCallback, errorCallback) {
+    $.ajax({
+        url: url,
+        method: method,
+        data: data,
+        dataType: 'json',
+        async: async,
+        contentType: 'application/json',
+        success: function (response) {
+            if (successCallback && typeof successCallback === 'function') {
+                successCallback(response);
+            }
+        },
+        error: function (xhr, status, error) {
+            if (errorCallback && typeof errorCallback === 'function') {
+                errorCallback(xhr.status);
+            }
+        }
+    });
+}
+
+// Usage example:
+//var apiUrl = 'https://example.com/api';
+//var requestData = { key: 'value' };
+
+//makeAjaxRequest(apiUrl, 'POST', JSON.stringify(requestData), false, function (response) {
+//    console.log('Success:', response);
+//}, function (errorStatus) {
+//    console.log('Error:', errorStatus);
+//});

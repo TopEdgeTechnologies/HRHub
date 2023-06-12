@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var BaseUrl = "https://localhost:7152/";
-//var BaseUrl = "http://192.168.90.20:8065/";
+//var BaseUrl = "http://192.168.90.20:8056/";
 
 builder.Services.AddHttpClient("APIClient", configureClient =>
 {
