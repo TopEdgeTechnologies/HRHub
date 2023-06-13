@@ -80,6 +80,15 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
             return Json(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> StaffLeaves(DateTime leavedate)
+        {
+            string procrdure = "sp_DashBoardStaffLeaves";
+            object[] parameters = new object[] { "'" + leavedate.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, _user.StaffId ?? 0 };
+
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
 
         [CustomAuthorization]
         public IActionResult  HR()
