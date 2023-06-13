@@ -207,13 +207,18 @@ namespace HRHUBWEB.Controllers
             return Json(result);    
 		}
 
-		public async Task<IActionResult> PutStaffSalaryMaster(string salaryMonth)
+		public async Task<IActionResult> PutStaffSalaryMaster(string salaryMonth, int salaryStatusId)
 		{
-			StaffSalary objStaffSalary = new StaffSalary();
-			objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
-			objStaffSalary.CreatedBy = _user.UserId;
-			var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryMaster", HttpMethod.Post);
-			return Json(result);
+            if(salaryStatusId > 0)
+            {
+			    StaffSalary objStaffSalary = new StaffSalary();
+			    objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
+                objStaffSalary.SalaryStatusId = Convert.ToInt32(salaryStatusId);    
+			    objStaffSalary.CreatedBy = _user.UserId;
+			    var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryMaster", HttpMethod.Post);
+			    return Json(result);
+            }
+            return Json(null);
 		}
 
         public async Task<IActionResult> AlreadyExistsMaster(int month = 0, int year = 0)
@@ -238,10 +243,10 @@ namespace HRHUBWEB.Controllers
             StaffSalary objStaffSalary = new StaffSalary();
             objStaffSalary.MonthNumber = month;
             objStaffSalary.Year = year;
-            
+                        
             objStaffSalary.StaffSalaryList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryByCompanyId/{_user.CompanyId}/{month}/{year}", HttpMethod.Get);
-
-            return View(objStaffSalary);
+            objStaffSalary.SalaryMasterInserted = objStaffSalary.StaffSalaryList.FirstOrDefault().SalaryMasterInserted;
+			return View(objStaffSalary);
         }
 
         public async Task<List<StaffSalary>> GetStaffSalaryById(int month, int year, int staffId)
@@ -303,12 +308,12 @@ namespace HRHUBWEB.Controllers
                 {
                     return RedirectToAction("StaffSalaryList", new { data = 1, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
                 }
-                else
-                {
+                else if (result.Message.Contains("Update"))
+				{
                     return RedirectToAction("StaffSalaryList", new { data = 2, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
                 }
             }
-            return View(objStaffSalary);    
+			return RedirectToAction("StaffSalaryList", new { data = 0, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
 		}
 
 		#endregion

@@ -116,6 +116,8 @@ namespace HRHUBAPI.Models
 		    [NotMapped]
 		    public IEnumerable<decimal>? ListDetailDeductionComponentAmount { get; set; }
 
+            [NotMapped]
+            public int? SalaryMasterInserted { get; set; }
 
 		#endregion
 
@@ -196,6 +198,7 @@ namespace HRHUBAPI.Models
 					OV_DeductionAmount = string.IsNullOrWhiteSpace(row["OV_DeductionAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_DeductionAmount"]),
 					OV_PayableAmount = string.IsNullOrWhiteSpace(row["OV_PayableAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_PayableAmount"]),
 					SalaryStatusTitle = string.IsNullOrWhiteSpace(row["SalaryStatusTitle"].ToString()) ? "" : row["SalaryStatusTitle"].ToString(),
+					SalaryMasterInserted = string.IsNullOrWhiteSpace(row["SalaryMasterInserted"].ToString()) ? 0 : Convert.ToInt32(row["SalaryMasterInserted"]),
 
 				}).ToList();    
                 return resultRows;
@@ -250,7 +253,7 @@ namespace HRHUBAPI.Models
 			try
 			{
 				DbConnection dbConnection = new DbConnection();
-				string query = " EXEC Payroll.StaffSalary_BulkUpdate '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.CreatedBy;
+				string query = " EXEC Payroll.StaffSalary_BulkUpdate '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.SalaryStatusId + ", " + objStaffSalary.CreatedBy;
 				DataTable dt = dbConnection.ReturnDataTable(query);
 				return Convert.ToBoolean(dt.Rows[0][0]);
 			}

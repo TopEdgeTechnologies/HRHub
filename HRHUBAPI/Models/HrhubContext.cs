@@ -782,7 +782,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
             entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");

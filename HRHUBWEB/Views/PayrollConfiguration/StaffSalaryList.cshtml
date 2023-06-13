@@ -276,7 +276,9 @@
 		<input type="hidden" id="salaryMonthName" value=@monthName />
 		<input type="hidden" id="startDate" value=@strDateStart />
 		<input type="hidden" id="endDate" value=@strDateEnd />
-		
+
+	@*<input type="hidden" asp-for="SalaryMasterInserted" value="@Model.SalaryMasterInserted" />*@
+
 		<!--Page header-->
 		
 		<!--End Page header-->
@@ -298,7 +300,16 @@
 							<div class="page-rightheader ms-md-auto">
 								<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
 									<div class="btn-list mt-3 mt-lg-0">
-										<input type="button" id="PayAllSalaries" value="Pay all Salaries" class="btn btn-primary me-3" />
+										@{
+											if (@Model.SalaryMasterInserted == 0)
+											{
+												<input type="button" id="btn_PayAllSalaries" value="Pay all Salaries" class="btn btn-info me-3" />
+											}
+											else if (@Model.SalaryMasterInserted > 0)
+											{
+											<input type="button" id="btn_PayAllSalaries" value="Hold all Salaries" class="btn btn-danger me-3" />
+											}
+										}
 										<button class="btn btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#excelmodal">
 											<i class="las la-file-excel"></i>  Download Monthly Excel Report
 										</button>
@@ -312,14 +323,12 @@
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="hr-payroll">
-								<thead>
+							<table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="hr-payroll">
+								<thead style="border-bottom: 1px solid #0000004a;">
 									<tr>
 										<th class="border-bottom-0 w-5">Sr.#</th>
 										<th class="border-bottom-0">Name</th>
 										<th class="border-bottom-0">Reg.#</th>
-										@*<th class="border-bottom-0">Department</th>
-									<th class="border-bottom-0">Designation</th>*@
 										<th class="border-bottom-0">Earning</th>
 										<th class="border-bottom-0">Deduction</th>
 										<th class="border-bottom-0">Payable</th>
@@ -351,7 +360,7 @@
 														}
 														<img id="viewUserImage" onclick="ViewSalaryCard(@item.StaffId)" class="avatar avatar-md brround me-3" src="@snapPath">
 
-														<div onclick="ViewStaffSalaryHistoryCard(@item.StaffId)" class="me-3 mt-0 mt-sm-1 d-block">
+														<div class="me-3 mt-0 mt-sm-1 d-block">
 															@{
 																string fullName = item.FirstName + " " + item.LastName;
 															}
@@ -361,55 +370,68 @@
 													</div>
 												</td>
 												<td>@Html.DisplayFor(modelitem => item.RegistrationNo)</td>
-												@*
-												<td>@Html.DisplayFor(modelitem => item.DepartmentTitle)</td>
-												<td>@Html.DisplayFor(modelitem => item.DesignationTitle)</td>
-												*@
 												<td>@Convert.ToDecimal(item.OV_EarningAmount).ToString("N2")</td>
 												<td>@Convert.ToDecimal(item.OV_DeductionAmount).ToString("N2")</td>
 												<td class="font-weight-semibold">@Convert.ToDecimal(item.OV_PayableAmount).ToString("N2")</td>
-												@{
-													string SalaryStatusTitle = "";
-													if(item.SalaryStatusTitle == "")
-													{
-														SalaryStatusTitle = "Prepared";
-													}
-													else
-													{
-														SalaryStatusTitle = item.SalaryStatusTitle;
-													}
-												}
-												<td><span class="badge badge-success">@SalaryStatusTitle</span></td>
-												@*<td>
-													<div class="d-flex">
-														<label class="custom-control custom-checkbox-md">
-															<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked="">
-															<span class="custom-control-label-md success"></span>
-														</label>
-														
+												<td>
+													@{
+														string SalaryStatus = "";
+														SalaryStatus = @item.SalaryStatusTitle;
+														if (SalaryStatus == "")
+                                                        {
+															SalaryStatus = "Not Prepared";
+															<span class="badge badge-orange">@SalaryStatus</span>
+                                                        }
+														else if (SalaryStatus == "Generated")
+														{
+															<span class="badge badge-success">@SalaryStatus</span>
+														}
+														else if (SalaryStatus == "Paid")
+                                                        {
+                                                            <span class="badge badge-info">@SalaryStatus</span>
+                                                        }
+														else if (SalaryStatus == "Hold")
+                                                        {
+                                                            <span class="badge badge-danger">@SalaryStatus</span>
+                                                        }
+                                                    }
+
+													<!----- Action Buttons Code Start From Here------>
+													<div class="float-end ms-auto">
+														<div class="btn-group ms-3 mb-0">
+															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+															<div class="dropdown-menu dropdown-menu-start" style="">
+																<a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>
+																<a onclick="ViewSalaryCard(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="view" class="dropdown-item" href="javascript:void(0);">
+																	<i class="feather feather-eye me-2"></i>View
+																</a>
+																<a onclick="ViewStaffSalaryHistoryCard(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="History" class="dropdown-item" href="javascript:void(0);">
+																	<i class="fa fa-history me-2"></i>See History
+																</a>
+																<a onclick="StaffSalaryEdit(@item.StaffId, @item.OV_PayableAmount)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" class="dropdown-item" href="javascript:void(0);">
+																	<i class="feather feather-edit me-2"></i>Edit Salary
+																</a>
+															</div>
+														</div>
 													</div>
+													<!----- Action Buttons Code Ends Here------>
 												</td>
-												*@
 												<td class="text-start">
 												<div class="d-flex align-items-center">
 													<label class="custom-switch">
-														<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" checked class="custom-switch-input">
+														@{
+															if (SalaryStatus == "Paid")
+															{
+																<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" checked class="custom-switch-input">			
+															}
+															else
+															{
+																<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" class="custom-switch-input">
+															}
+														}
 														<span class="custom-switch-indicator"></span>
 														@*<span class="custom-switch-description">On/Off</span>*@
 													</label>
-													@*
-													<label class="custom-control px-0 me-4 custom-checkbox-md">
-														<input type="checkbox" class="custom-control-input-success" id="chk_IsPaid" name="chk_IsPaid" value="option1" checked>
-														<span class="custom-control-label-md success"></span>
-													</label>
-													*@
-													
-													<a onclick="ViewSalaryCard(@item.StaffId)" class="action-btns" data-bs-toggle="modal">
-														<i class="feather feather-eye text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></i>
-													</a>
-													<a onclick="StaffSalaryEdit(@item.StaffId, @item.OV_PayableAmount)" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
-														<i class="feather feather-edit text-info"></i>
-													</a>
 												</div>
 													@*
 													<a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
@@ -653,13 +675,14 @@
 					cardHistoryHtml += '<td> ' + data[i].oV_DeductionAmount.toLocaleString() + ' </td>'
 					cardHistoryHtml += '<td> ' + data[i].oV_PayableAmount.toLocaleString() + ' </td>'
 
-					if(data[i].salaryStatusTitle == 'Paid')
-					{
+					if (data[i].salaryStatusTitle == 'Generated') {
 						cardHistoryHtml += '<td> <span class="badge badge-success-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
 					}
-					else
-					{
-						cardHistoryHtml += '<td> <span class="badge badge-orange-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+					else if(data[i].salaryStatusTitle == 'Paid') {
+						cardHistoryHtml += '<td> <span class="badge badge-info-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+					}
+					else if (data[i].salaryStatusTitle == 'Hold') {
+						cardHistoryHtml += '<td> <span class="badge badge-danger-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
 					}
 					cardHistoryHtml += '</tr>'
 					
@@ -691,6 +714,7 @@
 
 		function setUnpaid()
 		{
+			debugger
 			var ctr_IsPaid = document.getElementById("chk_IsPaid")
 
 			if (ctr_IsPaid.checked) 
@@ -706,63 +730,75 @@
 			
 		}
 
-		$("#PayAllSalaries").click(function() {
+		$("#btn_PayAllSalaries").click(function () {
 			debugger
+			var buttonTitle = $("#btn_PayAllSalaries").val()
+			var statusId = 0
+			//var SalaryStatusId = (buttonTitle === "Pay all Salaries") ? 2 : 3;
+			if(buttonTitle == "Pay all Salaries"){
+				statusId = 2
+			}
+			else if (buttonTitle == "Hold all Salaries") {
+				statusId = 3
+			}
+
 			var currentSalaryMonth = $("#endDate").val()
 			var currentMonth = $("#salaryMonth").val();
 			var currentYear = $("#salaryYear").val();
 
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			});
+			if (currentMonth !== "" && currentYear !== "") {  
+				const swalWithBootstrapButtons = Swal.mixin({
+					customClass: {
+						confirmButton: 'btn btn-success',
+						cancelButton: 'btn btn-danger'
+					},
+					buttonsStyling: false
+				});
 
-			swalWithBootstrapButtons.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				cancelButtonText: 'No, cancel!',
-				confirmButtonText: 'Yes, Save it!',
-				timer: 30000,
-				reverseButtons: true
-			}).then((result) => {
-				if (result.isConfirmed) {
-					debugger
-
-					if (StaffSalary_BulkUpdate(currentSalaryMonth)) {
+				swalWithBootstrapButtons.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					cancelButtonText: 'No, cancel!',
+					confirmButtonText: 'Yes, Save it!',
+					timer: 30000,
+					reverseButtons: true
+				}).then((result) => {
+					if (result.isConfirmed) {
 						debugger
-						//alert("All Staff Salaries Paid!")
-						// StaffSalaryList
-						var url = "/PayrollConfiguration/StaffSalaryList?data=" + 2 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
-						window.location.href = url;
-					}
-					else {
-						$.growl.warning({
-							message: "Record is not Updated, try again !"
-						});
-					}
 
-				}
-				else if (result.dismiss === Swal.DismissReason.cancel) {
-					swalWithBootstrapButtons.fire(
-						'Cancelled',
-						'Your record is safe :)',
-						'error'
-					)
-				}
-			});
+						if (StaffSalary_BulkUpdate(currentSalaryMonth, statusId)) {
+							debugger
+							//alert("All Staff Salaries Paid!")
+							// StaffSalaryList
+							var url = "/PayrollConfiguration/StaffSalaryList?data=" + 2 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+							window.location.href = url;
+						}
+						else {
+							$.growl.warning({
+								message: "Record is not Updated, try again !"
+							});
+						}
+
+					}
+					else if (result.dismiss === Swal.DismissReason.cancel) {
+						swalWithBootstrapButtons.fire(
+							'Cancelled',
+							'Your record is safe :)',
+							'error'
+						)
+					}
+				});
+			}
 			
 		});
 
-		function StaffSalary_BulkUpdate(currentSalaryMonth) {
+		function StaffSalary_BulkUpdate(currentSalaryMonth, statusId) {
 			var status = false;
 			debugger
 			//var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
-			var Data = { salaryMonth: currentSalaryMonth }
+			var Data = { salaryMonth: currentSalaryMonth, salaryStatusId: statusId }
 			console.log(Data)
 			$.ajax({
 				async: false,
@@ -785,9 +821,7 @@
 			return status;
 		}
 
-		function StaffSalaryEdit(staffId,amount) 
-		{
-			debugger
+		function StaffSalaryEdit(staffId,amount) {
 			var url = "/PayrollConfiguration/GetStaffSalaryCreateOrUpdate?month=" + encodeURIComponent($("#salaryMonth").val()) + "&year=" + encodeURIComponent($("#salaryYear").val()) + "&staffId=" + encodeURIComponent(staffId) + "&GrossAmount=" + encodeURIComponent(amount);
 			window.location.href = url;
 		}
