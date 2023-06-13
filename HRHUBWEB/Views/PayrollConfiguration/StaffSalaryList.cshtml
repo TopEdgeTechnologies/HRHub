@@ -1,5 +1,12 @@
 ﻿@model HRHUBAPI.Models.StaffSalary
 
+@*<style>
+	.custom-control-label-md::after,
+	.custom-control-label-md::before{
+		left:0;
+	}
+</style>*@
+
 <!--Add View Salary Modal -->
 <div class="modal fade" id="viewsalarymodal">
 	<div class="modal-dialog modal-lg" role="document">
@@ -258,9 +265,15 @@
 		var dayMonth = "1";
 		var strDateStart = $"{@Model.Year}/{dayMonth}/{dayMonth}";
 		var strDateEnd = $"{@Model.Year}/{@Model.MonthNumber}/1";
+
+		var year = @Model.Year ?? 0;
+		DateTime date = new DateTime(@Model.Year.Value, @Model.MonthNumber.Value, 1);
+		string monthName = date.ToString("MMMM");
+
 	}
 		<input type="hidden" id="salaryMonth" value=@Model.MonthNumber />
 		<input type="hidden" id="salaryYear" value=@Model.Year />
+		<input type="hidden" id="salaryMonthName" value=@monthName />
 		<input type="hidden" id="startDate" value=@strDateStart />
 		<input type="hidden" id="endDate" value=@strDateEnd />
 		
@@ -275,10 +288,10 @@
 						<div class="page-header d-xl-flex d-block">
 							<div class="page-leftheader">
 								@{
-									var monthNumber = @Model.MonthNumber ?? 1; // Assuming 1 as the default month number
-									var year = @Model.Year ?? 0;
-									var monthName = new DateTime(year, monthNumber, 1).ToString("MMMM");
-									var title = "Staff Salary " + monthName + "-" + year;
+									//var monthNumber = @Model.MonthNumber ?? 1; // Assuming 1 as the default month number
+									//var year = @Model.Year ?? 0;
+									//var monthName = new DateTime(year, monthNumber, 1).ToString("MMMM");
+								var title = "Staff Salary " + monthName + "-" + year;
 								}
 							<div class="page-title">@title</div>
 							</div>
@@ -378,18 +391,26 @@
 												</td>
 												*@
 												<td class="text-start">
-												@*
-													<label class="custom-control custom-checkbox-md">
-														<input type="checkbox" class="custom-control-input-success" name="example-checkbox1" value="option1" checked="">
+												<div class="d-flex align-items-center">
+													<label class="custom-switch">
+														<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" checked class="custom-switch-input">
+														<span class="custom-switch-indicator"></span>
+														@*<span class="custom-switch-description">On/Off</span>*@
+													</label>
+													@*
+													<label class="custom-control px-0 me-4 custom-checkbox-md">
+														<input type="checkbox" class="custom-control-input-success" id="chk_IsPaid" name="chk_IsPaid" value="option1" checked>
 														<span class="custom-control-label-md success"></span>
 													</label>
 													*@
+													
 													<a onclick="ViewSalaryCard(@item.StaffId)" class="action-btns" data-bs-toggle="modal">
 														<i class="feather feather-eye text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="View"></i>
 													</a>
 													<a onclick="StaffSalaryEdit(@item.StaffId, @item.OV_PayableAmount)" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
 														<i class="feather feather-edit text-info"></i>
 													</a>
+												</div>
 													@*
 													<a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Download">
 														<i class="feather feather-download  text-secondary"></i>
@@ -424,6 +445,33 @@
 	<script>
 
 		$(document).ready(function(){
+
+			// Show notification
+			var msg = '@ViewBag.Success';
+			if (msg !== "" && msg == '1') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '2') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '3') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '0') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+					type: "error"
+				});
+			}
 
 		});
 
@@ -480,7 +528,7 @@
 				$('#lbl_regNo').text(data[0].registrationNo)
 				$('#lbl_firstName').text(data[0].firstName + ' ' + data[0].lastName)
 				$('#lbl_Department').text(data[0].departmentTitle)
-				$('#lbl_SalaryPeriod').text($('#salaryMonth').val() + ' - ' + $('#salaryYear').val())
+				$('#lbl_SalaryPeriod').text($('#salaryMonthName').val() + ' - ' + $('#salaryYear').val())
 
 				if (data[0].companyLogoAttachment != null && data[0].companyLogoAttachment != '') 
 				{
@@ -544,6 +592,7 @@
 
 		function ViewStaffSalaryHistoryCard(staffId) 
 		{	
+			debugger
 			var Data = { dateFrom: $('#startDate').val(), dateTo: $("#endDate").val(), staffId: staffId }
 			//var Data = { month: monthNumber, year: year, staffId: staffId }
 			console.log(Data)
@@ -568,11 +617,9 @@
 			})
 		}
 
-		function GetStaffSalaryHistoryCard(data)
-		{
+		function GetStaffSalaryHistoryCard(data) {
 			debugger
-			if (data.length > 0) 
-			{
+			if (data.length > 0) {
 				$('#lbl_regNo_history').text(data[0].registrationNo)
 				$('#lbl_firstName_history').text(data[0].firstName + ' ' + data[0].lastName)
 				$('#lbl_Department_history').text(data[0].departmentTitle)
@@ -642,9 +689,28 @@
 			}
 		}
 
+		function setUnpaid()
+		{
+			var ctr_IsPaid = document.getElementById("chk_IsPaid")
+
+			if (ctr_IsPaid.checked) 
+			{
+				debugger
+				console.log("checked")
+			}
+			else 
+			{
+				debugger
+				console.log("un checked")
+			}
+			
+		}
+
 		$("#PayAllSalaries").click(function() {
-			var currentMonth = $("#endDate").val()
-			var currentYear = $("#endDate").val()
+			debugger
+			var currentSalaryMonth = $("#endDate").val()
+			var currentMonth = $("#salaryMonth").val();
+			var currentYear = $("#salaryYear").val();
 
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
@@ -654,46 +720,70 @@
 				buttonsStyling: false
 			});
 
-			if (validateForm()) {
-				swalWithBootstrapButtons.fire({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: 'No, cancel!',
-					confirmButtonText: 'Yes, Save it!',
-					timer: 30000,
-					reverseButtons: true
-				}).then((result) => {
-					if (result.isConfirmed) {
+			swalWithBootstrapButtons.fire({
+				title: 'Are you sure?',
+				text: "You won't be able to revert this!",
+				icon: 'warning',
+				showCancelButton: true,
+				cancelButtonText: 'No, cancel!',
+				confirmButtonText: 'Yes, Save it!',
+				timer: 30000,
+				reverseButtons: true
+			}).then((result) => {
+				if (result.isConfirmed) {
+					debugger
 
-						if (StaffSalary_BulkInsert(currentMonth, currentYear)) {
-							// StaffSalaryList
-							var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear)
-							window.location.href = url
-						}
-						else {
-							$.growl.warning({
-								message: "Record is not Inserted, try again !"
-							});
-						}
+					if (StaffSalary_BulkUpdate(currentSalaryMonth)) {
+						debugger
+						//alert("All Staff Salaries Paid!")
+						// StaffSalaryList
+						var url = "/PayrollConfiguration/StaffSalaryList?data=" + 2 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+						window.location.href = url;
+					}
+					else {
+						$.growl.warning({
+							message: "Record is not Updated, try again !"
+						});
+					}
 
-					}
-					else if (result.dismiss === Swal.DismissReason.cancel) {
-						swalWithBootstrapButtons.fire(
-							'Cancelled',
-							'Your record is safe :)',
-							'error'
-						)
-					}
-				});
-			}
-			else {
-				$.growl.warning({
-					message: "Please Enter required fields !"
-				});
-			}
+				}
+				else if (result.dismiss === Swal.DismissReason.cancel) {
+					swalWithBootstrapButtons.fire(
+						'Cancelled',
+						'Your record is safe :)',
+						'error'
+					)
+				}
+			});
+			
 		});
+
+		function StaffSalary_BulkUpdate(currentSalaryMonth) {
+			var status = false;
+			debugger
+			//var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
+			var Data = { salaryMonth: currentSalaryMonth }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/PayrollConfiguration/PutStaffSalaryMaster",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						debugger
+						status= data.success;
+					}
+				},
+				error: function () 
+				{
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			return status;
+		}
 
 		function StaffSalaryEdit(staffId,amount) 
 		{

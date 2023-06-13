@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group mt-5">
-                        <select id="attendanceMonth" name="attendanceMonth" class="form-control custom-select select2" data-placeholder="Select Month">
+                        <select id="attendanceMonth" name="attendanceMonth" onchange="onchangeMonthYearCheckAlreadyExistsMaster()" class="form-control custom-select select2" data-placeholder="Select Month">
                             <option label="Select Month"></option>
                             <option value="1">January</option>
                             <option value="2">February</option>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="form-group mt-5">
-                        <select id="attendanceYear" name="attendanceYear" class="form-control custom-select select2" data-placeholder="Select Year">
+                        <select id="attendanceYear" name="attendanceYear" onchange="onchangeMonthYearCheckAlreadyExistsMaster()"  class="form-control custom-select select2" data-placeholder="Select Year">
                             <option label="Select Year"></option>
                             <option value="2030">2030</option>
                             <option value="2029">2029</option>
@@ -70,7 +70,7 @@
                             </div>
                             <div class="col-6 col-sm-4 col-lg-4">
                                 <p class="text-muted">Pay Date</p>
-                                <span class="text-dark">01 May, 2023</span>
+                                <span id="lbl_SalaryDate" class="text-dark">01 May, 2023</span>
                             </div>
                             <div class="col-6 col-sm-4 col-lg-4">
                                 <p class="text-muted">Employees</p>
@@ -78,8 +78,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 col-lg-3">
-                        <input type="button" id="btn_GenerateStaffSalary" value="Generate Payroll" class="btn btn-primary btn-block" />
+                    <div id="btn_Salary" class="col-sm-4 col-lg-3">
+                        @*<input type="button" id="btn_GenerateStaffSalary" value="Generate Payroll" class="btn btn-primary btn-block" />*@
                     </div>
                 </div>
                 <p class="fs-16"><i class="fa fa-info-circle"></i> There are no employees with completed pay roll in this month </p>
@@ -92,7 +92,13 @@
 <script>
 
     $(document).ready(function () {
-            
+
+        $('#myonoffswitch2').prop('checked', true);
+        names()
+        localStorage.setItem('dayonedarkMode', true);
+        localStorage.removeItem('dayonelightMode');
+        localStorage.removeItem('dayonetransparentMode');
+
         //$("#SalaryMonth").select2();
         var currentMonth = new Date().getMonth()
         $("#attendanceMonth").val(currentMonth).trigger()
@@ -101,63 +107,136 @@
 
     });
 
-    $("#btn_GenerateStaffSalary").click(function () {
+    function onchangeMonthYearCheckAlreadyExistsMaster() {
+            debugger
+        var recordInserted = false;
         var currentMonth = $("#attendanceMonth").val()
         var currentYear = $("#attendanceYear").val()
 
-        const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
+        if (currentMonth != "" && currentYear != "") {
+            var date = new Date(currentYear, currentMonth - 1)
+            var currentMonthName = date.toLocaleString('default', { month: 'short' })
+            $("#lbl_Duration").text(currentMonthName + ' - ' + currentYear)
+            var dayMonth = "01";
+            var strSalaryMonth = dayMonth + " " + currentMonthName + ", " + currentYear
+            $("#lbl_SalaryDate").text(strSalaryMonth)
 
+            var recordInserted = false;
+            recordInserted = CheckAlreadyExistsMasterRecord(currentMonth, currentYear)
+                debugger
+            var htmlButton = ''
+            if (currentMonth > 0 && currentYear > 0 && recordInserted == true) {
+                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="View Payroll" class="btn btn-success btn-block" />'
+                //$.growl.warning({
+                //        message: "Record already Inserted!"
+                //});
+            }
+            else if (currentMonth > 0 && currentYear > 0 && recordInserted == false) {
+                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-primary btn-block" />'
+                //$.growl.warning({
+                //        message: "Record has not Inserted for selected Date!"
+                //});
+            }
+                debugger
+            $("#btn_Salary").html(htmlButton)
+        }
+    }
+
+    function CheckAlreadyExistsMasterRecord(currentMonth, currentYear) {
+        var recordInserted = false;
+        if(currentMonth != "" && currentYear != "") {
+            var Data = { month: currentMonth, year: currentYear }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/PayrollConfiguration/AlreadyExistsMaster",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        console.log(data)
+                        recordInserted = data.success;
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+        else {
+            $.growl.warning({
+                message: "Please select valid Month and Year, try again!"
+            });
+        }
+        return recordInserted;
+    }
+
+    function GeneratePayroll() {
+        debugger;
+        var buttonTitle = $("#btn_GenerateStaffSalary").val()
+
+        var currentMonth = $("#attendanceMonth").val();
+        var currentYear = $("#attendanceYear").val();
+
+        if (currentMonth !== "" && currentYear !== "") {  
             if (validateForm()) {
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'No, cancel!',
-                    confirmButtonText: 'Yes, Save it!',
-                    timer: 30000,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        
-                        if(StaffSalary_BulkInsert(currentMonth, currentYear))
-                        {
-                            // StaffSalaryList
-                            var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear)
-                            window.location.href = url
+                if (buttonTitle == 'Generate Payroll') {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'No, cancel!',
+                        confirmButtonText: 'Yes, Save it!',
+                        timer: 30000,
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            if (StaffSalary_BulkInsert(currentMonth, currentYear)) {
+                                // StaffSalaryList
+                                var url = "/PayrollConfiguration/StaffSalaryList?data=" + 1 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+                                window.location.href = url;
+                            } else {
+                                $.growl.warning({
+                                    message: "Record is not Inserted, try again !"
+                                });
+                            }
                         }
-                        else
-                        {
-                            $.growl.warning({
-                                message: "Record is not Inserted, try again !"
-                            });
+                        else if (result.dismiss === Swal.DismissReason.cancel) {
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your record is safe :)',
+                                'error'
+                            );
                         }
-                        
+                    });
+                }
+                    debugger
+                    if (buttonTitle == 'View Payroll') {
+                        debugger
+                        // StaffSalaryList
+                        var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+                        window.location.href = url;
                     }
-                    else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Cancelled',
-                            'Your record is safe :)',
-                            'error'
-                        )
-                    }
-                });
             }
             else {
                 $.growl.warning({
                     message: "Please Enter required fields !"
                 });
             }
-    });
+        }
+    }
 
-    function validateForm() 
-    {
+    function validateForm() {
         var form = $("#myform");
         var inputs = form.find("input");
         
@@ -172,19 +251,15 @@
         //form.addClass("was-validated");
     }
 
-    function customValidation() 
-    {
+    function customValidation() {
         var isvalid = true;
-        if ($("#attendanceMonth").val() == null || $("#attendanceMonth").val() == '') 
-        {
+        if ($("#attendanceMonth").val() == null || $("#attendanceMonth").val() == '') {
             $.growl.warning({
                 message: "Please Select Salary Month!"
             });
             isvalid = false;
         }
-
-        if ($("#attendanceYear").val() == null || $("#attendanceYear").val() == '')
-        {
+        if ($("#attendanceYear").val() == null || $("#attendanceYear").val() == '') {
             $.growl.warning({
                 message: "Please Select Salary Year!"
             });
@@ -193,8 +268,7 @@
         return isvalid;
     }
 
-    function StaffSalary_BulkInsert(currentMonth, currentYear) 
-    {
+    function StaffSalary_BulkInsert(currentMonth, currentYear) {
         var status = false;
         debugger
         //var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
@@ -209,7 +283,7 @@
                 if (data != "") {
                     console.log(data)
                     debugger
-                    status= data.success;
+                    status = data.success;
                 }
             },
             error: function () 

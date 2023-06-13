@@ -187,13 +187,6 @@ namespace HRHUBWEB.Controllers
         [CustomAuthorization]
         public async Task<IActionResult> StaffSalaryMaster()
         {
-			//DateTime DateFrom = DateTime.Now.AddMonths(-11).Date;
-	  //      DateTime DateTo = DateTime.Now.Date;		
-			//ViewBag.SalaryMonth = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
-
-			//StaffSalary objStaffSalary = new StaffSalary();
-   //         objStaffSalary.StaffSalaryMasterList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryMaster/{DateFrom.ToString("dd-MMM-yyyy")}/{DateTo.ToString("dd-MMM-yyyy")}", HttpMethod.Get);
-			
 			return View();
 		}
 
@@ -214,14 +207,34 @@ namespace HRHUBWEB.Controllers
             return Json(result);    
 		}
 
-        public async Task<IActionResult> StaffSalaryList(int month = 0, int year = 0)
+		public async Task<IActionResult> PutStaffSalaryMaster(string salaryMonth)
+		{
+			StaffSalary objStaffSalary = new StaffSalary();
+			objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
+			objStaffSalary.CreatedBy = _user.UserId;
+			var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryMaster", HttpMethod.Post);
+			return Json(result);
+		}
+
+        public async Task<IActionResult> AlreadyExistsMaster(int month = 0, int year = 0)
+        {
+            if (month > 0 && year > 0)
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/AlreadyExistsMaster/{month}/{year}", HttpMethod.Get);
+                return Json(result);
+            }
+            return Json(null);
+        }
+
+        public async Task<IActionResult> StaffSalaryList(String data = "", int month = 0, int year = 0)
         {
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            //ViewBag.Success = data;
+            ViewBag.Success = data;
+
             StaffSalary objStaffSalary = new StaffSalary();
             objStaffSalary.MonthNumber = month;
             objStaffSalary.Year = year;
@@ -257,9 +270,8 @@ namespace HRHUBWEB.Controllers
         { 
             StaffSalary objStaffSalary = new StaffSalary();
 			objStaffSalary.StaffSalaryEditList = await GetStaffSalaryById(month, year, staffId);
-            //ViewBag.SalaryMonth = month;
-            //ViewBag.SalaryYear = year;
 
+            objStaffSalary.StaffId = staffId;
 			objStaffSalary.MonthNumber = month;
 			objStaffSalary.Year = year;
 			objStaffSalary.RegistrationNo = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.RegistrationNo;
@@ -268,10 +280,36 @@ namespace HRHUBWEB.Controllers
             objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.DepartmentTitle;    
 			objStaffSalary.OV_PayableAmount = GrossAmount;
 
-            //StaffSalary objStaffSalary = new StaffSalary();
-            //         objStaffSalary = await _APIHelper.CallApiAsyncGet<StaffSalary>($"api/PayrollConfiguration/GetStaffSalaryById/{_user.CompanyId}/{month}/{year}/{StaffId}", HttpMethod.Get);
             return View(objStaffSalary);
         }
+
+		public async Task<IActionResult> SingleStaffSalaryCreateOrUpdate(IFormCollection objForm, StaffSalary objStaffSalary)
+		{
+            if (objStaffSalary.MonthNumber > 0 && objStaffSalary.Year > 0 && objStaffSalary.StaffId > 0)
+            {
+                var strDate = $"{objStaffSalary.Year}/{objStaffSalary.MonthNumber}/01";
+                DateTime getSalaryDate = Convert.ToDateTime(strDate).Date;
+
+				objStaffSalary.SalaryMonth = getSalaryDate;
+				//objStaffSalary.StaffId = staffId;
+				//objStaffSalary.TotalEarnings = Convert.ToDecimal(ov_earnings);
+                //objStaffSalary.TotalDeductions = Convert.ToDecimal(ov_deductions);
+                objStaffSalary.CreatedBy = _user.UserId;
+                objStaffSalary.UpdatedBy = _user.UserId;
+
+                var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PostSingleStaffSalary", HttpMethod.Post);
+
+                if (result.Message.Contains("Insert"))
+                {
+                    return RedirectToAction("StaffSalaryList", new { data = 1, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
+                }
+                else
+                {
+                    return RedirectToAction("StaffSalaryList", new { data = 2, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
+                }
+            }
+            return View(objStaffSalary);    
+		}
 
 		#endregion
 	}
