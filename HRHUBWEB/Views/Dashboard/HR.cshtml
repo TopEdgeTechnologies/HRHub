@@ -64,41 +64,40 @@
 
             </div>
             <div class="modal-body">
-               
+
                 <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
+                    <div class="col-md-12">
+                        <div class="card">
 
-                           
 
-                       
-                        <div class="table-responsive attendance_table mt-4">
-                            <table class="table mb-0 text-nowrap">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">S.No</th>
-                                        <th class="text-start">Employee</th>
-                                       
-                                        <th class="text-center">Date</th>
-                                        <th class="text-center">Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody  id="tblEvent" >
-                                      
-                                </tbody>
-                            </table>
+
+
+                            <div class="table-responsive attendance_table mt-4">
+                                <table class="table mb-0 text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">S.No</th>
+                                            <th class="text-start">Employee</th>
+
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tblEvent">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
+                <div class="modal-footer">
 
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
 
+                </div>
             </div>
-            <div class="modal-footer">
-
-                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
-
-            </div>
-        </div>
         </div>
     </div>
 </div>
@@ -215,7 +214,7 @@
         <div class="card overflow-hidden">
             <div class="card-header border-0">
                 <h4 class="card-title">Notice Board</h4>
-               
+
             </div>
 
             <div id="NoticeBoarddata" class="overflow-auto" style="height:255px"></div>
@@ -224,21 +223,21 @@
         <div class="card overflow-hidden">
             <div class="card-header border-0">
                 <h4 class="card-title">Upcoming Events</h4>
-                 <a href="#" onclick="allEventLoad()" class="text-muted">  
+                <a href="#" onclick="allEventLoad()" class="text-muted">
                     <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
-                 
+
                 </a>
             </div>
             <div style="height:214px">
-            <ul class="vertical-scroll" id="EventBoarddata">
-                <li class="item">
-                  </li>
-                <li class="item">
-                </li>
-                <li class="item">
-                </li>
+                <ul class="vertical-scroll" id="EventBoarddata">
+                    <li class="item">
+                    </li>
+                    <li class="item">
+                    </li>
+                    <li class="item">
+                    </li>
 
-            </ul>
+                </ul>
             </div>
 
 
@@ -326,7 +325,7 @@
             <div class="card-body">
 
                 <div id="employeesGender" class="mx-auto apex-dount"></div>
-                
+
             </div>
         </div>
     </div>
@@ -336,7 +335,7 @@
         <div class="card">
             <div class="card-header border-bottom-0">
                 <h3 class="card-title">Recent Job Application</h3>
-                <div class="card-options">
+                @*<div class="card-options">
                     <div class="dropdown">
                         <a href="javascript:void(0);" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> See All <i class="feather feather-chevron-down"></i> </a>
                         <ul class="dropdown-menu dropdown-menu-end" role="menu">
@@ -345,13 +344,29 @@
                             <li><a href="javascript:void(0);">Weekly</a></li>
                         </ul>
                     </div>
+                </div>*@
+
+
+                <div class="card-options col-md-4">
+                    <div class="form-group">
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div><input id="leavedate" class="form-control fc-datepicker " type="text">
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
             <div class="tab-menu-heading table_tabs mt-2 p-0 ">
                 <div class="tabs-menu1">
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
-                        <li class="ms-sm-4"><a href="#tab5" data-bs-toggle="tab">Job Applications</a></li>
+                        <li class="ms-sm-4"><a href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
                         <li><a href="#tab6" class="active" data-bs-toggle="tab">Job Opening</a></li>
                         <li><a href="#tab7" data-bs-toggle="tab">Hired Candidates</a></li>
                     </ul>
@@ -360,104 +375,45 @@
             <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
                 <div class="tab-content">
                     <div class="tab-pane" id="tab5">
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body">
-                            <table class="table mb-0 text-nowrap">
-                                <tbody>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/16.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Faith Harris</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">UI designer</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">5 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/1.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">James Paige</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">UI designer</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">2 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>India</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/4.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Liam Miller</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>WireFrameing</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">1 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>Germany</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/8.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Kimberly Berry</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>Senior Prototyper</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">3 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
+                        
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 420px;">
+                            @*<table class="table mb-0 text-nowrap">
+                            <tbody>
+
+                            <tr class="border-bottom">
+                            <td>
+                            <div class="d-flex">
+                            <img src="../assets/images/users/16.jpg" alt="img" class="avatar avatar-md brround me-3">
+                            <div class="me-3 mt-0 mt-sm-1 d-block">
+                            <h6 class="mb-0">Faith Harris</h6>
+                            <div class="clearfix"></div>
+                            <small class="text-muted">UI designer</small>
+                            </div>
+                            </div>
+                            </td>
+                            <td class="text-start fs-13">5 years</td>
+                            <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
+                            <td class="text-end">
+                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
+                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
+                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
+                            </td>
+                            </tr>
+
+                            </tbody>
+                            </table>*@
+
+                            <table class="table  card-table  table-sm text-nowrap" id="tableLeaves">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/9.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Kimberly Berry</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>Senior Prototyper</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">3 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
+                                        <th class="text-center">S.No</th>
+                                        <th class="text-start">Employee</th>
+                                        <th class="text-center">Applied On</th>
+                                        <th class="text-center">Action</th>
+
                                     </tr>
+                                </thead>
+                                <tbody id="tbodyLeaves">
                                 </tbody>
                             </table>
                         </div>
@@ -688,7 +644,7 @@
                 <h3 class="card-title">Attendance</h3>
                 <div class="card-options col-md-4">
                     <div class="form-group">
-                    
+
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
@@ -709,12 +665,10 @@
                             <th class="text-center">Status</th>
                             <th class="text-center">CheckIn</th>
                             <th class="text-center">CheckOut</th>
-                   
+
                         </tr>
                     </thead>
                     <tbody id="tbodyAttendance">
-                     
-                    
                     </tbody>
                 </table>
             </div>
@@ -736,7 +690,7 @@
 
 
             var currentYear = new Date().getFullYear();
-            var currentMonth =new Date().getMonth() + 1;
+            var currentMonth = new Date().getMonth() + 1;
             $('#sumaryYear').val(currentYear).trigger('change');
             $('#sumaryMonth').val(currentMonth).trigger('change');
 
@@ -746,11 +700,17 @@
                 dateFormat: 'dd M yy',
                 autoHide: true
 
-
-
             });
 
+            //$('#leavedate').datepicker({
+            //    dateFormat: 'dd M yy',
+            //    autoHide: true
+
+            //});
+
+
             $('#fromdate').datepicker('setDate', currentDate);
+            $('#leavedate').val('@DateTime.Now.ToString("dd-MM-yyyy")');
 
 
 
@@ -761,6 +721,7 @@
             LoadChartGenderWise();
             loadSalarySummaryGraph();
             checkdailyAttendance();
+            loadLeavesrequest();
 
 
             $('#sumaryYear').change(function () {
@@ -768,11 +729,15 @@
 
             });
 
-              $('#fromdate').change(function () {
+            $('#fromdate').change(function () {
                 checkdailyAttendance();
 
             });
 
+            $('#leavedate').change(function () {
+                loadLeavesrequest();
+
+            });
 
 
             $('#sumaryMonth').change(function () {
@@ -855,7 +820,7 @@
         function CheckEvent() {
 
             var requestData = { month: $('#sumaryMonth').val() };
-            makeAjaxRequest("/Dashboard/UpcommingEvent", 'GET',requestData, true, function (response) {
+            makeAjaxRequest("/Dashboard/UpcommingEvent", 'GET', requestData, true, function (response) {
 
 
                 if (response != null) {
@@ -863,7 +828,7 @@
                     //var html = ' <ul class="vertical-scroll">';
                     $('#EventBoarddata').html('')
                     var html = '';
-                    var htmltable='';
+                    var htmltable = '';
 
                     var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning"]; // List of predefined colors
 
@@ -883,15 +848,15 @@
 
                         ///model tabel load
 
-                        htmltable +='<tr class="border-bottom">' 
-                        htmltable +='<td class="text-center"> <span class="avatar avatar-sm brround" > '+(i+1)+' </span></td>'
-                        htmltable +='<td class="font-weight-semibold fs-14">'
-                        htmltable +='<div class="d-flex">'
+                        htmltable += '<tr class="border-bottom">'
+                        htmltable += '<td class="text-center"> <span class="avatar avatar-sm brround" > ' + (i + 1) + ' </span></td>'
+                        htmltable += '<td class="font-weight-semibold fs-14">'
+                        htmltable += '<div class="d-flex">'
                         htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
-                        htmltable +='<div class="me-3 mt-0 mt-sm-1 d-block" >'
-                        htmltable +='<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
+                        htmltable += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        htmltable += '<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
                         htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["department"] + ' | ' + response[i]["designation"] + ' </p>'
-                        htmltable +='</div></div> </td>'
+                        htmltable += '</div></div> </td>'
                         htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["Date"] + ' </span></td>'
                         htmltable += '<td class="text-center" > ' + response[i]["description"] + '  </td></tr>'
 
@@ -1158,63 +1123,111 @@
 
         }
 
-        function allEventLoad()
-        {
-        
-           $("#ModelEvent").modal('show');
-        
-        
+        function allEventLoad() {
+
+            $("#ModelEvent").modal('show');
+
+
         }
 
 
-        function checkdailyAttendance()
-        {
+        function checkdailyAttendance() {
             debugger
 
-                var requestData = { date: $("#fromdate").val() };
-                makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
+            var requestData = { date: $("#fromdate").val() };
+            makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
 
-                    if (response != null) {
+                if (response != null) {
                     debugger
 
-                        console.log(response)
-                     
-                        var html='';
-                         for (var i = 0; i < response.length; i++) {
-                            html +='<tr class="border-bottom">'
-                            html +='<td class="text-center"><span class="avatar avatar-sm brround">'+(i+1)+'</span></td>'
-                            html +='<td class="font-weight-semibold fs-14"> '
+                    console.log(response)
 
-                            html += '<div class="d-flex">'
-                            html += '<img class="avatar avatar-md brround me-3" src ="'+ response[i]["SnapPath"] + '" >'
-                            html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
-                            html += '<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
-                            html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
-                            html += '</div></div> </td>'
-                      
-                            html += '<td class="text-center"><span class="badge ' + response[i]["CssClass"].replace('badge','bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span></td>'
-                            html += '<td class="text-center">' + response[i]["FirstPunchIN"] + '</td>'
-                            html += '<td class="text-center">' + response[i]["LastPunchOut"] + '</td>'
-                            html += "</tr>"
+                    var html = '';
+                    for (var i = 0; i < response.length; i++) {
+                        html += '<tr class="border-bottom">'
+                        html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+                        html += '<td class="font-weight-semibold fs-14"> '
 
-                            }
+                        html += '<div class="d-flex">'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="text-center"><span class="badge ' + response[i]["CssClass"].replace('badge', 'bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span></td>'
+                        html += '<td class="text-center">' + response[i]["FirstPunchIN"] + '</td>'
+                        html += '<td class="text-center">' + response[i]["LastPunchOut"] + '</td>'
+                        html += "</tr>"
+
+                    }
 
                     $('#tbodyAttendance').html(html)
 
 
                     //$("#tableAttendance").DataTable();
 
-                    }
-                }, function (errorStatus) {
-                    console.log('Error:', errorStatus);
-                });
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
 
 
-            
-        
+
+
         }
 
+        function loadLeavesrequest() {
+            debugger
 
+            var requestData = { leavedate: $("#leavedate").val() };
+            makeAjaxRequest("/Dashboard/StaffLeaves", 'GET', requestData, false, function (response) {
+
+                if (response != null) {
+                    debugger
+
+                    console.log(response)
+
+                    var html = '';
+                    for (var i = 0; i < response.length; i++) {
+                        html += '<tr class="border-bottom">'
+                        html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+                        
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["ApplicantStaffName"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["ApplicantDepartment"] + ' | ' + response[i]["ApplicantDesignation"] + ' </p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["LeaveType"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["AppliedOn"].split("T")[0].toString("dd-MMM-yyyy") + '</p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="text-end"> '
+                        html += '<a href="/Leave/LeaveApproval/' + response[i]["LeaveID"] + '?staffid=' + response[i]["StaffID"] + '" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"> <i class="feather feather-eye text-primary"> </i></a> </td>'
+
+                        html += "</tr>"
+
+                    }
+
+                    $('#tbodyLeaves').html(html)
+
+
+
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
+
+
+
+
+        }
 
 
     </script>

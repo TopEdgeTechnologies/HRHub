@@ -5,9 +5,11 @@ namespace HRHUBAPI.Models;
 
 public partial class SectionAnswer
 {
-    public int? AnswerId { get; set; }
+    public int AnswerId { get; set; }
 
     public int? SectionQuestionId { get; set; }
+
+    public int? ReviewedStaffId { get; set; }
 
     public int? ReviewerDesignationId { get; set; }
 

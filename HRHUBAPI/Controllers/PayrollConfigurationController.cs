@@ -519,48 +519,93 @@ namespace HRHUBAPI.Controllers
                 } 
             }
 
-        #endregion
+		    [HttpPost("PutStaffSalaryMaster")]
+		    public async Task<ActionResult<bool>> PutStaffSalaryMaster(StaffSalary objStaffSalary)
+		    {
+			    var dbResult = await new StaffSalary().PutStaffSalaryMaster(objStaffSalary);
+			    if (dbResult == true)
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Updated Successfully"
+				    });
+			    }
+			    else
+			    {
+				    return Ok(new
+				    {
+					    success = false,
+					    Message = "Data Not Updated!"
+					});
+			    }
+		    }
 
-        #region StaffLoan
-
-        [HttpGet("GetLoanInfos{CompanyId}/{StaffId}")]
-        public async Task<ActionResult<List<LoanApplication>>> GetLoanInfos(int CompanyId, int StaffId)
-        {
-            return await new LoanApplication().GetLoanInfo(CompanyId, StaffId, _context);
-        }
-        [HttpGet("GetLoanStatusInfos")]
-        public async Task<ActionResult<List<LoanStatus>>> GetLoanStatusInfos()
-        {
-            return await new LoanApplication().GetLoanStatus(_context);
-        }
-        [HttpGet("GetLoanInfoId{id}")]
-        public async Task<ActionResult<Leave>> GetLoanInfoId(int id)
-        {
-            var result = await new LoanApplication().GetLoanById(id, _context);
-            if (result != null)
-                return Ok(result);
-
-            return NotFound();
-
-
-        }
-        [HttpPost("LoanAddOrCreate")]
-        public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
-        {
-            var result = await new LoanApplication().PostLoan(obj, _context);
-            if (result != null && result.LoanApplicationId > 0)
-                return Ok(new
+            [HttpGet("AlreadyExistsMaster/{month}/{year}")]
+            public async Task<ActionResult<StaffSalary>> AlreadyExistsMaster(int month, int year)
+            {
+            var dbResult = await new StaffSalary().AlreadyExistsMaster(month, year, _context);
+                if (dbResult == true)
                 {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Record Already Exists"
+                    });
+                }
+                else
                 {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
-        }
+                    return Ok(new
+                    {
+                        Success = false,
+                        Message = "Data Not Found!"
+                    });
+                }
+            }
+
+		    [HttpPost("PostSingleStaffSalary")]
+		    public async Task<ActionResult<StaffSalary>> PostSingleStaffSalary(StaffSalary objStaffSalary)
+		    {
+			    var dbResult = await new StaffSalary().PostSingleStaffSalary(objStaffSalary, _context);
+			    if (dbResult != null && dbResult.TranFlag == 2)
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Updated Successfully"
+				    });
+			    }
+			    else
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Inserted Successfully"
+				    });
+			    }
+		    }
+
+		#endregion
+
+		#region Loan
+
+		[HttpPost("LoanAddOrCreate")]
+            public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
+            {
+                var result = await new LoanApplication().PostLoan(obj, _context);
+                if (result != null && result.LoanApplicationId > 0)
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Update Successfully!"
+                    });
+                else
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Insert Successfully!"
+                    });
+            }
 
         // search data Loan by Status , loantype and dates
 
