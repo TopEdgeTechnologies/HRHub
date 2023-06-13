@@ -563,11 +563,33 @@ namespace HRHUBAPI.Controllers
                 }
             }
 
-        #endregion
+		    [HttpPost("PostSingleStaffSalary")]
+		    public async Task<ActionResult<StaffSalary>> PostSingleStaffSalary(StaffSalary objStaffSalary)
+		    {
+			    var dbResult = await new StaffSalary().PostSingleStaffSalary(objStaffSalary, _context);
+			    if (dbResult != null && dbResult.TranFlag == 2)
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Updated Successfully"
+				    });
+			    }
+			    else
+			    {
+				    return Ok(new
+				    {
+					    success = true,
+					    Message = "Data Inserted Successfully"
+				    });
+			    }
+		    }
 
-        #region Loan
+		#endregion
 
-        [HttpPost("LoanAddOrCreate")]
+		#region Loan
+
+		[HttpPost("LoanAddOrCreate")]
             public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
             {
                 var result = await new LoanApplication().PostLoan(obj, _context);

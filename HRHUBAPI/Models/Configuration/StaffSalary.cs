@@ -1,4 +1,5 @@
 ﻿using HRHUBAPI.Models.Configuration;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.Design;
@@ -30,15 +31,6 @@ namespace HRHUBAPI.Models
 
 		    [NotMapped]
 		    public int? MonthDaysCount { get; set; }
-
-		    //[NotMapped]
-		    //public string? FOMonth { get; set; }
-
-		    //[NotMapped]
-		    //public string? EOMonth { get; set; }
-
-      //      [NotMapped]
-      //      public IEnumerable<StaffSalary>? StaffSalaryHistoryList { get; set; }
 
 		    [NotMapped]
             public string? FirstName { get; set; }
@@ -82,13 +74,13 @@ namespace HRHUBAPI.Models
             [NotMapped]
             public IEnumerable<StaffSalary>? StaffSalaryList { get; set; }
 
-		    //[NotMapped]
-		    //public string? SnapPath { get; set; }
-
 		    [NotMapped]
 		    public string? Category { get; set; }
 
 			[NotMapped]
+		    public int? ComponentId { get; set; }
+
+         	[NotMapped]
 		    public string? ComponentTitle { get; set; }
 
             [NotMapped]
@@ -110,7 +102,20 @@ namespace HRHUBAPI.Models
             public string? CompanyLogoAttachment { get; set; }
 
             [NotMapped]
-            public IEnumerable<StaffSalary>? StaffSalaryEditList { get; set; }  
+            public IEnumerable<StaffSalary>? StaffSalaryEditList { get; set; }
+
+            [NotMapped]
+            public IEnumerable<int>? ListDetailEarningComponentId { get; set; }
+
+		    [NotMapped]
+		    public IEnumerable<decimal>? ListDetailEarningComponentAmount { get; set; }
+
+		    [NotMapped]
+		    public IEnumerable<int>? ListDetailDeductionComponentId { get; set; }
+
+		    [NotMapped]
+		    public IEnumerable<decimal>? ListDetailDeductionComponentAmount { get; set; }
+
 
 		#endregion
 
@@ -219,6 +224,7 @@ namespace HRHUBAPI.Models
 					DesignationTitle = string.IsNullOrWhiteSpace(row["DesignationTitle"].ToString()) ? "" : row["DesignationTitle"].ToString(),
 					DepartmentTitle = string.IsNullOrWhiteSpace(row["DepartmentTitle"].ToString()) ? "" : row["DepartmentTitle"].ToString(),
 					Category = string.IsNullOrWhiteSpace(row["Category"].ToString()) ? "" : row["Category"].ToString(),
+					ComponentId = string.IsNullOrWhiteSpace(row["ComponentID"].ToString()) ? 0 : Convert.ToInt32(row["ComponentID"]),
 					ComponentTitle = string.IsNullOrWhiteSpace(row["ComponentTitle"].ToString()) ? "" : row["ComponentTitle"].ToString(),
 					ComponentAmount = Convert.ToDecimal(row["ComponentAmount"]),
 				}).ToList();
@@ -250,48 +256,6 @@ namespace HRHUBAPI.Models
 			}
 			catch (Exception e) { return false; }
 		}
-
-		public async Task<StaffSalary> PostStaffSalary(StaffSalary objStaffSalary, HrhubContext hrhubContext)
-        {
-            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    var dbResult = await hrhubContext.StaffSalaries.FirstOrDefaultAsync(x => x.IsDeleted == false && x.StaffSalaryId == objStaffSalary.StaffSalaryId);
-                    if (dbResult != null && objStaffSalary.StaffSalaryId > 0)
-                    {
-                        dbResult.StaffSalaryId = objStaffSalary.StaffSalaryId;
-                        dbResult.StaffId = objStaffSalary.StaffId;
-                        dbResult.SalaryMonth = objStaffSalary.SalaryMonth;
-                        dbResult.GrossSalary = objStaffSalary.GrossSalary;
-                        dbResult.TotalDeductions = objStaffSalary.TotalDeductions;
-                        dbResult.TotalEarnings = objStaffSalary.TotalEarnings;
-                        dbResult.NetSalary = objStaffSalary.NetSalary;
-                        dbResult.SalaryStatusId = objStaffSalary.SalaryStatusId;
-                        dbResult.UpdatedBy = objStaffSalary.UpdatedBy;
-                        dbResult.UpdatedOn = DateTime.Now;
-                        dbResult.IsDeleted = false;
-
-                        await hrhubContext.SaveChangesAsync();
-                        dbResult.TranFlag = 2;
-                        dbContextTransaction.Commit();
-                        return dbResult;
-                    }
-                    else
-                    {
-                        objStaffSalary.CreatedOn = DateTime.Now;
-                        objStaffSalary.IsDeleted = false;
-
-                        hrhubContext.Add(objStaffSalary);
-                        await hrhubContext.SaveChangesAsync();
-                        objStaffSalary.TranFlag = 1;
-                        dbContextTransaction.Commit();
-                        return objStaffSalary;
-                    }
-                }
-                catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
-            }
-        }
 
         public async Task<bool> DeleteStaffSalary(int Id, int UserId, HrhubContext hrhubContext)
         {
@@ -336,7 +300,118 @@ namespace HRHUBAPI.Models
             catch (Exception e) { throw; }
         }
 
-        public async Task<bool> AlreadyExists(int Id, int StaffId, HrhubContext hrhubContext)
+		public async Task<StaffSalary> PostSingleStaffSalary(StaffSalary objStaffSalary, HrhubContext hrhubContext)
+        {
+            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var dbResult = await hrhubContext.StaffSalaries.FirstOrDefaultAsync(x => x.IsDeleted == false && x.SalaryMonth == objStaffSalary.SalaryMonth && x.StaffId == objStaffSalary.StaffId);
+                    if (dbResult != null && objStaffSalary.StaffId > 0)
+                    {
+						objStaffSalary.StaffSalaryId = dbResult.StaffSalaryId;
+
+                        dbResult.StaffId = objStaffSalary.StaffId;
+                        dbResult.SalaryMonth = objStaffSalary.SalaryMonth;
+						//dbResult.GrossSalary = objStaffSalary.GrossSalary;
+						dbResult.TotalEarnings = objStaffSalary.TotalEarnings;
+						dbResult.TotalDeductions = objStaffSalary.TotalDeductions;
+                        dbResult.NetSalary = objStaffSalary.TotalEarnings - objStaffSalary.TotalDeductions;
+                        //dbResult.SalaryStatusId = objStaffSalary.SalaryStatusId;
+                        dbResult.UpdatedBy = objStaffSalary.UpdatedBy;
+                        dbResult.UpdatedOn = DateTime.Now;
+                        dbResult.IsDeleted = false;
+
+                        await hrhubContext.SaveChangesAsync();
+
+						PostSingleStaffSalaryDetail(objStaffSalary, hrhubContext);
+
+						dbResult.TranFlag = 2;
+                        dbContextTransaction.Commit();
+                        return dbResult;
+                    }
+                    else
+                    {
+                        objStaffSalary.CreatedOn = DateTime.Now;
+                        objStaffSalary.IsDeleted = false;
+
+                        hrhubContext.Add(objStaffSalary);
+                        await hrhubContext.SaveChangesAsync();
+
+						PostSingleStaffSalaryDetail(objStaffSalary, hrhubContext);
+
+						objStaffSalary.TranFlag = 1;
+                        dbContextTransaction.Commit();
+                        return objStaffSalary;
+                    }
+                }
+                catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
+            }
+        }
+
+        private bool PostSingleStaffSalaryDetail(StaffSalary objStaffSalary, HrhubContext hrhubContext)
+        {
+            try
+            {
+				var dbResult = hrhubContext.StaffSalaryDetails.Where(x => x.StaffSalaryId == objStaffSalary.StaffSalaryId).ToList();
+                if (dbResult != null && dbResult.Count > 0) 
+                {
+                    hrhubContext.RemoveRange(dbResult);
+                    hrhubContext.SaveChanges(); 
+                }
+
+                List<StaffSalaryDetail> ListStaffSalaryDetails = new List<StaffSalaryDetail>();
+
+				// Earning Component Section
+                if(objStaffSalary.ListDetailEarningComponentId != null && objStaffSalary.ListDetailEarningComponentId.Count() > 0)
+                {
+				    int i = 0;
+                    foreach(var item in objStaffSalary.ListDetailEarningComponentId)
+                    {
+                        if(item != null && item > 0)
+                        {
+                            StaffSalaryDetail objStaffSalaryDetail = new StaffSalaryDetail();
+                        
+                            objStaffSalaryDetail.StaffSalaryId = objStaffSalary.StaffSalaryId;
+						    objStaffSalaryDetail.ComponentId = objStaffSalary.ListDetailEarningComponentId.ToArray()[i];
+						    objStaffSalaryDetail.Amount = objStaffSalary.ListDetailEarningComponentAmount.ToArray()[i];
+
+                            ListStaffSalaryDetails.Add(objStaffSalaryDetail);   
+					    }
+                        i++;
+                    }
+                }
+				// End Earning Component Section
+
+				// Deduction Component Section
+                if(objStaffSalary.ListDetailDeductionComponentId != null && objStaffSalary.ListDetailDeductionComponentId.Count() > 0)
+                {
+				    int j = 0;
+                    foreach(var item in objStaffSalary.ListDetailDeductionComponentId)
+                    {
+                        if(item != null && item > 0)
+                        {
+                            StaffSalaryDetail objStaffSalaryDetail = new StaffSalaryDetail();
+                            objStaffSalaryDetail.StaffSalaryId = objStaffSalary.StaffSalaryId;
+                            objStaffSalaryDetail.ComponentId = objStaffSalary.ListDetailDeductionComponentId.ToArray()[j];
+                            objStaffSalaryDetail.Amount = objStaffSalary.ListDetailDeductionComponentAmount.ToArray()[j];
+
+                            ListStaffSalaryDetails.Add(objStaffSalaryDetail);
+                        }
+                        j++;
+					}
+                }
+				// End Dedution Component Section
+
+				hrhubContext.AddRange(ListStaffSalaryDetails);
+				hrhubContext.SaveChanges();
+                return true;
+
+			}
+			catch (Exception e) { throw; }
+        }
+	
+		public async Task<bool> AlreadyExists(int Id, int StaffId, HrhubContext hrhubContext)
         {
             try
             {

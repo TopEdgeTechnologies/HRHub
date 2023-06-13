@@ -446,7 +446,32 @@
 
 		$(document).ready(function(){
 
-			
+			// Show notification
+			var msg = '@ViewBag.Success';
+			if (msg !== "" && msg == '1') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '2') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '3') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+					type: "success"
+				});
+			}
+			if (msg !== "" && msg == '0') {
+				notif({
+					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+					type: "error"
+				});
+			}
 
 		});
 
@@ -592,11 +617,9 @@
 			})
 		}
 
-		function GetStaffSalaryHistoryCard(data)
-		{
+		function GetStaffSalaryHistoryCard(data) {
 			debugger
-			if (data.length > 0) 
-			{
+			if (data.length > 0) {
 				$('#lbl_regNo_history').text(data[0].registrationNo)
 				$('#lbl_firstName_history').text(data[0].firstName + ' ' + data[0].lastName)
 				$('#lbl_Department_history').text(data[0].departmentTitle)
@@ -686,7 +709,9 @@
 		$("#PayAllSalaries").click(function() {
 			debugger
 			var currentSalaryMonth = $("#endDate").val()
-			
+			var currentMonth = $("#salaryMonth").val();
+			var currentYear = $("#salaryYear").val();
+
 			const swalWithBootstrapButtons = Swal.mixin({
 				customClass: {
 					confirmButton: 'btn btn-success',
@@ -710,10 +735,10 @@
 
 					if (StaffSalary_BulkUpdate(currentSalaryMonth)) {
 						debugger
-						//$.notif({
-						//	msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Record has Updated Succesfully.",
-						//	type: "success"
-						//});
+						//alert("All Staff Salaries Paid!")
+						// StaffSalaryList
+						var url = "/PayrollConfiguration/StaffSalaryList?data=" + 2 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+						window.location.href = url;
 					}
 					else {
 						$.growl.warning({

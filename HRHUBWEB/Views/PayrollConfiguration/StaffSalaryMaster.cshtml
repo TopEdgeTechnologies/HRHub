@@ -92,7 +92,13 @@
 <script>
 
     $(document).ready(function () {
-            
+
+        $('#myonoffswitch2').prop('checked', true);
+        names()
+        localStorage.setItem('dayonedarkMode', true);
+        localStorage.removeItem('dayonelightMode');
+        localStorage.removeItem('dayonetransparentMode');
+
         //$("#SalaryMonth").select2();
         var currentMonth = new Date().getMonth()
         $("#attendanceMonth").val(currentMonth).trigger()
@@ -121,15 +127,15 @@
             var htmlButton = ''
             if (currentMonth > 0 && currentYear > 0 && recordInserted == true) {
                     htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="View Payroll" class="btn btn-success btn-block" />'
-                $.growl.warning({
-                        message: "Record already Inserted!"
-                });
+                //$.growl.warning({
+                //        message: "Record already Inserted!"
+                //});
             }
             else if (currentMonth > 0 && currentYear > 0 && recordInserted == false) {
                     htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-primary btn-block" />'
-                $.growl.warning({
-                        message: "Record has not Inserted for selected Date!"
-                });
+                //$.growl.warning({
+                //        message: "Record has not Inserted for selected Date!"
+                //});
             }
                 debugger
             $("#btn_Salary").html(htmlButton)
@@ -166,7 +172,6 @@
         return recordInserted;
     }
 
-
     function GeneratePayroll() {
         debugger;
         var buttonTitle = $("#btn_GenerateStaffSalary").val()
@@ -174,33 +179,31 @@
         var currentMonth = $("#attendanceMonth").val();
         var currentYear = $("#attendanceYear").val();
 
-        if (currentMonth !== "" && currentYear !== "") {
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-
+        if (currentMonth !== "" && currentYear !== "") {  
             if (validateForm()) {
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'No, cancel!',
-                    confirmButtonText: 'Yes, Save it!',
-                    timer: 30000,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        
-                        debugger
-                        if (buttonTitle == 'Generate Payroll') {
+                if (buttonTitle == 'Generate Payroll') {
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: 'btn btn-success',
+                            cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'No, cancel!',
+                        confirmButtonText: 'Yes, Save it!',
+                        timer: 30000,
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                             if (StaffSalary_BulkInsert(currentMonth, currentYear)) {
                                 // StaffSalaryList
-                                var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+                                var url = "/PayrollConfiguration/StaffSalaryList?data=" + 1 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
                                 window.location.href = url;
                             } else {
                                 $.growl.warning({
@@ -208,19 +211,24 @@
                                 });
                             }
                         }
-                        else if (buttonTitle == 'View Payroll') {
-                            
+                        else if (result.dismiss === Swal.DismissReason.cancel) {
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your record is safe :)',
+                                'error'
+                            );
                         }
-
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Cancelled',
-                            'Your record is safe :)',
-                            'error'
-                        );
+                    });
+                }
+                    debugger
+                    if (buttonTitle == 'View Payroll') {
+                        debugger
+                        // StaffSalaryList
+                        var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+                        window.location.href = url;
                     }
-                });
-            } else {
+            }
+            else {
                 $.growl.warning({
                     message: "Please Enter required fields !"
                 });

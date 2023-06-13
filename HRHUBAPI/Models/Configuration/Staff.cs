@@ -402,8 +402,8 @@ namespace HRHUBAPI.Models
                 }
 
                 List<StaffSalaryComponent> ListStaffSalaryComponents = new List<StaffSalaryComponent>();
+
                 int i = 0;
-                
                 foreach (var item in objStaff.ListComponentAmountEarning)
                 {
                     if (item != null && item > 0)
@@ -419,9 +419,8 @@ namespace HRHUBAPI.Models
                     i++;
                 }
                 hrhubContext.AddRange(ListStaffSalaryComponents);
-                hrhubContext.SaveChanges();
+				hrhubContext.SaveChanges();
                 return true;
-
             }
             catch (Exception ex) { throw; }
         }
