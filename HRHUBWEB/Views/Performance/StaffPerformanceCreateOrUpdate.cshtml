@@ -447,8 +447,9 @@
                             var Datalist = new Array();
                             $("#myTable TBODY TR").each(function () {
                                 var row = $(this);
-                                var performance = {};                               
-                                
+                                var performance = {};
+                                var trTyp = $(this).closest('tr').attr('trType');
+                                alert(trTyp)
                               @*  if (trType) {*@
 
                                     var sectionQuestionIdInput = row.find("TD").eq(0).find("input");
