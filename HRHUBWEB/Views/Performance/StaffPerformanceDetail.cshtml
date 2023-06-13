@@ -1,4 +1,4 @@
-﻿@model HRHUBAPI.Models.SectionAnswer
+﻿@model HRHUBAPI.Models.StaffReviewFormProcessed
 @{
     ViewData["Title"] = "Staff Performance Details";
 }
@@ -8,6 +8,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
+                <input asp-for="ReviewedStaffId" type="hidden"/>
                 <h3 class="card-title">Staff Performance Answer</h3>
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
@@ -27,8 +28,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">Sr.#</th>
-                                <th class="border-bottom-0">Staff Name</th>                               
-                                <th class="border-bottom-0 ">Question Title</th>
+                                <th class="border-bottom-0">Staff Name</th>                             
+                                
                                 <th class="text-center">Total Weightage</th>
                                 <th class="text-center">Earned Weightage</th>
                                 <th class="">Action</th>
@@ -45,7 +46,7 @@
                                         </td>
                                         <td>
                                             <div class="d-flex">
-                                                <img class="avatar avatar-md brround me-3" src="@item.SnapPath">
+                                                <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
                                                 <div class="me-3 mt-0 mt-sm-1 d-block">
                                                     @{
                                                         string fullName = item.FirstName + " " + item.LastName;
@@ -55,9 +56,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
-                                            @item.QuestionTitle
-                                        </td>
+                                       
                                         <td class="text-center">
                                             @item.TotalWeightage
                                         </td>
@@ -76,12 +75,12 @@
                                                 <div class="d-flex">
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a asp-Action="StaffPerformanceCreateOrUpdate" asp-route-id="@item.AnswerId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                        <a asp-Action="StaffPerformanceCreateOrUpdate" asp-route-ReviewFormId="@item.ReviewFormId" asp-route-StaffId="@item.ReviewedStaffId"   class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                             <i class="feather feather-edit primary text-primary mt-1 "></i>
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                     {
-                                                        <a href="#" onclick="DeleteConfirmation(@item.AnswerId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                        <a href="#" onclick="DeleteConfirmation(@item.ReviewFormId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                         </a>
                                                     }

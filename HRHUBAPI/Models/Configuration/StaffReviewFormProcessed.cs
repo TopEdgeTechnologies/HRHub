@@ -15,6 +15,10 @@ namespace HRHUBAPI.Models
     public partial class StaffReviewFormProcessed
     {
         [NotMapped]
+        public string? FirstName { get; set; }
+        [NotMapped]
+        public string? LastName { get; set; }
+        [NotMapped]
         public decimal? AppraisalPercentage { get; set; }
         [NotMapped]
         public bool? IsAppraisalSet { get; set; }
@@ -24,6 +28,7 @@ namespace HRHUBAPI.Models
         public string? Weightage { get; set; }
         [NotMapped]
         public string? AppraisalDate { get; set; }
+        [NotMapped]
         public string? StaffRegistrationNo { get; set; }
         [NotMapped]
         public string? StaffName { get; set; }

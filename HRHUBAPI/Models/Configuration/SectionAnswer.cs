@@ -47,17 +47,17 @@ namespace HRHUBAPI.Models
        
 		
 		 [NotMapped]
-		public int? TotalWeightage { get; set; }
+		public decimal? TotalWeightage { get; set; }
 		
        
 		 [NotMapped]
-		public int? TotalQuestionWeightage { get; set; }
+		public decimal? TotalQuestionWeightage { get; set; }
 		
        
 		
         
 		 [NotMapped]
-		public int? EarnedWeightage { get; set; }
+		public decimal? EarnedWeightage { get; set; }
 		
        
 		
@@ -72,34 +72,74 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<SectionQuestion>? ListSectionQuestion { get; set; }
 
+         [NotMapped]
+        public IEnumerable<SectionAnswer>? ListSectionAnswer { get; set; }
+
 
         // list all Comments staff List
-        public async Task<List<SectionAnswer>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
+
+        public async Task<List<StaffReviewFormProcessed>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
         {
             try
             {
-                string query = "EXEC dbo.sp_List_Answer_Comment " + ReviewFormId;
-                DataTable dt = _db.ReturnDataTable(query);
+                var List = from SR in _context.StaffReviewFormProcesseds                                              
+                         
+                           join ST in _context.Staff on SR.ReviewedStaffId equals ST.StaffId
+                           where ST.IsDeleted == false  && ST.Status==true && SR.ReviewFormId == ReviewFormId 
 
-                var obj = dt.AsEnumerable()
-                    .Select(row => new SectionAnswer
-                    {
-                        SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
-                        AnswerId = Convert.ToInt32(row["AnswerID"]),
-                        FirstName = row["FirstName"].ToString(),
-                        LastName = row["LastName"].ToString(),                       
-                        StaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
-                        PerformanceFormTitle = row["PerformanceFormTitle"].ToString(),
-						QuestionTitle = row["QuestionTitle"].ToString(),
-                        TotalWeightage = Convert.ToInt32(row["TotalWeightage"]),
-                        EarnedWeightage = Convert.ToInt32(row["EarnedWeightage"])
+                           select new StaffReviewFormProcessed
+                           {
+                               StaffSnap = ST.SnapPath,                             
+                               FirstName = ST.FirstName,
+                               LastName = ST.LastName,
+                               ReviewFormId= SR.ReviewFormId,
+                               ReviewedStaffId = SR.ReviewedStaffId,                              
+                               TotalWeightage =Convert.ToDecimal(SR.TotalWeightage),
+                               EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)
 
-                    })
-                    .ToList();
-                return obj;
+
+                           };
+                return List != null ? List.OrderByDescending(x => x.ReviewFormId).ToList() : new List<StaffReviewFormProcessed>();
+
+
             }
-            catch { throw; }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
         }
+
+
+
+
+      //  public async Task<List<SectionAnswer>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
+      //  {
+      //      try
+      //      {
+      //          string query = "EXEC dbo.sp_List_Answer_Comment " + ReviewFormId;
+      //          DataTable dt = _db.ReturnDataTable(query);
+
+        //          var obj = dt.AsEnumerable()
+        //              .Select(row => new SectionAnswer
+        //              {
+        //                  SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
+        //                  AnswerId = Convert.ToInt32(row["AnswerID"]),
+        //                  FirstName = row["FirstName"].ToString(),
+        //                  LastName = row["LastName"].ToString(),                       
+        //                  StaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
+        //                  PerformanceFormTitle = row["PerformanceFormTitle"].ToString(),
+        //QuestionTitle = row["QuestionTitle"].ToString(),
+        //                  TotalWeightage = Convert.ToInt32(row["TotalWeightage"]),
+        //                  EarnedWeightage = Convert.ToInt32(row["EarnedWeightage"])
+
+        //              })
+        //              .ToList();
+        //          return obj;
+        //      }
+        //      catch { throw; }
+        //  }
 
 
 
@@ -187,7 +227,7 @@ namespace HRHUBAPI.Models
 
             }
 
-            return null;
+           
         }
 
         public async Task<SectionAnswer> SectionAnswerById(int id, HrhubContext _context)
@@ -238,6 +278,11 @@ namespace HRHUBAPI.Models
                             item.UpdatedOn = DateTime.Now; 
 
                         }
+                        
+                        _context.SectionAnswers.AddRange(listSectionAnswerInfo);
+                        await _context.SaveChangesAsync();
+
+
                         foreach (var item in listSectionAnswerInfo)
                         {
                             var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == item.ReviewedStaffId);
@@ -258,9 +303,7 @@ namespace HRHUBAPI.Models
 
 
 
-                        _context.SectionAnswers.AddRange(listSectionAnswerInfo);
-                        await _context.SaveChangesAsync();                     
-                      
+
                     }
 
                     await _context.SaveChangesAsync();

@@ -377,7 +377,7 @@ namespace HRHUBAPI.Controllers
 
 
         [HttpGet("GetStaffSectionAnswerList{ReviewFormId}")]
-        public async Task<ActionResult<List<SectionAnswer>>> GetStaffSectionAnswerList(int ReviewFormId)
+        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetStaffSectionAnswerList(int ReviewFormId)
         {
 
             return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, _context);

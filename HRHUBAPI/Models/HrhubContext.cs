@@ -777,12 +777,12 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<SectionAnswer>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("SectionAnswer", "Performance");
+            entity.HasKey(e => e.AnswerId);
 
-            entity.Property(e => e.AnswerComments).IsUnicode(false);
+            entity.ToTable("SectionAnswer", "Performance");
+
             entity.Property(e => e.AnswerId).HasColumnName("AnswerID");
+            entity.Property(e => e.AnswerComments).IsUnicode(false);
             entity.Property(e => e.AnswerWeightage).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
