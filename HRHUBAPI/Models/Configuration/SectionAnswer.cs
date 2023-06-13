@@ -8,6 +8,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using HRHUBAPI.Models.Configuration;
 using System.Data;
 using System.ComponentModel.Design;
+using static System.Collections.Specialized.BitVector32;
 
 namespace HRHUBAPI.Models
 {
@@ -19,8 +20,14 @@ namespace HRHUBAPI.Models
 		DbConnection _db = new DbConnection();
 
 
+
+        [NotMapped]
+        public int? CheckUpdate { get; set; }
+
         [NotMapped]
         public int? StaffId { get; set; }
+        [NotMapped]
+        public int? SectionId { get; set; }
         [NotMapped]
         public int? DesignationId { get; set; }
         [NotMapped]
@@ -28,6 +35,10 @@ namespace HRHUBAPI.Models
 		
        [NotMapped]
 		public string? FirstName { get; set; }
+		[NotMapped]
+		public string? SectionName { get; set; }
+		[NotMapped]
+		public string? SectionDescription { get; set; }
 		
         [NotMapped]
 		public string? LastName { get; set; }
@@ -48,21 +59,24 @@ namespace HRHUBAPI.Models
 		
 		 [NotMapped]
 		public decimal? TotalWeightage { get; set; }
-		
-       
-		 [NotMapped]
+
+
+        [NotMapped]
+        public decimal? SectionWeightage { get; set; }
+
+        [NotMapped]
 		public decimal? TotalQuestionWeightage { get; set; }
-		
-       
 		
         
 		 [NotMapped]
 		public decimal? EarnedWeightage { get; set; }
-		
-       
-		
 
-		[NotMapped]
+       
+
+
+
+
+        [NotMapped]
 		public int? Renew { get; set; }
 		[NotMapped]
         public Staff? StaffList { get; set; }
@@ -95,8 +109,7 @@ namespace HRHUBAPI.Models
                                ReviewFormId= SR.ReviewFormId,
                                ReviewedStaffId = SR.ReviewedStaffId,                              
                                TotalWeightage =Convert.ToDecimal(SR.TotalWeightage),
-                               EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)
-
+                               EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)                              
 
                            };
                 return List != null ? List.OrderByDescending(x => x.ReviewFormId).ToList() : new List<StaffReviewFormProcessed>();
@@ -113,33 +126,34 @@ namespace HRHUBAPI.Models
 
 
 
+        // Update_Answer_Question Load 
+        public async Task<List<SectionAnswer>> StaffSectionAnswerList(int CompanyId, int ReviewFormId, int Reviewed_StaffID, int Reviewer_StaffID, HrhubContext _context)
+        {
+            try
+            {
+                string query = "EXEC dbo.sp_AnswerSection_Update " + CompanyId + " , " + ReviewFormId + ", " + Reviewed_StaffID + "," + Reviewer_StaffID + "";
+                DataTable dt = _db.ReturnDataTable(query);
 
-      //  public async Task<List<SectionAnswer>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
-      //  {
-      //      try
-      //      {
-      //          string query = "EXEC dbo.sp_List_Answer_Comment " + ReviewFormId;
-      //          DataTable dt = _db.ReturnDataTable(query);
-
-        //          var obj = dt.AsEnumerable()
-        //              .Select(row => new SectionAnswer
-        //              {
-        //                  SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
-        //                  AnswerId = Convert.ToInt32(row["AnswerID"]),
-        //                  FirstName = row["FirstName"].ToString(),
-        //                  LastName = row["LastName"].ToString(),                       
-        //                  StaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
-        //                  PerformanceFormTitle = row["PerformanceFormTitle"].ToString(),
-        //QuestionTitle = row["QuestionTitle"].ToString(),
-        //                  TotalWeightage = Convert.ToInt32(row["TotalWeightage"]),
-        //                  EarnedWeightage = Convert.ToInt32(row["EarnedWeightage"])
-
-        //              })
-        //              .ToList();
-        //          return obj;
-        //      }
-        //      catch { throw; }
-        //  }
+                var obj = dt.AsEnumerable()
+                    .Select(row => new SectionAnswer
+                    {
+                        AnswerId = Convert.ToInt32(row["AnswerID"]),                      
+                        StaffId = Convert.ToInt32(row["Reviewed_StaffID"]),                        
+                        QuestionTitle = row["QuestionTitle"].ToString(),                       
+                        SectionQuestionId = Convert.ToInt32(row["SectionQuestionId"]),
+                        SectionId = Convert.ToInt32(row["SectionId"]),
+                        SectionWeightage = Convert.ToInt32(row["SectionWeightage"]),                                       
+                        SectionName = row["SectionTitle"].ToString(),
+                        SectionDescription = row["SectionDescription"].ToString(),
+                        AnswerWeightage = Convert.ToDecimal(row["AnswerWeightage"]),                  
+                        AnswerComments = row["AnswerComments"].ToString()                     
+                         
+                    }).OrderByDescending(x=>x.AnswerId)
+                    .ToList();
+                return obj;
+            }
+            catch { throw; }
+        }
 
 
 
@@ -192,31 +206,61 @@ namespace HRHUBAPI.Models
         }
         
         // Load all section and Question 
-        public async Task<List<SectionQuestion>> GetSectionQuestion(int CompanyId,int ReviewFormId, HrhubContext _context)
+        public async Task<List<SectionQuestion>> GetSectionQuestion(int ReviewFormId, HrhubContext _context)
         {
             try
             {
-                var List = from S in _context.SectionQuestions
-                           join Q in _context.Questions on S.QuestionId equals Q.QuestionId
-                           join section in _context.Sections on S.SectionId equals section.SectionId
-                           join Performance in _context.PerformanceForms on section.ReviewFormId equals Performance.ReviewFormId
-                           where Q.CompanyId== CompanyId && Q.IsDeleted == false && section.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
 
-                           select new SectionQuestion
-                           {
-                               SectionQuestionId = S.SectionQuestionId,
-                               QuestionId = S.QuestionId,
-                               SectionId = S.SectionId,
-                               Weightage = S.Weightage,
-                               QuestionName = Q.Title,
-                               SectionName = section.Title,
-                               SectionDescription = section.Description,
-                               ReviewName = Performance.Title,
-                               ReviewDescription = Performance.Description,
-                               
+                try
+                {
+                    string query = "EXEC dbo.sp_Load_Section_Question " + ReviewFormId + "";
+                    DataTable dt = _db.ReturnDataTable(query);
 
-                           };
-                return List != null ? List.OrderByDescending(x => x.SectionQuestionId).ToList() : new List<SectionQuestion>();
+                    var obj = dt.AsEnumerable()
+                        .Select(row => new SectionQuestion
+                        {
+                            QuestionMaxLimit = row["QuestionMaxLimit"] != DBNull.Value ? Convert.ToInt32(row["QuestionMaxLimit"]) : 0,
+                            QuestionId = row["QuestionId"] != DBNull.Value ? Convert.ToInt32(row["QuestionId"]) : 0,
+                            Weightage = row["Weightage"] != DBNull.Value ? Convert.ToInt32(row["Weightage"]) : 0,
+                            SectionQuestionId = row["SectionQuestionId"] != DBNull.Value ? Convert.ToInt32(row["SectionQuestionId"]) : 0,
+                            SectionId = row["SectionId"] != DBNull.Value ? Convert.ToInt32(row["SectionId"]) : 0,
+                            SectionName = row["SectionName"] != DBNull.Value ? row["SectionName"].ToString() : string.Empty,
+                            ReviewName = row["ReviewName"] != DBNull.Value ? row["ReviewName"].ToString() : string.Empty,
+                            SectionDescription = row["SectionDescription"] != DBNull.Value ? row["SectionDescription"].ToString() : string.Empty,
+                            ReviewDescription = row["ReviewDescription"] != DBNull.Value ? row["ReviewDescription"].ToString() : string.Empty,
+                            QuestionName = row["QuestionName"] != DBNull.Value ? row["QuestionName"].ToString() : string.Empty,
+                            IsAnswerWeightage = row["IsAnswerWeightage"] != DBNull.Value && Convert.ToBoolean(row["IsAnswerWeightage"])
+
+                        }).OrderByDescending(x => x.SectionQuestionId)
+                        .ToList();
+                    return obj;
+                }
+                catch { throw; }
+
+
+
+
+                //var List = from S in _context.SectionQuestions
+                //           join Q in _context.Questions on S.QuestionId equals Q.QuestionId
+                //           join section in _context.Sections on S.SectionId equals section.SectionId
+                //           join Performance in _context.PerformanceForms on section.ReviewFormId equals Performance.ReviewFormId
+                //           where Q.CompanyId== CompanyId && Q.IsDeleted == false && section.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
+
+                //           select new SectionQuestion
+                //           {
+                //               SectionQuestionId = S.SectionQuestionId,
+                //               QuestionId = S.QuestionId,
+                //               SectionId = S.SectionId,
+                //               Weightage = S.Weightage,
+                //               QuestionName = Q.Title,
+                //               SectionName = section.Title,
+                //               SectionDescription = section.Description,
+                //               ReviewName = Performance.Title,
+                //               ReviewDescription = Performance.Description,
+                //               AnswerWeightage = S.AnswerWeightage,
+
+                //           };
+                //return List != null ? List.OrderByDescending(x => x.SectionQuestionId).ToList() : new List<SectionQuestion>();
 
 
             }
@@ -267,43 +311,70 @@ namespace HRHUBAPI.Models
 
 			try
             {
-
                     var ObjsectionAnswer = new SectionAnswer();
-                    if (listSectionAnswerInfo.Count() > 0)
+                    int targetStaffReviewedId;
+
+                    var answerColumn = listSectionAnswerInfo.Select(s => s.ReviewerStaffId).ToList();
+                    
+                    
+                    
+                    
+                    targetStaffReviewedId = Convert.ToInt32(answerColumn.FirstOrDefault());
+
+                    var reviewer_StaffId = _context.SectionAnswers.Any(x => x.ReviewerStaffId == targetStaffReviewedId);
+                    if (reviewer_StaffId == true)
                     {
-                        // save Appraisal data 
-                        foreach (var item in listSectionAnswerInfo)
+                        if (listSectionAnswerInfo.Count() > 0)
                         {
-                            item.CreatedOn = DateTime.Now;
-                            item.UpdatedOn = DateTime.Now; 
-
-                        }
-                        
-                        _context.SectionAnswers.AddRange(listSectionAnswerInfo);
-                        await _context.SaveChangesAsync();
-
-
-                        foreach (var item in listSectionAnswerInfo)
-                        {
-                            var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == item.ReviewedStaffId);
-                            if (checkStaffReview != null && checkStaffReview.ReviewedStaffId > 0)
+                            // save Appraisal data 
+                            foreach (var item in listSectionAnswerInfo)
                             {
 
-                                decimal? sumAnser = listSectionAnswerInfo.Sum(answer => answer.AnswerWeightage);
-                                decimal? sumQuestion = listSectionAnswerInfo.Sum(total => total.TotalQuestionWeightage);
-                                checkStaffReview.TotalWeightage = sumQuestion;
-                                checkStaffReview.EarnedWeightage = sumAnser;
-                                checkStaffReview.UpdatedBy = item.CreatedBy;
-                                checkStaffReview.UpdatedOn = DateTime.Now;
-
-                                await _context.SaveChangesAsync();
+                                item.CreatedOn = DateTime.Now;
+                                item.UpdatedOn = DateTime.Now;
 
                             }
+
+                            _context.SectionAnswers.UpdateRange(listSectionAnswerInfo);
+                            await _context.SaveChangesAsync();
+
+                        }
+                    }
+                    else
+                    {
+
+                        if (listSectionAnswerInfo.Count() > 0)
+                        {
+                            // save Appraisal data 
+                            foreach (var item in listSectionAnswerInfo)
+                            {
+                                item.CreatedOn = DateTime.Now;
+                                item.UpdatedOn = DateTime.Now;
+
+                            }
+
+                            _context.SectionAnswers.AddRange(listSectionAnswerInfo);
+                            await _context.SaveChangesAsync();
+
                         }
 
+                    }
+                    foreach (var item in listSectionAnswerInfo)
+                    {
+                        var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == item.ReviewedStaffId);
+                        if (checkStaffReview != null && checkStaffReview.ReviewedStaffId > 0)
+                        {
 
+                            decimal? sumAnser = listSectionAnswerInfo.Sum(answer => answer.AnswerWeightage);
+                            decimal? sumQuestion = listSectionAnswerInfo.Sum(total => total.TotalQuestionWeightage);
+                            checkStaffReview.TotalWeightage = sumQuestion;
+                            checkStaffReview.EarnedWeightage = sumAnser;
+                            checkStaffReview.UpdatedBy = item.CreatedBy;
+                            checkStaffReview.UpdatedOn = DateTime.Now;
 
+                            await _context.SaveChangesAsync();
 
+                        }
                     }
 
                     await _context.SaveChangesAsync();

@@ -8,7 +8,7 @@
 {
 <div class="modal fade" id="AddGeneralModal">
     <div class="modal-dialog" role="document">
-        <input type="hidden" asp-for="ReviewerStaffId" />
+        <input type="hidden" asp-for="ReviewedStaffId" />
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Show Review</h5>
@@ -21,7 +21,7 @@
                     <div class="col-md-12">
 
                         <div class="form-group">
-                                <input type="hidden" name="StaffId" id="StaffId" />
+                                <input type="hidden" name="ReviewedStaffId" id="ReviewedStaffId" />
                             <label>Review type <span class="text-danger">*</span></label>
                             <select id="ReviewFormId" name="ReviewFormId" class="form-control custom-select select2" data-placeholder="Select Review">
 
@@ -170,8 +170,8 @@
         });
         function addnewPerformance(id) {
 
-            
-            $("#StaffId").val(id);
+
+            $("#ReviewedStaffId").val(id);
             $("#AddGeneralModal").modal('show');
 
 
@@ -193,7 +193,7 @@
                 e.preventDefault(); // Prevent the form from submitting normally
 
                 var Data = {
-                    StaffId: $("#ReviewerStaffId").val(),
+                    ReviewedStaffId: $("#ReviewedStaffId").val(),
                     ReviewFormId: $("#ReviewFormId").val()
                 } // Serialize the form data
 
