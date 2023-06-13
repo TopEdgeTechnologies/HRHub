@@ -273,8 +273,14 @@
                             {
                                 <a onclick="showleaveApprovalmodel(3)" class="btn btn-success my-1">Approve</a>
                                 <a onclick="showleaveApprovalmodel(4)" class="btn btn-danger my-1">Reject</a>
-                                <a onclick="showforwardleavemodel()" class="btn btn-primary my-1">Forward</a>
-                                <a asp-action="HRLeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                                @if(ViewBag.ForwardBtnVisibility == true){
+                                    <a onclick="showforwardleavemodel()" class="btn btn-primary my-1">Forward</a>
+                                    <a asp-action="HRLeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                                }
+                                else{
+                                    <a asp-action="HR" asp-controller="Dashboard" class="btn btn-outline-primary my-1">Close</a>
+                                }
+                                
                             }
                             else{
                                 <a asp-action="LeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
@@ -473,8 +479,10 @@
                                 message: b.message
                             });
 
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
+                            window.location.href = window.location.href;
+
+                            //var url = '@Url.Action("HRLeaveList", "Leave")';
+                            //window.location.href = url;
 
                         }
                         else {
@@ -482,8 +490,10 @@
                                 message: b.message
                             });
 
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
+                            window.location.href = window.location.href;
+
+                            //var url = '@Url.Action("HRLeaveList", "Leave")';
+                            //window.location.href = url;
 
 
                         }

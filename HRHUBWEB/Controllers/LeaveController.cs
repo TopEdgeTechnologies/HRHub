@@ -629,7 +629,7 @@ namespace HRHUBWEB.Controllers
                 obj.ApprovalDate = DateTime.Now;
                 obj.CreatedBy = userObject.UserId;
 
-                 var setting= await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Leave/GetLeaveApprovalSettingInfos{CompanyId}", HttpMethod.Get);
+                var setting= await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Leave/GetLeaveApprovalSettingInfos{CompanyId}", HttpMethod.Get);
                 // Extract the column name from the response
                 obj.FinalApprovalDesignationID = setting.FinalApprovalByDesignationId;
 
@@ -735,6 +735,16 @@ namespace HRHUBWEB.Controllers
                 if (staffid == _user.StaffId)
                 {
                     ViewBag.ApprovalBtnVisibility = false;
+                }
+
+                var setting = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Leave/GetLeaveApprovalSettingInfos{CompanyId}", HttpMethod.Get);
+                // Extract the column name from the response
+                var FinalApprovalDesignationID = setting.FinalApprovalByDesignationId;
+
+                ViewBag.ForwardBtnVisibility = false;
+                if (FinalApprovalDesignationID == _user.DesignationID)
+                {
+                    ViewBag.ForwardBtnVisibility = true;
                 }
 
                 if (Token != null)
