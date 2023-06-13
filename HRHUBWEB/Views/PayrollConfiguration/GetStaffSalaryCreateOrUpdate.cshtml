@@ -29,7 +29,7 @@
 						<div class="page-rightheader ms-md-auto">
 							<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
 								<div class="btn-list">
-									<a href="hr-addpayroll.html" class="btn btn-primary me-3">Add New Payroll</a>
+										@*<a href="hr-addpayroll.html" class="btn btn-primary me-3">Add New Payroll</a>*@
 									<button class="btn btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#excelmodal">
 										<i class="las la-file-excel"></i>  Download Monthly Excel Report
 									</button>
@@ -235,7 +235,7 @@
 						</div>
 						<div class="col-md-12 col-lg-8">
 							<input type="button" id="btn_InsertRecord" value="Save" class="btn btn-primary btn-lg" />
-							<a href="javascript:void(0);" class="btn btn-danger btn-lg">Cancel</a>
+								<input type="button" id="btn_Cancel" onclick="cancelRecord()" value="Cancel" class="btn btn-danger btn-lg" />
 						</div>
 					</div>
 				</div>
@@ -298,6 +298,10 @@
 			//alert("earnings: " + earnings + "\ deductions: " + deductions)
 			var netSalary = earnings - deductions;
 			$("#NetSalary").val(netSalary.toLocaleString()); // Using toLocaleString() to format the net salary with thousands separators
+		}
+
+		function cancelRecord(){
+			debugger
 		}
 
 		$("#btn_InsertRecord").click(function () {

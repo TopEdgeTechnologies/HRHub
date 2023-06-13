@@ -1,7 +1,6 @@
 ﻿@model HRHUBAPI.Models.StaffSalary
 
 <div class="card">
-    @*@using (Html.BeginForm("StaffCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))*@
     <div class="card-header border-bottom-0">
         <h3 class="card-title fs-24">
             Pay Runs
@@ -13,7 +12,7 @@
             <div class="row">
                 <div class="col-md-12 col-lg-3">
                     <div class="card-header border-bottom-0 d-flex justify-content-between align-items-center">
-                        <p class="fs-20">Process Pay run from <span id="lbl_Duration" class="font-weight-semibold fs-20">1st May - 31 May</span></p>
+                        <p class="fs-20">Process Pay run from <span id="lbl_Duration" class="font-weight-semibold fs-20">1st Jan - 31 Jan</span></p>
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -123,16 +122,16 @@
 
             var recordInserted = false;
             recordInserted = CheckAlreadyExistsMasterRecord(currentMonth, currentYear)
-                debugger
+            debugger
             var htmlButton = ''
             if (currentMonth > 0 && currentYear > 0 && recordInserted == true) {
-                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="View Payroll" class="btn btn-success btn-block" />'
+                htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="View Payroll" class="btn btn-success btn-block" />'
                 //$.growl.warning({
                 //        message: "Record already Inserted!"
                 //});
             }
             else if (currentMonth > 0 && currentYear > 0 && recordInserted == false) {
-                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-primary btn-block" />'
+                htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-primary btn-block" />'
                 //$.growl.warning({
                 //        message: "Record has not Inserted for selected Date!"
                 //});
@@ -203,7 +202,7 @@
                         if (result.isConfirmed) {
                             if (StaffSalary_BulkInsert(currentMonth, currentYear)) {
                                 // StaffSalaryList
-                                var url = "/PayrollConfiguration/StaffSalaryList?data=" + 1 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
+                                    var url = "/PayrollConfiguration/StaffSalaryList?data=" + 1 + "&month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
                                 window.location.href = url;
                             } else {
                                 $.growl.warning({
@@ -220,13 +219,13 @@
                         }
                     });
                 }
+                debugger
+                if (buttonTitle == 'View Payroll') {
                     debugger
-                    if (buttonTitle == 'View Payroll') {
-                        debugger
-                        // StaffSalaryList
+                    // StaffSalaryList
                         var url = "/PayrollConfiguration/StaffSalaryList?month=" + encodeURIComponent(currentMonth) + "&year=" + encodeURIComponent(currentYear);
-                        window.location.href = url;
-                    }
+                    window.location.href = url;
+                }
             }
             else {
                 $.growl.warning({
