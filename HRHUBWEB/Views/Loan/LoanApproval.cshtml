@@ -121,6 +121,7 @@
                             <label class="form-label">Reason:</label>
                             <textarea asp-for="Reason" class="form-control" rows="4">Type Reason here...</textarea>
                         </div>
+                       
                     </div>
                 </div>
             </div>
@@ -132,6 +133,8 @@
             <div class="card">
                 <div class="card-header  border-0">
                     <h4 class="card-title">Loan Approval Detail</h4>
+                    <select required id="athars" class="form-control select2 filter-multi" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
+                    </select>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive recent_jobs p-0 card-body">
@@ -280,6 +283,10 @@
         </div>
     </div>
 }
+
+
+
+
 <!-- End Report Modal  -->
 @section scripts{
 
@@ -288,6 +295,7 @@
         $(document).ready(function () {
 
             $('#LoanTypeId').select2();
+            $('#athars').select2();
             loadChart();
         })
 
