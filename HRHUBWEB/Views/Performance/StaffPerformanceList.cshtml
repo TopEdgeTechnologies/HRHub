@@ -1,0 +1,219 @@
+﻿@model HRHUBAPI.Models.SectionAnswer
+@{
+    ViewData["Title"] = "Staff Performance";
+}
+
+
+@using (Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Get, new { @id = "myform", enctype = "multipart/form-data" }))
+{
+<div class="modal fade" id="AddGeneralModal">
+    <div class="modal-dialog" role="document">
+        <input type="hidden" asp-for="ReviewerStaffId" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Show Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                                <input type="hidden" name="StaffId" id="StaffId" />
+                            <label>Review type <span class="text-danger">*</span></label>
+                            <select id="ReviewFormId" name="ReviewFormId" class="form-control custom-select select2" data-placeholder="Select Review">
+
+                                
+                                @foreach (var item in ViewBag.ListPerformanceForm)
+                                {
+                                    <option value="@item.ReviewFormId">@item.Title</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                   
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                    <button type="submit" onclick="return PerformanceForm()" class="btn btn-primary">GO</button>
+
+                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+}
+
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Staff Performance Evaluation</h3>  
+                 <div class="card-options">
+                        <div class="btn-list">
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead>
+                            <tr>
+                                <th class="border-bottom-0">Sr.#</th>
+                                <th class="border-bottom-0">Staff Title</th>
+                                <th class="border-bottom-0">Department</th>
+                                <th class="border-bottom-0">Designation</th>
+                                
+                                <th class="">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                int count = 1;
+                                foreach (var item in ViewBag.StaffList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <span>@count</span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            @item.FirstName  @item.LastName
+                                        </td>
+
+                                        <td>
+                                            @item.DepartmentTitle
+                                        </td>
+                                        <td>
+                                            @item.DesignationTitle
+                                        </td>
+                                        
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a onclick="addnewPerformance(@item.StaffId)" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i> Submit Evaluation</a>
+                                                    } 
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts{
+
+    <script>
+
+
+
+        $(document).ready(function () {
+            $('#ReviewFormId').select2({ placeholder: 'Select Review', width: '100%', allowClear: true }).val("").trigger('change');
+
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+
+        });
+        function addnewPerformance(id) {
+
+            
+            $("#StaffId").val(id);
+            $("#AddGeneralModal").modal('show');
+
+
+        }
+        function PerformanceForm() {
+            var status = true;
+            if ($("#ReviewFormId").val() == null || $("#ReviewFormId").val() == "Select Review") {
+                $.growl.warning({
+                    message: "Please Select Review"
+                });
+                status = false;
+                return false;
+            }            
+            
+
+            if (status) {
+            $('#myForm').submit(function (e) {
+
+                e.preventDefault(); // Prevent the form from submitting normally
+
+                var Data = {
+                    StaffId: $("#ReviewerStaffId").val(),
+                    ReviewFormId: $("#ReviewFormId").val()
+                } // Serialize the form data
+
+                $.ajax({
+                    url: '@Url.Action("StaffPerformanceCreateOrUpdate", "Performance")', // Replace "ControllerName" with your actual controller name
+                    type: 'Get',
+                    data: Data,
+                    success: function (result) {
+                        $('#ReviewFormId').select2({ placeholder: 'Select Review', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle the error response
+                    }
+                });
+            });
+            }
+           
+        }
+       
+    </script>
+
+}
