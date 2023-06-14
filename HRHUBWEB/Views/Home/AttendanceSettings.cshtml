@@ -1,0 +1,637 @@
+﻿
+@{
+    ViewData["Title"] = "AttendanceSettings";
+}
+
+<style>
+	.policy-module {
+		display: none;
+	}
+</style>
+
+<div class="side-app main-container py-0">
+
+	<!--Page header-->
+	<div class="page-header mt-0 mb-2 d-xl-flex d-block">
+		<div class="page-leftheader">
+			<div class="page-title">Attendance Settings</div>
+		</div>
+		<div class="page-rightheader ms-md-auto">
+			<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+				<div class="btn-list">
+					<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+					<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+					<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End Page header-->
+	<!-- Row -->
+	<div class="row">
+		<div class="col-md-12 col-xl-3">
+			<div class="card">
+				<div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+					<a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+						<i class="fa fa-clock-o me-2 fs-16 "></i>Timing Settings
+					</a>
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+						<i class="fa fa-users me-2 fs-16 "></i> Staff Settings
+					</a>
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+						<i class="fa fa-calendar me-2 fs-16 "></i> Weekend Rule
+					</a>
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-4" role="tab">
+						<i class="fa fa-edit me-2 fs-16 "></i> Policies
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 col-xl-9">
+			<div class="tab-content adminsetting-content" id="setting-tabContent">
+				<div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+					<div class="card">
+						<div class="card-header  border-0">
+							<h4 class="card-title">Office Timings</h4>
+						</div>
+						<div class="card-body pt-2">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label class="form-label">Office Start Time</label>
+									</div>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input class="form-control timepicker" placeholder="HH:MM AM/PM" type="text">
+											<div class="input-group-append">
+												<div class="input-group-text">
+													<i class="feather feather-clock"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-md-3">
+										<label class="form-label">Office End Time</label>
+									</div>
+									<div class="col-md-9">
+										<div class="input-group">
+											<input class="form-control timepicker" placeholder="HH:MM AM/PM" type="text">
+											<div class="input-group-append">
+												<div class="input-group-text">
+													<i class="feather feather-clock"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="tab-2" role="tabpanel">
+					<div class="card">
+						<div class="card-header  border-0">
+							<h4 class="card-title">Staff Attandance Settings</h4>
+						</div>
+
+						<div class="card-body pt-2">
+							<div class="mb-3">
+								<label class="custom-switch form-switch mb-0">
+									<span class="custom-switch-description fs-16 me-3 text-dark">Attendance by Rosters</span>
+									<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+									<span class="custom-switch-indicator"></span>
+								</label>
+							</div>
+							
+							<div class="mb-3">
+								<label class="custom-switch form-switch mb-0">
+									<span class="custom-switch-description fs-16 me-3 text-dark">Allow Web CheckIn</span>
+									<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+									<span class="custom-switch-indicator"></span>
+								</label>
+							</div>
+
+						</div>
+
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+
+					</div>
+				</div>
+				<div class="tab-pane fade" id="tab-3" role="tabpanel">
+					<div class="card">
+						<div class="card-header  border-0">
+							<h4 class="card-title">Weekend Rule Settings</h4>
+						</div>
+						<div class="card-body pt-2">
+							<div class="row row-sm">
+								<div class="col-lg-12">
+											<div class="table-responsive">
+												<table id="example3" class="table table-bordered text-nowrap border-bottom">
+													<thead>
+														<tr>
+															<th class="border-bottom-0">#</th>
+															<th class="border-bottom-0">Day Name</th>
+															<th class="border-bottom-0">Status</th>
+															<th class="border-bottom-0">Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>01</td>
+															<td>Saturday</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<div class="d-flex">
+
+																	<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																		<i class="feather feather-edit primary text-primary mt-1 "></i>
+																	</a>
+
+
+																	<a class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+																		<i class="feather feather-trash-2 text-danger mt-1"></i>
+																	</a>
+
+																</div>
+															</td>
+														</tr>
+
+
+														<tr>
+															<td>01</td>
+															<td>Saturday</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<div class="d-flex">
+
+																	<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																		<i class="feather feather-edit primary text-primary mt-1 "></i>
+																	</a>
+
+
+																	<a class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+																		<i class="feather feather-trash-2 text-danger mt-1"></i>
+																	</a>
+
+																</div>
+															</td>
+														</tr>
+
+
+														<tr>
+															<td>01</td>
+															<td>Saturday</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<div class="d-flex">
+
+																	<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																		<i class="feather feather-edit primary text-primary mt-1 "></i>
+																	</a>
+
+
+																	<a class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+																		<i class="feather feather-trash-2 text-danger mt-1"></i>
+																	</a>
+
+																</div>
+															</td>
+														</tr>
+
+
+														<tr>
+															<td>01</td>
+															<td>Saturday</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<div class="d-flex">
+
+																	<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																		<i class="feather feather-edit primary text-primary mt-1 "></i>
+																	</a>
+
+
+																	<a class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+																		<i class="feather feather-trash-2 text-danger mt-1"></i>
+																	</a>
+
+																</div>
+															</td>
+														</tr>
+
+
+														<tr>
+															<td>01</td>
+															<td>
+																<div class="form-group ">
+																	<label class="form-label">Beast</label>
+																	<select class="form-control select2 custom-select" id="daysOfWeek" data-placeholder="Choose one">
+																		<option label="Choose one">
+																		</option>
+																		<option value="1">Chuck Testa</option>
+																		<option value="2">Sage Cattabriga-Alosa</option>
+																		<option value="3">Nikola Tesla</option>
+																		<option value="4">Cattabriga-Alosa</option>
+																		<option value="5">Nikola Alosa</option>
+																	</select>
+																</div>
+																
+															</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<div class="d-flex">
+
+																	<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																		<i class="feather feather-edit primary text-primary mt-1 "></i>
+																	</a>
+
+
+																	<a class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+																		<i class="feather feather-trash-2 text-danger mt-1"></i>
+																	</a>
+
+																</div>
+															</td>
+														</tr>
+
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+							</div>
+						</div>
+
+				<div class="tab-pane fade" id="tab-4" role="tabpanel">
+					<div class="card">
+						<div class="card-header  border-0 justify-content-between align-items-center">
+							<h4 class="card-title">Policy Settings</h4>
+							<a href="javascript:void(0);" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addPolicy">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+						</div>
+						<div class="card-body pt-2">
+							<div class="modal fade" id="addPolicy">
+								<div class="modal-dialog" style="max-width:550px;" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Add Policy</h5>
+											<button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="policy-types">
+												<div class="form-group">
+													<label class="form-label">Policy</label>
+													<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true">
+														<option label="Choose one">
+														</option>
+														<option value="1">Tardiness Policy</option>@* Tardiness Policy*@
+														<option value="2">Tardiness Consequences &amp; Accumulated</option> @*Tardiness Consequences &amp; Accumulated*@
+													</select>
+												</div>
+												<div class="policy-module" id="tardiness-policy-module1">
+													<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+													</div>
+
+													<div class="form-control px-0 border-0 w-30 mb-3">
+														<label class="form-label">Title</label>
+														<input class="form-control" type="text" placeholder="leave policy" />
+													</div>
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+															@*															<button class="btn btn-danger" data-bs-container="body" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-placement="right" data-bs-popover-color="default" data-bs-toggle="popover" title="Popover right">Click me</button>
+															*@
+														</label>
+													</div>
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+															<a href="#">
+
+																<i class="fa fa-info text-info"></i>
+															</a>
+														</label>
+													</div>
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+														</label>
+													</div>
+												</div>
+												<div class="policy-module" id="tardiness-policy-module2">
+													<div class="form-group">
+														<label class="form-label">Policy</label>
+														<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true">
+															<option label="Choose one">
+															</option>
+															<option value="a">zxz</option>
+															<option value="b">zxzx</option>
+															<option value="c">jkjk</option>
+															<option value="d">kl</option>
+														</select>
+													</div>
+													<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+													</div>
+													<div class="form-control px-0 border-0 w-45 mb-3">
+														<label class="form-label">Title</label>
+														<input class="form-control" type="text" placeholder="Tardiness Consequences & Accumulated" />
+													</div>
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Mark half day after late minutes</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+															</a>
+															@*															<button class="btn btn-danger" data-bs-container="body" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-placement="right" data-bs-popover-color="default" data-bs-toggle="popover" title="Popover right">Click me</button>
+															*@
+														</label>
+													</div>
+												</div>
+												@*
+												<div class="popover bs-popover-end">
+												<div class="popover-arrow"></div>
+												<h3 class="popover-header">Popover Right</h3>
+												<div class="popover-body">
+												<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+												</div>
+												</div>*@
+
+												@*		<div class="mb-3">
+												<label class="custom-switch form-switch mb-0">
+												<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+												<span class="custom-switch-indicator"></span>
+												<span class="custom-switch-description fs-16 me-3 text-dark">Income Tax</span>
+												</label>
+												</div>
+												<div class="row row-sm">
+												<div class="col-lg-12">
+												<div class="table-responsive">
+												<table id="example3" class="table table-bordered text-nowrap border-bottom">
+												<thead>
+												<tr>
+												<th class="border-bottom-0">Title</th>
+												<th class="border-bottom-0">Min Income</th>
+												<th class="border-bottom-0">Max Income</th>
+												<th class="border-bottom-0">Rate %</th>
+												<th class="border-bottom-0">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr>
+												<td>
+												<div class="form-group">
+												<input class="form-control" type="text" placeholder="xyz">
+												</div>
+												</td>
+												<td>
+												<div class="form-group">
+												<input class="form-control" type="number" placeholder="xyz">
+												</div>
+
+												</td>
+												<td>
+												<div class="form-group">
+												<input class="form-control" type="number" placeholder="xyz">
+												</div>
+												</td>
+												<td>
+												<div class="form-group d-flex">
+												<div class="input-group">
+												<div class="input-group-prepend">
+												<div class="input-group-text">
+												<span>%</span>
+												</div>
+												<input class="form-control" type="text" placeholder="30">
+												</div>
+												</div>
+												</div>
+												</td>
+												<td>
+												<div class="form-group">
+												<a href="#" class="child-center ms-2 font-weight-bold fs-20 btn btn-info text-white" id="add-row-btn">+</a>
+												</div>
+												</td>
+
+												</tr>
+												</tbody>
+												</table>
+												</div>
+												</div>
+												</div>*@
+											</div>
+										</div>
+										<div class="modal-footer">
+											<div class="ms-auto">
+												<a href="javascript:void(0);" class="btn btn-success">Save</a>
+												<a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+											<div class="table-responsive">
+												<table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+													<thead>
+														<tr>
+															<th class="border-bottom-0">#</th>
+															<th class="border-bottom-0">Policy Title</th>
+															<th class="border-bottom-0">Status</th>
+															<th class="border-bottom-0">Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>01</td>
+															<td>OverTime Policy</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																	<i class="feather feather-edit primary text-primary mt-1 "></i>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td>01</td>
+															<td>OverTime Policy</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																	<i class="feather feather-edit primary text-primary mt-1"></i>
+																</a>
+															</td>
+														</tr>
+
+														<tr>
+															<td>01</td>
+															<td>OverTime Policy</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																	<i class="feather feather-edit primary text-primary mt-1"></i>
+																</a>
+															</td>
+														</tr>
+
+														<tr>
+															<td>01</td>
+															<td>OverTime Policy</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																	<i class="feather feather-edit primary text-primary mt-1"></i>
+																</a>
+															</td>
+														</tr>
+
+														<tr>
+															<td>01</td>
+															<td>OverTime Policy</td>
+															<td>
+																<label class="custom-switch form-switch mb-0">
+																	<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+																	<span class="custom-switch-indicator"></span>
+																</label>
+															</td>
+															<td>
+																<a class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+																	<i class="feather feather-edit primary text-primary mt-1"></i>
+																</a>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+					</div>
+				</div>
+	<!-- End Row -->
+	@section scripts{
+
+	<script>
+		$(document).ready(function () {
+			$('.custom-switch-input').prop('checked', true);
+			//policy-selection-modal functionality
+			var policyTypes = $('#policy-types');
+			var policyDescription = $('.policy-description');
+			var leavePolicyModule = $('#leave-policy-module');
+			var policyModule = $('.policy-module');
+			var TardinessPolicyModule1 = $('#tardiness-policy-module1');
+			var TardinessPolicyModule2 = $('#tardiness-policy-module2');
+			var overTimePolicyModule = $('#overtime-policy-module');
+			policyTypes.on('change', function () {
+				var selectedPolicy = policyTypes.val();
+				if (selectedPolicy == '1') {
+					policyModule.hide();
+					TardinessPolicyModule1.fadeIn(400);
+					policyDescription.text("Hi I am tardiness policy kindly read carefully about me so that you could know about the rules and regulations");
+				}
+				else{
+					policyModule.hide();
+					TardinessPolicyModule2.fadeIn(400);
+					policyDescription.text("Hi I am tardniess consequences & accumulated policy  kindly read carefully about me so that you could know about the rules and regulations");
+				}
+			})
+
+			$('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
+		})
+	</script>
+
+
+	}
+
+

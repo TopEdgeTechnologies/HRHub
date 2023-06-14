@@ -1,0 +1,645 @@
+﻿
+@{
+    ViewData["Title"] = "StaffProfile";
+}
+
+<style>
+    .child-center{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+</style>
+@*  Employe Profile View
+*@
+<div class="row">
+    <div class="col-md-12 col-lg-4 col-xl-3">
+
+@*       Employe profile card 
+*@
+        <div class="card overflow-hidden">
+            <div class="card-body">
+                <div class="card-header p-0 border-0">
+                    <div class="card-title">
+                    </div>
+                </div>
+                <div class="user-pic text-center">
+                    <img class="rounded-circle img-fluid" alt="avatar" src="~/assets/images/users/profile-img.webp" style=" width:150px">
+                    </img>
+                    <div class="pro-user mt-3">
+                        <h5 class="pro-user-username text-dark mb-2 fs-20">Muhammad Saqib</h5>
+                        <p class="pro-user-desc text-muted mb-1 fs-16">Frontend Developer</p>
+                        <p class="text-muted mb-3 fs-20">Software Department</p>
+                        <div class="social social-profile-buttons mt-3 mb-2">
+                            <ul class="mb-0">
+                                <li>
+                                    <a class="social-icon d-flex child-center" href=""><i class="fa fa-facebook" style="color: #3b5998;"></i></a>
+                                </li>
+                                <li>
+                                    <a class="social-icon d-flex child-center" href=""><i class="fa fa-twitter" style="color: #55acee;"></i></a>
+                                </li>
+
+                                <li>
+                                    <a class="social-icon d-flex child-center" href=""><i class="fa fa-linkedin" style="color:#0A66C2;"></i></a>
+                                </li>
+                                <li>
+                                    <a class="social-icon d-flex child-center text-danger" href=""><i class="fa fa-google-plus"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mb-3 clearfix">
+                            <span class="fa fa-star text-warning"></span>
+                            <span class="fa fa-star text-warning"></span>
+                            <span class="fa fa-star text-warning"></span>
+                            <span class="fa fa-star-half-o text-warning"></span>
+                            <span class="fa fa-star-o text-warning"></span>
+                        </div>
+                        <div class="btn-list">
+                            <a href="profile-1.html" class="btn btn-primary mt-3">Edit Profile</a>
+                            <a href="javascript:void(0);" class="btn btn-success mt-3">Message</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer p-0">
+                <div class="row">
+                    <div class="col-6 text-center py-3 border-end">
+                        <h5 class="mb-2">
+                            <span class="fs-18 text-success">Experience</span>
+                        </h5>
+                        <h5 class="fs-14 mb-0">02 years</h5>
+                    </div>
+                    <div class="col-6  py-3 text-center border-end">
+                        <h5 class="mb-2">
+                            <span class="fs-18 text-orange">Status</span>
+                        </h5>
+                        <h5 class="fs-14 mb-0">Active</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+@*        Employee Personal Information
+*@  
+            <div class="card overflow-hidden">
+            <div class="card-header">
+                <div class="card-title">
+                    <h4 class="card-title">Personal Details</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">Full Name</span>
+                                </td>
+                                <td class="py-2 px-0">London,UK</td>
+                            </tr>  
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">Employe ID</span>
+                                </td>
+                                <td class="py-2 px-0">4015</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">Address</span>
+                                </td>
+                                <td class="py-2 px-0">London,UK</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">Phone </span>
+                                </td>
+                                <td class="py-2 px-0">English, German</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">CNIC</span>
+                                </td>
+                                <td class="py-2 px-0">3456789023111</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-0">
+                                    <span class="font-weight-semibold w-50">DOB</span>
+                                </td>
+                                <td class="py-2 px-0">05 Dec, 2001</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+@*        Employe Education View
+*@        
+<div class="card border p-0 shadow-none">
+            <div class="card-header">
+                <div class="card-title">Education</div>
+            </div>
+            <div class="card-body">
+                <div class="main-profile-contact-list">
+                    <div class="media me-5 mt-0">
+                        <div class="media-icon child-center bg-success text-white me-4">
+                            <i class="fa fa-whatsapp"></i>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="font-weight-semibold mb-1">Web Designer at <a href="" class="btn-link">Spruko</a></h6>
+                            <span>2018 - present</span>
+                            <p>Past Work: Spruko, Inc.</p>
+                        </div>
+                    </div>
+
+                    <div class="media me-5">
+                        <div class="media-icon child-center bg-danger text-white me-4">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="font-weight-semibold mb-1">Studied at <a href="" class="btn-link">University</a></h6>
+                            <span>2004-2008</span>
+                            <p>Graduation: Bachelor of Science in Computer Science</p>
+                        </div>
+                    </div><div class="media me-5">
+                        <div class="media-icon child-center bg-danger text-white me-4">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+                        <div class="media-body">
+                            <h6 class="font-weight-semibold mb-1">Studied at <a href="" class="btn-link">University</a></h6>
+                            <span>2004-2008</span>
+                            <p>Graduation: Bachelor of Science in Computer Science</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-8 col-xl-6">
+
+		<div class="card">
+			<div class="card-header border-bottom-0">
+				<h4 class="card-title">Staff Details</h4>
+			</div>
+			<div class="tab-menu-heading table_tabs mt-2 p-0 ">
+				<div class="tabs-menu1">
+					<!-- Tabs -->
+					<ul class="nav panel-tabs">
+						<li class="ms-sm-4"><a href="#tab5" class="active" data-bs-toggle="tab">Today Tasks</a></li>
+						<li><a href="#tab6" data-bs-toggle="tab">Pending Tasks</a></li>
+						<li><a href="#tab7" data-bs-toggle="tab">Completed Tasks</a></li>
+						<li><a href="#tab8" data-bs-toggle="tab">Leaves</a></li>
+						<li><a href="#tab9" data-bs-toggle="tab">Attachements</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab5">
+						<div class="table-responsive recent_jobs p-0 card-body">
+							<table class="table mg-b-0 text-nowrap">
+								<tbody>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>	<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>	<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>	<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>	<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>
+								
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab6">
+						<div class="table-responsive recent_jobs p-0 card-body">
+							<table class="table mg-b-0 text-nowrap">
+								<tbody>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start"><span class="task-btn border-orange text-orange">On going</span></td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr><tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start"><span class="task-btn border-orange text-orange">On going</span></td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr><tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start"><span class="task-btn border-orange text-orange">On going</span></td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr><tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-clock  me-2"></i>Dead line 6:00 Pm</td>
+										<td class="text-start"><span class="task-btn border-orange text-orange">On going</span></td>
+										<td class="text-start d-flex">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit"><i class="feather feather-edit-3 primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send"><i class="feather feather-send primary text-primary"></i></a>
+										</td>
+									</tr>
+									
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane " id="tab7">
+						<div class="table-responsive recent_jobs p-0 card-body">
+							<table class="table mg-b-0 text-nowrap">
+								<tbody>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>Nov 15 2019</td>
+										<td class="text-start"><span class="task-btn bg-success text-white">Completed</span></td>
+										<td class="text-start d-flex mt-1">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"><i class="feather feather-eye primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
+											<ul class="dropdown-menu dropdown-menu-end" role="menu">
+												<li><a href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
+											</ul>
+										</td>
+									</tr>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>Nov 15 2019</td>
+										<td class="text-start"><span class="task-btn bg-success text-white">Completed</span></td>
+										<td class="text-start d-flex mt-1">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"><i class="feather feather-eye primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
+											<ul class="dropdown-menu dropdown-menu-end" role="menu">
+												<li><a href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
+											</ul>
+										</td>
+									</tr>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>Nov 15 2019</td>
+										<td class="text-start"><span class="task-btn bg-success text-white">Completed</span></td>
+										<td class="text-start d-flex mt-1">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"><i class="feather feather-eye primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
+											<ul class="dropdown-menu dropdown-menu-end" role="menu">
+												<li><a href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
+											</ul>
+										</td>
+									</tr>
+									<tr class="border-bottom">
+										<td>
+											<div class="d-flex">
+												<div class="table_img brround bg-light me-3">
+													<img src="../assets/images/png/task1.png" alt="img" class="">
+												</div>
+												<div class="me-3 mt-0 mt-sm-2 d-block">
+													<h6 class="mb-0 fs-13 font-weight-semibold">Adobe Xd Ui Design</h6>
+													<div class="clearfix"></div>
+													<small class="text-muted">Ui Designing And Prototype</small>
+												</div>
+											</div>
+										</td>
+										<td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>Nov 15 2019</td>
+										<td class="text-start"><span class="task-btn bg-success text-white">Completed</span></td>
+										<td class="text-start d-flex mt-1">
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"><i class="feather feather-eye primary text-primary"></i></a>
+											<a href="javascript:void(0);" class="action-btns1 child-center" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather feather-more-vertical text-primary"></i></a>
+											<ul class="dropdown-menu dropdown-menu-end" role="menu">
+												<li><a href="javascript:void(0);"><i class="feather feather-eye me-2"></i>View</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-plus-circle me-2"></i>Add</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-trash-2 me-2"></i>Remove</a></li>
+												<li><a href="javascript:void(0);"><i class="feather feather-settings me-2"></i>More</a></li>
+											</ul>
+										</td>
+									</tr>	
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="col-md-12 col-lg-4 col-xl-3">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Statistics-2023</div>
+            </div>
+            <div class="card-body">
+                <div class="row mb-7">
+                    <div class="col-4 text-center">
+                        <div class="chart-circle chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
+                            <canvas width="64" height="64"></canvas>
+                            <div class="chart-circle-value text-primary">89</div>
+                        </div>
+                        <h6 class="fs-14 font-weight-semibold mt-3">Attendance</h6>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="chart-circle chart-circle-sm" data-value="0.23" data-thickness="5" data-color="#fe7f00">
+                            <canvas width="64" height="64"></canvas>
+                            <div class="chart-circle-value text-secondary">23</div>
+                        </div>
+                        <h6 class="fs-14 font-weight-semibold mt-3">Projects</h6>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="chart-circle chart-circle-sm" data-value="0.67" data-thickness="5" data-color="#0dcd94">
+                            <canvas width="64" height="64"></canvas>
+                            <div class="chart-circle-value text-success">67%</div>
+                        </div>
+                        <h6 class="fs-14 font-weight-semibold mt-3">Performance</h6>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mg-b-5">
+                    <h6 class="">This Week</h6>
+                    <h6 class="font-weight-bold mb-1">01</h6>
+                </div>
+                <div class="progress progress-sm mb-5">
+                    <div class="progress-bar bg-danger w-10"></div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mg-b-5">
+                    <h6 class="">This Month</h6>
+                    <h6 class="font-weight-bold mb-1">05</h6>
+                </div>
+                <div class="progress progress-sm mb-5">
+                    <div class="progress-bar bg-info w-30"></div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mg-b-5">
+                    <h6 class="">This Year</h6>
+                    <h6 class="font-weight-bold mb-1">22</h6>
+                </div>
+                <div class="progress progress-sm mb-5">
+                    <div class="progress-bar bg-warning w-50"></div>
+                </div>
+            </div>
+        </div>
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h4 class="card-title">Notice Board</h4>
+            </div>
+            <div class="pt-2">
+                <div class="list-group">
+                    <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                        <div class="me-3 me-xs-0">
+                            <div class="calendar-icon icons">
+                                <div class="date_time bg-pink-transparent"> <span class="date">18</span> <span class="month">FEB</span> </div>
+                            </div>
+                        </div>
+                        <div class="ms-1">
+                            <div class="h5 fs-14 mb-1">Board meeting Completed</div> <small class="text-muted">attend the  company mangers...</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                        <div class="me-3 me-xs-0">
+                            <div class="calendar-icon icons">
+                                <div class="date_time bg-success-transparent "> <span class="date">16</span> <span class="month">FEB</span> </div>
+                            </div>
+                        </div>
+                        <div class="ms-1">
+                            <div class="h5 fs-14 mb-1">Updated the Company Policy</div>
+                            <small class="text-muted">some changes &amp; add the  terms &amp; conditions </small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex pt-3 pb-3 border-0">
+                        <div class="me-3 me-xs-0">
+                            <div class="calendar-icon icons">
+                                <div class="date_time bg-orange-transparent "> <span class="date">17</span> <span class="month">FEB</span> </div>
+                            </div>
+                        </div>
+                        <div class="ms-1">
+                            <div class="h5 fs-14 mb-1">Office Timings Changed</div> <small class="text-muted"> this effetct  after March 01st 9:00 Am To 5:00 Pm</small>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex pt-3 pb-5 border-0">
+                        <div class="me-3 me-xs-0">
+                            <div class="calendar-icon icons">
+                                <div class="date_time bg-info-transparent "> <span class="date">26</span> <span class="month">JAN</span> </div>
+                            </div>
+                        </div>
+                        <div class="ms-1">
+                            <div class="h5 fs-15 mb-1"> Republic Day Celebrated </div> <small class="text-muted">participate the all employess </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Skills</h4>
+            </div>
+            <div class="card-body">
+                <ul class="timeline">
+                    <li>
+                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">JavaScript / TypeScript</a>
+                        <p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">API integration,core, Interactive UI </p>
+                    </li>
+                    <li class="primary">
+                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">React JS</a>
+                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Hooks, REsuable Components</p>
+                    </li>
+                    <li class="pink">
+                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">NodeJS</a>
+                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Web applications"</p>
+                    </li>
+
+                    <li class="success mb-0 pb-0">
+                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
+                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
+                    </li>
+                    <li class="success mb-0 pb-0">
+                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
+                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+   
+       
+       
+    </div>
+</div>
+
+
+@section scripts{
+
+    
+}

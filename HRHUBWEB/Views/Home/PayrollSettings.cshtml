@@ -1,0 +1,1113 @@
+﻿
+@{
+    ViewData["Title"] = "PayrollSettings";
+}
+
+
+
+
+<style>
+	.calendar-widget {
+		border-radius: 17px;
+		overflow: hidden;
+		position: relative;
+		cursor: pointer;
+	}
+
+	
+
+	.widget-icon {
+		background: #f1f4fb;
+		padding: 18px 0;
+	}
+	 
+	/*Sir Noman
+*/
+	/*.custom-control-label-md::after,
+	.custom-control-label-md::before{
+		left:0;
+	}*/
+	.policy-description{
+		overflow-y: auto;
+		border-left: 2px solid #0D5BE1;
+		
+	}
+
+
+	.border-style, .calendar-widget.active {
+		outline: 2px solid #0D5BE1;
+		position: relative;
+		transition: 0.4ms ease-in-out;
+		/*		visibility:hidden;
+				opacity:0;*/
+	}
+
+
+		.border-style::before, .calendar-widget.active::before {
+			position: absolute;
+			content: "";
+			bottom: 0;
+			width: 18px;
+			right: -4px;
+			height: 20px;
+			background: #0D5BE1;
+		}
+
+	.pay-routine-module {
+		display: none;
+	}
+
+		.pay-routine-module.active {
+			display: block;
+		}
+
+	div.week-day-btn label {
+		width: 100px;
+		height: 37px;
+		background: #fff;
+		border: 1px solid #6e6e6e;
+		color: #000;
+		padding: 5px 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		font-size: 16px;
+		margin-left: 2px;
+	}
+
+	.week-day-btn input[type = "radio"] {
+		visibility: hidden;
+		opacity: 0;
+		width: 0px;
+	}
+
+		.week-day-btn input[type="radio"]:checked + label {
+			background-color: #128af9;
+			color: #fff;
+		}
+
+		.policy-module{
+			display: none;
+		}
+
+</style>
+
+<div class="side-app main-container py-0">
+
+	<!--Page header-->
+	<div class="page-header mt-0 mb-2 d-xl-flex d-block">
+		<div class="page-leftheader">
+			<div class="page-title">Payroll Settings</div>
+		</div>
+		<div class="page-rightheader ms-md-auto">
+			<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+				<div class="btn-list">
+					<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+					<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+					<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--End Page header-->
+	<!-- Row -->
+	<div class="row">
+		<div class="col-md-12 col-lg-3 col-xl-3">
+			<div class="card">
+				<div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+					<a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+						<i class="fa fa-cog me-2 fs-16 "></i>General Settings
+					</a>
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+						<i class="fa fa-bar-chart me-2 fs-16 "></i> Component Settings
+					</a>
+
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+						<i class="fa fa-edit me-2 fs-16 "></i> Policies Settings
+					</a>
+
+					<a class="nav-link" data-bs-toggle="pill" href="#tab-4" role="tab">
+						<i class="fa fa-percent me-2 fs-16 "></i> Company Tax Settings
+						<i class="fas fa-portal-exit"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 col-lg-9 col-xl-9">
+			<div class="tab-content adminsetting-content" id="setting-tabContent">
+				<div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+					<div class="card">
+						<div class="card-header justify-content-between align-items-center border-0">
+							<h4 class="card-title">General Settings</h4>
+
+
+						</div>
+						<div class="card-body pt-2">
+							<p class="fs-18 font-weight-semibold">How often do you pay your staff? <span class="text-danger">*</span></p>
+							<div class="row">
+								<div class="col-sm-6 col-lg-3 col-xl-3">
+									<div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center active" id="week-widget">
+										<div class="mb-3 w-100 text-center widget-icon">
+											<i class="fa fa-calendar text-info fs-2"></i>
+										</div>
+										<h3 class="fs-6 text-dark">Every Week</h3>
+									</div>
+								</div>
+
+								<div class="col-sm-6 col-lg-3 col-xl-3">
+									<div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="other-week-widget">
+										<div class="mb-3 w-100 text-center widget-icon">
+											<i class="fa fa-calendar text-info fs-2"></i>
+										</div>
+										<h3 class="fs-6 text-dark">Every Other Week</h3>
+									</div>
+								</div>
+
+								<div class="col-sm-6 col-lg-3 col-xl-3">
+									<div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="twice-month-widget">
+										<div class="mb-3 w-100 text-center widget-icon">
+											<i class="fa fa-calendar text-info fs-2"></i>
+										</div>
+										<h3 class="fs-6 text-dark">Twice a Week</h3>
+									</div>
+								</div>
+
+								<div class="col-sm-6 col-lg-3 col-xl-3">
+									<div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="once-month-widget">
+										<div class="mb-3 w-100 text-center widget-icon">
+											<i class="fa fa-calendar text-info fs-2"></i>
+										</div>
+										<h3 class="fs-6 text-dark">Once a Month</h3>
+									</div>
+								</div>
+
+							</div>
+
+
+							<div class="pay-schedule-interface">
+
+								<div class="mt-5 mb-6 pay-routine-module active" id="week-module">
+									<p class="fs-17  mb-4 text-dark font-weight-semibold">Pays every week on a<span class="text-secondary">*</span></p>
+
+									<div class="mb-5 d-flex">
+										<div class="week-day-btn">
+											<input type="radio" id="mon" name="weekday1">
+											<label for="mon">Monday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="tue" name="weekday1">
+											<label for="tue">Tuesday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="wed" name="weekday1">
+											<label for="wed">Wednesday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="thu" name="weekday1">
+											<label for="thu">Thursday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="fri" name="weekday1">
+											<label for="fri">Friday</label>
+										</div>
+									</div>
+
+
+									<p class="fs-17  mb-1 text-dark font-weight-semibold">
+										Note: <span class="font-weight-normal">
+											When payday falls on a non-working day or
+											a holiday, employees will get paid on a the previous day
+										</span>
+									</p>
+
+								</div>
+
+								<div class="mt-5 mb-6  pay-routine-module" id="other-week-module">
+									<p class="fs-17  mb-4 text-dark font-weight-semibold">Pays every other week on a<span class="text-secondary">*</span></p>
+									<div class="mb-5 d-flex">
+										<div class="week-day-btn">
+											<input type="radio" id="1" name="weekday2">
+											<label for="1">Monday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="2" name="weekday2">
+											<label for="2">Tuesday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="3" name="weekday2">
+											<label for="3">Wednesday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="4" name="weekday2">
+											<label for="4">Thursday</label>
+										</div>
+
+										<div class="week-day-btn">
+											<input type="radio" id="5" name="weekday2">
+											<label for="5">Friday</label>
+										</div>
+									</div>
+									<p class="fs-17  mb-1 text-dark font-weight-semibold">
+										Note: <span class="font-weight-normal">
+											When payday falls on a non-working day or
+											a holiday, employees will get paid on a the previous day
+										</span>
+									</p>
+								</div>
+
+
+
+
+
+								<div class="mt-5 mb-6  pay-routine-module" id="twice-month-module">
+									<p class="fs-17 mb-1 text-dark">For Work done from the <span class="font-weight-semibold">1st</span> to the <span class="font-weight-semibold">15th,</span><span class="text-secondary">*</span></p>
+									<div class="form-group py-2">
+										<div class="custom-controls-stacked">
+											<label class="custom-control mb-4 d-flex align-items-center custom-radio">
+												<input type="radio" class="custom-control-input" name="section1-radios" value="option1" checked="">
+												<span class="custom-control-label fs-16">The 15th of the same month</span>
+											</label>
+											<label class="custom-control mb-4 d-flex align-items-center custom-radio">
+												<input type="radio" class="custom-control-input" name="section1-radios" value="option2">
+												<span class="custom-control-label fs-16">Day <input type="number" placeholder="16" class="form-control w-20 w-sm-10 d-inline-block"> the same month</span>
+											</label>
+
+										</div>
+									</div>
+
+									<p class="fs-17 mb-1 text-dark">For Work done from the <span class="font-weight-semibold">16th</span> to the <span class="font-weight-semibold">end of the month, pay on</span><span class="text-secondary">*</span></p>
+
+									<div class="form-group py-2">
+										<div class="custom-controls-stacked">
+											<label class="custom-control custom-radio mb-4 d-flex align-items-center">
+												<input type="radio" class="custom-control-input" name="section2-radios" value="option1" checked="">
+												<span class="custom-control-label fs-16">The last day of the same month</span>
+
+											</label>
+											<label class="custom-control custom-radio mb-4 d-flex align-items-center">
+												<input type="radio" class="custom-control-input" name="section2-radios" value="option2">
+												<span class="custom-control-label fs-16">Day <input type="number" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> the following month</span>
+
+											</label>
+
+										</div>
+									</div>
+									<p class="fs-17  mb-1 text-dark font-weight-semibold">
+										Note: <span class="font-weight-normal">
+											When payday falls on a non-working day or
+											a holiday, employees will get paid on a the previous day
+										</span>
+									</p>
+								</div>
+
+								<div class="mt-5 mb-6  pay-routine-module" id="once-month-module">
+									<p class="fs-17  mb-1 text-dark font-weight-semibold">Pays on<span class="text-secondary">*</span></p>
+									<div class="form-group">
+										<div class="custom-controls-stacked">
+											<label class="custom-control custom-radio mb-4 d-flex align-items-center">
+												<input type="radio" class="custom-control-input" name="example-radios" value="option1" checked="">
+												<span class="custom-control-label fs-16">The last working day of every month</span>
+											</label>
+											<label class="custom-control custom-radio mb-4 d-flex align-items-center">
+												<input type="radio" class="custom-control-input" name="example-radios" value="option2">
+												<span class="custom-control-label fs-16">Day <input type="number" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
+											</label>
+										</div>
+									</div>
+
+									<p class="fs-17  mb-1 text-dark font-weight-semibold">
+										Note: <span class="font-weight-normal">
+											When payday falls on a non-working day or
+											a holiday, employees will get paid on a the previous day
+										</span>
+									</p>
+
+								</div>
+							</div>
+
+							<div class="card-footer px-0 d-flex align-items-center justify-content-between">
+								<div>
+									<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+									<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+								</div>
+								<div>
+									<span class="text-danger">All fields are mandatory*</span>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade show" id="tab-2" role="tabpanel">
+					<div class="card">
+						<div class="card-header justify-content-between align-items-center border-0">
+							<h4 class="card-title">Component Settings</h4>
+							<a href="javascript:void(0);" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addComponent">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+						</div>
+						<div class="card-body pt-2">
+							<div class="modal fade" id="addComponent">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Add Component</h5>
+											<button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="leave-types">
+												<div class="form-group">
+													<label class="form-label">Title</label>
+													<input class="form-control" type="text">
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Group</label>
+													<select class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+														<option label="Choose one">
+														</option>
+														<option value="1">Chuck Testa</option>
+														<option value="2">Sage Cattabriga-Alosa</option>
+
+													</select>
+													
+												</div>
+
+												<div class="form-group">
+													<label class="form-label">Category</label>
+													<select class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true">
+														<option label="Choose one">
+														</option>
+														<option value="1">Deduction</option>
+														<option value="2">Value</option>
+
+													</select>
+												</div>
+
+												<div class="mb-3">
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+														<span class="custom-switch-indicator"></span>
+														<span class="custom-switch-description fs-16 me-3 text-dark">Status</span>
+													</label>
+												</div>
+
+
+											</div>
+										</div>
+										<div class="modal-footer">
+											<div class="ms-auto">
+												<a href="javascript:void(0);" class="btn btn-success">Save</a>
+												<a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-primary">
+								<div class=" tab-menu-heading p-0">
+									<div class="tabs-menu1 ">
+										<!-- Tabs -->
+										<ul class="nav panel-tabs">
+											<li class=""><a href="#earning-tab" class="active" data-bs-toggle="tab">Earning</a></li>
+											<li><a href="#deduction-tab" data-bs-toggle="tab">Deduction</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="panel-body tabs-menu-body">
+									<div class="tab-content">
+										<div class="tab-pane active " id="earning-tab">
+											<div class="row row-sm">
+												<div class="col-lg-12">
+
+													<div class="table-responsive">
+														<table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
+															<thead>
+																<tr>
+																	<th class="wd-15p border-bottom-0">#</th>
+																	<th class="wd-15p border-bottom-0">Component</th>
+																	<th class="wd-20p border-bottom-0">Title</th>
+																	<th class="wd-15p border-bottom-0">Category</th>
+																	
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>Bella</td>
+																	<td>Chloe</td>
+																	<td>System Developer</td>
+																	<td>kjkjk</td>
+																
+																</tr>
+																<tr>
+																	<td>Donna</td>
+																	<td>Bond</td>
+																	<td>Account Manager</td>
+																	<td>kjkjk</td>
+															
+																</tr>
+																<tr>
+																	<td>Harry</td>
+																	<td>Carr</td>
+																	<td>Technical Manager</td>
+																	<td>kjkj</td>
+															
+																</tr>
+
+															
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane " id="deduction-tab">
+											<div class="row row-sm">
+												<div class="col-lg-12">
+													<div class="table-responsive">
+														<table id="example3" class="table table-bordered text-nowrap border-bottom">
+															<thead>
+																<tr>
+																	<th class="border-bottom-0">#</th>
+																	<th class="border-bottom-0">Component </th>
+																	<th class="border-bottom-0">Title</th>
+																	<th class="border-bottom-0">Category</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr>
+																	<td>01</td>
+																	<td>salary</td>
+																	<td>
+																		Annual Salary
+																	</td>
+																	<td>
+																		salary
+																	</td>
+																</tr>
+
+																<tr>
+																	<td>01</td>
+																	<td>salary</td>
+																	<td>
+																		Annual Salary
+																	</td>
+																	<td>
+																		salary
+																	</td>
+																</tr>
+
+																<tr>
+																	<td>01</td>
+																	<td>salary</td>
+																	<td>
+																		Annual Salary
+																	</td>
+																	<td>
+																		salary
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="tab-3" role="tabpanel">
+					<div class="card">
+						<div class="card-header justify-content-between align-items-center border-0">
+							<h4 class="card-title">Policy Settings</h4>
+							<a href="javascript:void(0);" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addPolicy">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+						</div>
+
+						<div class="card-body pt-2">
+							<div class="modal fade" id="addPolicy">
+								<div class="modal-dialog" style="max-width:550px;" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Add Policy</h5>
+											<button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<div class="policy-types">
+
+												<div class="form-group">
+													<label class="form-label">Policy</label>
+													<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true">
+														<option label="Choose one">
+														</option>
+
+														@*<option value="1">Leave Policy</option> 
+														<option value="2">Tardiness Policy</option>
+														<option value="3">Tardiness Consequences &amp; Accumulated</option>*@
+														<option value="1">Working Hours & Overtime Policy</option>
+													</select>
+												</div>
+											@*	<div class="policy-module" id="leave-policy-module">
+														<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+														</div>
+
+													<div class="form-control px-0 border-0 w-30 mb-3">
+															<label class="form-label">Title</label>
+															<input class="form-control" type="text" placeholder="leave policy"/>
+														</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+															<a href="#">
+																<i class="fa fa-info"></i>
+
+															</a>														
+														</label>
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+														</label>
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+														</label>
+													</div>
+													</div>*@
+
+												@*<div class="policy-module" id="tardiness-policy-module1">
+													<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+													</div>
+
+													<div class="form-control px-0 border-0 w-30 mb-3">
+														<label class="form-label">Title</label>
+														<input class="form-control" type="text" placeholder="leave policy" />
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+															
+														</label>
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+															<a href="#">
+
+																<i class="fa fa-info text-info"></i>
+															</a>
+														</label>
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+														</label>
+													</div>
+												</div>
+*@
+												<div class="policy-module" id="overtime-policy-module">
+													<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+													</div>
+
+													<div class="form-control px-0 border-0 w-30 mb-3">
+														<label class="form-label">Title</label>
+														<input class="form-control" type="text" placeholder="Overtime Policy" />
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Missing Hours Deduction</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+															@*															<button class="btn btn-danger" data-bs-container="body" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-placement="right" data-bs-popover-color="default" data-bs-toggle="popover" title="Popover right">Click me</button>
+															*@
+														</label>
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Pay over Time</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+
+															</a>
+														</label>
+													</div>
+												</div>
+												
+											@*	<div class="policy-module" id="tardiness-policy-module2">
+
+													<div class="form-group">
+														<label class="form-label">Policy</label>
+														<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true">
+															<option label="Choose one">
+															</option>
+															<option value="a">zxz</option>
+															<option value="b">zxzx</option>
+															<option value="c">jkjk</option>
+															<option value="d">kl</option>
+														</select>
+													</div>
+
+													<div class="mb-5">
+														<p class="w-100 ps-2 fs-14 policy-description"></p>
+													</div>
+
+													<div class="form-control px-0 border-0 w-45 mb-3">
+														<label class="form-label">Title</label>
+														<input class="form-control" type="text" placeholder="Tardiness Consequences & Accumulated" />
+													</div>
+
+													<div class="mb-5">
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+															<span class="custom-switch-indicator"></span>
+															<span class="custom-switch-description fs-15 me-3 text-dark">Mark half day after late minutes</span>
+															<a href="#">
+																<i class="fa fa-info text-info"></i>
+															</a>
+														</label>
+													</div>
+												</div>*@
+@*
+												<div class="popover bs-popover-end">
+													<div class="popover-arrow"></div>
+													<h3 class="popover-header">Popover Right</h3>
+													<div class="popover-body">
+														<p>Sed posuere consectetur est at lobortis. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
+													</div>
+												</div>*@
+										
+										@*		<div class="mb-3">
+													<label class="custom-switch form-switch mb-0">
+														<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+														<span class="custom-switch-indicator"></span>
+														<span class="custom-switch-description fs-16 me-3 text-dark">Income Tax</span>
+													</label>
+												</div>
+												<div class="row row-sm">
+													<div class="col-lg-12">
+														<div class="table-responsive">
+															<table id="example3" class="table table-bordered text-nowrap border-bottom">
+																<thead>
+																	<tr>
+																		<th class="border-bottom-0">Title</th>
+																		<th class="border-bottom-0">Min Income</th>
+																		<th class="border-bottom-0">Max Income</th>
+																		<th class="border-bottom-0">Rate %</th>
+																		<th class="border-bottom-0">Action</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td>
+																			<div class="form-group">
+																				<input class="form-control" type="text" placeholder="xyz">
+																			</div>
+																		</td>
+																		<td>
+																			<div class="form-group">
+																				<input class="form-control" type="number" placeholder="xyz">
+																			</div>
+
+																		</td>
+																		<td>
+																			<div class="form-group">
+																				<input class="form-control" type="number" placeholder="xyz">
+																			</div>
+																		</td>
+																		<td>
+																			<div class="form-group d-flex">
+																				<div class="input-group">
+																					<div class="input-group-prepend">
+																						<div class="input-group-text">
+																							<span>%</span>
+																						</div>
+																						<input class="form-control" type="text" placeholder="30">
+																					</div>
+																				</div>
+																			</div>
+																		</td>
+																		<td>
+																		<div class="form-group">
+																				<a href="#" class="child-center ms-2 font-weight-bold fs-20 btn btn-info text-white" id="add-row-btn">+</a>
+																		</div>
+																		</td>
+
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>*@
+											</div>
+										</div>
+										<div class="modal-footer">
+											<div class="ms-auto">
+												<a href="javascript:void(0);" class="btn btn-success">Save</a>
+												<a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row row-sm">
+								<div class="col-lg-12">
+									<div class="table-responsive">
+										<table id="example3" class="table table-bordered text-nowrap border-bottom">
+											<thead>
+												<tr>
+													<th class="border-bottom-0">#</th>
+													<th class="border-bottom-0">Title</th>
+													<th class="border-bottom-0">Status</th>
+													<th class="border-bottom-0">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>01</td>
+													<td>
+														Policy 1
+														<a href="javascript:void(0);" class="ms-3 border-0 action-btns1 sidebarmodal-collpase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View">
+															<i class="fa fa-info text-info"></i>
+														</a>
+													</td>
+													<td>
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+														</label>
+													</td>
+													<td>
+														<a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
+													</td>
+												</tr>
+
+												<tr>
+													<td>01</td>
+													<td>
+														Policy 2
+
+														<a href="javascript:void(0);" class="ms-3 border-0 action-btns1 sidebarmodal-collpase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View">
+															<i class="fa fa-info text-info"></i>
+
+														</a>
+
+													</td>
+
+													<td>
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+														</label>
+													</td>
+													<td>
+														<a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
+													</td>
+												</tr>
+
+												<tr>
+													<td>01</td>
+													<td>
+														Policy 3
+														<a href="javascript:void(0);" class="ms-3 border-0 action-btns1 sidebarmodal-collpase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View">
+															<i class="fa fa-info text-info"></i>
+
+														</a>
+													</td>
+
+													<td>
+														<label class="custom-switch form-switch mb-0">
+															<input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+															<span class="custom-switch-indicator"></span>
+														</label>
+													</td>
+													<td>
+														<a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
+													</td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-footer">
+							<a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+							<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+						</div>
+					
+
+					</div>
+				</div>
+			</div>
+		</div>
+			</div>
+		</div>
+
+
+<!--View Cpmpany Modal -->
+<div class="task-fade sidebar-modal">
+	<div class="sidebar-dialog task-modal">
+		<div class="sidebar-content">
+			<div class="sidebar-header">
+				<div>
+					<h4 class="mb-0 mt-4">Policy Details</h4>
+				</div>
+				<div class="ms-auto mt-3">
+					<a href="javascript:void(0);" class="action-btns dismiss">
+						<i class="feather feather-x"></i>
+					</a>
+				</div>
+			</div>
+			<div class="row no-gutters border-bottom">
+				<div class="col-md-12">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="card-body">
+									<h3>Policy Description</h3>
+									<p>
+										Handling allowed leaves can vary based on organizational policies and regional practices. There is no one-size-fits-all approach, and organizations have different methods for distributing and managing leaves. Here are two common approaches to leave distribution:
+
+										Calendar Year Approach:
+										In this approach, the leave entitlement is allocated based on the calendar year. Staff members receive their full leave entitlement at the beginning of the calendar year, and any unused leave typically does not carry over to the next year. For example, if an employee is entitled to 20 days of annual leave per year, they would receive the full 20 days at the beginning of the calendar year, and any unused days would be forfeited at the end of the year.
+
+										Anniversary or Accrual Approach:
+										In this approach, the leave entitlement is based on the employee's tenure with the organization. Leave accrues over time, usually on a monthly or quarterly basis, and staff members are eligible to use the accumulated leave after a certain period (e.g., after completion of the probation period). The leave entitlement typically increases with increasing tenure or as per the organization's policy. Unused leave may carry over to the next period, subject to certain limits or restrictions.
+
+										When deciding on the approach for leave distribution, consider factors such as organizational culture, employee expectations, legal requirements, and industry norms. It is important to establish clear policies regarding leave entitlement, carry-over limits, utilization rules, and any other relevant guidelines. This ensures transparency and consistency in leave management.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- View Company Modal  -->
+
+
+
+<script src="~/assets/plugins/jquery/jquery.min.js"></script>
+@section scripts{
+
+	  <script>
+		              $(document).ready(function () {
+			          $('.custom-switch-input').prop('checked', true);
+		              })
+
+	              </script>
+
+	  <script>
+
+
+
+		// Sidebar
+		$(document).ready(function () {
+			$('.custom-switch-input').prop('checked', true);
+
+			$('.switch-unchecked').prop('checked', false);
+			$('.dismiss').on('click', function () {
+				$('.sidebar-modal').removeClass('active');
+				$('body').removeClass('overlay-open');
+			});
+			$('.sidebarmodal-collpase').on('click', function () {
+				$('.sidebar-modal').addClass('active');
+				$('body').addClass('overlay-open');
+			});
+			$('body').append('<div class="overlay"></div>');
+			$('.overlay').on('click touchstart', function () {
+				$('body').removeClass('overlay-open');
+				$('.sidebar-modal').removeClass('active');
+			});
+		});
+
+		//Miss Maryam checkbox Date picker design
+
+		//var dateCheckBox = $('#date-checkbox');
+		//var dateField = $('#date-field');
+		//dateCheckBox.prop('checked', false);
+		//dateCheckBox.on('change', function(){
+		//	if (dateCheckBox.is(':checked')) {
+		//		dateField.prop('disabled', false);
+		//	}
+		//	else {
+		//		dateField.prop('disabled', true);
+
+		//	}
+		//})
+		
+
+		//calendarWidget.focus(function () {
+		//	$(this).addClass('border-style');
+		//})
+
+		//calendarWidget.blur(function () {
+		//	$(this).removeClass('border-style');
+		//})
+		//$('.calendar-widget').click(function () {
+		//	$(this).toggleClass('border-style');
+		//});
+
+
+
+		var calendarWidgets = $('.calendar-widget');
+		var weekWidget = $('#week-widget');
+		var otherWeekWidget = $('#other-week-widget');
+		var twiceMonthWidget = $('#twice-month-widget');
+		var onceMonthWidget = $('#once-month-widget');
+
+		var weekModule = $('#week-module');
+		var otherWeekModule = $('#other-week-module');
+		var twiceMonthModule = $('#twice-month-module');
+		var onceMonthModule = $('#once-month-module');
+		var payRoutineModule = $('.pay-routine-module');
+		var payRoutineModuleActice = $('.pay-routine-module.active');
+
+		calendarWidgets.click(function (event) {
+			event.stopPropagation();
+			calendarWidgets.removeClass('border-style');
+			weekWidget.removeClass('active');
+			$(this).addClass('border-style');
+		});
+
+		//$(document).click(function () {
+		//	calendarWidgets.removeClass('border-style');
+		//	weekWidget.addClass('active');
+
+		//});
+
+		otherWeekWidget.click(function () {
+			payRoutineModule.hide();
+			otherWeekModule.fadeIn(400);
+		})
+
+		twiceMonthWidget.click(function () {
+			payRoutineModule.hide();
+			twiceMonthModule.fadeIn(400);
+		})
+
+		onceMonthWidget.click(function () {
+
+			payRoutineModule.hide();
+			onceMonthModule.fadeIn(400);
+		})
+
+        weekWidget.click(function () {
+			payRoutineModule.hide();
+			weekModule.fadeIn(400);
+		})
+
+		var policyTypes = $('#policy-types');
+		var policyDescription = $('.policy-description');
+		//var leavePolicyModule = $('#leave-policy-module');
+		var policyModule = $('.policy-module');
+		//var TardinessPolicyModule1 = $('#tardiness-policy-module1');
+		//var TardinessPolicyModule2 = $('#tardiness-policy-module2');
+		var overTimePolicyModule = $('#overtime-policy-module');
+		policyTypes.on('change', function(){
+			var selectedPolicy = policyTypes.val();
+
+			if (selectedPolicy == '1') {
+
+				policyModule.hide();
+				overTimePolicyModule.fadeIn(400);
+				policyDescription.text("Hi I am working hours and overtime policy. kindly read carefully about me so that you could know about the rules and regulations");
+			}
+
+			//else if (selectedPolicy == '2') {
+			//	policyModule.hide();
+			//	TardinessPolicyModule1.fadeIn(400);
+			//	policyDescription.text("Hi I am tardiness policy kindly read carefully about me so that you could know about the rules and regulations");
+			//}
+			
+			//else if(selectedPolicy == '3'){
+			//	policyModule.hide();
+			//	overTimePolicyModule.fadeIn(400);
+			//	policyDescription.text("Hi I am over time policy kindly read carefully about me so that you could know about the rules and regulations");
+
+			//}
+			//else if(selectedPolicy == '4'){
+			//	policyModule.hide();
+			//	TardinessPolicyModule2.fadeIn(400);
+			//	policyDescription.text("Hi I am tardniess consequences & accumulated policy  kindly read carefully about me so that you could know about the rules and regulations");
+
+			//}
+
+		})
+
+		$('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
+
+	</script>
+}
+

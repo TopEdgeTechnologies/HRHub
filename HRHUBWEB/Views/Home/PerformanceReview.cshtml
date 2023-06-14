@@ -1,0 +1,260 @@
+﻿
+@{
+    ViewData["Title"] = "PerformanceReview";
+}
+
+<style>
+	.table-hover tbody tr:hover {
+		background-color: #f3f5fb !important;
+		cursor: pointer;
+	}
+
+	tbody#performance-input-body tr td{
+		padding: 0 10px;
+	}
+
+	table#performance-input-table thead tr th {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+
+	div.performance-output-card {
+		background: #f1f4fb;
+	}
+	.section-information-header{
+		border: 1px solid #cfd6e9;
+	}
+
+	.table-bordered, .text-wrap table, .table-bordered th, .text-wrap table th, .table-bordered td, .text-wrap table td {
+		border: 1px solid #cfd6e9;
+	}
+	
+</style>
+<div class="row">
+	<div class="col-lg-6 col-xl-6 col-md-12 col-sm-12">
+		<div class="card">
+			<div class="card-header border-bottom-0">
+				<h4 class="card-title">Performance Evaluation</h4>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-body">
+						<div class="form-group">
+							<label for="section-title-input" class="form-label">Section Name</label>
+							<input type="text" class="form-control" id="section-title-input" name="section-title-input" placeholder="Employe Behavior">
+						</div>
+
+						<div class="form-group">
+							<label for="section-description-input" class="form-label">Section Description</label>
+							<input class="form-control" type="text" id="section-description-input" name="section-description-input">
+						</div/>
+						<div class="card">
+							<div class="card-body p-0">
+								<div class="table-responsive">
+									<table class="table table-hover card-table table-vcenter text-nowrap mb-2" id="performance-input-table">
+										<thead>
+											<tr>
+												<th class="col-9">Questions</th>
+												<th class="col-3">Weightage</th>
+											</tr>
+										</thead>
+										<tbody id="performance-input-body">
+									
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+						<div class="question-container">
+							<div class="row">
+								<div class="col-md-8">
+									<div class="form-group">
+										<input type="text" class="form-control section-question-input" name="section-question" placeholder="Ask a Question?">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group d-flex align-items-center">
+										<input class="weight-input form-control" type="number" placeholder="01">
+										<div class="d-flex align-items-center">
+											<a class="btn border border-1 ms-2 btn-xs" id="add-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Add" aria-label="Add">
+												<i class="fa fa-plus text-success fs-18"></i>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>	
+					</div>
+					<button class="btn btn-info mt-4 mb-0" id="add-section-btn">Add Section <i class="fa fa-plus"></i></button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-12 col-xl-6 col-md-12 col-sm-12">
+		<div class="card" id="performance-output-card">
+			<div class="card-body">
+				<div class="table-responsive px-4">
+					<div class="py-4 section-information-header">
+						<h3 class="section-title-output text-center mb-2 text-capitalize fs-22 font-weight-bold"></h3>
+						<p  class="section-description-output px-2 text-center text-muted fs-15 font-weight-medium"></p>
+					</div>
+
+					<table class="table table-bordered text-nowrap performance-output-table">
+						<thead>
+							<tr>
+								<th class="col-8 border-bottom-0">Questions</th>
+								<th class="col-2 border-bottom-0">Weightage</th>
+							</tr>
+						</thead>
+						<tbody class="performance-output-body">
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+
+	
+	</div>
+</div>
+
+
+@section scripts{
+
+
+
+	<script>
+
+		$(document).ready(function(){
+
+			var sectionTitleInput = $('#section-title-input');
+			var sectionTitleOutput = $('.section-title-output');
+			var sectionDescriptionInput = $('#section-description-input');
+			var sectionDescriptionOutput = $('.section-description-output');
+			var sectionQuestionInput = $('.section-question-input');
+			//var questionOutput = $('.question-output');
+			var weightInput = $('.weight-input');
+			//var weightOutput = $('.weight-output');
+			var addBtn = $('#add-btn');
+			var formBody = $('.form-body');
+			var questionContainer = $('.question-container')
+			var performanceOutputBody = $('.performance-output-body');
+			var performanceInputBody = $('#performance-input-body');
+			var addSectionBtn = $('#add-section-btn');
+			var performanceOutputCard = $('#performance-output-card');
+
+
+			var counter = 1;
+
+			function  appendRowInTables (){
+					var questionInputValue = sectionQuestionInput.val().trim();
+				var weightInputValue = weightInput.val().trim();
+				if(questionInputValue == "" || weightInputValue == ""){
+					alert("please fill the data")
+				}
+				else{
+					var questionRow = `
+						<tr class="question-${counter}">
+								<td class="question-cell">${questionInputValue}</td>
+								<td  class="weight-cell">
+								 <div class="d-flex align-items-center justify-content-between">
+										 ${weightInputValue}
+															<a class="btn ms-2 delete-btn btn-xs delete-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
+																<i class="feather fs-16 feather-trash-2 text-danger "></i>
+															</a>
+
+														</div>
+														</td>
+						</tr>
+									
+						`
+					sectionQuestionInput.val("");
+					weightInput.val("");
+
+
+					var tableRow = `	<tr class="question-${counter}">
+											<td>
+													${questionInputValue}
+											</td>
+												<td>
+															${weightInputValue} 	
+												</td>
+											</tr>`
+				}
+
+				performanceOutputBody.append(tableRow);
+				counter++;
+				performanceInputBody.append(questionRow);
+			}
+			addBtn.on('click', appendRowInTables);
+
+			performanceInputBody.on('click', '.delete-btn', function () {
+				var questionClass = $(this).closest('tr').attr('class');
+				$('.' + questionClass).remove();
+				$(this).closest('tr').remove();
+			});
+
+		
+			performanceInputBody.on('click', 'tr', function () {
+				var questionCell = $('.question-cell').text();
+				var weightCell = $('.weight-cell');
+				sectionQuestionInput.val(questionCell).focus();
+				weightInput.val(weightCell).focus();
+				var questionClass = $(this).closest('tr').attr('class');
+				$('.'+ questionClass ).remove();
+				$('this').closest('tr').remove();
+			});
+			//var counterOutput = 2;
+			//function addSection (event){
+			//	event.preventDefault();
+
+			//	const cardBody = `<div class="card-body">
+			//			<div class="table-responsive px-4">
+			//				<div class="py-4 section-information-header">
+			//					<h3 class="section-title-output text-center mb-2 text-capitalize fs-22 font-weight-bold"></h3>
+			//					<p  class="section-description-output px-2 text-center text-muted fs-15 font-weight-medium"></p>
+			//				</div>
+
+			//				<table class="table table-bordered text-nowrap performance-output-table">
+			//					<thead>
+			//						<tr>
+			//							<th class="col-8 border-bottom-0">Questions</th>
+			//							<th class="col-2 border-bottom-0">Weightage</th>
+			//						</tr>
+			//					</thead>
+			//					<tbody class="performance-output-body-2">
+			//					</tbody>
+			//				</table>
+			//			</div>
+			//		</div>`
+
+					
+			//		counterOutput++;
+			//		performanceOutputCard.append(cardBody);
+
+			//		performanceInputBody.find('tr').remove();
+			//		sectionTitleInput.val("");
+			//		sectionDescriptionInput.val("");
+			//		$('.performance-output-body-2').append(tableRow);
+			//}
+			//addSectionBtn.on('click', addSection)
+
+		
+			sectionTitleInput.on('input',function () {
+				sectionTitleOutput.text(sectionTitleInput.val());
+			})
+			sectionDescriptionInput.on('input', function () {
+				sectionDescriptionOutput.text(sectionDescriptionInput.val());
+			})
+			$('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
+
+		})
+		
+
+
+	</script>
+
+}

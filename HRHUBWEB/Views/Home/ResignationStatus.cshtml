@@ -1,0 +1,366 @@
+﻿
+@{
+    ViewData["Title"] = "ResignationStatus";
+}
+
+
+<style>
+	.child-center{
+		display: flex;
+		align-items : center;
+		justify-content: center;
+	}
+
+	.personal-info li .text {
+		color: #888888;
+		display: block;
+		overflow: hidden;
+	}
+	.img-fit{
+		object-fit:cover;
+	}
+	.border-dashed-right{
+		border-right:  2px dashed #cccccc;
+	}
+
+	.arrow-ribbone-left.bg-danger:before {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		content: "";
+		right: -12px;
+		border-top: 12px solid transparent;
+		border-left: 12px solid #f7284a;
+		;
+		border-bottom: 12px solid transparent;
+		width: 0;
+	}
+	.message-feed:not(.right) .mf-content:before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    border-bottom: 8px solid #128af9;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    right: auto;
+    left: -12px;
+    transform: rotate(-90deg);
+    display: block;
+
+
+}
+
+	.comment-section {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		border: 2px solid #5fb2ff;
+		border-radius: 45px;
+		padding: 9px 9px;
+		margin-bottom: 1rem;
+	}
+  input.comment-input{
+	width: 100%;
+	border:none;
+	outline:none;
+	padding: 7px 10px;
+	font-size: 1.2rem;
+}
+input.comment-input::placeholder{
+	font-size: 1.1rem
+}
+	.comment-icons {
+		display: flex;
+	}
+
+	.btn-icon {
+		width: 3rem;
+		height: 3rem;
+		background-color: #e5f3ff;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.3rem;
+		margin-right: 8px;
+		border-radius: 50%;
+		border: none;
+		cursor: pointer;
+
+	}
+
+
+	a.attachement-btn {
+		width: 105px;
+		text-align: center;
+		border: 1px solid #e5f3ff;
+		padding: 2px 9px;
+		border-radius: 45px;
+		margin-right: 9px;
+		background: #e5f3ff;
+	}
+
+	ul.timeline > li.resignation-pending:before {
+		content: " ";
+		background: #f7284a;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 4px solid #fdedef;
+		left: -2px;
+		width: 20px;
+		height: 20px;
+		z-index: 1;
+		margin: 2px;
+	}
+
+	ul.timeline > li.resignation-approved:before{
+		content: " ";
+		background: #0dcd94;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 4px solid #fdedef;
+		left: -2px;
+		width: 20px;
+		height: 20px;
+		z-index: 1;
+		margin: 2px;
+	}
+	</style>
+
+<div class="row">
+	<div class="col-md-12 col-lg-12">
+		<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+			<div class="card-header border-bottom-0">
+				<div class="card-title">
+
+				</div>
+			</div>
+			<div class="card-body p-4">
+				<div class="row">
+						<div class="col-md-5 border-dashed-right">
+							<div class="row">
+								<div class="col-md-5 text-center text-md-start">
+								<img src="~/assets/images/users/staff-pic.jpg" class="img-fluid img-fit rounded-circle" style="width:175px; height:175px" />
+								</div>
+							<div class="col-md-7">
+								<div class="profile-info text-center text-md-start mt-2 mt-md-0">
+									<h3 class="user-name fs-22 mb-2">John Doe</h3>
+									<h6 class="text-primary fs-18 mb-2">Software Department</h6>
+									<small class="text-muted fs-16 mb-1">Web Designer</small>
+									<div class="staff-id font-weight-bold fs-16 mb-2">Employee ID : FT-0001</div>
+									<div class="text-dark font-weight-bold fs-16">Offboarding Date : 1st Jan 2013</div>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-md-7">
+						<ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Phone:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>012323899000</span></div>
+									</div>
+								</div>
+							</li>	<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Email:</div>
+									</div>
+									<div class=" col-6 col-md-9">
+										<div class="text"><span>123@outlook.comsasa</span></div>
+									</div>
+								</div>
+							</li>	<li>
+								<div class="row">
+									<div class=" col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Address:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>Sans Fransico, USA</span></div>
+									</div>
+								</div>
+							</li>	<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">CNIC</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>36302-9382983928392</span></div>
+									</div>
+								</div>
+							</li>	<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Phone:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>012323899000</span></div>
+									</div>
+								</div>
+							</li>	<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Hire Date:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>3/march/2021</span></div>
+									</div>
+								</div>
+							</li>	
+							
+						</ul>
+							</div>
+						
+						</div>
+				<div class="card-footer mt-4 p-0">
+					<div class="card ribbone-card rounded-0 p-2">
+						<div class="arrow-ribbone-left bg-danger">Reason</div>
+						<div class="card-body mt-3 p-6">
+							<p class="card-text">Some quick example text to build on the card title. Some quick example text to build on the card title</p>
+						</div>
+					</div>
+				</div>
+				</div> 
+			</div>
+			
+		</div>
+	<div class="col-xl-4 col-md-12 col-lg-12">
+		<div class="card">
+			<div class="card-header border-0">
+				<h4 class="card-title">Department Check In</h4>
+			
+			</div>
+			<div class="card-body pt-2">
+				<ul class="timeline ">
+					
+					<li class="primary resignation-approved mt-6 d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">Finanace Department</a>
+						<span class="text-muted font-weight-semibold">04/06/2021</span>
+
+					</li>
+					<li class="pink mt-6 resignation-approved d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">Finanace Department</a>
+						<span class="text-muted font-weight-semibold">04/06/2021</span>
+
+					</li>
+					<li class="success resignation-approved mb-0 pb-0 mt-6 d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">Digital Marketing Department</a>
+						<span class="text-muted font-weight-semibold">04/06/2021</span>
+
+					</li>
+					<li class="success resignation-approved mb-0 pb-0 mt-6 d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">Amazon Department</a>
+						<span class="text-muted font-weight-semibold">04/06/2021</span>
+
+					</li>
+				
+					<li class="opacity-50 resignation-pending d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">Finanace Department</a>
+						<span class="text-danger font-weight-semibold">Pending</span>
+					</li>
+					
+					<li class="success resignation-approved mb-0 pb-0 mt-6 d-flex align-items-center w-100 justify-content-between">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-20 ms-3">HR Department</a>
+						<a class="btn btn-primary">Exit Interview <i class="fa fa-sign-out-alt"></i></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-8 col-md-12 col-lg-12">
+		<div class="card" style="height: 451px;">
+			<div class="card-header border-0">
+				<h4 class="card-title">Comments</h4>
+			</div>
+			<div class="card-body pt-2" style="overflow-y:auto;">
+
+ <div class="comment-section">
+	<input type="text" class="comment-input" placeholder="Leave a comment" />
+	<div class="comment-icons">
+		<button type="button" class="btn-icon">
+							<i class="fa fa-paperclip"></i>
+		</button>
+		<button type="button" class="btn-icon">
+						<i class="fa text-info fa-paper-plane"></i>
+		</button>
+	</div>
+</div>
+
+		
+				<div class="message-feed align-items-center p-2 media mt-0">
+					<div class="pe-2">
+						<img src="../assets/images/users/16.jpg" alt="" class="avatar avatar-md brround">
+					</div>
+					<div class="media-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="mb-2">
+								<h4 class="text-dark fs-14 font-weight-semibold mb-1">John Doe</h4>
+								<span class="text-muted fs-12 font-weight-semibold mb-2">Frontend Developer <span class="text-info">┃Software Department┃</span></span>
+							</div>
+							<div class="media-detail d-md-flex align-items-center">
+								<a class="attachement-btn mb-2"><i class="fa me-1 text-info fa-file"></i>media</a>
+								<small class="mf-date mt-2 mt-md-0 mb-1 "><i class="fa  fa-clock-o"></i> 20/05/2020 at 09:00</small>
+							</div>
+						</div>
+						<div class="mf-content bg-info text-white">
+							Quisque consequat arcu eget odio cursus, ut tempor arcu vestibulum. Etiam ex arcu, porta a urna non, lacinia pellentesque orci. Proin semper sagittis erat, eget condimentum sapien viverra et.
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="message-feed  align-items-center p-2 media mt-0">
+					<div class="pe-2">
+						<img src="../assets/images/users/16.jpg" alt="" class="avatar avatar-md brround">
+					</div>
+					<div class="media-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="mb-2">
+								<h4 class="text-dark fs-14 font-weight-semibold mb-1">John Doe</h4>
+								<span class="text-muted fs-12 mb-2 font-weight-semibold">Frontend Developer <span class="text-info">┃Software Department┃</span></span>
+							</div>
+							<div class="media-detail d-md-flex align-items-center">
+								<a class="attachement-btn mb-2"><i class="fa me-1 text-info fa-file"></i>media</a>
+								<small class="mf-date mt-2 mt-md-0 mb-1 "><i class="fa  fa-clock-o"></i> 20/05/2020 at 09:00</small>
+							</div>
+						</div>
+						<div class="mf-content bg-info text-white">
+							Quisque consequat arcu eget odio cursus, ut tempor arcu vestibulum. Etiam ex arcu, porta a urna non, lacinia pellentesque orci. Proin semper sagittis erat, eget condimentum sapien viverra et.
+						</div>
+					</div>
+				</div><div class="message-feed  align-items-center p-2 media mt-0">
+					<div class="pe-2">
+						<img src="../assets/images/users/16.jpg" alt="" class="avatar avatar-md brround">
+					</div>
+					<div class="media-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="mb-2">
+								<h4 class="text-dark fs-14 font-weight-semibold mb-1">John Doe</h4>
+								<span class="text-muted fs-12 font-weight-semibold mb-2">Frontend Developer <span class="text-info">┃Software Department┃</span></span>
+							</div>
+							<div class="media-detail d-md-flex align-items-center">
+								<a class="attachement-btn mb-2"><i class="fa me-1 text-info fa-file"></i>media</a>
+								<small class="mf-date mt-2 mt-md-0 mb-1 "><i class="fa  fa-clock-o"></i> 20/05/2020 at 09:00</small>
+							</div>
+						</div>
+						<div class="mf-content bg-info text-white">
+							Quisque consequat arcu eget odio cursus, ut tempor arcu vestibulum. Etiam ex arcu, porta a urna non, lacinia pellentesque orci. Proin semper sagittis erat, eget condimentum sapien viverra et.
+						</div>
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+
+	
+	
+	</div>
+
+</div>
