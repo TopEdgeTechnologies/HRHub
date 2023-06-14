@@ -519,7 +519,6 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-
         #region LoanTypeInfo
         //[CustomAuthorization]
         //public async Task<IActionResult> LoanTypeList(string data = "")
@@ -698,7 +697,21 @@ namespace HRHUBWEB.Controllers
 
         //    }
         //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateLoanTypeStatus(int id, bool status, bool needapproval)
+        {
 
+            LoanType ObjLeaveType = new LoanType();
+            ObjLeaveType.LoanTypeId = id;
+            ObjLeaveType.Status = status;
+            ObjLeaveType.IsNeedApproval = needapproval;
+            ObjLeaveType.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/UpdateStatusByLoanTypeId", HttpMethod.Post);
+
+            return Json(result);
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> LoanTypeCreateOrUpdate(LoanType ObjLoanType)

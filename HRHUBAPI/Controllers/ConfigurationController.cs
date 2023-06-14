@@ -370,7 +370,19 @@ namespace HRHUBAPI.Controllers
 
 
         }
-
+        [HttpPost("UpdateStatusByLoanTypeId")]
+        public async Task<ActionResult<LoanType>> UpdateStatusByLoanTypeId(LoanType obj)
+        {
+            var result = await new LoanType().UpdateStatusByLoanTypeId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
 
         [HttpPost("LoanTypeAddOrUpdate")]
         public async Task<ActionResult<LoanType>> LoanTypeAddOrUpdate(LoanType obj)
