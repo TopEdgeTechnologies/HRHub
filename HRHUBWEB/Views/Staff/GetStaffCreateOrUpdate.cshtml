@@ -361,7 +361,7 @@
                                         </label>
                                     }
                       
-                                    async Task dropdownWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory, IEnumerable<SelectListItem> items, string dataValue, string dataText)
+                                    async Task dropdownWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory, IEnumerable<SelectListItem> items, bool databaseBinded)
                                     {
                                         <div class="form-group">
                                             <div class="row">
@@ -383,13 +383,27 @@
                                                         <option value="">Select</option>
                                                         @foreach (var item in items)
                                                         {
-                                                            if(item.Text == fieldValue)
+                                                            if(databaseBinded == true)
                                                             {
-                                                                <option value="@item.Text" selected >@item.Text</option>
+                                                                if(item.Value == fieldValue)
+                                                                {
+                                                                    <option value="@item.Value" selected>@item.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.Value" >@item.Text</option>
+                                                                }
                                                             }
-                                                            else
+                                                            else if(databaseBinded == false)
                                                             {
-                                                                <option value="@item.Text" >@item.Text</option>
+                                                                if(item.Text == fieldValue)
+                                                                {
+                                                                    <option value="@item.Text" selected >@item.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.Text" >@item.Text</option>
+                                                                }
                                                             }
                                                         }
                                                     </select>
@@ -397,15 +411,6 @@
                                             </div>
                                         </div>
                                     }
-
-                                    List<SelectListItem> GetMaterialStatusList()
-                                    {
-                                        List<SelectListItem> listobj = new List<SelectListItem>();
-                                        listobj.Add(new SelectListItem { Text = "Single", Value = "1" });
-                                        listobj.Add(new SelectListItem { Text = "Married", Value = "2" });
-                                        return listobj;
-                                    }
-
 
                                 }
                                 @{
@@ -416,13 +421,12 @@
                                     await doubleWidget("Emergency Contact Number", "EmergencyContact1", Model.EmergencyContact1, "Emergency Contact Number 1", "EmergencyContact2", Model.EmergencyContact2, "Emergency Contact Number 2", "number", false);
                                     await datePickerWidget("Date Of Birth", "Dob", Model.Dob, "DD-MM-YYY", "text", false);
                                     await radioParentGroupWidget("Gender");                                    
-                                    //await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, GetMaterialStatusList(), "Value", "Text");
+                                    
                                     if(Model.MaterialStatusList != null && Model.MaterialStatusList.Count() > 0)
                                     {
-                                        await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, Model.MaterialStatusList, "Value", "Text");
+                                        await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, Model.MaterialStatusList, false);
                                     }
-                                    
-                                    
+
                                 }
                                                                 
                                 
@@ -546,7 +550,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                
+                                @{
+                                    if (Model.DepartmentList != null && Model.DepartmentList.Count() > 0)
+                                    {
+                                        IEnumerable<SelectListItem> departmentItems = Model.DepartmentList.Select(d => new SelectListItem { Value = d.DepartmentId.ToString(), Text = d.Title });
+                                        await dropdownWidget("Department", "DepartmentId", Model.DepartmentId.ToString(), "Select Department", true, departmentItems, true);
+                                    }
+                                }
+                                @*
+                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Department<span class="text-danger">*</span></label>
@@ -558,6 +571,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                *@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">

@@ -97,8 +97,8 @@ namespace HRHUBWEB.Controllers
             objStaff = await GetStaffById(Id);
             
             objStaff.MaterialStatusList = GetMaterialStatusList();//.Select(s => new Staff { MaterialStatus = s.Text }).ToList();
-
-            ViewBag.ObjDepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+            objStaff.DepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+            //ViewBag.ObjDepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
             ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
             ViewBag.ObjSalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
 
