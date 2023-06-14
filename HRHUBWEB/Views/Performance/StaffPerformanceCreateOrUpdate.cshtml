@@ -1,6 +1,7 @@
 ﻿@model HRHUBAPI.Models.SectionAnswer
 @{
     ViewData["Title"] = "Staff Performance";
+
 }
 <style>
     .child-center {
@@ -221,102 +222,194 @@
 </div>
 
 
-    <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
- @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+    @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
-      
+        <input asp-for="ReviewedStaffId" type="hidden" class="form-control">
         <div class="card-header border-bottom-0">
         </div>
-
-
-    {
-        var CurrentSection = 0;
-
-        foreach (var item in Model.ListSectionQuestion)
+        if (Model.ReviewerStaffId != ViewBag.RevieverId)
         {
-
-
-            if (item.SectionId != CurrentSection)
             {
-                CurrentSection = Convert.ToInt32(item.SectionId);
-                var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
+                var CurrentSection = 0;
+
+                foreach (var item in Model.ListSectionQuestion)
+                {
 
 
-                <div class="card-body p-4">
-                    <section class="review-section professional-excellence">
+                    if (item.SectionId != CurrentSection)
+                    {
+                        CurrentSection = Convert.ToInt32(item.SectionId);
+                        var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
 
-                        <div class="review-header text-center">
-                            <h3 class="review-title">@item.SectionName</h3>
-                            <p class="text-muted">@item.SectionDescription</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered review-table mb-0" id="myTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Questions</th>
-                                                <th>Weightage</th>
-                                                <th>Self Score</th>
-                                                <th>Comment</th>
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
+                        <div class="card-body p-4">
+                            <section class="review-section professional-excellence">
 
-                                            @foreach (var ItemQuestion in QuestionsList)
-                                            {
-
-                                                <tr>
-                                                    <td>@ItemQuestion.QuestionName<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                    <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
-                                                    <td><input asp-for="AnswerWeightage" type="number" class="form-control number"></td>
-                                                    <td><input asp-for="AnswerComments" type="text" class="form-control"></td>
-                                                    <td><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
-                                                   
-                                                </tr>
-                                            }
-
-                                        </tbody>
-                                    </table>
-                                   
+                                <div class="review-header text-center">
+                                    <h3 class="review-title">@item.SectionName</h3>
+                                    <p class="text-muted">@item.SectionDescription</p>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered review-table mb-0" id="myTable">
+                                                <thead>
+                                                    <tr>
+
+
+                                                        <th>Questions</th>
+                                                        <th>Weightage</th>
+                                                        <th>Self Score</th>
+
+                                                        @* <th>Comment</th>*@
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @{
+                                                        if (item.IsAnswerWeightage == true) // it Questions Already Defined
+                                                        {
+
+                                                            foreach (var ItemQuestion in QuestionsList)
+                                                            {
+
+                                                                <tr>
+                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td><input  type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                                    <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+
+                                                                  @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        else  // it means its Open Question Section
+                                                        {
+
+                                                            for (int a = 0; a < item.QuestionMaxLimit; a++) //
+                                                            {
+                                                               
+                                                               
+                                                                <tr>
+                                                                    <td><input type="text" name="ListQuestion" class="form-control"></td>
+
+                                                                </tr>
+
+                                                            }
+
+
+                                                        }
+                                                    }
+
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+
                         </div>
-                        
-                    </section>
-                   
-                </div>
+                    }
+
+                }
 
             }
+        }
+        else
+        {
+            {
+                var CurrentSection = 0;
 
+                foreach (var item in Model.ListSectionAnswer)
+                {
+
+
+                    if (item.SectionId != CurrentSection)
+                    {
+                        CurrentSection = Convert.ToInt32(item.SectionId);
+                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.SectionId == item.SectionId).ToList();
+
+
+                        <div class="card-body p-4">
+                            <section class="review-section professional-excellence">
+
+                                <div class="review-header text-center">
+                                    <h3 class="review-title">@item.SectionName</h3>
+                                    <p class="text-muted">@item.SectionDescription</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered review-table mb-0" id="myTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Questions</th>
+                                                        <th>Weightage</th>
+                                                        <th>Self Score</th>
+                                                        <th>Comment</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach (var ItemQuestion in QuestionsList)
+                                                    {
+
+                                                        <tr>
+                                                            <td>@ItemQuestion.QuestionTitle<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                            <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.SectionWeightage" class="form-control" readonly=""></td>
+                                                            <td><input asp-for="AnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
+                                                            <td><input asp-for="AnswerComments" value="@ItemQuestion.AnswerComments" type="text" class="form-control"></td>
+                                                            <td><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
+                                                            <td><input asp-for="AnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+
+                        </div>
+                    }
+
+                }
+
+            }
         }
 
+        <div class="form-group mt-3">
+            <input type="button" value="Save" Onclick="SaveRecord()" id="btnsave" class="btn btn-primary" />
+            <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
+        </div>
     }
-
-    <div class="form-group mt-3">
-        <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
-        <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
-    </div>
-    }
-    </div>
+</div>
 
 
-    @section Scripts{
+@section Scripts{
 
-        <script>
+    <script>
+        $(document).ready(function () {
 
-
+           
+        });
         function SaveRecord() {
+
             var status = true;
-
             debugger;
-
-
-
             if ($("#AnswerWeightage").val() == "") {
                 $.growl.warning({
-                    message: "Enter Answer Weightage"
+                    message: "Please Enter Score"
                 });
                 $("#AnswerWeightage").css("border-color", "red");
                 status = false;
@@ -325,21 +418,7 @@
             else {
                 $("#AnswerWeightage").css("border-color", "#ddd");
             }
-
-
-
-            if ($("#AnswerComments").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Answer Comments"
-                });
-                $("#AnswerComments").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#AnswerComments").css("border-color", "#ddd");
-            }
-
+           
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -359,67 +438,7 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        debugger
-                        var Datalist = new Array();
-                        $("#myTable TBODY TR").each(function () {
-                            var row = $(this);                            
-                            var performance = {};
-                            var sectionQuestionIdInput = row.find("TD").eq(0).find("input");
-                            var totalQuestionWeightageInput = row.find("TD").eq(1).find("input");
-                            var answerWeightageInput = row.find("TD").eq(2).find("input");
-                            var answerCommentsInput = row.find("TD").eq(3).find("input");
-                            var ReviewedStaffIdInput = row.find("TD").eq(4).find("input");
-                            
-                            var sectionQuestionIdValue = sectionQuestionIdInput.val();
-                            var totalQuestionWeightageValue = totalQuestionWeightageInput.val();
-                            var answerWeightageValue = answerWeightageInput.val();
-                            var answerCommentsValue = answerCommentsInput.val();
-                            var ReviewedStaffIdValue = ReviewedStaffIdInput.val();
-
-                            if (sectionQuestionIdValue !== "" && !isNaN(sectionQuestionIdValue)) {
-                                performance.SectionQuestionId = parseInt(sectionQuestionIdValue);
-                            }
-                            if (totalQuestionWeightageValue !== "" && !isNaN(totalQuestionWeightageValue)) {
-                                performance.totalQuestionWeightage = parseInt(totalQuestionWeightageValue);
-                            }
-
-                            if (answerWeightageValue !== "" && !isNaN(answerWeightageValue)) {
-                                performance.AnswerWeightage = parseInt(answerWeightageValue);
-                            }
-                            if (ReviewedStaffIdValue !== "" && !isNaN(ReviewedStaffIdValue)) {
-                                performance.ReviewedStaffId = parseInt(ReviewedStaffIdValue);
-                            }
-
-                            if (answerCommentsValue !== "") {
-                                performance.AnswerComments = answerCommentsValue;
-                            }
-                            console.log(performance);
-                            Datalist.push(performance);
-                            console.log(Datalist);
-                          
-                        })
-
-
-
-
-
-                        if (Datalist.length > 0) {
-                            var Data = { list: Datalist }
-                        $.ajax({
-                            url: '@Url.Action("StaffPerformanceCreateOrUpdate", "Performance")',
-                            type: 'POST',
-                            data: Data,
-                            success: function (result) {
-                                // Handle the success response
-                                    Swal.fire('Success', 'Data saved!', 'success');
-
-                            },
-                            error: function (xhr, status, error) {
-                                // Handle the error response
-                            }
-                        });
-
-                    }
+                        $("#myform").submit();
                     }
                     else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
@@ -429,14 +448,18 @@
                         )
                     }
                 });
-               
+
+
             }
+
+
+
         }
 
 
 
 
-        </script>
+    </script>
 
 
 
