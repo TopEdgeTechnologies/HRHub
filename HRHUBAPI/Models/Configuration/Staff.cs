@@ -1,6 +1,7 @@
 ﻿using HRHUBAPI.Models.Configuration;
 using HRHUBAPI.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,9 @@ namespace HRHUBAPI.Models
 
             [NotMapped]
             public string? DesignationTitle { get; set; }
+
+            [NotMapped]
+            public IEnumerable<SelectListItem>? MaterialStatusList { get; set; } 
 
             [NotMapped]
             public IEnumerable<Department>? DepartmentList { get; set; }

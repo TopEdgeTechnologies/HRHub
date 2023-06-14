@@ -88,13 +88,15 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> GetStaffCreateOrUpdate(int Id) 
         {
-            ViewBag.MaterialStatus = GetMaterialStatusList();
+            //ViewBag.MaterialStatus = GetMaterialStatusList();
             ViewBag.BloodGroup = GetBloodGroup();
 
             Staff objStaff = new Staff();
-
+            
             // Edit/Update Mode
             objStaff = await GetStaffById(Id);
+            
+            objStaff.MaterialStatusList = GetMaterialStatusList();//.Select(s => new Staff { MaterialStatus = s.Text }).ToList();
 
             ViewBag.ObjDepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
             ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
