@@ -30,20 +30,28 @@
                         <input asp-for="NoOfLeaves" class="form-control" type="number" placeholder="Enter Leave Count">
                     </div>
                     <div class="form-group">
+                        @*
+
+                    <label class="custom-control custom-checkbox">
+                    <input type="checkbox" asp-for="Status" class="custom-control-input" checked>
+                    <span class="custom-control-label">IsActive</span>
+                    </label>*@
+
+                        @* <label class="custom-control custom-checkbox">
+                    <input type="checkbox" asp-for="IsNonPaid" class="custom-control-input">
+                    <span class="custom-control-label">Is Non-Paid</span>
+                    </label>*@
 
 
-                        <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="Status" class="custom-control-input" checked>
-                            <span class="custom-control-label">IsActive</span>
+                        <label class="custom-switch">
+                            <label class="form-label me-2 mt-1">IsActive</label>
+                            <input type="checkbox" asp-for="Status" class="custom-switch-input" checked="checked">
+                            <span class="custom-switch-indicator custom-switch-indicator"></span>
                         </label>
-
-                    </div>
-                    <div class="form-group">
-
-
-                        <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="IsNonPaid" class="custom-control-input">
-                            <span class="custom-control-label">Is Non-Paid</span>
+                        <label class="custom-switch ms-2">
+                            <label class="form-label me-2 mt-1">Is Non-Paid</label>
+                            <input type="checkbox" asp-for="IsNonPaid" class="custom-switch-input">
+                            <span class="custom-switch-indicator custom-switch-indicator"></span>
                         </label>
 
                     </div>
@@ -70,29 +78,37 @@
             <div class="card-header">
                 <h3 class="card-title">Leave Type Details</h3>
 
-                <div class="page-rightheader ms-md-auto">
-                    <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
                         <div class="btn-list">
-
-                            @if (Convert.ToBoolean(ViewBag.IsNew))
-                            {
-
-                                <a onclick="addnewleavetype()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Leave Type</a>
-
-                            }
-                            @*  <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag">
-                            <i class="feather feather-mail"></i>
-                            </button>
-                            <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact" fdprocessedid="8etyje">
-                            <i class="feather feather-phone-call"></i>
-                            </button>*@
-                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info" fdprocessedid="32j8uv">
-                                <i class="feather feather-info"></i>
-                            </button>
+                            <a onclick="addnewleavetype()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Leave Type</a>
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                         </div>
                     </div>
+                }
+
+
+
+                @*<div class="page-rightheader ms-md-auto">
+                <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                <div class="btn-list">
+
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+
+                <a onclick="addnewleavetype()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Leave Type</a>
+
+                }
+                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail" fdprocessedid="e1dtag"><i class="feather feather-mail"></i></button>
+                <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact" fdprocessedid="8etyje"><i class="feather feather-phone-call"></i></button>
+                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info" fdprocessedid="32j8uv">  <i class="feather feather-info"></i></button>
                 </div>
-                @*
+                </div>
+                </div>
+
                 @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
 
@@ -102,15 +118,15 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
+                    <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
                             <tr>
                                 <th class="text-center">Sr.#</th>
-                                <th class="border-bottom-0">LeaveType Title</th>
+                                <th class="border-bottom-0">Leave Type</th>
                                 <th class="border-bottom-0">No. of Leaves</th>
-                                <th class="text-center">Non Paid leave</th>
-                                <th class="text-center">Status</th>
-                                <th class="col-md-1">Action</th>
+                                <th class="border-bottom-0 w-4">Non Paid leave</th>
+                                <th class="border-bottom-0">Status</th>
+                                @*<th class="col-md-1">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -119,69 +135,108 @@
                                 int count = 1;
                                 foreach (var item in Model.ListLeaveTypes)
                                 {
-                                    <tr>
-                                        <td class="text-center">
-                                            @count
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Title)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.NoOfLeaves)
-                                        </td>
+                                        <tr>
+                                            <td class="text-center">
+                                                @count
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.NoOfLeaves)
+                                            </td>
 
-                                        @if (item.IsNonPaid == true)
-                                        {
-                                            <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
+                                            @*if (item.IsNonPaid == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
 
-                                        }
+                                }*@
 
-                                        @if (item.Status == true)
-                                        {
-                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+                                            <td>
+                                                <label class="custom-switch ">
 
-                                        }
-
-                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                        {
-                                            <th class="d-none">
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsNonPaid_@item.LeaveTypeId" onchange="setvalue(this.id,this)" @(item.IsNonPaid == true? "Checked":"") />
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+                                            </td>
 
 
-                                            </th>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-end">
-                                                <div class="d-flex">
-                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                    {
+                                            <td>
+                                                <label class="custom-switch mt-2">
 
-                                                        <a onclick="editrecord(@item.LeaveTypeId)" href="#" class="action-btns1 btn-xs">
-                                                            <i class="feather feather-edit primary text-primary mt-1 " data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit"></i>
-                                                        </a>
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.LeaveTypeId" onchange="setvalue(this.id,this)" @(item.Status == true? "Checked":"") />
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
 
-                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                    {
-                                                        <a onclick="confirmation(@item.LeaveTypeId)" href="#" class="action-btns1" data-bs-placement="bottom" data-bs-toggle="tooltip" data-original-title="Delete" data-bs-original-title="" title="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                        </a>
-                                                    }
+                                                <div class="float-end ms-auto">
+                                                    <div class="btn-group ms-3 mb-0">
+                                                        <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-start" style="">
+                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                                <a onclick="editrecord(@item.LeaveTypeId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+
+                                                        }
+                                                            @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                                <a onclick="confirmation(@item.LeaveTypeId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                        }
+                                                            <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </td>
-                                        }
+
+
+                                            @*if (item.Status == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                }*@
 
 
 
-                                    </tr>
+                                            @*if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                {
+                                <th class="d-none">
+
+
+                                </th>
+                                }
+                                else
+                                {
+                                <td class="text-end">
+                                <div class="d-flex">
+                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                {
+
+                                <a onclick="editrecord(@item.LeaveTypeId)" href="#" class="action-btns1 btn-xs">
+                                <i class="feather feather-edit primary text-primary mt-1 " data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit"></i>
+                                </a>
+
+                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                {
+                                <a onclick="confirmation(@item.LeaveTypeId)" href="#" class="action-btns1" data-bs-placement="bottom" data-bs-toggle="tooltip" data-original-title="Delete" data-bs-original-title="" title="Delete">
+                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                </a>
+                                }
+                                </div>
+
+                                </td>
+                                }*@
+
+
+
+                                        </tr>
                                     count++;
                                 }
                             }
@@ -395,7 +450,54 @@
             });
         }
 
+        function setvalue(event,row) {
+            debugger
+            console.log(event)
 
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $("#" + control + "_" + id).prop('checked', true);
+            }
+            else {
+                $("#" + control + "_" + id).prop('checked', false);
+            }
+
+            var currentRow = $(row).closest('tr');
+            var isactive = currentRow.find("#IsActive_" + id).is(':checked');
+            var isnonpaid = currentRow.find("#IsNonPaid_" + id).is(':checked');
+           
+
+            // UPdate Status & IsNonpaid
+            var Data = { id: id, status: isactive, nonpaid: isnonpaid }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateLeaveTypeStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("LeaveTypeList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
 
         function addnewleavetype() {
 
@@ -403,7 +505,7 @@
             $("#LeaveTypeId").val(0)
             $("#Title").val('')
             $("#NoOfLeaves").val('')
-            $("#Status").prop('checked', false)
+            $("#Status").prop('checked', true)
             $("#IsNonPaid").prop('checked', false)
             $("#NoOfLeaves").css("border-color", "#ddd");
             $("#Title").css("border-color", "#ddd");

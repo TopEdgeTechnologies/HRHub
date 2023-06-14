@@ -70,8 +70,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
+                    <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
                             <tr>
 
                                 <th class="border-bottom-0">Sr. #</th>
@@ -408,8 +408,10 @@
                     if (data != "") {
                         if (data.success) {
 
-                            var url = '@Url.Action("DesignationList", "Configuration",new { data = 2 })';
-                            window.location.href = url;
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("DesignationList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
 
                         }
                     }

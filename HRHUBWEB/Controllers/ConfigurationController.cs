@@ -377,7 +377,21 @@ namespace HRHUBWEB.Controllers
 
         //    }
         //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateLeaveTypeStatus(int id, bool status,bool nonpaid)
+        {
 
+            LeaveType ObjLeaveType = new LeaveType();
+            ObjLeaveType.LeaveTypeId = id;
+            ObjLeaveType.Status = status;
+            ObjLeaveType.IsNonPaid = nonpaid;
+            ObjLeaveType.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/UpdateStatusByLeaveTypeId", HttpMethod.Post);
+
+            return Json(result);
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)

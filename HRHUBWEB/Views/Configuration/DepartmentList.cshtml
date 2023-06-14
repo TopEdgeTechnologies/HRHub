@@ -84,13 +84,13 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
+                    <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
                             <tr>
                                 <th class="text-center">Sr.#</th>
-                                <th class="text-center">Logo</th>
+                                <th class="border-bottom-0">Logo</th>
                                 <th class="border-bottom-0">Title</th>
-                                <th class="text-center">Short Code</th>
+                                <th class="border-bottom-0">Short Code</th>
                                 <th class="border-bottom-0">Status</th>
                                 @*<th class="">Action</th>*@
                             </tr>
@@ -460,9 +460,10 @@
                 success: function (data) {
                     if (data != "") {
                         if (data.success) {
+                            // no need to redirect becoz status updated in DB
 
-                            var url = '@Url.Action("DepartmentList", "Configuration",new { data = 2 })';
-                            window.location.href = url;
+                            //var url = '@Url.Action("DepartmentList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
 
                         }
                     }

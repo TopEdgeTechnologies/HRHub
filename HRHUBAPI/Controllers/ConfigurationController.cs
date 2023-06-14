@@ -236,7 +236,6 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
-
         #region LeaveTypeInfo
 
         [HttpGet("GetLeaveTypeInfos{CompanyId}")]
@@ -263,9 +262,20 @@ namespace HRHUBAPI.Controllers
 
             return NotFound();
 
-
         }
-
+        [HttpPost("UpdateStatusByLeaveTypeId")]
+        public async Task<ActionResult<LeaveType>> UpdateStatusByLeaveTypeId(LeaveType obj)
+        {
+            var result = await new LeaveType().UpdateStatusByLeaveTypeId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
 
         [HttpPost("LeaveTypeAddOrUpdate")]
         public async Task<ActionResult<LeaveType>> LeaveTypeAddOrUpdate(LeaveType obj)
