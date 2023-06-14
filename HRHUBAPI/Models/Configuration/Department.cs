@@ -17,7 +17,7 @@ namespace HRHUBAPI.Models
             try
             {
                 List<Department> departments = new List<Department>();
-                departments = await hrhubContext.Departments.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+                departments = await hrhubContext.Departments.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).OrderByDescending(x=> x.DepartmentId).ToListAsync();
                 return departments;
             }
             catch { throw; }
@@ -39,7 +39,32 @@ namespace HRHUBAPI.Models
             }
             catch { throw; }
         }
+        public async Task<Department> UpdateStatusByDepartmentId(Department ObjDepartmentInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkDepartmentInfo = await _context.Departments.FirstOrDefaultAsync(x => x.DepartmentId == ObjDepartmentInfo.DepartmentId && x.IsDeleted == false);
+                if (checkDepartmentInfo != null && checkDepartmentInfo.DepartmentId > 0)
+                {
+                    checkDepartmentInfo.DepartmentId = ObjDepartmentInfo.DepartmentId;
+                    checkDepartmentInfo.UpdatedOn = DateTime.Now;
+                    checkDepartmentInfo.Status = ObjDepartmentInfo.Status;
+                    checkDepartmentInfo.UpdatedBy = ObjDepartmentInfo.UpdatedBy;
 
+                    await _context.SaveChangesAsync();
+                    return ObjDepartmentInfo;
+
+                }
+                return ObjDepartmentInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
         public async Task<Department> PostDepartment(Department department, HrhubContext hrhubContext)
         {
             using(var dbContextTransaction = hrhubContext.Database.BeginTransaction())

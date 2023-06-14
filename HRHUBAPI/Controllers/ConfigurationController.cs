@@ -46,6 +46,19 @@ namespace HRHUBAPI.Controllers
 
 
         }
+        [HttpPost("UpdateStatusByDesignationId")]
+        public async Task<ActionResult<Designation>> UpdateStatusByDesignationId(Designation obj)
+        {
+            var result = await new Designation().UpdateStatusByDesignationId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
 
         [HttpPost("DesignationAddOrUpdate")]
         public async Task<ActionResult<Designation>> DesignationAddOrUpdate(Designation obj)
@@ -144,7 +157,19 @@ namespace HRHUBAPI.Controllers
             }
             return NotFound();
         }
-
+        [HttpPost("UpdateStatusByDepartmentId")]
+        public async Task<ActionResult<Department>> UpdateStatusByDepartmentId(Department obj)
+        {
+            var result = await new Department().UpdateStatusByDepartmentId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
         [HttpPost("PostDepartment")]
         public async Task<ActionResult<Department>> PostDepartment(Department department)
         {

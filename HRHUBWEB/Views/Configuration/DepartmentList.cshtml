@@ -34,10 +34,18 @@
 
                         <img src="/Images/Avatar.png" alt="user-img" id="viewlogo" class="avatar-xxl rounded-circle mb-1">
 
-                        <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
-                            <span class="custom-control-label">IsActive</span>
+                        <label class="custom-switch ms-5">
+                            <label class="form-label me-2 mt-1">IsActive</label>
+                            <input type="checkbox" asp-for="Status" class="custom-switch-input" checked="checked">
+                            <span class="custom-switch-indicator custom-switch-indicator"></span>
                         </label>
+
+
+
+                        @*<label class="custom-control custom-checkbox">
+                    <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                    <span class="custom-control-label">IsActive</span>
+                    </label>*@
 
                     </div>
 
@@ -83,8 +91,8 @@
                                 <th class="text-center">Logo</th>
                                 <th class="border-bottom-0">Title</th>
                                 <th class="text-center">Short Code</th>
-                                <th class="text-center">Status</th>
-                                <th class="">Action</th>
+                                <th class="border-bottom-0">Status</th>
+                                @*<th class="">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -110,38 +118,74 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.ShortCode)
                                         </td>
-                                        @if (item.Status == true)
-                                        {
-                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+                                        <td>
+                                            <label class="custom-switch mt-2">
 
-                                        }
-                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                        {
-                                            <th class="d-none">
-                                            </th>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-end">
-                                                <div class="d-flex">
-                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                    {
-                                                        <a onclick="editrecord(@item.DepartmentId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit">
-                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                        </a>
-                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                    {
-                                                        <a onclick="confirmation(@item.DepartmentId)" href="#" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                        </a>
-                                                    }
+                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsDelete" id="IsActive_@item.DepartmentId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
+                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                            </label>
+
+
+                                            <div class="float-end ms-auto">
+                                                <div class="btn-group ms-3 mb-0">
+                                                    <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start" style="">
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="editrecord(@item.DepartmentId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+
+                                                        }
+                                                        @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                            <a onclick="confirmation(@item.DepartmentId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                        }
+                                                        <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                    </div>
                                                 </div>
-                                            </td>
-                                        }
+                                            </div>
+
+                                        </td>
+
+
+
+                                        @*if (item.Status == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                }*@
+
+
+
+
+
+                                        @*if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                {
+                                <th class="d-none">
+                                </th>
+                                }
+                                else
+                                {
+                                <td class="text-end">
+                                <div class="d-flex">
+                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                {
+                                <a onclick="editrecord(@item.DepartmentId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit">
+                                <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                </a>
+                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                {
+                                <a onclick="confirmation(@item.DepartmentId)" href="#" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                </a>
+                                }
+                                </div>
+                                </td>
+                                }*@
+
                                     </tr>
                                     count++;
                                 }
@@ -364,8 +408,7 @@
                 timer: 30000,
                 reverseButtons: true
             }).then((result) => {
-                if (result.isConfirmed) 
-                {
+                if (result.isConfirmed) {
                     var url = "@Url.Action("DepartmentDelete", "Configuration")/" + id; // replace with the desired action and controller names
                     window.location.href = url;
                 }
@@ -388,11 +431,52 @@
             $("#Title").val('')
             $("#ShortCode").val('')
             $("#LogoAttachmentFile").val('')
-            $("#viewlogo").attr("src", null);
-            $("#Status").prop('checked', false)
+
+            $("#Status").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+        }
+
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateDepartmentStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            var url = '@Url.Action("DepartmentList", "Configuration",new { data = 2 })';
+                            window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
 
 
         }
+
 
     </script>
 
