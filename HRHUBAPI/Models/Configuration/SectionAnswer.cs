@@ -88,6 +88,16 @@ namespace HRHUBAPI.Models
 
          [NotMapped]
         public IEnumerable<SectionAnswer>? ListSectionAnswer { get; set; }
+        
+        [NotMapped]
+        public IEnumerable<string>? ListQuestion { get; set; }
+        [NotMapped]
+        public IEnumerable<int>? ListSectionQuestionId { get; set; }
+        [NotMapped]
+        public IEnumerable<string>? ListTotalQuestionWeightage { get; set; }
+         [NotMapped]
+        public IEnumerable<string>? ListAnswerWeightage { get; set; }
+
 
 
         // list all Comments staff List
@@ -302,7 +312,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<SectionAnswer> PostSectionAnswer(List<SectionAnswer> listSectionAnswerInfo, HrhubContext _context)
+        public async Task<SectionAnswer> PostSectionAnswer(SectionAnswer SectionAnswerInfo, HrhubContext _context)
         {
 
 
@@ -312,70 +322,104 @@ namespace HRHUBAPI.Models
 			try
             {
                     var ObjsectionAnswer = new SectionAnswer();
-                    int targetStaffReviewedId;
+                    
 
-                    var answerColumn = listSectionAnswerInfo.Select(s => s.ReviewerStaffId).ToList();
-                    
-                    
-                    
-                    
-                    targetStaffReviewedId = Convert.ToInt32(answerColumn.FirstOrDefault());
-
-                    var reviewer_StaffId = _context.SectionAnswers.Any(x => x.ReviewerStaffId == targetStaffReviewedId);
+                  var getStaffReviewer = SectionAnswerInfo.ReviewerStaffId;                                
+                    var reviewer_StaffId = _context.SectionAnswers.Any(x => x.ReviewerStaffId == getStaffReviewer);
                     if (reviewer_StaffId == true)
                     {
-                        if (listSectionAnswerInfo.Count() > 0)
-                        {
-                            // save Appraisal data 
-                            foreach (var item in listSectionAnswerInfo)
-                            {
 
-                                item.CreatedOn = DateTime.Now;
-                                item.UpdatedOn = DateTime.Now;
-
-                            }
-
-                            _context.SectionAnswers.UpdateRange(listSectionAnswerInfo);
-                            await _context.SaveChangesAsync();
-
-                        }
+                    //    if (SectionAnswerInfo.ListAnswerWeightage != null)
+                    //    {
+                    //        _context.SectionAnswers.UpdateRange(SectionAnswerInfo);
+                    //        await _context.SaveChangesAsync();
+                    //    }
                     }
                     else
                     {
 
-                        if (listSectionAnswerInfo.Count() > 0)
+
+                    //---------------------------------------------- insert Answer Section ----------------------------
+
+                    List<SectionAnswer> lsobjAca = new List<SectionAnswer>();
+
+                        int a = 0;
+                        if (SectionAnswerInfo.ListAnswerWeightage != null)
                         {
-                            // save Appraisal data 
-                            foreach (var item in listSectionAnswerInfo)
+
+                            foreach (var item in SectionAnswerInfo.ListAnswerWeightage)
                             {
-                                item.CreatedOn = DateTime.Now;
-                                item.UpdatedOn = DateTime.Now;
+
+                                SectionAnswer objAca = new SectionAnswer();
+
+                                objAca.AnswerWeightage = Convert.ToDecimal(item);
+                                objAca.ReviewedStaffId = Convert.ToInt32(SectionAnswerInfo.ReviewedStaffId);
+                                objAca.SectionQuestionId = (int)SectionAnswerInfo.ListSectionQuestionId.ToArray()[a];
+                                objAca.ReviewerStaffId = SectionAnswerInfo.ReviewerStaffId;
+                                objAca.ReviewerDesignationId = SectionAnswerInfo.ReviewerDesignationId;
+                                objAca.CreatedOn = DateTime.Now;                               
+                                objAca.CreatedBy = SectionAnswerInfo.CreatedBy;                                
+                                lsobjAca.Add(objAca);
+                                a++;
 
                             }
 
-                            _context.SectionAnswers.AddRange(listSectionAnswerInfo);
+
+                        _context.SectionAnswers.AddRange(lsobjAca);
+                        await _context.SaveChangesAsync();
+
+
+
+                        //---------------------------------------------- Answer Section End ----------------------------
+
+
+                        //---------------------------------------------- insert Question ----------------------------
+
+                        List<Question> objQ = new List<Question>();
+
+                        int b = 0;
+                        if (SectionAnswerInfo.ListQuestion != null)
+                        {
+
+                            foreach (var item in SectionAnswerInfo.ListQuestion)
+                            {
+
+                                Question objAca = new Question();
+
+                                objAca.Title = item;
+                                //objAca.CompanyId = Miss here
+                                objAca.CreatedOn = DateTime.Now;
+                                objAca.IsDeleted = false;
+                                objAca.CreatedBy = SectionAnswerInfo.CreatedBy;
+                                objQ.Add(objAca);
+                                b++;
+
+                            }
+                        }
+
+                            _context.Questions.AddRange(objQ);
                             await _context.SaveChangesAsync();
 
                         }
 
+                    //---------------------------------------------- End Question ----------------------------
                     }
-                    foreach (var item in listSectionAnswerInfo)
-                    {
-                        var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == item.ReviewedStaffId);
+
+                    var checkStaffReview = await _context.StaffReviewFormProcesseds.FirstOrDefaultAsync(x => x.ReviewedStaffId == SectionAnswerInfo.ReviewedStaffId);
                         if (checkStaffReview != null && checkStaffReview.ReviewedStaffId > 0)
                         {
 
-                            decimal? sumAnser = listSectionAnswerInfo.Sum(answer => answer.AnswerWeightage);
-                            decimal? sumQuestion = listSectionAnswerInfo.Sum(total => total.TotalQuestionWeightage);
-                            checkStaffReview.TotalWeightage = sumQuestion;
-                            checkStaffReview.EarnedWeightage = sumAnser;
-                            checkStaffReview.UpdatedBy = item.CreatedBy;
-                            checkStaffReview.UpdatedOn = DateTime.Now;
+                        //decimal? sumAnser = SectionAnswerInfo.Sum(ListAnswerWeightage);
+                        //decimal? sumQuestion = SectionAnswerInfo.Sum(total => total.TotalQuestionWeightage);
+                        //checkStaffReview.TotalWeightage = sumQuestion;
+                        //checkStaffReview.EarnedWeightage = sumAnser;
+                        //checkStaffReview.UpdatedBy = SectionAnswerInfo.CreatedBy;
+                        //    checkStaffReview.UpdatedOn = DateTime.Now;
 
-                            await _context.SaveChangesAsync();
+                        //    await _context.SaveChangesAsync();
 
                         }
-                    }
+                  
 
                     await _context.SaveChangesAsync();
                     dbContextTransaction.Commit();

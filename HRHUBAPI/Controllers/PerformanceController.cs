@@ -430,7 +430,7 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpPost("StaffPerformanceAddOrUpdate")]
-        public async Task<ActionResult<SectionAnswer>> StaffPerformanceAddOrUpdate(List<SectionAnswer> list)
+        public async Task<ActionResult<SectionAnswer>> StaffPerformanceAddOrUpdate(SectionAnswer list)
         {
 
 

@@ -1,7 +1,7 @@
 ﻿@model HRHUBAPI.Models.SectionAnswer
 @{
     ViewData["Title"] = "Staff Performance";
-    
+
 }
 <style>
     .child-center {
@@ -222,10 +222,10 @@
 </div>
 
 
-    <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
- @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+    @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
-
+        <input asp-for="ReviewedStaffId" type="hidden" class="form-control">
         <div class="card-header border-bottom-0">
         </div>
         if (Model.ReviewerStaffId != ViewBag.RevieverId)
@@ -241,7 +241,7 @@
                     {
                         CurrentSection = Convert.ToInt32(item.SectionId);
                         var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
-                        
+
 
                         <div class="card-body p-4">
                             <section class="review-section professional-excellence">
@@ -256,13 +256,13 @@
                                             <table class="table table-bordered review-table mb-0" id="myTable">
                                                 <thead>
                                                     <tr>
-                                                        
+
 
                                                         <th>Questions</th>
                                                         <th>Weightage</th>
                                                         <th>Self Score</th>
-                                                       
-                                                       @* <th>Comment</th>*@
+
+                                                        @* <th>Comment</th>*@
 
                                                     </tr>
                                                 </thead>
@@ -275,37 +275,34 @@
                                                             foreach (var ItemQuestion in QuestionsList)
                                                             {
 
-                                                                <tr trtype="@item.IsAnswerWeightage">
-                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                                    <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
-                                                                    <td><input asp-for="AnswerWeightage" type="number" class="form-control number"></td>
-                                                                  
-                                                                    <td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
+                                                                <tr>
+                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td><input  type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                                    <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+
+                                                                  @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
 
                                                                 </tr>
                                                             }
                                                         }
                                                         else  // it means its Open Question Section
                                                         {
-                                                            for (int a = 0; a < item.QuestionMaxLimit; a++)
+
+                                                            for (int a = 0; a < item.QuestionMaxLimit; a++) //
                                                             {
-                                                                <tr trtype="@item.IsAnswerWeightage">
-                                                                    <td><input type="text" asp-for="QuestionTitle"  class="form-control"></td>
-                                                                   
+                                                               
+                                                               
+                                                                <tr>
+                                                                    <td><input type="text" name="ListQuestion" class="form-control"></td>
+
                                                                 </tr>
-                                                                
+
                                                             }
-                                   
+
 
                                                         }
                                                     }
-                                                    
 
-
-
-
-
-                                                   
 
                                                 </tbody>
                                             </table>
@@ -391,175 +388,78 @@
             }
         }
 
-    <div class="form-group mt-3">
-        <input type="button" value="Save" id="btnsave"  class="btn btn-primary" />
-        <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
-    </div>
+        <div class="form-group mt-3">
+            <input type="button" value="Save" Onclick="SaveRecord()" id="btnsave" class="btn btn-primary" />
+            <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
+        </div>
     }
-    </div>
+</div>
 
 
-    @section Scripts{
+@section Scripts{
 
-        <script>
+    <script>
         $(document).ready(function () {
 
-            $('#btnsave').click(function () {
-                var status = true;
-
-                debugger;
-
-
-
-                if ($("#AnswerWeightage").val() == "") {
-                    $.growl.warning({
-                        message: "Enter Answer Weightage"
-                    });
-                    $("#AnswerWeightage").css("border-color", "red");
-                    status = false;
-                    return false;
-                }
-                else {
-                    $("#AnswerWeightage").css("border-color", "#ddd");
-                }
-
-
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                });
-                if (status) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        cancelButtonText: 'No, cancel!',
-                        confirmButtonText: 'Yes, Save it!',
-                        timer: 30000,
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            debugger
-                            var Datalist = new Array();
-                            $("#myTable TBODY TR").each(function () {
-                                var row = $(this);
-                                var performance = {};
-                                var trTyp = $(this).closest('tr').attr('trType');
-                                alert(trTyp)
-                              @*  if (trType) {*@
-
-                                    var sectionQuestionIdInput = row.find("TD").eq(0).find("input");
-                                    var totalQuestionWeightageInput = row.find("TD").eq(1).find("input");
-                                    var answerWeightageInput = row.find("TD").eq(2).find("input");
-
-                                    var ReviewedStaffIdInput = row.find("TD").eq(3).find("input");
-
-
-
-
-                                    var sectionQuestionIdValue = sectionQuestionIdInput.val();
-                                    var totalQuestionWeightageValue = totalQuestionWeightageInput.val();
-
-                                    var ReviewedStaffIdValue = ReviewedStaffIdInput.val();
-                                    var answerWeightageValue = answerWeightageInput.val();
-
-                                    if (sectionQuestionIdValue !== "" && !isNaN(sectionQuestionIdValue)) {
-                                        performance.SectionQuestionId = parseInt(sectionQuestionIdValue);
-                                    }
-                                    if (totalQuestionWeightageValue !== "" && !isNaN(totalQuestionWeightageValue)) {
-                                        performance.totalQuestionWeightage = parseInt(totalQuestionWeightageValue);
-                                    }
-
-
-                                    if (ReviewedStaffIdValue !== "" && !isNaN(ReviewedStaffIdValue)) {
-                                        performance.ReviewedStaffId = parseInt(ReviewedStaffIdValue);
-                                    }
-
-                                    if (answerWeightageValue !== "" && !isNaN(answerWeightageValue)) {
-                                        performance.AnswerWeightage = parseInt(answerWeightageValue);
-                                    }
-
-                              @*  }
-                                else {*@
-                                    var QuestionTitleInput = row.find("TD").eq(0).find("input");
-                                    var QuestionTitleValue = QuestionTitleInput.val();
-                                    if (QuestionTitleValue !== "" && !isNaN(QuestionTitleValue)) {
-                                        performance.QuestionTitle = QuestionTitleValue;
-                                    }
-                             @*   }*@
-
-
-
-
-
-
-
-
-
-
-        @*var AnswerIdInput = row.find("TD").eq(5).find("input");
-                                var AnswerIdValue = AnswerIdInput.val();*@
-
-
-        @*if (AnswerIdValue !== "" && !isNaN(AnswerIdValue)) {
-                                performance.AnswerId = parseInt(AnswerIdValue);
-
-
-                                }*@
-
-
-                                    console.log(performance);
-                                Datalist.push(performance);
-                                console.log(Datalist);
-
-                            })
-
-
-
-
-
-                            if (Datalist.length > 0) {
-                                var Data = { list: Datalist }
-                                $.ajax({
-                                    url: '@Url.Action("StaffPerformanceCreateOrUpdate", "Performance")',
-                                    type: 'POST',
-                                    data: Data,
-                                    success: function (result) {
-                                        // Handle the success response
-                                        Swal.fire('Success', 'Data saved!', 'success');
-
-                                    },
-                                    error: function (xhr, status, error) {
-                                        // Handle the error response
-                                    }
-                                });
-
-                            }
-                        }
-                        else if (result.dismiss === Swal.DismissReason.cancel) {
-                            swalWithBootstrapButtons.fire(
-                                'Cancelled',
-                                'Your record is safe :)',
-                                'error'
-                            )
-                        }
-                    });
-
-                }
-            });
-        });
-            function SaveRecord() {
            
+        });
+        function SaveRecord() {
+
+            var status = true;
+            debugger;
+            if ($("#AnswerWeightage").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Score"
+                });
+                $("#AnswerWeightage").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#AnswerWeightage").css("border-color", "#ddd");
+            }
+           
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+
         }
 
 
 
 
-        </script>
+    </script>
 
 
 
