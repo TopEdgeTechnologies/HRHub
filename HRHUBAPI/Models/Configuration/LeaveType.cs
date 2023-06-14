@@ -121,7 +121,33 @@ namespace HRHUBAPI.Models
 
             }
         }
+        public async Task<LeaveType> UpdateStatusByLeaveTypeId(LeaveType ObjLeaveTypeInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkLeaveTypeInfo = await _context.LeaveTypes.FirstOrDefaultAsync(x => x.LeaveTypeId == ObjLeaveTypeInfo.LeaveTypeId && x.IsDeleted == false);
+                if (checkLeaveTypeInfo != null && checkLeaveTypeInfo.LeaveTypeId > 0)
+                {
+                    checkLeaveTypeInfo.LeaveTypeId = ObjLeaveTypeInfo.LeaveTypeId;
+                    checkLeaveTypeInfo.UpdatedOn = DateTime.Now;
+                    checkLeaveTypeInfo.Status = ObjLeaveTypeInfo.Status;
+                    checkLeaveTypeInfo.IsNonPaid = ObjLeaveTypeInfo.IsNonPaid;
+                    checkLeaveTypeInfo.UpdatedBy = ObjLeaveTypeInfo.UpdatedBy;
 
+                    await _context.SaveChangesAsync();
+                    return ObjLeaveTypeInfo;
+
+                }
+                return ObjLeaveTypeInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
         public async Task<LeaveType> PostLeaveType(LeaveType ObjLeaveTypeInfo, HrhubContext _context)
         {

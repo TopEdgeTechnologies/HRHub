@@ -24,7 +24,7 @@ namespace HRHUBAPI.Models
             try
             {
 			
-				var list =await _context.Designations.Where(x=>x.IsDeleted==false && x.CompanyId==CompanyId).ToListAsync();
+				var list =await _context.Designations.Where(x=>x.IsDeleted==false && x.CompanyId==CompanyId).OrderByDescending(x=> x.DesignationId).ToListAsync();
 
                 return list;
               
@@ -64,6 +64,33 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public async Task<Designation> UpdateStatusByDesignationId(Designation ObjDesignationInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkDesignationInfo = await _context.Designations.FirstOrDefaultAsync(x => x.DesignationId == ObjDesignationInfo.DesignationId && x.IsDeleted == false);
+                if (checkDesignationInfo != null && checkDesignationInfo.DesignationId > 0)
+                {
+                    checkDesignationInfo.DesignationId = ObjDesignationInfo.DesignationId;
+                    checkDesignationInfo.UpdatedOn = DateTime.Now;
+                    checkDesignationInfo.Status = ObjDesignationInfo.Status;
+                    checkDesignationInfo.UpdatedBy = ObjDesignationInfo.UpdatedBy;
+
+                    await _context.SaveChangesAsync();
+                    checkDesignationInfo.Flag = 2;
+                    return ObjDesignationInfo;
+
+                }
+                return ObjDesignationInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
         public async Task<Designation> PostDesignation(Designation ObjDesignationInfo, HrhubContext _context)
         {

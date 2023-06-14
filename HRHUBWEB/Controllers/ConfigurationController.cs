@@ -48,6 +48,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
             Designation ObjDesignation = new Designation();
             ObjDesignation.CompanyId = _user.CompanyId;
+            ObjDesignation.Status = true;
 
 			ObjDesignation.Listdesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>( $"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get);
 
@@ -60,7 +61,21 @@ namespace HRHUBWEB.Controllers
 
            
         }
-        
+        [HttpPost]
+        public async Task<IActionResult> UpdateDesignationStatus(int id, bool status)
+        {
+
+            Designation ObjDesignation = new Designation();
+            ObjDesignation.DesignationId = id;
+            ObjDesignation.Status = status;
+            ObjDesignation.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation, "api/Configuration/UpdateStatusByDesignationId", HttpMethod.Post);
+           
+            return Json(result);
+           
+        }
+
         [HttpPost]
         public async Task<IActionResult> DesignationCreateOrUpdate(Designation ObjDesignation)
         {
@@ -154,6 +169,21 @@ namespace HRHUBWEB.Controllers
             {
                 return RedirectToAction("DepartmentList", new { data = 2 });
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDepartmentStatus(int id, bool status)
+        {
+
+            Department ObjDepartment = new Department();
+            ObjDepartment.DepartmentId = id;
+            ObjDepartment.Status = status;
+            ObjDepartment.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDepartment, "api/Configuration/UpdateStatusByDepartmentId", HttpMethod.Post);
+
+            return Json(result);
+
         }
 
         public async Task<IActionResult> DepartmentDelete(int id )
@@ -347,7 +377,21 @@ namespace HRHUBWEB.Controllers
 
         //    }
         //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateLeaveTypeStatus(int id, bool status,bool nonpaid)
+        {
 
+            LeaveType ObjLeaveType = new LeaveType();
+            ObjLeaveType.LeaveTypeId = id;
+            ObjLeaveType.Status = status;
+            ObjLeaveType.IsNonPaid = nonpaid;
+            ObjLeaveType.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/UpdateStatusByLeaveTypeId", HttpMethod.Post);
+
+            return Json(result);
+
+        }
 
         [HttpPost]
         public async Task<IActionResult> LeaveTypeCreateOrUpdate(LeaveType ObjLeaveType)

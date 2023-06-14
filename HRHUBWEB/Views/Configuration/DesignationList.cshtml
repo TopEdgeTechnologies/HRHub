@@ -1,7 +1,6 @@
 ﻿@model HRHUBAPI.Models.Designation
 
 
-
 <input type="hidden" asp-for="CompanyId" />
 <!--Add Designation Modal -->
 @using (@Html.BeginForm("DesignationCreateOrUpdate", "Configuration", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
@@ -23,12 +22,13 @@
                         <label class="form-label">Designation Title</label>
                         <input asp-for="Title" class="form-control" type="text" placeholder="Enter Designation Title">
                     </div>
-                   
-                    <div class="form-group">                      
 
-                        <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
-                            <span class="custom-control-label">IsActive</span>
+                    <div class="form-group">
+
+                        <label class="custom-switch">
+                            <label class="form-label me-2 mt-1">IsActive</label>
+                            <input type="checkbox" asp-for="Status" class="custom-switch-input" checked="checked">
+                            <span class="custom-switch-indicator custom-switch-indicator"></span>
                         </label>
 
                     </div>
@@ -48,11 +48,6 @@
 }
 <!-- End Add Department Modal  -->
 <!-- Row -->
-
-
-
-
-
 <!-- Row -->
 <div class="row row-sm mt-4">
 
@@ -61,7 +56,7 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Designation Details</h3>
-                 @if (Convert.ToBoolean(ViewBag.IsNew))
+                @if (Convert.ToBoolean(ViewBag.IsNew))
                 {
                     <div class="card-options">
                         <div class="btn-list">
@@ -73,74 +68,113 @@
                     </div>
                 }
             </div>
-                <div class="card-body">
+            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
+                    <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
                             <tr>
-                                
-                                <th class="border-bottom-0">Designation Title</th>                               
-                                <th class="text-center">Status</th>
-                                <th class="">Action</th>
+
+                                <th class="border-bottom-0">Sr. #</th>
+                                <th class="border-bottom-0">Designation Title</th>
+                                <th class="border-bottom-0">Status</th>
+                                @*<th class="">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Listdesignation)
-                            {
-                                <tr>
+                            @{
+                                int count = 1;
+                                foreach (var item in Model.Listdesignation)
+                                {
+                                    <tr>
+                                        <td>
+                                            @count
+                                        </td>
 
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Title)
-                                    </td>
-
-                                   
-                                    @if (item.Status == true)
-                                    {
-                                        <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
-
-                                    }
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Title)
+                                        </td>
 
 
-                                    @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                    {
-                                        <th class="d-none">
+                                        <td>
+                                            <label class="custom-switch mt-2">
+
+                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input checkbox-IsDelete" id="IsActive_@item.DesignationId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
+                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                            </label>
 
 
+                                            <div class="float-end ms-auto">
+                                                <div class="btn-group ms-3 mb-0">
+                                                    <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start" style="">
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="editrecord(@item.DesignationId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
 
-
-
-
-                                        </th>
-                                    }
-                                    else
-                                    {
-                                        <td class="text-end">
-                                            <div class="d-flex">
-                                                @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                {
-
-                                                    <a onclick="editrecord(@item.DesignationId)" href="#" class="action-btns1" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                        <i class="feather feather-edit primary text-primary mt-1"></i>
-                                                    </a>
-                                                 
-                                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                {
-                                                    <a onclick="confirmation(@item.DesignationId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                    </a>
-                                                }
+                                                        }
+                                                        @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                            <a onclick="confirmation(@item.DesignationId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                        }
+                                                        <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                    </div>
+                                                </div>
                                             </div>
 
+
                                         </td>
-                                    }
+
+                                        @*if (item.Status == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                }*@
+
+
+                                        @*if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                {
+                                <th class="d-none">
 
 
 
-                                </tr>
+
+
+
+                                </th>
+                                }
+                                else
+                                {
+
+                                <td class="text-end">
+                                <div class="d-flex">
+                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                {
+
+                                <a onclick="editrecord(@item.DesignationId)" href="#" class="action-btns1" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                <i class="feather feather-edit primary text-primary mt-1"></i>
+                                </a>
+
+                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                {
+                                <a onclick="confirmation(@item.DesignationId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                </a>
+                                }
+                                </div>
+
+                                </td>
+                                }*@
+
+
+
+                                    </tr>
+
+                                    count++;
+                                }
                             }
 
                         </tbody>
@@ -152,22 +186,14 @@
 </div>
 
 <!-- End Row -->
-
-
-
-
-
-
-
-
 @section scripts{
-       
-    <script>
-     
-     
-        $(document).ready( function () {
 
-           
+    <script>
+
+
+        $(document).ready(function () {
+
+
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
 
@@ -206,6 +232,7 @@
 
             }
             $('#myTable').DataTable();
+
         });
 
 
@@ -227,7 +254,7 @@
                 $("#Title").css("border-color", "#ddd");
             }
             var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val(), CompanyId: $("#CompanyId").val() }
-           
+
             $.ajax({
                 async: false,
                 url: "/Configuration/DesignationCheckData",
@@ -236,7 +263,7 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                      ///  var b = JSON.parse(data)
+                        ///  var b = JSON.parse(data)
                         if (data.success) {
 
                             // $.growl.warning(b.message);
@@ -304,12 +331,12 @@
                 data: Data,
                 success: function (data) {
                     if (data != "") {
-                       
+
 
                         $("#DesignationId").val(data.designationId);
-                        $("#Title").val(data.title);                     
+                        $("#Title").val(data.title);
                         $("#Status").prop('checked', data.status)
-                      
+
                         $("#adddesignationmodal").modal('show');
                     }
                 },
@@ -356,14 +383,58 @@
             });
         }
 
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateDesignationStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("DesignationList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
 
 
         function addnewdesignation() {
 
             $("#adddesignationmodal").modal('show');
             $("#DesignationId").val(0);
-            $("#Title").val('');          
-            $("#Status").prop('checked', false);
+            $("#Title").val('');
+            $("#Status").prop('checked', true);
+
+            $("#Title").css("border-color", "#ddd");
 
 
         }
