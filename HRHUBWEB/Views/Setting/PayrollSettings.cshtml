@@ -555,14 +555,19 @@
 
 												<div class="form-group">
 													<label class="form-label">Policy</label>
-													<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true">
-														<option label="Choose one">
-														</option>
+													<select class="form-control select2 custom-select select2-hidden-accessible" id="policy-types" tabindex="-1" aria-hidden="true" data-placeholder="Choose one">
+														<option>	Choose one</option>
+														@foreach (var item in ViewBag.ListPolicy)
+														{
+															<option value="@item.PolicyId">@item.Title</option>
+														}
+
+
 
 														@*<option value="1">Leave Policy</option> 
 														<option value="2">Tardiness Policy</option>
 														<option value="3">Tardiness Consequences &amp; Accumulated</option>*@
-														<option value="1">Working Hours & Overtime Policy</option>
+														@*<option value="1">Working Hours & Overtime Policy</option>*@
 													</select>
 												</div>
 											@*	<div class="policy-module" id="leave-policy-module">

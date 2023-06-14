@@ -40,4 +40,11 @@
     <None Include="wwwroot\Images\CandidateAttachment\Sajid Ali-638194881412998079.pdf" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Setting\PayrollSettings.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
