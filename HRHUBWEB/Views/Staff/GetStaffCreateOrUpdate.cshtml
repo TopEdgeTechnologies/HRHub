@@ -135,6 +135,7 @@
                         <div class="tab-pane active" id="tab5">
                             <div class="card-body">
                                 <h4 class="mb-4 font-weight-bold">Basic</h4>
+                                @*
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -153,27 +154,27 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Contact Number<span class="text-danger">*</span></label>
@@ -191,25 +192,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
-                                                    <span class="text-muted"></span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input asp-for=EmergencyContact2 type="text" class="form-control" placeholder="Emergency Contact Number 2">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <div class="row">
+                            <div class="col-md-6">
+                            <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
+                            <span class="text-muted"></span>
+                            </div>
+                            <div class="col-md-6">
+                            <input asp-for=EmergencyContact2 type="text" class="form-control" placeholder="Emergency Contact Number 2">
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Date Of Birth</label>
@@ -238,6 +239,137 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                *@
+
+                                @{
+                                    async Task singleWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory = false)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control" placeholder="@placeholderTitle">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task doubleWidget(string labelTitle, object fieldName1, string? fieldValue1, string placeholderTitle1, object fieldName2, string? fieldValue2, string placeholderTitle2, string fieldValueType, bool isMandatory = false)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <input id=@fieldName1 name="@fieldName1" value="@fieldValue1" type="@fieldValueType" @required class="form-control mb-md-0 mb-5" placeholder="@placeholderTitle1">
+                                                            <span class="text-muted"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input id=@fieldName2 name="@fieldName2" value="@fieldValue2" type="@fieldValueType" @required class="form-control" placeholder="@placeholderTitle2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task datePickerWidget(string labelTitle, object fieldName, DateTime? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory = false)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                    @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task radioParentGroupWidget(string labelTitle)//, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory = false)
+                                    {
+                                         <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">@labelTitle</label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="custom-controls-stacked d-md-flex">
+                                                        @{
+                                                            await radioWidget("Male", "Gender", "Male", Model.Gender);
+                                                            await radioWidget("Female", "Gender", "Female", Model.Gender);
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task radioWidget(string labelTitle, string fieldName, string fieldValue, string? selectedValue)
+                                    {
+                                        <label class="custom-control custom-radio me-4">
+                                            <input id="Group_@fieldName@fieldValue" name="@fieldName" type="radio" class="custom-control-input" value="@fieldValue" @(fieldValue == selectedValue ? "checked" : "")>
+                                            <span class="custom-control-label">@labelTitle</span>
+                                        </label>
+                                    }
+
+                                    //async Task radioWidget(string labelTitle, object fieldName, string? fieldValue)
+                                    //{
+                                    //     <label class="custom-control custom-radio me-4">
+                                    //        <input id="Group_@fieldName" name="@fieldName" type="radio" class="custom-control-input" value="@fieldValue">
+                                    //        <span class="custom-control-label">@labelTitle</span>
+                                    //    </label> 
+                                    //}
+                                }
+                                @{
+                                    await doubleWidget("Name", "FirstName", Model.FirstName, "First Name", "LastName", Model.LastName, "Last Name", "text", true);
+                                    await singleWidget("Parents Name", "FatherName", Model.FatherName, "Parents or Guardian Name", "text", true);
+                                    await singleWidget("National Id Number", "NationalIdnumber", Model.NationalIdnumber, "National Idendity Number", "text", true);
+                                    await doubleWidget("Contact Number", "ContactNumber1", Model.ContactNumber1, "Contact Number 1", "ContactNumber2", Model.ContactNumber2, "Contact Number 2", "number", true);
+                                    await doubleWidget("Emergency Contact Number", "EmergencyContact1", Model.EmergencyContact1, "Emergency Contact Number 1", "EmergencyContact2", Model.EmergencyContact2, "Emergency Contact Number 2", "number", false);
+                                    await datePickerWidget("Date Of Birth", "Dob", Model.Dob, "DD-MM-YYY", "text", false);
+                                    await radioParentGroupWidget("Gender");
+                                }
+
+
+                                
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -739,6 +871,7 @@
 
             SalaryExceedLimit('Earning');
             onchangeDesignation();
+
         });
 
         $("#btnSaveUpdate").click(function () {
@@ -784,8 +917,8 @@
         $("#viewUserImage").click(function () {
             // Create a hidden file input element
             var input = $("#StaffImageAttachmentFile");
-           // input.type = 'file';
-         ///   input.accept = 'image/*';
+            // input.type = 'file';
+            // input.accept = 'image/*';
 
             // Handle file selection
             input.onchange = function (e) {
@@ -793,20 +926,30 @@
                 // Perform further operations with the selected file as needed
                 console.log('Selected file:', file);
             };
-
             // Trigger the file dialog
             input.click();
         });
 
-        function OnTextChangeStaffName()
-        {
-            var txt_Name = document.getElementById("txt_FirstName");
-            var txt_LtName = document.getElementById("txt_LastName");
-            var lbl_Name = document.getElementById("lbl_FullName");
+        $("#FirstName").on("input", function(){
+            debugger
+            $("#lbl_FullName").text($("#FirstName").val() + ' ' + $("#LastName").val())
+        });
 
-            var full_Name = txt_Name.value + ' ' + txt_LtName.value;
-            lbl_Name.textContent = full_Name;
-        }
+        $("#LastName").on("input", function() {
+            $("#lbl_FullName").text($("#FirstName").val() + ' ' + $("#LastName").val())
+        });
+
+        //function OnTextChangeStaffName()
+        //{
+        //    var txt_Name = document.getElementById("FirstName");
+        //    var txt_LtName = document.getElementById("LastName");
+        //    var lbl_Name = document.getElementById("lbl_FullName");
+
+        //    var full_Name = txt_Name.value + ' ' + txt_LtName.value;
+        //    lbl_Name.textContent = full_Name;
+
+        //    //lbl_Name.textContent($("#FirstName").val() + ' ' + $("#LastName").val())
+        //}
 
         function onchangeDesignation()
         {
@@ -1060,8 +1203,7 @@
             validateInput($(this));
         });
 
-
-        $("#txt_FirstName, #txt_LastName, #NationalIdnumber, #FatherName, #ContactNumber1, #EmergencyContact1, #RegistrationNo ").on("input", function () {
+        $("#FirstName, #LastName, #NationalIdnumber, #FatherName, #ContactNumber1, #EmergencyContact1, #RegistrationNo ").on("input", function () {
             validateInput($(this));
         });
 

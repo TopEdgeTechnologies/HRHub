@@ -40,84 +40,43 @@
 							</div>
 						</div>
 					</div>
+					@{
+						async Task createWidget(object fieldName, string labelTitle)
+						{
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-6">
+											<h4 class="font-weight-bold fs-14">@labelTitle</h4>
+									</div>
+									<div class="col-md-6">
+										<p>
+												@fieldName
+										</p>
+									</div>
+								</div>
+							</div>
+						}
+					}
 					<div class="form-data">
 						<div class="border-bottom mb-4">
 							<div class="row">
-								<div class="col-md-6">
-									<div class="row">
-										<div class="col-md-6">
-											<h4 class="font-weight-bold fs-14">RegistrationNo</h4>
-										</div>
-										<div class="col-md-6">
-											<p>
-												@Model.RegistrationNo
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="row">
-										<div class="col-md-6">
-											<h4 class="font-weight-bold fs-14">Staff Name</h4>
-
-										</div>
-										<div class="col-md-6">
-											<p>
-												@Model.FirstName @Model.LastName
-											</p>
-										</div>
-									</div>
-								</div>
+								@{
+									createWidget(@Model.RegistrationNo, "RegistrationNo");
+									var name = @Model.FirstName + ' ' + @Model.LastName;
+									createWidget(@name, "Name");
+								}
 							</div>
 						</div>
 						<div class="border-bottom mb-4">
 							<div class="row">
-								<div class="col-md-6">
-									<div class="row">
-										<div class="col-md-6">
-											<h4 class="font-weight-bold fs-14">Department</h4>
-										</div>
-										<div class="col-md-6">
-											<p>
-												@Model.DepartmentTitle
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="row">
-										<div class="col-md-6">
-											<h4 class="font-weight-bold fs-14">GrossSalary</h4>
-										</div>
-										<div class="col-md-6">
-											<p>
-												@Model.NetSalary?.ToString("N2")
-											</p>
-										</div>
-									</div>
-								</div>
-
+								@{
+									createWidget(@Model.DepartmentTitle, "Department");
+									var paidSalary = @Model.NetSalary?.ToString("N2");
+									createWidget(@paidSalary, "GrossSalary");
+								}
 							</div>
 						</div>
 					</div>
-					@*<table class="table table-vcenter text-nowrap">
-						<tr class="form-group">
-							<th class="col-md-3">RegistrationNo</th>
-							<td class="col-md-3">@Model.RegistrationNo</td>
-						</tr>
-						<tr class="form-group">
-							<th class="col-md-3">Staff Name</th>
-							<td class="col-md-3">@Model.FirstName @Model.LastName</td>
-						</tr>
-						<tr class="form-group">
-							<th class="col-md-3">Department</th>
-							<td class="col-md-3">@Model.DepartmentTitle</td>
-						</tr>
-						<tr class="form-group">
-							<th class="col-md-3">GrossSalary</th>
-							<td class="col-md-3">@Model.NetSalary?.ToString("N2")</td>
-						</tr>
-					</table>*@
 				</div>			
 				<div class="card-body">
 					<div class="row">
@@ -211,8 +170,7 @@
 							</table>
 						</div>
 					</div>
-				</div>
-			
+				</div>	
 				<div class="card-body">
 					<h4 class="card-title">Gross Salary</h4>
 					<div class="form-group">
@@ -235,7 +193,7 @@
 						</div>
 						<div class="col-md-12 col-lg-8">
 							<input type="button" id="btn_InsertRecord" value="Save" class="btn btn-primary btn-lg" />
-								<input type="button" id="btn_Cancel" onclick="cancelRecord()" value="Cancel" class="btn btn-danger btn-lg" />
+							<a asp-action="StaffSalaryList" asp-controller="PayrollConfiguration" class="btn btn-danger btn-lg">Cancel</a>
 						</div>
 					</div>
 				</div>
