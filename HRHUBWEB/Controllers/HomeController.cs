@@ -33,7 +33,52 @@ namespace HRHUBWEB.Controllers
         }
 
 
+        
         public IActionResult Test()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ResignationStatus()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> StaffPerformance()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> StaffPerformanceEvaluation()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> GenerealSettings()
+        {
+            return View();
+        }
+        public async Task<IActionResult> AttendanceSettings()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> LeaveSettings()
+        {
+            return View();
+        }
+		[ResponseCache(NoStore = true)]
+		public IActionResult PayrollSettings()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SideModal()
+        {
+            return View();
+        }
+
+        public IActionResult PerformanceReview()
         {
             return View();
         }

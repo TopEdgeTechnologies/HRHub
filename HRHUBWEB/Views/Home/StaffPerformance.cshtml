@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewData["Title"] = "StaffPerformance";
+}
+
+<style>
+    /*span#add-section, span#add-description{
+        cursor: pointer;
+    }
+
+    #section-Field, #description-field {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }*/
+    
+
+</style>
+
+<h1>Staff Performance</h1>
+
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header  d-flex justify-content-between align-items-center">
+                <h3 class="card-title">Staff Performance</h3>
+                <div class="btn-list">
+                    <a asp-controller"staff"="" class="btn btn-primary me-3" href="/Staff/GetStaffCreateOrUpdate"><i class="fe fe-plus-circle me-1"></i>Add New Staff</a>
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="basic-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">ID</th>
+                                <th class="wd-15p border-bottom-0">Title</th>
+                                <th class="wd-15p border-bottom-0">Start date</th>
+                                <th class="wd-20p border-bottom-0">End Date</th>
+                                <th class="wd-10p border-bottom-0">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>  <tr>
+                                <td>01</td>
+                                <td>Frontend Developer</td>
+                                <td>2018/03/12</td>
+                                <td>2018/03/12</td>
+                                <td><button class="btn btn-primary">go</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+   
+       
+                   
+
+
+
+     
+
+                              

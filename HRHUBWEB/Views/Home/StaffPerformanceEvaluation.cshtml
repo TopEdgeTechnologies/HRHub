@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewData["Title"] = " ";
+}
+
+<h1>StaffPerformanceEvaluation</h1>
+<style>
+   
+    .btn-icon {
+        width: 2.4rem;
+        height: 2.4rem;
+        background-color: #e5f3ff;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        margin-right: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+    #no-weight-table{
+        display:none;
+    }
+
+    .child-center{
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center  border-0">
+                <h4 class="card-title">Performance Evaluation</h4>
+                <a class="text-primary d-none fs-17 font-weight-semibold" id="btnPreview" href="#"><i class="fe fe-eye"></i> Preview</a>
+
+            </div>
+            <div class="card-body">
+                <div class="card border">
+                    <div class="card-header border-0">
+                        <h4 class="card-title fs-22">KPI Indicator</h4>
+                        @*    <div class="card-options">
+                        <label class="custom-switch">
+                        <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                        <span class="custom-switch-indicator"></span>
+                        </label>
+                        </div>*@
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="form-label fs-18">
+                                Section
+                                @*                                            <span id="add-section" class="text-capitalize text-primary ms-2 fs-15 ">Click to add new Section</span>
+                                *@
+                            </label>
+                            <input class="form-control mb-4" name="section-field" id="section-field" placeholder="Add Section" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label fs-18">
+                                Description
+                                @*                                            <span id="add-description" class="text-capitalize text-primary ms-2 fs-15 ">Click to add description</span>
+                                *@
+                            </label>
+                            <textarea rows="2" class="form-control" name="description-field" id="description-field" placeholder="something text here..."></textarea>
+                        </div>
+
+                        <div class="card">
+                
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered text-nowrap border-bottom" id="weight-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wd-15p col-10 border-bottom-0">Questions</th>
+                                                <th class="wd-15p col-2 border-bottom-0">Weightage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select class="form-control select2" data-placeholder="Choose one (with optgroup)">
+                                                            <option value="MT">Montana</option>
+                                                            <option value="NE">Nebraska</option>
+                                                            <option value="NM">New Mexico</option>
+                                                            <option value="ND">North Dakota</option>
+                                                            <option value="UT">Utah</option>
+                                                            <option value="WY">Wyoming</option>
+                                                            <option value="OK">Oklahoma</option>
+                                                            <option value="SD">South Dakota</option>
+                                                            <option value="TX">Texas</option>
+                                                            <option value="TN">Tennessee</option>
+                                                            <option value="WI">Wisconsin</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group d-flex align-items-center">
+                                                        <input id="weight-text-field" class="form-control" type="number" placeholder="01" />
+                                                        <div class="d-flex">
+                                                            <a class="btn border border-1 ms-2 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                <i class="feather fs-16 feather-trash-2 text-danger mt-1"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <table class="table table-bordered text-nowrap border-bottom" id="no-weight-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wd-15p border-bottom-0">Questions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" placeholder="What's your Question?'">
+                                                        <span class="input-group-text bg-info fs-18 text-white">+</span>
+                                                        <a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+
+        <div class="card border">
+            <div class="card-header border-0">
+                <h4 class="card-title">Settings</h4>
+                @* <div class="card-options">
+                <label class="custom-switch">
+                <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                <span class="custom-switch-indicator"></span>
+                </label>
+                </div>*@
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label fs-18">Order No.</label>
+                    <input class="form-control mb-4" placeholder="01" type="number">
+
+                </div>
+                <div class="mb-6">
+                    <label class="custom-switch form-switch mb-0">
+                        <input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+                        <span class="custom-switch-indicator"></span>
+                        <span class="custom-switch-description fs-18">Allow Self Storing</span>
+                    </label>
+                </div>
+
+                <div class="mb-6">
+                    <label class="custom-switch form-switch mb-0">
+                        <input type="checkbox" name="custom-switch-radio" id="weight-checkbox" class="custom-switch-input">
+                        <span class="custom-switch-indicator"></span>
+                        <span class="custom-switch-description fs-18">Is weighting</span>
+                    </label>
+                </div>
+
+
+                <div class="form-group mt-3">
+                    <label class="form-label fs-18">Limit Question</label>
+                    <input class="form-control mb-4" placeholder="01" type="number">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+                 
+@section scripts{
+
+<script>
+    $(document).ready(function(){
+
+        var weightCheckBox = $('#weight-checkbox');
+        var weightTable = $('#weight-table');
+        var noWeightTable  = $('#no-weight-table');
+        weightCheckBox.prop('checked', true);
+
+        weightCheckBox.on('change', function(){
+            if(!weightCheckBox.is(':checked')){
+                weightTable.hide();
+                noWeightTable.show();
+            }
+            else{
+            weightTable.show();
+            noWeightTable.hide();
+            }
+        })
+    })
+</script>
+}
