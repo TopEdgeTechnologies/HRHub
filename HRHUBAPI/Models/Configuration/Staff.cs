@@ -47,10 +47,16 @@ namespace HRHUBAPI.Models
             public IEnumerable<SelectListItem>? MaterialStatusList { get; set; } 
 
             [NotMapped]
+            public IEnumerable<SelectListItem>? BloodGroupList { get; set; } 
+
+            [NotMapped]
             public IEnumerable<Department>? DepartmentList { get; set; }
 
             [NotMapped]
             public IEnumerable<Designation>? DesignationList { get; set; }
+
+            [NotMapped]
+            public IEnumerable<SalaryMethod>? SalaryMethodList { get; set; }
 
             [NotMapped]
             public IEnumerable<string>? DocumentTitle { get; set; }

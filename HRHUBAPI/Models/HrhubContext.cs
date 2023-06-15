@@ -845,6 +845,7 @@ public partial class HrhubContext : DbContext
                 .HasColumnName("SalaryMethodID");
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
+            entity.Property(e => e.TaxPayerNumber).IsUnicode(false);
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.WorkMode).IsUnicode(false);

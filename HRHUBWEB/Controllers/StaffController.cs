@@ -89,18 +89,20 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> GetStaffCreateOrUpdate(int Id) 
         {
             //ViewBag.MaterialStatus = GetMaterialStatusList();
-            ViewBag.BloodGroup = GetBloodGroup();
-
+            //ViewBag.BloodGroup = GetBloodGroup();
             Staff objStaff = new Staff();
             
-            // Edit/Update Mode
+            // Edit & Update Mode
             objStaff = await GetStaffById(Id);
             
-            objStaff.MaterialStatusList = GetMaterialStatusList();//.Select(s => new Staff { MaterialStatus = s.Text }).ToList();
+            objStaff.MaterialStatusList = GetMaterialStatusList();
+            objStaff.BloodGroupList = GetBloodGroup();
             objStaff.DepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+            objStaff.DesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+            objStaff.SalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
             //ViewBag.ObjDepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
-            ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
-            ViewBag.ObjSalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
+            //ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+            //ViewBag.ObjSalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
 
             objStaff.StaffLeaveAllocationslist = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffLeaveAllocation>>($"api/Staffs/GetStaffLeaveAllocationsDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
 
