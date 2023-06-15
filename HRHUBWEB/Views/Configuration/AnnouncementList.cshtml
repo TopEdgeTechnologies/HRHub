@@ -40,15 +40,21 @@
                         <label class="form-label">Description: <span class="text-danger">*</span></label>
                         <textarea asp-for="Description" class="summernote"></textarea>
                     </div>
-                    <div class="form-group">                       
+                    <div class="form-group">
+                        @*
+                    <label class="custom-control custom-checkbox">
+                    <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                    <span class="custom-control-label">IsActive</span>
+                    </label>*@
 
-                        <label class="custom-control custom-checkbox">
-                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
-                            <span class="custom-control-label">IsActive</span>
+                        <label class="custom-switch">
+                            <label class="form-label me-2 mt-1">IsActive</label>
+                            <input type="checkbox" asp-for="Status" class="custom-switch-input" checked="checked">
+                            <span class="custom-switch-indicator custom-switch-indicator"></span>
                         </label>
 
                     </div>
-                  
+
                 </div>
                 <div class="modal-footer">
                     <input type="button" value="Save" id="btnsave" onclick="postdata()" class="btn btn-primary" />
@@ -77,20 +83,20 @@
                             <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                         </div>
                     </div>
-                   
+
                 }
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
+                    <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
                             <tr>
                                 <th class="border-bottom-0">Sr.#</th>
-                                <th class="border-bottom-0">Title</th>                               
-                                <th class="border-bottom-0">Description</th>                               
-                                <th class="border-bottom-0">Date</th>                               
-                                <th class="text-center">Status</th>
-                                <th class="">Action</th>
+                                <th class="border-bottom-0">Title</th>
+                                <th class="border-bottom-0" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;">Description</th>
+                                <th class="border-bottom-0">Date</th>
+                                <th class="border-bottom-0">Status</th>
+                                @*<th class="">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
@@ -99,58 +105,85 @@
                                 int count = 1;
                                 foreach (var item in Model.ListAnnouncements)
                                 {
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <span>@count</span>
-                                            </div>
-                                        </td>
-                                        
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Title)
-                                        </td>
-
-                                        <td>
-                                            @Html.Raw(item.Description)
-                                        </td>
-                                         <td>
-                                            @item.AnnouncementDate.Value.ToString("yyyy-MMM-dd")
-                                        </td>
-
-
-                                        @if (item.Status == true)
-                                        {
-                                            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
-
-                                        }
-                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                        {
-                                            <th class="d-none">
-                                            </th>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-end">
+                                        <tr>
+                                            <td>
                                                 <div class="d-flex">
-                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                    {
-                                                        <a onclick="editrecord(@item.AnnouncementId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit">
-                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                        </a>
-                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                    {
-                                                        <a onclick="confirmation(@item.AnnouncementId)" href="#" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                        </a>
-                                                    }
+                                                    <span>@count</span>
                                                 </div>
                                             </td>
-                                        }
-                                    </tr>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </td>
+
+                                            <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
+                                                @Html.Raw(item.Description)
+                                            </td>
+                                            <td>
+                                                @item.AnnouncementDate.Value.ToString("dd-MMM-yyyy")
+                                            </td>
+
+                                            <td>
+
+                                                <label class="custom-switch mt-2">
+
+                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.AnnouncementId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
+
+                                                <div class="float-end ms-auto">
+                                                    <div class="btn-group ms-3 mb-0">
+                                                        <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-start" style="">
+                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                                <a onclick="editrecord(@item.AnnouncementId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+
+                                                        }
+                                                            @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                                <a onclick="confirmation(@item.AnnouncementId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                        }
+                                                            <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+                                            @*if (item.Status == true)
+                                {
+                                <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                }
+                                else
+                                {
+                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                }*@
+
+                                            @*if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                {
+                                <th class="d-none">
+                                </th>
+                                }
+                                else
+                                {
+                                <td class="text-end">
+                                <div class="d-flex">
+                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                {
+                                <a onclick="editrecord(@item.AnnouncementId)" href="#" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Edit">
+                                <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                </a>
+                                } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                {
+                                <a onclick="confirmation(@item.AnnouncementId)" href="#" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                </a>
+                                }
+                                </div>
+                                </td>
+                                }*@
+                                        </tr>
                                     count++;
                                 }
                             }
@@ -215,11 +248,11 @@
             }
 
             $('#myTable').DataTable();
-       
+
         });
 
 
-      
+
 
         function postdata() {
             var status = true;
@@ -274,8 +307,8 @@
                 data: Data,
                 success: function (data) {
                     if (data != "") {
-                        debugger                      
-                        if (data.success) {                           
+                        debugger
+                        if (data.success) {
                             $.growl.warning({
                                 message: data.message
                             });
@@ -288,7 +321,7 @@
                 },
                 error: function () {
                     status = false;
-                   
+
                 }
             })
             const swalWithBootstrapButtons = Swal.mixin({
@@ -348,17 +381,17 @@
                         var Date = dateTimeString.split("T")[0];
 
                         var date = $("#AnnouncementDate").val(Date);
-                        alert(date)
-                        $('#Description').summernote('code', data.description);                      
+                        //alert(date)
+                        $('#Description').summernote('code', data.description);
 
                         $("#Status").prop('checked', data.status);
-                     
+
                         $("#addAnnouncementmodal").modal('show');
                     }
                 },
                 error: function () {
                     status = false;
-                   
+
                 }
             })
 
@@ -384,8 +417,7 @@
                 timer: 30000,
                 reverseButtons: true
             }).then((result) => {
-                if (result.isConfirmed) 
-                {
+                if (result.isConfirmed) {
                     var url = "@Url.Action("AnnouncementDelete", "Configuration")/" + id; // replace with the desired action and controller names
                     window.location.href = url;
                 }
@@ -399,7 +431,48 @@
             });
         }
 
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
 
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateAnnouncementStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("AnnouncementList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
 
         function addnewAnnouncement() {
 
@@ -407,10 +480,13 @@
             $("#AnnouncementId").val(0)
             $("#Title").val('')
             $("#Description").val('')
-            $('#Description').summernote('code', '');                 
-            $("#Status").prop('checked', false)
+            $('#Description').summernote('code', '');
+            $("#Status").prop('checked', true)
+            $("#AnnouncementDate").val('');
 
-
+            $("#Title").css("border-color", "#ddd");
+            $("#AnnouncementDate").css("border-color", "#ddd");
+            $("#Description").css("border-color", "#ddd");
         }
 
     </script>

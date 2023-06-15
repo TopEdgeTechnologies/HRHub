@@ -125,7 +125,32 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public async Task<Holiday> UpdateStatusByHolidayId(Holiday ObjHolidayInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkHolidayInfo = await _context.Holidays.FirstOrDefaultAsync(x => x.HolidayId == ObjHolidayInfo.HolidayId && x.IsDeleted == false);
+                if (checkHolidayInfo != null && checkHolidayInfo.HolidayId > 0)
+                {
+                    checkHolidayInfo.HolidayId = ObjHolidayInfo.HolidayId;
+                    checkHolidayInfo.Status = ObjHolidayInfo.Status;
+                    checkHolidayInfo.UpdatedBy = ObjHolidayInfo.UpdatedBy;
+                    checkHolidayInfo.UpdatedOn = DateTime.Now;
 
+                    await _context.SaveChangesAsync();
+                    return ObjHolidayInfo;
+
+                }
+                return ObjHolidayInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
         public async Task<Holiday> PostHoliday(Holiday obj, HrhubContext _context)
         {
             try

@@ -27,7 +27,7 @@ namespace HRHUBAPI.Models
             try
             {
                 List<LoanType> list = new List<LoanType>();
-                list = await _context.LoanTypes.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+                list = await _context.LoanTypes.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).OrderByDescending(x=> x.LoanTypeId).ToListAsync();
 
                 return list;
 
@@ -67,7 +67,33 @@ namespace HRHUBAPI.Models
 
             }
         }
+        public async Task<LoanType> UpdateStatusByLoanTypeId(LoanType ObjLoanTypeInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkLoanTypeInfo = await _context.LoanTypes.FirstOrDefaultAsync(x => x.LoanTypeId == ObjLoanTypeInfo.LoanTypeId && x.IsDeleted == false);
+                if (checkLoanTypeInfo != null && checkLoanTypeInfo.LoanTypeId > 0)
+                {
+                    checkLoanTypeInfo.LoanTypeId = ObjLoanTypeInfo.LoanTypeId;
+                    checkLoanTypeInfo.UpdatedOn = DateTime.Now;
+                    checkLoanTypeInfo.Status = ObjLoanTypeInfo.Status;
+                    checkLoanTypeInfo.IsNeedApproval = ObjLoanTypeInfo.IsNeedApproval;
+                    checkLoanTypeInfo.UpdatedBy = ObjLoanTypeInfo.UpdatedBy;
 
+                    await _context.SaveChangesAsync();
+                    return ObjLoanTypeInfo;
+
+                }
+                return ObjLoanTypeInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
         public async Task<LoanType> PostLoanType(LoanType ObjLoanTypeInfo, HrhubContext _context)
         {

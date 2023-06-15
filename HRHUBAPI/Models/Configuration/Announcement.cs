@@ -36,7 +36,32 @@ namespace HRHUBAPI.Models
             }
             catch { throw; }
         }
+        public async Task<Announcement> UpdateStatusByAnnouncementId(Announcement ObjAnnouncementInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkAnnouncementInfo = await _context.Announcements.FirstOrDefaultAsync(x => x.AnnouncementId == ObjAnnouncementInfo.AnnouncementId && x.IsDeleted == false);
+                if (checkAnnouncementInfo != null && checkAnnouncementInfo.AnnouncementId > 0)
+                {
+                    checkAnnouncementInfo.AnnouncementId = ObjAnnouncementInfo.AnnouncementId;
+                    checkAnnouncementInfo.Status = ObjAnnouncementInfo.Status;
+                    checkAnnouncementInfo.UpdatedBy = ObjAnnouncementInfo.UpdatedBy;
+                    checkAnnouncementInfo.UpdatedOn = DateTime.Now;
 
+                    await _context.SaveChangesAsync();
+                    return ObjAnnouncementInfo;
+
+                }
+                return ObjAnnouncementInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
         public async Task<Announcement> PostAnnouncement(Announcement ObjAnnouncement, HrhubContext hrhubContext)
         {
           
