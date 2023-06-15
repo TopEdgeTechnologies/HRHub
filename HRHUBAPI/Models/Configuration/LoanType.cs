@@ -27,7 +27,7 @@ namespace HRHUBAPI.Models
             try
             {
                 List<LoanType> list = new List<LoanType>();
-                list = await _context.LoanTypes.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).ToListAsync();
+                list = await _context.LoanTypes.Where(x => x.IsDeleted == false && x.CompanyId == CompanyId).OrderByDescending(x=> x.LoanTypeId).ToListAsync();
 
                 return list;
 

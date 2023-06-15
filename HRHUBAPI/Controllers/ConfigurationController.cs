@@ -295,11 +295,6 @@ namespace HRHUBAPI.Controllers
                     Success = true,
                     Message = "Data Insert Successfully!"
                 });
-
-
-
-
-
         }
 
         [HttpDelete("DeleteLeaveTypeInfo{id}")]
@@ -341,10 +336,6 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
-
-
-
-
 
 
         #endregion
@@ -403,10 +394,6 @@ namespace HRHUBAPI.Controllers
                     Message = "Data Insert Successfully!"
                 });
 
-
-
-
-
         }
 
         [HttpDelete("DeleteLoanTypeInfo{id}")]
@@ -449,11 +436,6 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-
-
-
-
-
         #endregion
 
         #region Holiday
@@ -477,7 +459,19 @@ namespace HRHUBAPI.Controllers
                 return NotFound();
             }
         }
-
+        [HttpPost("UpdateStatusByHolidayId")]
+        public async Task<ActionResult<Holiday>> UpdateStatusByHolidayId(Holiday obj)
+        {
+            var result = await new Holiday().UpdateStatusByHolidayId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
         [HttpPost("POstHoliday")]
         public async Task<ActionResult<Holiday>> PostHoliday(Holiday objHoliday)
         {
@@ -568,7 +562,6 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
-
         #region WeekendRule
 
         [HttpGet("GetWeekendRuleByCompanyID{CompanyID}")]
@@ -639,8 +632,20 @@ namespace HRHUBAPI.Controllers
 			}
 			return NotFound();
 		}
-
-		[HttpPost("PostAnnouncement")]
+        [HttpPost("UpdateStatusByAnnouncementId")]
+        public async Task<ActionResult<Announcement>> UpdateStatusByAnnouncementId(Announcement obj)
+        {
+            var result = await new Announcement().UpdateStatusByAnnouncementId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+        [HttpPost("PostAnnouncement")]
 		public async Task<ActionResult<Announcement>> PostAnnouncement(Announcement Announcement)
 		{
 
