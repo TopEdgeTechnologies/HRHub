@@ -92,13 +92,13 @@
                             <div class="card-options">
                                 <div class="btn-list">
 
-                                    @*    @if (Convert.ToBoolean(ViewBag.IsNew))
-                                    {*@
+                                    @if (Convert.ToBoolean(ViewBag.IsNew))
+                                    {
 
-                                    <a onclick="addnewLoan()" class="btn btn-primary me-3">Apply For Loan</a>
+                                        <a onclick="addnewLoan()" class="btn btn-primary me-3">Apply For Loan</a>
 
 
-                                    @*   }*@
+                                    }
                                     <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
                                     <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
                                     <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
@@ -164,8 +164,8 @@
 
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table  table-vcenter text-nowrap table-bordered border-bottom" id="myTable">
-                                    <thead>
+                                <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
+                                    <thead style="border-bottom: 1px solid #0000004a;">
                                         <tr>
                                             <th class="border-bottom-0">Sr.#</th>
                                             <th class="border-bottom-0">Applied On</th>
@@ -196,7 +196,7 @@
                                                         </div>
                                                     </td>
                                                     <td>@Convert.ToDecimal(item.Amount).ToString("N2")</td>
-                                                    <td>@Convert.ToDecimal(item.InstallmentPerMonth).ToString("N2")</td> 
+                                                    <td>@Convert.ToDecimal(item.InstallmentPerMonth).ToString("N2")</td>
                                                     <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.Reason)</td>
                                                     <td>
                                                         <div class="progress progress-sm d-block">
@@ -758,7 +758,7 @@
 
                             action += '<td><div class="progress progress-sm d-block"> <div class="progress-bar bg-success" style="width:' + listLoan[i]["paidPercentage"] + '%" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Paid: ' + listLoan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '" data-bs-original-title="Paid: ' + listLoan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '">  </div> </div>   </td>';
 
-                            
+
                             if (listLoan[i]["loanStatusId"] == 1) {
                                 action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
                             }

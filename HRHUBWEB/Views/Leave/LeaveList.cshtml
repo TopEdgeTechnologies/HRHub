@@ -261,19 +261,19 @@
                                                     <td>
                                                         @if (item.LeaveStatusId == 1) // New
                                                     {
-                                                        <span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span>
+                                                        <span class="badge badge-primary mt-2"><i class="mdi mdi-circle-medium"></i> New</span>
                                                     }
                                                     else if (item.LeaveStatusId == 2) // Pending
                                                     {
-                                                        <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span>
+                                                        <span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>
                                                     }
                                                     else if (item.LeaveStatusId == 3) // Approved
                                                     {
-                                                            <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span>
+                                                            <span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>
                                                     }
                                                     else if (item.LeaveStatusId == 4) // Rejected
                                                     {
-                                                       <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span>  
+                                                       <span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>  
                                                     }
 
                                                     <!----- Action Buttons Code Start From Here------>
@@ -667,27 +667,27 @@
                             action += '<td> ' + listleave[i]["days"] + '</td>';
                             action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listleave[i]["leaveSubject"] + '</td>';
 
-                            if (listleave[i]["leaveStatusId"] == 1) {
-                                action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
+                            action += '<td>';
+                            if (listleave[i]["leaveStatusId"] == 1) { //  New
+                                action += '<span class="badge badge-primary mt-2"><i class="mdi mdi-circle-medium"></i> New</span>';
                             }
-                            else if (listleave[i]["leaveStatusId"] == 2) {
-                                action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
-
-                            }
-                            else if (listleave[i]["leaveStatusId"] == 3) {
-                                action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
-
+                            else if (listleave[i]["leaveStatusId"] == 2) {  // Pending
+                                action += '<span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>';
 
                             }
-                            else if (listleave[i]["leaveStatusId"] == 4) {
-                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+                            else if (listleave[i]["leaveStatusId"] == 3) { // Approved
+                                action += '<span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>';
+
+
+                            }
+                            else if (listleave[i]["leaveStatusId"] == 4) { // rejected
+                                action += '<span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>';
 
                             }
 
-
-                            action += '<td class="text-center" style = "padding: 10px 8px !important;" >';
-                            action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > <i class="fa fa-ellipsis-v" > </i></a>';
-                            action += '<div class="dropdown-menu dropdown-menu-start">';
+                            // Action Buttons 
+                            action += '<div class="float-end ms-auto"> <div class="btn-group ms-3 mb-0"><a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>';
+                            action += '<div class="dropdown-menu dropdown-menu-start" style="">';
 
                             if (listleave[i]["leaveStatusId"] == 1) // New
                             {
@@ -698,6 +698,44 @@
 
                             action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="dropdown-item" > <i class="fe fe-eye me-2" > </i> View</a >';
                             action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
+                            // End of Action Buttons
+
+
+
+
+
+
+                            //if (listleave[i]["leaveStatusId"] == 1) {
+                            //    action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
+                            //}
+                            //else if (listleave[i]["leaveStatusId"] == 2) {
+                            //    action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
+
+                            //}
+                            //else if (listleave[i]["leaveStatusId"] == 3) {
+                            //    action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
+
+
+                            //}
+                            //else if (listleave[i]["leaveStatusId"] == 4) {
+                            //    action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+
+                            //}
+
+
+                            //action += '<td class="text-center" style = "padding: 10px 8px !important;" >';
+                            //action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > <i class="fa fa-ellipsis-v" > </i></a>';
+                            //action += '<div class="dropdown-menu dropdown-menu-start">';
+
+                            //if (listleave[i]["leaveStatusId"] == 1) // New
+                            //{
+                            //    action += '<a href="/Leave/LeaveCreateOrUpdate/' + listleave[i]["leaveId"] + '" class="dropdown-item" > <i class="fe fe-edit me-2" > </i> Edit</a>';
+                            //    action += '<a onclick="confirmation(' + listleave[i]["leaveId"] + ')" href="#" class="dropdown-item" > <i class="fe fe-trash me-2" > </i> Delete</a>';
+
+                            //}
+
+                            //action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="dropdown-item" > <i class="fe fe-eye me-2" > </i> View</a >';
+                            //action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
                             
 
 
