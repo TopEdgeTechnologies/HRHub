@@ -145,6 +145,10 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -784,6 +788,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
             entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
             entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -845,6 +850,7 @@ public partial class HrhubContext : DbContext
                 .HasColumnName("SalaryMethodID");
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
+            entity.Property(e => e.TaxPayerNumber).IsUnicode(false);
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.WorkMode).IsUnicode(false);

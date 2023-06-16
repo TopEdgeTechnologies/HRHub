@@ -228,22 +228,29 @@
         <input asp-for="ReviewedStaffId" type="hidden" class="form-control">
         <div class="card-header border-bottom-0">
         </div>
-        if (Model.ReviewerStaffId != ViewBag.RevieverId)
+        if (Model.ReviewerStaffId != ViewBag.UserStaffID)
         {
             {
                 var CurrentSection = 0;
 
-                foreach (var item in Model.ListSectionQuestion)
+                foreach (var item in Model.ListSectionQuestion) 
                 {
 
 
                     if (item.SectionId != CurrentSection)
                     {
+
+                       
                         CurrentSection = Convert.ToInt32(item.SectionId);
                         var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
 
 
                         <div class="card-body p-4">
+
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.ReviewedId) // it Questions Already Defined
+                            {
+
+
                             <section class="review-section professional-excellence">
 
                                 <div class="review-header text-center">
@@ -256,7 +263,7 @@
                                             <table class="table table-bordered review-table mb-0" id="myTable">
                                                 <thead>
                                                     <tr>
-
+                                                   
 
                                                         <th>Questions</th>
                                                         <th>Weightage</th>
@@ -269,36 +276,69 @@
                                                 <tbody>
 
                                                     @{
-                                                        if (item.IsAnswerWeightage == true) // it Questions Already Defined
+
+                                                        foreach (var ItemQuestion in QuestionsList)
                                                         {
 
-                                                            foreach (var ItemQuestion in QuestionsList)
-                                                            {
+                                                            <tr>
+                                                                <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                                <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+                                                                 <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
 
-                                                                <tr>
-                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                                    <td><input  type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
-                                                                    <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+                                                                @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
 
-                                                                  @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
-
-                                                                </tr>
-                                                            }
+                                                            </tr>
                                                         }
-                                                        else  // it means its Open Question Section
+
+                                                    }
+
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+                            }
+                            else
+                            {
+
+                                @if (Model.ReviewedStaffId == ViewBag.UserStaffID)
+                                {
+                               // List<HRHUBAPI.Models.SectionAnswer> list = (Model.ListSectionQuestion.Where(x => x.AllowSelfScoring == true || x.IsAnswerWeightage == false)).ToList(); 
+
+                                <section class="review-section professional-excellence">
+
+                                <div class="review-header text-center">
+                                    <h3 class="review-title">@item.SectionName</h3>
+                                    <p class="text-muted">@item.SectionDescription</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered review-table mb-0" id="myTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Questions</th>  
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @{
+                                                        // sir is ki aik condition lgai thi oper wo dekhy , thk ha dekhta hu
+                                                            
+                                                        for (int a = 0; a < item.QuestionMaxLimit; a++) //
                                                         {
 
-                                                            for (int a = 0; a < item.QuestionMaxLimit; a++) //
-                                                            {
-                                                               
-                                                               
-                                                                <tr>
+
+                                                            <tr>
                                                                     <td><input type="text" name="ListQuestion" class="form-control"></td>
+                                                                    <td class="d-none"><input name="ListSectionId" value="@CurrentSection" type="number" class="form-control number"></td>
 
                                                                 </tr>
-
-                                                            }
-
 
                                                         }
                                                     }
@@ -312,6 +352,8 @@
                                 </div>
 
                             </section>
+                            }
+                            }
 
                         </div>
                     }
@@ -328,57 +370,124 @@
                 foreach (var item in Model.ListSectionAnswer)
                 {
 
-
-                    if (item.SectionId != CurrentSection)
+                    var abc = item.SelfQuestion;
+                    if (item.GetSectionId != CurrentSection)
                     {
-                        CurrentSection = Convert.ToInt32(item.SectionId);
-                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.SectionId == item.SectionId).ToList();
+                        CurrentSection = Convert.ToInt32(item.GetSectionId);
+                        <input type="hidden" name="CurrentSection" value="@CurrentSection" />
+                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.GetSectionId == item.GetSectionId).ToList();
 
 
                         <div class="card-body p-4">
-                            <section class="review-section professional-excellence">
 
-                                <div class="review-header text-center">
-                                    <h3 class="review-title">@item.SectionName</h3>
-                                    <p class="text-muted">@item.SectionDescription</p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered review-table mb-0" id="myTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Questions</th>
-                                                        <th>Weightage</th>
-                                                        <th>Self Score</th>
-                                                        <th>Comment</th>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.ReviewedId) // it Questions Already Defined
+                            {
 
-                                                    @foreach (var ItemQuestion in QuestionsList)
-                                                    {
 
+                                <section class="review-section professional-excellence">
+
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
                                                         <tr>
-                                                            <td>@ItemQuestion.QuestionTitle<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                            <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.SectionWeightage" class="form-control" readonly=""></td>
-                                                            <td><input asp-for="AnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
-                                                            <td><input asp-for="AnswerComments" value="@ItemQuestion.AnswerComments" type="text" class="form-control"></td>
-                                                            <td><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
-                                                            <td><input asp-for="AnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+
+
+                                                            <th>Questions</th>
+                                                            <th>Weightage</th>
+                                                            <th>Self Score</th>
+
+                                                            @* <th>Comment</th>*@
 
                                                         </tr>
-                                                    }
+                                                    </thead>
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                        @{
 
+                                                            foreach (var ItemQuestion in QuestionsList)
+                                                            {
+
+                                                                <tr>
+                                                                    <td>@ItemQuestion.QuestionTitle<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td><input type="text" value="@ItemQuestion.SectionWeightage" class="form-control" readonly=""></td>
+                                                                    <td><input name="ListAnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
+                                                                    <td class="d-none"><input name="ListAnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+                                                                    <td class="d-none"><input name="ListReviewedStaffId" value="@ItemQuestion.StaffId" type="hidden" class="form-control"></td>
+
+
+                                                                </tr>
+                                                            }
+
+                                                        }
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </section>
+                                </section>
+                            }
+                            else
+                            {
+
+                                // List<HRHUBAPI.Models.SectionAnswer> list = (Model.ListSectionQuestion.Where(x => x.AllowSelfScoring == true || x.IsAnswerWeightage == false)).ToList();
+
+                                    <section class="review-section professional-excellence">
+
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Questions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @{
+
+                                                            //for (int a = 0; a < item.QuestionMaxLimit; a++) //
+                                                            //{
+                                                            foreach (var Items in QuestionsList)
+                                                            {
+                                                                <tr>
+                                                                    <td> <input type="hidden" name="ListAnswerId" value="@Items.AnswerId" class="form-control"> <input type="text" name="ListQuestion" value="@Items.SelfQuestion" class="form-control"></td>
+                                                                    <td class="d-none"><input name="ListSectionId" value="@Items.GetSectionId" type="number" class="form-control number"></td>
+
+                                                                </tr>
+                                                            }
+
+                                                               
+
+                                                           // }
+                                                        }
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </section>
+                            }
+
 
                         </div>
                     }
@@ -401,7 +510,7 @@
     <script>
         $(document).ready(function () {
 
-           
+
         });
         function SaveRecord() {
 
@@ -418,7 +527,7 @@
             else {
                 $("#AnswerWeightage").css("border-color", "#ddd");
             }
-           
+
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',

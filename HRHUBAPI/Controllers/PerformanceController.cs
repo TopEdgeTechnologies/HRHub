@@ -394,11 +394,17 @@ namespace HRHUBAPI.Controllers
         }
 
 
-        [HttpGet("GetSectionQuestionList{ReviewFormId}")]
-        public async Task<ActionResult<List<SectionQuestion>>> GetSectionQuestionList(int ReviewFormId)
+        [HttpGet("GetSectionQuestionList{ReviewFormId}/{CompanyId}")]
+        public async Task<ActionResult<List<SectionQuestion>>> GetSectionQuestionList(int ReviewFormId, int CompanyId)
         {
 
-            return await new SectionAnswer().GetSectionQuestion(ReviewFormId, _context);
+            return await new SectionAnswer().GetSectionQuestion(ReviewFormId, CompanyId, _context);
+        }
+         [HttpGet("SectionQuestionSelfScoring{ReviewFormId}/{CompanyId}")]
+        public async Task<ActionResult<List<SectionQuestion>>> SectionQuestionSelfScoring(int ReviewFormId, int CompanyId)
+        {
+
+            return await new SectionAnswer().SectionQuestionListSelfScoring(ReviewFormId, CompanyId, _context);
         }
 
 
@@ -429,8 +435,8 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpPost("StaffPerformanceAddOrUpdate")]
-        public async Task<ActionResult<SectionAnswer>> StaffPerformanceAddOrUpdate(SectionAnswer list)
+        [HttpPost("PostStaffPerformance")]
+        public async Task<ActionResult<SectionAnswer>> PostStaffPerformance(SectionAnswer list)
         {
 
 
