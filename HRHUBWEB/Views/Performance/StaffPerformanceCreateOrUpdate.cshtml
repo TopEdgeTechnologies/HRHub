@@ -1,6 +1,6 @@
 ﻿@model HRHUBAPI.Models.SectionAnswer
 @{
-    ViewData["Title"] = "Staff Performance";
+    ViewData["Title"] = "Staff Evaluation";
 
 }
 <style>
@@ -138,7 +138,7 @@
 <div class="col-md-12 col-lg-12">
     <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
         <div class="card-header border-bottom-0">
-            <h3 class="card-title">@Model.StaffList.FirstName Performance</h3>
+            <h3 class="card-title">@Model.StaffList.FirstName Evaluation</h3>
             <div class="card-options">
                 <div class="btn-list">
                     <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
@@ -225,7 +225,7 @@
 <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
     @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
-        <input asp-for="ReviewedStaffId" type="hidden" class="form-control"/>
+        <input asp-for="ReviewedStaffId" type="hidden" class="form-control" />
         <div class="card-header border-bottom-0">
         </div>
         if (Model.ReviewerStaffId != ViewBag.UserStaffID)
@@ -233,14 +233,14 @@
             {
                 var CurrentSection = 0;
 
-                foreach (var item in Model.ListSectionQuestion) 
+                foreach (var item in Model.ListSectionQuestion)
                 {
 
 
                     if (item.SectionId != CurrentSection)
                     {
 
-                       
+
                         CurrentSection = Convert.ToInt32(item.SectionId);
                         var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
 
@@ -251,110 +251,103 @@
                             {
 
 
-                            <section class="review-section professional-excellence">
+                                <section class="review-section professional-excellence">
 
-                                <div class="review-header text-center">
-                                    <h3 class="review-title">@item.SectionName</h3>
-                                    <p class="text-muted">@item.SectionDescription</p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered review-table mb-0" id="myTable">
-                                                <thead>
-                                                    <tr>
-                                                   
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
+                                                        <tr>
 
-                                                        <th class="col-8">Questions</th>
-                                                        <th class="col-1">Weightage</th>
-                                                        <th class="col-1">Self Score</th>
+                                                            <th class="col-8">Questions</th>
+                                                            <th class="col-1">Weightage</th>
+                                                            <th class="col-1">Self Score</th>
 
-
-                                                           
-
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
                                                         @{
-                                                           
+
                                                             foreach (var ItemQuestion in QuestionsList)
                                                             {
-                                                               
+
                                                                 <tr>
-                                                                <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
                                                                     <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
                                                                     <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
-                                                                 <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
+                                                                    <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
 
-                                                                @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
 
                                                                 </tr>
-                                                              
+
                                                             }
 
-                                                    }
+                                                        }
 
 
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </section>
+                                </section>
                             }
                             else
                             {
 
                                 @if (Model.ReviewedStaffId == ViewBag.UserStaffID)
                                 {
-                               // List<HRHUBAPI.Models.SectionAnswer> list = (Model.ListSectionQuestion.Where(x => x.AllowSelfScoring == true || x.IsAnswerWeightage == false)).ToList(); 
 
-                                <section class="review-section professional-excellence">
+                                    <section class="review-section professional-excellence">
 
-                                <div class="review-header text-center">
-                                    <h3 class="review-title">@item.SectionName</h3>
-                                    <p class="text-muted">@item.SectionDescription</p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered review-table mb-0" id="myTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Questions</th>  
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                    @{
-                                                        // sir is ki aik condition lgai thi oper wo dekhy , thk ha dekhta hu
-                                                            
-                                                        for (int a = 0; a < item.QuestionMaxLimit; a++) //
-                                                        {
-
-
-                                                            <tr>
-                                                                    <td><input type="text" name="ListQuestion" class="form-control"></td>
-                                                                    <td class="d-none"><input name="ListSectionId" value="@CurrentSection" type="number" class="form-control number"></td>
-
-                                                                </tr>
-
-                                                        }
-                                                    }
-
-
-                                                </tbody>
-                                            </table>
-
+                                        <div class="review-header text-center">
+                                            <h3 class="review-title">@item.SectionName</h3>
+                                            <p class="text-muted">@item.SectionDescription</p>
                                         </div>
-                                    </div>
-                                </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Questions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                            </section>
-                            }
+                                                            @{
+
+                                                                for (int a = 0; a < item.QuestionMaxLimit; a++) //
+                                                                {
+
+
+                                                                    <tr>
+                                                                        <td><input type="text" name="ListQuestion" class="form-control"></td>
+                                                                        <td class="d-none"><input name="ListSectionId" value="@CurrentSection" type="number" class="form-control number"></td>
+
+                                                                    </tr>
+
+                                                                }
+                                                            }
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </section>
+                                }
                             }
 
                         </div>
@@ -419,7 +412,7 @@
                                                                     <td><input name="ListAnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
                                                                     <td class="d-none"><input name="ListAnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
                                                                     <td class="d-none"><input name="ListReviewedStaffId" value="@ItemQuestion.StaffId" type="hidden" class="form-control"><input name="ListSectionId" value="@ItemQuestion.GetSectionId" type="number" class="form-control number"></td>
-                                                                  
+
 
                                                                 </tr>
                                                             }
@@ -439,7 +432,6 @@
                             else
                             {
 
-                                // List<HRHUBAPI.Models.SectionAnswer> list = (Model.ListSectionQuestion.Where(x => x.AllowSelfScoring == true || x.IsAnswerWeightage == false)).ToList();
                                 @if (Model.ReviewedStaffId == ViewBag.UserStaffID)
                                 {
                                     <section class="review-section professional-excellence">
@@ -488,7 +480,7 @@
                                 }
 
 
-        }
+                            }
 
 
                         </div>
@@ -497,7 +489,7 @@
                 }
 
             }
-            
+
         }
         <div class="form-group">
             <div class="d-flex justify-content-start ms-5 gap-1">
@@ -505,9 +497,9 @@
                 <button type="button" onclick="history.back()" class="btn btn-danger">Back</button>
             </div>
         </div>
-       
+
     }
-    
+
 </div>
 
 
@@ -523,7 +515,7 @@
             var status = true;
             debugger;
 
-            $('#myTable input').each(function() {
+            $('#myTable input').each(function () {
 
                 if ($(this).val() == "") {
                     $.growl.warning({
@@ -539,8 +531,6 @@
             })
 
 
-
-           
 
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {

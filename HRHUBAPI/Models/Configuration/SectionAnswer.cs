@@ -131,10 +131,10 @@ namespace HRHUBAPI.Models
        
         [NotMapped]
         public IEnumerable<int>? ListAnswerId { get; set; }
-       
 
 
-        // list all Comments staff List
+
+        // List Staff Section Answer
 
         public async Task<List<StaffReviewFormProcessed>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
         {

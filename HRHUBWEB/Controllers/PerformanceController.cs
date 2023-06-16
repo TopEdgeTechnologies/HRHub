@@ -338,8 +338,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffPerformanceCreateOrUpdate(string data = "", int ReviewedStaffId = 0, int ReviewFormId = 0)
         {
             ViewBag.Success = data;
-            SectionAnswer objInfo = new SectionAnswer();
-            ViewBag.ReviewedId=ViewBag.RevieverId = _user.StaffId;
+            SectionAnswer objInfo = new SectionAnswer();           
             ViewBag.UserStaffID = _user.StaffId;
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
@@ -374,7 +373,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.ReviewedId= ViewBag.RevieverId = _user.StaffId;
 
             ViewBag.UserStaffID = _user.StaffId;
-            //  objInfo.ReviewerStaffId 
+           
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
             objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
@@ -389,16 +388,10 @@ namespace HRHUBWEB.Controllers
             if (objInfo.ListSectionAnswer.Count() > 0)// && objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0) > 0)
             {
                 objInfo.ReviewerStaffId = objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId;
-            }
-             
+            }             
             
-                objInfo.ReviewedStaffId = ReviewedStaffId;
+            objInfo.ReviewedStaffId = ReviewedStaffId;
            
-
-
-
-
-
             return View("StaffPerformanceCreateOrUpdate", objInfo);
 
         }
