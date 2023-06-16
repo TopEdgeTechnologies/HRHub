@@ -340,7 +340,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
             SectionAnswer objInfo = new SectionAnswer();
             ViewBag.ReviewedId=ViewBag.RevieverId = _user.StaffId;
-
+            ViewBag.UserStaffID = _user.StaffId;
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
             if (ReviewedStaffId == _user.StaffId) // it means staff itself opening his own performance fowm now load only self scoring sections
@@ -407,7 +407,7 @@ namespace HRHUBWEB.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(SectionAnswer obj,int CurrentSection)
+        public async Task<IActionResult> StaffPerformanceCreateOrUpdate(SectionAnswer obj)
         {
 
             
@@ -416,11 +416,19 @@ namespace HRHUBWEB.Controllers
               obj.ReviewerStaffId = _user.StaffId;
               obj.ReviewerDesignationId = _user.DesignationID;
               obj.CompanyId = _user.CompanyId;
-              obj.GetSectionId = CurrentSection;
+              
 
            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Performance/PostStaffPerformance", HttpMethod.Post);
 
-            return Json(null);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("StaffPerformanceList", new { data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("StaffPerformanceList", new { data = 2 });
+            }
         }
 
         

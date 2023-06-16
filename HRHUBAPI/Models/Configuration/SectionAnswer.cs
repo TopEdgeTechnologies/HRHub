@@ -93,8 +93,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public bool? AllowSelfScoring { get; set; }
 
-        
 
+        [NotMapped]
+        public int? TranFlag { get; set; }
 
         [NotMapped]
 		public int? Renew { get; set; }
@@ -357,27 +358,6 @@ namespace HRHUBAPI.Models
 
 
 
-                //var List = from S in _context.SectionQuestions
-                //           join Q in _context.Questions on S.QuestionId equals Q.QuestionId
-                //           join section in _context.Sections on S.SectionId equals section.SectionId
-                //           join Performance in _context.PerformanceForms on section.ReviewFormId equals Performance.ReviewFormId
-                //           where Q.CompanyId== CompanyId && Q.IsDeleted == false && section.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
-
-                //           select new SectionQuestion
-                //           {
-                //               SectionQuestionId = S.SectionQuestionId,
-                //               QuestionId = S.QuestionId,
-                //               SectionId = S.SectionId,
-                //               Weightage = S.Weightage,
-                //               QuestionName = Q.Title,
-                //               SectionName = section.Title,
-                //               SectionDescription = section.Description,
-                //               ReviewName = Performance.Title,
-                //               ReviewDescription = Performance.Description,
-                //               AnswerWeightage = S.AnswerWeightage,
-
-                //           };
-                //return List != null ? List.OrderByDescending(x => x.SectionQuestionId).ToList() : new List<SectionQuestion>();
 
 
             }
@@ -429,7 +409,7 @@ namespace HRHUBAPI.Models
 			try
             {
 
-                    var formReviewID = _context.Sections.FirstOrDefault(x => x.SectionId == SectionAnswerInfo.ListSectionId.ToArray()[0]).ReviewFormId;
+                  var formReviewID = _context.Sections.FirstOrDefault(x => x.SectionId == SectionAnswerInfo.ListSectionId.ToArray()[0]).ReviewFormId;
                   var ObjsectionAnswer = new SectionAnswer();
                   var getStaffReviewer = SectionAnswerInfo.ReviewerStaffId;                                
                   var resultAnsers = _context.SectionAnswers.
@@ -438,6 +418,7 @@ namespace HRHUBAPI.Models
                     {
 
                          _context.SectionAnswers.RemoveRange(resultAnsers);
+
                             await _context.SaveChangesAsync();
                        
                     }
@@ -483,23 +464,35 @@ namespace HRHUBAPI.Models
 
                         //---------------------------------------------- insert StaffReviewFormProcesseds ----------------------------
 
+                        var ResultProcessed = _context.StaffReviewFormProcesseds.FirstOrDefault(x => x.ReviewedStaffId == SectionAnswerInfo.ReviewedStaffId && x.ReviewFormId == formReviewID);
+                        if (ResultProcessed != null)
+                        {
+                            ResultProcessed.TotalWeightage = SectionAnswerInfo.ListQuestionWeigth.Sum();
+                            ResultProcessed.EarnedWeightage = lsobjAca.Sum(x => x.AnswerWeightage);
+                            ResultProcessed.ReviewFormId = formReviewID;
+                            ResultProcessed.UpdatedBy = SectionAnswerInfo.CreatedBy;
+                            ResultProcessed.UpdatedOn = DateTime.Now;
 
+                            await _context.SaveChangesAsync();
 
+                        }
+                        else
+                        {
 
-                        StaffReviewFormProcessed objProcessed = new StaffReviewFormProcessed();
+                            StaffReviewFormProcessed objProcessed = new StaffReviewFormProcessed();
 
-                        objProcessed.EarnedWeightage =   lsobjAca.Sum(x => x.AnswerWeightage);
-                        objProcessed.TotalWeightage = SectionAnswerInfo.ListQuestionWeigth.Sum();
-                        objProcessed.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
-                        objProcessed.ReviewFormId = formReviewID;
-                        objProcessed.CreatedBy = SectionAnswerInfo.CreatedBy;
-                        objProcessed.CreatedOn = DateTime.Now;
+                            objProcessed.EarnedWeightage = lsobjAca.Sum(x => x.AnswerWeightage);
+                            objProcessed.TotalWeightage = SectionAnswerInfo.ListQuestionWeigth.Sum();
+                            objProcessed.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
+                            objProcessed.ReviewFormId = formReviewID;
+                            objProcessed.CreatedBy = SectionAnswerInfo.CreatedBy;
+                            objProcessed.CreatedOn = DateTime.Now;
 
-                        _context.StaffReviewFormProcesseds.Add(objProcessed);
+                            _context.StaffReviewFormProcesseds.Add(objProcessed);
 
-                        await _context.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
 
-
+                        }
 
                         //---------------------------------------------- StaffReviewFormProcesseds End ----------------------------
 
@@ -509,27 +502,31 @@ namespace HRHUBAPI.Models
 
                     }
 
-                    //---------------------------------------------- End Question ----------------------------
-                   
-
-                    
 
 
 
-                    if (SectionAnswerInfo.ListAnswerId!=null &&  SectionAnswerInfo.ListAnswerId.Count()>0)
+
+                    //---------------------------------------------- insert Self Questions ----------------------------
+
+                    var StaffReviewer = SectionAnswerInfo.ReviewerStaffId;
+                    var checkExitsViewer = _context.SectionAnswers.Any(x=>x.ReviewedStaffId== StaffReviewer);
+                    if (checkExitsViewer == true)
+                    {
+                        if (SectionAnswerInfo.ListAnswerId != null && SectionAnswerInfo.ListAnswerId.Count() > 0)
                         {
                             int c = 0;
                             foreach (var item in SectionAnswerInfo.ListAnswerId)
                             {
                                 var Sectiondetail = _context.SectionAnswers.FirstOrDefault(x => x.AnswerId == item);
-                                Sectiondetail.AnswerComments =string.IsNullOrWhiteSpace(SectionAnswerInfo.ListQuestion.ToArray()[c])?"": SectionAnswerInfo.ListQuestion.ToArray()[c];
-                                Sectiondetail.UpdatedBy= SectionAnswerInfo.CreatedBy;
-                                Sectiondetail.UpdatedOn = DateTime.Now; 
+                                Sectiondetail.AnswerComments = string.IsNullOrWhiteSpace(SectionAnswerInfo.ListQuestion.ToArray()[c]) ? "" : SectionAnswerInfo.ListQuestion.ToArray()[c];
+                                Sectiondetail.UpdatedBy = SectionAnswerInfo.CreatedBy;
+                                Sectiondetail.UpdatedOn = DateTime.Now;
                                 c++;
 
                             }
                             await _context.SaveChangesAsync();
 
+                        }
                     }
                     else
                     {
@@ -558,13 +555,27 @@ namespace HRHUBAPI.Models
 
                             }
                             _context.SectionAnswers.AddRange(objQ);
+
+
+                            StaffReviewFormProcessed objProcessed = new StaffReviewFormProcessed();
+
+                            objProcessed.EarnedWeightage = 0;
+                            objProcessed.TotalWeightage = 0;
+                            objProcessed.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
+                            objProcessed.ReviewFormId = formReviewID;
+                            objProcessed.CreatedBy = SectionAnswerInfo.CreatedBy;
+                            objProcessed.CreatedOn = DateTime.Now;
+
+                            _context.StaffReviewFormProcesseds.Add(objProcessed);
+
                             await _context.SaveChangesAsync();
                         }
 
-                        
+
 
                     }
-
+                   
+                    //---------------------------------------------- End Self Questions ----------------------------
 
 
                     await _context.SaveChangesAsync();
