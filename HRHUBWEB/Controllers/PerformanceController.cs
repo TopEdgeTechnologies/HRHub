@@ -338,11 +338,23 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffPerformanceCreateOrUpdate(string data = "", int ReviewedStaffId = 0, int ReviewFormId = 0)
         {
             ViewBag.Success = data;
-            SectionAnswer objInfo = new SectionAnswer();
-            ViewBag.RevieverId = _user.StaffId;
+            SectionAnswer objInfo = new SectionAnswer();           
+            ViewBag.UserStaffID = _user.StaffId;
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
-           
-            objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}", HttpMethod.Get);
+
+            if (ReviewedStaffId == _user.StaffId) // it means staff itself opening his own performance fowm now load only self scoring sections
+            {
+                objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/SectionQuestionSelfScoring{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+
+            }
+            else
+            {
+                objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+
+            }
+
+
+
             objInfo.ReviewedStaffId = ReviewedStaffId;
                
                 return View(objInfo);
@@ -358,18 +370,28 @@ namespace HRHUBWEB.Controllers
         {
             ViewBag.Success = data;
             SectionAnswer objInfo = new SectionAnswer();
-            ViewBag.RevieverId = _user.StaffId;
+            ViewBag.ReviewedId= ViewBag.RevieverId = _user.StaffId;
+
+            ViewBag.UserStaffID = _user.StaffId;
+           
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
-            objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{_user.CompanyId}/{ReviewFormId}", HttpMethod.Get);
+            objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
             
 
             objInfo.ListSectionAnswer = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionAnswer>>($"api/Performance/StaffSectionAnswerList{_user.CompanyId}/{ReviewFormId}/{ReviewedStaffId}/{_user.StaffId}", HttpMethod.Get);
-            if(objInfo.ListSectionAnswer.Count() > 0) { objInfo.ReviewerStaffId = _user.StaffId; }
 
+
+            int abc = objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0);
+
+
+            if (objInfo.ListSectionAnswer.Count() > 0)// && objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0) > 0)
+            {
+                objInfo.ReviewerStaffId = objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId;
+            }             
             
-
-
+            objInfo.ReviewedStaffId = ReviewedStaffId;
+           
             return View("StaffPerformanceCreateOrUpdate", objInfo);
 
         }
@@ -385,12 +407,21 @@ namespace HRHUBWEB.Controllers
               obj.CreatedBy = _user.UserId;
               obj.UpdatedBy = _user.UserId;
               obj.ReviewerStaffId = _user.StaffId;
-              obj.ReviewerDesignationId = _user.DesignationID;         
+              obj.ReviewerDesignationId = _user.DesignationID;
+              obj.CompanyId = _user.CompanyId;
+              
+
+           var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Performance/PostStaffPerformance", HttpMethod.Post);
 
 
-           var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Performance/StaffPerformanceAddOrUpdate", HttpMethod.Post);
-
-            return Json(null);
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("StaffPerformanceList", new { data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("StaffPerformanceList", new { data = 2 });
+            }
         }
 
         

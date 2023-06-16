@@ -1,6 +1,6 @@
 ﻿@model HRHUBAPI.Models.SectionAnswer
 @{
-    ViewData["Title"] = "Staff Performance";
+    ViewData["Title"] = "Staff Evaluation";
 
 }
 <style>
@@ -138,7 +138,7 @@
 <div class="col-md-12 col-lg-12">
     <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
         <div class="card-header border-bottom-0">
-            <h3 class="card-title">@Model.StaffList.FirstName Performance</h3>
+            <h3 class="card-title">@Model.StaffList.FirstName Evaluation</h3>
             <div class="card-options">
                 <div class="btn-list">
                     <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
@@ -225,10 +225,10 @@
 <div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
     @using (@Html.BeginForm("StaffPerformanceCreateOrUpdate", "Performance", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
     {
-        <input asp-for="ReviewedStaffId" type="hidden" class="form-control">
+        <input asp-for="ReviewedStaffId" type="hidden" class="form-control" />
         <div class="card-header border-bottom-0">
         </div>
-        if (Model.ReviewerStaffId != ViewBag.RevieverId)
+        if (Model.ReviewerStaffId != ViewBag.UserStaffID)
         {
             {
                 var CurrentSection = 0;
@@ -239,79 +239,116 @@
 
                     if (item.SectionId != CurrentSection)
                     {
+
+
                         CurrentSection = Convert.ToInt32(item.SectionId);
                         var QuestionsList = Model.ListSectionQuestion.Where(x => x.SectionId == item.SectionId).ToList();
 
 
                         <div class="card-body p-4">
-                            <section class="review-section professional-excellence">
 
-                                <div class="review-header text-center">
-                                    <h3 class="review-title">@item.SectionName</h3>
-                                    <p class="text-muted">@item.SectionDescription</p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered review-table mb-0" id="myTable">
-                                                <thead>
-                                                    <tr>
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.ReviewedId) // it Questions Already Defined
+                            {
 
 
-                                                        <th>Questions</th>
-                                                        <th>Weightage</th>
-                                                        <th>Self Score</th>
+                                <section class="review-section professional-excellence">
 
-                                                        @* <th>Comment</th>*@
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
+                                                        <tr>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                                            <th class="col-8">Questions</th>
+                                                            <th class="col-1">Weightage</th>
+                                                            <th class="col-1">Self Score</th>
 
-                                                    @{
-                                                        if (item.IsAnswerWeightage == true) // it Questions Already Defined
-                                                        {
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @{
 
                                                             foreach (var ItemQuestion in QuestionsList)
                                                             {
 
                                                                 <tr>
                                                                     <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                                    <td><input  type="text" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                                    <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
                                                                     <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+                                                                    <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
 
-                                                                  @*  //<td class="d-none"><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>*@
-
-                                                                </tr>
-                                                            }
-                                                        }
-                                                        else  // it means its Open Question Section
-                                                        {
-
-                                                            for (int a = 0; a < item.QuestionMaxLimit; a++) //
-                                                            {
-                                                               
-                                                               
-                                                                <tr>
-                                                                    <td><input type="text" name="ListQuestion" class="form-control"></td>
 
                                                                 </tr>
 
                                                             }
 
-
                                                         }
-                                                    }
 
 
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
 
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </section>
+                                </section>
+                            }
+                            else
+                            {
+
+                                @if (Model.ReviewedStaffId == ViewBag.UserStaffID)
+                                {
+
+                                    <section class="review-section professional-excellence">
+
+                                        <div class="review-header text-center">
+                                            <h3 class="review-title">@item.SectionName</h3>
+                                            <p class="text-muted">@item.SectionDescription</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Questions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @{
+
+                                                                for (int a = 0; a < item.QuestionMaxLimit; a++) //
+                                                                {
+
+
+                                                                    <tr>
+                                                                        <td><input type="text" name="ListQuestion" class="form-control"></td>
+                                                                        <td class="d-none"><input name="ListSectionId" value="@CurrentSection" type="number" class="form-control number"></td>
+
+                                                                    </tr>
+
+                                                                }
+                                                            }
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </section>
+                                }
+                            }
 
                         </div>
                     }
@@ -328,57 +365,123 @@
                 foreach (var item in Model.ListSectionAnswer)
                 {
 
-
-                    if (item.SectionId != CurrentSection)
+                    var abc = item.SelfQuestion;
+                    if (item.GetSectionId != CurrentSection)
                     {
-                        CurrentSection = Convert.ToInt32(item.SectionId);
-                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.SectionId == item.SectionId).ToList();
+                        CurrentSection = Convert.ToInt32(item.GetSectionId);
+                        <input type="hidden" name="CurrentSection" value="@CurrentSection" />
+                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.GetSectionId == item.GetSectionId).ToList();
 
 
                         <div class="card-body p-4">
-                            <section class="review-section professional-excellence">
 
-                                <div class="review-header text-center">
-                                    <h3 class="review-title">@item.SectionName</h3>
-                                    <p class="text-muted">@item.SectionDescription</p>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered review-table mb-0" id="myTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Questions</th>
-                                                        <th>Weightage</th>
-                                                        <th>Self Score</th>
-                                                        <th>Comment</th>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.ReviewedId) // it Questions Already Defined
+                            {
 
-                                                    @foreach (var ItemQuestion in QuestionsList)
-                                                    {
 
+                                <section class="review-section professional-excellence">
+
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
                                                         <tr>
-                                                            <td>@ItemQuestion.QuestionTitle<input type="hidden" asp-for="SectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                            <td><input asp-for="TotalQuestionWeightage" type="text" value="@ItemQuestion.SectionWeightage" class="form-control" readonly=""></td>
-                                                            <td><input asp-for="AnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
-                                                            <td><input asp-for="AnswerComments" value="@ItemQuestion.AnswerComments" type="text" class="form-control"></td>
-                                                            <td><input asp-for="ReviewedStaffId" type="hidden" class="form-control"></td>
-                                                            <td><input asp-for="AnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+
+                                                            <th class="col-8">Questions</th>
+                                                            <th class="col-1">Weightage</th>
+                                                            <th class="col-1">Self Score</th>
 
                                                         </tr>
-                                                    }
+                                                    </thead>
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                        @{
 
+                                                            foreach (var ItemQuestion in QuestionsList)
+                                                            {
+
+                                                                <tr>
+                                                                    <td>@ItemQuestion.QuestionTitle<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                    <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.SectionWeightage" class="form-control" readonly=""></td>
+                                                                    <td><input name="ListAnswerWeightage" value="@ItemQuestion.AnswerWeightage" type="number" class="form-control number"></td>
+                                                                    <td class="d-none"><input name="ListAnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+                                                                    <td class="d-none"><input name="ListReviewedStaffId" value="@ItemQuestion.StaffId" type="hidden" class="form-control"><input name="ListSectionId" value="@ItemQuestion.GetSectionId" type="number" class="form-control number"></td>
+
+
+                                                                </tr>
+                                                            }
+
+                                                        }
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </section>
+                                </section>
+                            }
+                            else
+                            {
+
+                                @if (Model.ReviewedStaffId == ViewBag.UserStaffID)
+                                {
+                                    <section class="review-section professional-excellence">
+
+                                        <div class="review-header text-center">
+                                            <h3 class="review-title">@item.SectionName</h3>
+                                            <p class="text-muted">@item.SectionDescription</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Questions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @{
+
+
+                                                                foreach (var Items in QuestionsList)
+                                                                {
+                                                                    <tr>
+                                                                        <td> <input type="hidden" name="ListAnswerId" value="@Items.AnswerId" class="form-control"> <input type="text" name="ListQuestion" value="@Items.SelfQuestion" class="form-control"></td>
+                                                                        <td class="d-none"><input name="ListSectionId" value="@Items.GetSectionId" type="number" class="form-control number"></td>
+
+                                                                    </tr>
+                                                                }
+
+
+
+
+                                                            }
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </section>
+                                }
+
+
+                            }
+
 
                         </div>
                     }
@@ -386,13 +489,17 @@
                 }
 
             }
-        }
 
-        <div class="form-group mt-3">
-            <input type="button" value="Save" Onclick="SaveRecord()" id="btnsave" class="btn btn-primary" />
-            <button type="button" onclick="history.back()" class="btn btn-danger"> Back</button>
+        }
+        <div class="form-group">
+            <div class="d-flex justify-content-start ms-5 gap-1">
+                <input type="button" value="Save" onclick="SaveRecord()" id="btnsave" class="btn btn-primary" />
+                <button type="button" onclick="history.back()" class="btn btn-danger">Back</button>
+            </div>
         </div>
+
     }
+
 </div>
 
 
@@ -401,24 +508,30 @@
     <script>
         $(document).ready(function () {
 
-           
+
         });
         function SaveRecord() {
 
             var status = true;
             debugger;
-            if ($("#AnswerWeightage").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Score"
-                });
-                $("#AnswerWeightage").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#AnswerWeightage").css("border-color", "#ddd");
-            }
-           
+
+            $('#myTable input').each(function () {
+
+                if ($(this).val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Self Score"
+                    });
+                    $(this).css("border-color", "red");
+                    status = false;
+                    return false;
+                }
+                else {
+                    $(this).css("border-color", "#ddd");
+                }
+            })
+
+
+
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -460,9 +573,6 @@
 
 
     </script>
-
-
-
 
     }
 

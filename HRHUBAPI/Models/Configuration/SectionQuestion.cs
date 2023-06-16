@@ -15,7 +15,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public string? ReviewDescription{ get; set; }
         [NotMapped]
-        public bool? IsAnswerWeightage { get; set; }
+        public bool? IsAnswerWeightage { get; set; } 
+        [NotMapped]
+        public bool? AllowSelfScoring { get; set; }
         [NotMapped]
         public int? QuestionMaxLimit { get; set; }
     }
