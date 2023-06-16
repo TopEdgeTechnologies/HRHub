@@ -26,8 +26,7 @@ namespace HRHUBAPI.Models
 
         [NotMapped]
         public int? StaffId { get; set; }
-        [NotMapped]
-        public int? SectionId { get; set; }
+       
         [NotMapped]
         public int? DesignationId { get; set; }
         [NotMapped]

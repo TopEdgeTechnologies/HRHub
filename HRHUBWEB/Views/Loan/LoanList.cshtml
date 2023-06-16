@@ -1,5 +1,10 @@
 ﻿@model HRHUBAPI.Models.LoanApplication
 
+<style>
+    .controldisable {
+        pointer-events: none;
+    }
+</style>
 
 <!--Add Loan Modal -->
 @using (@Html.BeginForm("LoanCreateOrUpdate", "Loan", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
@@ -27,15 +32,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Apply Date:</label>
+                                <label class="form-label">Apply Date</label>
                                 <input type="date" asp-for="ApplicationDate" class="form-control fc-datepicker" placeholder="select date" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label class="form-label">Amount:</label>
-                                    <input asp-for="Amount" class="form-control" type="number" />
+                                    <label class="form-label">Amount</label>
+                                    <input onchange="SetInstallmentPerMonth()" asp-for="Amount" class="form-control" type="number" />
                                 </div>
                             </div>
                         </div>
@@ -43,20 +48,20 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">No of Installments:</label>
+                                <label class="form-label">No of Installments</label>
                                 <input onchange="SetInstallmentPerMonth()" min="1" asp-for="NoOfInstallments" class="form-control" type="number" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Installment Per Month:</label>
-                                <input asp-for="InstallmentPerMonth" class="form-control" type="number" />
+                                <label class="form-label">Installment Per Month</label>
+                                <input asp-for="InstallmentPerMonth" class="form-control controldisable" type="number" />
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Reason:</label>
+                        <label class="form-label">Reason</label>
                         <textarea asp-for="Reason" class="form-control" rows="4">Type Reason here...</textarea>
                     </div>
 
@@ -117,7 +122,7 @@
                                                 <input type="hidden" asp-for="StaffId" value="@ViewBag.StaffID" />
                                                 <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Select Loan Type:</label>
+                                                        <label class="form-label">Select Loan Type</label>
                                                         <select id="LoanTypeId_Search" name="LoanTypeId" class="form-control" asp-items="@(new SelectList(Model.ListLoanTypes,"LoanTypeId" ,"Title"))">
                                                             <option value="">Select Loan Type</option>
                                                         </select>
@@ -125,29 +130,48 @@
                                                 </div>
                                                 <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Select Loan Status:</label>
+                                                        <label class="form-label">Select Loan Status</label>
                                                         <select id="LoanStatusId" name="LoanStatusId" class="form-control" asp-items="@(new SelectList(Model.ListLoanStatus,"LoanStatusId" ,"Title"))">
                                                             <option value="">Select Loan Status</option>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-lg-2">
+
+                                                <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Date From</label>
-                                                        <input type="date" id="ApplicationDateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                                        <label class="form-label">Month</label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend border px-1 py-1 border-1 rounded">
+                                                                <div class="input-group-text px-2 bg-white border-0">
+                                                                    <label class="custom-switch">
+                                                                        <input type="checkbox" id="date-checkbox" name="custom-switch-checkbox" class="custom-switch-input">
+                                                                        <span class="custom-switch-indicator"></span>
+                                                                    </label>
+                                                                </div>
+                                                                <input id="date-field" type="month" class="form-control px-1" placeholder="select date">
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12 col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label">Date To</label>
-                                                        <input type="date" id="ApplicationDateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
-                                                    </div>
-                                                </div>
+                                                @*
+                                            <div class="col-md-12 col-lg-2">
+                                            <div class="form-group">
+                                            <label class="form-label">Date From</label>
+                                            <input type="date" id="ApplicationDateFrom" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-2">
+                                            <div class="form-group">
+                                            <label class="form-label">Date To</label>
+                                            <input type="date" id="ApplicationDateTo" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
+                                            </div>
+                                            </div>*@
 
                                                 <div class="col-md-12 col-lg-2">
                                                     <div class="form-group mt-5">
                                                         <button type="button" onclick="SearchLoan()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
-                                                        <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
+                                                        <button type="button" onclick="SearchClear()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
 
 
 
@@ -167,14 +191,14 @@
                                 <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
                                     <thead style="border-bottom: 1px solid #0000004a;">
                                         <tr>
-                                            <th class="border-bottom-0">Sr.#</th>
+                                            <th class="border-bottom-0">#</th>
                                             <th class="border-bottom-0">Applied On</th>
                                             <th class="border-bottom-0">Loan</th>
-                                            <th class="border-bottom-0" title="Intallment Per Month">IPM</th>
-                                            <th class="border-bottom-0" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;">Reason</th>
-                                            <th class="border-bottom-0">Loan Detail</th>
+                                            <th class="border-bottom-0" title="Installment Per Month">IPM</th>
+                                            <th class="border-bottom-0" style="max-width: 170px; word-wrap: break-word!important; overflow: hidden;">Reason</th>
+                                            <th class="border-bottom-0">Payment</th>
                                             <th class="border-bottom-0">Status</th>
-                                            <th class="border-bottom-0">Action</th>
+                                            @*<th class="border-bottom-0">Action</th>*@
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -188,16 +212,18 @@
                                                     </td>
                                                     <td>
                                                         <div class="d-flex">
-                                                            <div class="me-3 d-block">
-                                                                <h6 class="mb-0 fs-15 font-weight-semibold">@item.LoanTypeTitle</h6>
-                                                                <div class="clearfix"></div>
-                                                                <small class="text-muted">@item.LoanApplicationDate</small>
+                                                            <div class="d-block">
+                                                                <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId">
+                                                                    <h6 class="mb-0 fs-15 font-weight-semibold">@item.LoanTypeTitle</h6>
+                                                                    <div class="clearfix"></div>
+                                                                    <small class="text-muted">@item.LoanApplicationDate</small>
+                                                                </a>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td>@Convert.ToDecimal(item.Amount).ToString("N2")</td>
                                                     <td>@Convert.ToDecimal(item.InstallmentPerMonth).ToString("N2")</td>
-                                                    <td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.Reason)</td>
+                                                    <td style="max-width: 170px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@Html.DisplayFor(modelItem => item.Reason)</td>
                                                     <td>
                                                         <div class="progress progress-sm d-block">
 
@@ -205,40 +231,39 @@
                                                         </div>
                                                     </td>
 
-                                                    @if (item.LoanStatusId == 1) // Approved
-                                                    {
-                                                        <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
-                                                    }
-                                                    else if (item.LoanStatusId == 2) // Rejected
-                                                    {
-                                                        <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
-
-                                                    }
-                                                    else
-                                                    {
-                                                        <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
-                                                    }
-
-                                                    <td class="text-start d-flex">
-                                                        @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
+                                                    <td>
+                                                        @if (item.LoanStatusId == 1) // Approved
                                                         {
-                                                            <a href="#" onclick="editrecord(@item.LoanApplicationId)" class="action-btns1">
-                                                                <i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title=""></i>
-                                                            </a>
+                                                            <span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>
                                                         }
-                                                        <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="action-btns1">
-                                                            <i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
-                                                        </a>
-                                                        @if (item.LoanStatusId != 1 && item.LoanStatusId != 2) // New
+                                                        else if (item.LoanStatusId == 2) // Rejected
                                                         {
-                                                            <a href="#" onclick="confirmation(@item.LoanApplicationId)" class="action-btns1">
-                                                                <i class="feather feather-trash-2 text-danger mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
-                                                            </a>
+                                                            <span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>
                                                         }
-                                                        <a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">
-                                                            <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
-                                                        </a>
+                                                        else
+                                                        {
+                                                            <span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>
+                                                        }
+
+                                                        <!----- Action Buttons Code Start From Here------>
+                                                        <div class="float-end ms-auto">
+                                                            <div class="btn-group ms-3 mb-0">
+                                                                <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                                <div class="dropdown-menu dropdown-menu-start" style="">
+                                                                    @if (item.LoanStatusId != 1 && item.LoanStatusId != 2)
+                                                                    {
+                                                                        <a href="#" onclick="editrecord(@item.LoanApplicationId)" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+                                                                        <a onclick="confirmation(@item.LoanApplicationId)" href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>
+                                                                    }
+                                                                    <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId" class="dropdown-item"><i class="fe fe-eye me-2"></i> View</a>
+                                                                    <a class="dropdown-item" href="javascript:void(0);"><i class="fe fe-info me-2"></i> Info</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!----- Action Buttons Code Ends Here------>
                                                     </td>
+
+
                                                 </tr>
                                                 count++;
                                             }
@@ -249,130 +274,9 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xxl-3">
-                <div class="card">
-                <div class="card-header  border-0">
-                <h4 class="card-title">Loans Overview</h4>
-                </div>
-                <div class="card-body">
-                <div id="Loansoverview" class="mx-auto pt-2"></div>
-                <div class="row pt-7 pb-5  mx-auto text-center">
-                <div class="col-md-7 mx-auto d-block">
-                <div class="row">
-                <div class="col-md-12">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-primary me-2 my-auto"></span>Casual Loans
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label badge-danger me-2 my-auto"></span>Sick Loans
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-secondary me-2 my-auto"></span>Gifted Loans
-                </div>
-                </div>
-                <div class="col-md-12 mt-3">
-                <div class="d-flex font-weight-semibold">
-                <span class="dot-label bg-success me-2 my-auto"></span>Remaining Loans
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>*@
+
             </div>
             <!-- End Row-->
-            @* <div class="card-body">
-            <div class="table-responsive">
-            <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-            <thead>
-            <tr>
-
-            <th class="border-bottom-0">Loan Title</th>
-            <th class="border-bottom-0">No. of Loans</th>
-            <th class="text-center">Non Paid Loan</th>
-            <th class="text-center">Status</th>
-            <th class="col-md-1">Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model)
-            {
-            <tr>
-
-            <td>
-            @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-            @Html.DisplayFor(modelItem => item.NoOfLoans)
-            </td>
-
-            @if (item.IsNonPaid == true)
-            {
-            <td class="text-center"><span class="badge badge-label bg-primary"><i class="mdi mdi-circle-medium"></i> True</span></td>
-            }
-            else
-            {
-            <td class="text-center"> <span class="badge badge-label bg-warning"><i class="mdi mdi-circle-medium"></i> False</span></td>
-
-            }
-
-            @if (item.Status == true)
-            {
-            <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-            }
-            else
-            {
-            <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
-
-            }
-
-            @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-            {
-            <th class="d-none">
-
-
-
-
-
-
-            </th>
-            }
-            else
-            {
-            <td class="text-end">
-            <div class="d-flex">
-            @if (Convert.ToBoolean(ViewBag.IsEdit))
-            {
-            <a asp-action="LoanCreateOrUpdate" asp-route-id="@item.LoanId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">
-            <i class="feather feather-edit primary text-primary">
-            </i>
-            </a>
-            } @if (Convert.ToBoolean(ViewBag.IsDelete))
-            {
-            <a asp-action="LoanDelete" asp-route-id="@item.LoanId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">
-            <i class="feather feather-trash-2 text-danger"></i>
-            </a>
-            }
-            </div>
-
-            </td>
-            }
-
-
-
-            </tr>
-            }
-
-            </tbody>
-            </table>
-            </div>
-            </div>*@
         </div>
     </div>
 </div>
@@ -488,9 +392,13 @@
             }
             $('#myTable').DataTable();
 
-            $('#LoanStatusId').select2();
-            $('#LoanTypeId').select2();
-            $('#LoanTypeId_Search').select2();
+            //$('#LoanStatusId').select2();
+            //$('#LoanTypeId').select2();
+            //$('#LoanTypeId_Search').select2();
+
+            $("#LoanStatusId").select2({ placeholder: "Select Loan Status", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#LoanTypeId").select2({  placeholder: "Select Loan Type", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#LoanTypeId_Search").select2({placeholder: "Select Loan Type",width: '100%', allowClear: true }).val('').trigger('change');
 
             // Show Filters controls
 
@@ -502,8 +410,26 @@
 
             ////////////////////////////////////
 
+            var dateCheckBox = $('#date-checkbox');
+            var dateField = $('#date-field');
+            dateCheckBox.prop('checked', false);
+            dateCheckBox.on('change', function () {
+                if (dateCheckBox.is(':checked')) {
+                    dateField.prop('disabled', false);
+                }
+                else {
+                    dateField.prop('disabled', true);
+
+                }
+            })
+
+
 
         })
+
+        var dataTable = $('#myTable').DataTable();
+        var originalData = dataTable.rows().data().toArray();
+        var originalHTML = $('#myTable tbody').html();
 
         function addnewLoan() {
             debugger;
@@ -537,12 +463,12 @@
         }
 
         function SetInstallmentPerMonth() {
-            debugger;
+            //debugger;
             var noOfInsttallments = $('#NoOfInstallments').val();
             var loanAmount = $('#Amount').val();
-            if (loanAmount > 0) {
+            if (loanAmount > 0 && noOfInsttallments>0 ) {
                 var installmentPerMonth = loanAmount / noOfInsttallments;
-                $('#InstallmentPerMonth').val(installmentPerMonth.toFixed(2));
+                $('#InstallmentPerMonth').val(parseInt(installmentPerMonth));
             }
         }
 
@@ -721,13 +647,10 @@
                 StaffId: $("#StaffId").val(),
                 LoanTypeId: $("#LoanTypeId_Search").val(),
                 LoanStatusId: $("#LoanStatusId").val(),
-                ApplicationDateFrom: $("#ApplicationDateFrom").val(),
-                ApplicationDateTo: $("#ApplicationDateTo").val(),
+                Month: $("#date-field").val(),
+                DateFilter: $('#date-checkbox').prop('checked')
 
             }
-
-
-
             $.ajax({
                 url: "/Loan/SearchList",
                 type: "POST",
@@ -751,7 +674,7 @@
                             var amount = listLoan[i]["amount"];
                             action += '';
                             action += '<tr><td> ' + count + ' </td>';
-                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listLoan[i]["loanTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listLoan[i]["loanApplicationDate"] + '</small></div></div></td>';
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <a href="/Loan/LoanApproval/' + listLoan[i]["LoanId"] + '?staffid=' + listLoan[i]["staffId"] + '"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listLoan[i]["loanTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listLoan[i]["loanApplicationDate"] + '</small></a></div></div></td>';
                             action += '<td> ' + listLoan[i]["amount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
                             action += '<td> ' + listLoan[i]["installmentPerMonth"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '</td>';
                             action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listLoan[i]["reason"] + '</td>';
@@ -759,40 +682,41 @@
                             action += '<td><div class="progress progress-sm d-block"> <div class="progress-bar bg-success" style="width:' + listLoan[i]["paidPercentage"] + '%" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Paid: ' + listLoan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '" data-bs-original-title="Paid: ' + listLoan[i]["paidLoanAmount"].toLocaleString(undefined, { minimumFractionDigits: 2 }) + '">  </div> </div>   </td>';
 
 
-                            if (listLoan[i]["loanStatusId"] == 1) {
-                                action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
-                            }
-                            else if (listLoan[i]["loanStatusId"] == 2) {
-                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+                            action += '<td>';
+                            if (listLoan[i]["loanStatusId"] == 1) { // Approved
+                                action += '<span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>';
 
                             }
-                            else {
-                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
-                                action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
+                            else if (listLoan[i]["loanStatusId"] == 2) { // Rejected
+                                action += '<span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>';
+
+                            }
+                            else { // Pending
+                                action += '<span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>';
+
                             }
 
-                            action += '<td class="text-start d-flex">';
+                            // Action Buttons
+                            action += '<div class="float-end ms-auto"> <div class="btn-group ms-3 mb-0"><a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>';
+                            action += '<div class="dropdown-menu dropdown-menu-start" style="">';
 
-                            if (listLoan[i]["loanStatusId"] != 1 && listLoan[i]["loanStatusId"] != 2) {
-                                action += '<a href="#" onclick="editrecord(' + listLoan[i]["LoanApplicationId"] + ')"  class="action-btns1">';
-                                action += '<i class="feather feather-edit  text-primary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="edit"></i></a>';
+                            if (listLoan[i]["loanStatusId"] != 1 && listLoan[i]["loanStatusId"] != 2) // New
+                            {
+                                action += '<a href="#" onclick="editrecord(' + listLoan[i]["LoanApplicationId"] + ')" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>';
+                                action += '<a onclick="confirmation(' + listLoan[i]["loanApplicationId"] + ')"  href="#" class="dropdown-item"><i class="fe fe-trash me-2"></i> Delete</a>';
+
                             }
 
-                            action += '<a href="/Loan/LoanApproval/' + listLoan[i]["LoanId"] + '?staffid=' + listLoan[i]["staffId"] + '"  class="action-btns1">';
-                            action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
-                            if (listLoan[i]["loanStatusId"] != 1 && listLoan[i]["loanStatusId"] != 2) {
+                            action += '<a href="/Loan/LoanApproval/' + listLoan[i]["LoanId"] + '?staffid=' + listLoan[i]["staffId"] + '" class="dropdown-item" > <i class="fe fe-eye me-2" > </i> View</a >';
+                            action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
+                            // End of Action Buttons
 
-                                action += '<a href="#" onclick="confirmation(' + listLoan[i]["loanApplicationId"] + ')"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                                action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
-                            }
-                            action += '<a href="javascript:void(0);" class="action-btns1" data-bs-toggle="modal" data-bs-target="#reportmodal">';
-                            action += ' <i class="feather feather-info text-secondary mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Report"></i> </a></tr>';
 
                         }
 
-                        $('#myTable tbody').html(action);
+                        //$('#myTable tbody').html(action);
 
-
+                        table.rows.add($(action)).draw();
 
                     }
 
@@ -808,7 +732,22 @@
 
 
         }
+        function SearchClear() {
+            //debugger;
 
+            $("#LoanStatusId").select2({ placeholder: "Select Loan Status", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#LoanTypeId_Search").select2({ placeholder: "Select Loan Type", width: '100%', allowClear: true }).val('').trigger('change');
+
+            $('#date-field').val('');
+            $('#date-checkbox').prop('checked', false);
+            $('#date-field').prop('disabled', false);
+
+            //Restore the original data
+            dataTable.clear().rows.add(originalData).draw();
+
+            $('#myTable tbody').html(originalHTML);
+
+        }
 
         function formatDate(date) {
             //debugger;
@@ -833,7 +772,7 @@
 
 
         function ViewLoan(Loanid) {
-            debugger
+            //debugger
 
 
             var Data = { id: Loanid }

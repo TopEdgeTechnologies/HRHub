@@ -7,6 +7,8 @@ public partial class SectionAnswer
 {
     public int AnswerId { get; set; }
 
+    public int? SectionId { get; set; }
+
     public int? SectionQuestionId { get; set; }
 
     public int? ReviewedStaffId { get; set; }

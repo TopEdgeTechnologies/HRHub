@@ -65,7 +65,7 @@ namespace HRHUBAPI.Models
             {
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + " ,0 , 0 , '', '' " ;
+                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + " ,0 , 0 , '', 0 " ;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
@@ -142,7 +142,52 @@ namespace HRHUBAPI.Models
 
             }
         }
+        public async Task<List<LoanApplication>> GetHRLoanInfo(int CompanyId, int LoginStaffId, HrhubContext _context)
+        {
+            try
+            {
+                DbConnection _db = new DbConnection();
 
+                string query = "EXEC sp_Get_StaffHRLoanDetail "+ LoginStaffId + " , 0  , " + CompanyId + " ,0 , 0 , '', 0 ";
+                DataTable dt = _db.ReturnDataTable(query);
+
+                var list = dt.AsEnumerable()
+                    .Select(row => new LoanApplication
+                    {
+                        LoanApplicationId = Convert.ToInt32(row["LoanApplicationId"]),
+                        LoanTypeTitle = row["Title"].ToString(),
+                        LoanApplicationDate = Convert.ToDateTime(row["ApplicationDate"]).ToString("dd-MMM-yyyy"),
+                        //LoanPaymentDate = String.IsNullOrWhiteSpace(l.PaymentDate.ToString()) ? DateTime.Now: Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
+                        Amount = Convert.ToDecimal(row["Amount"]),
+                        NoOfInstallments = Convert.ToInt32(row["NoOfInstallments"]),
+                        InstallmentPerMonth = Convert.ToInt32(row["InstallmentPerMonth"]),
+                        Reason = row["Reason"].ToString(),
+                        LoanStatusId = Convert.ToInt32(row["LoanStatusId"]),
+                        IsNeedApproval = Convert.ToBoolean(row["IsNeedApproval"]),
+
+                        PaidLoanAmount = Convert.ToDecimal(row["PaidLoan"]),
+                        PaidPercentage = Convert.ToInt32(row["PaidLoanPercentage"]),
+
+                        StaffId = Convert.ToInt32(row["StaffId"]),
+                        StaffRegistrationNo = row["RegistrationNo"].ToString(),
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/StaffImageEmpty.jpg" : row["SnapPath"].ToString(),
+                        StaffName = row["FirstName"].ToString(),
+                        Department = row["Department"].ToString(),
+                        Designation = row["Designation"].ToString()
+
+                    }).OrderByDescending(x => x.LoanApplicationId)
+                    .ToList();
+                return list;
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
         public async Task<List<LoanApplication>> GetLoanDetailById(int id, HrhubContext _context)
         {
             try
@@ -195,14 +240,14 @@ namespace HRHUBAPI.Models
 
         // Search Loan 
 
-        public async Task<List<LoanApplication>> SearchLoan(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime ApplicationDateFrom, DateTime ApplicationDateTo, HrhubContext _context)
+        public async Task<List<LoanApplication>> SearchLoan(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month, bool DateFilter, HrhubContext _context)
         {
             try
             {
 
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + "," + LoanTypeId+"," + LoanStatusId + ", '"+ ApplicationDateFrom + "', '" + ApplicationDateTo + "'";
+                string query = "EXEC sp_Get_StaffLoanDetail " + StaffId + " , " + CompanyId + "," + LoanTypeId+"," + LoanStatusId + ", '"+ Month + "', " + DateFilter;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
@@ -231,63 +276,6 @@ namespace HRHUBAPI.Models
                     }).OrderByDescending(x => x.LoanApplicationId)
                     .ToList();
                 return list;
-
-
-
-
-
-
-
-
-
-
-
-
-                //var list = await (from l in _context.LoanApplications
-                //                  join lt in _context.LoanTypes on l.LoanTypeId equals lt.LoanTypeId
-                //                  join s in _context.Staff on l.StaffId equals s.StaffId
-                //                  join dep in _context.Departments on s.DepartmentId equals dep.DepartmentId
-                //                  join di in _context.Designations on s.DesignationId equals di.DesignationId
-
-                //                  where l.IsDeleted == false
-                //                  && lt.IsDeleted == false
-                //                  && l.LoanTypeId == LoanTypeId
-                //                  && l.LoanStatusId == LoanStatusId
-                //                  && (l.ApplicationDate >= ApplicationDateFrom && l.ApplicationDate <= ApplicationDateTo)
-                //                  && s.CompanyId == CompanyId
-                //                  && s.StaffId == StaffId
-                //                  select new LoanApplication()
-                //                  {
-                //                      LoanApplicationId = l.LoanApplicationId,
-                //                      LoanTypeTitle = lt.Title,
-                //                      LoanApplicationDate = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
-                //                      LoanPaymentDate = Convert.ToDateTime(l.PaymentDate).ToString("dd-MMM-yyyy"),
-                //                      Amount = l.Amount,
-                //                      NoOfInstallments = l.NoOfInstallments,
-                //                      InstallmentPerMonth = l.InstallmentPerMonth,
-                //                      Reason = l.Reason,
-                //                      LoanStatusId = l.LoanStatusId,
-
-                //                      StaffId = s.StaffId,
-                //                      StaffRegistrationNo = s.RegistrationNo,
-                //                      StaffName = s.FirstName,
-                //                      StaffSnap = string.IsNullOrWhiteSpace(s.SnapPath) ? "/Images/StaffImageEmpty.jpg" : s.SnapPath.ToString(),
-                //                      Department = dep.Title,
-                //                      Designation = di.Title
-
-                //                  }).ToListAsync();
-
-
-                //return list != null ? list.OrderByDescending(x => x.LoanApplicationId).ToList() : new List<LoanApplication>();
-
-
-
-
-
-
-
-
-
 
 
             }
@@ -618,28 +606,12 @@ namespace HRHUBAPI.Models
 
 
 
-        //Load dropdown WeekendRule
-        public async Task<List<WeekendRule>> GetWeekendRule(HrhubContext hrhubContext)
-        {
-            try
-            {
-                List<WeekendRule> objWeekendRule = new List<WeekendRule>();
-                objWeekendRule = await hrhubContext.WeekendRules.Where(x => x.IsDeleted == false && x.Status == true).ToListAsync();
-                return objWeekendRule;
-            }
-            catch { throw; }
-        }
-
-
-
-
-
-        public async Task<LeaveApprovalSetting> GetLeaveApprovalSetting(int CompanyId, HrhubContext _context)
+        public async Task<LoanApprovalSetting> GetLoanApprovalSetting(int CompanyId, HrhubContext _context)
         {
 
             try
             {
-                return await _context.LeaveApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.IsDeleted == false);
+                return await _context.LoanApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == CompanyId);
 
             }
             catch (Exception ex)

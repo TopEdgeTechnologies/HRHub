@@ -310,25 +310,6 @@
                                         <td style="max-width: 170px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">@item.LeaveSubject</td>
                                         @*<td>@item.LeaveAppliedOnDate</td>*@
 
-                                        @*if (item.LeaveStatusId == 1) // New
-                                {
-                                <td class="text-center"><span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span></td>
-                                }
-                                else if (item.LeaveStatusId == 2) // Pending
-                                {
-                                <td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>
-
-                                }
-                                else if (item.LeaveStatusId == 3) // Approved
-                                {
-                                <td class="text-center"> <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span></td>
-
-                                }
-                                else if (item.LeaveStatusId == 4) // Rejected
-                                {
-                                <td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>
-
-                                }*@
 
                                         <td>
 
@@ -367,6 +348,8 @@
                                                 </div>
                                             </div>
                                             <!----- Action Buttons Code Ends Here------>
+
+
                                             @*<a href="#" onclick="showleaveApprovalmodel(this,@item.LeaveId,3,0)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">
                                     <i class="feather feather-check text-success mt-1"></i>
                                     </a>
@@ -686,24 +669,9 @@
             //$('#LeaveTypeId').select2();
             //$('#StaffId').select2();
 
-
-            $("#LeaveStatusId").select2({
-                placeholder: "Select Leave Status",
-                width: '100%',
-                allowClear: true
-            }).val('').trigger('change');
-
-            $("#LeaveTypeId").select2({
-                placeholder: "Select Leave Type",
-                width: '100%',
-                allowClear: true
-            }).val('').trigger('change');
-
-            $("#StaffId").select2({
-                placeholder: "Select Staff",
-                width: '100%',
-                allowClear: true
-            }).val('').trigger('change');
+            $("#LeaveStatusId").select2({  placeholder: "Select Leave Status", width: '100%', allowClear: true}).val('').trigger('change');
+            $("#LeaveTypeId").select2({placeholder: "Select Leave Type", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#StaffId").select2({ placeholder: "Select Staff", width: '100%', allowClear: true}).val('').trigger('change');
 
             // Show Filters controls
 
@@ -1062,63 +1030,6 @@
                             action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
                             // End of Action Buttons
 
-
-
-
-
-                            //if (listleave[i]["leaveStatusId"] == 1) {
-                            //    action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
-                            //}
-                            //else if (listleave[i]["leaveStatusId"] == 2) {
-                            //    action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
-
-                            //}
-                            //else if (listleave[i]["leaveStatusId"] == 3) {
-                            //    action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
-
-
-                            //}
-                            //else if (listleave[i]["leaveStatusId"] == 4) {
-                            //    action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
-
-                            //}
-
-                            //action += '<td class="text-start d-flex">';
-                            //action += '<div class="btn-group ms-3 mb-0">';
-                            //action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>';
-                            //action += '<div class="dropdown-menu dropdown-menu-start" style="">';
-                            //action += '<a onclick="showleaveApprovalmodel(this,' + listleave[i]["leaveId"] + ',3,0)" href="#" class="dropdown-item"><i class="feather feather-check me-2"></i> Accept</a>';
-                            //action += '<a onclick="showleaveApprovalmodel(this,' + listleave[i]["leaveId"] + ',4,0)" href="#" class="dropdown-item"><i class="feather feather-x me-2"></i> Reject</a>';
-                            //if (item.LeaveStatusId == 1) // New
-                            //{
-                            //    action += '<a onclick="showforwardleavemodel(this,' + listleave[i]["leaveId"] + ',0)" href = "#" class="dropdown-item" > <i class="fe fe-arrow-right-circle me-2" > </i> Forward</a>';
-                            //}
-
-                            //action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '" class="dropdown-item"> <i class="fe fe-eye me-2" > </i> View</a>';
-                            //action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a > </div> </div> </td> </tr>';
-
-
-                            //action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',3)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Accept">';
-                            //action += '<i class="feather feather-check text-success mt-1"></i></a>';
-
-
-                            //action += '<a href="#" onclick="showleaveApprovalmodel(' + listleave[i]["leaveId"] + ',4)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Rejected">';
-                            //action += '<i class="feather feather-x text-danger mt-1"></i></a>';
-
-
-                            //if (listleave[i]["leaveStatusId"] == 1) {
-                            //    action += '<a href="#" onclick="showforwardleavemodel(' + listleave[i]["leaveId"] + ')" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Forward">';
-                            //    action += '<i class="text-warning fe fe-arrow-right-circle mt-1"></i></a>';
-
-                            //    //action += '<a onclick="return confirm("Are you sure you want to delete ")" href="/Leave/LeaveDelete/' + listleave[i]["leaveId"] + '"  class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">';
-                            //    //action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a>';
-                            //}
-
-
-                            //action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="action-btns1">';
-                            //action += '<i class="feather feather-eye  text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title="view"></i></a>';
-
-
                         }
 
                         //$('#myTable tbody').html(action);
@@ -1136,9 +1047,10 @@
         }
 
         function SearchClear() {
-            $('#LeaveStatusId').select2().val('').trigger('change');
-            $('#LeaveTypeId').select2().val('').trigger('change');
-            $('#StaffId').select2().val('').trigger('change');
+            $("#LeaveStatusId").select2({  placeholder: "Select Leave Status", width: '100%', allowClear: true}).val('').trigger('change');
+            $("#LeaveTypeId").select2({placeholder: "Select Leave Type", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#StaffId").select2({ placeholder: "Select Staff", width: '100%', allowClear: true}).val('').trigger('change');
+
             $('#date-field').val('');
             $('#date-checkbox').prop('checked', false);
             $('#date-field').prop('disabled', false);

@@ -65,7 +65,7 @@ public partial class Staff
 
     public string? BankCode { get; set; }
 
-    public int? TaxPayerNumber { get; set; }
+    public string? TaxPayerNumber { get; set; }
 
     public string? JobDescription { get; set; }
 
