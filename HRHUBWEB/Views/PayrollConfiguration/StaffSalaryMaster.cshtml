@@ -1,6 +1,32 @@
 ﻿@model HRHUBAPI.Models.StaffSalary
 
 <div class="card">
+    @{
+        async Task dropdownWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory, IEnumerable<SelectListItem> items, bool databaseBinded)
+        {
+            <div class="col-md-2">
+                <div class="form-group mt-5">
+                <select id="@fieldName" name="@fieldName" class="form-control custom-select select2" data-placeholder="@placeholderTitle">
+                    <option value="">Select</option>
+                    @foreach (var item in items)
+                    {
+                        var ValueOrText = (databaseBinded ? item.Value : item.Text);
+                        //if (ValueOrText == fieldValue)
+                        //{
+                        //    <option value= (databaseBinded ? item.Value : item.Text) selected>@item.Text</option>
+                        //}
+                        //else
+                        //{
+                        //    <option value= (databaseBinded ? item.Value : item.Text) >@item.Text</option>
+                        //}
+                        <option value=(databaseBinded ? item.Value : item.Text)>@item.Text</option>
+                    }
+                </select>
+                </div>
+            </div>
+        }
+    }
+
     <div class="card-header border-bottom-0">
         <h3 class="card-title fs-24">
             Pay Runs
@@ -15,6 +41,35 @@
                         <p class="fs-20">Process Pay run from <span id="lbl_Duration" class="font-weight-semibold fs-20">1st Jan - 31 Jan</span></p>
                     </div>
                 </div>
+                @{
+
+                    if (Model.generalMonthAndYearList != null && Model.generalMonthAndYearList.Count() > 0)
+                    {
+                        await dropdownWidget("", "attendanceMonth", Model.MonthNumber.ToString(), "Select Month", true, Model.generalMonthAndYearList.Where(x => x.Group.Name == "Month"), true);
+                    }
+
+                    if (Model.generalMonthAndYearList != null && Model.generalMonthAndYearList.Count() > 0)
+                    {
+                        await dropdownWidget("", "attendanceYear", Model.Year.ToString(), "Select Year", true, Model.generalMonthAndYearList.Where(x => x.Group.Name == "Year"), true);
+                    }
+                    @*
+                    <select asp-for="MaterialStatus" class="form-control custom-select select2" data-placeholder="Select" 
+                            asp-items="@(new SelectList(@ViewBag.MaterialStatus,"Text" ,"Text"))">
+                        <option value="">Select</option>
+                    </select>
+
+                    @Html.DropDownList("SelectedOptionGroup1", ViewBag.Options as IEnumerable<SelectListItem>, "-- Select Group 1 --")
+                    @Html.DropDownList("SelectedOptionGroup2", ViewBag.Options as IEnumerable<SelectListItem>, "-- Select Group 2 --")
+                    
+
+                    @Html.DropDownListFor(model => model.generalMonthList, ViewBag.Options as IEnumerable<SelectListItem>, "-- Select Group 1 --", new { id = "attendanceMonth", name = "attendanceMonth" })
+                    @Html.DropDownListFor(model => model.generalMonthList, ViewBag.Options as IEnumerable<SelectListItem>, "-- Select Group 2 --", new { id = "attendanceYear", name = "attendanceYear" })
+
+*@
+                    
+
+                }
+                @*
                 <div class="col-md-2">
                     <div class="form-group mt-5">
                         <select id="attendanceMonth" name="attendanceMonth" onchange="onchangeMonthYearCheckAlreadyExistsMaster()" class="form-control custom-select select2" data-placeholder="Select Month">
@@ -46,13 +101,10 @@
                             <option value="2025">2025</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
                         </select>
                     </div>
                 </div>
-                @*<div class="col-md-12 col-lg-3">
+                <div class="col-md-12 col-lg-3">
                     <div class="form-group mt-5">
                         <a href="javascript:void(0);" class="btn btn-primary btn-block">Generate</a>
                     </div>
@@ -92,25 +144,34 @@
 
     $(document).ready(function () {
 
-        $('#myonoffswitch2').prop('checked', true);
-        names()
-        localStorage.setItem('dayonedarkMode', true);
-        localStorage.removeItem('dayonelightMode');
-        localStorage.removeItem('dayonetransparentMode');
-
+        //$('#myonoffswitch2').prop('checked', true);
+        ////names()
+        //localStorage.setItem('dayonedarkMode', true);
+        //localStorage.removeItem('dayonelightMode');
+        //localStorage.removeItem('dayonetransparentMode');
+            debuggger
         //$("#SalaryMonth").select2();
-        var currentMonth = new Date().getMonth()
-        $("#attendanceMonth").val(currentMonth).trigger()
+        var currentMonth = new Date().getMonth();
+        $("#attendanceMonth").prop("selectedIndex", currentMonth).trigger("change")
+        
         var currentYear = new Date().getFullYear()
-        $("#attendanceYear").val(currentYear).trigger()
+        $("#attendanceYear").text(currentYear).trigger("change")
 
+    });
+
+    $("#attendanceMonth").on("change", function () {
+            onchangeMonthYearCheckAlreadyExistsMaster()
+    });
+
+    $("#attendanceYear").on("change", function () {
+            onchangeMonthYearCheckAlreadyExistsMaster()
     });
 
     function onchangeMonthYearCheckAlreadyExistsMaster() {
             debugger
         var recordInserted = false;
-        var currentMonth = $("#attendanceMonth").val()
-        var currentYear = $("#attendanceYear").val()
+            var currentMonth = $("#attendanceMonth").find(":selected").index()
+            var currentYear = $("#attendanceYear").find(":selected").text()
 
         if (currentMonth != "" && currentYear != "") {
             var date = new Date(currentYear, currentMonth - 1)
@@ -175,8 +236,8 @@
         debugger;
         var buttonTitle = $("#btn_GenerateStaffSalary").val()
 
-        var currentMonth = $("#attendanceMonth").val();
-        var currentYear = $("#attendanceYear").val();
+        var currentMonth = $("#attendanceMonth").find(":selected").index()
+        var currentYear = $("#attendanceYear").find(":selected").text()
 
         if (currentMonth !== "" && currentYear !== "") {  
             if (validateForm()) {

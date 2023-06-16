@@ -1,4 +1,5 @@
 ﻿using HRHUBAPI.Models.Configuration;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,9 @@ namespace HRHUBAPI.Models
             public int? TranFlag { get; set; }
 
             [NotMapped]
+            public IEnumerable<SelectListItem>? generalMonthAndYearList { get; set; }
+         
+    		[NotMapped]
             public int? CompanyId { get; set; }
 
             [NotMapped]
@@ -230,6 +234,7 @@ namespace HRHUBAPI.Models
 					ComponentId = string.IsNullOrWhiteSpace(row["ComponentID"].ToString()) ? 0 : Convert.ToInt32(row["ComponentID"]),
 					ComponentTitle = string.IsNullOrWhiteSpace(row["ComponentTitle"].ToString()) ? "" : row["ComponentTitle"].ToString(),
 					ComponentAmount = Convert.ToDecimal(row["ComponentAmount"]),
+					GrossSalary = Convert.ToDecimal(row["SalaryAmount"]),
 				}).ToList();
 				return resultRows;
 			}

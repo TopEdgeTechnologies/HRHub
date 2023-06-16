@@ -187,8 +187,77 @@ namespace HRHUBWEB.Controllers
         [CustomAuthorization]
         public async Task<IActionResult> StaffSalaryMaster()
         {
-			return View();
+            StaffSalary objStaffSalary = new StaffSalary();
+            objStaffSalary.generalMonthAndYearList = generalMonthAndYear();
+			return View(objStaffSalary);
 		}
+
+        public List<SelectListItem> generalMonthAndYear()
+        {
+            // Create the select list groups
+            SelectListGroup group1 = new SelectListGroup { Name = "Month" };
+            SelectListGroup group2 = new SelectListGroup { Name = "Year" };
+
+            // Create the select list items and assign them to the respective groups
+            List<SelectListItem> items = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "January", Value = "1", Group = group1 },
+                new SelectListItem { Text = "February", Value = "2", Group = group1 },
+                new SelectListItem { Text = "March", Value = "3", Group = group1 },
+                new SelectListItem { Text = "April", Value = "4", Group = group1 },
+                new SelectListItem { Text = "May", Value = "5", Group = group1 },
+                new SelectListItem { Text = "June", Value = "6", Group = group1 },
+                new SelectListItem { Text = "July", Value = "7", Group = group1 },
+                new SelectListItem { Text = "August", Value = "8", Group = group1 },
+                new SelectListItem { Text = "September", Value = "9", Group = group1 },
+                new SelectListItem { Text = "October", Value = "10", Group = group1 },
+                new SelectListItem { Text = "November", Value = "11", Group = group1 },
+                new SelectListItem { Text = "December", Value = "12", Group = group1 },
+
+                new SelectListItem { Text = "2023", Value = "2023", Group = group2 },
+                new SelectListItem { Text = "2024", Value = "2024", Group = group2 },
+                new SelectListItem { Text = "2025", Value = "2025", Group = group2 },
+                new SelectListItem { Text = "2026", Value = "2026", Group = group2 },
+            };
+
+            // Pass the list of items to the view
+            ViewBag.Options = items;
+
+            return items;
+        }
+
+        public List<SelectListItem> generalMonth()
+		{
+			List<SelectListItem> listobj = new List<SelectListItem>();
+			listobj.Add(new SelectListItem { Text = "January", Value = "1" });
+			listobj.Add(new SelectListItem { Text = "February", Value = "2" });
+			listobj.Add(new SelectListItem { Text = "March", Value = "3" });
+			listobj.Add(new SelectListItem { Text = "April", Value = "4" });
+			listobj.Add(new SelectListItem { Text = "May", Value = "5" });
+			listobj.Add(new SelectListItem { Text = "June", Value = "6" });
+			listobj.Add(new SelectListItem { Text = "July", Value = "7" });
+			listobj.Add(new SelectListItem { Text = "August", Value = "8" });
+			listobj.Add(new SelectListItem { Text = "September", Value = "9" });
+			listobj.Add(new SelectListItem { Text = "October", Value = "10" });
+			listobj.Add(new SelectListItem { Text = "November", Value = "11" });
+			listobj.Add(new SelectListItem { Text = "December", Value = "12" });
+			return listobj;
+        }
+
+        public List<SelectListItem> generalYear()
+        {
+            List<SelectListItem> listobj = new List<SelectListItem>();
+            listobj.Add(new SelectListItem { Text = "2023", Value = "2023" });
+            listobj.Add(new SelectListItem { Text = "2024", Value = "2024" });
+            listobj.Add(new SelectListItem { Text = "2025", Value = "2025" });
+            listobj.Add(new SelectListItem { Text = "2026", Value = "2026" });
+            listobj.Add(new SelectListItem { Text = "2027", Value = "2027" });
+            listobj.Add(new SelectListItem { Text = "2028", Value = "2028" });
+            listobj.Add(new SelectListItem { Text = "2029", Value = "2029" });
+            listobj.Add(new SelectListItem { Text = "2030", Value = "2030" });
+            return listobj;
+        }
+
 
         public async Task<IActionResult> PostStaffSalaryMaster(int month = 0, int year = 0)
         {
@@ -271,7 +340,7 @@ namespace HRHUBWEB.Controllers
 			return null;
 		}
 
-		public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId, decimal GrossAmount)
+		public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId)
         { 
             StaffSalary objStaffSalary = new StaffSalary();
 			objStaffSalary.StaffSalaryEditList = await GetStaffSalaryById(month, year, staffId);
@@ -281,11 +350,11 @@ namespace HRHUBWEB.Controllers
 			objStaffSalary.Year = year;
 			objStaffSalary.RegistrationNo = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.RegistrationNo;
 			objStaffSalary.FirstName = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.FirstName;  
-            objStaffSalary.LastName = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.LastName;
-            objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.DepartmentTitle;    
-			objStaffSalary.OV_PayableAmount = GrossAmount;
+            objStaffSalary.LastName = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.LastName;
+            objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.DepartmentTitle;
+            objStaffSalary.GrossSalary = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.GrossSalary;
 
-            return View(objStaffSalary);
+			return View(objStaffSalary);
         }
 
 		public async Task<IActionResult> SingleStaffSalaryCreateOrUpdate(IFormCollection objForm, StaffSalary objStaffSalary)

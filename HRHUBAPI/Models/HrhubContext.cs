@@ -75,6 +75,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<LoanApplicationProcess> LoanApplicationProcesses { get; set; }
 
+    public virtual DbSet<LoanApprovalSetting> LoanApprovalSettings { get; set; }
+
     public virtual DbSet<LoanRepayment> LoanRepayments { get; set; }
 
     public virtual DbSet<LoanStatus> LoanStatuses { get; set; }
@@ -608,6 +610,17 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Remarks).IsUnicode(false);
         });
 
+        modelBuilder.Entity<LoanApprovalSetting>(entity =>
+        {
+            entity.HasKey(e => e.SettingId);
+
+            entity.ToTable("LoanApprovalSetting");
+
+            entity.Property(e => e.SettingId).HasColumnName("SettingID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.LoanFinalApprovalDesignationId).HasColumnName("LoanFinalApproval_DesignationID");
+        });
+
         modelBuilder.Entity<LoanRepayment>(entity =>
         {
             entity.ToTable("LoanRepayments", "Payroll");
@@ -784,6 +797,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ReviewedStaffId).HasColumnName("Reviewed_StaffID");
             entity.Property(e => e.ReviewerDesignationId).HasColumnName("Reviewer_DesignationID");
             entity.Property(e => e.ReviewerStaffId).HasColumnName("Reviewer_StaffID");
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
