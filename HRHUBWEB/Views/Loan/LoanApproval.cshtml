@@ -11,9 +11,9 @@
     .note-editing-area {
         height: 390px !important
     }
+
     .loandetail {
         pointer-events: none;
-
     }
 
     #ApplicationHtml {
@@ -49,7 +49,7 @@
 
     <div class="row">
 
-
+        <input type="hidden" asp-for="StaffId" />
         <div class="col-xl-4 col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header  border-0">
@@ -121,7 +121,7 @@
                             <label class="form-label">Reason:</label>
                             <textarea asp-for="Reason" class="form-control" rows="4">Type Reason here...</textarea>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>
@@ -133,8 +133,7 @@
             <div class="card">
                 <div class="card-header  border-0">
                     <h4 class="card-title">Loan Approval Detail</h4>
-                    <select required id="athars" class="form-control select2 filter-multi" multiple="multiple" asp-items="@(new SelectList(@ViewBag.Staffs ,"StaffId" ,"FirstName"))">
-                    </select>
+                   
                 </div>
                 <div class="card-body">
                     <div class="table-responsive recent_jobs p-0 card-body">
@@ -195,10 +194,19 @@
                     <div class="d-flex">
 
                         <div class="ms-auto">
-                            <a onclick="showloanApprovalmodel(1)" class="btn btn-success my-1">Approve</a>
-                            <a onclick="showloanApprovalmodel(2)" class="btn btn-danger my-1">Reject</a>
-                            <a onclick="showforwardloanmodel()" class="btn btn-primary my-1">Forward</a>
-                            <a asp-action="HRLeaveList" asp-controller="Leave" class="btn btn-outline-primary my-1">Close</a>
+                            @if (ViewBag.ApprovalBtnVisibility == true && Model.LoanStatusId != 1 && Model.LoanStatusId != 2)
+                            {
+                                <a onclick="showloanApprovalmodel(1)" class="btn btn-success my-1">Approve</a>
+                                <a onclick="showloanApprovalmodel(2)" class="btn btn-danger my-1">Reject</a>
+                                @if (ViewBag.ForwardBtnVisibility == true)
+                                {
+                                    <a onclick="showforwardloanmodel()" class="btn btn-primary my-1">Forward</a>
+                                }
+                                <a asp-action="HRLoanList" asp-controller="Loan" class="btn btn-outline-primary my-1">Close</a>
+                            }
+                            else{
+                                <a asp-action="LoanList" asp-controller="Loan" class="btn btn-outline-primary my-1">Close</a>
+                            }
 
                         </div>
                     </div>
@@ -368,9 +376,11 @@
 
             // Make an AJAX request to fetch the data from the database
             // Assuming the response is an array of numbers corresponding to each category of leaves
+            var Data = { StaffId: $("#StaffId").val() }
             $.ajax({
                 url: "/Loan/GetLoanChartData",
                 method: 'GET',
+                data: Data,
                 success: function (response) {
                     debugger;
                     // Update the series property with the fetched data

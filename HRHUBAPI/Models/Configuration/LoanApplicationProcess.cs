@@ -14,12 +14,17 @@ namespace HRHUBAPI.Models
         public string? ApprovedByStaffSnap { get; set; }
         [NotMapped]
         public string? ApprovedByStaffName { get; set; }
+        
         [NotMapped]
         public string? ApprovedByDesignation { get; set; }
         [NotMapped]
         public string? LoanProcessDate { get; set; }
         [NotMapped]
         public DateTime? PaymentDate { get; set; }
+        [NotMapped]
+        public int? FinalApprovalDesignationID { get; set; }
+        [NotMapped]
+        public int? ApprovedByDesignationID { get; set; }
 
         public async Task<List<LoanApplicationProcess>> GetLoanAprrovalDetail(int LoanId, HrhubContext _context)
         {
@@ -129,16 +134,19 @@ namespace HRHUBAPI.Models
             {
                 try
                 {
-                    var Info = await hrhubContext.LoanApplications.FirstOrDefaultAsync(x => x.LoanApplicationId == obj.LoanApplicationId && x.IsDeleted == false);
-                    if (Info != null && Info.LoanApplicationId > 0)
+                    if(obj.ApprovedByDesignationID == obj.FinalApprovalDesignationID)
                     {
-                        Info.PaymentDate = obj.PaymentDate;
-                        Info.LoanStatusId = obj.LoanStatusId;
-                        Info.UpdatedBy = obj.ApprovedByStaffId;
-                        Info.UpdatedOn = DateTime.Now;
-                        await hrhubContext.SaveChangesAsync();
+                        var Info = await hrhubContext.LoanApplications.FirstOrDefaultAsync(x => x.LoanApplicationId == obj.LoanApplicationId && x.IsDeleted == false);
+                        if (Info != null && Info.LoanApplicationId > 0)
+                        {
+                            Info.PaymentDate = obj.PaymentDate;
+                            Info.LoanStatusId = obj.LoanStatusId;
+                            Info.UpdatedBy = obj.ApprovedByStaffId;
+                            Info.UpdatedOn = DateTime.Now;
+                            await hrhubContext.SaveChangesAsync();
+                        }
                     }
-
+                    
                     var dbResult = await hrhubContext.LoanApplicationProcesses.FirstOrDefaultAsync(x => x.LoanApplicationId == obj.LoanApplicationId && x.ApprovedByStaffId == obj.ApprovedByStaffId);
                     if (dbResult != null)
                     {

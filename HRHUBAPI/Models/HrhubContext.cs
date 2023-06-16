@@ -75,6 +75,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<LoanApplicationProcess> LoanApplicationProcesses { get; set; }
 
+    public virtual DbSet<LoanApprovalSetting> LoanApprovalSettings { get; set; }
+
     public virtual DbSet<LoanRepayment> LoanRepayments { get; set; }
 
     public virtual DbSet<LoanStatus> LoanStatuses { get; set; }
@@ -610,6 +612,17 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.LoanStatusId).HasColumnName("LoanStatusID");
             entity.Property(e => e.ProcessDate).HasColumnType("date");
             entity.Property(e => e.Remarks).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<LoanApprovalSetting>(entity =>
+        {
+            entity.HasKey(e => e.SettingId);
+
+            entity.ToTable("LoanApprovalSetting");
+
+            entity.Property(e => e.SettingId).HasColumnName("SettingID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.LoanFinalApprovalDesignationId).HasColumnName("LoanFinalApproval_DesignationID");
         });
 
         modelBuilder.Entity<LoanRepayment>(entity =>

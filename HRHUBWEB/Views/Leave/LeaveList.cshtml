@@ -81,7 +81,7 @@
                                                 <input type="hidden" asp-for="StaffId" value="@ViewBag.StaffID" />
                                                 <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Select Leave Type:</label>
+                                                        <label class="form-label">Select Leave Type</label>
                                                         <select id="LeaveTypeId" name="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
                                                             <option value="">Select Leave Type</option>
                                                         </select>
@@ -90,7 +90,7 @@
 
                                                 <div class="col-md-12 col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label">Select Leave Status:</label>
+                                                        <label class="form-label">Select Leave Status</label>
                                                         <select id="LeaveStatusId" name="LeaveStatusId" class="form-control" asp-items="@(new SelectList(Model.ListleaveStatus,"LeaveStatusId" ,"Title"))">
                                                             <option value="">Select Leave Status</option>
                                                         </select>
@@ -134,60 +134,6 @@
                                             </div>
 
 
-
-
-                                            @*<div class="row">
-                                        <input type="hidden" asp-for="StaffId" value="@ViewBag.StaffID" />
-                                        <div class="col-md-12 col-lg-3">
-                                        <div class="form-group">
-                                        <label class="form-label">Select Leave Type:</label>
-                                        <select id="LeaveTypeId" name="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
-                                        <option value="">Select Leave Type</option>
-                                        </select>
-                                        </div>
-                                        </div>
-                                        <div class="col-md-12 col-lg-3">
-                                        <div class="form-group">
-                                        <label class="form-label">Select Leave Status:</label>
-                                        <select id="LeaveStatusId" name="LeaveStatusId" class="form-control" asp-items="@(new SelectList(Model.ListleaveStatus,"LeaveStatusId" ,"Title"))">
-                                        <option value="">Select Leave Status</option>
-                                        </select>
-                                        </div>
-                                        </div>
-                                        <div class="col-md-12 col-lg-2">
-                                        <div class="form-group">
-                                        <label class="form-label">Month</label>
-                                        <div class="input-group">
-                                        <div class="input-group-prepend border px-1 py-1 border-1 rounded">
-                                        <div class="input-group-text px-2 bg-white border-0">
-                                        <label class="custom-switch">
-                                        <input type="checkbox" id="date-checkbox" name="custom-switch-checkbox" class="custom-switch-input">
-                                        <span class="custom-switch-indicator"></span>
-                                        </label>
-                                        </div>
-                                        <input id="date-field" type="month" class="form-control px-1" placeholder="select date">
-                                        </div>
-                                        </div>
-
-
-
-                                        <label class="form-label">Date From</label>
-                                        <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" placeholder="select date" />
-                                        </div>
-                                        </div>
-
-                                        <div class="col-md-12 col-lg-2">
-                                        <div class="form-group mt-5">
-                                        <button type="button" onclick="SearchLeave()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fe fe-search"></i> </button>
-                                        <button type="button" onclick="SearchClear()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Refresh"> <i class="fe fe-refresh-ccw"></i> </button>
-
-
-
-                                        </div>
-                                        </div>
-
-                                        </div>*@
-
                                         }
                                     </div>
                                 </div>
@@ -199,7 +145,7 @@
                                 <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="myTable">
                                     <thead style="border-bottom: 1px solid #0000004a;">
                                         <tr>
-                                            <th class="border-bottom-0">Sr.#</th>
+                                            <th class="border-bottom-0">#</th>
                                             <th class="border-bottom-0">Applied On</th>
                                             @*<th class="border-bottom-0">From</th>
                                             <th class="border-bottom-0">TO</th>*@
@@ -261,19 +207,19 @@
                                                     <td>
                                                         @if (item.LeaveStatusId == 1) // New
                                                     {
-                                                        <span class="badge badge-primary"><i class="mdi mdi-circle-medium"></i> New</span>
+                                                        <span class="badge badge-primary mt-2"><i class="mdi mdi-circle-medium"></i> New</span>
                                                     }
                                                     else if (item.LeaveStatusId == 2) // Pending
                                                     {
-                                                        <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span>
+                                                        <span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>
                                                     }
                                                     else if (item.LeaveStatusId == 3) // Approved
                                                     {
-                                                            <span class="badge badge-success"><i class="mdi mdi-circle-medium"></i> Approved</span>
+                                                            <span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>
                                                     }
                                                     else if (item.LeaveStatusId == 4) // Rejected
                                                     {
-                                                       <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span>  
+                                                       <span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>  
                                                     }
 
                                                     <!----- Action Buttons Code Start From Here------>
@@ -512,18 +458,8 @@
             //$('#LeaveStatusId').select2();
             //$('#LeaveTypeId').select2();
 
-            $("#LeaveStatusId").select2({
-                placeholder: "Select Leave Status",
-                width: '100%',
-                allowClear: true
-            }).val('').trigger('change');
-
-            $("#LeaveTypeId").select2({
-                placeholder: "Select Leave Type",
-                width: '100%',
-                allowClear: true
-            }).val('').trigger('change');
-
+            $("#LeaveStatusId").select2({placeholder: "Select Leave Status", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#LeaveTypeId").select2({ placeholder: "Select Leave Type", width: '100%',allowClear: true }).val('').trigger('change');
 
             // Show Filters controls
 
@@ -663,31 +599,31 @@
                             var count = i + 1;
                             action += '';
                             action += '<tr><td> ' + count + ' </td>';
-                            action += '<td><div class="d-flex"><div class="me-3 d-block"> <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listleave[i]["leaveTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small></div></div></td>';
+                            action += '<td><div class="d-flex"><div class="me-3 d-block"><a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '" > <h6 class="mb-0 fs-15 font-weight-semibold" > ' + listleave[i]["leaveTypeTitle"] + '</h6><div class="clearfix"> </div><small class="text-muted" > ' + listleave[i]["leaveAppliedOnDate"] + '</small> </a> </div></div></td>';
                             action += '<td> ' + listleave[i]["days"] + '</td>';
                             action += '<td style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;"> ' + listleave[i]["leaveSubject"] + '</td>';
 
-                            if (listleave[i]["leaveStatusId"] == 1) {
-                                action += '<td class="text-center"> <span class="badge badge-primary"> <i class="mdi mdi-circle-medium"> </i> New</span></td>';
+                            action += '<td>';
+                            if (listleave[i]["leaveStatusId"] == 1) { //  New
+                                action += '<span class="badge badge-primary mt-2"><i class="mdi mdi-circle-medium"></i> New</span>';
                             }
-                            else if (listleave[i]["leaveStatusId"] == 2) {
-                                action += '<td class="text-center"> <span class="badge badge-warning"><i class="mdi mdi-circle-medium"></i> Pending</span></td>';
-
-                            }
-                            else if (listleave[i]["leaveStatusId"] == 3) {
-                                action += '<td class="text-center"> <span class="badge badge-success"> <i class="mdi mdi-circle-medium"> </i> Approved</span></td>';
-
+                            else if (listleave[i]["leaveStatusId"] == 2) {  // Pending
+                                action += '<span class="badge badge-warning mt-2"><i class="mdi mdi-circle-medium"></i> Pending</span>';
 
                             }
-                            else if (listleave[i]["leaveStatusId"] == 4) {
-                                action += '<td class="text-center"> <span class="badge badge-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span></td>';
+                            else if (listleave[i]["leaveStatusId"] == 3) { // Approved
+                                action += '<span class="badge badge-success mt-2"><i class="mdi mdi-circle-medium"></i> Approved</span>';
+
+
+                            }
+                            else if (listleave[i]["leaveStatusId"] == 4) { // rejected
+                                action += '<span class="badge badge-danger mt-2"><i class="mdi mdi-circle-medium"></i> Rejected</span>';
 
                             }
 
-
-                            action += '<td class="text-center" style = "padding: 10px 8px !important;" >';
-                            action += '<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" > <i class="fa fa-ellipsis-v" > </i></a>';
-                            action += '<div class="dropdown-menu dropdown-menu-start">';
+                            // Action Buttons 
+                            action += '<div class="float-end ms-auto"> <div class="btn-group ms-3 mb-0"><a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>';
+                            action += '<div class="dropdown-menu dropdown-menu-start" style="">';
 
                             if (listleave[i]["leaveStatusId"] == 1) // New
                             {
@@ -698,7 +634,8 @@
 
                             action += '<a href="/Leave/LeaveApproval/' + listleave[i]["leaveId"] + '?staffid=' + listleave[i]["staffId"] + '"  class="dropdown-item" > <i class="fe fe-eye me-2" > </i> View</a >';
                             action += '<a class="dropdown-item" href = "javascript:void(0);" > <i class="fe fe-info me-2" > </i> Info</a>  </div>  </div> </td></tr>';
-                            
+                            // End of Action Buttons
+
 
 
 
@@ -737,8 +674,9 @@
         }
         function SearchClear() {
             debugger;
-            $('#LeaveStatusId').select2().val('').trigger('change');
-            $('#LeaveTypeId').select2().val('').trigger('change');
+            $("#LeaveStatusId").select2({ placeholder: "Select Leave Status", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#LeaveTypeId").select2({ placeholder: "Select Leave Type", width: '100%', allowClear: true }).val('').trigger('change');
+
             $('#date-field').val('');
             $('#date-checkbox').prop('checked', false);
             $('#date-field').prop('disabled', false);

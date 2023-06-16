@@ -585,34 +585,61 @@ namespace HRHUBAPI.Controllers
 			    }
 		    }
 
-		#endregion
+        #endregion
 
-		#region Loan
+        #region StaffLoan
 
-		[HttpPost("LoanAddOrCreate")]
-            public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
-            {
-                var result = await new LoanApplication().PostLoan(obj, _context);
-                if (result != null && result.LoanApplicationId > 0)
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Data Update Successfully!"
-                    });
-                else
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Data Insert Successfully!"
-                    });
-            }
+        
+        [HttpGet("GetHRLoanInfos{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<List<LoanApplication>>> GetHRLoanInfos(int CompanyId, int StaffId)
+        {
+            return await new LoanApplication().GetHRLoanInfo(CompanyId, StaffId, _context);
+        }
+        [HttpGet("GetLoanStatusInfos")]
+        public async Task<ActionResult<List<LoanStatus>>> GetLoanStatusInfos()
+        {
+            return await new LoanApplication().GetLoanStatus(_context);
+        }
+        [HttpGet("GetLoanInfoId{id}")]
+        public async Task<ActionResult<Leave>> GetLoanInfoId(int id)
+        {
+            var result = await new LoanApplication().GetLoanById(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+        [HttpPost("LoanAddOrCreate")]
+        public async Task<ActionResult<LoanApplication>> LoanAddOrCreate(LoanApplication obj)
+        {
+            var result = await new LoanApplication().PostLoan(obj, _context);
+            if (result != null && result.LoanApplicationId > 0)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+        }
+        [HttpGet("GetLoanInfos{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<List<LoanApplication>>> GetLoanInfos(int CompanyId, int StaffId)
+        {
+            return await new LoanApplication().GetLoanInfo(CompanyId, StaffId, _context);
+        }
 
         // search data Loan by Status , loantype and dates
 
-        [HttpGet("SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{ApplicationDateFrom}/{ApplicationDateTo}")]
-        public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime ApplicationDateFrom, DateTime ApplicationDateTo)
+        [HttpGet("SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{Month}/{DateFilter}")]
+        public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month,bool DateFilter)
         {
-            var result = await new LoanApplication().SearchLoan(CompanyId, StaffId, LoanTypeId, LoanStatusId, ApplicationDateFrom, ApplicationDateTo, _context);
+            var result = await new LoanApplication().SearchLoan(CompanyId, StaffId, LoanTypeId, LoanStatusId, Month, DateFilter, _context);
             if (result != null)
                 return Ok(result);
 
@@ -685,7 +712,12 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
+        [HttpGet("GetLoanApprovalSettingInfos{CompanyId}")]
+        public async Task<ActionResult<LoanApprovalSetting>> GetLoanApprovalSettingInfos(int CompanyId)
+        {
 
+            return await new LoanApplication().GetLoanApprovalSetting(CompanyId, _context);
+        }
         [HttpGet("GetStaffLoanRemainingAmount{StaffId}")]
         public async Task<ActionResult<List<LoanType>>> GetStaffLoanRemainingAmount(int StaffId)
         {
