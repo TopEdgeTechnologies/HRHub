@@ -15,6 +15,7 @@ using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace HRHUBWEB.Controllers
 {
@@ -187,8 +188,43 @@ namespace HRHUBWEB.Controllers
         [CustomAuthorization]
         public async Task<IActionResult> StaffSalaryMaster()
         {
-			return View();
+            StaffSalary objStaffSalary = new StaffSalary();
+            loadMonthAndYear();
+            return View(objStaffSalary);
 		}
+
+        private void loadMonthAndYear()
+        {
+            List<SelectListItem> itemsYear = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "2023", Value = "2023" },
+                new SelectListItem { Text = "2024", Value = "2024" },
+                new SelectListItem { Text = "2025", Value = "2025" },
+                new SelectListItem { Text = "2026", Value = "2026" },
+            };
+
+            // Assign the list to ViewBag
+            ViewBag.yearViewBag = itemsYear;
+
+            List<SelectListItem> items = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "January", Value = "1"},
+                new SelectListItem { Text = "February", Value = "2"},
+                new SelectListItem { Text = "March", Value = "3"},
+                new SelectListItem { Text = "April", Value = "4"},
+                new SelectListItem { Text = "May", Value = "5"},
+                new SelectListItem { Text = "June", Value = "6"},
+                new SelectListItem { Text = "July", Value = "7"},
+                new SelectListItem { Text = "August", Value = "8"},
+                new SelectListItem { Text = "September", Value = "9"},
+                new SelectListItem { Text = "October", Value = "10"},
+                new SelectListItem { Text = "November", Value = "11"},
+                new SelectListItem { Text = "December", Value = "12"},
+            };
+
+            // Create the SelectList using the items and return it
+            ViewBag.monthViewBag = items;
+        }
 
         public async Task<IActionResult> PostStaffSalaryMaster(int month = 0, int year = 0)
         {
@@ -271,7 +307,7 @@ namespace HRHUBWEB.Controllers
 			return null;
 		}
 
-		public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId, decimal GrossAmount)
+		public async Task<IActionResult> GetStaffSalaryCreateOrUpdate(int month, int year, int staffId)
         { 
             StaffSalary objStaffSalary = new StaffSalary();
 			objStaffSalary.StaffSalaryEditList = await GetStaffSalaryById(month, year, staffId);
@@ -281,11 +317,11 @@ namespace HRHUBWEB.Controllers
 			objStaffSalary.Year = year;
 			objStaffSalary.RegistrationNo = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.RegistrationNo;
 			objStaffSalary.FirstName = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.FirstName;  
-            objStaffSalary.LastName = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.LastName;
-            objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList?.FirstOrDefault()?.DepartmentTitle;    
-			objStaffSalary.OV_PayableAmount = GrossAmount;
+            objStaffSalary.LastName = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.LastName;
+            objStaffSalary.DepartmentTitle = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.DepartmentTitle;
+            objStaffSalary.GrossSalary = objStaffSalary.StaffSalaryEditList.FirstOrDefault()?.GrossSalary;
 
-            return View(objStaffSalary);
+			return View(objStaffSalary);
         }
 
 		public async Task<IActionResult> SingleStaffSalaryCreateOrUpdate(IFormCollection objForm, StaffSalary objStaffSalary)

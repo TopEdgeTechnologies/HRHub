@@ -300,7 +300,21 @@
 </body>
 </html>
 
+@section scripts{
+    <script>
+        $(document).ready(function () {
 
+           $('#myonoffswitch2').prop('checked', true);
+            ////names()
+           localStorage.setItem('dayonedarkMode', true);
+           localStorage.removeItem('dayonelightMode');
+           localStorage.removeItem('dayonetransparentMode');
+           
+
+        });
+
+    </script>
+}
 
 
 
