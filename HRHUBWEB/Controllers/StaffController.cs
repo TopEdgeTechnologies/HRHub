@@ -95,6 +95,22 @@ namespace HRHUBWEB.Controllers
             // Edit & Update Mode
             objStaff = await GetStaffById(Id);
 
+            // Fill BI StaffAttendanceStatisticsList
+            int month = DateTime.Now.Month;
+            int year = DateTime.Now.Year;
+
+            var staffAttendanceStatistics = await _APIHelper.CallApiAsyncGet<Staff>($"api/Staffs/GetStaffAttendanceStatistics{objStaff.CompanyId}/{month}/{year}/{Id}", HttpMethod.Get);
+
+            objStaff.MTDPresentCount = staffAttendanceStatistics.MTDPresentCount;
+            objStaff.YTDPaidLeaveCount = staffAttendanceStatistics.YTDPaidLeaveCount;
+            objStaff.TotalAllowedLeaves = staffAttendanceStatistics.TotalAllowedLeaves;
+       
+            objStaff.MonthDaysCount = staffAttendanceStatistics.MonthDaysCount;
+            objStaff.MonthName = staffAttendanceStatistics.MonthName;
+            objStaff.MonthNumber = month;
+            objStaff.Year = year;
+            // End Fill BI StaffAttendanceStatisticsList
+
             objStaff.MaterialStatusList = GetMaterialStatusList();
             objStaff.BloodGroupList = GetBloodGroup();
             objStaff.DepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);

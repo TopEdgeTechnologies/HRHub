@@ -40,34 +40,38 @@
                     </div>
                     <div class="card-footer p-0">
                         <div class="row">
+                            
                             <div class="col-4 text-center py-5 border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">May</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">@Model.MonthName</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-success">0</span>
+                                    <span class="fs-18 text-success">@Model.MTDPresentCount</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
-                                    <span class="fs-18 font-weight-semibold text-dark">31</span>
+                                    <span class="fs-18 font-weight-semibold text-dark">@Model.MonthDaysCount</span>
                                 </h5>
-                                <h5 class="fs-12 mb-0">Attendance</h5>
+                                <h5 class="fs-12 mb-0">Presents</h5>
                             </div>
                             <div class="col-4  py-5 text-center border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">Year-@Model.Year</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-orange">0</span>
+                                    <span class="fs-18 text-orange">@Model.YTDPaidLeaveCount</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
-                                    <span class="fs-18 font-weight-semibold text-dark">41</span>
+                                    <span class="fs-18 font-weight-semibold text-dark">@Model.TotalAllowedLeaves</span>
                                 </h5>
                                 <h5 class="fs-12 mb-0">Leaves</h5>
                             </div>
+                            @*
                             <div class="col-4 text-center py-5">
                                 <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-primary">0</span>
+                                    <span class="fs-18 text-primary">23</span>
                                 </h5>
-                                <h5 class="fs-12 mb-0">Awards</h5>
+                                <h5 class="fs-12 mb-0">Absents</h5>
                             </div>
+                        *@
                         </div>
                     </div>
                 </div>
+                @*
                 <div class="card">
                     <div class="card-header  border-0">
                         <div class="card-title">Statistics-2023</div>
@@ -116,6 +120,7 @@
                         </div>
                     </div>
                 </div>
+                *@
             </div>
             <div class="col-xl-9 col-md-12 col-lg-12">
                 <div class="tab-menu-heading hremp-tabs p-0 ">
