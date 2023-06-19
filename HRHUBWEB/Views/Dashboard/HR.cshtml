@@ -660,7 +660,7 @@
                 <table class="table  card-table  table-sm text-nowrap" id="tableAttendance">
                     <thead>
                         <tr>
-                            <th class="text-center">S.No</th>
+                           @* <th class="text-center">#</th>*@
                             <th class="text-start">Employee</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">CheckIn</th>
@@ -1145,7 +1145,7 @@
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
                         html += '<tr class="border-bottom">'
-                        html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+                        //html += '<td class="text-center">' + (i + 1) + '</td>'
                         html += '<td class="font-weight-semibold fs-14"> '
 
                         html += '<div class="d-flex">'
