@@ -291,7 +291,6 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffPerformanceList(String data = "")
         {
 
-            ViewBag.ListPerformanceForm = await _APIHelper.CallApiAsyncGet<IEnumerable<PerformanceForm>>($"api/Performance/GetPerformanceInfos{_user.CompanyId}", HttpMethod.Get);
 
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
@@ -299,9 +298,14 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
             ViewBag.Success = data;
-            SectionAnswer ObjSectionAnswer = new SectionAnswer();
-            ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
-            return View(ObjSectionAnswer);
+            PerformanceForm ObjPerformanceForm = new PerformanceForm();
+
+
+            ObjPerformanceForm.ListPerformanceForm = await _APIHelper.CallApiAsyncGet<IEnumerable<PerformanceForm>>($"api/Performance/GetPerformanceInfos{_user.CompanyId}", HttpMethod.Get);
+
+            return View(ObjPerformanceForm);
+
+
         }
 
 
@@ -309,7 +313,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffPerformanceDetail(String data = "", int id = 0, int ReviewFormId = 0)
         {
 
-            ViewBag.ListAnswerSatff = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>($"api/Performance/GetStaffSectionAnswerList{ReviewFormId}", HttpMethod.Get);
+            ViewBag.ListAnswerSatff = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>($"api/Performance/GetStaffSectionAnswerList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
 
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
@@ -321,10 +325,6 @@ namespace HRHUBWEB.Controllers
             //ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
             return View(ObjStaffReviewFormProcessed);
         }
-
-
-
-
 
         public async Task<IActionResult> GetStaffPerformanceById(int id)
         {
@@ -376,27 +376,44 @@ namespace HRHUBWEB.Controllers
            
             objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
-            objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
-            
+            // objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+
+
+
+            if (ReviewedStaffId == _user.StaffId) // it means staff itself opening his own performance fowm now load only self scoring sections
+            {
+                objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/SectionQuestionSelfScoring{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+
+            }
+            else
+            {
+                objInfo.ListSectionQuestion = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionQuestion>>($"api/Performance/GetSectionQuestionList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+
+            }
+
+
+
 
             objInfo.ListSectionAnswer = await _APIHelper.CallApiAsyncGet<IEnumerable<SectionAnswer>>($"api/Performance/StaffSectionAnswerList{_user.CompanyId}/{ReviewFormId}/{ReviewedStaffId}/{_user.StaffId}", HttpMethod.Get);
 
 
-            int abc = objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0);
+            //int SelfScoringAvailableINDB = objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0);
+            // SelfScoringAvailableINDB purpose to do this is to check if self scoring answers already exist or not
 
-
-            if (objInfo.ListSectionAnswer.Count() > 0)// && objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0) > 0)
+            if (objInfo.ListSectionAnswer.Count() > 0 && objInfo.ListSectionAnswer.Count(x => x.SelfReviewExistance > 0) > 0)
             {
-                objInfo.ReviewerStaffId = objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId;
-            }             
+                objInfo.ReviewerStaffId = objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId == 0 ? _user.StaffId : objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId; // sir yha issue ha aik yha id nhi mily gi ek minute ok
+            }
+            else if (objInfo.ListSectionAnswer.Count() > 0 && objInfo.ListSectionAnswer.Count(x => x.AnswerId > 0) > 0)
+            {
+                objInfo.ReviewerStaffId = objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId == 0 ? _user.StaffId : objInfo.ListSectionAnswer.ToArray()[0].ReviewerStaffId; // sir yha issue ha aik yha id nhi mily gi ek minute ok
+            }
             
             objInfo.ReviewedStaffId = ReviewedStaffId;
            
             return View("StaffPerformanceCreateOrUpdate", objInfo);
 
         }
-
-
 
 
         [HttpPost]
@@ -425,11 +442,6 @@ namespace HRHUBWEB.Controllers
         }
 
         
-
-
-
-
-
         public async Task<IActionResult> StaffPerformanceDelete(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Performance/DeletePerformanceInfo{id}/{_user.UserId}", HttpMethod.Get);
@@ -450,8 +462,21 @@ namespace HRHUBWEB.Controllers
             return ObjSectionAnswer;
         }
 
+        // Show Individual Staff Performance All Sections
+       
+        public async Task<IActionResult> StaffPerformance(String data = "", int ReviewedStaffId = 0)
+        {
+
+            //  ViewBag.ListAnswerSatff = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>($"api/Performance/GetStaffSectionAnswerList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
+            SectionAnswer objInfo = new SectionAnswer();
+            ViewBag.UserStaffID = _user.StaffId;
+            objInfo.StaffList = await _APIHelper.CallApiAsyncGet<Staff>($"api/Performance/GetStaffProfileId{ReviewedStaffId}", HttpMethod.Get);
 
 
+            ViewBag.Success = data;
+            SectionAnswer ObjSectionAnswer = new SectionAnswer();
+            return View(ObjSectionAnswer);
+        }
 
 
         #endregion
