@@ -15,6 +15,7 @@ using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace HRHUBWEB.Controllers
 {
@@ -188,76 +189,42 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffSalaryMaster()
         {
             StaffSalary objStaffSalary = new StaffSalary();
-            objStaffSalary.generalMonthAndYearList = generalMonthAndYear();
-			return View(objStaffSalary);
+            loadMonthAndYear();
+            return View(objStaffSalary);
 		}
 
-        public List<SelectListItem> generalMonthAndYear()
+        private void loadMonthAndYear()
         {
-            // Create the select list groups
-            SelectListGroup group1 = new SelectListGroup { Name = "Month" };
-            SelectListGroup group2 = new SelectListGroup { Name = "Year" };
-
-            // Create the select list items and assign them to the respective groups
-            List<SelectListItem> items = new List<SelectListItem>
+            List<SelectListItem> itemsYear = new List<SelectListItem>
             {
-                new SelectListItem { Text = "January", Value = "1", Group = group1 },
-                new SelectListItem { Text = "February", Value = "2", Group = group1 },
-                new SelectListItem { Text = "March", Value = "3", Group = group1 },
-                new SelectListItem { Text = "April", Value = "4", Group = group1 },
-                new SelectListItem { Text = "May", Value = "5", Group = group1 },
-                new SelectListItem { Text = "June", Value = "6", Group = group1 },
-                new SelectListItem { Text = "July", Value = "7", Group = group1 },
-                new SelectListItem { Text = "August", Value = "8", Group = group1 },
-                new SelectListItem { Text = "September", Value = "9", Group = group1 },
-                new SelectListItem { Text = "October", Value = "10", Group = group1 },
-                new SelectListItem { Text = "November", Value = "11", Group = group1 },
-                new SelectListItem { Text = "December", Value = "12", Group = group1 },
-
-                new SelectListItem { Text = "2023", Value = "2023", Group = group2 },
-                new SelectListItem { Text = "2024", Value = "2024", Group = group2 },
-                new SelectListItem { Text = "2025", Value = "2025", Group = group2 },
-                new SelectListItem { Text = "2026", Value = "2026", Group = group2 },
+                new SelectListItem { Text = "2023", Value = "2023" },
+                new SelectListItem { Text = "2024", Value = "2024" },
+                new SelectListItem { Text = "2025", Value = "2025" },
+                new SelectListItem { Text = "2026", Value = "2026" },
             };
 
-            // Pass the list of items to the view
-            ViewBag.Options = items;
+            // Assign the list to ViewBag
+            ViewBag.yearViewBag = itemsYear;
 
-            return items;
+            List<SelectListItem> items = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "January", Value = "1"},
+                new SelectListItem { Text = "February", Value = "2"},
+                new SelectListItem { Text = "March", Value = "3"},
+                new SelectListItem { Text = "April", Value = "4"},
+                new SelectListItem { Text = "May", Value = "5"},
+                new SelectListItem { Text = "June", Value = "6"},
+                new SelectListItem { Text = "July", Value = "7"},
+                new SelectListItem { Text = "August", Value = "8"},
+                new SelectListItem { Text = "September", Value = "9"},
+                new SelectListItem { Text = "October", Value = "10"},
+                new SelectListItem { Text = "November", Value = "11"},
+                new SelectListItem { Text = "December", Value = "12"},
+            };
+
+            // Create the SelectList using the items and return it
+            ViewBag.monthViewBag = items;
         }
-
-        public List<SelectListItem> generalMonth()
-		{
-			List<SelectListItem> listobj = new List<SelectListItem>();
-			listobj.Add(new SelectListItem { Text = "January", Value = "1" });
-			listobj.Add(new SelectListItem { Text = "February", Value = "2" });
-			listobj.Add(new SelectListItem { Text = "March", Value = "3" });
-			listobj.Add(new SelectListItem { Text = "April", Value = "4" });
-			listobj.Add(new SelectListItem { Text = "May", Value = "5" });
-			listobj.Add(new SelectListItem { Text = "June", Value = "6" });
-			listobj.Add(new SelectListItem { Text = "July", Value = "7" });
-			listobj.Add(new SelectListItem { Text = "August", Value = "8" });
-			listobj.Add(new SelectListItem { Text = "September", Value = "9" });
-			listobj.Add(new SelectListItem { Text = "October", Value = "10" });
-			listobj.Add(new SelectListItem { Text = "November", Value = "11" });
-			listobj.Add(new SelectListItem { Text = "December", Value = "12" });
-			return listobj;
-        }
-
-        public List<SelectListItem> generalYear()
-        {
-            List<SelectListItem> listobj = new List<SelectListItem>();
-            listobj.Add(new SelectListItem { Text = "2023", Value = "2023" });
-            listobj.Add(new SelectListItem { Text = "2024", Value = "2024" });
-            listobj.Add(new SelectListItem { Text = "2025", Value = "2025" });
-            listobj.Add(new SelectListItem { Text = "2026", Value = "2026" });
-            listobj.Add(new SelectListItem { Text = "2027", Value = "2027" });
-            listobj.Add(new SelectListItem { Text = "2028", Value = "2028" });
-            listobj.Add(new SelectListItem { Text = "2029", Value = "2029" });
-            listobj.Add(new SelectListItem { Text = "2030", Value = "2030" });
-            return listobj;
-        }
-
 
         public async Task<IActionResult> PostStaffSalaryMaster(int month = 0, int year = 0)
         {

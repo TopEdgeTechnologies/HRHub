@@ -564,6 +564,19 @@
                                     await datePickerWidget("Date Of Birth", "Dob", Model.Dob, "DD-MM-YYY", "text", false);
                                     await radioParentGroupWidget("Gender");                                    
                                     
+                                    @*
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-label mb-0 mt-2">Marital Status</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                @Html.DropDownList("SelectedValue", ViewBag.MaterialStatusViewBag as List<SelectListItem>, "-- Select Month --", new { id = "MaterialStatus", name = "MaterialStatus",  @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    *@
+
                                     if(Model.MaterialStatusList != null && Model.MaterialStatusList.Count() > 0)
                                     {
                                         await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, Model.MaterialStatusList, false);
@@ -814,13 +827,10 @@
                                     await textWidget("Job Title", "JobTitle", Model.JobTitle, "Describe Staff Job Title", "text", true);
                                     await textareaWidget("Job Description", "JobDescription", Model.JobDescription, "Job Description", true);
                                     await datePickerWidget("Date Of Joining", "JoiningDate", Model.JoiningDate, "DD-MM-YYY", "text", false);
-                                    await datePickerWidget("Resigning Date", "ResigningDate", Model.ResigningDate, "DD-MM-YYY", "text", false);
-                                    await datePickerWidget("Termination Date", "TerminationDate", Model.TerminationDate, "DD-MM-YYY", "text", false);
+                                    //await datePickerWidget("Resigning Date", "ResigningDate", Model.ResigningDate, "DD-MM-YYY", "text", false);
+                                    //await datePickerWidget("Termination Date", "TerminationDate", Model.TerminationDate, "DD-MM-YYY", "text", false);
                                     await checkboxWidget("Status:", "Status", Model.Status, false);
                                 }
-
-                                
-
 
 
                                 <h4 class="mb-5 mt-7 font-weight-bold">Bank Details</h4>
@@ -1096,12 +1106,16 @@
 
         $("#FirstName").on("input", function(){
             debugger
-            $("#lbl_FullName").text($("#FirstName").val() + ' ' + $("#LastName").val())
-        });
+            var fullName = $("#FirstName").val() + ' ' + $("#LastName").val()
+            $("#lbl_FullName").text(fullName)
+            $("#AccountTitle").val(fullName)
+       });
 
         $("#LastName").on("input", function() {
-            $("#lbl_FullName").text($("#FirstName").val() + ' ' + $("#LastName").val())
-        });
+            var fullName = $("#FirstName").val() + ' ' + $("#LastName").val()
+            $("#lbl_FullName").text(fullName)
+            $("#AccountTitle").val(fullName)
+         });
 
         //function OnTextChangeStaffName()
         //{

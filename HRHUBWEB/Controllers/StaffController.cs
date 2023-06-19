@@ -94,7 +94,7 @@ namespace HRHUBWEB.Controllers
             
             // Edit & Update Mode
             objStaff = await GetStaffById(Id);
-            
+
             objStaff.MaterialStatusList = GetMaterialStatusList();
             objStaff.BloodGroupList = GetBloodGroup();
             objStaff.DepartmentList = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
@@ -124,6 +124,7 @@ namespace HRHUBWEB.Controllers
             List<SelectListItem> listobj = new List<SelectListItem>();
             listobj.Add(new SelectListItem { Text = "Single", Value = "1" });
             listobj.Add(new SelectListItem { Text = "Married", Value = "2" });
+
             return listobj;
         }
 
