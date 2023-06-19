@@ -365,12 +365,12 @@ namespace HRHUBAPI.Controllers
         #endregion
 
         #region QuestionSection
-        //[HttpGet("GetQuestionSectionInfos{id}")]
-        //public async Task<ActionResult<List<SectionQuestion>>> GetQuestionSectionInfos(int id)
-        //{
+        [HttpGet("GetQuestionSectionInfos{id}")]
+        public async Task<ActionResult<List<SectionQuestion>>> GetQuestionSectionInfos(int id)
+        {
 
-        //    return await new Section().GetSectionQuestion(id, _context);
-        //}
+            return await new Section().GetSectionQuestion(id, _context);
+        }
         #endregion
 
         #region Staff Performance Evaluation    
@@ -386,11 +386,11 @@ namespace HRHUBAPI.Controllers
 
 
 
-        [HttpGet("GetStaffSectionAnswerList{ReviewFormId}")]
-        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetStaffSectionAnswerList(int ReviewFormId)
+        [HttpGet("GetStaffSectionAnswerList{ReviewFormId}/{CompanyId}")]
+        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetStaffSectionAnswerList(int ReviewFormId,int CompanyId)
         {
 
-            return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, _context);
+            return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, CompanyId, _context);
         }
 
 

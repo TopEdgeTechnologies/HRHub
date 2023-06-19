@@ -36,6 +36,7 @@ namespace HRHUBAPI.Models
         public int? DesignationId { get; set; }
         [NotMapped]
 		public string? DepartmentTitle { get; set; }
+       
 		
        [NotMapped]
 		public string? FirstName { get; set; }
@@ -136,36 +137,67 @@ namespace HRHUBAPI.Models
 
         // List Staff Section Answer
 
-        public async Task<List<StaffReviewFormProcessed>> ListStaffSectionAnswer(int ReviewFormId, HrhubContext _context)
+        public async Task<List<StaffReviewFormProcessed>> ListStaffSectionAnswer(int ReviewFormId,int CompanyId, HrhubContext _context)
         {
+
+
+
             try
             {
-                var List = from SR in _context.StaffReviewFormProcesseds                                              
-                         
-                           join ST in _context.Staff on SR.ReviewedStaffId equals ST.StaffId
-                           where ST.IsDeleted == false  && ST.Status==true && SR.ReviewFormId == ReviewFormId 
+                string query = "EXEC dbo.Sp_Get_Staff_Review_List " + ReviewFormId + "," + CompanyId + "";
+                DataTable dt = _db.ReturnDataTable(query);
 
-                           select new StaffReviewFormProcessed
-                           {
-                               StaffSnap = ST.SnapPath,                             
-                               FirstName = ST.FirstName,
-                               LastName = ST.LastName,
-                               ReviewFormId= SR.ReviewFormId,
-                               ReviewedStaffId = SR.ReviewedStaffId,                              
-                               TotalWeightage =Convert.ToDecimal(SR.TotalWeightage),
-                               EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)                              
-
-                           };
-                return List != null ? List.OrderByDescending(x => x.ReviewFormId).ToList() : new List<StaffReviewFormProcessed>();
-
-
+                var obj = dt.AsEnumerable()
+                    .Select(row => new StaffReviewFormProcessed
+                    {
+                        StaffSnap = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
+                        FirstName = row["FirstName"].ToString(),
+                        Department= row["Title"].ToString(),
+                        Designation = row["Title"].ToString(),
+                        LastName =  row["LastName"].ToString(),
+                        ReviewFormId= Convert.ToInt32(row["ReviewFormId"]),
+                        ReviewedStaffId = Convert.ToInt32(row["Reviewed_StaffID"]),
+                        TotalWeightage =Convert.ToDecimal(row["TotalWeightage"]),
+                        EarnedWeightage = Convert.ToDecimal(row["EarnedWeightage"]) 
+                    }).OrderByDescending(x => x.ReviewFormId)
+                    .ToList();
+                return obj;
             }
-            catch (Exception ex)
-            {
+            catch { throw; }
 
-                throw;
 
-            }
+
+
+
+
+            //try
+            //{
+            //    var List = from SR in _context.StaffReviewFormProcesseds                                              
+
+            //               join ST in _context.Staff on SR.ReviewedStaffId equals ST.StaffId
+            //               where ST.IsDeleted == false  && ST.Status==true && SR.ReviewFormId == ReviewFormId 
+
+            //               select new StaffReviewFormProcessed
+            //               {
+            //                   StaffSnap = ST.SnapPath,                             
+            //                   FirstName = ST.FirstName,
+            //                   LastName = ST.LastName,
+            //                   ReviewFormId= SR.ReviewFormId,
+            //                   ReviewedStaffId = SR.ReviewedStaffId,                              
+            //                   TotalWeightage =Convert.ToDecimal(SR.TotalWeightage),
+            //                   EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)                              
+
+            //               };
+            //    return List != null ? List.OrderByDescending(x => x.ReviewFormId).ToList() : new List<StaffReviewFormProcessed>();
+
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw;
+
+            //}
         }
 
 
@@ -205,9 +237,50 @@ namespace HRHUBAPI.Models
         }
 
 
-          // Update_Answer_Question Load 
-       
+        // List Show Individual Staff Performance All Sections vise
 
+
+        public async Task<SectionAnswer> ViewStaffPerformance(int StaffId, HrhubContext _context)
+        {
+            //try
+            //{
+            //    var List = from S in _context.SectionAnswers
+            //               join Design in _context.Designations on S.DesignationId equals Design.DesignationId
+            //               join D in _context.Departments on S.DepartmentId equals D.DepartmentId
+            //               where S.IsDeleted == false && Design.IsDeleted == false && S.Status == true && Design.Status == true && D.IsDeleted == false && D.Status == true && S.StaffId == StaffId
+
+            //               select new Staff
+            //               {
+            //                   StaffId = S.StaffId,
+            //                   FirstName = S.FirstName,
+            //                   LastName = S.LastName,
+            //                   DesignationTitle = Design.Title,
+            //                   DepartmentTitle = D.Title,
+            //                   DepartmentId = S.DepartmentId,
+            //                   DesignationId = S.DesignationId,
+            //                   SnapPath = string.IsNullOrWhiteSpace(S.SnapPath) ? "/Images/StaffImageEmpty.jpg" : S.SnapPath,
+            //                   RegistrationNo = S.RegistrationNo,
+            //                   ContactNumber1 = S.ContactNumber1,
+            //                   Email = S.Email,
+            //                   PermanentAddress = S.PermanentAddress,
+            //                   NationalIdnumber = S.NationalIdnumber,
+
+
+            //               };
+            //    return List != null ? List.FirstOrDefault() : new SectionAnswer();
+
+
+
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw;
+
+            //}
+
+            return null;
+        }
 
 
 
@@ -251,7 +324,7 @@ namespace HRHUBAPI.Models
 
             }
 
-            return null;
+           
         }
         
         // Load all section and Question 
@@ -286,31 +359,6 @@ namespace HRHUBAPI.Models
                     return obj;
                 }
                 catch { throw; }
-
-
-
-
-                //var List = from S in _context.SectionQuestions
-                //           join Q in _context.Questions on S.QuestionId equals Q.QuestionId
-                //           join section in _context.Sections on S.SectionId equals section.SectionId
-                //           join Performance in _context.PerformanceForms on section.ReviewFormId equals Performance.ReviewFormId
-                //           where Q.CompanyId== CompanyId && Q.IsDeleted == false && section.ReviewFormId== ReviewFormId && Performance.IsDeleted == false && Performance.CompanyId==CompanyId
-
-                //           select new SectionQuestion
-                //           {
-                //               SectionQuestionId = S.SectionQuestionId,
-                //               QuestionId = S.QuestionId,
-                //               SectionId = S.SectionId,
-                //               Weightage = S.Weightage,
-                //               QuestionName = Q.Title,
-                //               SectionName = section.Title,
-                //               SectionDescription = section.Description,
-                //               ReviewName = Performance.Title,
-                //               ReviewDescription = Performance.Description,
-                //               AnswerWeightage = S.AnswerWeightage,
-
-                //           };
-                //return List != null ? List.OrderByDescending(x => x.SectionQuestionId).ToList() : new List<SectionQuestion>();
 
 
             }
@@ -508,10 +556,10 @@ namespace HRHUBAPI.Models
 
                     //---------------------------------------------- insert Self Questions ----------------------------
 
-                    var StaffReviewer = SectionAnswerInfo.ReviewerStaffId;
-                    var checkExitsViewer = _context.SectionAnswers.Any(x=>x.ReviewedStaffId== StaffReviewer);
-                    if (checkExitsViewer == true)
+                    if (SectionAnswerInfo.ListQuestion != null && SectionAnswerInfo.ListQuestion.Count() > 0)
                     {
+
+                        
                         if (SectionAnswerInfo.ListAnswerId != null && SectionAnswerInfo.ListAnswerId.Count() > 0)
                         {
                             int c = 0;
@@ -527,9 +575,9 @@ namespace HRHUBAPI.Models
                             await _context.SaveChangesAsync();
 
                         }
-                    }
-                    else
-                    {
+                       
+                        else
+                        {
 
                         List<SectionAnswer> objQ = new List<SectionAnswer>();
 
@@ -555,23 +603,44 @@ namespace HRHUBAPI.Models
 
                             }
                             _context.SectionAnswers.AddRange(objQ);
+                             await _context.SaveChangesAsync();
 
-
-                            StaffReviewFormProcessed objProcessed = new StaffReviewFormProcessed();
-
-                            objProcessed.EarnedWeightage = 0;
-                            objProcessed.TotalWeightage = 0;
-                            objProcessed.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
-                            objProcessed.ReviewFormId = formReviewID;
-                            objProcessed.CreatedBy = SectionAnswerInfo.CreatedBy;
-                            objProcessed.CreatedOn = DateTime.Now;
-
-                            _context.StaffReviewFormProcesseds.Add(objProcessed);
-
-                            await _context.SaveChangesAsync();
                         }
 
+                            var ResultProcessed = _context.StaffReviewFormProcesseds.FirstOrDefault(x => x.ReviewedStaffId == SectionAnswerInfo.ReviewedStaffId && x.ReviewFormId == formReviewID);
+                            if (ResultProcessed != null)
+                            {
+                                ResultProcessed.TotalWeightage = SectionAnswerInfo. ListQuestionWeigth!=null? SectionAnswerInfo.ListQuestionWeigth.Sum(): ResultProcessed.TotalWeightage;
+                                ResultProcessed.EarnedWeightage = lsobjAca!=null && lsobjAca.Count()>0?   lsobjAca.Sum(x => x.AnswerWeightage) : ResultProcessed.EarnedWeightage;
+                                ResultProcessed.ReviewFormId = formReviewID;
+                                ResultProcessed.UpdatedBy = SectionAnswerInfo.CreatedBy;
+                                ResultProcessed.UpdatedOn = DateTime.Now;
 
+                                await _context.SaveChangesAsync();
+
+                            }
+                            else
+                            {
+
+                                StaffReviewFormProcessed objProcessed = new StaffReviewFormProcessed();
+
+                                objProcessed.EarnedWeightage = 0;
+                                objProcessed.TotalWeightage = 0;
+                                objProcessed.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
+                                objProcessed.ReviewFormId = formReviewID;
+                                objProcessed.CreatedBy = SectionAnswerInfo.CreatedBy;
+                                objProcessed.CreatedOn = DateTime.Now;
+
+                                _context.StaffReviewFormProcesseds.Add(objProcessed);
+
+                                await _context.SaveChangesAsync();
+                            }
+
+
+
+
+
+                        }
 
                     }
                    

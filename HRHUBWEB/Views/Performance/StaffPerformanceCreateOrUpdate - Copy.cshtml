@@ -228,7 +228,7 @@
         <input asp-for="ReviewedStaffId" type="hidden" class="form-control" />
         <div class="card-header border-bottom-0">
         </div>
-        if ( Model.ReviewerStaffId != ViewBag.UserStaffID)
+        if (Model.ListSectionAnswer.Where(x=>x.AnswerId>0).Count()==0 ||   Model.ReviewerStaffId != ViewBag.UserStaffID)
         {
             {
                 var CurrentSection = 0;

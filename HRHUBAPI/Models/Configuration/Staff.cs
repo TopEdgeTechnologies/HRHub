@@ -117,7 +117,7 @@ namespace HRHUBAPI.Models
                         SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         SNO = Convert.ToInt32(row["SNO"]),
                         FirstName = row["FirstName"].ToString(),
-                        LastName = row["LastName"].ToString(),
+                        LastName =  row["LastName"].ToString(),
                         Email = row["Email"].ToString(),
                         StaffId = Convert.ToInt32(row["StaffId"]),
                         RegistrationNo = row["RegistrationNo"].ToString(),

@@ -41,51 +41,51 @@
                         <tbody>
                             @{
                                
-                                //foreach (var item in Model.AllSection)
-                                //{
-                                //    <tr>
-                                //        <td class="text-center">
-                                //            @item.OrderNo
-                                //        </td>
+                                foreach (var item in Model.AllSection)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @item.OrderNo
+                                        </td>
 
-                                //        <td>
-                                //            @item.Title
-                                //        </td>
+                                        <td>
+                                            @item.Title
+                                        </td>
                                         
-                                //        <td>
-                                //            @item.Description
-                                //        </td>                                      
+                                        <td>
+                                            @item.Description
+                                        </td>                                      
                                         
                                        
 
                                         
-                                //        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                //        {
-                                //            <th class="d-none">
-                                //            </th>
-                                //        }
-                                //        else
-                                //        {
-                                //            <td class="text-end">
-                                //                <div class="d-flex">
-                                //                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                //                    {
-                                //                        <a asp-action="PerformanceSectionCreateOrUpdate" asp-route-id="@item.SectionId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
-                                //                            <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                //                        </a>
-                                //                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                //                    {
-                                //                        <a href="#" onclick="DeleteConfirmation(@item.SectionId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                //                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                //                        </a>
-                                //                    }
+                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                        {
+                                            <th class="d-none">
+                                            </th>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-end">
+                                                <div class="d-flex">
+                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                    {
+                                                        <a asp-action="PerformanceSectionCreateOrUpdate" asp-route-id="@item.SectionId" asp-route-ReviewFormId="@item.ReviewFormId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                    {
+                                                        <a href="#" onclick="DeleteConfirmation(@item.SectionId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                        </a>
+                                                    }
 
-                                //                </div>
-                                //            </td>
-                                //        }
-                                //    </tr>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
                                     
-                                //}
+                                }
                             }
                         </tbody>
                     </table>
