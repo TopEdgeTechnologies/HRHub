@@ -393,6 +393,13 @@ namespace HRHUBAPI.Controllers
             return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, CompanyId, _context);
         }
 
+        [HttpGet("GetViewStaffPerformanceList{ReviewedStaffId}/{ReviewFormId}")]
+        public async Task<ActionResult<List<SectionAnswer>>> GetViewStaffPerformanceList(int ReviewedStaffId, int ReviewFormId)
+        {
+
+            return await new SectionAnswer().ViewStaffPerformance(ReviewedStaffId, ReviewFormId, _context);
+        }
+
 
         [HttpGet("GetSectionQuestionList{ReviewFormId}/{CompanyId}")]
         public async Task<ActionResult<List<SectionQuestion>>> GetSectionQuestionList(int ReviewFormId, int CompanyId)
