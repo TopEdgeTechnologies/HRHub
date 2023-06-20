@@ -15,7 +15,8 @@ namespace HRHUBAPI.Models
         public string? CssColor { get; set; } 
         [NotMapped]
         public string? CandidateName { get; set; }
-
+        [NotMapped]
+        public int? CompanyId { get; set; }
 
 
     }

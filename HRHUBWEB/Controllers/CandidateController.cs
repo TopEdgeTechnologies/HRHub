@@ -288,7 +288,7 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("CandidateList", new { id = 1 });
+                    return RedirectToAction("CandidateList", new { data = status,id = 1 });
 
                 }
                 else
@@ -398,6 +398,7 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            obj.CompanyId = userObject.CompanyId;
             obj.CreatedBy = userObject.UserId;
 
 
@@ -405,7 +406,6 @@ namespace HRHUBWEB.Controllers
 
             var modelobj = JsonConvert.DeserializeObject<CandidateScreening>(my["obj"]);
             modelobj.CreatedBy = userObject.UserId;
-
 
             /////////////////////////
             ///
