@@ -158,13 +158,67 @@
                             <img src="@Model.StaffList.SnapPath" class="img-fluid img-fit rounded-circle" style="width:175px; height:175px" />
                         </div>
                         <div class="col-md-7">
-                            <div class="profile-info text-center text-md-start mt-md-0">
+                            <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="title mb-1 font-weight-bold fs-16">Name:</div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="text"><span>@Model.StaffList.FirstName</span> <span>@Model.StaffList.LastName</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Employee Id:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.RegistrationNo</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="title mb-1 font-weight-bold fs-16">Job Title:</div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="text"><span>@Model.StaffList.JobTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Designation:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.DesignationTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                 <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Department:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.DepartmentTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+
+
+                            </ul>
+                            @*<div class="profile-info text-center text-md-start mt-md-0">
                                 <h3 class="user-name fs-22 mb-2">@Model.StaffList.FirstName</h3>
                                 <h6 class="text-primary fs-18 mb-2">@Model.StaffList.DepartmentTitle</h6>
                                 <small class="text-muted fs-16 mb-1">@Model.StaffList.DesignationTitle</small>
                                 <div class="staff-id font-weight-bold fs-16 mb-2">Employee ID : @Model.StaffList.RegistrationNo</div>
 
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -172,21 +226,41 @@
                     <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
                         <li>
                             <div class="row">
-                                <div class="col-6 col-md-3">
+                                <div class="col-md-3">
                                     <div class="title mb-1 font-weight-bold fs-16">Phone:</div>
                                 </div>
-                                <div class="col-6 col-md-9">
+                                <div class="col-md-9">
                                     <div class="text"><span>@Model.StaffList.ContactNumber1</span></div>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="row">
-                                <div class="col-6 col-md-3">
+                                <div class="col-md-3">
                                     <div class="title mb-1 font-weight-bold fs-16">Email:</div>
                                 </div>
                                 <div class=" col-6 col-md-9">
                                     <div class="text"><span>@Model.StaffList.Email</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="title mb-1 font-weight-bold fs-16">Cnic:</div>
+                                </div>
+                                <div class="col-6 col-md-9">
+                                    <div class="text"><span>@Model.StaffList.NationalIdnumber</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class=" col-6 col-md-3">
+                                    <div class="title mb-1 font-weight-bold fs-16">Gender:</div>
+                                </div>
+                                <div class="col-6 col-md-9">
+                                    <div class="text"><span>@Model.StaffList.Gender</span></div>
                                 </div>
                             </div>
                         </li>
@@ -200,16 +274,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="row">
-                                <div class="col-6 col-md-3">
-                                    <div class="title mb-1 font-weight-bold fs-16">CNIC</div>
-                                </div>
-                                <div class="col-6 col-md-9">
-                                    <div class="text"><span>@Model.StaffList.NationalIdnumber</span></div>
-                                </div>
-                            </div>
-                        </li>
+                        
 
 
                     </ul>

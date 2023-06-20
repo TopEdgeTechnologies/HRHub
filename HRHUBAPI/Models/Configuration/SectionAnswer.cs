@@ -270,6 +270,8 @@ namespace HRHUBAPI.Models
                                RegistrationNo = S.RegistrationNo,
                                ContactNumber1 = S.ContactNumber1,
                                Email = S.Email,
+                               JobTitle = S.JobTitle,
+                               Gender = S.Gender,
                                PermanentAddress = S.PermanentAddress,
                                NationalIdnumber = S.NationalIdnumber,
                                

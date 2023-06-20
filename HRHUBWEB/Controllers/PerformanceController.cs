@@ -310,7 +310,7 @@ namespace HRHUBWEB.Controllers
 
 
         [CustomAuthorization]
-        public async Task<IActionResult> StaffPerformanceDetail(String data = "", int ReviewFormId = 0)
+        public async Task<IActionResult> StaffPerformanceDetail(int ReviewFormId = 0)
         {
 
             ViewBag.ListAnswerSatff = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffReviewFormProcessed>>($"api/Performance/GetStaffSectionAnswerList{ReviewFormId}/{_user.CompanyId}", HttpMethod.Get);
@@ -320,7 +320,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            ViewBag.Success = data;
+            
             StaffReviewFormProcessed ObjStaffReviewFormProcessed = new StaffReviewFormProcessed();
             return View(ObjStaffReviewFormProcessed);
         }
