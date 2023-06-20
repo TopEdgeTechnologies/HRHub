@@ -50,6 +50,8 @@ namespace HRHUBAPI.Models
 		
         [NotMapped]
 		public string? DesignationTitle { get; set; }
+        [NotMapped]
+		public string? SectionTitle { get; set; }
 	    [NotMapped]
 		public string? SnapPath { get; set; }
 		
@@ -82,8 +84,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public bool? IsAnswerWeightage { get; set; }
 
-        //[NotMapped]
-        //public int? ListAnswerId { get; set; }
+        [NotMapped]
+        public int? OrderNo { get; set; }
 
         [NotMapped]
         public int? CompanyId { get; set; }
@@ -170,34 +172,7 @@ namespace HRHUBAPI.Models
 
 
 
-            //try
-            //{
-            //    var List = from SR in _context.StaffReviewFormProcesseds                                              
-
-            //               join ST in _context.Staff on SR.ReviewedStaffId equals ST.StaffId
-            //               where ST.IsDeleted == false  && ST.Status==true && SR.ReviewFormId == ReviewFormId 
-
-            //               select new StaffReviewFormProcessed
-            //               {
-            //                   StaffSnap = ST.SnapPath,                             
-            //                   FirstName = ST.FirstName,
-            //                   LastName = ST.LastName,
-            //                   ReviewFormId= SR.ReviewFormId,
-            //                   ReviewedStaffId = SR.ReviewedStaffId,                              
-            //                   TotalWeightage =Convert.ToDecimal(SR.TotalWeightage),
-            //                   EarnedWeightage = Convert.ToDecimal(SR.EarnedWeightage)                              
-
-            //               };
-            //    return List != null ? List.OrderByDescending(x => x.ReviewFormId).ToList() : new List<StaffReviewFormProcessed>();
-
-
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    throw;
-
-            //}
+           
         }
 
 
@@ -240,46 +215,34 @@ namespace HRHUBAPI.Models
         // List Show Individual Staff Performance All Sections vise
 
 
-        public async Task<SectionAnswer> ViewStaffPerformance(int StaffId, HrhubContext _context)
+        public async Task<List<SectionAnswer>> ViewStaffPerformance(int ReviewedStaffId, int ReviewFormId, HrhubContext _context)
         {
-            //try
-            //{
-            //    var List = from S in _context.SectionAnswers
-            //               join Design in _context.Designations on S.DesignationId equals Design.DesignationId
-            //               join D in _context.Departments on S.DepartmentId equals D.DepartmentId
-            //               where S.IsDeleted == false && Design.IsDeleted == false && S.Status == true && Design.Status == true && D.IsDeleted == false && D.Status == true && S.StaffId == StaffId
+            try
+            {
+                string query = "EXEC dbo.Sp_StaffPerformance_AllSection_Details " + ReviewedStaffId + " , " + ReviewFormId + "";
+                DataTable dt = _db.ReturnDataTable(query);
 
-            //               select new Staff
-            //               {
-            //                   StaffId = S.StaffId,
-            //                   FirstName = S.FirstName,
-            //                   LastName = S.LastName,
-            //                   DesignationTitle = Design.Title,
-            //                   DepartmentTitle = D.Title,
-            //                   DepartmentId = S.DepartmentId,
-            //                   DesignationId = S.DesignationId,
-            //                   SnapPath = string.IsNullOrWhiteSpace(S.SnapPath) ? "/Images/StaffImageEmpty.jpg" : S.SnapPath,
-            //                   RegistrationNo = S.RegistrationNo,
-            //                   ContactNumber1 = S.ContactNumber1,
-            //                   Email = S.Email,
-            //                   PermanentAddress = S.PermanentAddress,
-            //                   NationalIdnumber = S.NationalIdnumber,
-
-
-            //               };
-            //    return List != null ? List.FirstOrDefault() : new SectionAnswer();
-
-
-
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    throw;
-
-            //}
-
-            return null;
+                var obj = dt.AsEnumerable()
+                    .Select(row => new SectionAnswer
+                    {
+                        AnswerId = Convert.IsDBNull(row["AnswerID"]) ? 0 : Convert.ToInt32(row["AnswerID"]),
+                        QuestionTitle = row["QuestionTitle"].ToString(),
+                        GetSectionId = Convert.IsDBNull(row["SectionId"]) ? 0 : Convert.ToInt32(row["SectionId"]),
+                        SectionWeightage = Convert.IsDBNull(row["SectionWeightage"]) ? 0 : Convert.ToInt32(row["SectionWeightage"]),
+                        OrderNo = Convert.IsDBNull(row["OrderNo"]) ? 0 : Convert.ToInt32(row["OrderNo"]),
+                        SectionName = row["SectionTitle"].ToString(),
+                        SectionDescription = row["SectionDescription"].ToString(),
+                        DesignationTitle = row["DesignationTitle"].ToString(),
+                        AnswerComments = row["AnswerComments"].ToString(),
+                        AnswerWeightage = Convert.IsDBNull(row["AnswerWeightage"]) ? 0 : Convert.ToDecimal(row["AnswerWeightage"]),
+                        IsAnswerWeightage = Convert.IsDBNull(row["AnswerWeightage"]) ? false : Convert.ToBoolean(row["AnswerWeightage"]),
+                        AllowSelfScoring = Convert.IsDBNull(row["AllowSelfScoring"]) ? false : Convert.ToBoolean(row["AllowSelfScoring"]),
+                        QuestionMaxLimit = Convert.IsDBNull(row["QuestionMaxLimit"]) ? 0 : Convert.ToInt32(row["QuestionMaxLimit"]),
+                    }).OrderBy(x => x.OrderNo)
+                    .ToList();
+                return obj;
+            }
+            catch { throw; }
         }
 
 
@@ -307,6 +270,8 @@ namespace HRHUBAPI.Models
                                RegistrationNo = S.RegistrationNo,
                                ContactNumber1 = S.ContactNumber1,
                                Email = S.Email,
+                               JobTitle = S.JobTitle,
+                               Gender = S.Gender,
                                PermanentAddress = S.PermanentAddress,
                                NationalIdnumber = S.NationalIdnumber,
                                

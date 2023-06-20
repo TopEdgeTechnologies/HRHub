@@ -158,13 +158,67 @@
                             <img src="@Model.StaffList.SnapPath" class="img-fluid img-fit rounded-circle" style="width:175px; height:175px" />
                         </div>
                         <div class="col-md-7">
-                            <div class="profile-info text-center text-md-start mt-md-0">
+                            <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="title mb-1 font-weight-bold fs-16">Name:</div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="text"><span>@Model.StaffList.FirstName</span> <span>@Model.StaffList.LastName</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Employee Id:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.RegistrationNo</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="title mb-1 font-weight-bold fs-16">Job Title:</div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="text"><span>@Model.StaffList.JobTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Designation:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.DesignationTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+                                 <li>
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="title mb-1 font-weight-bold fs-16">Department:</div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="text"><span>@Model.StaffList.DepartmentTitle</span></div>
+                                        </div>
+                                    </div>
+                                </li>
+
+
+                            </ul>
+                            @*<div class="profile-info text-center text-md-start mt-md-0">
                                 <h3 class="user-name fs-22 mb-2">@Model.StaffList.FirstName</h3>
                                 <h6 class="text-primary fs-18 mb-2">@Model.StaffList.DepartmentTitle</h6>
                                 <small class="text-muted fs-16 mb-1">@Model.StaffList.DesignationTitle</small>
                                 <div class="staff-id font-weight-bold fs-16 mb-2">Employee ID : @Model.StaffList.RegistrationNo</div>
 
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>
@@ -172,21 +226,41 @@
                     <ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
                         <li>
                             <div class="row">
-                                <div class="col-6 col-md-3">
+                                <div class="col-md-3">
                                     <div class="title mb-1 font-weight-bold fs-16">Phone:</div>
                                 </div>
-                                <div class="col-6 col-md-9">
+                                <div class="col-md-9">
                                     <div class="text"><span>@Model.StaffList.ContactNumber1</span></div>
                                 </div>
                             </div>
                         </li>
                         <li>
                             <div class="row">
-                                <div class="col-6 col-md-3">
+                                <div class="col-md-3">
                                     <div class="title mb-1 font-weight-bold fs-16">Email:</div>
                                 </div>
                                 <div class=" col-6 col-md-9">
                                     <div class="text"><span>@Model.StaffList.Email</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="title mb-1 font-weight-bold fs-16">Cnic:</div>
+                                </div>
+                                <div class="col-6 col-md-9">
+                                    <div class="text"><span>@Model.StaffList.NationalIdnumber</span></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class=" col-6 col-md-3">
+                                    <div class="title mb-1 font-weight-bold fs-16">Gender:</div>
+                                </div>
+                                <div class="col-6 col-md-9">
+                                    <div class="text"><span>@Model.StaffList.Gender</span></div>
                                 </div>
                             </div>
                         </li>
@@ -200,16 +274,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="row">
-                                <div class="col-6 col-md-3">
-                                    <div class="title mb-1 font-weight-bold fs-16">CNIC</div>
-                                </div>
-                                <div class="col-6 col-md-9">
-                                    <div class="text"><span>@Model.StaffList.NationalIdnumber</span></div>
-                                </div>
-                            </div>
-                        </li>
+                        
 
 
                     </ul>
@@ -219,5 +284,158 @@
 
         </div>
     </div>
+
+</div>
+<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+    
+      
+        <div class="card-header border-bottom-0">
+        </div>       
+           
+      
+            @{
+                var CurrentSection = 0;
+                foreach (var item in Model.ListSectionAnswer)
+                {
+
+                   
+                    if (item.GetSectionId != CurrentSection)
+                    {
+                        CurrentSection = Convert.ToInt32(item.GetSectionId);
+                        <input type="hidden" name="CurrentSection" value="@CurrentSection" />
+                        var QuestionsList = Model.ListSectionAnswer.Where(x => x.GetSectionId == item.GetSectionId).ToList();
+                        
+
+                        <div class="card-body p-4">
+
+
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false) // it Questions Already Defined
+                            {
+
+
+                                <section class="review-section professional-excellence">
+
+                                    <div class="review-header text-center">
+                                        <h3 class="review-title">@item.SectionName</h3>
+                                        <p class="text-muted">@item.SectionDescription</p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered review-table mb-0" id="myTable">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th class="col-8">Questions</th>
+                                                            <th class="col-1">Weightage</th>
+                                                    @foreach (var designation in QuestionsList.Select(x => x.DesignationTitle).Distinct())
+                                                    {
+                                                        <th class="text-center">
+                                                            <span>@designation</span>
+                                                        
+                                                           
+                                                        </th>
+                                                    }
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @{
+
+                                                    @foreach (var ItemQuestion in QuestionsList.DistinctBy(x => x.QuestionTitle))
+                                                    {
+                                                                <tr>
+                                                              <td>@ItemQuestion.QuestionTitle</td>
+                                                            <td class="text-center">@ItemQuestion.SectionWeightage</td>
+
+
+                                                            @foreach (var designation in QuestionsList.Select(x => x.DesignationTitle).Distinct())
+                                                            {
+                                                                var designationQuestion = QuestionsList.FirstOrDefault(x => x.DesignationTitle == designation && x.QuestionTitle == ItemQuestion.QuestionTitle);
+                                                                <td class="text-center">@(designationQuestion != null ? designationQuestion.AnswerWeightage : "")</td>
+                                                            }
+                                                                    <td class="d-none"><input name="ListAnswerId" value="@ItemQuestion.AnswerId" type="hidden" class="form-control"></td>
+                                                                    <td class="d-none"><input name="ListReviewedStaffId" value="@ItemQuestion.StaffId" type="hidden" class="form-control"><input name="ListSectionId" value="@ItemQuestion.GetSectionId" type="number" class="form-control number"></td>
+
+
+                                                                </tr>
+                                                    }
+
+                                                    }
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </section>
+                            }
+                            else
+                            {
+
+                               
+                                    <section class="review-section professional-excellence">
+
+                                        <div class="review-header text-center">
+                                            <h3 class="review-title">@item.SectionName</h3>
+                                            <p class="text-muted">@item.SectionDescription</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Questions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @{
+
+
+                                                                foreach (var Items in QuestionsList)
+                                                                {
+                                                                    <tr>
+                                                            <td> <input type="hidden" name="ListAnswerId" value="@Items.AnswerId" class="form-control"> <input type="text" name="ListQuestion" value="@Items.AnswerComments" readonly class="form-control"></td>
+                                                                        <td class="d-none"><input name="ListSectionId" value="@Items.GetSectionId" type="number" class="form-control number"></td>
+
+                                                                    </tr>
+                                                                }
+
+
+
+
+                                                            }
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </section>
+                                }
+
+
+                           
+
+                        </div>
+                    }
+
+                }
+
+            }
+
+       
+       
+
+   
 
 </div>
