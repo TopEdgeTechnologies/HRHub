@@ -24,7 +24,10 @@
                                     <a class="text-dark" href="javascript:void(0);">
                                         <h4 class="mt-3 mb-1 font-weight-semibold">@Model.Name</h4>
                                     </a> <span class="text-muted">@Model.CurrentDesignation</span><br>
-                                    <small class="text-muted">@Model.ExperienceInYears Yrs Experience</small>
+                                   
+                                        <small class="text-muted">@Model.ExperienceInYears Year Experience</small>
+
+                                   
                                 </div>
                             </div>
                         </div>
@@ -60,13 +63,13 @@
                                 <td><span class="font-weight-semibold">Current Designation :</span> @Model.CurrentDesignation</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Annual Salary :</span> @Model.CurrentSalary</td>
+                                <td><span class="font-weight-semibold">Annual Salary :</span> @Convert.ToDecimal(Model.CurrentSalary).ToString("N2")</td>
                             </tr>
                             <tr>
                                 <td><span class="font-weight-semibold">Current Company :</span> @Model.CurrentCompany</td>
                             </tr>
                             <tr>
-                                <td><span class="font-weight-semibold">Experience :</span> @Model.ExperienceInYears Yrs</td>
+                                <td><span class="font-weight-semibold">Experience :</span> @Model.ExperienceInYears Years</td>
                             </tr>
                             <tr>
                                 <td><span class="font-weight-semibold">Location :</span> @Model.City</td>
@@ -104,12 +107,13 @@
                         </tbody>*@
                     </table>
                 </div>
+                <hr style="border:1px solid;" />
                 <h5 class="mb-4 mt-5 font-weight-semibold">Employment Details</h5>
                 <div>
                     <i class="fa fa-caret-right me-2"></i> Currently Working at <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
                 <div>
-                    <i class="fa fa-caret-right me-2"></i> @Model.ExperienceInYears Yrs Of Working Experience in <span class="font-weight-semibold">@Model.CurrentCompany</span>
+                    <i class="fa fa-caret-right me-2"></i> @Model.ExperienceInYears Years Of Working Experience in <span class="font-weight-semibold">@Model.CurrentCompany</span>
                 </div>
               
                <div class="row mt-4">
@@ -117,10 +121,10 @@
                         <div class="card">
                             <div class="p-0">
                                 <div class="card-header border-0">
-                                    <h4 class="card-title">Skills Details</h4>
+                                    <h4 class="card-title">Skills</h4>
                                 </div>
 
-                                <div class="card-body overflow-auto overflow-scrolling" style="height: 200px;">
+                                <div class="card-body overflow-auto overflow-scrolling" style="height: 290px;">
 
                                    
 
@@ -160,9 +164,9 @@
 
                      <div class="card overflow-hidden">
                                     <div class="card-header border-0">
-                                        <h4 class="card-title">Time Line Status</h4>
+                                        <h4 class="card-title">TimeLine</h4>
                                     </div>
-                                    <div  id="timeofcandidatescreening"  class="overflow-auto overflow-scrolling mt-3" style="height: 200px;">
+                            <div id="timeofcandidatescreening" class="overflow-auto overflow-scrolling" style="height: 290px;">
 
 
 

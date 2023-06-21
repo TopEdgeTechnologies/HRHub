@@ -48,7 +48,7 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Candidate().PostCandidate(obj, _context);
-            if (result != null && result.CandidateId > 0)
+            if (result != null && result.Flag == 2)
                 return Ok(new
                 {
                     Success = true,

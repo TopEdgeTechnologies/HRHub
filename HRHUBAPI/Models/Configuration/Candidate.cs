@@ -25,7 +25,8 @@ namespace HRHUBAPI.Models
         public IEnumerable<string>? ListSkillStatus { get; set; }
         [NotMapped]
         public IEnumerable<Candidate>? ListCandidate { get; set; }
-
+        [NotMapped]
+        public int? Flag { get; set; }
 
 
         // Search Candidate by Name or Designation and Experince
@@ -127,8 +128,8 @@ namespace HRHUBAPI.Models
                                 City = cs.City,
                                 Address = cs.Address,
                                 Qualification = cs.Qualification,
-                                ApplyDate = cs.ApplyDate,
-                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "" : cs.Picture,
+                                ApplyDate = cs.ApplyDate,                               
+                                Picture = string.IsNullOrWhiteSpace(cs.Picture) ? "/Images/StaffImageEmpty.jpg" : cs.Picture,
                                 CompanyId = cs.CompanyId,
                                 StatusId = cs.StatusId,
                                 CreatedOn = cs.CreatedOn,
@@ -220,7 +221,7 @@ namespace HRHUBAPI.Models
                         checkCandidateInfo.UpdatedOn = DateTime.Now;
                         checkCandidateInfo.Status = CandidateInfo.Status;
                         checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
-
+                        CandidateInfo.Flag = 2;
                         await _context.SaveChangesAsync();
 
                     }
@@ -228,7 +229,11 @@ namespace HRHUBAPI.Models
                     {
                         CandidateInfo.CreatedOn = DateTime.Now;
                         CandidateInfo.StatusId = 1;
-
+                        CandidateInfo.Flag = 1;
+                        if (CandidateInfo.ExperienceInMonths == null)
+                        {
+                            CandidateInfo.ExperienceInMonths = 0;
+                        }
                         CandidateInfo.IsDeleted = false;
                         _context.Candidates.Add(CandidateInfo);
                         await _context.SaveChangesAsync();
@@ -309,12 +314,6 @@ namespace HRHUBAPI.Models
 
 
 
-
-
-
-
-
-
                     await _context.SaveChangesAsync();
                     dbContextTransaction.Commit();
                     return CandidateInfo;
@@ -370,6 +369,39 @@ namespace HRHUBAPI.Models
                     objscreen.IsDeleted = false;
                     
                     await _context.SaveChangesAsync();
+
+
+                    // -------------------Save and Staff records
+
+                    if (objscreen.StatusId == 8) // Entry in Staff Table  When Candidate Offered Accepted 
+                    {
+                        Staff objStaff = new Staff();
+                        var ResultCandidate = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == objscreen.CandidateId && x.IsDeleted == false);
+                        if (ResultCandidate != null)
+                        {
+
+                            objStaff.FirstName = ResultCandidate.Name;
+                            objStaff.Dob = ResultCandidate.Dob;
+                            objStaff.ContactNumber1 = ResultCandidate.Phone;
+                            objStaff.Gender = ResultCandidate.Gender;
+                            objStaff.JobTitle = ResultCandidate.CurrentDesignation;
+                            objStaff.PermanentAddress = ResultCandidate.Address;
+                            objStaff.PresentAddress = ResultCandidate.City;
+                            objStaff.Email = ResultCandidate.Email;
+                            objStaff.DesignationId = ResultCandidate.DesignationId;
+                            objStaff.SnapPath = ResultCandidate.Picture;
+                            objStaff.CompanyId = ResultCandidate.CompanyId;
+                            objStaff.Status = true;
+                            objStaff.CreatedOn = DateTime.Now;
+                            objStaff.CreatedBy = objscreen.CreatedBy;
+                            objStaff.IsDeleted = false;
+                        }
+                        
+                        _context.Staff.Add(objStaff);
+                        await _context.SaveChangesAsync();
+                    }
+                    // ---------------------------------------------
+
 
                     dbContextTransaction.Commit();
                     return objscreen;
