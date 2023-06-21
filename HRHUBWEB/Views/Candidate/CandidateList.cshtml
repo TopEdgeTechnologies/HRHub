@@ -222,8 +222,7 @@
                                                             @if (Model.UrlRequestSatausID != 8 && Model.UrlRequestSatausID != 9){
                                                             
                                                             <a class="dropdown-item" href="#" Onclick="loadModal(@item.CandidateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Process" data-bs-original-title="View" aria-label="Process">
-                                                                <i class="feather feather-check me-2"> Process
-                                                                </i>
+                                                                    <i class="fa fa-blind me-3"> Process</i>
                                                             </a>
                                                             }
                                                             <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" data-bs-original-title="View" aria-label="View">

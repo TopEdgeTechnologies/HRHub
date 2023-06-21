@@ -379,7 +379,17 @@
                     <div class="row mt-5">
                         <div class="col-md-4 col-sm-4">
                             <label class="form-label">Apply Date <span class="text-danger">*</span></label>
-                            <input asp-for="ApplyDate" class="form-control " placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+
+                                @if (!string.IsNullOrEmpty(@Model.ApplyDate.ToString()))
+                                {
+                                <input asp-for="ApplyDate" class="form-control " placeholder="DD-MM-YYY" type="date" >
+                            }
+                            else{
+                                <input asp-for="ApplyDate" class="form-control " placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+
+                                
+                                }
+
                             @*<div class="form-group">
                                
                                 <div class="input-group">
@@ -828,6 +838,22 @@
             else {
                 $("#CandidateResume").css("border-color", "#ddd");
             }
+            }
+            if ($("#CoverLetter").val() == "") {
+
+
+                $.growl.warning({
+                    message: "Please Enter Cover Letter"
+                });
+
+
+
+                $("#CoverLetter").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CoverLetter").css("border-color", "#ddd");
             }
 
             return status;
