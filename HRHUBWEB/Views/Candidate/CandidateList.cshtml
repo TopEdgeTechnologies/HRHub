@@ -222,16 +222,16 @@
                                                             @if (Model.UrlRequestSatausID != 8 && Model.UrlRequestSatausID != 9){
                                                             
                                                             <a class="dropdown-item" href="#" Onclick="loadModal(@item.CandidateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Process" data-bs-original-title="View" aria-label="Process">
-                                                                <i class="feather feather-check text-success me-2"> Process
+                                                                <i class="feather feather-check me-2"> Process
                                                                 </i>
                                                             </a>
                                                             }
                                                             <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" data-bs-original-title="View" aria-label="View">
-                                                                <i class="feather feather-eye  text-primary me-2"> View
+                                                                <i class="feather feather-eye me-2"> View
                                                                 </i>
                                                             </a>
                                                             <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                <i class="feather feather-edit  text-primary me-2"> Edit
+                                                                <i class="feather feather-edit me-2"> Edit
                                                                 </i>
                                                             </a>
                                                         } @if (Convert.ToBoolean(ViewBag.IsDelete))
@@ -239,11 +239,11 @@
                                                             @if (Model.UrlRequestSatausID == 1)
                                                             {
                                                                 <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                    <i class="feather feather-trash-2 text-danger me-2"> Delete</i>
+                                                                    <i class="feather feather-trash-2 me-2"> Delete</i>
                                                                 </a>
                                                             }
                                                             <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Resume" data-bs-original-title="Download Resume" aria-label="Download Resume">
-                                                                <i class="feather feather-download  text-secondary me-2"> Download</i>
+                                                                <i class="feather feather-download me-2"> Download</i>
                                                             </a>
                                                         }
                                                     </div>
@@ -721,10 +721,10 @@
 
             var obj = {
 
-                CandidateId:   $("#CandidateId").val(),
-                StatusId:      $("#StatusId").val(),
-                Remarks:       $("#Remarks").val(),
-                ScreeningDate: $("#ScreeningDate").val(),
+                CandidateId:    $("#CandidateId").val(),
+                StatusId:       $("#StatusId").val(),
+                Remarks:        $("#Remarks").val(),
+                ScreeningDate:  $("#ScreeningDate").val(),
                 AttachmentPath: $("#AttachmentCandidate").val()
             }
 
@@ -745,7 +745,11 @@
                     $.growl.notice({
                                message: "Status Updated"
                               });
-
+                              $("#CandidateId").val(0)
+                    $('#StatusId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
+                              $("#Remarks").val("")
+                              
+                              
                                //location.reload();
                 } else {
                  console.log('Error uploading form data');

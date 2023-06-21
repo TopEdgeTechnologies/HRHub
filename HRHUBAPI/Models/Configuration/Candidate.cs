@@ -25,7 +25,8 @@ namespace HRHUBAPI.Models
         public IEnumerable<string>? ListSkillStatus { get; set; }
         [NotMapped]
         public IEnumerable<Candidate>? ListCandidate { get; set; }
-
+        [NotMapped]
+        public int? Flag { get; set; }
 
 
         // Search Candidate by Name or Designation and Experince
@@ -220,7 +221,7 @@ namespace HRHUBAPI.Models
                         checkCandidateInfo.UpdatedOn = DateTime.Now;
                         checkCandidateInfo.Status = CandidateInfo.Status;
                         checkCandidateInfo.UpdatedBy = CandidateInfo.CreatedBy;
-
+                        CandidateInfo.Flag = 2;
                         await _context.SaveChangesAsync();
 
                     }
@@ -228,7 +229,8 @@ namespace HRHUBAPI.Models
                     {
                         CandidateInfo.CreatedOn = DateTime.Now;
                         CandidateInfo.StatusId = 1;
-                        if(CandidateInfo.ExperienceInMonths == null)
+                        CandidateInfo.Flag = 1;
+                        if (CandidateInfo.ExperienceInMonths == null)
                         {
                             CandidateInfo.ExperienceInMonths = 0;
                         }
@@ -312,12 +314,6 @@ namespace HRHUBAPI.Models
 
 
 
-
-
-
-
-
-
                     await _context.SaveChangesAsync();
                     dbContextTransaction.Commit();
                     return CandidateInfo;
@@ -377,7 +373,7 @@ namespace HRHUBAPI.Models
 
                     // -------------------Save and Staff records
 
-                    if (objscreen.StatusId == 8) // 
+                    if (objscreen.StatusId == 8) // Entry in Staff Table  When Candidate Offered Accepted 
                     {
                         Staff objStaff = new Staff();
                         var ResultCandidate = await _context.Candidates.FirstOrDefaultAsync(x => x.CandidateId == objscreen.CandidateId && x.IsDeleted == false);
@@ -388,6 +384,7 @@ namespace HRHUBAPI.Models
                             objStaff.Dob = ResultCandidate.Dob;
                             objStaff.ContactNumber1 = ResultCandidate.Phone;
                             objStaff.Gender = ResultCandidate.Gender;
+                            objStaff.JobTitle = ResultCandidate.CurrentDesignation;
                             objStaff.PermanentAddress = ResultCandidate.Address;
                             objStaff.PresentAddress = ResultCandidate.City;
                             objStaff.Email = ResultCandidate.Email;

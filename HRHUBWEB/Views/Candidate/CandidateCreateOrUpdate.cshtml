@@ -112,14 +112,24 @@
 
                         <div class="col-md-4 col-sm-4">
 
-                            <label class="form-label">Choose Image </label>
+                            <label class="form-label">Choose Image
+                            
+                                 @if (!string.IsNullOrEmpty(Model.Picture))
+                                {
+                                    <a href="@Model.Picture" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Picture" data-bs-original-title="View Picture" aria-label="View Picture"> <i class="feather feather-eye text-primary"></i></a>
+                                    <input type="hidden" value="@Model.Picture" name="Picture" />
+                                }
+                            
+                            
+                            </label>
                             <div class="form-group local-forms">
                                 <label for="form-label" class="form-label"></label> <input class="form-control" accept=".jpg, .jpeg, .png" id="CandidatePicture" name="CandidatePicture" type="file">
+                           
                             </div>
                         </div>
 
 
-
+                       
 
 
 
@@ -393,9 +403,19 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label class="form-label">Upload Resume <span class="text-danger">*</span></label>
+                            <label class="form-label">Upload Resume <span class="text-danger">*</span>
+                                
+                                @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                                {
+                                    <a href="@Model.AttachmentPath" target="_blank" data-bs-original-title="Download Resume" aria-label="Download Resume"><i class="feather feather-download  text-secondary me-2"> Download</i></a>
+                                    <input type="hidden" value="@Model.AttachmentPath" name="AttachmentPath" />
+                                }
+                            </label>
                             <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" type="file" accept=".pdf, .doc, .docx">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" value="@Model.AttachmentPath" type="file" accept=".pdf, .doc, .docx">
+                            
+                            
+                            
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -456,14 +476,19 @@
             //});
 
             //$('#ApplyDate').datepicker('setDate', currentDate);
+        
+        
+             if('@Model.CandidateId'>0)
+             {
+                $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val().trigger('change');
 
+
+             }else{
             $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
+
+             }
+          
             $('#SkillStatus').select2({ placeholder: 'Select Skill Status', width: '100%', allowClear: true }).val("").trigger('change');
-
-            //$('#DesignationId').select2();
-            //$('#SkillStatus').select2();
-
-
 
             $('#CandidatePicture').change(function () {
                 var fileInput = $(this);
@@ -491,11 +516,6 @@
                 }
 
             });
-
-
-
-
-
 
             $('#CandidateResume').change(function () {
             debugger
@@ -543,7 +563,7 @@
             
             
              var Data = { id: $("#CandidateId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val(), CompanyId: $("#CompanyId").val() }
-            console.log(Data)
+           
             $.ajax({
                 async: false,
                 url: "/Candidate/CandidateCheckData",
@@ -792,6 +812,8 @@
 
                 status = false;
             }
+            if('@Model.AttachmentPath'==''  )
+            {
             if (document.getElementById("CandidateResume").value == "") {
 
                 $.growl.warning({
@@ -806,7 +828,7 @@
             else {
                 $("#CandidateResume").css("border-color", "#ddd");
             }
-
+            }
 
             return status;
         }
