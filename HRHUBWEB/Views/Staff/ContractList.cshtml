@@ -34,7 +34,7 @@
 					<div class="form-group">
 								<label class="form-label">Staff Name <span class="text-danger">*</span></label>
 						<select asp-for=StaffId  class="form-control " data-placeholder="Select Staff"  asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
-							<option label="Select Staff">Select Staff</option>
+							
 						</select>
 					</div>
 					</div>
@@ -43,7 +43,7 @@
 					<div class="form-group">
 						<label class="form-label">Contract Type <span class="text-danger">*</span></label>
 								<select asp-for="EmploymentTypeId" class="form-control " data-placeholder="Select Contract Type" asp-items="@(new SelectList(@ViewBag.ContractType,"EmploymentTypeId", "Title"))">
-							<option label="Select Contract Type">Select Contract Type</option>
+							
 						</select>
 					</div>
 					</div>
@@ -53,7 +53,7 @@
 							<div class="form-group">
 								<label class="form-label">Contract Duration in Months <span class="text-danger">*</span></label>
 								<select asp-for="ContractDuration" class="form-control" data-placeholder="Select Months">
-									<option value="0">Select Month</option>
+									
 									<option value="3 Month">3 Month</option>
 									<option value="6 Months">6 Months</option>
 									<option value="9 Months">9 Months</option>
@@ -402,7 +402,10 @@
 				}
 			});
 
-			$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
+			//$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
+			$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#ContractDuration').select2({ placeholder: 'Select Contract Duration', width: '100%', allowClear: true }).val("").trigger('change');
 
 
 			$('#myTable,#ExpireContractTable').DataTable();
@@ -471,10 +474,19 @@
 						$("#Renew").val(renew);
 
 						$("#StaffContractId").val(data.staffContractId);
-						$("#StaffId").val(data.staffId).trigger("change");
-						$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
+
+
+
+						$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val(data.staffId).trigger('change');
+						//$("#StaffId").val(data.staffId).trigger("change");
+						$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val(data.employmentTypeId).trigger('change');
+
+						//$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
 						$("#Title").val(data.title);
-						$("#ContractDuration").val(data.contractDuration).trigger("change");
+						$('#ContractDuration').select2({ placeholder: 'Select Contract Duration', width: '100%', allowClear: true }).val(data.contractDuration).trigger('change');
+
+
+						//$("#ContractDuration").val(data.contractDuration).trigger("change");
 						$("#StartDate").val(DateStart)
 						$("#EndDate").val(DateEnd)
 						$("#AdditionalDetails").val(data.additionalDetails)
@@ -533,7 +545,7 @@
 			debugger;
 
 			
-			if ($("#StaffId").val() == null || $("#StaffId").val() == "Select Staff") {
+			if ($("#StaffId").val() == null || $("#StaffId").val() == "") {
 				
 				$.growl.warning({
 					message: "Please Select Staff Name"
@@ -546,7 +558,7 @@
 				$("#StaffId").css("border-color", "#ddd");
 			}
 			
-			if ($("#EmploymentTypeId").val() == "Select Contract Type" || $("#EmploymentTypeId").val() == null) {
+			if ($("#EmploymentTypeId").val() == "" || $("#EmploymentTypeId").val() == null) {
 				$.growl.warning({
 					message: "Please Select Contract Type"
 				});
@@ -557,7 +569,7 @@
 			else {
 				$("#EmploymentTypeId").css("border-color", "#ddd");
 			}
-			if ($("#ContractDuration").val() == "" || $("#ContractDuration").val()==0 ) {
+			if ($("#ContractDuration").val() == "" || $("#ContractDuration").val()==null ) {
 				$.growl.warning({
 					message: "Please Select Contract Duration"
 				});

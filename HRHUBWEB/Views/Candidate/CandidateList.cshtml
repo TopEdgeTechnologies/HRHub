@@ -69,13 +69,18 @@
                             @if(Model.UrlRequestSatausID==1)
                             {
                                  <a asp-action="CandidateCreateOrUpdate" asp-controller="Candidate" class="btn btn-primary"><i class="fe fe-plus-circle me-1"></i>Add Candidates </a>
-                                
-                            }
+                                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                                <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
+                            }else{
+                            <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
 
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="feather feather-filter"></i> </button>
+                       }
                         </div>
                     </div>
                 }
@@ -747,7 +752,7 @@
                               $("#CandidateId").val(0)
                     $('#StatusId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
                               $("#Remarks").val("")
-                              
+                               
                               
                                //location.reload();
                 } else {
@@ -755,7 +760,11 @@
                  }
                     };
   xhr.send(formData);
+                setTimeout(function () {
 
+                location.reload();
+               
+            }, 2000);
 
 
             //$.ajax({

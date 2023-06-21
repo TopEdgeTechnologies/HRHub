@@ -13,6 +13,7 @@
                 <h3 class="card-title">Candidate Personal Information</h3>
                 <div class="card-options">
                     <div class="btn-list">
+                         <button type="button" onclick="history.back()" class="btn btn-primary " data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter" id="btn_Filter"> <i class="fa fa-arrow-left"></i> </button>
 
                         <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                         <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
@@ -112,11 +113,15 @@
 
                         <div class="col-md-4 col-sm-4">
 
-                            <label class="form-label">Choose Image
+                            <label class="form-label">Choose Image 
                             
                                  @if (!string.IsNullOrEmpty(Model.Picture))
                                 {
-                                    <a href="@Model.Picture" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Picture" data-bs-original-title="View Picture" aria-label="View Picture"> <i class="feather feather-eye text-primary"></i></a>
+                                    <a href="@Model.Picture" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Picture" data-bs-original-title="View Picture" aria-label="View Picture">
+                                        <i class="fa fa-eye text-secondary">
+                                            View Picture
+                                        </i>
+                                    </a>
                                     <input type="hidden" value="@Model.Picture" name="Picture" />
                                 }
                             
@@ -487,15 +492,16 @@
 
             //$('#ApplyDate').datepicker('setDate', currentDate);
         
-        
+       
              if('@Model.CandidateId'>0)
              {
                 $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val().trigger('change');
 
 
-             }else{
+             }else
+             {
             $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
-
+                
              }
           
             $('#SkillStatus').select2({ placeholder: 'Select Skill Status', width: '100%', allowClear: true }).val("").trigger('change');
@@ -822,6 +828,23 @@
 
                 status = false;
             }
+            if ($("#DesignationId").val() == "" || $("#DesignationId").val() == null) {
+
+
+                $.growl.warning({
+                    message: "Please Select  Designation"
+                });
+
+
+
+                $("#DesignationId").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#DesignationId").css("border-color", "#ddd");
+            }
+
             if('@Model.AttachmentPath'==''  )
             {
             if (document.getElementById("CandidateResume").value == "") {
