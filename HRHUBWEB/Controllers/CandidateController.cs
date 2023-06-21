@@ -259,8 +259,18 @@ namespace HRHUBWEB.Controllers
                     ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
 
                 }
+                if (ObjCandidate.AttachmentPath != null && CandidateResume != null)
+                {
+                    ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
 
+                }
                 if (ObjCandidate.Picture == null && CandidatePicture != null)
+                {
+
+                    ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
+                }
+
+                if (ObjCandidate.Picture != null && CandidatePicture != null)
                 {
 
                     ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");

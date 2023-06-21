@@ -161,7 +161,7 @@ namespace HRHUBAPI.Models
             DbConnection _db = new DbConnection();
             try
             {
-                string query = "EXEC HR.sp_Get_StaffList " + CompanyId;
+                string query = "EXEC HR.GetStaffList " + CompanyId;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var staff = dt.AsEnumerable()
