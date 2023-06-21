@@ -118,7 +118,7 @@ namespace HRHUBAPI.Models
 			DbConnection _db = new DbConnection();
 			try
 			{
-				string query = "EXEC BI.sp_Get_Staff_Statistics " + CompanyId;
+				string query = "EXEC BI.GetStaff_Statistics " + CompanyId;
 				DataTable dt = _db.ReturnDataTable(query);
 				Staff StaffStatistics = new Staff();
 
@@ -138,8 +138,8 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                DbConnection dbConnection = new DbConnection();
-                string query = " EXEC BI.sp_Get_Staff_Attendance_Statistics " + CompanyId + ", " + month + ", " + year + ", " + StaffId ;
+                DbConnection dbConnection = new DbConnection(); 
+                string query = " EXEC BI.GetStaff_Attendance_Statistics " + CompanyId + ", " + month + ", " + year + ", " + StaffId ;
                 
                 DataTable dt = dbConnection.ReturnDataTable(query);
                 Staff StaffAttendanceStatistics = new Staff();
@@ -147,7 +147,7 @@ namespace HRHUBAPI.Models
                 {
                     StaffAttendanceStatistics.MTDPresentCount = Convert.ToInt32(dt.Rows[0]["MTDPresentCount"]);
                     StaffAttendanceStatistics.YTDPaidLeaveCount = Convert.ToInt32(dt.Rows[0]["YTDPaidLeaveCount"]);
-                    StaffAttendanceStatistics.TotalAllowedLeaves = Convert.ToInt32(dt.Rows[0]["TotalAllowedLeaves"]);
+                    StaffAttendanceStatistics.TotalAllowedLeaves = Convert.ToInt32(dt.Rows[0]["TotalAllowedPaidLeaveCount"]);
                     StaffAttendanceStatistics.MonthDaysCount = Convert.ToInt32(dt.Rows[0]["MonthDaysCount"]);
                     StaffAttendanceStatistics.MonthName = dt.Rows[0]["MonthName"].ToString();
               }
@@ -161,7 +161,7 @@ namespace HRHUBAPI.Models
             DbConnection _db = new DbConnection();
             try
             {
-                string query = "EXEC HR.sp_Get_StaffList " + CompanyId;
+                string query = "EXEC HR.GetStaffList " + CompanyId;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var staff = dt.AsEnumerable()
@@ -215,7 +215,7 @@ namespace HRHUBAPI.Models
             DbConnection _db = new DbConnection();
             try
             {
-                string query = "EXEC HR.sp_Get_StaffWise_Allowed_Leaves " + CompanyId + ", " + Id;
+                string query = "EXEC HR.GetStaffWise_Allowed_Leaves " + CompanyId + ", " + Id;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var leaveAllocation = dt.AsEnumerable()

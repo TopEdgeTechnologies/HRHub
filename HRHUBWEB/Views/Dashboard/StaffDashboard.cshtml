@@ -59,25 +59,8 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<h5 class="">Completed Projects</h5>
-									<h3 class="mb-0 mt-auto text-success">51</h3>
-								</div>
-							</div>
-							<div class="col-5">
-								<div class="icon1 bg-success my-auto  float-end"> <i class="IconCenterAlignment feather feather-file-text"></i> </div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-3 col-lg-6 col-md-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-7">
-								<div class="mt-0 text-start">
-									<h5 class="">Total Attendance</h5>
-									<h3 class="mb-0 mt-auto text-primary">162</h3>
+									<h5 class="">YTD Present</h5>
+									<h3 id="YTDPresentCount" class="mb-0 mt-auto text-primary">162</h3>
 								</div>
 							</div>
 							<div class="col-5">
@@ -93,8 +76,8 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<h5 class="">Absent</h5>
-									<h3 class="mb-0 mt-auto text-secondary">12</h3>
+									<h5 class="">YTD Leave</h5>
+									<h3 id="MTDPaidLeaveCount" class="mb-0 mt-auto text-secondary">12</h3>
 								</div>
 							</div>
 							<div class="col-5">
@@ -110,12 +93,29 @@
 						<div class="row">
 							<div class="col-7">
 								<div class="mt-0 text-start">
-									<h5 class="">Awards</h5>
-									<h3 class="mb-0 mt-auto text-danger">0</h3>
+									<h5 class="">YTD Absent</h5>
+									<h3 id="TotalAbsentCount" class="mb-0 mt-auto text-danger">0</h3>
 								</div>
 							</div>
 							<div class="col-5">
 							<div class="icon1 bg-danger my-auto  float-end"> <i class="IconCenterAlignment feather feather-award"></i> </div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-6 col-md-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-7">
+								<div class="mt-0 text-start">
+									<h5 class="">YTD Projects</h5>
+									<h3 class="mb-0 mt-auto text-success">0</h3>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="icon1 bg-success my-auto  float-end"> <i class="IconCenterAlignment feather feather-file-text"></i> </div>
 							</div>
 						</div>
 					</div>
@@ -126,62 +126,124 @@
 		<!--Row-->
 		<div class="row">
 			<div class="col-xl-8 col-md-12 col-lg-12">
-
-			<div class="col-sm-12 col-xl-12">
-				<div class="card">
-					<div class="card-header border-bottom-0"> 
-						<div class="card-title">Vertical Stacked Bar Chart</div> 
-						<div class="card-options col-md-4">
-							<div class="form-group">
-
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<div class="input-group-text">
-											<i class="feather feather-calendar"></i>
-										</div>
-									</div><input id="chartDate" class="form-control fc-datepicker " type="text">
+				<div class="col-sm-12 col-xl-12">
+					<div class="card">
+						<div class="card-header border-bottom-0"> 
+							<div class="card-title">Vertical Stacked Bar Chart</div> 
+							<div class="card-options col-md-4">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<div class="input-group-text">
+												<i class="feather feather-calendar"></i>
+											</div>
+										</div><input id="chartDate" class="form-control fc-datepicker " type="text">
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="card-body"> 
-						
-						
-
-						<div class="chartjs-wrapper-demo">
-							<canvas id="chartStackedAttendance" class="h-300"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-				@*
-				<div class="card">
-				<canvas id="barChart"></canvas>
-
-				<div id="echartEmployees" class="chartsh "></div>
-					<div class="card-header  border-0 responsive-header">
-						<h4 class="card-title">Salary And Attendance chart</h4>
-						<div class="card-options me-3">
-							<div class="btn-list">
-								<a href="javascript:void(0);" class="btn btn-outline-light text-dark float-start me-4 d-flex   my-1"><span class="dot-label bg-light4 me-2 my-auto"></span>Attendance</a>
-								<a href="javascript:void(0);" class="btn btn-outline-light text-dark float-start me-4 d-flex  my-1"><span class="dot-label bg-primary me-2 my-auto"></span>Salary</a>
-								<a href="javascript:void(0);" class="btn btn-outline-light   my-1" data-bs-toggle="dropdown" aria-expanded="false"> Year <i class="feather feather-chevron-down"></i> </a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									<li><a href="javascript:void(0);">Monthly</a></li>
-									<li><a href="javascript:void(0);">Yearly</a></li>
-									<li><a href="javascript:void(0);">Weekly</a></li>
-								</ul>
+						<div class="card-body"> 
+							<div class="chartjs-wrapper-demo">
+								<canvas id="chartStackedAttendance" class="h-300"></canvas>
 							</div>
 						</div>
 					</div>
-					<div class="card-body">
-						<canvas id="chartbar" class="h-400"></canvas>
+				</div>
+			</div>
+			<div class="col-xl-4 col-lg-12 col-md-12">
+				<div class="card">
+					<div class="card-header border-0">
+						<h4 class="card-title">Up Coming Holidays</h4>
+					</div>
+					<div id="holidaysCard" class="card-body mt-1">
+						@*
+						<div class="mb-5">
+							<div class="d-flex comming_holidays calendar-icon icons">
+								<span class="date_time bg-success-transparent bradius me-3">
+									<span class="date fs-20">3</span>
+									<span class="month fs-13">FEB</span>
+								</span>
+								<div class="me-3 mt-0 mt-sm-1 d-block">
+									<h6 class="mb-1 font-weight-semibold">Office Off</h6>
+									<span class="clearfix"></span>
+									<small>Sunday</small>
+								</div>
+								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">3 days to left</p>
+							</div>
+						</div>
+						<div class="mb-5">
+							<div class="d-flex comming_holidays calendar-icon icons">
+								<span class="date_time bg-purple-transparent bradius me-3">
+									<span class="date fs-20">10</span>
+									<span class="month fs-13">FEB</span>
+								</span>
+								<div class="me-3 mt-0 mt-sm-1 d-block">
+									<h6 class="mb-1 font-weight-semibold">Public Holiday</h6>
+									<span class="clearfix"></span>
+									<small>Enjoy your day off</small>
+								</div>
+								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">13 days to left</p>
+							</div>
+						</div>
+						<div class="mb-5">
+							<div class="d-flex comming_holidays calendar-icon icons">
+								<span class="date_time bg-orange-transparent bradius me-3">
+									<span class="date fs-20">20</span>
+									<span class="month fs-13">MAR</span>
+								</span>
+								<div class="me-3 mt-0 mt-sm-1 d-block">
+									<h6 class="mb-1 font-weight-semibold">Office Off</h6>
+									<span class="clearfix"></span>
+									<small>Sunday</small>
+								</div>
+								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">23 days to left</p>
+							</div>
+						</div>
+						<div class="mb-5">
+							<div class="d-flex comming_holidays calendar-icon icons">
+								<span class="date_time bg-warning-transparent bradius me-3">
+									<span class="date fs-20">17</span>
+									<span class="month fs-13">FEB</span>
+								</span>
+								<div class="me-3 mt-0 mt-sm-1 d-block">
+									<h6 class="mb-1 font-weight-semibold">Optional Holiday</h6>
+									<span class="clearfix"></span>
+									<small>Sunday</small>
+								</div>
+								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">20 days to left</p>
+							</div>
+						</div>
+						<div class="mb-0">
+							<div class="d-flex comming_holidays calendar-icon icons">
+								<span class="date_time bg-pink-transparent bradius me-3">
+									<span class="date fs-20">13</span>
+									<span class="month fs-13">MAR</span>
+								</span>
+								<div class="me-3 mt-0 mt-sm-1 d-block">
+									<h6 class="mb-1 font-weight-semibold">Conference</h6>
+									<span class="clearfix"></span>
+									<small>Money Update</small>
+								</div>
+								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">35 days to left</p>
+							</div>
+						</div>
+						*@
 					</div>
 				</div>
-				*@
+				</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-3 col-lg-12 col-md-12">
+				<div class="card">
+					<div class="p-0">
+						<div class="card-header border-0">
+							<h4 class="card-title">Calendar</h4>
+						</div>
+						<div class="calendar p-4 pt-0"></div>
+					</div>
+				</div>
 			</div>
+
 			<div class="col-xl-4 col-md-12 col-lg-12">
 				<div class="card">
 					<div class="card-header  border-0">
@@ -268,97 +330,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-xl-3 col-lg-12 col-md-12">
-				<div class="card">
-					<div class="p-0">
-						<div class="card-header border-0">
-							<h4 class="card-title">Calendar</h4>
-						</div>
-						<div class="calendar p-4 pt-0"></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-4 col-lg-12 col-md-12">
-				<div class="card">
-					<div class="card-header border-0">
-						<h4 class="card-title">Up Coming Holidays</h4>
-					</div>
-					<div class="card-body mt-1">
-						<div class="mb-5">
-							<div class="d-flex comming_holidays calendar-icon icons">
-								<span class="date_time bg-success-transparent bradius me-3">
-									<span class="date fs-20">3</span>
-									<span class="month fs-13">FEB</span>
-								</span>
-								<div class="me-3 mt-0 mt-sm-1 d-block">
-									<h6 class="mb-1 font-weight-semibold">Office Off</h6>
-									<span class="clearfix"></span>
-									<small>Sunday</small>
-								</div>
-								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">3 days to left</p>
-							</div>
-						</div>
-						<div class="mb-5">
-							<div class="d-flex comming_holidays calendar-icon icons">
-								<span class="date_time bg-purple-transparent bradius me-3">
-									<span class="date fs-20">10</span>
-									<span class="month fs-13">FEB</span>
-								</span>
-								<div class="me-3 mt-0 mt-sm-1 d-block">
-									<h6 class="mb-1 font-weight-semibold">Public Holiday</h6>
-									<span class="clearfix"></span>
-									<small>Enjoy your day off</small>
-								</div>
-								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">13 days to left</p>
-							</div>
-						</div>
-						<div class="mb-5">
-							<div class="d-flex comming_holidays calendar-icon icons">
-								<span class="date_time bg-orange-transparent bradius me-3">
-									<span class="date fs-20">20</span>
-									<span class="month fs-13">MAR</span>
-								</span>
-								<div class="me-3 mt-0 mt-sm-1 d-block">
-									<h6 class="mb-1 font-weight-semibold">Office Off</h6>
-									<span class="clearfix"></span>
-									<small>Sunday</small>
-								</div>
-								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">23 days to left</p>
-							</div>
-						</div>
-						<div class="mb-5">
-							<div class="d-flex comming_holidays calendar-icon icons">
-								<span class="date_time bg-warning-transparent bradius me-3">
-									<span class="date fs-20">17</span>
-									<span class="month fs-13">FEB</span>
-								</span>
-								<div class="me-3 mt-0 mt-sm-1 d-block">
-									<h6 class="mb-1 font-weight-semibold">Optional Holiday</h6>
-									<span class="clearfix"></span>
-									<small>Sunday</small>
-								</div>
-								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">20 days to left</p>
-							</div>
-						</div>
-						<div class="mb-0">
-							<div class="d-flex comming_holidays calendar-icon icons">
-								<span class="date_time bg-pink-transparent bradius me-3">
-									<span class="date fs-20">13</span>
-									<span class="month fs-13">MAR</span>
-								</span>
-								<div class="me-3 mt-0 mt-sm-1 d-block">
-									<h6 class="mb-1 font-weight-semibold">Conference</h6>
-									<span class="clearfix"></span>
-									<small>Money Update</small>
-								</div>
-								<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">35 days to left</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			<div class="col-xl-5 col-lg-12 col-md-12">
 				<div class="card">
 					<div class="card-header border-0">
@@ -705,33 +677,30 @@
 
             });
 
-			$('#fromdate').datepicker('setDate', currentDate);
-			$('#chartDate').val('@DateTime.Now.ToString("yyyy-MM-dd")');
+			$('#fromdate').datepicker('setDate', currentDate)
+			$('#chartDate').val('@DateTime.Now.ToString("yyyy-MM-dd")')
 
-			loadStaffMonthlyAttendanceGraph();
+			loadStaffYTDAttendance()
+			loadStaffMonthlyAttendanceGraph()
+			loadStaffYTDHoliday()
 
 			$('#chartDate').change(function () {
-				loadStaffMonthlyAttendanceGraph();
+				loadStaffYTDAttendance()
+				loadStaffMonthlyAttendanceGraph()
+				loadStaffYTDHoliday()
             });
 
 		});
 
 		function loadStaffMonthlyAttendanceGraph() {
-
 			var MonthName = []
 			var PresentCount = []
 			var AbsentCount = []
+			var dateValue = $('#chartDate').val()
+			var requestData = { currentDate: dateValue }
 
-			debugger
-			var dateValue = $('#chartDate').val();
-			//var year = (dateValue) ? parseInt(dateValue.split('-')[0]) : null;
-
-
-			var requestData = { currentDate: dateValue };
 			makeAjaxRequest("/Dashboard/StaffMonthlyAttendance", 'GET', requestData, false, function (response) {
-				debugger
 				if (response != null) {
-					debugger
 					for (var i = 0; i < response.length; i++) {
 						MonthName.push(response[i].MonthName);
 						PresentCount.push(response[i].PresentCount);
@@ -740,9 +709,8 @@
 					}
 				}
 				}, function (errorStatus) {
-					console.log('Error:', errorStatus);
+					console.log('Error:', errorStatus)
 			});
-			debugger
 
 			/** STACKED BAR CHART **/
 			var ctx6 = document.getElementById('chartStackedAttendance');
@@ -799,6 +767,62 @@
 			});
 
 		}
+
+		function loadStaffYTDAttendance() {
+			var dateValue = $('#chartDate').val()
+			var requestData = { currentDate: dateValue }
+
+			makeAjaxRequest("/Dashboard/Staff_YTDAttendance", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					$('#YTDPresentCount').text(response[0].YTDPresentCount)
+					$('#MTDPaidLeaveCount').text(response[0].MTDPaidLeaveCount)
+					$('#TotalAbsentCount').text(response[0].TotalAbsentCount)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
 	
+		function loadStaffYTDHoliday() {
+			debugger
+			var dateValue = $('#chartDate').val()
+			var requestData = { currentDate: dateValue }
+
+				makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					debugger
+					var htmlHoliday = ''
+					for (var i = 0; i < response.length; i++) {
+						//if (i = response.length - 1) {
+						//	htmlHoliday += ' <div class="mb-5"> '
+						//}
+						//else{
+						//	htmlHoliday += ' <div class="mb-5"> '
+						//}
+						htmlHoliday += ' <div class="mb-5"> '
+						htmlHoliday += ' 	<div class="d-flex comming_holidays calendar-icon icons"> '
+						htmlHoliday += ' 		<span class="date_time ' + response[i].SpanClass + ' bradius me-3"> '
+						htmlHoliday += ' 			<span class="date fs-20"> ' + response[i].HolidayDayNumber + '</span>  '
+						htmlHoliday += ' 			<span class="month fs-13">' + response[i].HolidayShortMonthName + '</span> '
+						htmlHoliday += ' 		</span> '
+						htmlHoliday += ' 		<div class="me-3 mt-0 mt-sm-1 d-block"> '
+						htmlHoliday += ' 			<h6 class="mb-1 font-weight-semibold">' + response[i].HolidayType + '</h6> '
+						htmlHoliday += ' 			<span class="clearfix"></span> '
+						htmlHoliday += ' 			<small>' + response[i].DayWithTitle + '</small> '
+						htmlHoliday += ' 		</div> '
+						htmlHoliday += ' 		<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">' + response[i].DaysLeft + ' days left</p> '
+						htmlHoliday += ' 	</div> '
+						htmlHoliday += ' </div> '
+
+						//console.log(response[i]);
+					}
+					debugger
+					$("#holidaysCard").html(htmlHoliday)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+
 	</script>
 }

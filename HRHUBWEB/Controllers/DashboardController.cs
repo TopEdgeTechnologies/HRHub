@@ -104,8 +104,28 @@ namespace HRHUBWEB.Controllers
 		[HttpGet]
 		public async Task<IActionResult> StaffMonthlyAttendance(DateTime currentDate)
 		{
-			string procrdure = "BI.GetStaffMonthlyAttendanceBetweenDate";
+			string procrdure = "BI.GetStaff_MonthlyAttendance_BetweenDate";
 			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'", _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_YTDAttendance(DateTime currentDate)
+		{
+			string procrdure = "BI.GetStaff_YTDAttendance";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'", _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+        		
+		[HttpGet]
+		public async Task<IActionResult> Staff_UpComingHolidays(DateTime currentDate)
+		{
+			string procrdure = "BI.GetStaff_UpComingHolidays";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'" };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
