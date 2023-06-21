@@ -1,6 +1,6 @@
-$(function() {
+$(function () {
 	'use strict';
-	
+
 	var ctx1 = document.getElementById('chartBar1').getContext('2d');
 	new Chart(ctx1, {
 		type: 'bar',
@@ -116,7 +116,7 @@ $(function() {
 					display: false
 				}
 			},
-			hover: {mode: null},
+			hover: { mode: null },
 			scales: {
 				yAxes: [{
 					ticks: {
@@ -194,7 +194,7 @@ $(function() {
 			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
 			datasets: [{
 				data: [14, 12, 34, 25, 24, 20],
-				backgroundColor: [ '#fe7f00', '#ffad00', '#45aaf2', '#01c353', '#f7592d']
+				backgroundColor: ['#fe7f00', '#ffad00', '#45aaf2', '#01c353', '#f7592d']
 			}, {
 				data: [22, 30, 25, 30, 20, 40],
 				backgroundColor: '#3366ff'
@@ -246,7 +246,7 @@ $(function() {
 				fill: true
 			}, {
 				data: [14, 12, 34, 25, 24, 20],
-				backgroundColor:  '#3366ff',
+				backgroundColor: '#3366ff',
 				borderWidth: 1,
 				fill: true
 			}]
@@ -297,7 +297,7 @@ $(function() {
 				fill: true
 			}, {
 				data: [14, 12, 34, 25, 24, 20],
-				backgroundColor:  '#3366ff',
+				backgroundColor: '#3366ff',
 				borderWidth: 1,
 				fill: true
 			}]
@@ -344,7 +344,7 @@ $(function() {
 		data: {
 			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 			datasets: [{
-				data: [14, 12, 34, 25, 44, 36, 35, 25, 30, 32, 20, 25 ],
+				data: [14, 12, 34, 25, 44, 36, 35, 25, 30, 32, 20, 25],
 				borderColor: '#3366ff',
 				borderWidth: 1,
 				fill: false
@@ -401,7 +401,7 @@ $(function() {
 		data: {
 			labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 			datasets: [{
-				data: [14, 12, 34, 25, 44, 36, 35, 25, 30, 32, 20, 25 ],
+				data: [14, 12, 34, 25, 44, 36, 35, 25, 30, 32, 20, 25],
 				borderColor: '#3366ff',
 				borderWidth: 1,
 				backgroundColor: gradient1
@@ -449,7 +449,7 @@ $(function() {
 	var datapie = {
 		labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
 		datasets: [{
-			data: [35,24,20,15,8],
+			data: [35, 24, 20, 15, 8],
 			backgroundColor: ['#3366ff', '#fe7f00', '#ffad00', '#45aaf2', '#01c353', '#f7592d']
 		}]
 	};

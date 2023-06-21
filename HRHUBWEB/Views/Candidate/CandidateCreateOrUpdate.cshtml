@@ -24,6 +24,8 @@
             {
 
                 <input type="hidden" asp-for="CandidateId" />
+                <input type="hidden" asp-for="StatusId" />
+               
                 <input type="hidden" asp-for="CompanyId" value="@ViewBag.CompanyId" />
                 <div class="card-body">
 
@@ -39,7 +41,7 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
                                 <label class="form-label">Email <span class="text-danger">*</span></label>
-                                <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email">
+                                <input asp-for="Email" class="form-control" type="email" placeholder="Enter Email">
 
                             </div>
                         </div>
@@ -47,7 +49,7 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
                                 <label class="form-label">Phone No <span class="text-danger">*</span></label>
-                                <input asp-for="Phone" class="form-control" type="text" placeholder="Enter phone">
+                                <input asp-for="Phone" class="form-control number" type="number" placeholder="Enter phone">
 
                             </div>
                         </div>
@@ -57,13 +59,8 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
                                 <label class="form-label">Date of Birth</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <i class="feather feather-calendar"></i>
-                                        </div>
-                                    </div><input asp-for="Dob" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date">
-                                </div>
+                                <input asp-for="Dob" class="form-control" placeholder="DD-MM-YYY" type="date">
+                                
                             </div>
                         </div>
 
@@ -115,14 +112,24 @@
 
                         <div class="col-md-4 col-sm-4">
 
-                            <label class="form-label">Choose Image </label>
+                            <label class="form-label">Choose Image
+                            
+                                 @if (!string.IsNullOrEmpty(Model.Picture))
+                                {
+                                    <a href="@Model.Picture" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Picture" data-bs-original-title="View Picture" aria-label="View Picture"> <i class="feather feather-eye text-primary"></i></a>
+                                    <input type="hidden" value="@Model.Picture" name="Picture" />
+                                }
+                            
+                            
+                            </label>
                             <div class="form-group local-forms">
                                 <label for="form-label" class="form-label"></label> <input class="form-control" accept=".jpg, .jpeg, .png" id="CandidatePicture" name="CandidatePicture" type="file">
+                           
                             </div>
                         </div>
 
 
-
+                       
 
 
 
@@ -187,7 +194,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Experiences in Months <span class="text-danger">*</span></label>
+                                <label class="form-label">Experiences in Months <span class="text-danger"></span></label>
                                 <select asp-for="ExperienceInMonths" class="form-control custom-select select2" data-placeholder="Select Months">
                                     <option label="Select Months"></option>
                                     <option value="0">Fresher</option>
@@ -206,6 +213,13 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group local-forms">
+                                <label class="form-label">Left Previous Company <span class="text-danger">*</span></label>
+                                <input asp-for="ReasonToLeft" class="form-control" type="text" placeholder="Enter Reason">
+
+                            </div>
+                        </div>
 
 
                     </div>
@@ -231,8 +245,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">Skill Status <span class="text-danger">*</span></label>
-                                            <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Skill Status">
-                                                <option label="Select Months"></option>
+                                            <select id="SkillStatus" class="form-control custom-select select2" data-placeholder="Select Skill Status">
+                                               
                                                 <option value="Beginer">Beginer</option>
                                                 <option value="Intermediate">Intermediate</option>
                                                 <option value="Expert">Expert</option>
@@ -258,7 +272,7 @@
                                         <h4 class="card-title">Skills Details</h4>
                                     </div>
                                     
-                                        <div class="card-body overflow-auto overflow-scrolling mt-3" style="height: 200px;">
+                                        <div class="card-body overflow-auto overflow-scrolling" style="height: 265px;">
 
                                         @if (Model.CandidateId > 0)
                                         {
@@ -364,22 +378,34 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-4 col-sm-4">
-                            <div class="form-group">
-                                <label class="form-label">Apply Date <span class="text-danger">*</span></label>
+                            <label class="form-label">Apply Date <span class="text-danger">*</span></label>
+
+                                @if (!string.IsNullOrEmpty(@Model.ApplyDate.ToString()))
+                                {
+                                <input asp-for="ApplyDate" class="form-control " placeholder="DD-MM-YYY" type="date" >
+                            }
+                            else{
+                                <input asp-for="ApplyDate" class="form-control " placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+
+                                
+                                }
+
+                            @*<div class="form-group">
+                               
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <i class="feather feather-calendar"></i>
                                         </div>
-                                    </div><input asp-for="ApplyDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group local-forms">
                                 <label class="form-label">Apply for Position <span class="text-danger">*</span></label>
-                                <select asp-for="DesignationId" class="form-control" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">
-                                    <option value="">Select Designation</option>
+                                <select asp-for="DesignationId" class="form-control custom-select select2" data-placeholder="Select Designation" asp-items="@(new SelectList(@ViewBag.CandidateDesignation,"DesignationId" ,"Title"))">
+                                    
                                 </select>
 
 
@@ -387,9 +413,19 @@
                         </div>
 
                         <div class="col-md-4 col-sm-4">
-                            <label class="form-label">Upload Resume <span class="text-danger">*</span></label>
+                            <label class="form-label">Upload Resume <span class="text-danger">*</span>
+                                
+                                @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                                {
+                                    <a href="@Model.AttachmentPath" target="_blank" data-bs-original-title="Download Resume" aria-label="Download Resume"><i class="feather feather-download  text-secondary me-2"> Download</i></a>
+                                    <input type="hidden" value="@Model.AttachmentPath" name="AttachmentPath" />
+                                }
+                            </label>
                             <div class="form-group local-forms">
-                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" type="file" accept=".pdf, .doc, .docx">
+                                <label for="form-label" class="form-label"></label> <input class="form-control" id="CandidateResume" name="CandidateResume" value="@Model.AttachmentPath" type="file" accept=".pdf, .doc, .docx">
+                            
+                            
+                            
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -433,6 +469,15 @@
 
         $(document).ready(function () {
 
+            $('#SkillTitle').keypress(function (event) {
+                if (event.keyCode === 13) {
+                    $('#btn_AddClass').click()
+                }
+            });
+
+
+           
+
             //var currentDate = new Date();
             //$('#Dob,#ApplyDate').datepicker({
             //    // dateFormat: 'dd M yy',
@@ -441,12 +486,19 @@
             //});
 
             //$('#ApplyDate').datepicker('setDate', currentDate);
+        
+        
+             if('@Model.CandidateId'>0)
+             {
+                $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val().trigger('change');
 
 
-            $('#DesignationId').select2();
-            $('#SkillStatus').select2();
+             }else{
+            $('#DesignationId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
 
-
+             }
+          
+            $('#SkillStatus').select2({ placeholder: 'Select Skill Status', width: '100%', allowClear: true }).val("").trigger('change');
 
             $('#CandidatePicture').change(function () {
                 var fileInput = $(this);
@@ -474,11 +526,6 @@
                 }
 
             });
-
-
-
-
-
 
             $('#CandidateResume').change(function () {
             debugger
@@ -526,7 +573,7 @@
             
             
              var Data = { id: $("#CandidateId").val(), email: $('#Email').val() == '' ? '""' : $('#Email').val(), CompanyId: $("#CompanyId").val() }
-            console.log(Data)
+           
             $.ajax({
                 async: false,
                 url: "/Candidate/CandidateCheckData",
@@ -706,21 +753,21 @@
             }
 
 
-            if ($("#ExperienceInMonths").val() == "") {
+            if ($("#ReasonToLeft").val() == "") {
 
 
                 $.growl.warning({
-                    message: "Please Enter Experience In Months"
+                    message: "Please Enter Reason"
                 });
 
 
 
-                $("#ExperienceInMonths").css("border-color", "red");
+                $("#ReasonToLeft").css("border-color", "red");
                 status = false;
 
             }
             else {
-                $("#ExperienceInMonths").css("border-color", "#ddd");
+                $("#ReasonToLeft").css("border-color", "#ddd");
             }
 
 
@@ -775,6 +822,8 @@
 
                 status = false;
             }
+            if('@Model.AttachmentPath'==''  )
+            {
             if (document.getElementById("CandidateResume").value == "") {
 
                 $.growl.warning({
@@ -789,7 +838,23 @@
             else {
                 $("#CandidateResume").css("border-color", "#ddd");
             }
+            }
+            if ($("#CoverLetter").val() == "") {
 
+
+                $.growl.warning({
+                    message: "Please Enter Cover Letter"
+                });
+
+
+
+                $("#CoverLetter").css("border-color", "red");
+                status = false;
+
+            }
+            else {
+                $("#CoverLetter").css("border-color", "#ddd");
+            }
 
             return status;
         }
@@ -799,7 +864,7 @@
 
 
         function Update(id) {
-        alert(id);
+       
         }
 
 
@@ -1033,7 +1098,7 @@
             debugger
 
             $("#SkillTitle").val("");
-            $('#SkillStatus').select2({ placeholder: "Select SkillStatus" }).val('').trigger('change');
+           // $('#SkillStatus').select2({ placeholder: "Select SkillStatus" }).val('').trigger('change');
 
 
 
