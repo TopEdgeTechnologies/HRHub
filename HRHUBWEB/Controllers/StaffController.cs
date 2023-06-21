@@ -270,8 +270,6 @@ namespace HRHUBWEB.Controllers
             return Json(result); 
 		}
 
-
-
         #region Staff Contract
 
 
@@ -347,6 +345,7 @@ namespace HRHUBWEB.Controllers
 
 
 		#endregion
+
 		private string UploadImage(string name, IFormFile file, string root)
         {
             try
