@@ -197,7 +197,7 @@ namespace HRHUBAPI.Controllers
 		{
 
 			var dbResult = await new StaffContract().PostStaffContract(ObjStaffContract, _context);
-			if (dbResult != null)
+			if (dbResult != null && dbResult.Flag==2)
 			{
 				return Ok(new
 				{

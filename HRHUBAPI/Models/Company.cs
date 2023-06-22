@@ -25,17 +25,29 @@ public partial class Company
 
     public string? Currency { get; set; }
 
-    public bool? AttendanceByRosters { get; set; }
+    public bool AttendanceByRosters { get; set; }
 
     public TimeSpan? OfficeStartTime { get; set; }
 
     public TimeSpan? OfficeEndTime { get; set; }
 
-    public bool? EmployeeWebCheckIn { get; set; }
+    public bool EmployeeWebCheckIn { get; set; }
 
     public int? StartTimeGraceMinutes { get; set; }
 
+    public bool? IsGraceMinutesAllowed { get; set; }
+
+    public bool? IsMarkHalfDayAllow { get; set; }
+
     public int? MarkHalfDayAfterLateMinutes { get; set; }
+
+    public string? EmailSendFrom { get; set; }
+
+    public string? EmailPassword { get; set; }
+
+    public int? EmailSmtpport { get; set; }
+
+    public string? EmailServerHost { get; set; }
 
     public bool Status { get; set; }
 

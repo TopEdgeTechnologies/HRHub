@@ -32,10 +32,10 @@
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                <th class="text-center">Order No</th>
-                                <th class="border-bottom-0">Section Name</th>
-                                <th class="border-bottom-0">Description</th>                                                             
-                                <th class="">Action</th>
+                                <th class="col-1">Order No</th>
+                                <th class="border-bottom-0 col-4">Section Name</th>
+                                <th class="border-bottom-0 col-6">Description</th>                                                             
+                                <th class="col-1">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,7 +44,7 @@
                                 foreach (var item in Model.AllSection)
                                 {
                                     <tr>
-                                        <td class="text-center">
+                                        <td>
                                             @item.OrderNo
                                         </td>
 
@@ -66,21 +66,44 @@
                                         }
                                         else
                                         {
-                                            <td class="text-end">
-                                                <div class="d-flex">
-                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                    {
-                                                        <a asp-action="PerformanceSectionCreateOrUpdate" asp-route-id="@item.SectionId" asp-route-ReviewFormId="@item.ReviewFormId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
-                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                        </a>
-                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                    {
-                                                        <a href="#" onclick="DeleteConfirmation(@item.SectionId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                        </a>
-                                                    }
+                                            <td>
 
+
+
+
+                                                <!----- Action Buttons Code Start From Here------>
+                                                <div class="ms-auto">
+                                                    <div class="btn-group ms-3 mb-0">
+                                                        <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-start" style="">
+
+
+                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                            {
+                                                                <a asp-action="PerformanceSectionCreateOrUpdate" asp-route-id="@item.SectionId" asp-route-ReviewFormId="@item.ReviewFormId" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                    <i class="feather feather-edit primary text-primary me-2"></i>Edit
+                                                                </a>
+                                                            } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                            {
+                                                                <a href="#" onclick="DeleteConfirmation(@item.SectionId)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                                    <i class="feather feather-trash-2 text-danger me-2"></i>Delete
+                                                                </a>
+                                                            }
+
+
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                                <!----- Action Buttons Code Ends Here------>
+
+
+
+
+                                               
+
+
+
+
                                             </td>
                                         }
                                     </tr>

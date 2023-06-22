@@ -32,7 +32,7 @@
                                     <li class="@((ViewContext.RouteData.Values["action"].ToString() == SubChildItem.action) ? "is-expanded" : "")">
                                         <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@SubChildItem.ReferenceID">
                                         <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
-                                            <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle  </span>
+                                            <span class="sub-side-item__label" style="padding-right: 8px;">@SubChildItem.FormTitle  </span>
                                             <span class="badge badge-success side-badge"> @SubChildItem.titlewithcounter</span>
                                         </a>
 								</li>
@@ -47,8 +47,8 @@
 
                                         <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
                                         <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
-                                        <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle</span>										
-									</a>
+                                            <span class="sub-side-item__label" style="padding-right: 8px;">@SubChildItem.FormTitle</span>
+                                        </a>
 								</li>
                                 
                                 }

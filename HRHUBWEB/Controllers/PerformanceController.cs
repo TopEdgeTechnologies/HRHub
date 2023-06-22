@@ -137,15 +137,16 @@ namespace HRHUBWEB.Controllers
 			ObjPerformanceForm.CompanyId = _user.CompanyId;
 			ObjPerformanceForm.CreatedBy = _user.UserId;
 
-            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjPerformanceForm, "api/Performance/PerformanceAddOrUpdate", HttpMethod.Post);
+            var result = await _APIHelper.CallApiAsyncPost<PerformanceForm>(ObjPerformanceForm, "api/Performance/PerformanceAddOrUpdate", HttpMethod.Post);
 
-            if (result.Message.Contains("Insert"))
+            if (result !=null && result.Flag==1)
             {
-                return RedirectToAction("PerformanceList", new { data = 1 });
+                return RedirectToAction("PerformanceSectionList", new { data = 1,id = result.ReviewFormId });
             }
+           
             else
             {
-                return RedirectToAction("PerformanceList", new { data = 2 });
+                return RedirectToAction("PerformanceSectionList", new { data = 2, id = result.ReviewFormId });
             }
         }
 
@@ -224,17 +225,18 @@ namespace HRHUBWEB.Controllers
            
             ObjSection.CreatedBy = _user.UserId;
 
-			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjSection, "api/Performance/PerformanceSectionAddOrUpdate", HttpMethod.Post);
+			var result = await _APIHelper.CallApiAsyncPost<Section>(ObjSection, "api/Performance/PerformanceSectionAddOrUpdate", HttpMethod.Post);
 
-			if (result.Message.Contains("Insert"))
-			{
-				return RedirectToAction("PerformanceSectionList", new { data = 1, id = ObjSection.ReviewFormId });
-			}
-			else
-			{
-				return RedirectToAction("PerformanceSectionList", new { data = 2, id = ObjSection.ReviewFormId });
-			}
-		}
+            if (result != null && result.Flag == 1)
+            {
+                return RedirectToAction("PerformanceSectionList", new { data = 1, id = result.ReviewFormId });
+            }
+
+            else
+            {
+                return RedirectToAction("PerformanceSectionList", new { data = 2, id = result.ReviewFormId });
+            }
+        }
 
 		public async Task<IActionResult> PerformanceSectionDelete(int id)
 		{

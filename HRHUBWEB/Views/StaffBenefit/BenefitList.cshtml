@@ -68,11 +68,11 @@
                     <table class="table table-bordered text-nowrap border-bottom" id="myTable">
                         <thead>
                             <tr>
-                                <th class="text-center">Sr.#</th>                              
-                                <th class="border-bottom-0">Benefits</th>                                                                           
-                                <th class="border-bottom-0 text-center">Staff Count</th>                                                                           
-                                <th class="border-bottom-0 text-center">Status</th>                                                                           
-                                <th class="">Action</th>
+                                <th class="col-1 text-center">Sr.#</th>
+                                <th class="col-3">Benefits</th>                                                                           
+                                <th class="col-2 text-center">Staff Count</th>                                                                           
+                                <th class="col-2 text-center">Status</th>
+                                <th class="col-1 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,21 +109,40 @@
                                         }
                                         else
                                         {
-                                            <td class="text-end">
-                                                <div class="d-flex">
+                                            <td>
+
+
+                                                <!----- Action Buttons Code Start From Here------>
+                                                <div class="ms-auto">
+                                                    <div class="btn-group ms-3 mb-0">
+                                                        <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                        <div class="dropdown-menu dropdown-menu-start" style="">
+
+
+                                               
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
-                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                            <i class="feather feather-edit me-2"></i>Edit
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                     {
-                                                        <a href="#" onclick="DeleteConfirmation(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                <a href="#" onclick="DeleteConfirmation(@item.ComponentId)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                            <i class="feather feather-trash-2 me-2"></i>Delete
                                                         </a>
                                                     }
                                                
-                                                </div>
+                                               
+                                          
+                                                
+															</div>
+														</div>
+													</div>
+													<!----- Action Buttons Code Ends Here------>
+                                                
+                                                
+                                            
+                                                
                                             </td>
                                         }
                                     </tr>
