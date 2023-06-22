@@ -97,6 +97,31 @@ namespace HRHUBWEB.Controllers
                 return Json(result);
             }
 
+        [HttpGet]
+        public async Task<IActionResult> StaffLoan()
+        {
+            string procrdure = "bi.sp_getloanApplicationpending";
+            object[] parameters = new object[] { _user.CompanyId ?? 0 };
+
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> candidatePending()
+        {
+            string procrdure = "bi.sp_getCandidateapplied";
+            object[] parameters = new object[] { _user.CompanyId ?? 0 };
+
+            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            return Json(result);
+        }
+
+
+
+
+
         [CustomAuthorization]
         public async Task< IActionResult>  HR()
         {

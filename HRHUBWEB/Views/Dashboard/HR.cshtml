@@ -335,16 +335,7 @@
         <div class="card">
             <div class="card-header border-bottom-0">
                 <h3 class="card-title">Recent Job Application</h3>
-                @*<div class="card-options">
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> See All <i class="feather feather-chevron-down"></i> </a>
-                        <ul class="dropdown-menu dropdown-menu-end" role="menu">
-                            <li><a href="javascript:void(0);">Monthly</a></li>
-                            <li><a href="javascript:void(0);">Yearly</a></li>
-                            <li><a href="javascript:void(0);">Weekly</a></li>
-                        </ul>
-                    </div>
-                </div>*@
+          
 
 
                 <div class="card-options col-md-4">
@@ -366,49 +357,25 @@
                 <div class="tabs-menu1">
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
-                        <li class="ms-sm-4"><a href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
-                        <li><a href="#tab6" class="active" data-bs-toggle="tab">Job Opening</a></li>
+                        <li class="ms-sm-4"><a class="active" href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
+                        <li><a href="#tab6" data-bs-toggle="tab">Loan Request</a></li>
                         <li><a href="#tab7" data-bs-toggle="tab">Hired Candidates</a></li>
                     </ul>
                 </div>
             </div>
             <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
                 <div class="tab-content">
-                    <div class="tab-pane" id="tab5">
+                    <div class="tab-pane active" id="tab5">
                         
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 420px;">
-                            @*<table class="table mb-0 text-nowrap">
-                            <tbody>
-
-                            <tr class="border-bottom">
-                            <td>
-                            <div class="d-flex">
-                            <img src="../assets/images/users/16.jpg" alt="img" class="avatar avatar-md brround me-3">
-                            <div class="me-3 mt-0 mt-sm-1 d-block">
-                            <h6 class="mb-0">Faith Harris</h6>
-                            <div class="clearfix"></div>
-                            <small class="text-muted">UI designer</small>
-                            </div>
-                            </div>
-                            </td>
-                            <td class="text-start fs-13">5 years</td>
-                            <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                            <td class="text-end">
-                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                            </td>
-                            </tr>
-
-                            </tbody>
-                            </table>*@
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 450px;">
+                           
 
                             <table class="table  card-table  table-sm text-nowrap" id="tableLeaves">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">S.No</th>
-                                        <th class="text-start">Employee</th>
-                                        <th class="text-center">Applied On</th>
+                                       
+                                        <th>Employee</th>
+                                        <th>Applied On</th>
                                         <th class="text-center">Action</th>
 
                                     </tr>
@@ -418,218 +385,42 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane active" id="tab6">
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body">
-                            <table class="table mb-0 text-nowrap">
-                                <tbody>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <span class="bg-light brround fs-12">UI/UX</span>
-                                                </div>
-                                                <div class="me-3 mt-3 d-block">
-                                                    <h6 class="mb-0 fs-13 font-weight-semibold">UI UX Designers</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">12 Dec 2020</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">4 vacancies</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-check text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-help-circle  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-x text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <img src="../assets/images/photos/html.png" alt="img" class=" bg-light brround">
-                                                </div>
-                                                <div class="me-3 mt-3 d-block">
-                                                    <h6 class="mb-0 fs-13 font-weight-semibold">Experienced Html Developer</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">28 Nov 2020</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">2 vacancies</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-check text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-help-circle  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-x text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <img src="../assets/images/photos/jquery.png" alt="img" class=" bg-light brround">
-                                                </div>
-                                                <div class="me-3 mt-3 d-block">
-                                                    <h6 class="mb-0 fs-13 font-weight-semibold">Experienced Jquery Developer</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>12 Nov 2020</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">1 vacancies</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-check text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-help-circle  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-x text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <img src="../assets/images/photos/vue.png" alt="img" class=" bg-light brround">
-                                                </div>
-                                                <div class="me-3 mt-3 d-block">
-                                                    <h6 class="mb-0 fs-13 font-weight-semibold">Vue js Developer</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>24 Oct 2020</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">6 vacancies</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-check text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-help-circle  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-x text-danger"></i></a>
-                                        </td>
-                                    </tr>
+                    <div class="tab-pane" id="tab6">
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body"  style="height: 450px;">
+                            <table class="table  card-table  table-sm text-nowrap">
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <div class="table_img brround bg-light me-3">
-                                                    <img src="../assets/images/photos/html.png" alt="img" class=" bg-light brround">
-                                                </div>
-                                                <div class="me-3 mt-3 d-block">
-                                                    <h6 class="mb-0 fs-13 font-weight-semibold">Kimberly Berry</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>14 Oct 2020</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">4 vacancies</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-check text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-help-circle  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns"><i class="feather feather-x text-danger"></i></a>
-                                        </td>
+
+                                        <th class="text-start">Employee</th>
+                                        <th>Applied On</th>
+                                        <th class="text-center">Action</th>
+
                                     </tr>
+                                </thead>
+
+                                <tbody id="tbodyLoan">
+                                 
+                                    
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="tab-pane " id="tab7">
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body">
-                            <table class="table mb-0 text-nowrap">
-                                <tbody>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/16.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Faith Harris</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">UI designer</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">5 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/1.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">James Paige</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small class="text-muted">UI designer</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">2 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>India</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/4.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Liam Miller</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>WireFrameing</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">1 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>Germany</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr class="border-bottom">
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/8.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Kimberly Berry</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>Senior Prototyper</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">3 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
-                                    </tr>
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 450px;">
+                            <table class="table  card-table  table-sm text-nowrap">
+
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img src="../assets/images/users/9.jpg" alt="img" class="avatar avatar-md brround me-3">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-0">Kimberly Berry</h6>
-                                                    <div class="clearfix"></div>
-                                                    <small>Senior Prototyper</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-start fs-13">3 years</td>
-                                        <td class="text-start fs-13"><i class="feather feather-map-pin text-muted me-2"></i>USA</td>
-                                        <td class="text-end">
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Contact"><i class="feather feather-phone-call text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Mail"><i class="feather feather-mail  text-primary"></i></a>
-                                            <a href="javascript:void(0);" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><i class="feather feather-trash-2 text-danger"></i></a>
-                                        </td>
+
+                                        <th class="text-start">Employee</th>
+                                        <th>Applied On</th>
+                                        <th class="text-center">Action</th>
+
                                     </tr>
+                                </thead>
+
+                                <tbody id="candidatebody" >
+                           
                                 </tbody>
                             </table>
                         </div>
@@ -656,7 +447,7 @@
 
                 </div>
             </div>
-            <div class="table-responsive attendance_table mt-4" style="height: 420px;">
+            <div class="table-responsive attendance_table mt-4" style="height: 485px;">
                 <table class="table  card-table  table-sm text-nowrap" id="tableAttendance">
                     <thead>
                         <tr>
@@ -722,6 +513,8 @@
             loadSalarySummaryGraph();
             checkdailyAttendance();
             loadLeavesrequest();
+            loadLoanrequest();
+             loadCandiate() ;
 
 
             $('#sumaryYear').change(function () {
@@ -1191,11 +984,11 @@
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
                         html += '<tr class="border-bottom">'
-                        html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+                    //    html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
                         
                         html += '<td class="font-weight-semibold fs-14"> '
                         html += '<div class="d-flex">'
-                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<img class="avatar avatar-md brround me-3" src ="'+ response[i]["SnapPath"] + '" >'
                         html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
                         html += '<h6 class="mb-1 fs-14"> ' + response[i]["ApplicantStaffName"] + ' </h6>'
                         html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["ApplicantDepartment"] + ' | ' + response[i]["ApplicantDesignation"] + ' </p>'
@@ -1216,6 +1009,116 @@
                     }
 
                     $('#tbodyLeaves').html(html)
+
+
+
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
+
+
+
+
+        }
+
+
+
+
+        function loadLoanrequest() {
+            debugger
+
+            var requestData = {};
+            makeAjaxRequest("/Dashboard/StaffLoan", 'GET', requestData, false, function (response) {
+
+                if (response != null) {
+                    debugger
+
+                    console.log(response)
+
+                    var html = '';
+                    for (var i = 0; i < response.length; i++) {
+                        html += '<tr class="border-bottom">'
+                        //    html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["RegistrationNo"] + '  |  ' + response[i]["staffname"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["loanType"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["ApplicationDate"].split("T")[0].toString("dd-MMM-yyyy") + '</p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="text-end"> '
+                        html += '<a href="/Loan/LoanApproval/' + response[i]["LoanApplicationID"] + '?staffid=' + response[i]["StaffID"] + '" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"> <i class="feather feather-eye text-primary"> </i></a> </td>'
+
+                        html += "</tr>"
+
+                    }
+
+                    $('#tbodyLoan').html(html)
+
+
+
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
+
+
+
+
+        }
+
+
+
+        
+        function loadCandiate() {
+            debugger
+
+            var requestData = { };
+            makeAjaxRequest("/Dashboard/candidatePending", 'GET', requestData, false, function (response) {
+
+                if (response != null) {
+                    debugger
+
+                    console.log(response)
+
+                    var html = '';
+                    for (var i = 0; i < response.length; i++) {
+                        html += '<tr class="border-bottom">'
+                        //    html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14">  ' + response[i]["Name"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["Email"] + ' | ' + response[i]["Phone"] + ' </p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="font-weight-semibold fs-14"> '
+                        html += '<div class="d-flex">'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["Qualification"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["ApplyDate"].split("T")[0].toString("dd-MMM-yyyy") + '</p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="text-end"> '
+                        html += '<a href="/Candidate/CandidateDetails/' + response[i]["CandidateID"] + '" class="action-btns" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View"> <i class="feather feather-eye text-primary"> </i></a> </td>'
+
+                        html += "</tr>"
+
+                    }
+
+                    $('#candidatebody').html(html)
 
 
 

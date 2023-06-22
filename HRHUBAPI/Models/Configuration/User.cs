@@ -52,7 +52,9 @@ namespace HRHUBAPI.Models
         public string? EmailServerHost { get; set; }
 
 
-        
+
+        [NotMapped]
+        public string? StaffName { get; set; }
 
 
 
@@ -102,8 +104,8 @@ namespace HRHUBAPI.Models
 								EmailSendFrom=c.EmailSendFrom,
 								EmailPassword=c.EmailPassword,
 								EmailSMTPPort=c.EmailSmtpport,
-								EmailServerHost=c.EmailServerHost
-
+								EmailServerHost=c.EmailServerHost,
+                                StaffName= staff.FirstName
 
                             };
 
