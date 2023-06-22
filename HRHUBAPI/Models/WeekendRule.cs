@@ -15,6 +15,10 @@ public partial class WeekendRule
 
     public bool? IsDeleted { get; set; }
 
+    public string? IconClass { get; set; }
+
+    public string? SpanClass { get; set; }
+
     public int? CreatedBy { get; set; }
 
     public int? UpdatedBy { get; set; }
@@ -22,6 +26,4 @@ public partial class WeekendRule
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public string? IconClass { get; set; }
 }

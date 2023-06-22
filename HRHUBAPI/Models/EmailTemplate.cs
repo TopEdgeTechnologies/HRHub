@@ -3,25 +3,19 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class Holiday
+public partial class EmailTemplate
 {
-    public int HolidayId { get; set; }
+    public int TemplateId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public DateTime? HolidayDate { get; set; }
-
-    public string? DayName { get; set; }
-
-    public string? HolidayType { get; set; }
-
     public string? Title { get; set; }
 
+    public string? Subject { get; set; }
+
+    public string? Body { get; set; }
+
     public bool Status { get; set; }
-
-    public bool? IsDeleted { get; set; }
-
-    public string? SpanClass { get; set; }
 
     public int? CreatedBy { get; set; }
 

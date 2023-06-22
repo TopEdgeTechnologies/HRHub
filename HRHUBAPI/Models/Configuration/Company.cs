@@ -51,9 +51,12 @@ namespace HRHUBAPI.Models
 
 		[NotMapped]
 		public LeaveApproval? SettingLeaveApproval { get; set; }
+        [NotMapped]
+        public List<WeekendRule>? WeekendList { get; set; }
+        
 
 
-		public async Task<List<Company>> GetCompany(int CompanyId,HrhubContext _context)
+        public async Task<List<Company>> GetCompany(int CompanyId,HrhubContext _context)
         {
             try
             {

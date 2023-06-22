@@ -26,4 +26,8 @@ public partial class CandidateScreening
     public DateTime? UpdatedOn { get; set; }
 
     public string? AttachmentPath { get; set; }
+
+    public DateTime? InterviewDateTime { get; set; }
+
+    public string? InterviewMediumOrLocation { get; set; }
 }

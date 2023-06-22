@@ -14,4 +14,12 @@ public partial class Policy
     public int? PolicyCategoryId { get; set; }
 
     public bool? Status { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public DateTime? CreatedOn { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
+    public DateTime? UpdatedOn { get; set; }
 }
