@@ -160,6 +160,7 @@ public partial class HrhubContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
+    public virtual DbSet<XStaffLeaveAllocation> XStaffLeaveAllocations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1264,6 +1265,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
             entity.Property(e => e.SectionTitle).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ViewPerformanceReviewQuestionsList>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("view_PerformanceReviewQuestionsList");
+
+            entity.Property(e => e.PerformanceFormTitle).IsUnicode(false);
+            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.QuestionTitle).IsUnicode(false);
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.SectionDescription).IsUnicode(false);
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.SectionTitle).IsUnicode(false);
+            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
         });
 
         modelBuilder.Entity<ViewPerformanceReviewQuestionsList>(entity =>

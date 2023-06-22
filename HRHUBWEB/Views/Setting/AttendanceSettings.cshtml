@@ -1,0 +1,1139 @@
+﻿@model HRHUBAPI.Models.Company
+
+@{
+    ViewData["Title"] = "AttendanceSettings";
+}
+
+<div class="side-app main-container py-0">
+
+    <!--Page header-->
+    <div class="page-header mt-0 mb-2 d-xl-flex d-block">
+        <div class="page-leftheader">
+            <div class="page-title">Attendance Settings</div>
+        </div>
+        <div class="page-rightheader ms-md-auto">
+            <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                <div class="btn-list">
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Page header-->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-md-12 col-xl-3">
+            <div class="card">
+                <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+                        <i class="fa fa-clock-o me-2 fs-16 "></i>Timing Settings
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+                        <i class="fa fa-users me-2 fs-16 "></i> Staff Settings
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+                        <i class="fa fa-calendar me-2 fs-16 "></i> Weekend Rule
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-4" role="tab">
+                        <i class="fa fa-edit me-2 fs-16 "></i> Policies
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-9">
+            <div class="tab-content adminsetting-content" id="setting-tabContent">
+                <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Office Timings</h4>
+                        </div>
+                        <div class="card-body pt-2">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Office Start Time</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input class="form-control timepicker" asp-for="OfficeStartTime" placeholder="HH:MM AM/PM" type="text">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <i class="feather feather-clock"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Office End Time</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <input class="form-control timepicker" asp-for="OfficeEndTime" placeholder="HH:MM AM/PM" type="text">
+                                            <div class="input-group-append">
+                                                <div class="input-group-text">
+                                                    <i class="feather feather-clock"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Staff Attandance Settings</h4>
+                        </div>
+
+                        <div class="card-body pt-2">
+                            <div class="mb-3">
+                                <label class="custom-switch form-switch mb-0">
+                                    <span class="custom-switch-description fs-16 me-3 text-dark">Attendance by Rosters</span>
+                                    <input type="checkbox" asp-for="AttendanceByRosters" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="custom-switch form-switch mb-0">
+                                    <span class="custom-switch-description fs-16 me-3 text-dark">Allow Web CheckIn</span>
+                                    <input type="checkbox" asp-for="EmployeeWebCheckIn" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-3" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Weekend Rule Settings</h4>
+                        </div>
+                        <div class="card-body pt-2">
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered text-nowrap border-bottom" id="weekend-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Day Name</th>
+                                                    <th class="border-bottom-0">Status</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    var count = 1;
+                                                    foreach (var item in ViewBag.ListWeekEndRule)
+                                                    {
+                                                        <tr>
+                                                            <td id="@item.WeekendRuleId">@count</td>
+                                                            <td>@item.DayName</td>
+                                                            <td>
+                                                                <label class="custom-switch form-switch mb-0">
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.WeekendRuleId" onchange="setweekendvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex">
+
+                                                                    @*<a class="action-btns1 btn-xs" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                            </a>*@
+
+                                                                    <a class="btn-l" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                        <i class="feather feather-trash-2 fs-4 text-danger mt-1"></i>
+                                                                    </a>
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        count++;
+                                                    }
+                                                }
+
+
+                                                <tr>
+                                                    <td>Sr#</td>
+                                                    <td>
+                                                        <div class="form-group ">
+                                                            <select class="form-control select2 custom-select" id="daysOfWeek" data-placeholder="Choose Day">
+                                                                <option label="Choose Day">
+                                                                </option>
+                                                                <option value="Monday">Monday</option>
+                                                                <option value="Tuesday">Tuesday</option>
+                                                                <option value="Wednesday">Wednesday</option>
+                                                                <option value="Thursday">Thursday</option>
+                                                                <option value="Friday">Friday</option>
+                                                                <option value="Saturday">Saturday</option>
+                                                                <option value="Sunday">Sunday</option>
+                                                            </select>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="Status" name="custom-switch-radio" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator"></span>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <a class="action-btns1 btn-xs" onclick="addrow(this)" data-bs-placement="top" data-bs-toggle="tooltip" title="Add">
+                                                                <i class="feather feather-plus primary text-primary mt-1 "></i>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="tab-4" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0 justify-content-between align-items-center">
+                            <h4 class="card-title">Policy Settings</h4>
+                            <a onclick="addpolicymodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addPolicy">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+                        </div>
+                        <div class="card-body pt-2">
+
+                            <div class="modal fade" id="addPolicy">
+                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Add Policy</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="PolicyConfigurationId" />
+                                            <div class="policy-types">
+                                                <div class="form-group">
+                                                    <label class="form-label">Policy</label>
+                                                    <select id="policy-types" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.AttendancePolicy ,"PolicyId" ,"Title"))">
+                                                    </select>
+                                                </div>
+                                                <div hidden class="policy-module" id="div_policy">
+                                                    <div class="mb-5">
+                                                        <p class="w-100 ps-2 fs-14 policy-description"></p>
+                                                    </div>
+
+                                                    <div class="form-control px-0 border-0 w-30 mb-3">
+                                                        <label class="form-label">Title</label>
+                                                        <input class="form-control" id="Title" type="text" placeholder="Policy" />
+                                                    </div>
+
+                                                    <div class="mb-5" id="div_AllowGraceMinutes">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="AllowGraceMinutes" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Allow Grace minutes</span>
+
+                                                            <a id="GraceMinutesTooltip" href="#">
+                                                                <i class="fa fa-info text-info"></i>
+                                                            </a>
+                                                        </label>
+                                                        <div id="div_GraceMinutes" class="form-control px-0 border-0 w-30 mb-3">
+                                                            <label class="form-label">Grace Minutes</label>
+                                                            <input class="form-control" id="GraceMinutes" type="number" placeholder="Grace Minutes" />
+                                                        </div>
+
+                                                    </div>
+
+                                                    @*<div class="mb-5" id="div_HalfLeave">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+                                                            <a href="#">
+                                                                <i class="fa fa-info text-info"></i>
+
+                                                            </a>
+                                                        </label>
+                                                    </div>
+                                                    <div class="mb-5" id="div_QuarterLeave">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+                                                            <a href="#">
+
+                                                                <i class="fa fa-info text-info"></i>
+                                                            </a>
+                                                        </label>
+                                                    </div>*@
+                                                    @*<div class="mb-5" id="div_LeaveStatus">
+                                                    <label class="custom-switch form-switch mb-0">
+                                                    <input type="checkbox" id="LeaveStatus" name="custom-switch-radio" class="custom-switch-input">
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
+                                                    <a href="#">
+                                                    <i class="fa fa-info text-info"></i>
+
+                                                    </a>
+                                                    </label>
+                                                    </div>*@
+                                                    <div class="mb-5" id="div_HalfDayLateMinutes">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="HalfDayLateMinutes" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Mark half day after late minutes</span>
+
+                                                            <a href="#">
+                                                                <i class="fa fa-info text-info"></i>
+                                                            </a>
+                                                        </label>
+                                                        <div id="div_LateMinutes" class="form-control px-0 border-0 w-30 mb-3">
+                                                            <label class="form-label">Half Day After Late Minutes</label>
+                                                            <input class="form-control" id="LateMinutes" type="number" placeholder="Late Minutes" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="ms-auto">
+                                                <button type="button" onclick="savePolicyConfiguration()" class="btn btn-success">Save</button>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Policy Title</th>
+                                                    <th class="border-bottom-0">Status</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    var i = 1;
+                                                    foreach (var items in ViewBag.ListAttendancePolicy)
+                                                    {
+                                                        <tr>
+                                                            <td id="@items.PolicyConfigurationId">@i</td>
+                                                            <td>@items.Title</td>
+                                                            <td>
+                                                                <label class="custom-switch form-switch mb-0">
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@items.PolicyConfigurationId" onchange="setpolicyvalue(this.id)" @(items.Status == true? "checked" : "")>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                @* <a onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                        <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>*@
+
+                                                                <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        i++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+@section scripts{
+
+    <script>
+        //var tooltipText = "In the context of attendance management, Grace Minutes refers to a predetermined period of time before or after the scheduled start or end time during which an employee is still considered to be on time or present. It allows for a certain level of flexibility and acknowledges that minor delays or early departures may occur without penalizing the employee.";
+
+        //// Set the tooltip text dynamically using JavaScript
+        //$("#GraceMinutesTooltip").setAttribute("title", tooltipText);
+
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+
+
+            $('#policy-table').DataTable();
+            $('#weekend-table').DataTable();
+
+            //$('.custom-switch-input').prop('checked', true);
+            //$('#HalfLeave').prop('checked', true);
+            //$('#QuarterLeave').prop('checked', true);
+            $('#AllowGraceMinutes').prop('checked', true);
+            $('#HalfDayLateMinutes').prop('checked', true);
+
+            $("#daysOfWeek").select2({ placeholder: "Choose Day", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
+
+
+        })
+
+        $('#policy-types').on('change', function () {
+            debugger;
+            var selectedPolicy = $('#policy-types').val();
+            $("#Title").css("border-color", "#ddd");
+            $("#LateMinutes").css("border-color", "#ddd");
+            $("#GraceMinutes").css("border-color", "#ddd");
+            if (selectedPolicy > 0) {
+                var Data = { Id: selectedPolicy }
+                $.ajax({
+                    url: "/Setting/GetPolicyDescription",
+                    method: 'GET',
+                    data: Data,
+                    success: function (response) {
+                        if (response != null) {
+                            $("#div_policy").prop('hidden', false)
+                            if (selectedPolicy == '12') { // Tardiness Policy
+                                //$('#div_HalfLeave').prop('hidden', false)
+                                //$('#div_QuarterLeave').prop('hidden', false)
+                                //$('#div_LeaveStatus').prop('hidden', false)
+                                //$('#div_HalfDayLateMinutes').prop('hidden', true)
+                                $('#div_HalfDayLateMinutes').prop('hidden', true)
+                                $('#div_AllowGraceMinutes').prop('hidden', false)
+
+                            }
+                            else if (selectedPolicy == '13') { // Tardiness Consequences & Accumulated
+                                //$('#div_HalfLeave').prop('hidden', true)
+                                //$('#div_QuarterLeave').prop('hidden', true)
+                                //$('#div_LeaveStatus').prop('hidden', true)
+                                $('#div_HalfDayLateMinutes').prop('hidden', false)
+                                $('#div_AllowGraceMinutes').prop('hidden', true)
+                            }
+
+                            $('.policy-description').text(response.description);
+                        }
+                    },
+                    error: function () {
+                        // Handle error if the AJAX request fails
+                        console.log('Failed to fetch data from the database.');
+                    }
+                });
+            }
+        })
+
+        $('.btn_Save').on('click', function () {
+            debugger;
+            var OfficeStartTime = $('#OfficeStartTime').val();
+            var OfficeEndTime = $('#OfficeEndTime').val();
+            var AttendanceByRosters = $('#AttendanceByRosters').is(':checked');
+            var EmployeeWebCheckIn = $('#EmployeeWebCheckIn').is(':checked');
+            var weekendList = new Array();
+            $('#weekend-table tbody tr').not(':last').each(function () {
+                var row = $(this);
+                var weekend = {};
+                weekend.WeekendRuleId = row.find("TD").eq(0).attr("id");
+                weekend.DayName = row.find("TD").eq(1).text();
+                weekend.Status = row.find("TD").eq(2).find('input').is(':checked');
+                weekendList.push(weekend);
+            });
+            var Data = {
+                OfficeStartTime: OfficeStartTime,
+                OfficeEndTime: OfficeEndTime,
+                AttendanceByRosters: AttendanceByRosters,
+                EmployeeWebCheckIn: EmployeeWebCheckIn,
+                WeekendList: weekendList
+            }
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/SaveAttendanceSetting",
+                        type: "Post",
+                        data: Data,
+                        success: function (data) {
+                            if (data != "") {
+                                debugger
+                                //var b = JSON.parse(data)
+                                if (data.success) {
+
+                                    //window.location.href =  window.location.href;
+                                    var url = '@Url.Action("AttendanceSettings", "Setting",new { data = 2 })';
+                                    window.location.href = url;
+                                    status = false;
+                                }
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+
+
+        })
+
+        $('#HalfDayLateMinutes').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            $('#div_LateMinutes').prop('hidden', false)
+            if (!checked) {
+                $('#div_LateMinutes').prop('hidden', true)
+                $('#LateMinutes').val(0);
+            }
+        })
+
+        $('#AllowGraceMinutes').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            $('#div_GraceMinutes').prop('hidden', false)
+            if (!checked) {
+                $('#div_GraceMinutes').prop('hidden', true)
+                $('#GraceMinutes').val(0);
+            }
+        })
+        function savePolicyConfiguration() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if ($("#policy-types").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Policy"
+                });
+                $("#policy-types").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if (($("#LateMinutes").val() == "" || $("#LateMinutes").val() == "0") && $('#HalfDayLateMinutes').is(":checked") == true && $("#policy-types").val() == 13) { // Tardiness Consequences & Accumulated
+                $.growl.warning({
+                    message: "Enter Late Minutes"
+                });
+                $("#LateMinutes").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if (($("#GraceMinutes").val() == "" || $("#GraceMinutes").val() == "0") && $('#AllowGraceMinutes').is(":checked") == true && $("#policy-types").val() == 12) { // Tardiness 
+                $.growl.warning({
+                    message: "Enter Grace Minutes"
+                });
+                $("#GraceMinutes").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+                $("#policy-types").css("border-color", "#ddd");
+                $("#LateMinutes").css("border-color", "ddd");
+                $("#GraceMinutes").css("border-color", "ddd");
+            }
+            var Data = {
+                id: $("#PolicyConfigurationId").val(),
+                title: $('#Title').val(),
+                policyId: $("#policy-types").val(),
+                //halfleave: $("#HalfLeave").is(':checked'),
+                //quarterleave: $("#QuarterLeave").is(':checked'),
+                halfdayafterlateminutes: $("#HalfDayLateMinutes").is(':checked'),
+                lateminutes: $("#LateMinutes").val(),
+                allowgraceminutes: $("#AllowGraceMinutes").is(':checked'),
+                graceminutes: $("#GraceMinutes").val()
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/PolicyConfigurationAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#PolicyConfigurationId").val(),
+                    policyId: $("#policy-types").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addPolicy").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/AttendancePolicyCreateOrUpdate",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        //notif({
+                                        //    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " +data.message,
+                                        //    type: "success"
+                                        //});
+                                        status = false;
+
+                                        refreshpolicyTable();
+
+                                    }
+                                    else {
+                                        $("#addPolicy").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+
+
+                        //$("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+        function editpolicyconfiguration(id) {
+            debugger;
+            addpolicymodel();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/GetAttendancePolicyConfigurationById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#PolicyConfigurationId").val(data.policyConfigurationId)
+                        $("#Title").val(data.title);
+                        $("#policy-types").val(data.policyId).trigger('change');
+
+                        if (data.policyId == 12) {
+                            $('#AllowGraceMinutes').prop('checked', data.allowGraceMinutes)
+                            $('#AllowGraceMinutes').trigger('change');
+                            $('#GraceMinutes').val(data.graceMinutes);
+
+
+                            //$('#HalfLeave').prop('checked', data.halfLeave);
+                            //$('#QuarterLeave').prop('checked', data.quarterLeave);
+                        }
+                        else if (data.policyId == 13) {
+                            $('#HalfDayLateMinutes').prop('checked', data.halfDayLateMinutes)
+                            $('#HalfDayLateMinutes').trigger('change');
+                            $('#LateMinutes').val(data.lateMinutes);
+                        }
+                        $("#addPolicy").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function addrow(control) {
+            debugger;
+            var currentrow = $(control).closest('tr');
+            var id = 0;// for new row
+            var SelectedDay = currentrow.find('#daysOfWeek').val();
+            var status = currentrow.find('input#Status').is(':checked');
+
+            if (!rowExist(SelectedDay)) {
+
+                var previousRow = currentrow.prev();
+                var srno = parseInt(previousRow.find('td:nth-child(1)').text()) + 1;
+
+                var newrow = '<tr>'
+                newrow += '<td>' + srno + '</td>'
+                newrow += '<td>' + SelectedDay + '</td>'
+
+                var checkattr = '';
+                if (status == true) {
+                    checkattr = 'checked';
+                }
+
+                newrow += '<td><label class="custom-switch form-switch mb-0" >'
+                newrow += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" ' + checkattr + ' />'
+                newrow += '<span class="custom-switch-indicator" > </span> </label> </td> '
+                newrow += '<td><div class="d-flex" >'
+                newrow += '<a class="action-btns1 onclick="confirmation(' + id + ')" btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">'
+                newrow += '<i class="feather feather-trash-2 text-danger mt-1"></i></a> </div> </td> </tr>'
+
+                if (previousRow == null) {
+                    currentrow.before(newrow);
+                }
+                else {
+
+                    previousRow.after(newrow);
+                }
+
+            }
+            else {
+                notif({
+                    msg: "<i class='fa fa-x fs-20 me-2'></i><b>Warning:</b> This Day already exist!",
+                    type: "error"
+                });
+            }
+
+            $("#daysOfWeek").select2({ placeholder: "Choose Day", width: '100%', allowClear: true }).val('').trigger('change');
+
+        }
+
+        function rowExist(SelectedDay) {
+            debugger;
+            var val = false;
+
+            $('#weekend-table tbody tr').not(':last').each(function (rowIndex) {
+                var day = $(this).find('td:nth-child(2)').text();
+
+                if (day == SelectedDay) {
+                    val = true;
+                    return false;
+                }
+            });
+            return val;
+        }
+
+        function confirmation(id, control) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { id: id }
+                    $.ajax({
+                        url: "/Setting/WeekendRuleDelete",
+                        method: 'GET',
+                        data: Data,
+                        success: function (response) {
+                            if (response.success) {
+
+                                var currentrow = $(control).closest('tr');
+                                currentrow.remove();
+
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                    type: "success"
+                                });
+
+                                refreshWeekendTable();
+                            }
+
+
+                        },
+                        error: function () {
+                            // Handle error if the AJAX request fails
+                            console.log('Failed to fetch data from the database.');
+                        }
+                    });
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+        function refreshpolicyTable() {
+            var Data = { PolicyCategoryId: 2 }
+            $.ajax({
+                url: "/Setting/GetPoliciesByCompanyId",
+                method: 'GET',
+                data: Data,
+                success: function (response) {
+                    if (response != null) {
+
+                        var table = $('#policy-table').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        console.log(response);
+                        var action = '';
+                        for (var i = 0; i < response.length; i++) {
+
+                            action += '<tr>'
+                            action += '<td id="' + response[i]["policyConfigurationId"] + '">' + (i + 1) + '</td>'
+                            action += '<td>' + response[i]["title"] + '</td>'
+
+                            var checkattr = '';
+                            if (response[i]["status"] == true) {
+                                checkattr = 'checked';
+                            }
+
+                            action += '<td><label class="custom-switch form-switch mb-0" >'
+                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsActive_' + response[i]["policyConfigurationId"] + '" onchange = "setpolicyvalue(this.id)" ' + checkattr + ' />'
+                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
+                            action += '<td><div class="d-flex" >'
+                            action += '<a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(' + response[i]["policyConfigurationId"] + ')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
+                            action += '<i class="feather feather-edit primary text-primary mt-1"></i></a> </div> </td> </tr>'
+                        }
+
+                        table.rows.add($(action)).draw();
+
+                    }
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+        }
+
+        function refreshWeekendTable() {
+
+            $.ajax({
+                url: "/Setting/GetWeekendRule",
+                method: 'GET',
+                success: function (response) {
+                    if (response != null) {
+
+                        var table = $('#weekend-table').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        console.log(response);
+                        var action = '';
+                        for (var i = 0; i < response.length; i++) {
+
+                            action += '<tr>'
+                            action += '<td>' + (i + 1) + '</td>'
+                            action += '<td>' + response[i]["dayName"] + '</td>'
+
+                            var checkattr = '';
+                            if (response[i]["status"] == true) {
+                                checkattr = 'checked';
+                            }
+
+                            action += '<td><label class="custom-switch form-switch mb-0" >'
+                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" ' + checkattr + ' />'
+                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
+                            action += '<td><div class="d-flex" >'
+                            action += '<a class="btn-l" onclick="confirmation(' + response[i]["weekendRuleId"] + ',this)" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">'
+                            action += '<i class="feather feather-trash-2 fs-4 text-danger mt-1"></i></a> </div> </td> </tr>'
+                        }
+
+                        // dropdown row
+                        action += '<tr><td>Sr# </td>'
+                        action += '<td><div class="form-group ">'
+                        action += '<select class="form-control select2 custom-select" id="daysOfWeek" data-placeholder="Choose Day">'
+                        action += '<option label="Choose Day" ></option>'
+                        action += '<option value = "Monday"> Monday </option>'
+                        action += '<option value = "Tuesday"> Tuesday </option>'
+                        action += '<option value = "Wednesday"> Wednesday </option>'
+                        action += '<option value = "Thursday"> Thursday </option>'
+                        action += '<option value = "Friday"> Friday </option>'
+                        action += '<option value = "Saturday"> Saturday </option>'
+                        action += '<option value = "Sunday"> Sunday </option> </select> </div> </td>'
+                        action += '<td> <label class="custom-switch form-switch mb-0" >'
+                        action += '<input type="checkbox" id="Status" name="custom-switch-radio" class="custom-switch-input" > <span class="custom-switch-indicator" > </span>  </label> </td>'
+                        action += '<td> <div class="d-flex" > <a class="action-btns1 btn-xs" onclick="addrow(this)" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Add" >'
+                        action += '<i class="feather feather-plus primary text-primary mt-1"> </i> </a> </div> </td> </tr>'
+
+
+                        $("#daysOfWeek").select2({ placeholder: "Choose Day", width: '100%', allowClear: true }).val('').trigger('change');
+
+                        table.rows.add($(action)).draw();
+
+                    }
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+        }
+        function setpolicyvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdatePolicyConfigurationStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+
+        function setweekendvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdatePolicyWeekendRuleStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+
+        function addpolicymodel() {
+
+            $("#addPolicy").modal('show');
+            $("#PolicyConfigurationId").val(0)
+            $("#Title").val('')
+            $("#div_policy").prop('hidden', true)
+
+            //$('#div_HalfLeave').prop('hidden', true)
+            //$('#div_QuarterLeave').prop('hidden', true)
+            //$('#div_LeaveStatus').prop('hidden', true)
+
+            $('#div_AllowGraceMinutes').prop('hidden', true)
+            $('#div_HalfDayLateMinutes').prop('hidden', true)
+
+            $("#Status").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+            $("#LateMinutes").css("border-color", "#ddd");
+            $("#GraceMinutes").css("border-color", "#ddd");
+            $('.policy-description').text("");
+            $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
+        }
+
+
+    </script>
+
+
+	}
+
+

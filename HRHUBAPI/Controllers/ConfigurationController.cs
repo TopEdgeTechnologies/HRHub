@@ -585,7 +585,37 @@ namespace HRHUBAPI.Controllers
             }
         }
 
+        [HttpGet("DeleteWeekendRule{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteWeekendRule(int Id, int UserId)
+        {
+            if (Id > 0)
+            {
 
+                var dbResult = await new WeekendRule().DeleteWeekendRuleInfo(Id, UserId, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+        }
+        [HttpPost("UpdateStatusByWeekendRuleId")]
+        public async Task<ActionResult<WeekendRule>> UpdateStatusByWeekendRuleId(WeekendRule obj)
+        {
+            var result = await new WeekendRule().UpdateStatusByWeekendRuleId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
 
         [HttpPost("PostWeekendRule")]
         public async Task<ActionResult<Holiday>> PostWeekendRule(WeekendRule objRule)
