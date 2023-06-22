@@ -358,7 +358,8 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="row mb-0 pb-0">
+				<div id="LeaveBalanceSummary" class="row mb-0 pb-0">
+					@*
 					<div class="col-4 text-center py-5 border-end">
 						<h5>Vacation</h5>
 						<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 16</span></div>
@@ -371,6 +372,7 @@
 						<h5>Unpaid leave</h5>
 						<div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
 					</div>
+					*@
 				</div>
 			</div>
 		</div>
@@ -672,6 +674,7 @@
 			loadStaffMonthlyAttendanceGraph()
 			loadStaffYTDHoliday()
 			loadStaffLeaveBalance_Statistics()
+			loadStaffLeaveBalance_Summary()
 
 			$('#chartDate').change(function () {
 				loadStaffYTDAttendance()
@@ -1102,6 +1105,32 @@
 					}
 
 					$("#TblBodyLeaveBalance").html(htmlLeaveBalance)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+
+		function loadStaffLeaveBalance_Summary() {
+			debugger
+			var requestData = { }
+
+			makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Summary", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					var htmlLeaveBalance = ''
+					for (var i = 0; i < response.length; i++) {
+						htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
+						htmlLeaveBalance += ' 	<h5>Paid Leave</h5> '
+						htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">' + response[i].PaidLeaveCount + ' <span class="my-auto fs-14 font-weight-normal text-light">/</span> .0</span></div> '
+						htmlLeaveBalance += ' </div> '
+
+						htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
+						htmlLeaveBalance += ' 	<h5>Non Paid Leave</h5> '
+						htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">' + response[i].NonPaidLeaveCount + ' <span class="my-auto fs-14 font-weight-normal text-light">/</span> .0</span></div> '
+						htmlLeaveBalance += ' </div> '
+					}
+
+					$("#LeaveBalanceSummary").html(htmlLeaveBalance)
 				}
 			}, function (errorStatus) {
 				console.log('Error:', errorStatus)
