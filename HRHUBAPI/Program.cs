@@ -48,7 +48,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddHostedService<MailService>();
 
-//builder.Services.AddHostedService<EmailBackGroundService>();
 
 
     
