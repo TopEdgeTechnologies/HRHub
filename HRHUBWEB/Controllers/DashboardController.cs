@@ -145,16 +145,6 @@ namespace HRHUBWEB.Controllers
 			return new Leave();
 		}
 
-		//public async Task<Leave> GetleaveTypeList()
-		//{
-		//	if (_user.CompanyId > 0)
-		//	{
-		//		ViewBag.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
-		//		//return ViewBag.ListleaveTypes;
-		//	}
-		//	return new Leave();
-		//}
-
 		public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
 		{
             Leave ObjLeave = new Leave();
@@ -171,17 +161,17 @@ namespace HRHUBWEB.Controllers
 			ObjLeave.IsDeleted = false;
 			ObjLeave.CreatedBy = _user.UserId;
 
-			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeave, "api/Leave/LeaveAddOrCreate", HttpMethod.Post);
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeave, "api/Leave/LeaveAddOrCreate", HttpMethod.Post); 
+			return Json(result);
+		}
 
-            //if (result.Message.Contains("Insert"))
-            //{
-            //    return new RedirectToAction("StaffDashboard", new { data = 1 });
-            //}
-			//else
-			//{
-			//	return RedirectToAction("SalaryMethodList", new { data = 2 });
-			//}
-            //return new RedirectToActionResult("Dashboard", "StaffDashboard", result);    
+		[HttpGet]
+		public async Task<IActionResult> Staff_LeaveBalance_Statistics()
+		{
+			string procrdure = "BI.GetStaff_LeaveBalance_Statistics";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
 		}
 

@@ -91,7 +91,7 @@
 		</div>
 		<div class="page-rightheader ms-md-auto">
 			<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-		<a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal">Apply Leaves</a> @*data-bs-target="#applyleaves"*@
+				<a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal">Apply Leaves</a> @*data-bs-target="#applyleaves"*@
 				<div class="d-flex">
 					<div class="header-datepicker me-3">
 						<div class="input-group">
@@ -340,7 +340,8 @@
 				<div class="card-header border-0">
 					<h4 class="card-title">Leave Balance</h4>
 					<div class="card-options me-3">
-						<a href="" class="btn btn-block btn-primary pe-3 ps-3">Apply For Leave</a>
+						
+						<a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-block btn-primary pe-3 ps-3" data-bs-toggle="modal">Apply For Leave</a>
 					</div>
 				</div>
 				<div class="table-responsive leave_table fs-13 mt-5">
@@ -350,34 +351,10 @@
 								<th class="text-start">Balance</th>
 								<th class="text-start">Used</th>
 								<th class="text-center">Available</th>
-								<th class="text-center">Allowance</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr class="border-bottom fs-15">
-								<td class="text-center d-flex"><span class="bg-primary brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">Vacation</span></td>
-								<td class="font-weight-semibold fs-15">16.5</td>
-								<td class="text-center text-muted fs-15">3.5</td>
-								<td class="text-center text-muted">20</td>
-							</tr>
-							<tr class="border-bottom fs-15">
-								<td class="text-center d-flex"><span class="bg-orange brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">Sick Leave</span></td>
-								<td class="font-weight-semibold">4.5</td>
-								<td class="text-center text-muted">16</td>
-								<td class="text-center text-muted">20</td>
-							</tr>
-							<tr class="border-bottom fs-15">
-								<td class="text-center d-flex"><span class="bg-warning brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">Unpaid leave</span></td>
-								<td class="font-weight-semibold">5</td>
-								<td class="text-center text-muted">360</td>
-								<td class="text-center text-muted">365</td>
-							</tr>
-							<tr class="border-bottom fs-15">
-								<td class="text-center d-flex"><span class="bg-info brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">Work from Home</span></td>
-								<td class="font-weight-semibold">8</td>
-								<td class="text-center text-muted">22</td>
-								<td class="text-center text-muted">30</td>
-							</tr>
+						<tbody id="TblBodyLeaveBalance">
+
 						</tbody>
 					</table>
 				</div>
@@ -694,6 +671,7 @@
 			loadStaffYTDAttendance()
 			loadStaffMonthlyAttendanceGraph()
 			loadStaffYTDHoliday()
+			loadStaffLeaveBalance_Statistics()
 
 			$('#chartDate').change(function () {
 				loadStaffYTDAttendance()
@@ -746,24 +724,6 @@
 			// Schedule the next update after 1 second
 			setTimeout(updateClock, 1000);
 		  }
-
-		 // function updateClock() {
-			//  var now = new Date();
-			//  var hours = now.getHours();
-			//  var minutes = now.getMinutes();
-			//  var seconds = now.getSeconds();
-
-			//  // Add leading zeros to minutes and seconds
-			//  minutes = minutes < 10 ? '0' + minutes : minutes;
-			//  seconds = seconds < 10 ? '0' + seconds : seconds;
-
-			//  // Update the input field value
-			//  document.getElementById('tpBasic').value = hours + ':' + minutes + ':' + seconds;
-
-			//  // Schedule the next update after 1 second
-			//  setTimeout(updateClock, 1000);
-			//}
-
 
 		function openApplyLeaveModal() {
 			var statusCount = 0;
@@ -1120,6 +1080,28 @@
 					}
 
 					$("#holidaysCard").html(htmlHoliday)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+
+		function loadStaffLeaveBalance_Statistics() {
+			debugger
+			var requestData = { }
+
+			makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Statistics", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					var htmlLeaveBalance = ''
+					for (var i = 0; i < response.length; i++) {
+						htmlLeaveBalance += ' <tr class="border-bottom fs-15"> '
+						htmlLeaveBalance += ' 	<td class="text-center d-flex"><span class="bg-' + response[i].LeaveTypeCSSClass + ' brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">' + response[i].LeaveTypeTitle + '</span></td> '
+						htmlLeaveBalance += ' 	<td class="font-weight-semibold fs-15">' + response[i].LeaveCount + '</td> '
+						htmlLeaveBalance += ' 	<td class="text-center text-muted">' + response[i].RemainingLeaves + '</td> '
+						htmlLeaveBalance += ' </tr> '
+					}
+
+					$("#TblBodyLeaveBalance").html(htmlLeaveBalance)
 				}
 			}, function (errorStatus) {
 				console.log('Error:', errorStatus)
