@@ -1,6 +1,7 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
 using HRHUBWEB.Filters;
+using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -14,13 +15,19 @@ namespace HRHUBWEB.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly APIHelper _APIHelper;
         private readonly User _user;
+        private readonly IEmailHelper _EmailHelper;
+  
 
-        public DashboardController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
+
+        public DashboardController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, 
+            APIHelper APIHelper, IHttpContextAccessor httpContextAccessor, IEmailHelper EmailHelper)
         {
             _webHostEnvironment = webHostEnvironment;
             _APIHelper = APIHelper;
             _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            _EmailHelper = EmailHelper;
+        
         }
        
         [HttpGet]
@@ -91,10 +98,10 @@ namespace HRHUBWEB.Controllers
         }
 
         [CustomAuthorization]
-        public IActionResult  HR()
+        public async Task< IActionResult>  HR()
         {
-			
-			return View();
+          var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
+            return View();
         }
 
 

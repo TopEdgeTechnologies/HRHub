@@ -144,6 +144,10 @@ namespace HRHUBWEB.Extensions
         //var resultList = await CallApiAsync<List<object>>(model, apiUrl, HttpMethod.Get);
 
     }
+
+
+
+
 }
 
 

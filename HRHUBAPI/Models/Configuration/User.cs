@@ -38,6 +38,28 @@ namespace HRHUBAPI.Models
 		public string? OldPasword { get; set; }
 		[NotMapped]
 		public int? status { get; set; }
+
+        [NotMapped]
+        public string? EmailSendFrom { get; set; }
+
+        [NotMapped]
+        public string? EmailPassword { get; set; }
+
+        [NotMapped]
+        public int? EmailSMTPPort { get; set; }
+
+        [NotMapped]
+        public string? EmailServerHost { get; set; }
+
+
+        
+
+
+
+
+
+
+
         public async Task<User> Login(User Obj, HrhubContext _context)
         {
 
@@ -77,8 +99,13 @@ namespace HRHUBAPI.Models
 								DesignationID = d.DesignationId,
 								DepartmentId = dep.DepartmentId,
 								Departmentname = dep.Title,
+								EmailSendFrom=c.EmailSendFrom,
+								EmailPassword=c.EmailPassword,
+								EmailSMTPPort=c.EmailSmtpport,
+								EmailServerHost=c.EmailServerHost
 
-							};
+
+                            };
 
                
 

@@ -3,9 +3,13 @@ using HRHUBWEB.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using System.Net;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 var BaseUrl = "https://localhost:7152/";
@@ -23,12 +27,9 @@ builder.Services.AddSession();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<DbConnection>();
 builder.Services.AddSingleton<APIHelper>();
-
-//builder.Services.AddControllersWithViews(options =>
-//{
-//    options.Filters.Add(new ExceptionFilter());
-//});
-
+builder.Services.AddTransient<IEmailHelper, EmailHelper>();
+builder.Services.AddSingleton<CacheExtensions>();
+builder.Services.AddMemoryCache();
 
 
 
@@ -41,6 +42,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseExceptionHandler("/Error");
 
@@ -64,3 +66,4 @@ app.MapControllerRoute(
     pattern: "{controller=User}/{action=Loginpage}/{id?}");
 
 app.Run();
+

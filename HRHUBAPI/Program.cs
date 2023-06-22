@@ -1,12 +1,15 @@
+using HRHUBAPI.BackGroundService;
 using HRHUBAPI.Models;
 using HRHUBAPI.Models.Configuration;
 using HRHUBAPI.Web.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
@@ -17,6 +20,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<jwtTokenGenrator>();
 builder.Services.AddTransient<DbConnection>();
+builder.Services.AddTransient<EmailHelper>();
+
 
 builder.Services.AddDbContext<HrhubContext>(Options =>
 {
@@ -40,6 +45,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            };
        });
 
+
+builder.Services.AddHostedService<MailService>();
+
+//builder.Services.AddHostedService<EmailBackGroundService>();
+
+
+    
 
 
 
