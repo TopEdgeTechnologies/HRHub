@@ -296,6 +296,40 @@ namespace HRHUBWEB.Controllers
 
 
 
+        #region NotificationSetting
+
+        public async Task<IActionResult> NotificationSettings(string data = "")
+        {
+            ViewBag.Success = data;
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+           EmailNotificationSetting objEmail = new EmailNotificationSetting();
+         
+            ViewBag.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            //LeaveApprovalSetting Obj = new LeaveApprovalSetting();
+            //Obj = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Setting/GetLeaveSettingByCompanyId{CompanyId}", HttpMethod.Get);
+
+            //ViewBag.ListLeaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+
+            //ViewBag.ListDesignations = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+            //ViewBag.ListleaveStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveStatus>>("api/Leave/GetLeaveStatusInfos", HttpMethod.Get);
+
+            //ViewBag.ListLeavePolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPoliciesByCompanyId{CompanyId}/{PolicyCategoryId}", HttpMethod.Get);
+
+            //ViewBag.LeavePolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPolicybyCategoryId{PolicyCategoryId}", HttpMethod.Get);
+
+            return View(objEmail);
+        }
+
+
+
+
+        #endregion
+
 
 
 

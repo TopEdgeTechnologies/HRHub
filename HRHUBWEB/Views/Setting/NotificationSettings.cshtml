@@ -1,0 +1,1009 @@
+﻿@model HRHUBAPI.Models.EmailNotificationSetting
+
+@{
+    ViewData["Title"] = "Notification Settings";
+}
+
+
+<div class="side-app main-container py-0">
+
+    <!--Page header-->
+    <div class="page-header mt-0 mb-2 d-xl-flex d-block">
+        <div class="page-leftheader">
+            <div class="page-title">Notification Settings</div>
+        </div>
+        <div class="page-rightheader ms-md-auto">
+            <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                <div class="btn-list">
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Page header-->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-md-12 col-xl-3">
+            <div class="card">
+                <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+                        <i class="fa fa-cog me-2 fs-16 "></i>General Settings
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+                        <i class="fa fa-edit me-2 fs-16 "></i> Email Template
+                    </a>
+                 @*   <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+                        <i class="fa fa-list-alt me-2 fs-16 "></i> Leave Types
+                    </a>*@
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-9">
+            <div class="tab-content adminsetting-content" id="setting-tabContent">
+                <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">General Settings</h4>
+                        </div>
+                        <div class="card-body pt-2">
+                            <input type="hidden" asp-for="CompanyId" />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Leave Final Approval By</label>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="form-label">Approve Leave on Status</label>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                                <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header justify-content-between align-items-center border-0">
+                            <h4 class="card-title">Email Template</h4>
+                            <div>
+                                <a onclick="addEmailTemplatemodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addEmail">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+                            </div>
+                        </div>
+                        <div class="card-body pt-2">
+                            <div class="modal fade" id="addEmail">
+                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Add Policy</h5>
+                                            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="PolicyConfigurationId" />
+                                            <div class="policy-types">
+
+                                                <div class="form-group">
+                                                    <label class="form-label">Policy</label>
+                                                    <select id="policy-types" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.LeavePolicy ,"PolicyId" ,"Title"))">
+                                                    </select>
+                                                </div>
+                                                <div hidden class="policy-module" id="leave-policy-module">
+                                                    <div class="mb-5">
+                                                        <p class="w-100 ps-2 fs-14 policy-description"></p>
+                                                    </div>
+
+                                                    <div class="form-control px-0 border-0 w-30 mb-3">
+                                                        <label class="form-label">Title</label>
+                                                        <input class="form-control" id="Title" type="text" placeholder="leave policy" />
+                                                    </div>
+
+                                                    <div class="mb-5">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+                                                            <a href="#">
+                                                                <i class="fa fa-info"></i>
+
+                                                            </a>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="mb-5">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+                                                            <a href="#">
+                                                                <i class="fa fa-info text-info"></i>
+
+                                                            </a>
+                                                        </label>
+                                                    </div>
+
+                                                    @* <div class="mb-5">
+                                                    <label class="custom-switch form-switch mb-0">
+                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
+                                                    <a href="#">
+                                                    <i class="fa fa-info text-info"></i>
+
+                                                    </a>
+                                                    </label>
+                                                    </div>*@
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="ms-auto">
+                                                <a onclick="savePolicyConfiguration()" class="btn btn-success btn_Save">Save</a>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Title</th>
+                                                    <th class="border-bottom-0">Subject</th>
+                                                    <th class="border-bottom-0">Body</th>
+                                                    <th class="border-bottom-0">Status</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    int i = 1;
+                                                    foreach (var item in ViewBag.ListEmailTemplate)
+                                                    {
+                                                        <tr>
+                                                            <td>@i</td>
+                                                            <td>@item.Title</td>
+                                                            <td>@item.Subject</td>
+                                                            <td>@item.Body</td>
+                                                           
+                                                            <td>
+                                                                <label class="custom-switch mt-2">
+
+                                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.TemplateId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
+                                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                            <div class="d-flex">
+                                                              @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                {
+                                                                        <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary mt-1"></i>
+                                                                </a>
+                                                                }
+
+                                                              </div>
+
+                                                            </td>
+                                                        </tr>
+                                                        i++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+              
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+            $('#policy-table').DataTable();
+            $('#leavetype-table').DataTable();
+
+
+            //$('.custom-switch-input').prop('checked', true);
+
+
+        })
+
+
+        $('.btn_Save').on('click', function () {
+            debugger;
+
+            var Data = {
+                FinalApprovalByDesignationId: $("#FinalApprovalByDesignationId").val(),
+                LeaveApprovalLeaveStatusId: $('#LeaveApprovalLeaveStatusId').val()
+            }
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/SaveLeaveSetting",
+                        type: "Post",
+                        data: Data,
+                        success: function (data) {
+                            if (data != "") {
+                                debugger
+                                //var b = JSON.parse(data)
+                                if (data.success) {
+
+                                    //window.location.href =  window.location.href;
+                                    var url = '@Url.Action("LeaveSettings", "Setting",new { data = 2 })';
+                                    window.location.href = url;
+                                    status = false;
+                                }
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+
+
+        })
+
+
+
+        /// Add or Edit Leave Type
+        function saveLeaveType() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#LeaveTypeTitle").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#LeaveTypeTitle").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if ($("#NoOfLeaves").val() == "" || $("#NoOfLeaves").val() == "0") {
+                $.growl.warning({
+                    message: "Please Select Policy"
+                });
+                $("#NoOfLeaves").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#LeaveTypeTitle").css("border-color", "#ddd");
+                $("#NoOfLeaves").css("border-color", "#ddd");
+            }
+            var Data = {
+                LeaveTypeId: $("#LeaveTypeId").val(),
+                Title: $('#LeaveTypeTitle').val(),
+                NoOfLeaves: $("#NoOfLeaves").val(),
+                Status: $("#Status").is(':checked'),
+                IsNonPaid: $("#IsNonPaid").is(':checked')
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/LeaveTypeAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#LeaveTypeId").val(),
+                    title: $('#Title').val() == '' ? '""' : $('#Title').val(),
+                    CompanyId: $("#CompanyId").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addleavetypemodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/PostLeaveType",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        //notif({
+                                        //    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " +data.message,
+                                        //    type: "success"
+                                        //});
+                                        status = false;
+
+                                        refreshLeaveTypeTable();
+
+                                    }
+                                    else {
+                                        $("#addleavetypemodal").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+
+
+                        //$("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+        function editrecord(id) {
+            debugger;
+            addnewleavetype();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetLeaveTypeById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#LeaveTypeId").val(data.leaveTypeId);
+                        $("#LeaveTypeTitle").val(data.title);
+                        $("#NoOfLeaves").val(data.noOfLeaves);
+
+                        $("#Status").prop('checked', data.status)
+                        $("#IsNonPaid").prop('checked', data.isNonPaid)
+                        $("#addleavetypemodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+
+        function confirmation(id, control) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { id: id }
+                    $.ajax({
+                        url: "/Setting/LeaveTypeDelete",
+                        method: 'GET',
+                        data: Data,
+                        success: function (response) {
+                            if (response.success) {
+
+                                var currentrow = $(control).closest('tr');
+                                currentrow.remove();
+
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                    type: "success"
+                                });
+
+                                refreshLeaveTypeTable();
+                            }
+
+
+                        },
+                        error: function () {
+                            // Handle error if the AJAX request fails
+                            console.log('Failed to fetch data from the database.');
+                        }
+                    });
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+
+        function refreshLeaveTypeTable() {
+            $.ajax({
+                url: "/Setting/GetLeaveTypeByCompanyId",
+                method: 'GET',
+                success: function (response) {
+                    if (response != null) {
+
+                        var table = $('#leavetype-table').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        console.log(response);
+                        var action = '';
+                        for (var i = 0; i < response.length; i++) {
+
+                            action += '<tr>'
+                            action += '<td>' + (i + 1) + '</td>'
+                            action += '<td>' + response[i]["title"] + '</td>'
+                            action += '<td> <div class="form-group m-0"> <input class="form-control" id="NoOfLeaves" value="' + response[i]["noOfLeaves"] + '" type="number" name="number"> </div></td>'
+
+                            var checknonpaidattr = '';
+                            if (response[i]["isNonPaid"] == true) {
+                                checknonpaidattr = 'checked';
+                            }
+
+                            action += '<td><label class="custom-switch form-switch mb-0" >'
+                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsNonPaid_' + response[i]["leaveTypeId"] + '" onchange="setvalue(this.id,this)" ' + checknonpaidattr + ' />'
+                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
+
+                            var checkattr = '';
+                            if (response[i]["status"] == true) {
+                                checkattr = 'checked';
+                            }
+
+                            action += '<td><label class="custom-switch form-switch mb-0" >'
+                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsActive_' + response[i]["leaveTypeId"] + '" onchange = "setvalue(this.id)" ' + checkattr + ' />'
+                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
+                            action += '<td><div class="d-flex" >'
+                            action += '<a class="action-btns1 btn-xs" onclick="editrecord(' + response[i]["leaveTypeId"] + ')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
+                            action += '<i class="feather feather-edit primary text-primary mt-1"></i></a>'
+                            action += '<a class="action-btns1 btn-xs" onclick="confirmation(' + response[i]["leaveTypeId"] + ',this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
+                            action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a> </div> </td> </tr>'
+
+                        }
+
+
+                        table.rows.add($(action)).draw();
+
+                    }
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+        }
+
+        function setvalue(event, row) {
+            debugger
+            console.log(event)
+
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $("#" + control + "_" + id).prop('checked', true);
+            }
+            else {
+                $("#" + control + "_" + id).prop('checked', false);
+            }
+
+            var currentRow = $(row).closest('tr');
+            var isactive = currentRow.find("#IsActive_" + id).is(':checked');
+            var isnonpaid = currentRow.find("#IsNonPaid_" + id).is(':checked');
+            var noOfLeaves = currentRow.find("#NoOfLeaves_" + id).val();
+
+
+            // UPdate Status & IsNonpaid
+            var Data = { id: id, status: isactive, nonpaid: isnonpaid, noofleaves: noOfLeaves }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateLeaveTypeStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("LeaveTypeList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
+        /// End of Add or Edit Leave Type
+
+        /// Add or Edit Leave Policy
+
+        function savePolicyConfiguration() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if ($("#policy-types").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Policy"
+                });
+                $("#policy-types").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+                $("#policy-types").css("border-color", "#ddd");
+            }
+            var Data = {
+                id: $("#PolicyConfigurationId").val(),
+                title: $('#Title').val(),
+                policyId: $("#policy-types").val(),
+                halfleave: $("#HalfLeave").is(':checked'),
+                quarterleave: $("#QuarterLeave").is(':checked')
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/PolicyConfigurationAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#PolicyConfigurationId").val(),
+                    policyId: $("#policy-types").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addPolicy").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/LeavePolicyCreateOrUpdate",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        //notif({
+                                        //    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " +data.message,
+                                        //    type: "success"
+                                        //});
+                                        status = false;
+
+                                        refreshpolicyTable();
+
+                                    }
+                                    else {
+                                        $("#addPolicy").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+
+
+                        //$("#myform").submit();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+        function editpolicyconfiguration(id) {
+            debugger;
+            addEmailTemplatemodel();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/GetLeavePolicyConfigurationById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#PolicyConfigurationId").val(data.policyConfigurationId)
+                        $("#Title").val(data.title);
+                        $("#policy-types").val(data.policyId).trigger('change');
+
+                        if (data.policyId == 9) {
+                            $('#leave-policy-module').prop('hidden', false)
+                            $('#HalfLeave').prop('checked', data.halfLeave);
+                            $('#QuarterLeave').prop('checked', data.quarterLeave);
+                        }
+                        $("#addPolicy").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+        function refreshpolicyTable() {
+            debugger;
+            var Data = { PolicyCategoryId: 1 }
+            $.ajax({
+                url: "/Setting/GetPoliciesByCompanyId",
+                method: 'GET',
+                data: Data,
+                success: function (response) {
+                    if (response != null) {
+
+                        var table = $('#policy-table').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        console.log(response);
+                        var action = '';
+                        for (var i = 0; i < response.length; i++) {
+
+                            action += '<tr>'
+                            action += '<td id="' + response[i]["policyConfigurationId"] + '">' + (i + 1) + '</td>'
+                            action += '<td>' + response[i]["title"] + '</td>'
+
+                            var checkattr = '';
+                            if (response[i]["status"] == true) {
+                                checkattr = 'checked';
+                            }
+
+                            action += '<td><label class="custom-switch form-switch mb-0" >'
+                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsActive_' + response[i]["policyConfigurationId"] + '" onchange = "setpolicyvalue(this.id)" ' + checkattr + ' />'
+                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
+                            action += '<td><div class="d-flex" >'
+                            action += '<a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(' + response[i]["policyConfigurationId"] + ')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
+                            action += '<i class="feather feather-edit primary text-primary mt-1"></i></a> </div> </td> </tr>'
+                        }
+
+
+
+                        table.rows.add($(action)).draw();
+
+                    }
+                },
+                error: function () {
+                    // Handle error if the AJAX request fails
+                    console.log('Failed to fetch data from the database.');
+                }
+            });
+
+
+        }
+
+        function setpolicyvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdatePolicyConfigurationStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+
+        /// End of Add or Edit Leave Policy
+
+        var policyTypes = $('#policy-types');
+        var policyDescription = $('.policy-description');
+        var leavePolicyModule = $('#leave-policy-module');
+        var policyModule = $('.policy-module');
+
+        $('#policy-types').on('change', function () {
+            var selectedPolicy = policyTypes.val();
+            debugger;
+
+            if (selectedPolicy > 0) {
+                var Data = { Id: selectedPolicy }
+                $.ajax({
+                    url: "/Setting/GetPolicyDescription",
+                    method: 'GET',
+                    data: Data,
+                    success: function (response) {
+                        if (response != null) {
+                            if (selectedPolicy == '9') { // Tardiness Policy
+                                $('#leave-policy-module').prop('hidden', false)
+
+                            }
+
+                            $('.policy-description').text(response.description);
+                        }
+                    },
+                    error: function () {
+                        // Handle error if the AJAX request fails
+                        console.log('Failed to fetch data from the database.');
+                    }
+                });
+            }
+
+        })
+
+        function addEmailTemplatemodel() {
+
+            $("#addPolicy").modal('show');
+            $("#PolicyConfigurationId").val(0)
+            $("#Title").val('')
+            $('#leave-policy-module').prop('hidden', true)
+
+
+            $("#HalfLeave").prop('checked', true);
+            $("#QuarterLeave").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+            $('.policy-description').text("");
+            $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
+        }
+
+        function addnewleavetype() {
+
+
+            $("#LeaveTypeId").val(0)
+            $("#LeaveTypeTitle").val('')
+            $("#NoOfLeaves").val('')
+            $("#Status").prop('checked', true)
+            $("#IsNonPaid").prop('checked', false)
+            $("#NoOfLeaves").css("border-color", "#ddd");
+            $("#LeaveTypeTitle").css("border-color", "#ddd");
+
+            $("#addleavetypemodal").modal('show');
+
+        }
+
+    </script>
+
+					}
+
+

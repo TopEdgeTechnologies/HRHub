@@ -102,5 +102,47 @@ namespace HRHUBAPI.Controllers
 
         #endregion
 
+
+
+        #region NotificationSetting
+
+
+
+        [HttpGet("GetEmailTemplateByCompanyId{CompanyId}")]
+        public async Task<ActionResult<EmailTemplate>> GetEmailTemplateByCompanyId(int CompanyId)
+        {
+            var result = await new EmailNotificationSetting().GetEmailTemplate(CompanyId, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+        [HttpPost("PostAttendanceSetting")]
+        public async Task<ActionResult<EmailNotificationSetting>> PostEmailNotificationSetting(EmailNotificationSetting Obj)
+        {
+
+            var dbResult = await new EmailNotificationSetting().PostEmailNotificationSetting(Obj, _context);
+            if (dbResult != null && dbResult.Flag==2)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                }); ;
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+        #endregion
+
     }
 }
