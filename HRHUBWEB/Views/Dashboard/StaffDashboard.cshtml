@@ -88,6 +88,28 @@
 					*@
 					<div class="form-group">
 						<label class="form-label">Leaves Types</label>
+						
+						<select id="LeaveTypeId" class="form-control">
+						@*	@{
+								//if (Model.ListleaveTypes != null && Model.ListleaveTypes.Count() > 0)
+								//{
+								//	foreach (var leaveType in Model.ListleaveTypes)
+								//	{
+								//		<option value="@leaveType.LeaveTypeId">@leaveType.Title</option>
+								//	}
+								//}
+								
+
+								//if (ViewBag.ListleaveTypes != null && ViewBag.ListleaveTypes.Count() > 0)
+								//{
+								//	foreach (var leaveType in ViewBag.ListleaveTypes)
+								//	{
+								//		<option value="@leaveType.Id">@leaveType.Name</option>
+								//	}
+								//}
+							}*@
+						</select>
+						
                         @*
 						<select id="LeaveTypeId" class="form-control" data-placeholder="Select Leave Type" asp-items="@(new SelectList(@ViewBag.ListleaveTypes,"LeaveTypeId", "Title"))">
 							<option label="Select Leave Type"></option>
@@ -96,7 +118,7 @@
 						<select id="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
 							<option value="">Select Leave Type</option>
 						</select>
-						*@
+						
 						<select id="LeaveTypeId" name="LeaveTypeId" class="form-control custom-select select2" data-placeholder="Select">
 							<option label="Select"></option>
 							<option value="1">Half Day Leave</option>
@@ -108,7 +130,8 @@
 							<option value="6">Unpaid Leaves</option>
 							<option value="8">Other Leaves</option>
 						</select>
-                        
+                        *@
+						
 					</div>
 					<div class="form-group">
 						<label class="form-label">Reason:</label>
@@ -738,6 +761,10 @@
 @section scripts{
 	<script>
 		$(document).ready(function() {
+			$('#myonoffswitch2').prop('checked', true);
+			localStorage.setItem('dayonedarkMode', true);
+			localStorage.removeItem('dayonelightMode');
+			localStorage.removeItem('dayonetransparentMode');
 
 			var currentDate = new Date(); // Get the current date
 			$('#singledaterange').datepicker({
@@ -760,19 +787,53 @@
 
 		});
 
+		function populateLeaveType() {
+			debugger
+			var listleaveTypes = @Html.Raw(Json.Serialize(ViewBag.vbleaveTypes));
+
+			if (listleaveTypes != null && listleaveTypes.length > 0) {
+				var dropdown = $('#LeaveTypeId');
+
+				$.each(listleaveTypes, function (index, leaveType) {
+					dropdown.append($('<option></option>').val(leaveType.LeaveTypeId).text(leaveType.Title));
+				});
+			}
+		}
+
+		//function populateLeaveType(){
+		//	var ddlHtml = ''
+		//	if (ViewBag.ListleaveTypes != null && ViewBag.ListleaveTypes.Count() > 0)
+		//	{
+		//		foreach (var leaveType in ViewBag.ListleaveTypes)
+		//		{
+		//			ddlHtml += '<option value="'+leaveType.LeaveTypeId+'">'+leaveType.Title+'</option>'
+		//		}
+		//		$('#LeaveTypeId').html(ddlHtml)
+		//	}
+		//}
+
 		function openApplyLeaveModal() {
 			var statusCount = 0;
-			var Data = { }
-			console.log(Data)
+			var dropdown = $('#LeaveTypeId');
+			var ddlHtml = ''
+			
+			var data = { }
+
+			console.log(data)
 			$.ajax({
 				async: false,
 					url: "/Dashboard/GetleaveTypeList",
 				type: "GET",
-				data: Data,
+				data: data,
 				success: function (data) {
 					if (data != "") {
 						console.log(data)
-						debugger
+
+						for (var i = 0; i < data.listleaveTypes.length; i++) {
+							ddlHtml += '<option value="' + data.listleaveTypes[i].leaveTypeId + '">' + data.listleaveTypes[i].title + '</option>'
+						}
+						dropdown.html(ddlHtml);
+
 						statusCount = data.listleaveTypes.length;
 					}
 				},
@@ -783,6 +844,8 @@
 				}
 			})
 			if(statusCount > 0){
+				debugger
+				//populateLeaveType()
 				$("#applyleaves").modal('show')
 			}
 			

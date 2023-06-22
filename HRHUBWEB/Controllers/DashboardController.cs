@@ -133,26 +133,37 @@ namespace HRHUBWEB.Controllers
 			return Json(result);
 		}
 
-        public async Task<Leave> GetleaveTypeList()
-        {
-            Leave ObjLeave = new Leave();
-            if (_user.CompanyId > 0)
-            {
-                ObjLeave.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
-                return ObjLeave;
-            }
-            return new Leave();
-        }
-		
-        public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
+		public async Task<Leave> GetleaveTypeList()
+		{
+			Leave ObjLeave = new Leave();
+			if (_user.CompanyId > 0)
+			{
+				ObjLeave.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+				ViewBag.vbleaveTypes = ObjLeave.ListleaveTypes;
+				return ObjLeave;
+			}
+			return new Leave();
+		}
+
+		//public async Task<Leave> GetleaveTypeList()
+		//{
+		//	if (_user.CompanyId > 0)
+		//	{
+		//		ViewBag.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+		//		//return ViewBag.ListleaveTypes;
+		//	}
+		//	return new Leave();
+		//}
+
+		public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
 		{
             Leave ObjLeave = new Leave();
             ObjLeave.AppliedOn = DateTime.Now;
             ObjLeave.StaffId = _user.UserId;
-
-            ObjLeave.LeaveStatusId = leaveTypeId;
-            ObjLeave.StartDate = startDate; 
+			ObjLeave.LeaveTypeId = leaveTypeId;
+			ObjLeave.StartDate = startDate; 
             ObjLeave.EndDate = endDate;
+            ObjLeave.LeaveStatusId = 1;
 			ObjLeave.ApplicationHtml = "<p>" + leaveSubject + "</p>";
 			ObjLeave.LeaveSubject = leaveSubject;
             ObjLeave.MarkAsHalfLeave = markAsHalfLeave;
@@ -185,10 +196,9 @@ namespace HRHUBWEB.Controllers
 		//}
 
 		[CustomAuthorization]
-        public IActionResult StaffDashboard()
+        public async Task<IActionResult> StaffDashboard()
         {
-
-            return View();
+			return View();
         }
 
         #endregion
