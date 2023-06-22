@@ -539,7 +539,7 @@ namespace HRHUBAPI.Models
                 }
                 catch (Exception ex)
                 {
-
+                    dbContextTransaction.Rollback();
                     throw;
 
                 }

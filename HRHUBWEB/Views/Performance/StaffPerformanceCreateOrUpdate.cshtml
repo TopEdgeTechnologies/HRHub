@@ -228,7 +228,7 @@
         <input asp-for="ReviewedStaffId" type="hidden" class="form-control" />
         <div class="card-header border-bottom-0">
         </div>
-        if (Model.ReviewerStaffId != ViewBag.UserStaffID)
+        if ( Model.ReviewerStaffId != ViewBag.UserStaffID)
         {
             {
                 var CurrentSection = 0;
@@ -247,58 +247,59 @@
 
                         <div class="card-body p-4">
 
-                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.ReviewedId) // it Questions Already Defined
+                            @if (item.IsAnswerWeightage == true && item.AllowSelfScoring == false && Model.ReviewedStaffId != ViewBag.UserStaffID) // it Questions Already Defined
                             {
 
+                               
+                                    <section class="review-section professional-excellence">
 
-                                <section class="review-section professional-excellence">
+                                        <div class="review-header text-center">
+                                            <h3 class="review-title">@item.SectionName</h3>
+                                            <p class="text-muted">@item.SectionDescription</p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered review-table mb-0" id="myTable">
+                                                        <thead>
+                                                            <tr>
 
-                                    <div class="review-header text-center">
-                                        <h3 class="review-title">@item.SectionName</h3>
-                                        <p class="text-muted">@item.SectionDescription</p>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered review-table mb-0" id="myTable">
-                                                    <thead>
-                                                        <tr>
+                                                                <th class="col-8">Questions</th>
+                                                                <th class="col-1">Weightage</th>
+                                                                <th class="col-1">Self Score</th>
 
-                                                            <th class="col-8">Questions</th>
-                                                            <th class="col-1">Weightage</th>
-                                                            <th class="col-1">Self Score</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                                            @{
 
-                                                        @{
+                                                                foreach (var ItemQuestion in QuestionsList)
+                                                                {
 
-                                                            foreach (var ItemQuestion in QuestionsList)
-                                                            {
-
-                                                                <tr>
-                                                                    <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
-                                                                    <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
-                                                                    <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
-                                                                    <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
+                                                                    <tr>
+                                                                        <td>@ItemQuestion.QuestionName<input type="hidden" name="ListSectionQuestionId" value="@ItemQuestion.SectionQuestionId" class="form-control"></td>
+                                                                        <td><input type="text" name="ListQuestionWeigth" value="@ItemQuestion.Weightage" class="form-control" readonly=""></td>
+                                                                        <td><input name="ListAnswerWeightage" id="AnswerWeightage" type="number" class="form-control number"></td>
+                                                                        <td class="d-none"><input name="ListSectionId" value="@ItemQuestion.SectionId" type="number" class="form-control number"></td>
 
 
-                                                                </tr>
+                                                                    </tr>
+
+                                                                }
 
                                                             }
 
-                                                        }
 
+                                                        </tbody>
+                                                    </table>
 
-                                                    </tbody>
-                                                </table>
-
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                </section>
+                                    </section>
+                               
                             }
                             else
                             {

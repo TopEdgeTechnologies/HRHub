@@ -388,7 +388,7 @@
 			var  myObjectUser = JsonSerializer.Deserialize<HRHUBAPI.Models.User>(jsonUser);
 			var imagesComapny = myObjectUser.LogoAttachment == null ? @"~\Images\Avatar.png" : myObjectUser.LogoAttachment;
 			var imagesAvatar = @myObjectUser.UserImage == null ? @"/Images/Avatar.png" : @myObjectUser.UserImage;
-
+		
 
 			}
 
@@ -655,7 +655,6 @@
 
 								@await Component.InvokeAsync("NavigationBar")
 
-								
 
 @*
 
@@ -1736,6 +1735,12 @@
 	<script src="~/assets/plugins/echarts/echarts.js"></script>
 	<script src="~/assets/js/echarts.js"></script>
 
+		<!-- INTERNAL Chart js -->
+	<script src="~/assets/plugins/chart/chart.bundle.js"></script>
+	<script src="~/assets/plugins/chart/utils.js"></script>
+	<script src="~/assets/js/chart.js"></script>
+
+
 	<script src="~/assets/plugins/vertical-scroll/jquery.bootstrap.newsbox.js"></script>
 	<script src="~/assets/plugins/vertical-scroll/vertical-scroll.js"></script>
 
@@ -1753,6 +1758,37 @@
     
     </script>
 	<script>
+
+
+
+
+		/****** Starts Here --  Below code is to Keep Selected Active*******/
+		$(document).ready(function () {
+	
+			// Find the <li> element with the class "is-expanded"
+			const expandedLi = document.querySelector('li.is-expanded');
+
+			// Check if the <li> element exists
+			if (expandedLi) {
+
+				const link = expandedLi.querySelector('a');
+
+				// Add the "active" class to the <a> tag
+				link.classList.add('active');
+
+				// Find the parent <ul> element
+				const parentUl = expandedLi.parentNode;
+
+				// Update the class of the parent <ul> element
+				parentUl.classList.add('open');
+
+				// Set the display property of the parent <ul> element to "block"
+				parentUl.style.display = 'block';
+			}
+		});
+			/****** End Here --  Below code is to Keep Selected Active*******/
+
+
 
 		
 		function changePassword() {

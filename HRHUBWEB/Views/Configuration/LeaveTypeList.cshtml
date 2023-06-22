@@ -468,10 +468,10 @@
             var currentRow = $(row).closest('tr');
             var isactive = currentRow.find("#IsActive_" + id).is(':checked');
             var isnonpaid = currentRow.find("#IsNonPaid_" + id).is(':checked');
-           
+            var noOfLeaves = currentRow.find("TD").eq(2).text();
 
             // UPdate Status & IsNonpaid
-            var Data = { id: id, status: isactive, nonpaid: isnonpaid }
+            var Data = { id: id, status: isactive, nonpaid: isnonpaid, noofleaves: noOfLeaves }
             $.ajax({
                 async: false,
                 url: "/Configuration/UpdateLeaveTypeStatus",

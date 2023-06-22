@@ -40,34 +40,38 @@
                     </div>
                     <div class="card-footer p-0">
                         <div class="row">
+                            
                             <div class="col-4 text-center py-5 border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">May</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">@Model.MonthName</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-success">0</span>
+                                    <span class="fs-18 text-success">@Model.MTDPresentCount</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
-                                    <span class="fs-18 font-weight-semibold text-dark">31</span>
+                                    <span class="fs-18 font-weight-semibold text-dark">@Model.MonthDaysCount</span>
                                 </h5>
-                                <h5 class="fs-12 mb-0">Attendance</h5>
+                                <h5 class="fs-12 mb-0">Presents</h5>
                             </div>
                             <div class="col-4  py-5 text-center border-end">
-                                <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
+                                <h5 class="fs-12 font-weight-semibold mb-3">Year-@Model.Year</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-orange">0</span>
+                                    <span class="fs-18 text-orange">@Model.YTDPaidLeaveCount</span>
                                     <span class="my-auto fs-9 font-weight-normal  ms-1 me-1">/</span>
-                                    <span class="fs-18 font-weight-semibold text-dark">41</span>
+                                    <span class="fs-18 font-weight-semibold text-dark">@Model.TotalAllowedLeaves</span>
                                 </h5>
                                 <h5 class="fs-12 mb-0">Leaves</h5>
                             </div>
+                            @*
                             <div class="col-4 text-center py-5">
                                 <h5 class="fs-12 font-weight-semibold mb-3">Year-2023</h5>
                                 <h5 class="mb-2">
-                                    <span class="fs-18 text-primary">0</span>
+                                    <span class="fs-18 text-primary">23</span>
                                 </h5>
-                                <h5 class="fs-12 mb-0">Awards</h5>
+                                <h5 class="fs-12 mb-0">Absents</h5>
                             </div>
+                        *@
                         </div>
                     </div>
                 </div>
+                @*
                 <div class="card">
                     <div class="card-header  border-0">
                         <div class="card-title">Statistics-2023</div>
@@ -116,6 +120,7 @@
                         </div>
                     </div>
                 </div>
+                *@
             </div>
             <div class="col-xl-9 col-md-12 col-lg-12">
                 <div class="tab-menu-heading hremp-tabs p-0 ">
@@ -135,6 +140,7 @@
                         <div class="tab-pane active" id="tab5">
                             <div class="card-body">
                                 <h4 class="mb-4 font-weight-bold">Basic</h4>
+                                @*
                                 <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -153,27 +159,27 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Contact Number<span class="text-danger">*</span></label>
@@ -191,25 +197,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
-                                                    <span class="text-muted"></span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input asp-for=EmergencyContact2 type="text" class="form-control" placeholder="Emergency Contact Number 2">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <div class="row">
+                            <div class="col-md-6">
+                            <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
+                            <span class="text-muted"></span>
+                            </div>
+                            <div class="col-md-6">
+                            <input asp-for=EmergencyContact2 type="text" class="form-control" placeholder="Emergency Contact Number 2">
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Date Of Birth</label>
@@ -238,75 +244,62 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Marital Status</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <select asp-for="MaterialStatus" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.MaterialStatus,"Text" ,"Text"))">
-                                                <option value="">Select</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Blood Group</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <select asp-for="BloodGroup" class="form-control custom-select select2" data-placeholder="Select Group" asp-items="@(new SelectList(@ViewBag.BloodGroup,"Text", "Text"))">
-                                                <option label="Select Group"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Email</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for=Email type="text" required class="form-control" placeholder="email">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Present Address<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <textarea asp-for=PresentAddress rows="3" required class="form-control" placeholder="Address1"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Permanent Address<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <textarea asp-for=PermanentAddress rows="3" class="form-control" placeholder="Address2"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="form-label mb-0 mt-2">Upload Photo</div>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="form-group">
-                                                <label for="form-label" class="form-label"></label>
-                                                <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*<h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>*@
-                                <div class="form-group mt-7">
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Marital Status</label>
+                            </div>
+                            <div class="col-md-9">
+                            <select asp-for="MaterialStatus" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.MaterialStatus,"Text" ,"Text"))">
+                            <option value="">Select</option>
+                            </select>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Blood Group</label>
+                            </div>
+                            <div class="col-md-9">
+                            <select asp-for="BloodGroup" class="form-control custom-select select2" data-placeholder="Select Group" asp-items="@(new SelectList(@ViewBag.BloodGroup,"Text", "Text"))">
+                            <option label="Select Group"></option>
+                            </select>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group ">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Email</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for=Email type="text" class="form-control" placeholder="email">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Present Address<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <textarea asp-for=PresentAddress rows="3" required class="form-control" placeholder="Address1"></textarea>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Permanent Address<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <textarea asp-for=PermanentAddress rows="3" class="form-control" placeholder="Address2"></textarea>
+                            </div>
+                            </div>
+                            </div>
+
+                            <div class="form-group mt-7">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <h4 class="form-label" font-weight-bold">Account Login</h4>
@@ -320,56 +313,328 @@
                                         </div>
                                     </div>
                                 </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Staff Email</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input type="text" id="txt_OfficialEmailAddress" disabled="disabled" class="form-control" placeholder="Staff email">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Password</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input type="password" id="txt_OfficialEmailPassword" disabled="disabled" class="form-control" placeholder="password">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group mt-7">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label">Email Notification:</label>
+                            </div>
+                            <div class="col-md-9">
+                            <label class="custom-switch">
+                            <input type="checkbox" name="chk_EmailNotification" id="chk_EmailNotification" disabled="disabled" class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">On/Off</span>
+                            </label>
+                            </div>
+                            </div>
+                            </div>
+                                *@
 
+                                @{
+                                    async Task doubleWidget(string labelTitle, object fieldName1, string? fieldValue1, string placeholderTitle1, object fieldName2, string? fieldValue2, string placeholderTitle2, string fieldValueType, bool isMandatory)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <input id=@fieldName1 name="@fieldName1" value="@fieldValue1" type="@fieldValueType" @required class="form-control mb-md-0 mb-5" placeholder="@placeholderTitle1">
+                                                            <span class="text-muted"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input id=@fieldName2 name="@fieldName2" value="@fieldValue2" type="@fieldValueType" @required class="form-control" placeholder="@placeholderTitle2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task textWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control" placeholder="@placeholderTitle">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task textareaWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <textarea id=@fieldName name="@fieldName" value="@fieldValue" rows="3" @required class="form-control" placeholder="@placeholderTitle">@fieldValue</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task datePickerWidget(string labelTitle, object fieldName, DateTime? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory)
+                                    {
+                                        <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                    @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task radioParentGroupWidget(string labelTitle)//, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory = false)
+                                    {
+                                         <div class="form-group ">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">@labelTitle</label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="custom-controls-stacked d-md-flex">
+                                                        @{
+                                                            await radioWidget("Male", "Gender", "Male", Model.Gender);
+                                                            await radioWidget("Female", "Gender", "Female", Model.Gender);
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task radioWidget(string labelTitle, string fieldName, string fieldValue, string? selectedValue)
+                                    {
+                                        <label class="custom-control custom-radio me-4">
+                                            <input id="Group_@fieldName@fieldValue" name="@fieldName" type="radio" class="custom-control-input" value="@fieldValue" @(fieldValue == selectedValue ? "checked" : "")>
+                                            <span class="custom-control-label">@labelTitle</span>
+                                        </label>
+                                    }
+                      
+                                    async Task dropdownWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory, IEnumerable<SelectListItem> items, bool databaseBinded)
+                                    {
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label mb-0 mt-2">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <select id="@fieldName" name="@fieldName" @(required) class="form-control custom-select select2" data-placeholder="@placeholderTitle">
+                                                        <option value="">Select</option>
+                                                        @foreach (var item in items)
+                                                        {
+                                                            if(databaseBinded == true)
+                                                            {
+                                                                if(item.Value == fieldValue)
+                                                                {
+                                                                    <option value="@item.Value" selected>@item.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.Value" >@item.Text</option>
+                                                                }
+                                                            }
+                                                            else if(databaseBinded == false)
+                                                            {
+                                                                if(item.Text == fieldValue)
+                                                                {
+                                                                    <option value="@item.Text" selected >@item.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@item.Text" >@item.Text</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    async Task checkboxWidget(string labelTitle, object fieldName, bool fieldValue, bool isMandatory)
+                                    {
+                                        <div class="form-group mt-7">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="form-label">
+                                                        @labelTitle
+                                                        @{
+                                                            string required = "";
+                                                            if (isMandatory == true)
+                                                            {
+                                                                <span class="text-danger">*</span>
+                                                                required = "required";
+                                                            }
+                                                        }
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <label class="custom-switch">
+                                                        <input id="@fieldName" name="@fieldName" type="checkbox" @(isMandatory ? "required" : "") value="@fieldValue" checked="@fieldValue" class="custom-switch-input">
+                                                        <span class="custom-switch-indicator"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                
+                                @{
+                                    await doubleWidget("Name", "FirstName", Model.FirstName, "First Name", "LastName", Model.LastName, "Last Name", "text", true);
+                                    await textWidget("Parents Name", "FatherName", Model.FatherName, "Parents or Guardian Name", "text", true);
+                                    await textWidget("National Id Number", "NationalIdnumber", Model.NationalIdnumber, "National Idendity Number", "text", true);
+                                    await doubleWidget("Contact Number", "ContactNumber1", Model.ContactNumber1, "Contact Number 1", "ContactNumber2", Model.ContactNumber2, "Contact Number 2", "number", true);
+                                    await doubleWidget("Emergency Contact Number", "EmergencyContact1", Model.EmergencyContact1, "Emergency Contact Number 1", "EmergencyContact2", Model.EmergencyContact2, "Emergency Contact Number 2", "number", false);
+                                    await datePickerWidget("Date Of Birth", "Dob", Model.Dob, "DD-MM-YYY", "text", false);
+                                    await radioParentGroupWidget("Gender");                                    
+                                    
+                                    @*
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label class="form-label mb-0 mt-2">Marital Status</label>
+                                            </div>
+                                            <div class="col-md-9">
+                                                @Html.DropDownList("SelectedValue", ViewBag.MaterialStatusViewBag as List<SelectListItem>, "-- Select Month --", new { id = "MaterialStatus", name = "MaterialStatus",  @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    *@
+
+                                    if(Model.MaterialStatusList != null && Model.MaterialStatusList.Count() > 0)
+                                    {
+                                        await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, Model.MaterialStatusList, false);
+                                    }
+
+                                    if(Model.BloodGroupList != null && Model.BloodGroupList.Count() > 0)
+                                    {
+                                        await dropdownWidget("Blood Group", "BloodGroup", Model.BloodGroup, "Select Blood Group", false, Model.BloodGroupList, false);
+                                    }
+
+                                    await textWidget("Email", "Email", Model.Email, "Email", "text", false);
+                                    await textareaWidget("Present Address", "PresentAddress", Model.PresentAddress, "Enter Present Address", true);
+                                    await textareaWidget("Permanent Address", "PermanentAddress", Model.PermanentAddress, "Enter Permanent Address", false);
+                                }                                
+                               
+                                
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Staff Email</label>
+                                            <div class="form-label mb-0 mt-2">Upload Photo</div>
                                         </div>
                                         <div class="col-md-9">
-                                            <input type="text" id="txt_OfficialEmailAddress" disabled="disabled" class="form-control" placeholder="Staff email">
+                                            <div class="form-group">
+                                                <label for="form-label" class="form-label"></label>
+                                                <input name="StaffImageAttachmentFile" accept=".jpg, .jpeg, .png" id="StaffImageAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Password</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input type="password" id="txt_OfficialEmailPassword" disabled="disabled" class="form-control" placeholder="password">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-7">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label">Email Notification:</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="chk_EmailNotification" id="chk_EmailNotification" disabled="disabled" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">On/Off</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>
+                                @{
+                                    @*await textWidget("Staff Email", "OfficialEmail", Model.em, "Enter Staff official email", "text", true);
+                                    await textWidget("Password", "OfficialPassword", Model.em, "Enter Staff password", "password", true);*@
+                                }
+                                
+
+                                
                             </div>
                         </div>
                         <div class="tab-pane" id="tab6">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Staff Registration #</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="RegistrationNo" type="text" required class="form-control" placeholder="Registration Number">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
+                                @*
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Staff Registration #</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="RegistrationNo" type="text" required class="form-control" placeholder="Registration Number">
+                            </div>
+                            </div>
+                            </div>
+                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="form-label mb-0 mt-2">Department<span class="text-danger">*</span></label>
@@ -381,6 +646,7 @@
                                         </div>
                                     </div>
                                 </div>
+                               
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-3">
@@ -393,163 +659,208 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Job Title<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="JobTitle" type="text" required class="form-control" placeholder="Registration Number">
-                                        </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Job Title<span class="text-danger">*</span></label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="JobTitle" type="text" required class="form-control" placeholder="Describe Staff Job Title">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Job Description</label>
+                            </div>
+                            <div class="col-md-9">
+                            <textarea asp-for="JobDescription" rows="3" class="form-control" placeholder="Job Description"></textarea>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Date Of Joining</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="JoiningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Resignation Date</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="ResigningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Termination Date</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="TerminationDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                            </div>
+                            </div>
+                            </div>
+
+                            <div class="form-group mt-7">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="form-label">Status:</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="custom-switch">
+                                            <input asp-for=Status type="checkbox" onchange="StaffStatusChange()" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+                                            <span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
+                                        </label>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Job Description</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <textarea asp-for="JobDescription" rows="3" class="form-control" placeholder="Job Description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Date Of Joining</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="JoiningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Resignation Date</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="ResigningDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Termination Date</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="TerminationDate" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-7">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label">Status:</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <label class="custom-switch">
-                                                <input asp-for=Status type="checkbox" onchange="StaffStatusChange()" class="custom-switch-input"> @* name="custom-switch-checkbox"*@
-                                                <span class="custom-switch-indicator"></span>
-                                                <span id="lbl_StaffStatus" class="custom-switch-description">Active/Inactive</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Account Holder</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="AccountTitle" type="text" class="form-control" placeholder="Name">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Account Number</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="BankAccountNumber" type="text" class="form-control" placeholder="Number">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Bank Name</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="BankName" type="text" class="form-control" placeholder="Name">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Branch Location</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="BankLocation" type="text" class="form-control" placeholder="Location">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">
+                            Bank Code (IFSC)
+                            <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Bank Identify Number in your Country">?</span>
+                            </label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="BankCode" type="text" class="form-control" placeholder="Code">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">
+                            Tax Payer ID (PAN)
+                            <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxpayer Identification Number Used in your Country">?</span>
+                            </label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for="TaxPayerNumber" type="text" class="form-control" placeholder="ID No">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Salary Method</label>
+                            </div>
+                            <div class="col-md-9">
+                            <select asp-for=SalaryMethodId id="SalaryMethodId" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethodList,"SalaryMethodId", "Title"))">
+                            <option label="Select Salary Method"></option>
+                            </select>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Gross Salary</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input asp-for=SalaryAmount type="number" class="form-control" placeholder="$Salary">
+                            </div>
+                            </div>
+                            </div>
+                                *@
+                                @{
+                                    await textWidget("Staff Registration #", "RegistrationNo", Model.RegistrationNo, "Registration Number", "text", true);
+
+                                    if (Model.DepartmentList != null && Model.DepartmentList.Count() > 0)
+                                    {
+                                        IEnumerable<SelectListItem> departmentItems = Model.DepartmentList.Select(d => new SelectListItem { Value = d.DepartmentId.ToString(), Text = d.Title });
+                                        await dropdownWidget("Department", "DepartmentId", Model.DepartmentId.ToString(), "Select Department", true, departmentItems, true);
+                                    }
+
+                                    if (Model.DesignationList != null && Model.DesignationList.Count() > 0)
+                                    {
+                                        IEnumerable<SelectListItem> designationItems = Model.DesignationList.Select(d => new SelectListItem { Value = d.DesignationId.ToString(), Text = d.Title });
+                                        await dropdownWidget("Designation", "DesignationId", Model.DesignationId.ToString(), "Select Designation", true, designationItems, true);
+                                    }
+
+                                    await textWidget("Job Title", "JobTitle", Model.JobTitle, "Describe Staff Job Title", "text", true);
+                                    await textareaWidget("Job Description", "JobDescription", Model.JobDescription, "Job Description", true);
+                                    await datePickerWidget("Date Of Joining", "JoiningDate", Model.JoiningDate, "DD-MM-YYY", "text", false);
+                                    //await datePickerWidget("Resigning Date", "ResigningDate", Model.ResigningDate, "DD-MM-YYY", "text", false);
+                                    //await datePickerWidget("Termination Date", "TerminationDate", Model.TerminationDate, "DD-MM-YYY", "text", false);
+                                    await checkboxWidget("Status:", "Status", Model.Status, false);
+                                }
+
+
                                 <h4 class="mb-5 mt-7 font-weight-bold">Bank Details</h4>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Account Holder</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="AccountTitle" type="text" class="form-control" placeholder="Name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Account Number</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="BankAccountNumber" type="text" class="form-control" placeholder="Number">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Bank Name</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="BankName" type="text" class="form-control" placeholder="Name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Branch Location</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="BankLocation" type="text" class="form-control" placeholder="Location">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">
-                                                Bank Code (IFSC)
-                                                <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Bank Identify Number in your Country">?</span>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="BankCode" type="text" class="form-control" placeholder="Code">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">
-                                                Tax Payer ID (PAN)
-                                                <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="top" title="Taxpayer Identification Number Used in your Country">?</span>
-                                            </label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="TaxPayerNumber" type="text" class="form-control" placeholder="ID No">
-                                        </div>
-                                    </div>
-                                </div>
+                                @{
+                                    await textWidget("Account Holder", "AccountTitle", Model.AccountTitle, "Enter Bank Account Title", "text", false);
+                                    await textWidget("Account Number", "BankAccountNumber", Model.BankAccountNumber, "Enter Bank Account Number", "text", false);
+                                    await textWidget("Bank Name", "BankName", Model.BankName, "Enter Bank Name", "text", false);
+                                    await textWidget("Branch Location", "BankLocation", Model.BankLocation, "Enter Branch Location", "text", false);
+                                    await textWidget("Bank Code (IFSC)", "BankCode", Model.BankCode, "Bank Identify Number in your Country", "text", false);
+                                    await textWidget("Tax Payer ID (PAN)", "TaxPayerNumber", Model.TaxPayerNumber, "Taxpayer Identification Number Used in your Country", "text", false);
+                                }
                             </div>
                         </div>                
                         <div class="tab-pane" id="tab7">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Salary Method</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <select asp-for=SalaryMethodId id="SalaryMethodId" class="form-control custom-select select2" data-placeholder="Select Salary Method" asp-items="@(new SelectList(@ViewBag.ObjSalaryMethodList,"SalaryMethodId", "Title"))">
-                                                <option label="Select Salary Method"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Gross Salary</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for=SalaryAmount type="number" class="form-control" placeholder="$Salary">
-                                        </div>
-                                    </div>
-                                </div>
+                                @{
+                                    if (Model.SalaryMethodList != null && Model.SalaryMethodList.Count() > 0)
+                                    {
+                                        IEnumerable<SelectListItem> salaryMethodItems = Model.SalaryMethodList.Select(d => new SelectListItem { Value = d.SalaryMethodId.ToString(), Text = d.Title });
+                                        await dropdownWidget("SalaryMethod", "SalaryMethodId", Model.SalaryMethodId?.ToString(), "Select Salary Method", false , salaryMethodItems, true);
+                                    }
+                                    await textWidget("Gross Salary", "SalaryAmount", Model.SalaryAmount.ToString(), "$Salary", "number", false);
+                                }
+                               
+                                
                                 <div>
                                     <h4 class="mb-4 font-weight-bold">Salary Breakup
                                         <span id="lbl_Earning" class="fs-18 text-success">0</span>
@@ -739,6 +1050,7 @@
 
             SalaryExceedLimit('Earning');
             onchangeDesignation();
+
         });
 
         $("#btnSaveUpdate").click(function () {
@@ -784,8 +1096,8 @@
         $("#viewUserImage").click(function () {
             // Create a hidden file input element
             var input = $("#StaffImageAttachmentFile");
-           // input.type = 'file';
-         ///   input.accept = 'image/*';
+            // input.type = 'file';
+            // input.accept = 'image/*';
 
             // Handle file selection
             input.onchange = function (e) {
@@ -793,20 +1105,34 @@
                 // Perform further operations with the selected file as needed
                 console.log('Selected file:', file);
             };
-
             // Trigger the file dialog
             input.click();
         });
 
-        function OnTextChangeStaffName()
-        {
-            var txt_Name = document.getElementById("txt_FirstName");
-            var txt_LtName = document.getElementById("txt_LastName");
-            var lbl_Name = document.getElementById("lbl_FullName");
+        $("#FirstName").on("input", function(){
+            debugger
+            var fullName = $("#FirstName").val() + ' ' + $("#LastName").val()
+            $("#lbl_FullName").text(fullName)
+            $("#AccountTitle").val(fullName)
+       });
 
-            var full_Name = txt_Name.value + ' ' + txt_LtName.value;
-            lbl_Name.textContent = full_Name;
-        }
+        $("#LastName").on("input", function() {
+            var fullName = $("#FirstName").val() + ' ' + $("#LastName").val()
+            $("#lbl_FullName").text(fullName)
+            $("#AccountTitle").val(fullName)
+         });
+
+        //function OnTextChangeStaffName()
+        //{
+        //    var txt_Name = document.getElementById("FirstName");
+        //    var txt_LtName = document.getElementById("LastName");
+        //    var lbl_Name = document.getElementById("lbl_FullName");
+
+        //    var full_Name = txt_Name.value + ' ' + txt_LtName.value;
+        //    lbl_Name.textContent = full_Name;
+
+        //    //lbl_Name.textContent($("#FirstName").val() + ' ' + $("#LastName").val())
+        //}
 
         function onchangeDesignation()
         {
@@ -1060,8 +1386,7 @@
             validateInput($(this));
         });
 
-
-        $("#txt_FirstName, #txt_LastName, #NationalIdnumber, #FatherName, #ContactNumber1, #EmergencyContact1, #RegistrationNo ").on("input", function () {
+        $("#FirstName, #LastName, #NationalIdnumber, #FatherName, #ContactNumber1, #EmergencyContact1, #RegistrationNo ").on("input", function () {
             validateInput($(this));
         });
 

@@ -68,8 +68,9 @@ namespace  HRHUBWEB.Filters
                     controller.TempData["IsDelete"] = ResultRole.IsDelete;
                     controller.TempData["IsPrint"] = ResultRole.IsPrint;
                     controller.TempData["ReferenceID"] = ResultRole.ReferenceID;
+					controller.TempData["actionName"] = actionName;
 
-                    return;
+					return;
 
                 }
                 else

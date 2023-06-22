@@ -52,7 +52,30 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public async Task<WeekendRule> UpdateStatusByWeekendRuleId(WeekendRule ObjWeekendRuleInfo, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var checkWeekendRuleInfo = await _context.WeekendRules.FirstOrDefaultAsync(x => x.WeekendRuleId == ObjWeekendRuleInfo.WeekendRuleId && x.IsDeleted == false);
+                if (checkWeekendRuleInfo != null && checkWeekendRuleInfo.WeekendRuleId > 0)
+                {
+                    checkWeekendRuleInfo.UpdatedOn = DateTime.Now;
+                    checkWeekendRuleInfo.Status = ObjWeekendRuleInfo.Status;
+                    checkWeekendRuleInfo.UpdatedBy = ObjWeekendRuleInfo.UpdatedBy;
 
+                    await _context.SaveChangesAsync();
+
+                }
+                return ObjWeekendRuleInfo;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
         public async Task<WeekendRule> PostWeekendRule(WeekendRule objRule, HrhubContext _context)
         {
@@ -84,7 +107,32 @@ namespace HRHUBAPI.Models
 
         }
 
+        public async Task<bool> DeleteWeekendRuleInfo(int id,int UserId, HrhubContext _context)
+        {
+            try
+            {
+                bool check = false;
+                var WeekendRuleInfo = await _context.WeekendRules.FirstOrDefaultAsync(x => x.WeekendRuleId == id && x.IsDeleted == false);
 
+                if (WeekendRuleInfo != null)
+                {
+                    WeekendRuleInfo.IsDeleted = true;
+                    WeekendRuleInfo.UpdatedBy = UserId;
+                    WeekendRuleInfo.UpdatedOn = DateTime.Now;
+                    check = true;
+
+                }
+                await _context.SaveChangesAsync();
+                return check;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+        }
 
     }
 }

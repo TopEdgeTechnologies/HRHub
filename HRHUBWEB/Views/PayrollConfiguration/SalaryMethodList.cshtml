@@ -48,103 +48,102 @@
     </div>
     <!-- End Add Department Modal  -->
 }
-
-<!-- Row -->
-<div class="row row-sm mt-4">
-    <div class="col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Salary Method Details</h3>
-                @if (Convert.ToBoolean(ViewBag.IsNew))
-                {
-                    <div class="card-options">
-                        <div class="btn-list">
-                            <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Salary Method</a>
-                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+    <!-- Row -->
+    <div class="row row-sm mt-4">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Salary Method Details</h3>
+                    @if (Convert.ToBoolean(ViewBag.IsNew))
+                    {
+                        <div class="card-options">
+                            <div class="btn-list">
+                                <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Salary Method</a>
+                                <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                                <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                            </div>
                         </div>
-                    </div>
-                }
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Sr.#</th>
-                                <th class="text-center">Salary Method Id</th>
-                                <th class="border-bottom-0">Salary Method Title</th>
-                                @*<th class="text-center">Status</th>*@
-                                <th class="">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                int count = 1;
-                                foreach (var item in Model.SalaryMethodList)
-                                {
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <span>@count</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SalaryMethodId)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Title)
-                                        </td>
-                                        @*
-                                @if (item.Status == true)
-                                {
-                                <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
-                                }
-                                else
-                                {
-                                <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
-
-                                }
-                                *@
-                                        @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-                                        {
-                                            <th class="d-none">
-                                            </th>
-                                        }
-                                        else
-                                        {
-                                            <td class="text-end">
+                    }
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Sr.#</th>
+                                    <th class="text-center">Salary Method Id</th>
+                                    <th class="border-bottom-0">Salary Method Title</th>
+                                    @*<th class="text-center">Status</th>*@
+                                    <th class="">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int count = 1;
+                                    foreach (var item in Model.SalaryMethodList)
+                                    {
+                                        <tr>
+                                            <td>
                                                 <div class="d-flex">
-                                                    @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                    {
-                                                        <a href="#" onclick="EditRecord(@item.SalaryMethodId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
-                                                            <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                        </a>
-                                                    } @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                                    {
-                                                        <a href="#" onclick="DeleteConfirmation(@item.SalaryMethodId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-                                                            <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                        </a>
-                                                    }
+                                                    <span>@count</span>
                                                 </div>
                                             </td>
-                                        }
-                                    </tr>
-                                    count++;
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SalaryMethodId)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Title)
+                                            </td>
+                                            @*
+                                    @if (item.Status == true)
+                                    {
+                                    <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
+                                    }
+                                    else
+                                    {
+                                    <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
+
+                                    }
+                                    *@
+                                            @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                            {
+                                                <th class="d-none">
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-end">
+                                                    <div class="d-flex">
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a href="#" onclick="EditRecord(@item.SalaryMethodId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                            </a>
+                                                        } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                            <a href="#" onclick="DeleteConfirmation(@item.SalaryMethodId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
+                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                            </a>
+                                                        }
+                                                    </div>
+                                                </td>
+                                            }
+                                        </tr>
+                                        count++;
+                                    }
                                 }
-                            }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <!-- End Row -->
 
-<!-- End Row -->
 @section scripts
-    {
+{
     <script>
         $(document).ready(function () {
 

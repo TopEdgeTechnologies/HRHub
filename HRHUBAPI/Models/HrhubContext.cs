@@ -151,6 +151,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
 
+    public virtual DbSet<ViewPerformanceReviewQuestionsList> ViewPerformanceReviewQuestionsLists { get; set; }
+
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
     public virtual DbSet<XStaffLeaveAllocation> XStaffLeaveAllocations { get; set; }
@@ -317,6 +319,12 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AttachmentPath).IsUnicode(false);
             entity.Property(e => e.CandidateId).HasColumnName("CandidateID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.InterviewDateTime)
+                .HasColumnType("datetime")
+                .HasColumnName("Interview_DateTime");
+            entity.Property(e => e.InterviewMediumOrLocation)
+                .IsUnicode(false)
+                .HasColumnName("Interview_MediumOrLocation");
             entity.Property(e => e.Remarks).IsUnicode(false);
             entity.Property(e => e.ScreeningDate).HasColumnType("date");
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
@@ -547,6 +555,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DayName).IsUnicode(false);
             entity.Property(e => e.HolidayDate).HasColumnType("date");
+            entity.Property(e => e.HolidayType).IsUnicode(false);
+            entity.Property(e => e.SpanClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -749,9 +759,11 @@ public partial class HrhubContext : DbContext
             entity.ToTable("Policy");
 
             entity.Property(e => e.PolicyId).HasColumnName("PolicyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.PolicyCategoryId).HasColumnName("PolicyCategoryID");
             entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<PolicyCategory>(entity =>
@@ -1225,6 +1237,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
+            entity.Property(e => e.StaffTenureInYears).HasColumnType("numeric(17, 6)");
+            entity.Property(e => e.TaxPayerNumber).IsUnicode(false);
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.WorkMode).IsUnicode(false);
         });
@@ -1248,6 +1262,40 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionTitle).IsUnicode(false);
         });
 
+        modelBuilder.Entity<ViewPerformanceReviewQuestionsList>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("view_PerformanceReviewQuestionsList");
+
+            entity.Property(e => e.PerformanceFormTitle).IsUnicode(false);
+            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.QuestionTitle).IsUnicode(false);
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.SectionDescription).IsUnicode(false);
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.SectionTitle).IsUnicode(false);
+            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
+        });
+
+        modelBuilder.Entity<ViewPerformanceReviewQuestionsList>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("view_PerformanceReviewQuestionsList");
+
+            entity.Property(e => e.PerformanceFormTitle).IsUnicode(false);
+            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
+            entity.Property(e => e.QuestionTitle).IsUnicode(false);
+            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
+            entity.Property(e => e.SectionDescription).IsUnicode(false);
+            entity.Property(e => e.SectionId).HasColumnName("SectionID");
+            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
+            entity.Property(e => e.SectionTitle).IsUnicode(false);
+            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
+        });
+
         modelBuilder.Entity<WeekendRule>(entity =>
         {
             entity.ToTable("WeekendRule", "HR");
@@ -1257,6 +1305,20 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DayName).IsUnicode(false);
             entity.Property(e => e.IconClass).IsUnicode(false);
+            entity.Property(e => e.SpanClass).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<XStaffLeaveAllocation>(entity =>
+        {
+            entity.HasKey(e => e.LeaveAllocationId).HasName("PK_StaffLeaveAllocation");
+
+            entity.ToTable("X StaffLeaveAllocation");
+
+            entity.Property(e => e.LeaveAllocationId).HasColumnName("LeaveAllocationID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.LeaveTypeId).HasColumnName("LeaveTypeID");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 

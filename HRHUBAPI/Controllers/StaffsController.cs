@@ -37,7 +37,13 @@ namespace HRHUBAPI.Controllers
 			return await new Staff().GetStaffStatisticsByCompanyId(CompanyId);
 		}
 
-		[HttpGet("GetStaffByCompanyId{CompanyId}")]
+        [HttpGet("GetStaffAttendanceStatistics{CompanyId}/{month}/{year}/{StaffId}")]
+        public async Task<ActionResult<Staff>> GetStaffAttendanceStatistics(int CompanyId, int month, int year, int StaffId)
+        {
+            return await new Staff().GetStaffAttendanceStatistics(CompanyId, month, year, StaffId);
+        }
+
+        [HttpGet("GetStaffByCompanyId{CompanyId}")]
         public async Task<ActionResult<List<Staff>>> GetStaffByCompanyId(int CompanyId)
         {
 			return await new Staff().GetStaffByCompanyId(CompanyId);
@@ -191,7 +197,7 @@ namespace HRHUBAPI.Controllers
 		{
 
 			var dbResult = await new StaffContract().PostStaffContract(ObjStaffContract, _context);
-			if (dbResult != null)
+			if (dbResult != null && dbResult.Flag==2)
 			{
 				return Ok(new
 				{

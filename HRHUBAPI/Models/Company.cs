@@ -35,6 +35,10 @@ public partial class Company
 
     public int? StartTimeGraceMinutes { get; set; }
 
+    public bool? IsGraceMinutesAllowed { get; set; }
+
+    public bool? IsMarkHalfDayAllow { get; set; }
+
     public int? MarkHalfDayAfterLateMinutes { get; set; }
 
     public string? EmailSendFrom { get; set; }

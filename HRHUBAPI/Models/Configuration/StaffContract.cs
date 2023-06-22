@@ -29,7 +29,8 @@ namespace HRHUBAPI.Models
 
 		[NotMapped]
 		public string? ExpirayStatus { get; set; }
-
+		[NotMapped]
+		public int? Flag { get; set; }
 		[NotMapped]
 		public int? Renew { get; set; }
 		[NotMapped]
@@ -177,8 +178,8 @@ namespace HRHUBAPI.Models
                     checkStaffContractInfo.UpdatedOn = DateTime.Now;
                     checkStaffContractInfo.Status = ObjStaffContractInfo.Status;
                     checkStaffContractInfo.UpdatedBy = ObjStaffContractInfo.CreatedBy;
-
-                    await _context.SaveChangesAsync();
+                        ObjStaffContractInfo.Flag = 2;
+					await _context.SaveChangesAsync();
                    
                   
 
@@ -207,6 +208,7 @@ namespace HRHUBAPI.Models
 
                     ObjStaffContractInfo.CreatedOn = DateTime.Now;
                     ObjStaffContractInfo.IsDeleted = false;
+                        ObjStaffContractInfo.Flag = 1;
                     _context.StaffContracts.Add(ObjStaffContractInfo);
                     await _context.SaveChangesAsync();
 

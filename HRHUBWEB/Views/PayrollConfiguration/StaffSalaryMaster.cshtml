@@ -15,8 +15,22 @@
                         <p class="fs-20">Process Pay run from <span id="lbl_Duration" class="font-weight-semibold fs-20">1st Jan - 31 Jan</span></p>
                     </div>
                 </div>
+
                 <div class="col-md-2">
                     <div class="form-group mt-5">
+                        @Html.DropDownList("SelectedValue", ViewBag.monthViewBag as List<SelectListItem>, "-- Select Month --", new { id = "attendanceMonth", name = "attendanceMonth",  @class = "form-control" })
+                    </div>
+                </div>
+               
+                <div class="col-md-2">
+                    <div class="form-group mt-5">
+                        @Html.DropDownList("SelectedValue", ViewBag.yearViewBag as List<SelectListItem>, "-- Select Year --", new { id = "attendanceYear", name = "attendanceYear",  @class = "form-control" })
+                    </div>
+                </div>
+
+                @*
+                <div class="col-md-2">
+                <div class="form-group mt-5">
                         <select id="attendanceMonth" name="attendanceMonth" onchange="onchangeMonthYearCheckAlreadyExistsMaster()" class="form-control custom-select select2" data-placeholder="Select Month">
                             <option label="Select Month"></option>
                             <option value="1">January</option>
@@ -46,13 +60,10 @@
                             <option value="2025">2025</option>
                             <option value="2024">2024</option>
                             <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
                         </select>
                     </div>
                 </div>
-                @*<div class="col-md-12 col-lg-3">
+                <div class="col-md-12 col-lg-3">
                     <div class="form-group mt-5">
                         <a href="javascript:void(0);" class="btn btn-primary btn-block">Generate</a>
                     </div>
@@ -93,24 +104,33 @@
     $(document).ready(function () {
 
         $('#myonoffswitch2').prop('checked', true);
-        names()
+        ////names()
         localStorage.setItem('dayonedarkMode', true);
         localStorage.removeItem('dayonelightMode');
         localStorage.removeItem('dayonetransparentMode');
-
+            debuggger
         //$("#SalaryMonth").select2();
-        var currentMonth = new Date().getMonth()
-        $("#attendanceMonth").val(currentMonth).trigger()
+        var currentMonth = new Date().getMonth();
+        $("#attendanceMonth").prop("selectedIndex", currentMonth).trigger("change")
+        
         var currentYear = new Date().getFullYear()
-        $("#attendanceYear").val(currentYear).trigger()
+        $("#attendanceYear").text(currentYear).trigger("change")
 
+    });
+
+    $("#attendanceMonth").on("change", function () {
+            onchangeMonthYearCheckAlreadyExistsMaster()
+    });
+
+    $("#attendanceYear").on("change", function () {
+            onchangeMonthYearCheckAlreadyExistsMaster()
     });
 
     function onchangeMonthYearCheckAlreadyExistsMaster() {
             debugger
         var recordInserted = false;
-        var currentMonth = $("#attendanceMonth").val()
-        var currentYear = $("#attendanceYear").val()
+            var currentMonth = $("#attendanceMonth").find(":selected").index()
+            var currentYear = $("#attendanceYear").find(":selected").text()
 
         if (currentMonth != "" && currentYear != "") {
             var date = new Date(currentYear, currentMonth - 1)
@@ -131,7 +151,7 @@
                 //});
             }
             else if (currentMonth > 0 && currentYear > 0 && recordInserted == false) {
-                htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-primary btn-block" />'
+                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-info btn-block" />'
                 //$.growl.warning({
                 //        message: "Record has not Inserted for selected Date!"
                 //});
@@ -175,8 +195,8 @@
         debugger;
         var buttonTitle = $("#btn_GenerateStaffSalary").val()
 
-        var currentMonth = $("#attendanceMonth").val();
-        var currentYear = $("#attendanceYear").val();
+        var currentMonth = $("#attendanceMonth").find(":selected").index()
+        var currentYear = $("#attendanceYear").find(":selected").text()
 
         if (currentMonth !== "" && currentYear !== "") {  
             if (validateForm()) {

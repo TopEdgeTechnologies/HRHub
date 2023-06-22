@@ -35,5 +35,17 @@ namespace HRHUBAPI.Controllers
 
         }
 
-    }
+		//[HttpGet("GetDashboardData/{CompanyId}/{FunctionName}")]
+		//public async Task<ActionResult> GetDashboardDataFunction(int CompanyId, string FunctionName, [FromBody] object[] parameters)
+		//{
+		//	string parameterString = string.Join(",", parameters);
+		//	string query = $"SELECT * FROM {FunctionName}({parameterString})";
+  //          query += " OPTION (MAXRECURSION 0) ";
+		//	DataTable dataTable = await Task.Run(() => _DbCom.ReturnDataTable(query));
+		//	var result = _DbCom.GetTableRows(dataTable);
+		//	return Ok(result);
+		//}
+
+
+	}
 }

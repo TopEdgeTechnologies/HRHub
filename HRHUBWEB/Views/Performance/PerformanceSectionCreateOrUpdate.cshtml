@@ -82,7 +82,8 @@
                                                     <td>
                                                         <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
 
-                                                    <option value="Add-New"><b>---Add New---</b></option>
+                                                    <option value="Add-New" class="font-weight-bold">--- Add New Question ---</option>
+                                                   
                                                             @foreach (var item in ViewBag.QuestionList)
                                                             {
                                                                 <option value="@item.QuestionId">@item.Title</option>
@@ -124,7 +125,7 @@
                                                     <tr>
                                                     <td>
                                                         <select id="QuestionId" name="QuestionId" class="form-control custom-select select2" data-placeholder="Select Question">
-                                                               <option value="Add-New"><b><---Add New---></b></option>
+                                                        <option value="Add-New" class="font-weight-bold">--- Add New Question ---</option>
 
                                                             @foreach (var item in ViewBag.QuestionList)
                                                             {
@@ -545,7 +546,9 @@
          
                              // Data saved successfully
                              Swal.fire('Success', 'Data saved!', 'success');
-                            $('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
+                                                        
+                             
+                             $('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
                               $('#title').val('');
                          } else {
                              // Error occurred while saving data

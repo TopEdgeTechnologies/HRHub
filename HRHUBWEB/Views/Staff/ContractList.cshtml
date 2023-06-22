@@ -34,7 +34,7 @@
 					<div class="form-group">
 								<label class="form-label">Staff Name <span class="text-danger">*</span></label>
 						<select asp-for=StaffId  class="form-control " data-placeholder="Select Staff"  asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
-							<option label="Select Staff">Select Staff</option>
+							
 						</select>
 					</div>
 					</div>
@@ -43,7 +43,7 @@
 					<div class="form-group">
 						<label class="form-label">Contract Type <span class="text-danger">*</span></label>
 								<select asp-for="EmploymentTypeId" class="form-control " data-placeholder="Select Contract Type" asp-items="@(new SelectList(@ViewBag.ContractType,"EmploymentTypeId", "Title"))">
-							<option label="Select Contract Type">Select Contract Type</option>
+							
 						</select>
 					</div>
 					</div>
@@ -52,8 +52,7 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<label class="form-label">Contract Duration in Months <span class="text-danger">*</span></label>
-								<select asp-for="ContractDuration" class="form-control" data-placeholder="Select Months">
-									<option value="0">Select Month</option>
+								<select asp-for="ContractDuration" class="form-control" data-placeholder="Select Months">									
 									<option value="3 Month">3 Month</option>
 									<option value="6 Months">6 Months</option>
 									<option value="9 Months">9 Months</option>
@@ -65,21 +64,29 @@
 								
 							<div class="form-group">
 								<label class="form-label">Start Date <span class="text-danger">*</span></label>
-								<input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control fc-datepicker" />
+								<input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
 							</div>
 							
 					</div>
 					<div class="col-md-3">
 							<div class="form-group">
 								<label class="form-label">End Date <span class="text-danger">*</span></label>
-								<input type="date" asp-for="EndDate" class="form-control fc-datepicker " />
+								<input type="date" asp-for="EndDate" class="form-control" />
 							</div>
 					</div>
 					</div>
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<label class="form-label">Attachment <span class="text-danger">*</span></label>
+								<label class="form-label">Attachment <span class="text-danger">*</span>
+
+									@if (!string.IsNullOrEmpty(Model.Attachment))
+									{
+										<a href="@Model.Attachment" target="_blank" data-bs-original-title="Download" aria-label="Download"><i class="feather feather-download  text-secondary me-2"> Download</i></a>
+										<input type="hidden" value="@Model.Attachment" name="Attachment"id="Attachment" />
+									}
+								
+								</label>
 								<div class="form-group local-forms">
 									<label for="form-label" class="form-label"></label> <input class="form-control" id="ContractAttachment" name="ContractAttachment" type="file" accept=".pdf, .doc, .docx,.jpg, .jpeg, .png">
 								</div>
@@ -208,25 +215,35 @@
 											}
 											else
 											{
-												<td class="text-end">
-													<div class="d-flex">
-														@if (Convert.ToBoolean(ViewBag.IsEdit))
-														{
-															<a href="#" onclick="EditRecord(@item.StaffContractId,0)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
-																<i class="feather feather-edit primary text-primary mt-1 "></i>
-															</a>
-														} @if (Convert.ToBoolean(ViewBag.IsDelete))
-														{
-															<a href="#" onclick="DeleteConfirmation(@item.StaffContractId)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Delete">
-																<i class="feather feather-trash-2 text-danger mt-1"></i>
-															</a>
+												<td>
+													<!----- Action Buttons Code Start From Here------>
+													<div class="ms-auto">
+														<div class="btn-group ms-3 mb-0">
+															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+															<div class="dropdown-menu dropdown-menu-start" style="">
 
-															<a target="_blank" href="@Url.Content(item.Attachment)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
-																<i class="feather feather-download  text-secondary mt-1"></i>
-															</a>
 
-														}
+
+
+
+																@if (Convert.ToBoolean(ViewBag.IsEdit))
+																{
+																	<a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
+																		<i class="fa fa-file-text me-2"></i>Re-New Contract
+																	</a>
+
+																	<a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
+																		<i class="feather feather-download me-2"></i>Download Contract
+																	</a>
+																}
+
+
+
+
+															</div>
+														</div>
 													</div>
+													<!----- Action Buttons Code Ends Here------>
 												</td>
 											}
 										</tr>
@@ -299,19 +316,38 @@
 											}
 											else
 											{
-												<td class="text-end">
-													<div class="d-flex">
-														@if (Convert.ToBoolean(ViewBag.IsEdit))
-														{
-															<a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
-																<i class="fa fa-file-text mt-1"></i>
-															</a>
+												<td>
 
-															<a target="_blank" href="@Url.Content(item.Attachment)" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
-																<i class="feather feather-download  text-secondary mt-1"></i>
-															</a>
-														} 
+
+													<!----- Action Buttons Code Start From Here------>
+													<div class="ms-auto">
+														<div class="btn-group ms-3 mb-0">
+															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+															<div class="dropdown-menu dropdown-menu-start" style="">
+
+
+
+
+																@if (Convert.ToBoolean(ViewBag.IsEdit))
+																{
+																	<a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
+																		<i class="fa fa-file-text me-2"></i>Re-New Contract
+																	</a>
+
+																	<a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
+																		<i class="feather feather-download me-2"></i>Download Contract
+																	</a>
+																}
+
+
+
+															</div>
+														</div>
 													</div>
+													<!----- Action Buttons Code Ends Here------>
+
+												
+												
 												</td>
 											}
 										</tr>
@@ -343,14 +379,37 @@
 			$("#ContractDuration").change(function () {
 
 
-
+				debugger
 				var months = parseInt($(this).val()); // Get the selected contract duration in months
+
+
 				var currentDate = new Date(); // Get the current date
 				var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
-				var formattedDate = $.datepicker.formatDate('yy-mm-dd', incrementedDate); // Format the incremented date as "yyyy-MM-dd"
+				var year = incrementedDate.getFullYear();
+				var month = (incrementedDate.getMonth() + 1).toString().padStart(2, '0');
+				var day = incrementedDate.getDate().toString().padStart(2, '0');
+				var formattedDate = `${year}-${month}-${day}`;
+
+				$("#EndDate").val(formattedDate);
+
+
+
+
+				//var currentDate = new Date(); // Get the current date
+				//var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
+				//var formattedDate = incrementedDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }); // Format the incremented date as "MM/dd/yyyy"
 
 				
-				$("#EndDate").val(formattedDate);
+
+
+
+
+				//var currentDate = new Date(); // Get the current date
+				//var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
+				//var formattedDate = $.datepicker.formatDate('yy-mm-dd', incrementedDate); // Format the incremented date as "yyyy-MM-dd"
+
+
+				//$("#EndDate").val(formattedDate);
 				
 				
     });
@@ -402,7 +461,10 @@
 				}
 			});
 
-			$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
+			//$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
+			$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
 
 
 			$('#myTable,#ExpireContractTable').DataTable();
@@ -471,15 +533,25 @@
 						$("#Renew").val(renew);
 
 						$("#StaffContractId").val(data.staffContractId);
-						$("#StaffId").val(data.staffId).trigger("change");
-						$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
+
+
+
+						$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val(data.staffId).trigger('change');
+						//$("#StaffId").val(data.staffId).trigger("change");
+						$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val(data.employmentTypeId).trigger('change');
+
+						//$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
 						$("#Title").val(data.title);
-						$("#ContractDuration").val(data.contractDuration).trigger("change");
+						$('#ContractDuration').select2({ placeholder: 'Select Contract Duration', width: '100%', allowClear: true }).val(data.contractDuration).trigger('change');
+
+
+						//$("#ContractDuration").val(data.contractDuration).trigger("change");
 						$("#StartDate").val(DateStart)
-						$("#EndDate").val(DateEnd)
-						$("#AdditionalDetails").val(data.additionalDetails)
-						$("#Attachment").val(data.attachment)					
-						
+						 $("#EndDate").val(DateEnd)
+						var a =$("#AdditionalDetails").val(data.additionalDetails)
+						alert(a)
+						var abc =$("#Attachment").val(data.attachment)					
+						alert(abc)
 						$("#Status").prop('checked', data.status);
 						$("#AddGeneralModal").modal('show');
 
@@ -533,7 +605,7 @@
 			debugger;
 
 			
-			if ($("#StaffId").val() == null || $("#StaffId").val() == "Select Staff") {
+			if ($("#StaffId").val() == null || $("#StaffId").val() == "") {
 				
 				$.growl.warning({
 					message: "Please Select Staff Name"
@@ -546,7 +618,7 @@
 				$("#StaffId").css("border-color", "#ddd");
 			}
 			
-			if ($("#EmploymentTypeId").val() == "Select Contract Type" || $("#EmploymentTypeId").val() == null) {
+			if ($("#EmploymentTypeId").val() == "" || $("#EmploymentTypeId").val() == null) {
 				$.growl.warning({
 					message: "Please Select Contract Type"
 				});
@@ -557,7 +629,7 @@
 			else {
 				$("#EmploymentTypeId").css("border-color", "#ddd");
 			}
-			if ($("#ContractDuration").val() == "" || $("#ContractDuration").val()==0 ) {
+			if ($("#ContractDuration").val() == "" || $("#ContractDuration").val()==null ) {
 				$.growl.warning({
 					message: "Please Select Contract Duration"
 				});
@@ -592,20 +664,27 @@
 			else {
 				$("#EndDate").css("border-color", "#ddd");
 			}
-			if (document.getElementById("ContractAttachment").value == "") {
-
-				$.growl.warning({
-					message: "Please Select Attachment"
-				});
 
 
-				$("#ContractAttachment").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#ContractAttachment").css("border-color", "#ddd");
-			}
+
+			if('@Model.Attachment'=='')
+            {
+				if (document.getElementById("ContractAttachment").value == "") {
+
+					$.growl.warning({
+						message: "Please Select Attachment"
+					});
+
+
+					$("#ContractAttachment").css("border-color", "red");
+					status = false;
+					return false;
+				}
+				else {
+					$("#ContractAttachment").css("border-color", "#ddd");
+				}
+            }
+			
 
 
 			var Data = { id: $("#StaffContractId").val(), EndDate: $('#EndDate').val() == '' ? '""' : $('#EndDate').val(), StaffId: $("#StaffId").val() }
@@ -671,10 +750,11 @@
 		}
 
 		function ClearControl(){
-		
-			$("#StaffId").val("").trigger("change");
-			$("#EmploymentTypeId").val("").trigger("change");
-			$("#ContractDuration").val("").trigger("change");
+
+			$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
+			$('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
+
 
 			$(".StartDate").val('');
 			$(".EndDate").val('');

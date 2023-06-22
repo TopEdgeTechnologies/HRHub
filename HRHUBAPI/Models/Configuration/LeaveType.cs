@@ -131,6 +131,7 @@ namespace HRHUBAPI.Models
                 {
                     checkLeaveTypeInfo.LeaveTypeId = ObjLeaveTypeInfo.LeaveTypeId;
                     checkLeaveTypeInfo.UpdatedOn = DateTime.Now;
+                    checkLeaveTypeInfo.NoOfLeaves = ObjLeaveTypeInfo.NoOfLeaves;
                     checkLeaveTypeInfo.Status = ObjLeaveTypeInfo.Status;
                     checkLeaveTypeInfo.IsNonPaid = ObjLeaveTypeInfo.IsNonPaid;
                     checkLeaveTypeInfo.UpdatedBy = ObjLeaveTypeInfo.UpdatedBy;

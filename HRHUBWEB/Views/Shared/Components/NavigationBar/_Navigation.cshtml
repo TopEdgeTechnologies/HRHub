@@ -5,10 +5,10 @@
 @foreach (var item in Model.Where(x => x.parentId == 0 && x.isParent == true))
 	
 {
+    
 
-
-	<li class="slide">
-		<a href="#" class="side-menu__item" data-bs-toggle="slide">
+    <li class="slide">
+        <a href="#" class="side-menu__item" data-bs-toggle="slide">
 			<i class="@item.imageClass sidemenu_icon"></i><span class="side-menu__label">@item.FormTitle</span><i class="angle fa fa-angle-right"></i>
 		
 		</a>
@@ -29,10 +29,10 @@
 
                                 if (@SubChildItem.ReferenceID > 0)
                                 {
-                                    <li>
+                                    <li class="@((ViewContext.RouteData.Values["action"].ToString() == SubChildItem.action) ? "is-expanded" : "")">
                                         <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller" asp-route-id="@SubChildItem.ReferenceID">
                                         <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
-                                            <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle  </span>
+                                            <span class="sub-side-item__label" style="padding-right: 8px;">@SubChildItem.FormTitle  </span>
                                             <span class="badge badge-success side-badge"> @SubChildItem.titlewithcounter</span>
                                         </a>
 								</li>
@@ -40,10 +40,15 @@
                                 }
                                 else
                                 {
-                                    	<li>  <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
+                                    <li class="@((ViewContext.RouteData.Values["action"].ToString() == SubChildItem.action) ? "is-expanded" : "")">
+                                       @* @(ViewContext.RouteData.Values["action"].ToString().Equals(SubChildItem.action) ? "class=active" : "")*@
+
+
+
+                                        <a class="sub-slide-item" asp-action="@SubChildItem.action" asp-controller="@SubChildItem.controller">
                                         <i class="@SubChildItem.imageClass  sidemenu_icon"></i>
-                                        <span class="sub-side-item__label" padding-left: 8px;>@SubChildItem.FormTitle</span>										
-									</a>
+                                            <span class="sub-side-item__label" style="padding-right: 8px;">@SubChildItem.FormTitle</span>
+                                        </a>
 								</li>
                                 
                                 }
@@ -60,7 +65,7 @@
                     {
 
 
-                    <li>
+                        <li class="@((ViewContext.RouteData.Values["action"].ToString() == Childitem.action) ? "is-expanded" : "")">
                             <a class="slide-item" asp-action="@Childitem.action" asp-controller="@Childitem.controller" asp-route-id="@Childitem.ReferenceID">
                             <i class="@Childitem.imageClass  sidemenu_icon"></i>
                             <span class="side-menu__label">
@@ -71,7 +76,7 @@
                     else
                     {
 
-                        <li>
+                        <li class="@((ViewContext.RouteData.Values["action"].ToString() == Childitem.action) ? "is-expanded" : "")">
                             <a class="slide-item" asp-action="@Childitem.action" asp-controller="@Childitem.controller">
                                 <i class="@Childitem.imageClass  sidemenu_icon"></i>
                                 <span class="side-menu__label">

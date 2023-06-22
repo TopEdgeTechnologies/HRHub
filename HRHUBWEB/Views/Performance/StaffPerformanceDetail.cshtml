@@ -15,6 +15,8 @@
                     <div class="card-options">
                         <div class="btn-list">
                             @*<a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Benefit</a>*@
+
+                            <button type="button" onclick="history.back()" class="btn btn-primary" data-bs-placement="top" data-bs-toggle="" title="" data-bs-original-title="Filter"> <i class="fa fa-arrow-left"></i> </button>
                             <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
                             <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
                             <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
@@ -52,7 +54,7 @@
                                                         string fullName = item.FirstName + " " + item.LastName;
                                                     }
                                                     <h6 class="mb-1 fs-14">@fullName</h6>
-                                                    <p class="text-muted mb-0 fs-12"></p>
+                                                    <p class="text-muted mb-0 fs-12">@item.Designation</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -77,6 +79,9 @@
                                                     {
                                                         <a asp-Action="StaffPerformanceUpdate" asp-route-ReviewFormId="@item.ReviewFormId" asp-route-ReviewedStaffId="@item.ReviewedStaffId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                             <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                        </a>
+                                                        <a asp-Action="StaffPerformance" asp-route-ReviewFormId="@item.ReviewFormId" asp-route-ReviewedStaffId="@item.ReviewedStaffId" class="action-btns1 btn-xs" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="View">
+                                                            <i class="feather feather-eye text-primary mt-1 "></i>
                                                         </a>
                                                     } 
 

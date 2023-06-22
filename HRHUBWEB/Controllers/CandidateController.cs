@@ -251,12 +251,30 @@ namespace HRHUBWEB.Controllers
                 var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+               
                 var CandidateResume = my.Files.GetFile("CandidateResume");
                 var CandidatePicture = my.Files.GetFile("CandidatePicture");
+                if (ObjCandidate.AttachmentPath == null && CandidateResume != null)
+                {
+                    ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
 
-                ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
-                ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
+                }
+                if (ObjCandidate.AttachmentPath != null && CandidateResume != null)
+                {
+                    ObjCandidate.AttachmentPath = uploadImage(ObjCandidate.Name, CandidateResume, "CandidateAttachment");
 
+                }
+                if (ObjCandidate.Picture == null && CandidatePicture != null)
+                {
+
+                    ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
+                }
+
+                if (ObjCandidate.Picture != null && CandidatePicture != null)
+                {
+
+                    ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
+                }
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
                 ObjCandidate.CompanyId = userObject.CompanyId;
                 ObjCandidate.CreatedBy = userObject.UserId;
@@ -288,7 +306,7 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("CandidateList", new { id = 1 });
+                    return RedirectToAction("CandidateList", new { data = status,id = 1 });
 
                 }
                 else
@@ -398,6 +416,7 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            obj.CompanyId = userObject.CompanyId;
             obj.CreatedBy = userObject.UserId;
 
 
@@ -405,7 +424,6 @@ namespace HRHUBWEB.Controllers
 
             var modelobj = JsonConvert.DeserializeObject<CandidateScreening>(my["obj"]);
             modelobj.CreatedBy = userObject.UserId;
-
 
             /////////////////////////
             ///

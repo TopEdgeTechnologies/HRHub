@@ -1,6 +1,7 @@
 ﻿using HRHUBAPI.Models.Configuration;
 using HRHUBAPI.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,27 @@ namespace HRHUBAPI.Models
             public IEnumerable<Staff>? StaffList { get; set; }
 
             [NotMapped]
+            public int? MTDPresentCount { get; set; }
+
+            [NotMapped]
+            public int? YTDPaidLeaveCount { get; set; }
+
+            [NotMapped]
+            public int? TotalAllowedLeaves { get; set; }
+
+            [NotMapped]
+            public int? MonthDaysCount { get; set; }
+
+            [NotMapped]
+            public string? MonthName { get; set; }
+
+            [NotMapped]
+            public int? MonthNumber { get; set; }
+
+            [NotMapped]
+            public int? Year { get; set; }
+
+            [NotMapped]
             public int? TranFlag { get; set; }
 
             [NotMapped]
@@ -43,10 +65,19 @@ namespace HRHUBAPI.Models
             public string? DesignationTitle { get; set; }
 
             [NotMapped]
+            public IEnumerable<SelectListItem>? MaterialStatusList { get; set; } 
+
+            [NotMapped]
+            public IEnumerable<SelectListItem>? BloodGroupList { get; set; } 
+
+            [NotMapped]
             public IEnumerable<Department>? DepartmentList { get; set; }
 
             [NotMapped]
             public IEnumerable<Designation>? DesignationList { get; set; }
+
+            [NotMapped]
+            public IEnumerable<SalaryMethod>? SalaryMethodList { get; set; }
 
             [NotMapped]
             public IEnumerable<string>? DocumentTitle { get; set; }
@@ -87,7 +118,7 @@ namespace HRHUBAPI.Models
 			DbConnection _db = new DbConnection();
 			try
 			{
-				string query = "EXEC BI.sp_Get_Staff_Statistics " + CompanyId;
+				string query = "EXEC BI.GetStaff_Statistics " + CompanyId;
 				DataTable dt = _db.ReturnDataTable(query);
 				Staff StaffStatistics = new Staff();
 
@@ -103,12 +134,34 @@ namespace HRHUBAPI.Models
 			catch { throw; }
 		}
 
+        public async Task<Staff> GetStaffAttendanceStatistics(int CompanyId, int month, int year, int StaffId)
+        {
+            try
+            {
+                DbConnection dbConnection = new DbConnection(); 
+                string query = " EXEC BI.GetStaff_Attendance_Statistics " + CompanyId + ", " + month + ", " + year + ", " + StaffId ;
+                
+                DataTable dt = dbConnection.ReturnDataTable(query);
+                Staff StaffAttendanceStatistics = new Staff();
+                if(dt.Rows.Count > 0)
+                {
+                    StaffAttendanceStatistics.MTDPresentCount = Convert.ToInt32(dt.Rows[0]["MTDPresentCount"]);
+                    StaffAttendanceStatistics.YTDPaidLeaveCount = Convert.ToInt32(dt.Rows[0]["YTDPaidLeaveCount"]);
+                    StaffAttendanceStatistics.TotalAllowedLeaves = Convert.ToInt32(dt.Rows[0]["TotalAllowedPaidLeaveCount"]);
+                    StaffAttendanceStatistics.MonthDaysCount = Convert.ToInt32(dt.Rows[0]["MonthDaysCount"]);
+                    StaffAttendanceStatistics.MonthName = dt.Rows[0]["MonthName"].ToString();
+              }
+                return StaffAttendanceStatistics;
+            }
+            catch (Exception ex) { throw; }
+        }
+
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {
             DbConnection _db = new DbConnection();
             try
             {
-                string query = "EXEC HR.sp_Get_StaffList " + CompanyId;
+                string query = "EXEC HR.GetStaffList " + CompanyId;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var staff = dt.AsEnumerable()
@@ -117,7 +170,7 @@ namespace HRHUBAPI.Models
                         SnapPath = string.IsNullOrWhiteSpace(row["SnapPath"].ToString()) ? "/Images/Avatar.png" : row["SnapPath"].ToString(),
                         SNO = Convert.ToInt32(row["SNO"]),
                         FirstName = row["FirstName"].ToString(),
-                        LastName = row["LastName"].ToString(),
+                        LastName =  row["LastName"].ToString(),
                         Email = row["Email"].ToString(),
                         StaffId = Convert.ToInt32(row["StaffId"]),
                         RegistrationNo = row["RegistrationNo"].ToString(),
@@ -162,7 +215,7 @@ namespace HRHUBAPI.Models
             DbConnection _db = new DbConnection();
             try
             {
-                string query = "EXEC HR.sp_Get_StaffWise_Allowed_Leaves " + CompanyId + ", " + Id;
+                string query = "EXEC HR.GetStaffWise_Allowed_Leaves " + CompanyId + ", " + Id;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var leaveAllocation = dt.AsEnumerable()

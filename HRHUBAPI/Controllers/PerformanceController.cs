@@ -103,18 +103,21 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new PerformanceForm().PostPerformanceForm(obj, _context);
-            if (result != null && result.Flag == 2)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
+            
+            return Ok(result);
+
+           
+            //return Ok(new
+            //{
+            //    Success = true,
+            //    Message = "Data Update Successfully!"
+            //});
+            //else
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Insert Successfully!"
+            //    });
 
 
         }
@@ -204,18 +207,20 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Section().PostSection(obj, _context);
-            if (result != null && result.Flag == 2)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
+
+            return Ok(result);
+            //if (result != null && result.Flag == 2)
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Update Successfully!"
+            //    });
+            //else
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Insert Successfully!"
+            //    });
 
 
         }
@@ -365,12 +370,12 @@ namespace HRHUBAPI.Controllers
         #endregion
 
         #region QuestionSection
-        //[HttpGet("GetQuestionSectionInfos{id}")]
-        //public async Task<ActionResult<List<SectionQuestion>>> GetQuestionSectionInfos(int id)
-        //{
+        [HttpGet("GetQuestionSectionInfos{id}")]
+        public async Task<ActionResult<List<SectionQuestion>>> GetQuestionSectionInfos(int id)
+        {
 
-        //    return await new Section().GetSectionQuestion(id, _context);
-        //}
+            return await new Section().GetSectionQuestion(id, _context);
+        }
         #endregion
 
         #region Staff Performance Evaluation    
@@ -386,11 +391,18 @@ namespace HRHUBAPI.Controllers
 
 
 
-        [HttpGet("GetStaffSectionAnswerList{ReviewFormId}")]
-        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetStaffSectionAnswerList(int ReviewFormId)
+        [HttpGet("GetStaffSectionAnswerList{ReviewFormId}/{CompanyId}")]
+        public async Task<ActionResult<List<StaffReviewFormProcessed>>> GetStaffSectionAnswerList(int ReviewFormId,int CompanyId)
         {
 
-            return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, _context);
+            return await new SectionAnswer().ListStaffSectionAnswer(ReviewFormId, CompanyId, _context);
+        }
+
+        [HttpGet("GetViewStaffPerformanceList{ReviewedStaffId}/{ReviewFormId}")]
+        public async Task<ActionResult<List<SectionAnswer>>> GetViewStaffPerformanceList(int ReviewedStaffId, int ReviewFormId)
+        {
+
+            return await new SectionAnswer().ViewStaffPerformance(ReviewedStaffId, ReviewFormId, _context);
         }
 
 
