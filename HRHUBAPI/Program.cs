@@ -45,8 +45,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            };
        });
 
+if (Convert.ToBoolean(  builder.Configuration["services:mailService"]))
+{
+    builder.Services.AddHostedService<MailService>();
 
-builder.Services.AddHostedService<MailService>();
+}
 
 
 

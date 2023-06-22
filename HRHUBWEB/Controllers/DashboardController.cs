@@ -103,12 +103,7 @@ namespace HRHUBWEB.Controllers
           var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
             return View();
         }
-            [CustomAuthorization]
-            public IActionResult  HR()
-            {
-			
-			    return View();
-            }
+           
 
 		#endregion
 
