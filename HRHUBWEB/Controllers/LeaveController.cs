@@ -308,8 +308,9 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
+                if (leavetypeid == 0) { return  Json(null); }   
 
-                ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+				ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
                 ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
                 ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
                 ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);

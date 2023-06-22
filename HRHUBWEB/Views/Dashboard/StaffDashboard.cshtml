@@ -1,4 +1,4 @@
-﻿
+﻿@*@model HRHUBAPI.Models.Leave*@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
@@ -23,6 +23,8 @@
 			<div class="modal-body">
 				<div class="leave-types">
 					<div class="form-group">
+						
+						<input type="hidden" id="LeaveId" name="LeaveId" />
 						<label class="form-label">Leaves Dates</label>
 						<select name="projects"  class="form-control custom-select select2" id="daterange-categories">
 							<option value="single">Single Leaves</option>
@@ -86,7 +88,16 @@
 					*@
 					<div class="form-group">
 						<label class="form-label">Leaves Types</label>
-						<select name="projects"  class="form-control custom-select select2" data-placeholder="Select">
+                        @*
+						<select id="LeaveTypeId" class="form-control" data-placeholder="Select Leave Type" asp-items="@(new SelectList(@ViewBag.ListleaveTypes,"LeaveTypeId", "Title"))">
+							<option label="Select Leave Type"></option>
+						</select>
+						
+						<select id="LeaveTypeId" class="form-control" asp-items="@(new SelectList(Model.ListleaveTypes,"LeaveTypeId" ,"Title"))">
+							<option value="">Select Leave Type</option>
+						</select>
+						*@
+						<select id="LeaveTypeId" name="LeaveTypeId" class="form-control custom-select select2" data-placeholder="Select">
 							<option label="Select"></option>
 							<option value="1">Half Day Leave</option>
 							<option value="2">Casual Leaves</option>
@@ -97,10 +108,27 @@
 							<option value="6">Unpaid Leaves</option>
 							<option value="8">Other Leaves</option>
 						</select>
+                        
 					</div>
 					<div class="form-group">
 						<label class="form-label">Reason:</label>
-						<textarea class="form-control" rows="5">Some text here...</textarea>
+						<textarea id="LeaveSubject" name="LeaveSubject" class="form-control" rows="2">Some text here...</textarea>
+					</div>
+					<div class="row form-group leavecheckbox">
+						<div class="col-xl-6 col-md-12 col-lg-12 mt-2 half">
+							@* <div class="col-md-6 mt-2 half">*@
+							<label class="custom-control custom-checkbox chkbox">
+								<input type="checkbox" id="MarkAsHalfLeave" name="MarkAsHalfLeave" class="custom-control-input">
+								<span class="custom-control-label">Half Leave</span>
+							</label>
+						</div>
+						<div class="col-xl-6 col-md-12 col-lg-12 mt-2 short">
+							@*<div class="col-md-6 mt-2 short">*@
+							<label class="custom-control custom-checkbox chkbox">
+								<input type="checkbox" id="MarkAsShortLeave" name="MarkAsShortLeave" class="custom-control-input">
+								<span class="custom-control-label">Short Leave</span>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -110,8 +138,8 @@
 					<span class="badge badge-success badge-pill ms-2" id="SelectedDays">0</span>
 				</div>
 				<div class="ms-auto">
+					<button type="button" onclick="PostLeaveApplication()" class="btn btn-primary">Submit</button>
 					<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
-					<button type="button" onclick="postdata()" class="btn btn-primary">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -129,7 +157,7 @@
 			</div>
 			<div class="page-rightheader ms-md-auto">
 				<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-					<a href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal" data-bs-target="#applyleaves">Apply Leaves</a>
+			<a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal">Apply Leaves</a> @*data-bs-target="#applyleaves"*@
 					<div class="d-flex">
 						<div class="header-datepicker me-3">
 							<div class="input-group">
@@ -732,6 +760,35 @@
 
 		});
 
+		function openApplyLeaveModal() {
+			var statusCount = 0;
+			var Data = { }
+			console.log(Data)
+			$.ajax({
+				async: false,
+					url: "/Dashboard/GetleaveTypeList",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						debugger
+						statusCount = data.listleaveTypes.length;
+					}
+				},
+				error: function () 
+				{
+					statusCount = 0;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			if(statusCount > 0){
+				$("#applyleaves").modal('show')
+			}
+			
+			return status;
+		}
+
 		$("#daterange-categories").change(function () {
             debugger;
             var leavecategory = $("#daterange-categories").val();
@@ -787,7 +844,7 @@
 			}
 		}
 
-		function postdata() {
+		function CheckLeaveApplication() {
             debugger
             var status = true;
 
@@ -865,7 +922,6 @@
             });
 
             if (status) {
-
                 swalWithBootstrapButtons.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -877,7 +933,7 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $("#myform").submit();
+						PostLeaveApplication()
                     }
                     else if (
                         result.dismiss === Swal.DismissReason.cancel
@@ -891,6 +947,42 @@
                 });
             }
         }
+
+		function PostLeaveApplication() {
+			var status = false;
+			debugger
+
+			var Data = { 
+				leaveTypeId: $("#LeaveTypeId").val(),
+				startDate: $("#StartDate").val(),
+				endDate: $("#EndDate").val(),
+				leaveSubject: $("#LeaveSubject").val(),
+				markAsHalfLeave: $("#MarkAsHalfLeave").val(),
+				markAsShortLeave: $("#MarkAsShortLeave").val()
+			}
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Dashboard/LeaveCreateOrUpdate",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						debugger
+						status = data.success;
+						var url = "/Dashboard/StaffDashboard";
+						window.location.href = url;
+					}
+				},
+				error: function () 
+				{
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			return status;
+		}
 
 		function loadStaffMonthlyAttendanceGraph() {
 			var MonthName = []

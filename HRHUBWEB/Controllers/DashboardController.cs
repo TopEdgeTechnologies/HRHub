@@ -1,9 +1,11 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
 using HRHUBWEB.Filters;
+using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.Design;
 
 namespace HRHUBWEB.Controllers
 {
@@ -131,6 +133,46 @@ namespace HRHUBWEB.Controllers
 			return Json(result);
 		}
 
+        public async Task<Leave> GetleaveTypeList()
+        {
+            Leave ObjLeave = new Leave();
+            if (_user.CompanyId > 0)
+            {
+                ObjLeave.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+                return ObjLeave;
+            }
+            return new Leave();
+        }
+		
+        public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
+		{
+            Leave ObjLeave = new Leave();
+            ObjLeave.AppliedOn = DateTime.Now;
+            ObjLeave.StaffId = _user.UserId;
+
+            ObjLeave.LeaveStatusId = leaveTypeId;
+            ObjLeave.StartDate = startDate; 
+            ObjLeave.EndDate = endDate;
+			ObjLeave.ApplicationHtml = "<p>" + leaveSubject + "</p>";
+			ObjLeave.LeaveSubject = leaveSubject;
+            ObjLeave.MarkAsHalfLeave = markAsHalfLeave;
+            ObjLeave.MarkAsShortLeave = markAsShortLeave;
+			ObjLeave.IsDeleted = false;
+			ObjLeave.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeave, "api/Leave/LeaveAddOrCreate", HttpMethod.Post);
+
+            //if (result.Message.Contains("Insert"))
+            //{
+            //    return new RedirectToAction("StaffDashboard", new { data = 1 });
+            //}
+			//else
+			//{
+			//	return RedirectToAction("SalaryMethodList", new { data = 2 });
+			//}
+            //return new RedirectToActionResult("Dashboard", "StaffDashboard", result);    
+			return Json(result);
+		}
 
 		//[HttpGet]
 		//public async Task<IActionResult> StaffMonthlyAttendance(DateTime dateFrom, DateTime dateTo, int staffId)
