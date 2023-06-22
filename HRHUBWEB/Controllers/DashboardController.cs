@@ -5,6 +5,7 @@ using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.Design;
 
 namespace HRHUBWEB.Controllers
 {
@@ -164,6 +165,47 @@ namespace HRHUBWEB.Controllers
 			return Json(result);
 		}
 
+		public async Task<Leave> GetleaveTypeList()
+		{
+			Leave ObjLeave = new Leave();
+			if (_user.CompanyId > 0)
+			{
+				ObjLeave.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+				ViewBag.vbleaveTypes = ObjLeave.ListleaveTypes;
+				return ObjLeave;
+			}
+			return new Leave();
+		}
+
+		public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
+		{
+            Leave ObjLeave = new Leave();
+            ObjLeave.AppliedOn = DateTime.Now;
+            ObjLeave.StaffId = _user.UserId;
+			ObjLeave.LeaveTypeId = leaveTypeId;
+			ObjLeave.StartDate = startDate; 
+            ObjLeave.EndDate = endDate;
+            ObjLeave.LeaveStatusId = 1;
+			ObjLeave.ApplicationHtml = "<p>" + leaveSubject + "</p>";
+			ObjLeave.LeaveSubject = leaveSubject;
+            ObjLeave.MarkAsHalfLeave = markAsHalfLeave;
+            ObjLeave.MarkAsShortLeave = markAsShortLeave;
+			ObjLeave.IsDeleted = false;
+			ObjLeave.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeave, "api/Leave/LeaveAddOrCreate", HttpMethod.Post); 
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_LeaveBalance_Statistics()
+		{
+			string procrdure = "BI.GetStaff_LeaveBalance_Statistics";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
 
 		//[HttpGet]
 		//public async Task<IActionResult> StaffMonthlyAttendance(DateTime dateFrom, DateTime dateTo, int staffId)
@@ -176,10 +218,9 @@ namespace HRHUBWEB.Controllers
 		//}
 
 		[CustomAuthorization]
-        public IActionResult StaffDashboard()
+        public async Task<IActionResult> StaffDashboard()
         {
-
-            return View();
+			return View();
         }
 
         #endregion
