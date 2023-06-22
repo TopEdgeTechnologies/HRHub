@@ -301,7 +301,6 @@ namespace HRHUBWEB.Controllers
 
 
 
-
         public async Task<IActionResult> PayrollSettings(string data = "", int Id = 0)
         {
             ViewBag.Success = data;
