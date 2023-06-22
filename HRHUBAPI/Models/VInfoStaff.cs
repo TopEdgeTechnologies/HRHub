@@ -61,7 +61,7 @@ public partial class VInfoStaff
 
     public string? BankCode { get; set; }
 
-    public int? TaxPayerNumber { get; set; }
+    public string? TaxPayerNumber { get; set; }
 
     public string? JobDescription { get; set; }
 
@@ -70,6 +70,8 @@ public partial class VInfoStaff
     public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }
+
+    public decimal? StaffTenureInYears { get; set; }
 
     public int? EmploymentTypeId { get; set; }
 
@@ -129,13 +131,13 @@ public partial class VInfoStaff
 
     public string? CompanyCurrency { get; set; }
 
-    public bool? CompanyAttendanceByRosters { get; set; }
+    public bool CompanyAttendanceByRosters { get; set; }
 
     public TimeSpan? CompanyOfficeStartTime { get; set; }
 
     public TimeSpan? CompanyOfficeEndTime { get; set; }
 
-    public bool? CompanyEmployeeWebCheckIn { get; set; }
+    public bool CompanyEmployeeWebCheckIn { get; set; }
 
     public int? CompanyStartTimeGraceMinutes { get; set; }
 

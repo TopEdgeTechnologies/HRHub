@@ -103,18 +103,21 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new PerformanceForm().PostPerformanceForm(obj, _context);
-            if (result != null && result.Flag == 2)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
+            
+            return Ok(result);
+
+           
+            //return Ok(new
+            //{
+            //    Success = true,
+            //    Message = "Data Update Successfully!"
+            //});
+            //else
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Insert Successfully!"
+            //    });
 
 
         }
@@ -204,18 +207,20 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Section().PostSection(obj, _context);
-            if (result != null && result.Flag == 2)
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Update Successfully!"
-                });
-            else
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Insert Successfully!"
-                });
+
+            return Ok(result);
+            //if (result != null && result.Flag == 2)
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Update Successfully!"
+            //    });
+            //else
+            //    return Ok(new
+            //    {
+            //        Success = true,
+            //        Message = "Data Insert Successfully!"
+            //    });
 
 
         }

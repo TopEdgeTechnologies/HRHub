@@ -314,7 +314,21 @@ namespace HRHUBWEB.Controllers
 		public async Task<IActionResult> StaffContractCreateOrUpdate(IFormCollection MyAttachment, StaffContract ObjStaffContract)
 		{
 			var Attachment = MyAttachment.Files.GetFile("ContractAttachment");
-			ObjStaffContract.Attachment = UploadImage(ObjStaffContract.ContractDuration, Attachment, "ContractAttachment");			
+
+			if (ObjStaffContract.Attachment == null && Attachment != null)
+			{
+				ObjStaffContract.Attachment = UploadImage(ObjStaffContract.ContractDuration, Attachment, "ContractAttachment");
+
+
+			}
+			if (ObjStaffContract.Attachment != null && Attachment != null)
+			{
+				ObjStaffContract.Attachment = UploadImage(ObjStaffContract.ContractDuration, Attachment, "ContractAttachment");
+
+
+			}
+
+
 			ObjStaffContract.CreatedBy = _user.UserId;
 
 			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjStaffContract, "api/Staffs/PostStaffContract", HttpMethod.Post);

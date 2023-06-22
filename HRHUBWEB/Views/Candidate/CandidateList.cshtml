@@ -221,35 +221,38 @@
                                                 <div class="btn-group ms-3 mb-0">
                                                     <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-start" style="">
+                                                       
+                                                        
                                                         @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                         {
 
                                                             @if (Model.UrlRequestSatausID != 8 && Model.UrlRequestSatausID != 9){
                                                             
                                                             <a class="dropdown-item" href="#" Onclick="loadModal(@item.CandidateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Process" data-bs-original-title="View" aria-label="Process">
-                                                                    <i class="fa fa-blind me-3"> Process</i>
+                                                                    <i class="fa fa-blind me-1"></i> Process
                                                             </a>
                                                             }
                                                             <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" data-bs-original-title="View" aria-label="View">
-                                                                <i class="feather feather-eye me-2"> View
-                                                                </i>
+                                                                <i class="feather feather-eye me-1"></i> View
                                                             </a>
                                                             <a asp-action="CandidateCreateOrUpdate" asp-route-id="@item.CandidateId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                <i class="feather feather-edit me-2"> Edit
-                                                                </i>
+                                                                <i class="feather feather-edit me-2"></i>Edit
                                                             </a>
                                                         } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                         {
                                                             @if (Model.UrlRequestSatausID == 1)
                                                             {
                                                                 <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                    <i class="feather feather-trash-2 me-2"> Delete</i>
+                                                                    <i class="feather feather-trash-2 me-2"></i>Delete
                                                                 </a>
                                                             }
                                                             <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Resume" data-bs-original-title="Download Resume" aria-label="Download Resume">
-                                                                <i class="feather feather-download me-2"> Download</i>
+                                                                <i class="feather feather-download me-2"></i>Download
                                                             </a>
                                                         }
+
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -337,8 +340,27 @@
                                                 <div class="input-group-text">
                                                     <i class="feather feather-calendar"></i>
                                                 </div>
-                                            </div><input name="ScreeningDate" id="ScreeningDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                            </div><input name="ScreeningDate" id="ScreeningDate" class="form-control " placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
                                         </div>
+                                    </div>
+
+                                    <div id="ShowInterviewLocation">
+                                        <div class="form-group">
+                                        <label class="form-label">Interview Location</label>
+                                        <input  name="InterviewMediumOrLocation" id="InterviewMediumOrLocation" class="form-control" placeholder="Enter Interview Location" />
+                                    </div>
+                                    </div>
+                                    <div id="ShowInterviewDate">
+                                       <div class="form-group">
+                                        <label class="form-label">Interview Date <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="feather feather-calendar"></i>
+                                                </div>
+                                            </div><input name="InterviewDateTime" id="InterviewDateTime" class="form-control " placeholder="DD-MM-YYY" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                        </div>
+                                    </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Remarks</label>
@@ -512,6 +534,21 @@
                     $('#ShowAttachment').hide(1000);
                 }
             });
+            $('#ShowInterviewDate').hide(1000);
+             $('#ShowInterviewLocation').hide(1000);
+            $('#StatusId').change(function () {
+                var selectOption = $(this).val();
+               
+                debugger
+                if (selectOption == '3' || selectOption == '4') {
+                    $('#ShowInterviewDate').show(1000);
+                    $('#ShowInterviewLocation').show(1000);
+                } else {
+                    $('#ShowInterviewDate').hide(1000);
+                    $('#ShowInterviewLocation').hide(1000);
+                }
+            });
+             
 
             ////////////////////////////
 
@@ -714,7 +751,36 @@
 
                 return false;
             }
+           
+                debugger
+                if ($("#StatusId").val() == '3' || $("#StatusId").val() == '4') {
+                    if ($("#InterviewMediumOrLocation").val() == '') {
+                        $.growl.warning({
+                            message: "Enter Interview Location !"
+                        });
 
+                        return false;
+                    }
+                    else if ($("#InterviewDateTime").val() == '') {
+                        $.growl.warning({
+                            message: "Enter Interview Date!"
+                        });
+
+                        return false;
+                    }
+                }
+            if ($("#StatusId").val() == '7') {
+                    if (document.getElementById("AttachmentCandidate").value == "") {
+
+                        $.growl.warning({
+                            message: "Please Select Attachment"
+                        });                        
+                        return false;
+
+                    }
+                   
+                } 
+         
             if ($("#Remarks").val() == '') {
                 $.growl.warning({
                     message: "Please Enter Remarks !"
@@ -729,7 +795,9 @@
                 StatusId:       $("#StatusId").val(),
                 Remarks:        $("#Remarks").val(),
                 ScreeningDate:  $("#ScreeningDate").val(),
-                AttachmentPath: $("#AttachmentCandidate").val()
+                AttachmentPath: $("#AttachmentCandidate").val(),
+                InterviewDateTime: $("#InterviewDateTime").val(),
+                InterviewMediumOrLocation: $("#InterviewMediumOrLocation").val()
             }
 
 
@@ -750,7 +818,7 @@
                                message: "Status Updated"
                               });
                               $("#CandidateId").val(0)
-                    $('#StatusId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
+                              $('#StatusId').select2({ placeholder: 'Select Designation', width: '100%', allowClear: true }).val("").trigger('change');
                               $("#Remarks").val("")
                                
                               
