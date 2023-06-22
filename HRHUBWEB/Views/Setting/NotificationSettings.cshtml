@@ -32,7 +32,7 @@
                         <i class="fa fa-cog me-2 fs-16 "></i>General Settings
                     </a>
                     <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
-                        <i class="fa fa-edit me-2 fs-16 "></i> Email Template
+                        <i class="feather feather-mail me-2 fs-16 "></i> Email Template
                     </a>
                  @*   <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
                         <i class="fa fa-list-alt me-2 fs-16 "></i> Leave Types
@@ -43,114 +43,194 @@
         <div class="col-md-12 col-xl-9">
             <div class="tab-content adminsetting-content" id="setting-tabContent">
                 <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+
+
+
                     <div class="card">
                         <div class="card-header  border-0">
-                            <h4 class="card-title">General Settings</h4>
+                            <h4 class="card-title">Candidate Enrollment</h4>
                         </div>
-                        <div class="card-body pt-2">
-                            <input type="hidden" asp-for="CompanyId" />
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="form-label">Leave Final Approval By</label>
-                                        
-                                    </div>
-                                </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="row">
 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="form-label">Approve Leave on Status</label>
-                                        
+                                    <div class="col-xl-3 pe-0">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" asp-for="OnCandidateEnrollment" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xl-6 ps-xl-0" id="OnCandidateEnrollmentTemplate">
+                                        <select asp-for="OnCandidateEnrollmentTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
-                                <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
-                            </div>
+
                         </div>
+
                     </div>
+
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Status Change</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-xl-3 pe-0">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" asp-for="OnStatusChange" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xl-6 ps-xl-0" id="OnStatusChangeTemplate">
+                                        <select asp-for="OnStatusChangeTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Approved</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-xl-3">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" asp-for="OnApproved" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xl-6 ps-xl-0" id="OnApprovedTemplate">
+                                        <select asp-for="OnApprovedTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Salary Generation</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-xl-3 pe-0">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" asp-for="OnSalaryGeneration" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xl-6 ps-xl-0" id="SalaryGenerationTemplate">
+                                        <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+                <div class="card-footer">
+                    <a onclick="SaveSettings()" class="btn btn-success">Save Changes</a>
+                    <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
                 </div>
+                   
+                </div>
+                
+           
+                
+
+
+
+
+
+
+
+
+               
                 <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                    
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Email Template</h4>
                             <div>
-                                <a onclick="addEmailTemplatemodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addEmail">Add New <i class="fe fe-plus-circle me-1"></i></a>
+                                <a  class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addEmail">Add New <i class="fe fe-plus-circle me-1"></i></a>
 
                             </div>
                         </div>
                         <div class="card-body pt-2">
                             <div class="modal fade" id="addEmail">
-                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                <div class="modal-dialog modal-lg"  role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Add Policy</h5>
+                                            <h5 class="modal-title">Add Email Template</h5>
                                             <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <input type="hidden" id="PolicyConfigurationId" />
-                                            <div class="policy-types">
+                                            <input type="hidden" id="TemplateId" />
+                                           
+                                          
 
                                                 <div class="form-group">
-                                                    <label class="form-label">Policy</label>
-                                                    <select id="policy-types" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.LeavePolicy ,"PolicyId" ,"Title"))">
-                                                    </select>
+                                                    <label class="form-label">Title: <span class="text-danger">*</span></label>
+                                                    <input id="Title" name="Title" class="form-control" type="text" placeholder="Enter Email Title">
                                                 </div>
-                                                <div hidden class="policy-module" id="leave-policy-module">
-                                                    <div class="mb-5">
-                                                        <p class="w-100 ps-2 fs-14 policy-description"></p>
-                                                    </div>
-
-                                                    <div class="form-control px-0 border-0 w-30 mb-3">
-                                                        <label class="form-label">Title</label>
-                                                        <input class="form-control" id="Title" type="text" placeholder="leave policy" />
-                                                    </div>
-
-                                                    <div class="mb-5">
-                                                        <label class="custom-switch form-switch mb-0">
-                                                            <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
-                                                            <span class="custom-switch-indicator"></span>
-                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
-                                                            <a href="#">
-                                                                <i class="fa fa-info"></i>
-
-                                                            </a>
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="mb-5">
-                                                        <label class="custom-switch form-switch mb-0">
-                                                            <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
-                                                            <span class="custom-switch-indicator"></span>
-                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
-                                                            <a href="#">
-                                                                <i class="fa fa-info text-info"></i>
-
-                                                            </a>
-                                                        </label>
-                                                    </div>
-
-                                                    @* <div class="mb-5">
-                                                    <label class="custom-switch form-switch mb-0">
-                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input">
-                                                    <span class="custom-switch-indicator"></span>
-                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Status leave</span>
-                                                    <a href="#">
-                                                    <i class="fa fa-info text-info"></i>
-
-                                                    </a>
-                                                    </label>
-                                                    </div>*@
+                                                  <div class="form-group">
+                                                    <label class="form-label">Subject: <span class="text-danger">*</span></label>
+                                                    <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
                                                 </div>
+
+                                            <div class="form-group">
+                                                <label class="form-label">Body:</label>
+                                                <textarea id="Body" name="Body" class="summernote"></textarea>
+                                            </div>
+
+
+                                            <div class="form-group">
+
+
+                                                <label class="custom-switch">
+                                                    <label class="form-label me-2 mt-1">IsActive</label>
+                                                    <input type="checkbox" id="Status" name="Status" class="custom-switch-input" checked="checked">
+                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                </label>
 
                                             </div>
+
                                         </div>
+                                        
                                         <div class="modal-footer">
                                             <div class="ms-auto">
-                                                <a onclick="savePolicyConfiguration()" class="btn btn-success btn_Save">Save</a>
+                                                <a  class="btn btn-success btn_SaveEmail">Save</a>
                                                 <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                                             </div>
                                         </div>
@@ -165,8 +245,8 @@
                                                 <tr>
                                                     <th class="border-bottom-0">#</th>
                                                     <th class="border-bottom-0">Title</th>
-                                                    <th class="border-bottom-0">Subject</th>
-                                                    <th class="border-bottom-0">Body</th>
+                                                    <th class="border-bottom-0 d-none">Subject</th>
+                                                    <th class="border-bottom-0 d-none">Body</th>
                                                     <th class="border-bottom-0">Status</th>
                                                     <th class="border-bottom-0">Action</th>
                                                 </tr>
@@ -174,14 +254,18 @@
                                             <tbody>
                                                 @{
                                                     int i = 1;
-                                                    foreach (var item in ViewBag.ListEmailTemplate)
+                                                    foreach (var item in Model.ListEmailTemplate)
                                                     {
                                                         <tr>
                                                             <td>@i</td>
                                                             <td>@item.Title</td>
-                                                            <td>@item.Subject</td>
-                                                            <td>@item.Body</td>
-                                                           
+                                                            
+                                                            <td class="d-none" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
+                                                                @Html.Raw(item.Subject)
+                                                            </td>
+                                                            <td class="d-none" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
+                                                                @Html.Raw(item.Body)
+                                                            </td>
                                                             <td>
                                                                 <label class="custom-switch mt-2">
 
@@ -190,15 +274,35 @@
                                                                 </label>
                                                             </td>
                                                             <td>
-                                                            <div class="d-flex">
-                                                              @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                                {
-                                                                        <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                    <i class="feather feather-edit primary mt-1"></i>
-                                                                </a>
-                                                                }
 
-                                                              </div>
+
+                                                                <!----- Action Buttons Code Start From Here------>
+                                                                <div class="ms-auto">
+                                                                    <div class="btn-group ms-3 mb-0">
+                                                                        <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                                        <div class="dropdown-menu dropdown-menu-start" style="">
+                                                                         
+                                                            
+                                                                            <a class="dropdown-item" href="#" onclick="editrecord(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit  me-2"></i> Edit
+                                                                       
+                                                                </a>
+                                                                            <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                                <i class="feather feather-trash me-2"></i> Delete
+
+                                                                    </a>
+
+
+
+                                                             
+
+
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!----- Action Buttons Code Ends Here------>
 
                                                             </td>
                                                         </tr>
@@ -221,13 +325,77 @@
 
     </div>
 
-</div>
+
 
 @section scripts{
 
     <script>
         $(document).ready(function () {
 
+            ClearControl();
+
+            // Open drop down and hide drop down
+
+            $('#SalaryGenerationTemplate').hide();
+            $('#OnRejectionTemplate').hide();
+            $('#OnApprovedTemplate').hide();
+            $('#OnStatusChangeTemplate').hide();
+            $('#OnCandidateEnrollmentTemplate').hide();
+
+
+
+            $('#OnCandidateEnrollment').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    $('#OnCandidateEnrollmentTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnCandidateEnrollmentTemplate').hide(1000);
+                }
+            });
+            $('#OnStatusChange').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    $('#OnStatusChangeTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnStatusChangeTemplate').hide(1000);
+                }
+            });
+            $('#OnApproved').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    $('#OnApprovedTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnApprovedTemplate').hide(1000);
+                }
+            });
+
+            $('#OnRejection').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    $('#OnRejectionTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnRejectionTemplate').hide(1000);
+                }
+            });
+
+              $('#OnSalaryGeneration').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    $('#SalaryGenerationTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#SalaryGenerationTemplate').hide(1000);
+                }
+            });
+
+
+         
+
+            //////////////////////////////////
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
 
@@ -274,13 +442,72 @@
 
         })
 
+        function ClearControl(){
 
-        $('.btn_Save').on('click', function () {
-            debugger;
+            $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+        }
+
+        function SaveSettings(){
+
+
+            //$('#OnSalaryGeneration').change(function () {
+            //    if ($(this).is(':checked')) {
+            //        // Checkbox is checked, show the controls
+            //        if ($("#OnSalaryGenerationTemplateId").val() == '' || $("#OnSalaryGenerationTemplateId").val() == null) {
+            //    $.growl.warning({
+            //        message: "Please select Status !"
+            //    });
+
+            //    return false;
+            //}
+                
+            //});
+
+
+
+
+           
+           
+
+
+
+
+
+
+
+            var AttendanceByRosters   = $('#AttendanceByRosters').is(':checked');                          
+            var OnCandidateEnrollment = $('#OnCandidateEnrollment').is(':checked');                  
+            var OnStatusChange        = $('#OnStatusChange').is(':checked');               
+            var OnApproved            = $('#OnApproved').is(':checked');                
+            var OnRejection           = $('#OnRejection').is(':checked');             
+            var OnSalaryGeneration    = $('#OnSalaryGeneration').is(':checked');
+            var OnApprovedTemplateId    = $('#OnApprovedTemplateId').val();
+            var OnRejectionTemplateId    = $('#OnRejectionTemplateId').val();
+            var OnSalaryGenerationTemplateId    = $('#OnSalaryGenerationTemplateId').val();
+            var OnStatusChangeTemplateId    = $('#OnStatusChangeTemplateId').val();
+            var OnCandidateEnrollmentTemplateId    = $('#OnCandidateEnrollmentTemplateId').val();
+           
+
+
+
 
             var Data = {
-                FinalApprovalByDesignationId: $("#FinalApprovalByDesignationId").val(),
-                LeaveApprovalLeaveStatusId: $('#LeaveApprovalLeaveStatusId').val()
+                                                  
+                OnCandidateEnrollment:OnCandidateEnrollment,                                    
+                OnStatusChange       :OnStatusChange,                                    
+                OnApproved           :OnApproved,                                    
+                OnRejection          :OnRejection,                                    
+                OnSalaryGeneration   :OnSalaryGeneration,
+                OnApprovedTemplateId :OnApprovedTemplateId,
+                OnRejectionTemplateId :OnRejectionTemplateId,
+                OnSalaryGenerationTemplateId :OnSalaryGenerationTemplateId,
+                OnStatusChangeTemplateId :OnStatusChangeTemplateId,
+                OnCandidateEnrollmentTemplateId :OnCandidateEnrollmentTemplateId,
             }
 
             const swalWithBootstrapButtons = Swal.mixin({
@@ -304,20 +531,16 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         async: false,
-                        url: "/Setting/SaveLeaveSetting",
+                        url: "/Setting/SaveNotificationSetting",
                         type: "Post",
                         data: Data,
                         success: function (data) {
                             if (data != "") {
                                 debugger
-                                //var b = JSON.parse(data)
-                                if (data.success) {
-
-                                    //window.location.href =  window.location.href;
-                                    var url = '@Url.Action("LeaveSettings", "Setting",new { data = 2 })';
-                                    window.location.href = url;
-                                    status = false;
-                                }
+                               
+                                ClearControl();
+                                // Data saved successfully
+                                Swal.fire('Success', 'Data saved!', 'success');
                             }
                         },
                         error: function () {
@@ -335,180 +558,51 @@
                 }
             });
 
-
-
-        })
-
-
-
-        /// Add or Edit Leave Type
-        function saveLeaveType() {
-            debugger;
-            var status = true;
-            debugger;
-            if ($("#LeaveTypeTitle").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Title"
-                });
-                $("#LeaveTypeTitle").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else if ($("#NoOfLeaves").val() == "" || $("#NoOfLeaves").val() == "0") {
-                $.growl.warning({
-                    message: "Please Select Policy"
-                });
-                $("#NoOfLeaves").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#LeaveTypeTitle").css("border-color", "#ddd");
-                $("#NoOfLeaves").css("border-color", "#ddd");
-            }
-            var Data = {
-                LeaveTypeId: $("#LeaveTypeId").val(),
-                Title: $('#LeaveTypeTitle').val(),
-                NoOfLeaves: $("#NoOfLeaves").val(),
-                Status: $("#Status").is(':checked'),
-                IsNonPaid: $("#IsNonPaid").is(':checked')
-
-            }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Configuration/LeaveTypeAlreadyExists",
-                type: "GET",
-                data: {
-                    id: $("#LeaveTypeId").val(),
-                    title: $('#Title').val() == '' ? '""' : $('#Title').val(),
-                    CompanyId: $("#CompanyId").val()
-                },
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-                        //var b = JSON.parse(data)
-                        if (data.success) {
-
-                            // $.growl.warning(data.message);
-                            $.growl.warning({
-                                message: data.message
-                            });
-                            status = false;
-                        }
-                        else {
-                            $("#addleavetypemodal").modal('hide');
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            })
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-            if (status) {
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'No, cancel!',
-                    confirmButtonText: 'Yes, Save it!',
-                    timer: 30000,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            async: false,
-                            url: "/Setting/PostLeaveType",
-                            type: "Post",
-                            data: Data,
-                            success: function (data) {
-                                if (data != "") {
-                                    debugger
-                                    //var b = JSON.parse(data)
-                                    if (data.success) {
-
-                                        //notif({
-                                        //    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " +data.message,
-                                        //    type: "success"
-                                        //});
-                                        status = false;
-
-                                        refreshLeaveTypeTable();
-
-                                    }
-                                    else {
-                                        $("#addleavetypemodal").modal('hide');
-                                    }
-                                }
-                            },
-                            error: function () {
-                                status = false;
-                                //   toastr.error("Please Fill Required Field");
-                            }
-                        })
-
-
-
-
-                        //$("#myform").submit();
-                    }
-                    else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Cancelled',
-                            'Your record is safe :)',
-                            'error'
-                        )
-                    }
-                });
-
-
-            }
-
-
         }
 
+
+
+
+
+
+
+
         function editrecord(id) {
-            debugger;
-            addnewleavetype();
+            
             var Data = { id: id }
             console.log(Data)
             $.ajax({
                 async: false,
-                url: "/Configuration/GetLeaveTypeById",
+                url: "/Setting/EmailTemplateDetails",
                 type: "GET",
                 data: Data,
                 success: function (data) {
                     if (data != "") {
                         debugger
 
-                        $("#LeaveTypeId").val(data.leaveTypeId);
-                        $("#LeaveTypeTitle").val(data.title);
-                        $("#NoOfLeaves").val(data.noOfLeaves);
+                        $("#TemplateId").val(data.templateId);
+                        $("#Title").val(data.title);
+                        $("#Subject").val(data.subject);
 
-                        $("#Status").prop('checked', data.status)
-                        $("#IsNonPaid").prop('checked', data.isNonPaid)
-                        $("#addleavetypemodal").modal('show');
+                       
+                        //alert(date)
+                        $('#Body').summernote('code', data.body);
+
+                        $("#Status").prop('checked', data.status);
+
+                        $("#addEmail").modal('show');
                     }
                 },
                 error: function () {
                     status = false;
-                    //   toastr.error("Please Fill Required Field");
+
                 }
             })
 
 
         }
 
-        function confirmation(id, control) {
+        function confirmation(id) {
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -528,34 +622,8 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-
-                    var Data = { id: id }
-                    $.ajax({
-                        url: "/Setting/LeaveTypeDelete",
-                        method: 'GET',
-                        data: Data,
-                        success: function (response) {
-                            if (response.success) {
-
-                                var currentrow = $(control).closest('tr');
-                                currentrow.remove();
-
-                                notif({
-                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
-                                    type: "success"
-                                });
-
-                                refreshLeaveTypeTable();
-                            }
-
-
-                        },
-                        error: function () {
-                            // Handle error if the AJAX request fails
-                            console.log('Failed to fetch data from the database.');
-                        }
-                    });
-
+                    var url = "@Url.Action("TemplateDelete", "Setting")/" + id; // replace with the desired action and controller names
+                    location.reload();
                 }
                 else if (result.dismiss === Swal.DismissReason.cancel) {
                     swalWithBootstrapButtons.fire(
@@ -567,338 +635,7 @@
             });
         }
 
-
-
-        function refreshLeaveTypeTable() {
-            $.ajax({
-                url: "/Setting/GetLeaveTypeByCompanyId",
-                method: 'GET',
-                success: function (response) {
-                    if (response != null) {
-
-                        var table = $('#leavetype-table').DataTable();
-                        table.clear();
-                        table.draw();
-
-                        console.log(response);
-                        var action = '';
-                        for (var i = 0; i < response.length; i++) {
-
-                            action += '<tr>'
-                            action += '<td>' + (i + 1) + '</td>'
-                            action += '<td>' + response[i]["title"] + '</td>'
-                            action += '<td> <div class="form-group m-0"> <input class="form-control" id="NoOfLeaves" value="' + response[i]["noOfLeaves"] + '" type="number" name="number"> </div></td>'
-
-                            var checknonpaidattr = '';
-                            if (response[i]["isNonPaid"] == true) {
-                                checknonpaidattr = 'checked';
-                            }
-
-                            action += '<td><label class="custom-switch form-switch mb-0" >'
-                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsNonPaid_' + response[i]["leaveTypeId"] + '" onchange="setvalue(this.id,this)" ' + checknonpaidattr + ' />'
-                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
-
-                            var checkattr = '';
-                            if (response[i]["status"] == true) {
-                                checkattr = 'checked';
-                            }
-
-                            action += '<td><label class="custom-switch form-switch mb-0" >'
-                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsActive_' + response[i]["leaveTypeId"] + '" onchange = "setvalue(this.id)" ' + checkattr + ' />'
-                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
-                            action += '<td><div class="d-flex" >'
-                            action += '<a class="action-btns1 btn-xs" onclick="editrecord(' + response[i]["leaveTypeId"] + ')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
-                            action += '<i class="feather feather-edit primary text-primary mt-1"></i></a>'
-                            action += '<a class="action-btns1 btn-xs" onclick="confirmation(' + response[i]["leaveTypeId"] + ',this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
-                            action += '<i class="feather feather-trash-2 text-danger mt-1"></i></a> </div> </td> </tr>'
-
-                        }
-
-
-                        table.rows.add($(action)).draw();
-
-                    }
-                },
-                error: function () {
-                    // Handle error if the AJAX request fails
-                    console.log('Failed to fetch data from the database.');
-                }
-            });
-
-
-        }
-
-        function setvalue(event, row) {
-            debugger
-            console.log(event)
-
-            var datasplited = event.split('_');
-            var control = datasplited[0];
-            var id = datasplited[1];
-
-            if ($("#" + control + "_" + id).is(':checked')) {
-                $("#" + control + "_" + id).prop('checked', true);
-            }
-            else {
-                $("#" + control + "_" + id).prop('checked', false);
-            }
-
-            var currentRow = $(row).closest('tr');
-            var isactive = currentRow.find("#IsActive_" + id).is(':checked');
-            var isnonpaid = currentRow.find("#IsNonPaid_" + id).is(':checked');
-            var noOfLeaves = currentRow.find("#NoOfLeaves_" + id).val();
-
-
-            // UPdate Status & IsNonpaid
-            var Data = { id: id, status: isactive, nonpaid: isnonpaid, noofleaves: noOfLeaves }
-            $.ajax({
-                async: false,
-                url: "/Configuration/UpdateLeaveTypeStatus",
-                type: "POST",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        if (data.success) {
-
-                            // no need to redirect becoz status updated in DB
-
-                            //var url = '@Url.Action("LeaveTypeList", "Configuration",new { data = 2 })';
-                            //window.location.href = url;
-
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            })
-
-
-
-        }
-        /// End of Add or Edit Leave Type
-
-        /// Add or Edit Leave Policy
-
-        function savePolicyConfiguration() {
-            debugger;
-            var status = true;
-            debugger;
-            if ($("#Title").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Title"
-                });
-                $("#Title").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else if ($("#policy-types").val() == "") {
-                $.growl.warning({
-                    message: "Please Select Policy"
-                });
-                $("#policy-types").css("border-color", "red");
-                status = false;
-                return false;
-            }
-            else {
-                $("#Title").css("border-color", "#ddd");
-                $("#policy-types").css("border-color", "#ddd");
-            }
-            var Data = {
-                id: $("#PolicyConfigurationId").val(),
-                title: $('#Title').val(),
-                policyId: $("#policy-types").val(),
-                halfleave: $("#HalfLeave").is(':checked'),
-                quarterleave: $("#QuarterLeave").is(':checked')
-
-            }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Setting/PolicyConfigurationAlreadyExists",
-                type: "GET",
-                data: {
-                    id: $("#PolicyConfigurationId").val(),
-                    policyId: $("#policy-types").val()
-                },
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-                        //var b = JSON.parse(data)
-                        if (data.success) {
-
-                            // $.growl.warning(data.message);
-                            $.growl.warning({
-                                message: data.message
-                            });
-                            status = false;
-                        }
-                        else {
-                            $("#addPolicy").modal('hide');
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            })
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-            if (status) {
-                swalWithBootstrapButtons.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    cancelButtonText: 'No, cancel!',
-                    confirmButtonText: 'Yes, Save it!',
-                    timer: 30000,
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            async: false,
-                            url: "/Setting/LeavePolicyCreateOrUpdate",
-                            type: "Post",
-                            data: Data,
-                            success: function (data) {
-                                if (data != "") {
-                                    debugger
-                                    //var b = JSON.parse(data)
-                                    if (data.success) {
-
-                                        //notif({
-                                        //    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " +data.message,
-                                        //    type: "success"
-                                        //});
-                                        status = false;
-
-                                        refreshpolicyTable();
-
-                                    }
-                                    else {
-                                        $("#addPolicy").modal('hide');
-                                    }
-                                }
-                            },
-                            error: function () {
-                                status = false;
-                                //   toastr.error("Please Fill Required Field");
-                            }
-                        })
-
-
-
-
-                        //$("#myform").submit();
-                    }
-                    else if (result.dismiss === Swal.DismissReason.cancel) {
-                        swalWithBootstrapButtons.fire(
-                            'Cancelled',
-                            'Your record is safe :)',
-                            'error'
-                        )
-                    }
-                });
-
-
-            }
-
-
-        }
-
-        function editpolicyconfiguration(id) {
-            debugger;
-            addEmailTemplatemodel();
-            var Data = { id: id }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Setting/GetLeavePolicyConfigurationById",
-                type: "GET",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-
-                        $("#PolicyConfigurationId").val(data.policyConfigurationId)
-                        $("#Title").val(data.title);
-                        $("#policy-types").val(data.policyId).trigger('change');
-
-                        if (data.policyId == 9) {
-                            $('#leave-policy-module').prop('hidden', false)
-                            $('#HalfLeave').prop('checked', data.halfLeave);
-                            $('#QuarterLeave').prop('checked', data.quarterLeave);
-                        }
-                        $("#addPolicy").modal('show');
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            })
-
-
-        }
-        function refreshpolicyTable() {
-            debugger;
-            var Data = { PolicyCategoryId: 1 }
-            $.ajax({
-                url: "/Setting/GetPoliciesByCompanyId",
-                method: 'GET',
-                data: Data,
-                success: function (response) {
-                    if (response != null) {
-
-                        var table = $('#policy-table').DataTable();
-                        table.clear();
-                        table.draw();
-
-                        console.log(response);
-                        var action = '';
-                        for (var i = 0; i < response.length; i++) {
-
-                            action += '<tr>'
-                            action += '<td id="' + response[i]["policyConfigurationId"] + '">' + (i + 1) + '</td>'
-                            action += '<td>' + response[i]["title"] + '</td>'
-
-                            var checkattr = '';
-                            if (response[i]["status"] == true) {
-                                checkattr = 'checked';
-                            }
-
-                            action += '<td><label class="custom-switch form-switch mb-0" >'
-                            action += '<input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id = "IsActive_' + response[i]["policyConfigurationId"] + '" onchange = "setpolicyvalue(this.id)" ' + checkattr + ' />'
-                            action += '<span class="custom-switch-indicator" > </span> </label> </td> '
-                            action += '<td><div class="d-flex" >'
-                            action += '<a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(' + response[i]["policyConfigurationId"] + ')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">'
-                            action += '<i class="feather feather-edit primary text-primary mt-1"></i></a> </div> </td> </tr>'
-                        }
-
-
-
-                        table.rows.add($(action)).draw();
-
-                    }
-                },
-                error: function () {
-                    // Handle error if the AJAX request fails
-                    console.log('Failed to fetch data from the database.');
-                }
-            });
-
-
-        }
-
-        function setpolicyvalue(event) {
+        function setvalue(event) {
             debugger
             console.log(event)
             var datasplited = event.split('_');
@@ -916,7 +653,7 @@
             var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
             $.ajax({
                 async: false,
-                url: "/Setting/UpdatePolicyConfigurationStatus",
+                url: "/Setting/UpdateEmailTemStatus",
                 type: "POST",
                 data: Data,
                 success: function (data) {
@@ -924,7 +661,9 @@
                         if (data.success) {
 
                             // no need to redirect becoz status updated in DB
-
+                            Swal.fire('Success', 'Status Update!', 'success');
+                            
+                            //window.location.href = url;
 
                         }
                     }
@@ -934,73 +673,136 @@
                     //   toastr.error("Please Fill Required Field");
                 }
             })
+
+
+
         }
 
-        /// End of Add or Edit Leave Policy
+        $('.btn_SaveEmail').on('click', function () {
+            saveEmailTemplate();
+        })
+        /// Add or Edit Email Template
 
-        var policyTypes = $('#policy-types');
-        var policyDescription = $('.policy-description');
-        var leavePolicyModule = $('#leave-policy-module');
-        var policyModule = $('.policy-module');
-
-        $('#policy-types').on('change', function () {
-            var selectedPolicy = policyTypes.val();
+        function saveEmailTemplate() {
             debugger;
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            } else if ($("#Subject").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Subject"
+                });
+                $("#Subject").css("border-color", "red");
+                status = false;
+                return false;
+            } else {
+                $("#Title").css("border-color", "#ddd");
+                $("#Subject").css("border-color", "#ddd");
+            }
+            var Data = {
+                TemplateId: $("#TemplateId").val(),
+                Title: $('#Title').val(),
+                Subject: $("#Subject").val(),
+                Body: $("#Body").val(),
+                Status: $("#Status").is(':checked')
+            }
 
-            if (selectedPolicy > 0) {
-                var Data = { Id: selectedPolicy }
-                $.ajax({
-                    url: "/Setting/GetPolicyDescription",
-                    method: 'GET',
-                    data: Data,
-                    success: function (response) {
-                        if (response != null) {
-                            if (selectedPolicy == '9') { // Tardiness Policy
-                                $('#leave-policy-module').prop('hidden', false)
-
-                            }
-
-                            $('.policy-description').text(response.description);
+            $.ajax({
+                async: false,
+                url: "/Setting/EmailTemplateCheckData",
+                type: "GET",
+                data: {
+                    id: $("#TemplateId").val(),
+                    title: $("#Title").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger;
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        } else {
+                            $("#addEmail").modal('hide');
                         }
-                    },
-                    error: function () {
-                        // Handle error if the AJAX request fails
-                        console.log('Failed to fetch data from the database.');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            });
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            if (status) {
+               
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/PostEmailTemplate",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger;
+                                    //var b = JSON.parse(data)
+                                    Swal.fire('Success', 'Data saved!', 'success');
+
+
+                                    $("#TemplateId").val(0)
+                                    $("#Title").val('')
+                                    $("#Subject").val('')
+                                    $('#Body').summernote('code', '');
+                                } else {
+                                    $("#addEmail").modal('hide');
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        );
                     }
                 });
             }
-
-        })
-
-        function addEmailTemplatemodel() {
-
-            $("#addPolicy").modal('show');
-            $("#PolicyConfigurationId").val(0)
-            $("#Title").val('')
-            $('#leave-policy-module').prop('hidden', true)
-
-
-            $("#HalfLeave").prop('checked', true);
-            $("#QuarterLeave").prop('checked', true);
-            $("#Title").css("border-color", "#ddd");
-            $('.policy-description').text("");
-            $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
         }
 
-        function addnewleavetype() {
+        
 
+       
 
-            $("#LeaveTypeId").val(0)
-            $("#LeaveTypeTitle").val('')
-            $("#NoOfLeaves").val('')
-            $("#Status").prop('checked', true)
-            $("#IsNonPaid").prop('checked', false)
-            $("#NoOfLeaves").css("border-color", "#ddd");
-            $("#LeaveTypeTitle").css("border-color", "#ddd");
-
-            $("#addleavetypemodal").modal('show');
-
-        }
 
     </script>
 

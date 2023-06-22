@@ -120,7 +120,7 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpPost("PostAttendanceSetting")]
+        [HttpPost("PostEmailNotificationSetting")]
         public async Task<ActionResult<EmailNotificationSetting>> PostEmailNotificationSetting(EmailNotificationSetting Obj)
         {
 
@@ -142,6 +142,109 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
+
+
+
+        // Post Email Template data here 
+
+
+
+        [HttpGet("EmailTemplateById{Id}")]
+        public async Task<ActionResult<EmailTemplate>> EmailTemplateById(int Id)
+        {
+            var dbResult = await new EmailNotificationSetting().GetEmailTemplateById(Id, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+
+
+
+        [HttpPost("PostEmailTemplateData")]
+        public async Task<ActionResult<EmailTemplate>> PostEmailTemplateData(EmailTemplate Obj)
+        {
+
+            var dbResult = await new EmailNotificationSetting().PostEmailTemplate(Obj, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                }); ;
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+
+
+
+        [HttpGet("EmailTemplateDelete{id}/{UserId}")]
+        public async Task<ActionResult<bool>> EmailTemplateDelete(int id, int UserId)
+        {
+            if (id > 0)
+            {
+
+                var dbResult = await new EmailNotificationSetting().DeleteEmailTemplate(id, UserId, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+        }
+
+
+
+        [HttpGet("EmailTemAlreadyExists{CompanyId}/{id}/{title}")]
+        public async Task<ActionResult<bool>> EmailTemAlreadyExists(int CompanyId, int Id, string title)
+        {
+            var dbResult = await new EmailNotificationSetting().AlreadyExists(CompanyId, Id, title, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+        [HttpPost("UpdateStatusByEmailTemplateById")]
+        public async Task<ActionResult<EmailTemplate>> UpdateStatusByEmailTemplateById(EmailTemplate obj)
+        {
+            var result = await new EmailNotificationSetting().UpdateStatusByEmailTempId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
         #endregion
 
     }

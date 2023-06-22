@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.ComponentModel.Design;
 using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
 {
@@ -297,7 +298,7 @@ namespace HRHUBWEB.Controllers
 
 
         #region NotificationSetting
-
+        [CustomAuthorization]
         public async Task<IActionResult> NotificationSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -308,29 +309,98 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
            EmailNotificationSetting objEmail = new EmailNotificationSetting();
-         
-            ViewBag.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
-            //LeaveApprovalSetting Obj = new LeaveApprovalSetting();
-            //Obj = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Setting/GetLeaveSettingByCompanyId{CompanyId}", HttpMethod.Get);
 
-            //ViewBag.ListLeaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
-
-            //ViewBag.ListDesignations = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
-            //ViewBag.ListleaveStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveStatus>>("api/Leave/GetLeaveStatusInfos", HttpMethod.Get);
-
-            //ViewBag.ListLeavePolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPoliciesByCompanyId{CompanyId}/{PolicyCategoryId}", HttpMethod.Get);
-
-            //ViewBag.LeavePolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPolicybyCategoryId{PolicyCategoryId}", HttpMethod.Get);
+            objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            
 
             return View(objEmail);
         }
+        [HttpPost]
+        public async Task<IActionResult> SaveNotificationSetting(EmailNotificationSetting obj)
+        {
+            obj.CompanyId = _user.CompanyId;
+          
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailNotificationSetting", HttpMethod.Post);
+            return Json(result);
+        }
+
+
+
+
+
 
 
 
 
         #endregion
 
+        #region Email Template 
 
+
+
+
+
+        public async Task<IActionResult> EmailTemplateDetails(int Id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
+            return Json(result);
+
+
+        }
+
+
+
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> PostEmailTemplate(EmailTemplate obj)
+        {
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.CreateBy;
+
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailTemplateData", HttpMethod.Post);
+            return Json(result);
+        }
+
+
+
+
+
+        public async Task<IActionResult> TemplateDelete(int id)
+        {
+
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemplateDelete{id}/{_user.UserId}", HttpMethod.Delete);
+            return Json(result);
+
+        }
+
+        public async Task<ActionResult<JsonObject>> EmailTemplateCheckData(int id, string title)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmailTemStatus(int id, bool status)
+        {
+
+            EmailTemplate ObjEmailTemplate = new EmailTemplate();
+            ObjEmailTemplate.TemplateId = id;
+            ObjEmailTemplate.Status = status;
+            ObjEmailTemplate.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjEmailTemplate, "api/Setting/UpdateStatusByEmailTemplateById", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+
+
+        #endregion
 
 
 
