@@ -150,10 +150,10 @@ namespace HRHUBWEB.Controllers
 		}
         		
 		[HttpGet]
-		public async Task<IActionResult> Staff_UpComingHolidays(DateTime currentDate)
+		public async Task<IActionResult> Staff_UpComingHolidays()
 		{
 			string procrdure = "BI.GetStaff_UpComingHolidays";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'" };
+			object[] parameters = new object[] { _user.CompanyId ?? 0 };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
@@ -205,6 +205,16 @@ namespace HRHUBWEB.Controllers
 		public async Task<IActionResult> Staff_LeaveBalance_Summary()
 		{
 			string procrdure = "BI.GetStaff_LeaveBalance_Summary";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_UpComingBirthdays()
+		{
+			string procrdure = "BI.GetStaff_UpComingBirthdays";
 			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
