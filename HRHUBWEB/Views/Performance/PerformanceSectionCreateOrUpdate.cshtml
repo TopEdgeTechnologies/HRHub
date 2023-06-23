@@ -274,8 +274,24 @@
 @section scripts{
 
     <script>
+        var weightTable = $('#weight-table');
+        var noWeightTable = $('#no-weight-table');
 
+        weightTable.hide();
+        $('#IsAnswerWeightage').change(function () {
+                if ($(this).is(':checked')) {
+                weightTable.show();
+                noWeightTable.hide();
+                $("#answerCheckBox").attr("disabled", true);
+                $('#QuestionMaxLimit').prop('readonly', false);
+                }
+                else{
+                weightTable.hide();
+                $('#QuestionMaxLimit').prop('readonly', true);
+                noWeightTable.hide();
+                }
 
+        });
         $(document).ready(function () {
 
             $('#QuestionId').select2({ placeholder: 'Select Question', width: '100%', allowClear: true }).val("").trigger('change');
@@ -285,26 +301,26 @@
              }
              });
 
-
-            var weightCheckBox = $('#IsAnswerWeightage');
-            var answerCheckBox = $('#AllowSelfScoring');
-            var weightTable = $('#weight-table');
-            var noWeightTable = $('#no-weight-table');
+            $('#IsAnswerWeightage').trigger('change');
+            //var weightCheckBox = $('#IsAnswerWeightage');
+            //var answerCheckBox = $('#AllowSelfScoring');
+            //var weightTable = $('#weight-table');
+            //var noWeightTable = $('#no-weight-table');
             
-            weightTable.hide();
-            weightCheckBox.on('change', function () {
-                if (!weightCheckBox.is(':checked')) {
-                    weightTable.hide();
-                    noWeightTable.hide();
-                    $("#answerCheckBox").attr("disabled", true);
-                    $('#QuestionMaxLimit').prop('readonly', false);
-                }
-                else {
-                    weightTable.show();
-                    $('#QuestionMaxLimit').prop('readonly', true);
-                    noWeightTable.hide();
-                }
-            });
+            //weightTable.hide();
+            //weightCheckBox.on('change', function () {
+            //    if (!weightCheckBox.is(':checked')) {
+            //        weightTable.hide();
+            //        noWeightTable.hide();
+            //        $("#answerCheckBox").attr("disabled", true);
+            //        $('#QuestionMaxLimit').prop('readonly', false);
+            //    }
+            //    else {
+            //        weightTable.show();
+            //        $('#QuestionMaxLimit').prop('readonly', true);
+            //        noWeightTable.hide();
+            //    }
+            //});
 
           
 

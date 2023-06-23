@@ -49,6 +49,12 @@ public partial class Company
 
     public string? EmailServerHost { get; set; }
 
+    public bool? LeaveDistributionIsAccrualApproach { get; set; }
+
+    public bool? LeaveDistributionIsCalendarYearApproach { get; set; }
+
+    public int? LeaveDistributionStartMonth { get; set; }
+
     public bool Status { get; set; }
 
     public bool? IsDeleted { get; set; }

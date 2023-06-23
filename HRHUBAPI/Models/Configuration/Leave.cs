@@ -595,8 +595,9 @@ namespace HRHUBAPI.Models
 
                 DbConnection _db = new DbConnection();
 
-                string query = "Select [dbo].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
-                decimal RemainingLeave = Convert.ToInt32(_db.ReturnColumn(query, "RemainingLeave"));
+                //string query = "Select [HR].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
+				string query = "Select RemainingLeaves FROM [HR].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
+				decimal RemainingLeave = Convert.ToInt32(_db.ReturnColumn(query, "RemainingLeave"));
                 
                 return RemainingLeave;
             }

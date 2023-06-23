@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
 {
@@ -114,26 +112,25 @@ namespace HRHUBWEB.Controllers
                 return Json(result);
             }
 
-        [HttpGet]
-        public async Task<IActionResult> StaffLoan()
-        {
-            string procrdure = "bi.sp_getloanApplicationpending";
-            object[] parameters = new object[] { _user.CompanyId ?? 0 };
+            [HttpGet]
+            public async Task<IActionResult> StaffLoan()
+            {
+                string procrdure = "bi.sp_getloanApplicationpending";
+                object[] parameters = new object[] { _user.CompanyId ?? 0 };
 
-            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
-            return Json(result);
-        }
+                var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+                return Json(result);
+            }
 
+            [HttpGet]
+            public async Task<IActionResult> candidatePending()
+            {
+                string procrdure = "bi.sp_getCandidateapplied";
+                object[] parameters = new object[] { _user.CompanyId ?? 0 };
 
-        [HttpGet]
-        public async Task<IActionResult> candidatePending()
-        {
-            string procrdure = "bi.sp_getCandidateapplied";
-            object[] parameters = new object[] { _user.CompanyId ?? 0 };
-
-            var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
-            return Json(result);
-        }
+                var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+                return Json(result);
+            }
 
 
 
@@ -145,28 +142,9 @@ namespace HRHUBWEB.Controllers
           var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
             return View();
         }
+           
 
-        public async Task<IActionResult> HRAttendance(string status="")
-        {
-
-            string procrdure = "BI.sp_staffDailyAttendance";
-            object[] parameters = new object[] { "'" + DateTime.Now.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, "'"+status+"'" };
-
-            ViewBag.Attendanceresult = await _APIHelper.CallApiDynamicList<List<object>>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
-            ViewBag.Status = status;
-          //  
-
-
-            //   string sdasd = result;
-
-
-
-
-            return View();
-        }
-
-
-        #endregion
+		#endregion
 
         #region Staff Dashboard
 
@@ -181,25 +159,86 @@ namespace HRHUBWEB.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Staff_YTDAttendance(DateTime currentDate)
+		public async Task<IActionResult> Staff_Attendance_Present_Leave()
 		{
-			string procrdure = "BI.GetStaff_YTDAttendance";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'", _user.UserId };
+			string procrdure = "BI.GetStaff_Attendance_Present_Leave";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
 		}
         		
 		[HttpGet]
-		public async Task<IActionResult> Staff_UpComingHolidays(DateTime currentDate)
+		public async Task<IActionResult> Staff_UpComingHolidays()
 		{
 			string procrdure = "BI.GetStaff_UpComingHolidays";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'" };
+			object[] parameters = new object[] { _user.CompanyId ?? 0 };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
 		}
 
+		public async Task<Leave> GetleaveTypeList()
+		{
+			Leave ObjLeave = new Leave();
+			if (_user.CompanyId > 0)
+			{
+				ObjLeave.ListleaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
+				ViewBag.vbleaveTypes = ObjLeave.ListleaveTypes;
+				return ObjLeave;
+			}
+			return new Leave();
+		}
+
+		public async Task<IActionResult> LeaveCreateOrUpdate(int leaveTypeId, DateTime startDate, DateTime endDate, string leaveSubject, bool markAsHalfLeave, bool markAsShortLeave)
+		{
+            Leave ObjLeave = new Leave();
+            ObjLeave.AppliedOn = DateTime.Now;
+            ObjLeave.StaffId = _user.UserId;
+			ObjLeave.LeaveTypeId = leaveTypeId;
+			ObjLeave.StartDate = startDate; 
+            ObjLeave.EndDate = endDate;
+            ObjLeave.LeaveStatusId = 1;
+			ObjLeave.ApplicationHtml = "<p>" + leaveSubject + "</p>";
+			ObjLeave.LeaveSubject = leaveSubject;
+            ObjLeave.MarkAsHalfLeave = markAsHalfLeave;
+            ObjLeave.MarkAsShortLeave = markAsShortLeave;
+			ObjLeave.IsDeleted = false;
+			ObjLeave.CreatedBy = _user.UserId;
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeave, "api/Leave/LeaveAddOrCreate", HttpMethod.Post); 
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_LeaveBalance_Statistics()
+		{
+			string procrdure = "BI.GetStaff_LeaveBalance_Statistics";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_LeaveBalance_Summary()
+		{
+			string procrdure = "BI.GetStaff_LeaveBalance_Summary";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_UpComingBirthdays()
+		{
+			string procrdure = "BI.GetStaff_UpComingBirthdays";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
 
 		//[HttpGet]
 		//public async Task<IActionResult> StaffMonthlyAttendance(DateTime dateFrom, DateTime dateTo, int staffId)
@@ -212,10 +251,9 @@ namespace HRHUBWEB.Controllers
 		//}
 
 		[CustomAuthorization]
-        public IActionResult StaffDashboard()
+        public async Task<IActionResult> StaffDashboard()
         {
-
-            return View();
+			return View();
         }
 
         #endregion
