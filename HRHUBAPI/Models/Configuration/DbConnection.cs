@@ -10,7 +10,7 @@ namespace HRHUBAPI.Models.Configuration
     public class DbConnection
     {
 
-      //  private readonly IConfiguration _config;
+        // private readonly IConfiguration _config;
         string connectionString = ConnectionString.CName;
         //public DbConnection(IConfiguration config)
         //{
@@ -18,13 +18,10 @@ namespace HRHUBAPI.Models.Configuration
 
         //}
 
-
-
         #region Global of Returns
 
         public bool IsNullOrWhiteSpace(string value)
-        {
-          
+        {     
             if (value != null)
             {
                 for (int i = 0; i < value.Length; i++)
@@ -37,6 +34,7 @@ namespace HRHUBAPI.Models.Configuration
             }
             return true;    // Value is Empty aka Khali aka Nothing aka EmptyString aka ""
         }
+
         public List<Dictionary<string, object>> GetTableRows(DataTable dtData)
         {
             List<Dictionary<string, object>>
@@ -69,8 +67,6 @@ namespace HRHUBAPI.Models.Configuration
 
         public void ExecuteQuery(string Query)
         {
-
-
             SqlConnection con = new SqlConnection(connectionString);
             con.Open();
             SqlCommand com = new SqlCommand(Query, con);
@@ -80,8 +76,6 @@ namespace HRHUBAPI.Models.Configuration
         }
         public DataTable ReturnDataTable(string query)
         {
-
-            
             DataTable dt = new DataTable();
             using (var connection = new SqlConnection(connectionString))
             {
@@ -93,9 +87,6 @@ namespace HRHUBAPI.Models.Configuration
                 connection.Close();
                 return dt;
             }
-
-
-        
         }
 
         #endregion
