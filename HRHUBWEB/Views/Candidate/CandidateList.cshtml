@@ -175,7 +175,9 @@
                                     </td>
                                     <td>
                                         <div class="d-flex">
-                                            <img class="avatar avatar-md brround me-3" src="@item.Picture">
+                                            <a asp-action="CandidateDetails" asp-route-id="@item.CandidateId"><img  class="avatar avatar-md brround me-3" src="@item.Picture"></a>
+
+                                           
                                             <div class="me-3 mt-0 mt-sm-1 d-block">
                                                @* @{
                                                     string fullName = item.FirstName + " " + item.LastName;

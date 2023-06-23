@@ -44,144 +44,170 @@
             <div class="tab-content adminsetting-content" id="setting-tabContent">
                 <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
 
+                    <input type="hidden" asp-for="NotificationId" />
 
 
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <h4 class="card-title">Candidate Enrollment</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <input type="hidden" asp-for="NotificationId" />
 
-                                    <div class="col-xl-3 pe-0">
-                                        <label class="custom-switch">
-                                            <input type="checkbox" asp-for="OnCandidateEnrollment" class="custom-switch-input">
-                                            <span class="custom-switch-indicator"></span>
-
-                                        </label>
-                                    </div>
-                                    <div class="col-xl-6 ps-xl-0" id="OnCandidateEnrollmentTemplate">
-                                        <select asp-for="OnCandidateEnrollmentTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <h4 class="card-title">Status Change</h4>
-                        </div>
-                        <div class="card-body">
-
-                            <div class="form-group">
-                                <div class="row">
-
-                                    <div class="col-xl-3 pe-0">
-                                        <label class="custom-switch">
-                                            <input type="checkbox" asp-for="OnStatusChange" class="custom-switch-input">
-                                            <span class="custom-switch-indicator"></span>
-
-                                        </label>
-                                    </div>
-                                    <div class="col-xl-6 ps-xl-0" id="OnStatusChangeTemplate">
-                                        <select asp-for="OnStatusChangeTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
 
                     
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <h4 class="card-title">Rejection</h4>
-                        </div>
-                        <div class="card-body">
+                        <div class="card">
+                        <div class="card-header mb-3">
+                            <h3 class="card-title">Candidate Enrollment</h3>
 
-                            <div class="form-group">
-                                <div class="row">
+                            <div class="card-options">
 
-                                    <div class="col-xl-3 pe-0">
-                                        <label class="custom-switch">
-                                            <input type="checkbox" asp-for="OnRejection" class="custom-switch-input">
-                                            <span class="custom-switch-indicator"></span>
+                                <label class="custom-switch">
+                                    <input type="checkbox" asp-for="OnCandidateEnrollment" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
 
-                                        </label>
-                                    </div>
-                                    <div class="col-xl-6 ps-xl-0" id="OnRejectionTemplate">
-                                        <select asp-for="OnRejectionTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                        </select>
-                                    </div>
-                                </div>
+                                </label>
                             </div>
+                        </div>
+                        <div class="card-body" id="OnCandidateEnrollmentTemplate">
+
+
+
+                           
+                                <select asp-for="OnCandidateEnrollmentTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                </select>
+                            
+
 
                         </div>
-
                     </div>
 
 
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <h4 class="card-title">Approved</h4>
-                        </div>
-                        <div class="card-body">
+    
+                        <div class="card">
+                        <div class="card-header mb-3">
+                            <h3 class="card-title">Status Change</h3>
 
-                            <div class="form-group">
-                                <div class="row">
+                            <div class="card-options">
 
-                                    <div class="col-xl-3">
-                                        <label class="custom-switch">
-                                            <input type="checkbox" asp-for="OnApproved" class="custom-switch-input">
-                                            <span class="custom-switch-indicator"></span>
+                                <label class="custom-switch">
+                                    <input type="checkbox" asp-for="OnStatusChange" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
 
-                                        </label>
-                                    </div>
-                                    <div class="col-xl-6 ps-xl-0" id="OnApprovedTemplate">
-                                        <select asp-for="OnApprovedTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                        </select>
-                                    </div>
-                                </div>
+                                </label>
                             </div>
+                        </div>
+                        <div class="card-body" id="OnStatusChangeTemplate">
+
+                            
+                                <select asp-for="OnStatusChangeTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                </select>
+                           
+
+
 
                         </div>
-
                     </div>
 
-                    <div class="card">
-                        <div class="card-header  border-0">
-                            <h4 class="card-title">Salary Generation</h4>
-                        </div>
-                        <div class="card-body">
 
-                            <div class="form-group">
-                                <div class="row">
 
-                                    <div class="col-xl-3 pe-0">
-                                        <label class="custom-switch">
-                                            <input type="checkbox" asp-for="OnSalaryGeneration" class="custom-switch-input">
-                                            <span class="custom-switch-indicator"></span>
+                    
+                    
+    
+                        <div class="card">
+                        <div class="card-header mb-3">
+                            <h3 class="card-title">Rejection</h3>
 
-                                        </label>
-                                    </div>
-                                    <div class="col-xl-6 ps-xl-0" id="SalaryGenerationTemplate">
-                                        <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="card-options">
+
+                                <label class="custom-switch">
+                                    <input type="checkbox" asp-for="OnRejection" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+
+                                </label>
                             </div>
+                        </div>
+                        <div class="card-body" id="OnRejectionTemplate">
+
+                           
+                                <select asp-for="OnRejectionTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                </select>
+                          
+
+
 
                         </div>
-
                     </div>
+
+
+
+
+                        <div class="card">
+                        <div class="card-header mb-3">
+                            <h3 class="card-title">Approved</h3>
+
+                            <div class="card-options">
+
+                                <label class="custom-switch">
+                                    <input type="checkbox" asp-for="OnApproved" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-body" id="OnApprovedTemplate">
+
+                          
+                                <select asp-for="OnApprovedTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                </select>
+                           
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="card">
+                        <div class="card-header mb-3">
+                            <h3 class="card-title">Salary Generation</h3>
+
+                            <div class="card-options">
+
+                                <label class="custom-switch">
+                                    <input type="checkbox" asp-for="OnSalaryGeneration" class="custom-switch-input">
+                                    <span class="custom-switch-indicator"></span>
+
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-body" id="SalaryGenerationTemplate">
+
+                           
+                                <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                </select>
+                          
+
+
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -192,7 +218,7 @@
                    
                 </div>
                    
-                </div>ok
+                </div>
                 
            
                 
@@ -249,7 +275,7 @@
 
 
                                                 <label class="custom-switch">
-                                                    <label class="form-label me-2 mt-1">IsActive</label>
+                                                    <label class="form-label me-2 mt-1">Status</label>
                                                     <input type="checkbox" id="Status" name="Status" class="custom-switch-input" checked="checked">
                                                     <span class="custom-switch-indicator custom-switch-indicator"></span>
                                                 </label>
@@ -312,18 +338,19 @@
                                                                         <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                                         <div class="dropdown-menu dropdown-menu-start" style="">
 
+                                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                            {
+                                                                                <a class="dropdown-item" href="#" onclick="editrecord(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                                    <i class="feather feather-edit  me-2"></i> Edit
 
-                                                                            <a class="dropdown-item" href="#" onclick="editrecord(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                                <i class="feather feather-edit  me-2"></i> Edit
+                                                                                </a>
+                                                                                <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Edit" aria-label="Delete">
+                                                                                    <i class="feather feather-trash me-2"></i> Delete
 
                                                                             </a>
-                                                                            <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Edit" aria-label="Delete">
-                                                                                <i class="feather feather-trash me-2"></i> Delete
-
-                                                                            </a>
 
 
-
+                                                                            }
                                                              
 
 
@@ -558,11 +585,11 @@
         function SaveSettings(){
 
             debugger
-
+                
                 if ($("#OnCandidateEnrollment").is(':checked')) {
                     // Checkbox is checked, show the controls
 
-                    if ($("#OnRejectionTemplateId").val() == '' || $("#OnRejectionTemplateId").val() == null) {
+                    if ($("#OnCandidateEnrollmentTemplateId").val() == '' || $("#OnCandidateEnrollmentTemplateId").val() == null) {
                         $.growl.warning({
                             message: "Select Candidate Enrollment Template !"
                         });
