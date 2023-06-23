@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewData["Title"] = "HR Attendance";
+}
+
+
+
+<input type="hidden" id="attendanceStatus" value="@ViewBag.Status "/>
+<div class="row row-sm mt-4">
+<div class="col-xl-12 col-lg-12 col-md-12">
+    <div class="card">
+        <div class="card-header border-0">
+            <h3 class="card-title">Attendance</h3>
+            <div class="card-options">
+
+                  <div class="btn-list d-flex">
+                           
+                             <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div>
+                            <input id="fromdate" name="fromdate" class="form-control fc-datepicker " type="text">
+                        </div>
+               
+                        </div>
+
+              
+
+            </div>
+        </div>
+            <div class="card-body">
+            <div class="table-responsive" >
+            <table class="table  card-table  table-sm text-nowrap" id="tableAttendance">
+                <thead>
+                    <tr>
+                         <th class="text-center">Sr.#</th>
+                        <th class="text-start">Employee</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">CheckIn</th>
+                        <th class="text-center">CheckOut</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tbodyAttendance">
+
+                        @{
+                            int count = 1;
+                            foreach (var item in ViewBag.Attendanceresult)
+                            {
+
+                                       <tr class="border-bottom">
+                                    <td class="text-center"> @count</td>
+                                       <td class="font-weight-semibold fs-14"> 
+
+                                       <div class="d-flex">
+                                            <img class="avatar avatar-md brround me-3" src="@item.SnapPath">
+                                       <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                <h6 class="mb-1 fs-14">@item.EmployeeName </h6>
+                                                <p class="text-muted mb-0 fs-12"> @item.DepartmentTitle  | @item.DesignationTitle </p>
+                                       </div></div> 
+                                       </td>
+
+
+                                    <td class="text-center"><span class="badge @item.CssClassR">@item.attendanceStatus</span></td>
+                                    <td class="text-center"> @item.FirstPunchIN</td>
+                                    <td class="text-center">@item.LastPunchOut</td>
+                                </tr>
+
+                                count++;
+                            }
+
+
+                    }
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+            </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+@section scripts{
+    <script src="~/assets/js/form-elements.js"></script>
+<script>
+
+        $(document).ready(function () {
+
+            $('#tableAttendance').DataTable();
+        var currentDate = new Date(); // Get the current date
+       
+        $('#fromdate').datepicker('setDate', currentDate);
+
+            
+
+
+            $('#fromdate').change(function () {
+                checkdailyAttendance();
+
+            });
+        });
+        function checkdailyAttendance() {
+            debugger
+
+            var requestData = { date: $("#fromdate").val(), attendanceStatus:$('#attendanceStatus').val() };
+            makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
+
+                if (response != null) {
+                    debugger
+
+                    console.log(response)
+
+                    var html = '';
+                    for (var i = 0; i < response.length; i++) {
+                        html += '<tr class="border-bottom">'
+                        //html += '<td class="text-center">' + (i + 1) + '</td>'
+                        html += '<td class="font-weight-semibold fs-14"> '
+
+                        html += '<div class="d-flex">'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
+                        html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                        html += '<h6 class="mb-1 fs-14"> ' + response[i]["EmployeeName"] + ' </h6>'
+                        html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                        html += '</div></div> </td>'
+
+                        html += '<td class="text-center"><span class="badge ' + response[i]["CssClass"].replace('badge', 'bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span></td>'
+                        html += '<td class="text-center">' + response[i]["FirstPunchIN"] + '</td>'
+                        html += '<td class="text-center">' + response[i]["LastPunchOut"] + '</td>'
+                        html += "</tr>"
+
+                    }
+
+                    $('#tbodyAttendance').html(html)
+
+
+                    //$("#tableAttendance").DataTable();
+
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
+
+
+
+
+        }
+
+
+
+</script>
+}

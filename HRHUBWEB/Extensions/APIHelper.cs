@@ -4,6 +4,7 @@ using System;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Extensions
 {
@@ -94,7 +95,7 @@ namespace HRHUBWEB.Extensions
 
 
 
-        public async Task<dynamic> CallApiDynamic<T>(object model, string apiUrl, HttpMethod httpMethod)
+        public async Task<T> CallApiDynamic<T>(object model, string apiUrl, HttpMethod httpMethod)
         {
             // Replace this with the JWT token you received from the server
             string jwtToken = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -124,7 +125,54 @@ namespace HRHUBWEB.Extensions
                 };
 
                 string content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<dynamic>(content, options);
+
+
+                return JsonSerializer.Deserialize<T>(content, options);
+            }
+            else
+            {
+                throw new Exception($"Error calling API: {response.StatusCode}");
+            }
+        }
+
+
+
+        public async Task<T> CallApiDynamicList<T>(object model, string apiUrl, HttpMethod httpMethod)
+        {
+            // Replace this with the JWT token you received from the server
+            string jwtToken = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+
+            // Create an HttpClient instance
+
+            // Set the Authorization header with the JWT token
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+
+            //	Serialize the model to JSON
+
+            string json = JsonSerializer.Serialize(model);
+
+            // Create the HTTP request message
+            var request = new HttpRequestMessage(httpMethod, apiUrl);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            // Send the HTTP request
+            HttpResponseMessage response = await _client.SendAsync(request);
+
+            // Handle the response
+            if (response.IsSuccessStatusCode)
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                string content = await response.Content.ReadAsStringAsync();
+
+               // List<object> resultList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<object>>(content);
+
+               return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
+
+
             }
             else
             {

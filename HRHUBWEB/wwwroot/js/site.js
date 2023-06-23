@@ -87,3 +87,133 @@ function makeAjaxRequest(url, method, data, async,  successCallback, errorCallba
 //}, function (errorStatus) {
 //    console.log('Error:', errorStatus);
 //});
+
+
+$('.number').keypress(function (event) {
+    if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+        event.preventDefault();
+    }
+});
+
+//________ Datepicker
+$(".fc-datepicker").datepicker({
+    dateFormat: "dd-M-yy",
+    monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]
+});
+
+//________ Countdonwtimer
+$("#clocktimer").countdowntimer({
+    currentTime: true,
+    size: "md",
+    borderColor: "transparent",
+    backgroundColor: "transparent",
+    fontColor: "#313e6a",
+    // timeZone : "+1"
+});
+
+//________ Countdonwtimer
+$("#clocktimer2").countdowntimer({
+    currentTime: true,
+    size: "md",
+    borderColor: "transparent",
+    backgroundColor: "transparent",
+    fontColor: "#313e6a",
+    // timeZone : "+1"
+});
+
+//________ Datepicker
+$('.fc-datepicker').datepicker('setDate', 'today');
+
+
+
+/****** Starts Here --  Below code is to Keep Selected Active*******/
+$(document).ready(function () {
+
+    // Find the <li> element with the class "is-expanded"
+    const expandedLi = document.querySelector('li.is-expanded');
+
+    // Check if the <li> element exists
+    if (expandedLi) {
+
+        const link = expandedLi.querySelector('a');
+
+        // Add the "active" class to the <a> tag
+        link.classList.add('active');
+
+        // Find the parent <ul> element
+        const parentUl = expandedLi.parentNode;
+
+        // Update the class of the parent <ul> element
+        parentUl.classList.add('open');
+
+        // Set the display property of the parent <ul> element to "block"
+        parentUl.style.display = 'block';
+    }
+});
+			/****** End Here --  Below code is to Keep Selected Active*******/
+
+
+
+function changePassword() {
+
+
+    if ($("#NewPassword").val() != $("#ConfirmPassword").val()) {
+        notif({
+            msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning: </b>Password confirm not matach .",
+            type: "warning"
+        });
+        return false
+    }
+
+
+    if ($("#NewPassword").val() == $("#ConfirmPassword").val()) {
+
+        const apiUrl = "/User/passwordchange"; // Replace with your MVC controller action URL
+        const requestData = {
+
+            Password: $("#ConfirmPassword").val(),
+            OldPasword: $("#CurrentPassword").val()
+        };
+
+        //	var Data = { id: $("#DesignationId").val(), title: $('#Title').val() == '' ? '""' : $('#Title').val() }
+        //console.log(Data)
+        $.ajax({
+            async: false,
+            url: "/User/passwordchange",
+            type: "POST",
+            data: requestData,
+            success: function (data) {
+                console.log(data)
+                if (data != null) {
+
+                    if (data.success) {
+
+                        notif({
+                            msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success: </b> Your password Updated Succesfully.",
+                            type: "success"
+                        });
+                    }
+                    else {
+
+                        notif({
+                            msg: "<i class='fa fa-check fs-20 me-2'></i> <b>Warning: </b> " + data.message,
+                            type: "warning"
+                        });
+                    }
+                }
+                else {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Error:</b> Password updated fail. ",
+                        type: "error"
+                    });
+
+                }
+            },
+            error: function () {
+                status = false;
+                //   toastr.error("Please Fill Required Field");
+            }
+        })
+
+    }
+}

@@ -4,7 +4,10 @@ using HRHUBWEB.Filters;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
 {
@@ -78,14 +81,28 @@ namespace HRHUBWEB.Controllers
             }
 
             [HttpGet]
-            public async Task<IActionResult> StaffDailyAttendance(DateTime date)
+            public async Task<IActionResult> StaffDailyAttendance(DateTime date ,string attendanceStatus="")
             {
                 string procrdure = "BI.sp_staffDailyAttendance";
-                object[] parameters = new object[] { "'"+date.ToString("dd-MMM-yyyy")+"'", _user.CompanyId ?? 0 };
-         
+        
+            if (string.IsNullOrWhiteSpace(attendanceStatus))
+            {
+
+                object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0 };
+                 var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+                  return Json(result);
+
+            }
+            else { 
+            
+                object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, "'"+attendanceStatus+"'" };
                 var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
                 return Json(result);
+
             }
+
+
+        }
         
             [HttpGet]
             public async Task<IActionResult> StaffLeaves(DateTime leavedate)
@@ -128,13 +145,32 @@ namespace HRHUBWEB.Controllers
           var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
             return View();
         }
-           
 
-		#endregion
+        public async Task<IActionResult> HRAttendance(string status="")
+        {
 
-		#region Staff Dashboard
+            string procrdure = "BI.sp_staffDailyAttendance";
+            object[] parameters = new object[] { "'" + DateTime.Now.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, "'"+status+"'" };
 
-		[HttpGet]
+            ViewBag.Attendanceresult = await _APIHelper.CallApiDynamicList<List<object>>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+            ViewBag.Status = status;
+          //  
+
+
+            //   string sdasd = result;
+
+
+
+
+            return View();
+        }
+
+
+        #endregion
+
+        #region Staff Dashboard
+
+        [HttpGet]
 		public async Task<IActionResult> StaffMonthlyAttendance(DateTime currentDate)
 		{
 			string procrdure = "BI.GetStaff_MonthlyAttendance_BetweenDate";
@@ -185,4 +221,6 @@ namespace HRHUBWEB.Controllers
         #endregion
 
     }
+
+
 }

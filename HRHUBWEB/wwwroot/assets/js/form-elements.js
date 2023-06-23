@@ -47,13 +47,13 @@ $(function(){
    });
 
 
-   // Date picker
-	$('#datepicker-date').bootstrapdatepicker({
-		format: "dd-mm-yyyy",
-		viewMode: "date",
-		multidate: true,
-		multidateSeparator: "-",
-	})
+	   // Date picker
+		$('#datepicker-date').bootstrapdatepicker({
+			format: "dd-mm-yyyy",
+			viewMode: "date",
+			multidate: true,
+			multidateSeparator: "-",
+		})
 
 	// Month picker
 	$('#datepicker-month').bootstrapdatepicker({
