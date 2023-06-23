@@ -51,7 +51,7 @@
 
                     
                         <div class="card">
-                        <div class="card-header mb-3">
+                        <div class="card-header mb-3" id="BorderChangeEnrollment">
                             <h3 class="card-title">Candidate Enrollment</h3>
 
                             <div class="card-options">
@@ -67,7 +67,7 @@
 
 
 
-                           
+                            <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
                                 <select asp-for="OnCandidateEnrollmentTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
                                 </select>
                             
@@ -79,7 +79,7 @@
 
     
                         <div class="card">
-                        <div class="card-header mb-3">
+                        <div class="card-header mb-3" id="BorderChangeStatus">
                             <h3 class="card-title">Status Change</h3>
 
                             <div class="card-options">
@@ -93,7 +93,7 @@
                         </div>
                         <div class="card-body" id="OnStatusChangeTemplate">
 
-                            
+                             <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
                                 <select asp-for="OnStatusChangeTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
                                 </select>
                            
@@ -109,7 +109,7 @@
                     
     
                         <div class="card">
-                        <div class="card-header mb-3">
+                        <div class="card-header mb-3" id="BorderChangeRejection">
                             <h3 class="card-title">Rejection</h3>
 
                             <div class="card-options">
@@ -123,7 +123,7 @@
                         </div>
                         <div class="card-body" id="OnRejectionTemplate">
 
-                           
+                            <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
                                 <select asp-for="OnRejectionTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
                                 </select>
                           
@@ -137,7 +137,7 @@
 
 
                         <div class="card">
-                        <div class="card-header mb-3">
+                        <div class="card-header mb-3" id="BorderChangeApproved">
                             <h3 class="card-title">Approved</h3>
 
                             <div class="card-options">
@@ -151,7 +151,7 @@
                         </div>
                         <div class="card-body" id="OnApprovedTemplate">
 
-                          
+                           <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
                                 <select asp-for="OnApprovedTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
                                 </select>
                            
@@ -176,7 +176,7 @@
 
 
                     <div class="card">
-                        <div class="card-header mb-3">
+                        <div class="card-header mb-3" id="BorderChangeSalary">
                             <h3 class="card-title">Salary Generation</h3>
 
                             <div class="card-options">
@@ -190,7 +190,7 @@
                         </div>
                         <div class="card-body" id="SalaryGenerationTemplate">
 
-                           
+                           <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
                                 <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
                                 </select>
                           
@@ -462,6 +462,7 @@
                 if ($(this).is(':checked')) {
                     debugger
                     // Checkbox is checked, show the controls
+                    $("#BorderChangeEnrollment").css("border-bottom", "1px solid #3366FF");
                     if (@Model.OnCandidateEnrollmentTemplateId == 0) {
                         $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
@@ -477,7 +478,7 @@
                 else {
                     // Checkbox is unchecked, hide the controls
                     $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-                 
+                    $("#BorderChangeEnrollment").css("border-bottom", "1px solid #fdfdff");
                     
                     
                     $('#OnCandidateEnrollmentTemplate').hide(1000);
@@ -487,6 +488,7 @@
             $('#OnStatusChange').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
+                    $("#BorderChangeStatus").css("border-bottom", "1px solid #3366FF");
                     if (@Model.OnStatusChangeTemplateId == 0 || @Model.OnStatusChangeTemplateId == null) {
                         $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
@@ -501,6 +503,7 @@
                     $('#OnStatusChangeTemplate').show(1000);
                 } else {
                     // Checkbox is unchecked, hide the controls
+                    $("#BorderChangeStatus").css("border-bottom", "1px solid #fdfdff");
                     $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
                     $('#OnStatusChangeTemplate').hide(1000);
@@ -509,6 +512,7 @@
             $('#OnApproved').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
+                    $("#BorderChangeApproved").css("border-bottom", "1px solid #3366FF");
                     if (@Model.OnApprovedTemplateId == 0 || @Model.OnApprovedTemplateId == null) {
                         $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
@@ -522,6 +526,7 @@
                     $('#OnApprovedTemplate').show(1000);
                 } else {
                     // Checkbox is unchecked, hide the controls
+                    $("#BorderChangeApproved").css("border-bottom", "1px solid #fdfdff");
                     $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
                     $('#OnApprovedTemplate').hide(1000);
@@ -531,7 +536,7 @@
             $('#OnRejection').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
-
+                     $("#BorderChangeRejection").css("border-bottom", "1px solid #3366FF");
                     if (@Model.OnRejectionTemplateId== 0 || @Model.OnRejectionTemplateId == null) {
                         $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
@@ -545,6 +550,7 @@
                     $('#OnRejectionTemplate').show(1000);
                 } else {
                     // Checkbox is unchecked, hide the controls
+                      $("#BorderChangeRejection").css("border-bottom", "1px solid #fdfdff");
                     $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
                     $('#OnRejectionTemplate').hide(1000);
                 }
@@ -553,6 +559,7 @@
             $('#OnSalaryGeneration').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
+                    $("#BorderChangeSalary").css("border-bottom", "1px solid #3366FF");
                     if (@Model.OnSalaryGenerationTemplateId== 0 || @Model.OnSalaryGenerationTemplateId == null) {
                         $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
@@ -566,7 +573,7 @@
                 } 
                 else {
                     // Checkbox is unchecked, hide the controls
-
+                    $("#BorderChangeSalary").css("border-bottom", "1px solid #fdfdff");
                     $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
                     $('#SalaryGenerationTemplate').hide(1000);
                 }
