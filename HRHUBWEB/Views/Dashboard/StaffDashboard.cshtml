@@ -114,15 +114,14 @@
                         <div class="card">
                             <div class="table-responsive attendance_table mt-4">
 								<table class="table mb-0 text-nowrap" style="max-height: 500px; overflow-y: scroll;">
+									@*
                                     <thead>
                                         <tr>
-                                            <th class="text-center">S.No</th>
-                                            <th class="text-start">Employee</th>
-
                                             <th class="text-center">Date</th>
                                             <th class="text-center">Description</th>
                                         </tr>
                                     </thead>
+									*@
 									<tbody id="tblBodyUpComingHoliday" style="max-height: 500px; overflow-y: scroll;">
                                     </tbody>
                                 </table>
@@ -173,7 +172,6 @@
                                         <tr>
                                             <th class="text-center">S.No</th>
                                             <th class="text-start">Employee</th>
-
                                             <th class="text-center">Date</th>
                                             <th class="text-center">Description</th>
                                         </tr>
@@ -1115,11 +1113,12 @@
 		function loadStaffUpComingHoliday() {
 			var dateValue = $('#chartDate').val()
 			var requestData = { }
-
-				makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, false, function (response) {
+			debugger
+			makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, false, function (response) {
 				if (response != null) {
 					var htmlHoliday = ''
 					for (var i = 0; i < response.length && i < 5; i++) {
+						debugger
 						//if (i = response.length - 1) {
 						//	htmlHoliday += ' <div class="mb-5"> '
 						//}
