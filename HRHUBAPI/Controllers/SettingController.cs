@@ -108,17 +108,22 @@ namespace HRHUBAPI.Controllers
 
 
 
-        [HttpGet("GetEmailTemplateByCompanyId{CompanyId}")]
-        public async Task<ActionResult<EmailTemplate>> GetEmailTemplateByCompanyId(int CompanyId)
+        [HttpGet("GetEmailNotificationSettingById{CompanyId}")]
+        public async Task<ActionResult<EmailNotificationSetting>> GetEmailNotificationSettingById(int CompanyId)
         {
-            var result = await new EmailNotificationSetting().GetEmailTemplate(CompanyId, _context);
-            if (result != null)
-                return Ok(result);
-
+            var dbResult = await new EmailNotificationSetting().GetEmailNotificationSettingById(CompanyId, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
             return NotFound();
-
-
         }
+
+
+
+
+
+
 
         [HttpPost("PostEmailNotificationSetting")]
         public async Task<ActionResult<EmailNotificationSetting>> PostEmailNotificationSetting(EmailNotificationSetting Obj)
@@ -148,6 +153,20 @@ namespace HRHUBAPI.Controllers
         // Post Email Template data here 
 
 
+
+
+
+        [HttpGet("GetEmailTemplateByCompanyId{CompanyId}")]
+        public async Task<ActionResult<List<EmailTemplate>>> GetEmailTemplateByCompanyId(int CompanyId)
+        {
+            var result = await new EmailNotificationSetting().GetEmailTemplate(CompanyId, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
 
         [HttpGet("EmailTemplateById{Id}")]
         public async Task<ActionResult<EmailTemplate>> EmailTemplateById(int Id)

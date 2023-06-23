@@ -309,6 +309,8 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
            EmailNotificationSetting objEmail = new EmailNotificationSetting();
+            objEmail = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
+
 
             objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
             
@@ -324,13 +326,6 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailNotificationSetting", HttpMethod.Post);
             return Json(result);
         }
-
-
-
-
-
-
-
 
 
         #endregion
@@ -373,7 +368,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> TemplateDelete(int id)
         {
 
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemplateDelete{id}/{_user.UserId}", HttpMethod.Delete);
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemplateDelete{id}/{_user.UserId}", HttpMethod.Get);
             return Json(result);
 
         }

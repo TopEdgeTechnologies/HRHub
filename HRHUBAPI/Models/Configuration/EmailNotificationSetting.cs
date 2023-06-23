@@ -22,6 +22,28 @@ namespace HRHUBAPI.Models
 
         #region EmailNotificationSetting    
 
+
+        
+
+
+        public async Task<EmailNotificationSetting> GetEmailNotificationSettingById(int CompanyId, HrhubContext hrhubContext)
+        {
+            try
+            {
+                var dbResult = await hrhubContext.EmailNotificationSettings.FirstOrDefaultAsync(x => x.CompanyId == CompanyId);
+                if (dbResult != null)
+                {
+                    return dbResult;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+
+
         public async Task<EmailNotificationSetting> PostEmailNotificationSetting(EmailNotificationSetting ObjEmailNotificationSettingInfo, HrhubContext _context)
         {
             try
@@ -32,15 +54,15 @@ namespace HRHUBAPI.Models
                 {
                     checkEmailNotificationSettingInfo.NotificationId =                  ObjEmailNotificationSettingInfo.NotificationId;
                     checkEmailNotificationSettingInfo.OnCandidateEnrollment =           ObjEmailNotificationSettingInfo.OnCandidateEnrollment;
-                    checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
+                    checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
                     checkEmailNotificationSettingInfo.OnStatusChange                  = ObjEmailNotificationSettingInfo.OnStatusChange;
-                    checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
+                    checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
                     checkEmailNotificationSettingInfo.OnApproved                      = ObjEmailNotificationSettingInfo.OnApproved;
-                    checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
+                    checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
                     checkEmailNotificationSettingInfo.OnRejection                     = ObjEmailNotificationSettingInfo.OnRejection;
-                    checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
+                    checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
                     checkEmailNotificationSettingInfo.OnSalaryGeneration              = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
-                    checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId    = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
+                    checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId    = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
                     checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
                    
                     
@@ -51,7 +73,7 @@ namespace HRHUBAPI.Models
 				}
                 else
                 {
-
+                    
                     ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
                     ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
                     ObjEmailNotificationSettingInfo.OnRejectionTemplateId = ObjEmailNotificationSettingInfo.OnRejectionTemplateId ?? 0;
@@ -173,14 +195,7 @@ namespace HRHUBAPI.Models
             {
                 bool recordDeleted = false;
                 var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x => x.TemplateId == id);
-                if (dbResult != null)
-                {
-                   
-                    dbResult.UpdatedOn = DateTime.Now;
-                    dbResult.UpdatedBy = userid;
-
-                    recordDeleted = true;
-                }
+                
                 hrhubContext.Remove(dbResult);
                 await hrhubContext.SaveChangesAsync();
                 return recordDeleted;

@@ -53,6 +53,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="row">
+                                    <input type="hidden" asp-for="NotificationId" />
 
                                     <div class="col-xl-3 pe-0">
                                         <label class="custom-switch">
@@ -98,6 +99,35 @@
                         </div>
 
                     </div>
+
+                    
+                    <div class="card">
+                        <div class="card-header  border-0">
+                            <h4 class="card-title">Rejection</h4>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <div class="row">
+
+                                    <div class="col-xl-3 pe-0">
+                                        <label class="custom-switch">
+                                            <input type="checkbox" asp-for="OnRejection" class="custom-switch-input">
+                                            <span class="custom-switch-indicator"></span>
+
+                                        </label>
+                                    </div>
+                                    <div class="col-xl-6 ps-xl-0" id="OnRejectionTemplate">
+                                        <select asp-for="OnRejectionTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
 
                     <div class="card">
                         <div class="card-header  border-0">
@@ -158,8 +188,8 @@
 
 
                 <div class="card-footer">
-                    <a onclick="SaveSettings()" class="btn btn-success">Save Changes</a>
-                    <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                    <a onclick="SaveSettings()" class="btn btn-primary">Save Changes</a>
+                   
                 </div>
                    
                 </div>
@@ -181,7 +211,7 @@
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Email Template</h4>
                             <div>
-                                <a  class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addEmail">Add New <i class="fe fe-plus-circle me-1"></i></a>
+                                <a class="btn btn-primary me-3" data-bs-toggle="modal" onclick="addnewEmail();"> <i class="fe fe-plus-circle me-1"></i> Add New</a>
 
                             </div>
                         </div>
@@ -281,16 +311,16 @@
                                                                     <div class="btn-group ms-3 mb-0">
                                                                         <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                                         <div class="dropdown-menu dropdown-menu-start" style="">
-                                                                         
-                                                            
+
+
                                                                             <a class="dropdown-item" href="#" onclick="editrecord(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                    <i class="feather feather-edit  me-2"></i> Edit
-                                                                       
-                                                                </a>
-                                                                            <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                                <i class="feather feather-edit  me-2"></i> Edit
+
+                                                                            </a>
+                                                                            <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Edit" aria-label="Delete">
                                                                                 <i class="feather feather-trash me-2"></i> Delete
 
-                                                                    </a>
+                                                                            </a>
 
 
 
@@ -342,55 +372,13 @@
             $('#OnStatusChangeTemplate').hide();
             $('#OnCandidateEnrollmentTemplate').hide();
 
+            $('#OnCandidateEnrollment').trigger('change');
+            $('#OnStatusChange').trigger('change');
+            $('#OnApproved').trigger('change');
+            $('#OnRejection').trigger('change');
+            $('#OnSalaryGeneration').trigger('change');
 
-
-            $('#OnCandidateEnrollment').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $('#OnCandidateEnrollmentTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#OnCandidateEnrollmentTemplate').hide(1000);
-                }
-            });
-            $('#OnStatusChange').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $('#OnStatusChangeTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#OnStatusChangeTemplate').hide(1000);
-                }
-            });
-            $('#OnApproved').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $('#OnApprovedTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#OnApprovedTemplate').hide(1000);
-                }
-            });
-
-            $('#OnRejection').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $('#OnRejectionTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#OnRejectionTemplate').hide(1000);
-                }
-            });
-
-              $('#OnSalaryGeneration').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $('#SalaryGenerationTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#SalaryGenerationTemplate').hide(1000);
-                }
-            });
+                $('#OnCandidateEnrollmentTemplateId').val(@Model.OnCandidateEnrollmentTemplateId).trigger('change');
 
 
          
@@ -442,6 +430,121 @@
 
         })
 
+
+            $('#OnCandidateEnrollment').change(function () {
+                if ($(this).is(':checked')) {
+                    debugger
+                    // Checkbox is checked, show the controls
+                    if (@Model.OnCandidateEnrollmentTemplateId == 0) {
+                        $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    }
+                    else
+                    {
+                    
+                    $('#OnCandidateEnrollmentTemplateId').val(@Model.OnCandidateEnrollmentTemplateId).trigger('change');
+                    }
+
+                    $('#OnCandidateEnrollmentTemplate').show(1000);
+                } 
+                else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                 
+                    
+                    
+                    $('#OnCandidateEnrollmentTemplate').hide(1000);
+                   
+                }
+            });
+            $('#OnStatusChange').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    if (@Model.OnStatusChangeTemplateId == 0 || @Model.OnStatusChangeTemplateId == null) {
+                        $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    }
+                    else {
+
+                        $('#OnStatusChangeTemplateId').val(@Model.OnStatusChangeTemplateId).trigger('change');
+                    }
+
+
+                    
+                    $('#OnStatusChangeTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    $('#OnStatusChangeTemplate').hide(1000);
+                }
+            });
+            $('#OnApproved').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    if (@Model.OnApprovedTemplateId == 0 || @Model.OnApprovedTemplateId == null) {
+                        $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    }
+                    else {
+
+                       $('#OnApprovedTemplateId').val(@Model.OnApprovedTemplateId).trigger('change');
+                    }
+
+                    
+                    $('#OnApprovedTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    $('#OnApprovedTemplate').hide(1000);
+                }
+            });
+
+            $('#OnRejection').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+
+                    if (@Model.OnRejectionTemplateId== 0 || @Model.OnRejectionTemplateId == null) {
+                        $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    }
+                    else {
+
+                        $('#OnRejectionTemplateId').val(@Model.OnRejectionTemplateId).trigger('change');
+                    }
+
+                    
+                    $('#OnRejectionTemplate').show(1000);
+                } else {
+                    // Checkbox is unchecked, hide the controls
+                    $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                    $('#OnRejectionTemplate').hide(1000);
+                }
+            });
+
+            $('#OnSalaryGeneration').change(function () {
+                if ($(this).is(':checked')) {
+                    // Checkbox is checked, show the controls
+                    if (@Model.OnSalaryGenerationTemplateId== 0 || @Model.OnSalaryGenerationTemplateId == null) {
+                        $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+
+                    }
+                    else{
+
+                    $('#OnSalaryGenerationTemplateId').val(@Model.OnSalaryGenerationTemplateId).trigger('change');
+                    }
+
+                    $('#SalaryGenerationTemplate').show(1000);
+                } 
+                else {
+                    // Checkbox is unchecked, hide the controls
+
+                    $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                    $('#SalaryGenerationTemplate').hide(1000);
+                }
+            });
+
         function ClearControl(){
 
             $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
@@ -454,29 +557,80 @@
 
         function SaveSettings(){
 
+            debugger
 
-            //$('#OnSalaryGeneration').change(function () {
-            //    if ($(this).is(':checked')) {
-            //        // Checkbox is checked, show the controls
-            //        if ($("#OnSalaryGenerationTemplateId").val() == '' || $("#OnSalaryGenerationTemplateId").val() == null) {
-            //    $.growl.warning({
-            //        message: "Please select Status !"
-            //    });
+                if ($("#OnCandidateEnrollment").is(':checked')) {
+                    // Checkbox is checked, show the controls
 
-            //    return false;
-            //}
+                    if ($("#OnRejectionTemplateId").val() == '' || $("#OnRejectionTemplateId").val() == null) {
+                        $.growl.warning({
+                            message: "Select Candidate Enrollment Template !"
+                        });
+
+                        return false;
+                    }
+
+
+                }
+                 if ($("#OnStatusChange").is(':checked')) 
+                {
+                        // Checkbox is checked, show the controls
+
+                    if ($("#OnStatusChangeTemplateId").val() == '' || $("#OnStatusChangeTemplateId").val() == null) {
+                            $.growl.warning({
+                            message: "Select StatusChange Template !"
+                            });
+
+                            return false;
+                        }
+
+
+                 }
+                 if ($("#OnApproved").is(':checked')) 
+                 {
+                        // Checkbox is checked, show the controls
+                       
+                    if ($("#OnApprovedTemplateId").val() == '' || $("#OnApprovedTemplateId").val() == null) {
+                            $.growl.warning({
+                            message: "Select Approved Template !"
+                            });
+
+                            return false;
+                        }
+
+
+                 }
+                 if ($("#OnSalaryGeneration").is(':checked')) 
+                 {
+                        // Checkbox is checked, show the controls
+
+                    if ($("#OnSalaryGenerationTemplateId").val() == '' || $("#OnSalaryGenerationTemplateId").val() == null) {
+                            $.growl.warning({
+                            message: "Select Salary Generation Template !"
+                            });
+
+                            return false;
+                        }
+
+
+                  }
+
+                  if ($("#OnRejection").is(':checked')) 
+                  {
+                        // Checkbox is checked, show the controls
+
+                    if ($("#OnRejectionTemplateId").val() == '' || $("#OnRejectionTemplateId").val() == null) {
+                            $.growl.warning({
+                            message: "Select Rejection Template !"
+                            });
+
+                            return false;
+                        }
+
+
+                  }
+
                 
-            //});
-
-
-
-
-           
-           
-
-
-
-
 
 
 
@@ -497,7 +651,7 @@
 
 
             var Data = {
-                                                  
+                NotificationId         : $("#NotificationId").val(),                         
                 OnCandidateEnrollment:OnCandidateEnrollment,                                    
                 OnStatusChange       :OnStatusChange,                                    
                 OnApproved           :OnApproved,                                    
@@ -538,7 +692,7 @@
                             if (data != "") {
                                 debugger
                                
-                                ClearControl();
+                                //ClearControl();
                                 // Data saved successfully
                                 Swal.fire('Success', 'Data saved!', 'success');
                             }
@@ -557,6 +711,11 @@
                     )
                 }
             });
+                setTimeout(function () {
+
+                    location.reload();
+
+                }, 3000);
 
         }
 
@@ -603,6 +762,11 @@
         }
 
         function confirmation(id) {
+            
+            var obj =
+            {
+            id:id
+            }
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -622,8 +786,24 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var url = "@Url.Action("TemplateDelete", "Setting")/" + id; // replace with the desired action and controller names
-                    location.reload();
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/TemplateDelete",                           
+                            data: obj,
+                            success: function (data) {
+                                if (data == "") {
+                                    debugger
+
+                                    //ClearControl();
+                                    // Data saved successfully
+                                    Swal.fire('Success', 'Data Deleted!', 'success');
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
                 }
                 else if (result.dismiss === Swal.DismissReason.cancel) {
                     swalWithBootstrapButtons.fire(
@@ -633,6 +813,11 @@
                     )
                 }
             });
+            setTimeout(function () {
+
+                        location.reload();
+
+                    }, 2000);
         }
 
         function setvalue(event) {
@@ -672,7 +857,12 @@
                     status = false;
                     //   toastr.error("Please Fill Required Field");
                 }
-            })
+            });
+                //setTimeout(function () {
+
+                //    location.reload();
+
+                //}, 2000);
 
 
 
@@ -796,13 +986,27 @@
                         );
                     }
                 });
+                    setTimeout(function () {
+
+                        location.reload();
+
+                    }, 2000);
             }
         }
 
-        
+        function addnewEmail() {
 
-       
+            $("#addEmail").modal('show');
+            $("#TemplateId").val(0)
+            $("#Title").val('')
+            $("#Subject").val('')
+            $('#Body').summernote('code', '');
+            $("#Status").prop('checked', true);       
+            $("#Title").css("border-color", "#ddd");           
+           
+        }
 
+           
 
     </script>
 
