@@ -294,14 +294,9 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
+        #region Payroll Settings
 
-
-
-
-
-
-
-        public async Task<IActionResult> PayrollSettings(string data = "", int Id = 0)
+        public async Task<IActionResult> PayrollSettings(string data = "")
         {
             ViewBag.Success = data;
 
@@ -310,9 +305,80 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-            ViewBag.ListPolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>("api/Policy/GetPolicyInfos", HttpMethod.Get);
+            var CompanyId = _user.CompanyId;
+            var PolicyCategoryId = 3; // LeavePolicyCategoryId
 
-            return View();
+            LeaveApprovalSetting Obj = new LeaveApprovalSetting();
+            Obj = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Setting/GetLeaveSettingByCompanyId{CompanyId}", HttpMethod.Get);
+
+            ViewBag.ListComponents = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentInfo>>($"api/StaffBenefits/GetComponentsInfos{CompanyId}", HttpMethod.Get);
+            ViewBag.ListTaxSlab = await _APIHelper.CallApiAsyncGet<IEnumerable<TaxSlabSetting>>($"api/Setting/GetTaxSlabSettingByCompanyId{CompanyId}", HttpMethod.Get);
+
+            ViewBag.ListComponentGroup = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentGroup>>($"api/PayrollConfiguration/GetComponentGroup", HttpMethod.Get);
+            //ViewBag.ListleaveStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveStatus>>("api/Leave/GetLeaveStatusInfos", HttpMethod.Get);
+
+            ViewBag.ListPayrollPolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPoliciesByCompanyId{CompanyId}/{PolicyCategoryId}", HttpMethod.Get);
+
+            ViewBag.PayrollPolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>($"api/Policy/GetPolicybyCategoryId{PolicyCategoryId}", HttpMethod.Get);
+
+            return View(Obj);
         }
+
+        public async Task<IActionResult> GetComponentByCompanyId()
+        {
+            try
+            {
+                var CompanyId = _user.CompanyId;
+                var list = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentInfo>>($"api/StaffBenefits/GetComponentsInfo{CompanyId}", HttpMethod.Get);
+                return Json(list);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+
+
+        public async Task<IActionResult> PostComponent(ComponentInfo obj)
+        {
+
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostComponent", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> GetComponentById(int Id)
+        {
+            var obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById{Id}", HttpMethod.Get);
+            return Json(obj);
+
+        }
+        public async Task<IActionResult> ComponentDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/StaffBenefits/DeleteStaffBenefitInfo/{id}/{_user.UserId}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        #endregion
+
+
+        //public async Task<IActionResult> PayrollSettings(string data = "", int Id = 0)
+        //{
+        //    ViewBag.Success = data;
+
+        //    ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+        //    ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+        //    ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+        //    ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+        //    ViewBag.ListPolicy = await _APIHelper.CallApiAsyncGet<IEnumerable<Policy>>("api/Policy/GetPolicyInfos", HttpMethod.Get);
+
+        //    return View();
+        //}
     }
 }

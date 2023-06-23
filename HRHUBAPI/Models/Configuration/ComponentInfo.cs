@@ -65,10 +65,8 @@ namespace HRHUBAPI.Models
 
             }
 
-          
-          
-           
        
+
         public async Task<ComponentInfo> GetBenefitInfoById(int Id, HrhubContext hrhubContext)
         {
             try
@@ -179,10 +177,88 @@ namespace HRHUBAPI.Models
 
 
 
+        #region Component in Setting
+
+        public async Task<List<ComponentInfo>> GetComponentsInfo(int CompanyId, HrhubContext hrhubContext)
+        {
+
+            try
+            {
+
+                List<ComponentInfo> list = new List<ComponentInfo>();
+
+                string query = "EXEC dbo.sp_Get_ComponentInfo " + CompanyId;
+                DataTable dt = _db.ReturnDataTable(query);
+
+                list = dt.AsEnumerable()
+                    .Select(row => new ComponentInfo
+                    {
+                        ComponentId = Convert.ToInt32(row["ComponentID"]),
+                        Title = row["Title"].ToString(),
+                        Status = Convert.ToBoolean(row["Status"]),
+                        GroupTitle = row["GroupTitle"].ToString(),
+                        Type = row["Type"].ToString(),
+                        Category = row["Category"].ToString(),
+                        IsBenefit = Convert.ToBoolean(row["IsBenefit"])
+
+                    }).OrderByDescending(x => x.ComponentId).ToList();
+                return list;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+
+        }
+
+        public async Task<ComponentInfo> PostComponent(ComponentInfo objComponentInfo, HrhubContext hrhubContext)
+        {
+            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var dbResult = await hrhubContext.ComponentInfos.FirstOrDefaultAsync(x => x.IsDeleted == false && x.ComponentId == objComponentInfo.ComponentId);
+                    if (dbResult != null && objComponentInfo.ComponentId > 0)
+                    {
+                        dbResult.ComponentId = objComponentInfo.ComponentId;
+                        dbResult.ComponentGroupId = objComponentInfo.ComponentGroupId;
+                        dbResult.Title = objComponentInfo.Title;
+                        dbResult.CalculationMethod = objComponentInfo.CalculationMethod;
+                        dbResult.CompanyContribution = objComponentInfo.CompanyContribution;
+                        dbResult.Category = objComponentInfo.Category;
+                        dbResult.Type = objComponentInfo.Type;
+                        dbResult.Status = objComponentInfo.Status;
+                        dbResult.UpdatedBy = objComponentInfo.UpdatedBy;
+                        dbResult.UpdatedOn = DateTime.Now;
+                        dbResult.IsDeleted = false;
+
+                        await hrhubContext.SaveChangesAsync();
+                        dbResult.TranFlag = 2;
+                        dbContextTransaction.Commit();
+                        return dbResult;
+                    }
+                    else
+                    {
+                        objComponentInfo.CreatedOn = DateTime.Now;
+                        objComponentInfo.IsDeleted = false;
+                        objComponentInfo.IsBenefit = false;
+                        hrhubContext.Add(objComponentInfo);
+                        await hrhubContext.SaveChangesAsync();
+                        objComponentInfo.TranFlag = 1;
+                        dbContextTransaction.Commit();
+                        return objComponentInfo;
+                    }
+                }
+                catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
+            }
+        }
+
+        #endregion
 
 
 
-      
 
 
 

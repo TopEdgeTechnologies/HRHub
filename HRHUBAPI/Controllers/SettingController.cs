@@ -1,7 +1,9 @@
 ﻿using HRHUBAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.ComponentModel.Design;
+using System.Net.Http.Headers;
 
 namespace HRHUBAPI.Controllers
 {
@@ -101,6 +103,49 @@ namespace HRHUBAPI.Controllers
         }
 
         #endregion
+
+        #region PayrollSetting
+        [HttpPost("PostComponent")]
+        public async Task<ActionResult<ComponentInfo>> PostComponent(ComponentInfo Obj)
+        {
+
+            var dbResult = await new ComponentInfo().PostComponent(Obj, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                }); ;
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+        [HttpGet("GetComponentInfoById{id}")]
+        public async Task<ActionResult<ComponentInfo>> GetComponentInfoById(int id)
+        {
+            var result = await new ComponentInfo().GetBenefitInfoById(id, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+        }
+
+        [HttpGet("GetTaxSlabSettingByCompanyId{CompanyId}")]
+        public async Task<ActionResult<List<TaxSlabSetting>>> GetTaxSlabSettingByCompanyId(int CompanyId)
+        {
+            return await new Policy().GetTaxSlabSettingByCompanyId(CompanyId, _context);
+        }
+
+        #endregion
+
 
     }
 }

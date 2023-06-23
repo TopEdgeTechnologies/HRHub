@@ -268,6 +268,9 @@
                                                                 <i class="fa fa-info text-info"></i>
                                                             </a>
                                                         </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="graceminutes-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
                                                         <div id="div_GraceMinutes" class="form-control px-0 border-0 w-30 mb-3">
                                                             <label class="form-label">Grace Minutes</label>
                                                             <input class="form-control" id="GraceMinutes" type="number" placeholder="Grace Minutes" />
@@ -276,26 +279,26 @@
                                                     </div>
 
                                                     @*<div class="mb-5" id="div_HalfLeave">
-                                                        <label class="custom-switch form-switch mb-0">
-                                                            <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
-                                                            <span class="custom-switch-indicator"></span>
-                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
-                                                            <a href="#">
-                                                                <i class="fa fa-info text-info"></i>
+                                                    <label class="custom-switch form-switch mb-0">
+                                                    <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
+                                                    <a href="#">
+                                                    <i class="fa fa-info text-info"></i>
 
-                                                            </a>
-                                                        </label>
+                                                    </a>
+                                                    </label>
                                                     </div>
                                                     <div class="mb-5" id="div_QuarterLeave">
-                                                        <label class="custom-switch form-switch mb-0">
-                                                            <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
-                                                            <span class="custom-switch-indicator"></span>
-                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
-                                                            <a href="#">
+                                                    <label class="custom-switch form-switch mb-0">
+                                                    <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
+                                                    <a href="#">
 
-                                                                <i class="fa fa-info text-info"></i>
-                                                            </a>
-                                                        </label>
+                                                    <i class="fa fa-info text-info"></i>
+                                                    </a>
+                                                    </label>
                                                     </div>*@
                                                     @*<div class="mb-5" id="div_LeaveStatus">
                                                     <label class="custom-switch form-switch mb-0">
@@ -314,10 +317,13 @@
                                                             <span class="custom-switch-indicator"></span>
                                                             <span class="custom-switch-description fs-15 me-3 text-dark">Mark half day after late minutes</span>
 
-                                                            <a href="#">
+                                                            <a id="LateMinutesTooltip" href="#">
                                                                 <i class="fa fa-info text-info"></i>
                                                             </a>
                                                         </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="lateminutes-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
                                                         <div id="div_LateMinutes" class="form-control px-0 border-0 w-30 mb-3">
                                                             <label class="form-label">Half Day After Late Minutes</label>
                                                             <input class="form-control" id="LateMinutes" type="number" placeholder="Late Minutes" />
@@ -396,11 +402,6 @@
 @section scripts{
 
     <script>
-        //var tooltipText = "In the context of attendance management, Grace Minutes refers to a predetermined period of time before or after the scheduled start or end time during which an employee is still considered to be on time or present. It allows for a certain level of flexibility and acknowledges that minor delays or early departures may occur without penalizing the employee.";
-
-        //// Set the tooltip text dynamically using JavaScript
-        //$("#GraceMinutesTooltip").setAttribute("title", tooltipText);
-
 
         $(document).ready(function () {
 
@@ -456,7 +457,10 @@
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
 
 
+
         })
+
+
 
         $('#policy-types').on('change', function () {
             debugger;
@@ -627,7 +631,7 @@
                 status = false;
                 return false;
             }
-            else if (($("#GraceMinutes").val() == "" || $("#GraceMinutes").val() == "0") && $('#AllowGraceMinutes').is(":checked") == true && $("#policy-types").val() == 12) { // Tardiness 
+            else if (($("#GraceMinutes").val() == "" || $("#GraceMinutes").val() == "0") && $('#AllowGraceMinutes').is(":checked") == true && $("#policy-types").val() == 12) { // Tardiness
                 $.growl.warning({
                     message: "Enter Grace Minutes"
                 });
@@ -1114,6 +1118,8 @@
             $("#PolicyConfigurationId").val(0)
             $("#Title").val('')
             $("#div_policy").prop('hidden', true)
+            $("#LateMinutes").val(0);
+            $("#GraceMinutes").val(0);
 
             //$('#div_HalfLeave').prop('hidden', true)
             //$('#div_QuarterLeave').prop('hidden', true)
@@ -1129,6 +1135,31 @@
             $('.policy-description').text("");
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
         }
+
+        
+        $("#GraceMinutesTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Grace Minutes refers to a predetermined period of time before or after the scheduled start or end time during which an employee is still considered to be on time or present. It allows for a certain level of flexibility and acknowledges that minor delays or early departures may occur without penalizing the employee.";
+            $("#graceminutes-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#graceminutes-description").text(tooltipText);
+        });
+         $("#GraceMinutesTooltip").mouseout(function () {
+            debugger
+            $("#graceminutes-description").text("");
+        });
+
+  $("#LateMinutesTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Late Minutes refer to the duration by which an employee exceeds the scheduled start or end time of their shift or work hours. It represents the amount of time an employee arrives late to work or departs after the designated end time.";
+            $("#lateminutes-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#lateminutes-description").text(tooltipText);
+        });
+         $("#LateMinutesTooltip").mouseout(function () {
+            debugger
+            $("#lateminutes-description").text("");
+        });
 
 
     </script>

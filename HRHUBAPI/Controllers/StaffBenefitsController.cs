@@ -19,7 +19,7 @@ namespace HRHUBAPI.Controllers
 
       
 
-        #region Staff Benefits
+        #region Staff Benefits 
 
         [HttpGet("GetStaffBenefitInfos{CompanyId}")]
         public async Task<ActionResult<List<ComponentInfo>>> GetStaffBenefitInfos(int CompanyId)
@@ -27,7 +27,13 @@ namespace HRHUBAPI.Controllers
 
             return await new ComponentInfo().GetBenefitInfo(CompanyId, _context);
         }
-        [HttpGet("GetStaffBenefitById/{Id}")]
+        [HttpGet("GetComponentsInfos{CompanyId}")]
+        public async Task<ActionResult<List<ComponentInfo>>> GetComponentsInfos(int CompanyId)
+        {
+
+            return await new ComponentInfo().GetComponentsInfo(CompanyId, _context);
+        }
+        [HttpGet("GetStaffBenefitById{Id}")]
         public async Task<ActionResult<ComponentInfo>> GetStaffBenefitById(int Id)
         {
             return await new ComponentInfo().GetBenefitInfoById(Id, _context);

@@ -324,7 +324,7 @@ namespace HRHUBAPI.Controllers
         //#region Component Info
 
         //[HttpGet("GetComponentInfo")]
-        //public async Task<ActionResult<List<ComponentInfo>>> GetComponentInfo()
+        //public async Task<ActionResult<List<ComponentInfo>>> GetComponentInfo() 
         //{
         //    return await new ComponentInfo().GetComponentInfo(_context);
         //}

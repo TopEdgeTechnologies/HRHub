@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.ComponentModel.Design;
+using System.Data;
 
 namespace HRHUBAPI.Models
 {
@@ -426,27 +427,27 @@ namespace HRHUBAPI.Models
         #region LeaveSettings
         public async Task<LeaveApprovalSetting> PostLeaveSetting(LeaveApprovalSetting obj, HrhubContext _context)
         {
-                try
+            try
+            {
+                var checkSettingInfo = await _context.LeaveApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == obj.CompanyId && x.IsDeleted == false);
+                if (checkSettingInfo != null && checkSettingInfo.SettingId > 0)
                 {
-                    var checkSettingInfo = await _context.LeaveApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == obj.CompanyId && x.IsDeleted == false);
-                    if (checkSettingInfo != null && checkSettingInfo.SettingId > 0)
-                    {
-                        checkSettingInfo.FinalApprovalByDesignationId = obj.FinalApprovalByDesignationId;
-                        checkSettingInfo.LeaveApprovalLeaveStatusId = obj.LeaveApprovalLeaveStatusId;
-                        checkSettingInfo.UpdatedOn = DateTime.Now;
-                        checkSettingInfo.UpdatedBy = obj.CreatedBy;
+                    checkSettingInfo.FinalApprovalByDesignationId = obj.FinalApprovalByDesignationId;
+                    checkSettingInfo.LeaveApprovalLeaveStatusId = obj.LeaveApprovalLeaveStatusId;
+                    checkSettingInfo.UpdatedOn = DateTime.Now;
+                    checkSettingInfo.UpdatedBy = obj.CreatedBy;
 
-                        await _context.SaveChangesAsync();
-
-                    }
-                    
-                    return checkSettingInfo;
-                }
-                catch (Exception ex)
-                {
-                    throw;
+                    await _context.SaveChangesAsync();
 
                 }
+
+                return checkSettingInfo;
+            }
+            catch (Exception ex)
+            {
+                throw;
+
+            }
         }
         public async Task<LeaveApprovalSetting> GetLeaveSettingByCompanyId(int companyid, HrhubContext _context)
         {
@@ -572,6 +573,29 @@ namespace HRHUBAPI.Models
 
             }
         }
+
+        #endregion
+
+        #region Payroll Settings
+
+        public async Task<List<TaxSlabSetting>> GetTaxSlabSettingByCompanyId(int CompanyId, HrhubContext hrhubContext)
+        {
+
+            try
+            {
+                return await hrhubContext.TaxSlabSettings.Where(x => x.CompanyId == CompanyId && x.IsDeleted == false).ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+
+        }
+
+
 
         #endregion
 
