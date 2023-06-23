@@ -140,10 +140,10 @@ namespace HRHUBWEB.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Staff_YTDAttendance(DateTime currentDate)
+		public async Task<IActionResult> Staff_Attendance_Present_Leave()
 		{
-			string procrdure = "BI.GetStaff_YTDAttendance";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("dd-MMM-yyyy") + "'", _user.UserId };
+			string procrdure = "BI.GetStaff_Attendance_Present_Leave";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);

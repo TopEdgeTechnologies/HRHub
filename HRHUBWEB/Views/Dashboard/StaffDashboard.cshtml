@@ -242,8 +242,8 @@
 					<div class="row">
 						<div class="col-7">
 							<div class="mt-0 text-start">
-								<h5 class="">YTD Present</h5>
-								<h3 id="YTDPresentCount" class="mb-0 mt-auto text-primary">162</h3>
+								<h5 class="">Present</h5>
+								<h3 id="PresentCount" class="mb-0 mt-auto text-primary">0</h3>
 							</div>
 						</div>
 						<div class="col-5">
@@ -259,8 +259,8 @@
 					<div class="row">
 						<div class="col-7">
 							<div class="mt-0 text-start">
-								<h5 class="">YTD Leave</h5>
-								<h3 id="MTDPaidLeaveCount" class="mb-0 mt-auto text-secondary">12</h3>
+								<h5 class="">Paid Leave</h5>
+								<h3 id="PaidLeaveCount" class="mb-0 mt-auto text-secondary">0</h3>
 							</div>
 						</div>
 						<div class="col-5">
@@ -276,8 +276,8 @@
 					<div class="row">
 						<div class="col-7">
 							<div class="mt-0 text-start">
-								<h5 class="">YTD Absent</h5>
-								<h3 id="TotalAbsentCount" class="mb-0 mt-auto text-danger">0</h3>
+								<h5 class="">Absent</h5>
+								<h3 id="AbsentCount" class="mb-0 mt-auto text-danger">0</h3>
 							</div>
 						</div>
 						<div class="col-5">
@@ -293,7 +293,7 @@
 					<div class="row">
 						<div class="col-7">
 							<div class="mt-0 text-start">
-								<h5 class="">YTD Projects</h5>
+								<h5 class="">Projects</h5>
 								<h3 class="mb-0 mt-auto text-success">0</h3>
 							</div>
 						</div>
@@ -726,7 +726,7 @@
 
 			$('#chartDate').val('@DateTime.Now.ToString("yyyy-MM-dd")')
 
-			loadStaffYTDAttendance()
+			loadStaff_Attendance_Present_Leave()
 			loadStaffMonthlyAttendanceGraph()
 			loadStaffUpComingHoliday()
 			
@@ -734,9 +734,7 @@
 			loadStaffLeaveBalance_Summary()
 			loadStaffUpComingBirthdays()
 			
-
 			$('#chartDate').change(function () {
-				loadStaffYTDAttendance()
 				loadStaffMonthlyAttendanceGraph()
             });
 
@@ -1095,15 +1093,15 @@
 
 		}
 
-		function loadStaffYTDAttendance() {
+		function loadStaff_Attendance_Present_Leave() {
 			var dateValue = $('#chartDate').val()
 			var requestData = { currentDate: dateValue }
 
-			makeAjaxRequest("/Dashboard/Staff_YTDAttendance", 'GET', requestData, false, function (response) {
+			makeAjaxRequest("/Dashboard/Staff_Attendance_Present_Leave", 'GET', requestData, false, function (response) {
 				if (response != null) {
-					$('#YTDPresentCount').text(response[0].YTDPresentCount)
-					$('#MTDPaidLeaveCount').text(response[0].MTDPaidLeaveCount)
-					$('#TotalAbsentCount').text(response[0].TotalAbsentCount)
+					$('#PresentCount').text(response[0].PresentCount)
+					$('#PaidLeaveCount').text(response[0].PaidLeaveCount)
+					$('#AbsentCount').text(response[0].AbsentCount)
 				}
 			}, function (errorStatus) {
 				console.log('Error:', errorStatus)
@@ -1261,20 +1259,16 @@
 		function loadStaffUpComingBirthdays() {
 			debugger
 			var requestData = { }
-
 			makeAjaxRequest("/Dashboard/Staff_UpComingBirthdays", 'GET', requestData, false, function (response) {
 				if (response != null) {
 					var htmlBirthday = ''
 					for (var i = 0; i < response.length && i < 5; i++) {
 						htmlBirthday += ' <tr> '
 						htmlBirthday += ' 	<td class="d-flex"> '
-						htmlBirthday += ' 		<img class="w-8 h-8 bradius me-3" src="../assets/images/users/4.jpg" alt="media1"> '
+						htmlBirthday += ' 		<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '" alt="media1"> '
 						htmlBirthday += ' 		<div class="my-auto"> '
 						htmlBirthday += ' 			<a href="javascript:void(0);" class="mb-1 font-weight-semibold fs-16">' + response[i].FullName + '</a> '
-
-						var birthDayFormatted = response[i].BirthDay;
-
-						htmlBirthday += '			<p class="text-muted fs-13 mb-0">' + birthDayFormatted + ' | ' + response[i].AgeInYears + ' Years Old</p> ';
+						htmlBirthday += '			<p class="text-muted fs-13 mb-0">' + response[i].BirthDay + ' | ' + response[i].AgeInYears + ' Years Old</p> ';
 						htmlBirthday += ' 		</div> '
 						htmlBirthday += ' 	</td> '
 						htmlBirthday += ' 	<td class="text-end"> '
