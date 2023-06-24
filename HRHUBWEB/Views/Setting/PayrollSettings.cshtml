@@ -734,7 +734,7 @@
                                                                 </a>
                                                             </label>
                                                             <div class="mb-2 mt-2">
-                                                                <p id="shortminuites-description" class="w-100 ps-2 fs-14 "></p>
+                                                                <p id="shortminutes-description" class="w-100 ps-2 fs-14 "></p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1906,14 +1906,14 @@
             $("#overtime-description").text("");
         });
 
-        $("#ShortMinutesTooltip").mouseover(function () {
+        $("#ShortMinutesDeductionTooltip").mouseover(function () {
             debugger
             var tooltipText = "Short minutes deduction refers to the practice of reducing an employee's salary or wages for the time they are absent from work due to arriving late or leaving early by a few minutes. It involves subtracting a certain amount from their salary or wages to account for the missed time.";
             $("#shortminutes-description").fadeIn(400);
             // Set the tooltip text dynamically using JavaScript
             $("#shortminutes-description").text(tooltipText);
         });
-        $("#ShortMinutesTooltip").mouseout(function () {
+        $("#ShortMinutesDeductionTooltip").mouseout(function () {
             debugger
             $("#shortminutes-description").text("");
         });

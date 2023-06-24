@@ -346,7 +346,7 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> PayrollPolicyCreateOrUpdate(int id, string title, int policyId, bool isincometaxapplicable, List<TaxSlabSetting> listTaxSlab, bool isovertimeapplicable, bool isshortminutesdeduction)
         {
-            Policy obj = new Policy();
+            Policy  obj = new Policy();
             obj.PolicyConfigurationId = id;
             obj.Title = title;
             obj.PolicyId = policyId;
@@ -362,7 +362,7 @@ namespace HRHUBWEB.Controllers
 
             //var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Policy/PostPayrollPolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{isincometaxapplicable}/{listTaxSlab}", HttpMethod.Get);
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Policy/PostPayrollPolicyConfiguration", HttpMethod.Post);
-
+            
             return Json(result);
 
         }
@@ -517,6 +517,11 @@ namespace HRHUBWEB.Controllers
 
 
         #endregion
+
+
+
+
+
 
 
         //public async Task<IActionResult> PayrollSettings(string data = "", int Id = 0)
