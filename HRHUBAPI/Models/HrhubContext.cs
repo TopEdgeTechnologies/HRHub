@@ -151,8 +151,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
 
-    public virtual DbSet<ViewPerformanceReviewQuestionsList> ViewPerformanceReviewQuestionsLists { get; set; }
-
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -273,7 +271,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<Candidate>(entity =>
         {
-            entity.ToTable("Candidate", "Recuriment");
+            entity.ToTable("Candidate", "Recuriment", tb => tb.HasTrigger("AutoEntryInEmailForNewCandidateEnrollment"));
 
             entity.Property(e => e.CandidateId).HasColumnName("CandidateID");
             entity.Property(e => e.Address).IsUnicode(false);
@@ -1236,6 +1234,8 @@ public partial class HrhubContext : DbContext
                 .HasColumnName("LeaveDistribution_StartDate");
             entity.Property(e => e.LeaveDistributionStartMonth).HasColumnName("LeaveDistribution_StartMonth");
             entity.Property(e => e.MaterialStatus).IsUnicode(false);
+            entity.Property(e => e.MonthlyDateOfEveryMonth).HasColumnName("Monthly_DateOfEveryMonth");
+            entity.Property(e => e.MonthlyIsSpecificDayofEveryMonth).HasColumnName("Monthly_IsSpecificDayofEveryMonth");
             entity.Property(e => e.NationalIdnumber)
                 .IsUnicode(false)
                 .HasColumnName("NationalIDNumber");
