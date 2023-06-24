@@ -12,6 +12,7 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System;
+using HRHUBAPI.BackGroundService;
 
 namespace HRHUBWEB.Controllers
 {
@@ -19,10 +20,21 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-        public CandidateController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+        private readonly IEmailHelper _EmailHelper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly APIHelper _APIHelper;
+        private readonly User _user;
+
+
+        public CandidateController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, IEmailHelper EmailHelper , APIHelper aPIHelper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
+            _EmailHelper = EmailHelper;
+            _APIHelper = aPIHelper;
+            _httpContextAccessor = httpContextAccessor;
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
         }
 
         #region CandidateInfo
@@ -288,7 +300,7 @@ namespace HRHUBWEB.Controllers
 
                     var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
-
+                    
                     int status = 0;
                     if (model.Success)
                     {
@@ -303,6 +315,7 @@ namespace HRHUBWEB.Controllers
                             status = 2;
                         }
 
+                      //var result = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, "", "Test email hello hello");
 
                     }
 
@@ -436,13 +449,22 @@ namespace HRHUBWEB.Controllers
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
+                var candidateObj = JsonConvert.DeserializeObject<CandidateScreening>(result);
+
+
+                // send email on status update 
+                SendToCandidateEmail(candidateObj.CandidateId, candidateObj.StatusId);
+
+
 
                 // Update list of candidates
                 HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateInfos{userObject.CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result1 = message1.Content.ReadAsStringAsync().Result;
-                   var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1);
+                   
+                   
+                    var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1);
 
                     return Json(new
                     {
@@ -514,7 +536,133 @@ namespace HRHUBWEB.Controllers
         #endregion
 
 
+        #region SendEmailNotification
+        
+        
+        
+        private async void SendToCandidateEmail(int? CandidateId, int? StatusId)
+        {
+            
+            Candidate ObjCandidate = new Candidate();
+            EmailTemplate objEmail = new EmailTemplate();
+            EmailNotificationSetting objEmailSetting = new EmailNotificationSetting();
 
+           int? statusid = StatusId;
+
+            if (statusid == 9)// it means its rejected now get rejected email template 
+            {
+                //
+
+
+                ObjCandidate = await _APIHelper.CallApiAsyncGet<Candidate>($"api/Candidate/GetCandidateInfoId{CandidateId}", HttpMethod.Get);
+                objEmailSetting = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
+                var Id = objEmailSetting.OnRejectionTemplateId;
+
+                objEmail = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
+                var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+                //HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+                //if (message.IsSuccessStatusCode)
+                //{
+                //    var result = message.Content.ReadAsStringAsync().Result;
+                //    ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+                //}
+
+
+                //HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+                //if (Message.IsSuccessStatusCode)
+                //{
+                //    var result = Message.Content.ReadAsStringAsync().Result;
+                //    objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+                //}
+
+                //HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+                //if (message1.IsSuccessStatusCode)
+                //{
+                //    var result = message1.Content.ReadAsStringAsync().Result;
+                //    objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+                //}
+                //   var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+
+
+
+            }
+            //else if (statusid == 8) // it means its Offer Accepted now get Offer Accepted email template 
+            //{
+            //    HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+            //    if (message.IsSuccessStatusCode)
+            //    {
+            //        var result = message.Content.ReadAsStringAsync().Result;
+            //        ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+            //    }
+
+
+            //    HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+            //    if (Message.IsSuccessStatusCode)
+            //    {
+            //        var result = Message.Content.ReadAsStringAsync().Result;
+            //        objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+            //    }
+            //    var Id = objEmailSetting.OnStatusChangeTemplateId;
+
+            //    HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+            //    if (message1.IsSuccessStatusCode)
+            //    {
+            //        var result = message1.Content.ReadAsStringAsync().Result;
+            //        objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+            //    }
+            //    var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+            //}
+
+            //else if (statusid == 2) // it means its Short List now get Short List email template 
+            //{
+            //    HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+            //    if (message.IsSuccessStatusCode)
+            //    {
+            //        var result = message.Content.ReadAsStringAsync().Result;
+            //        ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+            //    }
+
+
+            //    HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+            //    if (Message.IsSuccessStatusCode)
+            //    {
+            //        var result = Message.Content.ReadAsStringAsync().Result;
+            //        objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+            //    }
+            //    var Id = objEmailSetting.OnStatusChangeTemplateId;
+
+            //    HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+            //    if (message1.IsSuccessStatusCode)
+            //    {
+            //        var result = message1.Content.ReadAsStringAsync().Result;
+            //        objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+            //    }
+            //    var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+            //}
+            //else if (statusid == 3) // it means its Interview now get Interview  email template 
+            //{ 
+            
+            //}
+
+
+
+
+
+
+
+
+        }
+        #endregion
 
 
 

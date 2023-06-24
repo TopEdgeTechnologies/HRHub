@@ -27,7 +27,7 @@ builder.Services.AddSession();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton<DbConnection>();
 builder.Services.AddSingleton<APIHelper>();
-builder.Services.AddTransient<IEmailHelper, EmailHelper>();
+builder.Services.AddSingleton<IEmailHelper, EmailHelper>();
 builder.Services.AddSingleton<CacheExtensions>();
 builder.Services.AddMemoryCache();
 

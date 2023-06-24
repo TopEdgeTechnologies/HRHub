@@ -392,6 +392,7 @@
 
 
 @section scripts{
+      
 
     <script>
         $(document).ready(function () {
@@ -407,17 +408,38 @@
                 var summernoteEditor = $('#Body');
 
                 // Add click event handler to your text spans
-                $('#CandidateId').click(function () {
-                    // Get the clicked text
-                    var clickedText = $(this).text();   
-                    
-                   summernoteEditor.summernote('pasteHTML', clickedText);
 
-                    notif({
-                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Variable Add in Clip board.",
-                        type: "success"
-                    });
-                });
+
+
+                 $('#CandidateId').click(function () {
+                     debugger
+    // Get the clicked text
+    var clickedText = $(this).text();
+
+    // Get the current cursor position
+    var range = summernoteEditor.summernote('editor.createRange');
+    var currentPosition = range.index
+
+    // Insert the clicked text at the current cursor position
+    summernoteEditor.summernote('editor.insertText',clickedText, currentPosition );
+
+    });
+                //$('#CandidateId').click(function () {
+                //    // Get the clicked text
+                //    var clickedText = $(this).text();   
+
+
+
+
+
+                    
+                //   //summernoteEditor.summernote('pasteHTML', clickedText);
+
+                //   // notif({
+                //   //     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Variable Add in Clip board.",
+                //   //     type: "success"
+                //   // });
+                //});
 
 
 

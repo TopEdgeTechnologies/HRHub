@@ -18,17 +18,18 @@ namespace HRHUBWEB.Extensions
 
     public class EmailHelper : IEmailHelper
     {
-
+        private IWebHostEnvironment _webHostEnvironment;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly APIHelper _APIHelper;
-        //  private readonly User _user;
+        private readonly User _user;
 
         public EmailHelper(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
 
             _APIHelper = APIHelper;
+            _webHostEnvironment = webHostEnvironment;
             _httpContextAccessor = httpContextAccessor;
-            // _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
         }
 
 
@@ -37,7 +38,7 @@ namespace HRHUBWEB.Extensions
             try
             {
 
-                var _user = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<User>("AuthenticatedUser");
+               /// var _user = _httpContextAccessor.HttpContext?.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
 
                 EmailLog obj = new EmailLog();
