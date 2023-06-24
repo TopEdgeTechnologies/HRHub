@@ -60,7 +60,7 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="form-group">
                                 <label class="form-label">Date of Birth</label>
-                                <input asp-for="Dob" class="form-control" placeholder="DD-MM-YYY" type="date">
+                                <input asp-for="Dob" class="form-control fc-datepicker" placeholder="DD-MMM-YYY" type="text">
                                 
                             </div>
                         </div>
@@ -491,6 +491,10 @@
             //});
 
             //$('#ApplyDate').datepicker('setDate', currentDate);
+
+                   var currentDate = new Date(); // Get the current date
+
+                $('.fc-datepicker').datepicker('setDate', currentDate);
         
        
              if('@Model.CandidateId'>0)
