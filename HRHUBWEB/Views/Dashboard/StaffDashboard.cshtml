@@ -616,10 +616,7 @@
 @section scripts{
 	<script>
 		$(document).ready(function() {
-			$('#myonoffswitch2').prop('checked', true);
-			localStorage.setItem('dayonedarkMode', true);
-			localStorage.removeItem('dayonelightMode');
-			localStorage.removeItem('dayonetransparentMode');
+		
 
 			$('#DashboardCalender').val('@DateTime.Now.ToString("yyyy-MM-dd")')
 			// Start the clock
