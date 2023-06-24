@@ -126,31 +126,6 @@ $('.fc-datepicker').datepicker('setDate', 'today');
 
 
 
-/****** Starts Here --  Below code is to Keep Selected Active*******/
-$(document).ready(function () {
-
-    // Find the <li> element with the class "is-expanded"
-    const expandedLi = document.querySelector('li.is-expanded');
-
-    // Check if the <li> element exists
-    if (expandedLi) {
-
-        const link = expandedLi.querySelector('a');
-
-        // Add the "active" class to the <a> tag
-        link.classList.add('active');
-
-        // Find the parent <ul> element
-        const parentUl = expandedLi.parentNode;
-
-        // Update the class of the parent <ul> element
-        parentUl.classList.add('open');
-
-        // Set the display property of the parent <ul> element to "block"
-        parentUl.style.display = 'block';
-    }
-});
-			/****** End Here --  Below code is to Keep Selected Active*******/
 
 
 
