@@ -143,6 +143,7 @@
         <div class="modal-content">
             <div class="modal-header">
 				<h5 class="modal-title">Loan Management</h5>
+				@*
                 <div class="card-options col-md-3">
                     <select id="sumaryMonthLoan" class=" form-control custom-select select2">
                         <option value="0">All</option>
@@ -160,6 +161,7 @@
                         <option value="12">December</option>
                     </select>
                 </div>
+				*@
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -180,6 +182,9 @@
 									<tbody id="tblBodyLoanModal" style="max-height: 500px; overflow-y: scroll;">
                                     </tbody>
                                 </table>
+								<div id="LoanBalanceSummaryModal" class="row mb-0 pb-0">
+
+								</div>
                             </div>
                         </div>
                     </div>
@@ -289,6 +294,7 @@
 		</div>
 	</div>
 	<!--End Page header-->
+
 	<!--Row-->
 	<div class="row">
 		<div class="col-xl-3 col-lg-6 col-md-12">
@@ -403,7 +409,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-3 col-lg-12 col-md-12">
+		<div class="col-xl-6 col-lg-12 col-md-12">
 			<div class="card">
 				<div class="p-0">
 					<div class="card-header border-0">
@@ -413,93 +419,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xl-4 col-md-12 col-lg-12">
-			<div class="card">
-				<div class="card-header  border-0">
-					<h4 class="card-title">Recent Activity</h4>
-				</div>
-				<div class="pt-4">
-					<div class="table-responsive">
-						<table class="table transaction-table mb-0 text-nowrap">
-							<tbody>
-								<tr class="border-bottom">
-									<td class="d-flex ps-6">
-										<span class="bg-pink pink-border brround d-block me-5 mt-1 h-5 w-5"></span>
-										<div class="my-auto">
-											<span class="mb-1 font-weight-semibold fs-17">You Late to day</span>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Your office intime is 9:42</small>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Late time 14min</small>
-										</div>
-									</td>
-									<td class="text-end pe-6">
-										<a class="text-muted d-block fs-16" href="javascript:void(0);">Just Now</a>
-									</td>
-								</tr>
-								<tr class="border-bottom">
-									<td class="d-flex ps-6">
-										<span class="bg-warning warning-border brround d-block me-5 mt-1 h-5 w-5"></span>
-										<div class="my-auto">
-											<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Undoubtable source</small>
-										</div>
-									</td>
-									<td class="text-end pe-6">
-										<a class="text-muted d-block fs-16" href="javascript:void(0);">1 Hour ago</a>
-									</td>
-								</tr>
-								<tr class="border-bottom">
-									<td class="d-flex ps-6">
-										<span class="bg-primary primary-border brround d-block me-5 mt-1 h-5 w-5"></span>
-										<div class="my-auto">
-											<span class="mb-1 font-weight-semibold fs-17">Success! your Lunch Time</span>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Lunch time 1:30 To 2:30</small>
-										</div>
-									</td>
-									<td class="text-end pe-6">
-										<a class="text-muted d-block fs-16" href="javascript:void(0);">4 hours ago</a>
-									</td>
-								</tr>
-								<tr class="border-bottom">
-									<td class="d-flex ps-6">
-										<span class="bg-success success-border brround d-block me-5 mt-1 h-5 w-5"></span>
-										<div class="my-auto">
-											<span class="mb-1 font-weight-semibold fs-17">Many desktops Publishing The</span>
-											<div class="clearfix"></div>
-											<span class="mb-1 font-weight-semibold fs-17"> versions are evolved</span>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Page editors now use...</small>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Late time 14min</small>
-										</div>
-									</td>
-									<td class="text-end pe-6">
-										<a class="text-muted d-block fs-16" href="javascript:void(0);">5 hours ago</a>
-									</td>
-								</tr>
-								<tr>
-									<td class="d-flex ps-6">
-										<span class="bg-orange orange-border brround d-block me-5 mt-1 h-5 w-5"></span>
-										<div class="my-auto">
-											<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
-											<div class="clearfix"></div>
-											<small class="text-muted fs-14">Birthday on Feb 16</small>
-										</div>
-									</td>
-									<td class="text-end pe-6">
-										<a class="text-muted d-block fs-16" href="javascript:void(0);">11 Jan 2020</a>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-5 col-lg-12 col-md-12">
+		<div class="col-xl-6 col-lg-12 col-md-12">
 			<div class="card">
 				<div class="card-header border-0">
 				@*
@@ -549,7 +469,7 @@
 		</div>
 	</div>
 	<div class="row">	
-		<div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 ">
+		<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
 		<div class="card">
 			<div class="card-header border-bottom-0">
 				<h4 class="card-title">Loan Management</h4>
@@ -583,7 +503,7 @@
 			</div>
 		</div>
 	</div>
-		<div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 ">
+		<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
 			<div class="card">
 				<div class="card-header border-bottom-0">
 					<h4 class="card-title">Up Coming Birthdays</h4>
@@ -603,7 +523,94 @@
 			</div>
 		</div>
 	</div>
-
+	<div class="row">
+		<div class="col-xl-6 col-md-12 col-lg-12">
+		<div class="card">
+			<div class="card-header  border-0">
+				<h4 class="card-title">Recent Activity</h4>
+			</div>
+			<div class="pt-4">
+				<div class="table-responsive">
+					<table class="table transaction-table mb-0 text-nowrap">
+						<tbody>
+							<tr class="border-bottom">
+								<td class="d-flex ps-6">
+									<span class="bg-pink pink-border brround d-block me-5 mt-1 h-5 w-5"></span>
+									<div class="my-auto">
+										<span class="mb-1 font-weight-semibold fs-17">You Late to day</span>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Your office intime is 9:42</small>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Late time 14min</small>
+									</div>
+								</td>
+								<td class="text-end pe-6">
+									<a class="text-muted d-block fs-16" href="javascript:void(0);">Just Now</a>
+								</td>
+							</tr>
+							<tr class="border-bottom">
+								<td class="d-flex ps-6">
+									<span class="bg-warning warning-border brround d-block me-5 mt-1 h-5 w-5"></span>
+									<div class="my-auto">
+										<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Undoubtable source</small>
+									</div>
+								</td>
+								<td class="text-end pe-6">
+									<a class="text-muted d-block fs-16" href="javascript:void(0);">1 Hour ago</a>
+								</td>
+							</tr>
+							<tr class="border-bottom">
+								<td class="d-flex ps-6">
+									<span class="bg-primary primary-border brround d-block me-5 mt-1 h-5 w-5"></span>
+									<div class="my-auto">
+										<span class="mb-1 font-weight-semibold fs-17">Success! your Lunch Time</span>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Lunch time 1:30 To 2:30</small>
+									</div>
+								</td>
+								<td class="text-end pe-6">
+									<a class="text-muted d-block fs-16" href="javascript:void(0);">4 hours ago</a>
+								</td>
+							</tr>
+							<tr class="border-bottom">
+								<td class="d-flex ps-6">
+									<span class="bg-success success-border brround d-block me-5 mt-1 h-5 w-5"></span>
+									<div class="my-auto">
+										<span class="mb-1 font-weight-semibold fs-17">Many desktops Publishing The</span>
+										<div class="clearfix"></div>
+										<span class="mb-1 font-weight-semibold fs-17"> versions are evolved</span>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Page editors now use...</small>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Late time 14min</small>
+									</div>
+								</td>
+								<td class="text-end pe-6">
+									<a class="text-muted d-block fs-16" href="javascript:void(0);">5 hours ago</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="d-flex ps-6">
+									<span class="bg-orange orange-border brround d-block me-5 mt-1 h-5 w-5"></span>
+									<div class="my-auto">
+										<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
+										<div class="clearfix"></div>
+										<small class="text-muted fs-14">Birthday on Feb 16</small>
+									</div>
+								</td>
+								<td class="text-end pe-6">
+									<a class="text-muted d-block fs-16" href="javascript:void(0);">11 Jan 2020</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 <!-- end app-content-->
 
 @section scripts{
@@ -1286,7 +1293,8 @@
 					var totalLoanAmount = 0
 					var totalLoanRepaymentAmount = 0
 					var totalLoanRemainingAmount = 0
-					for (var i = 0; i < response.length && i < 5; i++) {
+					//for (var i = 0; i < response.length && i < 5; i++) {
+					for (var i = 0; i < response.length && i < (directOpen == 'direct' ? 3 : response.length) ; i++) {
 						debugger
 						htmlLoan += ' <tr> '
 						htmlLoan += ' 	<td class="d-flex"> '
@@ -1317,8 +1325,6 @@
 						totalLoanRemainingAmount = totalLoanAmount - totalLoanRepaymentAmount
 					}
 
-					
-
 					// Loan Balance Summary
 					var htmlLoanBalance = ''
 					htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
@@ -1335,7 +1341,6 @@
 					htmlLoanBalance += ' 	<h5>Total Loan</h5> '
 					htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-success fs-20 font-weight-semibold">' + totalLoanAmount.toLocaleString() + ' </span></div> '
 					htmlLoanBalance += ' </div> '
-
 					
 					if(directOpen == 'direct'){
 						$("#TblBodyLoan").html(htmlLoan)
@@ -1343,7 +1348,7 @@
 					}
 					else if(directOpen == 'modal'){
 						$("#tblBodyLoanModal").html(htmlLoan)
-						//$("#LoanBalanceSummary").html(htmlLoanBalance)
+						$("#LoanBalanceSummaryModal").html(htmlLoanBalance)
 
 						$("#LoanModelEvent").modal('show')
 					}
@@ -1362,3 +1367,8 @@
 
 <!-- Circle-progress js-->
 <script src="~/assets/plugins/circle-progress/circle-progress.min.js"></script>
+
+<!-- INTERNAL Daterangepicker js-->
+<script src="~/assets/plugins/daterangepicker/moment.min.js"></script>
+<script src="~/assets/plugins/daterangepicker/daterangepicker.js"></script>
+
