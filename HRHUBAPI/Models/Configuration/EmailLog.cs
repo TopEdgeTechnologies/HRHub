@@ -44,23 +44,22 @@ namespace HRHUBAPI.Models
             {
 
                 DbConnection dbConnection = new DbConnection();
-                string query = @"select e.*, c.Email_SMTPPort, c.Email_SendFrom, c.Email_Password, c.Email_ServerHost from emaillog e
-                                    inner join Company c on c.CompanyID = e.CompanyID    where IsSent is null";
+                string query = @"exec sp_sendEMail  ";
 
                 DataTable dt = dbConnection.ReturnDataTable(query);
                 var resultRows = dt.AsEnumerable().Select(row => new EmailLog
                 {
 
                     EmailId = Convert.ToInt32(row["EmailId"]),
-                    EmailFrom = row["EmailFrom"].ToString(),
-                    EmailTo = row["EmailTo"].ToString(),
-                    CreatedBy = Convert.ToInt32(row["CreatedBy"]),
-                    Body = row["Body"].ToString(),
-                    Subject = row["Subject"].ToString(),
-                    PortName = Convert.ToInt32(row["Email_SMTPPort"].ToString()),
-                    FromMail = row["Email_SendFrom"].ToString(),
-                    ServerName = row["Email_ServerHost"].ToString(),
-                    Pasword = row["Email_Password"].ToString()
+                    EmailFrom = string.IsNullOrWhiteSpace(row["EmailFrom"].ToString()) ? "" : row["EmailFrom"].ToString(),
+                    EmailTo = string.IsNullOrWhiteSpace(row["EmailTo"].ToString()) ?"":  row["EmailTo"].ToString(),
+                    CreatedBy =  string.IsNullOrWhiteSpace(row["CreatedBy"].ToString())?0:Convert.ToInt32(row["CreatedBy"]),
+                    Body = string.IsNullOrWhiteSpace(row["Body"].ToString()) ? "" : row["Body"].ToString(),
+                    Subject = string.IsNullOrWhiteSpace(row["Subject"].ToString()) ? "" : row["Subject"].ToString(),
+                    PortName = string.IsNullOrWhiteSpace(row["Email_SMTPPort"].ToString()) ? 0 : Convert.ToInt32(row["Email_SMTPPort"].ToString()),
+                    FromMail = string.IsNullOrWhiteSpace(row["Email_SendFrom"].ToString()) ? "" : row["Email_SendFrom"].ToString(),
+                    ServerName = string.IsNullOrWhiteSpace(row["Email_ServerHost"].ToString()) ? "" : row["Email_ServerHost"].ToString(),
+                    Pasword = string.IsNullOrWhiteSpace(row["Email_Password"].ToString()) ? "" : row["Email_Password"].ToString()
                 }).ToList();
 
 

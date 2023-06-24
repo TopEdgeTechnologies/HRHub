@@ -107,7 +107,7 @@ namespace HRHUBWEB.Controllers
 
             return View(Obj);
         }
-        public async Task<IActionResult> AttendancePolicyCreateOrUpdate(int id, string title, int policyId,  bool halfdayafterlateminutes, int lateminutes, bool allowgraceminutes, int graceminutes)   //bool halfleave, bool quarterleave,
+        public async Task<IActionResult> AttendancePolicyCreateOrUpdate(int id, string title, int policyId, bool halfdayafterlateminutes, int lateminutes, bool allowgraceminutes, int graceminutes)   //bool halfleave, bool quarterleave,
         {
 
             var CompanyId = _user.CompanyId;
@@ -259,7 +259,7 @@ namespace HRHUBWEB.Controllers
             obj.CompanyId = _user.CompanyId;
             obj.CreatedBy = _user.UserId;
 
-            var result = await _APIHelper.CallApiAsyncPost<Response>(obj,"api/Configuration/LeaveTypeAddOrUpdate", HttpMethod.Post);
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Configuration/LeaveTypeAddOrUpdate", HttpMethod.Post);
 
             return Json(result);
 
@@ -324,7 +324,7 @@ namespace HRHUBWEB.Controllers
 
             return View(Obj);
         }
-        public async Task<IActionResult> SavePayrollSetting(int MonthlyDateOfEveryMonth, bool IsSpecificDayofEveryMonth )
+        public async Task<IActionResult> SavePayrollSetting(int MonthlyDateOfEveryMonth, bool IsSpecificDayofEveryMonth)
         {
 
             StaffSalarySetting obj = new StaffSalarySetting();
