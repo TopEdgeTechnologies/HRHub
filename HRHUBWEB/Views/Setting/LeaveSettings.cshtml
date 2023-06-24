@@ -118,11 +118,14 @@
                                                             <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
                                                             <span class="custom-switch-indicator"></span>
                                                             <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
-                                                            <a href="#">
+                                                            <a id="HalfLeaveTooltip" href="#">
                                                                 <i class="fa fa-info"></i>
 
                                                             </a>
                                                         </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="halfleave-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
                                                     </div>
 
                                                     <div class="mb-5">
@@ -130,11 +133,14 @@
                                                             <input type="checkbox" id="QuarterLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
                                                             <span class="custom-switch-indicator"></span>
                                                             <span class="custom-switch-description fs-15 me-3 text-dark">Quarter Day leave</span>
-                                                            <a href="#">
+                                                            <a id="QuarterLeaveTooltip" href="#">
                                                                 <i class="fa fa-info text-info"></i>
 
                                                             </a>
                                                         </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="quarterleave-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
                                                     </div>
 
                                                    @* <div class="mb-5">
@@ -1130,6 +1136,30 @@
             $("#addleavetypemodal").modal('show');
 
         }
+
+        $("#HalfLeaveTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Half Leave refers to a type of leave that is granted to an employee for half of a working day. It allows an employee to be absent from work for a specified period, typically half of their regular working hours, while still being entitled to certain benefits and allowances.";
+            $("#halfleave-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#halfleave-description").text(tooltipText);
+        });
+         $("#HalfLeaveTooltip").mouseout(function () {
+            debugger
+            $("#halfleave-description").text("");
+        });
+
+  $("#QuarterLeaveTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Quarter Leave typically refers to a brief period of authorized absence or time off that is shorter than a full day. It allows an employee to be absent from work for a specific duration, such as a few hours or part of a workday, while still being entitled to certain benefits and allowances.";
+            $("#quarterleave-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#quarterleave-description").text(tooltipText);
+        });
+         $("#QuarterLeaveTooltip").mouseout(function () {
+            debugger
+            $("#quarterleave-description").text("");
+        });
 
     </script>
 
