@@ -145,53 +145,31 @@ namespace HRHUBWEB.Controllers
         [HttpGet]
         public async Task<IActionResult> CandidateCreateOrUpdate(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            //var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            //Get Company ID through Sessions
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
+            ////Get Company ID through Sessions
+            //var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            ViewBag.CompanyId = _user.CompanyId;
             var CompanyId = ViewBag.CompanyId;
             var CandidateId = id;
-            if (Token != null) {
-
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
-
-
-                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
-
-                }
 
 
 
-              
+            ViewBag.CandidateDesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{CompanyId}", HttpMethod.Get);
+            ViewBag.CandidateSkill = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateSkill>>($"api/Candidate/GetCandidateSkillInfos{CandidateId}", HttpMethod.Get);
 
-                if (id == 0)
+
+            if (id == 0)
             {
                 Candidate Info = new Candidate();
-                
+
                 return View(Info);
             }
             Candidate Candidateinfo = await GetCandidatebyID(id);
 
             return View(Candidateinfo);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-
-            }
+            
         }
         [HttpPost]
         public async Task<IActionResult> CandidateCreateOrUpdate(IFormCollection my,Candidate ObjCandidate)
@@ -226,8 +204,8 @@ namespace HRHUBWEB.Controllers
                     ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
                 }
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjCandidate.CompanyId = userObject.CompanyId;
-                ObjCandidate.CreatedBy = userObject.UserId;
+                ObjCandidate.CompanyId = _user.CompanyId;
+                ObjCandidate.CreatedBy = _user.UserId;
                 HttpResponseMessage message = await _client.PostAsJsonAsync("api/Candidate/CandidateAddOrCreate", ObjCandidate);
 
                 if (message.IsSuccessStatusCode)
