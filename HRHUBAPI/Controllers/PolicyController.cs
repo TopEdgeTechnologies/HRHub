@@ -144,5 +144,62 @@ namespace HRHUBAPI.Controllers
         }
 
         #endregion
+
+
+        #region Payroll Policy
+
+        [HttpPost("PostPayrollPolicyConfiguration")]
+        public async Task<ActionResult<Policy>> PostPayrollPolicyConfiguration(Policy obj)
+        {
+
+            var dbResult = await new Policy().PostPayrollPolicyConfiguration(obj, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+        [HttpGet("GetsPayrollPolicyConfigurationById{Id}/{CompanyId}")]
+        public async Task<ActionResult<Policy>> GetsPayrollPolicyConfigurationById(int Id, int CompanyId)
+        {
+            return await new Policy().GetPayrollPolicyConfigurationById(Id, CompanyId, _context);
+        }
+
+        //[HttpGet("PostPayrollPolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{isincometaxapplicable}/{listTaxSlab}")]
+        //public async Task<ActionResult<Policy>> PostPayrollPolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId,bool isincometaxapplicable, List<TaxSlabSetting> listTaxSlab)
+        //{
+
+        //    var dbResult = await new Policy().PostPayrollPolicyConfiguration(id, policyId, title, CompanyId, UserId, isincometaxapplicable, listTaxSlab, _context);
+        //    if (dbResult != null)
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Updated Successfully"
+        //        });
+        //    }
+        //    else
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Inserted Successfully"
+        //        });
+        //    }
+        //}
+
+
+        #endregion
     }
 }

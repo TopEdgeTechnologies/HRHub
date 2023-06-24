@@ -16,4 +16,8 @@ public partial class StaffSalarySetting
     public bool? IsShortMinutesDeductionApplicable { get; set; }
 
     public string? SalaryFrequency { get; set; }
+
+    public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
+
+    public int? MonthlyDateOfEveryMonth { get; set; }
 }

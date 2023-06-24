@@ -7,8 +7,6 @@ public partial class VInfoStaff
 {
     public int StaffId { get; set; }
 
-    public int? DepartmentId { get; set; }
-
     public string? JobTitle { get; set; }
 
     public string? RegistrationNo { get; set; }
@@ -73,6 +71,10 @@ public partial class VInfoStaff
 
     public decimal? StaffTenureInYears { get; set; }
 
+    public DateTime? Birthday { get; set; }
+
+    public int? AgeInYears { get; set; }
+
     public int? EmploymentTypeId { get; set; }
 
     public int? StaffStatusId { get; set; }
@@ -97,7 +99,7 @@ public partial class VInfoStaff
 
     public bool? DesignationIsDeleted { get; set; }
 
-    public int Expr16 { get; set; }
+    public int DepartmentId { get; set; }
 
     public string? DepartmentTitle { get; set; }
 
@@ -146,6 +148,16 @@ public partial class VInfoStaff
     public bool CompanyStatus { get; set; }
 
     public bool? CompanyIsDeleted { get; set; }
+
+    public bool? LeaveDistributionIsAccrualApproach { get; set; }
+
+    public bool? LeaveDistributionIsCalendarYearApproach { get; set; }
+
+    public int? LeaveDistributionStartMonth { get; set; }
+
+    public DateTime? LeaveDistributionStartDate { get; set; }
+
+    public DateTime? LeaveDistributionEndDate { get; set; }
 
     public int StaffSalarySettingId { get; set; }
 

@@ -308,8 +308,8 @@ namespace HRHUBWEB.Controllers
             var CompanyId = _user.CompanyId;
             var PolicyCategoryId = 3; // LeavePolicyCategoryId
 
-            LeaveApprovalSetting Obj = new LeaveApprovalSetting();
-            Obj = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Setting/GetLeaveSettingByCompanyId{CompanyId}", HttpMethod.Get);
+            StaffSalarySetting Obj = new StaffSalarySetting();
+            Obj = await _APIHelper.CallApiAsyncGet<StaffSalarySetting>($"api/Setting/GetSalarySettingByCompanyId{CompanyId}", HttpMethod.Get);
 
             ViewBag.ListComponents = await _APIHelper.CallApiAsyncGet<IEnumerable<ComponentInfo>>($"api/StaffBenefits/GetComponentsInfos{CompanyId}", HttpMethod.Get);
             ViewBag.ListTaxSlab = await _APIHelper.CallApiAsyncGet<IEnumerable<TaxSlabSetting>>($"api/Setting/GetTaxSlabSettingByCompanyId{CompanyId}", HttpMethod.Get);
@@ -323,7 +323,61 @@ namespace HRHUBWEB.Controllers
 
             return View(Obj);
         }
+        public async Task<IActionResult> SavePayrollSetting(int MonthlyDateOfEveryMonth, bool IsSpecificDayofEveryMonth )
+        {
 
+            StaffSalarySetting obj = new StaffSalarySetting();
+            obj.MonthlyDateOfEveryMonth = MonthlyDateOfEveryMonth;
+            obj.MonthlyIsSpecificDayofEveryMonth = IsSpecificDayofEveryMonth;
+            obj.CompanyId = Convert.ToInt32(_user.CompanyId);
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostPayrollSetting", HttpMethod.Post);
+            return Json(result);
+
+            //if (result.Message.Contains("Insert"))
+            //{
+            //    return RedirectToAction("AttendanceSettings", new { data = 1 });
+            //}
+            //else
+            //{
+            //    return RedirectToAction("AttendanceSettings", new { data = 2 });
+            //}
+        }
+        public async Task<IActionResult> PayrollPolicyCreateOrUpdate(int id, string title, int policyId, bool isincometaxapplicable, List<TaxSlabSetting> listTaxSlab, bool isovertimeapplicable, bool isshortminutesdeduction)
+        {
+            Policy  obj = new Policy();
+            obj.PolicyConfigurationId = id;
+            obj.Title = title;
+            obj.PolicyId = policyId;
+            obj.IsIncomeTaxApplicable = isincometaxapplicable;
+            obj.ListTaxSlab = listTaxSlab;
+            obj.IsOverTimeApplicable = isovertimeapplicable;
+            obj.IsShortMinutesDeduction = isshortminutesdeduction;
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.UserId;
+
+            //var CompanyId = _user.CompanyId;
+            //var UserId = _user.UserId;
+
+            //var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Policy/PostPayrollPolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{isincometaxapplicable}/{listTaxSlab}", HttpMethod.Get);
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Policy/PostPayrollPolicyConfiguration", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> GetPayrollPolicyConfigurationById(int Id)
+        {
+            try
+            {
+                var obj = await _APIHelper.CallApiAsyncGet<Policy>($"api/Policy/GetsPayrollPolicyConfigurationById{Id}/{_user.CompanyId}", HttpMethod.Get);
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
         public async Task<IActionResult> GetComponentByCompanyId()
         {
             try
@@ -338,9 +392,6 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-
-
-
         public async Task<IActionResult> PostComponent(ComponentInfo obj)
         {
 
@@ -361,6 +412,13 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> ComponentDelete(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/StaffBenefits/DeleteStaffBenefitInfo/{id}/{_user.UserId}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        public async Task<IActionResult> TaxSlabDelete(int id)
+        {
+            var UserId = _user.UserId;
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteTaxSlab{id}/{UserId}", HttpMethod.Get);
             return Json(result);
         }
 

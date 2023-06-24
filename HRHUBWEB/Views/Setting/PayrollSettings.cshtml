@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HRHUBAPI.Models.StaffSalarySetting
+
+@{
     ViewData["Title"] = "PayrollSettings";
 }
 
@@ -6,89 +8,92 @@
 
 
 <style>
-            .calendar-widget {
-                border-radius: 17px;
-                overflow: hidden;
-                position: relative;
-                cursor: pointer;
-            }
+    .calendar-widget {
+        border-radius: 17px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+    }
 
 
 
-            .widget-icon {
-                background: #f1f4fb;
-                padding: 18px 0;
-            }
+    .widget-icon {
+        background: #f1f4fb;
+        padding: 18px 0;
+    }
 
-            /*Sir Noman
-        */
-            /*.custom-control-label-md::after,
-            .custom-control-label-md::before{
-                left:0;
-            }*/
-            .policy-description{
-                overflow-y: auto;
-                border-left: 2px solid #0D5BE1;
-
-            }
-
-
-            .border-style, .calendar-widget.active {
-                outline: 2px solid #0D5BE1;
-                position: relative;
-                transition: 0.4ms ease-in-out;
-                /*		visibility:hidden;
-                        opacity:0;*/
-            }
+    /*Sir Noman
+                */
+    /*.custom-control-label-md::after,
+                    .custom-control-label-md::before{
+                        left:0;
+                    }*/
+    .policy-description {
+        overflow-y: auto;
+        border-left: 2px solid #0D5BE1;
+    }
 
 
-                .border-style::before, .calendar-widget.active::before {
-                    position: absolute;
-                    content: "";
-                    bottom: 0;
-                    width: 18px;
-                    right: -4px;
-                    height: 20px;
-                    background: #0D5BE1;
-                }
+    .border-style, .calendar-widget.active {
+        outline: 2px solid #0D5BE1;
+        position: relative;
+        transition: 0.4ms ease-in-out;
+        /*		visibility:hidden;
+                                opacity:0;*/
+    }
 
-            .pay-routine-module {
-                display: none;
-            }
 
-                .pay-routine-module.active {
-                    display: block;
-                }
+        .border-style::before, .calendar-widget.active::before {
+            position: absolute;
+            content: "";
+            bottom: 0;
+            width: 18px;
+            right: -4px;
+            height: 20px;
+            background: #0D5BE1;
+        }
 
-            div.week-day-btn label {
-                width: 100px;
-                height: 37px;
-                background: #fff;
-                border: 1px solid #6e6e6e;
-                color: #000;
-                padding: 5px 8px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                font-size: 16px;
-                margin-left: 2px;
-            }
+    .pay-routine-module {
+        display: none;
+    }
 
-            .week-day-btn input[type = "radio"] {
-                visibility: hidden;
-                opacity: 0;
-                width: 0px;
-            }
+        .pay-routine-module.active {
+            display: block;
+        }
 
-                .week-day-btn input[type="radio"]:checked + label {
-                    background-color: #128af9;
-                    color: #fff;
-                }
+    div.week-day-btn label {
+        width: 100px;
+        height: 37px;
+        background: #fff;
+        border: 1px solid #6e6e6e;
+        color: #000;
+        padding: 5px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 2px;
+    }
+
+    .week-day-btn input[type = "radio"] {
+        visibility: hidden;
+        opacity: 0;
+        width: 0px;
+    }
+
+        .week-day-btn input[type="radio"]:checked + label {
+            background-color: #128af9;
+            color: #fff;
+        }
     /*
-                .policy-module{
-                    display: none;
-                }*/
+                        .policy-module{
+                            display: none;
+                        }*/
+
+                        .divdisable{
+                            pointer-events: none;
+                        }
 
 </style>
 
@@ -147,7 +152,7 @@
                             <p class="fs-18 font-weight-semibold">How often do you pay your staff? <span class="text-danger">*</span></p>
                             <div class="row">
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center active" id="week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -156,7 +161,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="other-week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="other-week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -165,7 +170,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="twice-month-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="twice-month-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -174,7 +179,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center" id="once-month-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center active" id="once-month-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -187,7 +192,7 @@
 
                             <div class="pay-schedule-interface">
 
-                                <div class="mt-5 mb-6 pay-routine-module active" id="week-module">
+                                <div class="mt-5 mb-6 pay-routine-module" id="week-module">
                                     <p class="fs-17  mb-4 text-dark font-weight-semibold">Pays every week on a<span class="text-secondary">*</span></p>
 
                                     <div class="mb-5 d-flex">
@@ -308,17 +313,17 @@
                                     </p>
                                 </div>
 
-                                <div class="mt-5 mb-6  pay-routine-module" id="once-month-module">
+                                <div class="mt-5 mb-6  pay-routine-module active" id="once-month-module">
                                     <p class="fs-17  mb-1 text-dark font-weight-semibold">Pays on<span class="text-secondary">*</span></p>
                                     <div class="form-group">
                                         <div class="custom-controls-stacked">
                                             <label class="custom-control custom-radio mb-4 d-flex align-items-center">
-                                                <input type="radio" class="custom-control-input" name="example-radios" value="option1" checked="">
+                                                <input type="radio" id="LastWorkingDayOfMonth" class="custom-control-input" name="example-radios" value="option1" checked="">
                                                 <span class="custom-control-label fs-16">The last working day of every month</span>
                                             </label>
                                             <label class="custom-control custom-radio mb-4 d-flex align-items-center">
-                                                <input type="radio" class="custom-control-input" name="example-radios" value="option2">
-                                                <span class="custom-control-label fs-16">Day <input type="number" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
+                                                <input type="radio" id="SpecificDay" class="custom-control-input" name="example-radios" value="option2">
+                                                <span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
                                             </label>
                                         </div>
                                     </div>
@@ -335,7 +340,7 @@
 
                             <div class="card-footer px-0 d-flex align-items-center justify-content-between">
                                 <div>
-                                    <a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+                                    <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
                                     <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
                                 </div>
                                 <div>
@@ -450,29 +455,29 @@
                                                                     var i = 1;
                                                                     foreach (var item in list)
                                                                     {
-                                                                                        <tr>
-                                                                                            <td>@i</td>
-                                                                                            <td>@item.Title</td>
-                                                                                            <td>@item.GroupTitle</td>
-                                                                                            <td>
+                                                                        <tr>
+                                                                            <td>@i</td>
+                                                                            <td>@item.Title</td>
+                                                                            <td>@item.GroupTitle</td>
+                                                                            <td>
 
-                                                                                                <label class="custom-switch form-switch mb-0">
-                                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.ComponentId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
-                                                                                                    <span class="custom-switch-indicator"></span>
-                                                                                                </label>
+                                                                                <label class="custom-switch form-switch mb-0">
+                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.ComponentId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                                    <span class="custom-switch-indicator"></span>
+                                                                                </label>
 
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="d-flex">
-                                                                                                    <a onclick="editrecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
-                                                                                                        <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                                                                    </a>
-                                                                                                    <a onclick="confirmation(@item.ComponentId,this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <a onclick="editrecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                                                        <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                                                    </a>
+                                                                                    <a onclick="confirmation(@item.ComponentId,this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
                                                                         i++;
                                                                     }
                                                                 }
@@ -504,27 +509,27 @@
                                                                     var ii = 1;
                                                                     foreach (var item in listt)
                                                                     {
-                                                                                        <tr>
-                                                                                            <td>@ii</td>
-                                                                                            <td>@item.Title</td>
-                                                                                            <td>@item.GroupTitle</td>
-                                                                                            <td>
-                                                                                                <label class="custom-switch form-switch mb-0">
-                                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.ComponentId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
-                                                                                                    <span class="custom-switch-indicator"></span>
-                                                                                                </label>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="d-flex">
-                                                                                                    <a onclick="editrecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
-                                                                                                        <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                                                                    </a>
-                                                                                                    <a onclick="confirmation(@item.ComponentId,this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>@ii</td>
+                                                                            <td>@item.Title</td>
+                                                                            <td>@item.GroupTitle</td>
+                                                                            <td>
+                                                                                <label class="custom-switch form-switch mb-0">
+                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.ComponentId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                                    <span class="custom-switch-indicator"></span>
+                                                                                </label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <a onclick="editrecord(@item.ComponentId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                                                        <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                                                    </a>
+                                                                                    <a onclick="confirmation(@item.ComponentId,this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                                        <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
                                                                         ii++;
                                                                     }
                                                                 }
@@ -539,7 +544,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
                             <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
                         </div>
                     </div>
@@ -548,7 +553,7 @@
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Policy Settings</h4>
-                            <a href="javascript:void(0);" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addPolicy">Add New <i class="fe fe-plus-circle me-1"></i></a>
+                            <a onclick="addpolicymodel()" href="#" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addPolicy">Add New <i class="fe fe-plus-circle me-1"></i></a>
 
                         </div>
 
@@ -595,11 +600,14 @@
                                                             <input type="checkbox" id="IsIncomeTaxApplicable" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
                                                             <span class="custom-switch-indicator"></span>
                                                             <span class="custom-switch-description fs-15 me-3 text-dark">Is Income Tax Applicable</span>
-                                                            <a href="#">
-                                                                <i class="fa fa-info text-info"></i>
+                                                            <a id="IncomeTaxTooltip" href="#">
+                                                                <i class="fa fa-info"></i>
 
                                                             </a>
                                                         </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="incometax-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
                                                         <div hidden id="div_TaxSlabTable">
                                                             <input type="hidden" id="SlabId" />
                                                             <div class="row mt-3">
@@ -628,21 +636,21 @@
                                                                         <input class="form-control" id="TaxRatePercentage" type="number" placeholder="%" />
                                                                     </div>
                                                                 </div>
-                                                               <div class="col-md-12 col-lg-2 mt-5">
+                                                                <div class="col-md-12 col-lg-2 mt-5">
                                                                     <div class="ms-auto">
-                                                                    <button type="button" id="btn_Add" onclick="AddRow()" class="btn btn-success">Add</button>
+                                                                        <button type="button" id="btn_Add" onclick="AddRow()" class="btn btn-success">Add</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           @* <div class="row text-end">
+                                                            @* <div class="row text-end">
 
-                                                                 <div class="ms-auto">
-                                                                    <a href="javascript:void(0);" class="btn btn-success">Add</a>
-                                                                    <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Refresh</a>
-                                                                </div>
+                                                            <div class="ms-auto">
+                                                            <a href="javascript:void(0);" class="btn btn-success">Add</a>
+                                                            <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Refresh</a>
+                                                            </div>
 
                                                             </div>*@
-                                                            <div class="table-responsive mt-5">
+                                                            <div class="table-responsive mt-5" style="height: 244px;">
                                                                 <table id="tax-table" class="table table-bordered text-nowrap border-bottom">
                                                                     <thead>
                                                                         <tr>
@@ -659,35 +667,38 @@
                                                                             int count = 1;
                                                                             foreach (var item in ViewBag.ListTaxSlab)
                                                                             {
-                                                                                                <tr>
-                                                                                                    <td>@count</td>
-                                                                                                    <td>@item.Title</td>
-                                                                                                    <td>@item.MinIncome
-                                                                                                        @*<div class="form-group m-0">
-                                                                                            <input class="form-control" id="MinIncome_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.MinIncome" type="number" name="number">
-                                                                                        </div>*@
-                                                                                                    </td>
-                                                                                                    <td>@item.MaxIncome
-                                                                                                        @*<div class="form-group m-0">
-                                                                                            <input class="form-control" id="MaxIncome_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.MaxIncome" type="number" name="number">
-                                                                                        </div>*@
-                                                                                                    </td>
-                                                                                                    <td>@item.TaxRatePercentage
-                                                                                                        @*<div class="form-group m-0">
-                                                                                            <input class="form-control" id="TaxRatePercentage_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.TaxRatePercentage" type="number" name="number">
-                                                                                        </div>*@
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        <div class="d-flex">
-                                                                                                            <a onclick="edittaxrecord(@item.SlabId,this)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
-                                                                                                                <i class="feather feather-edit primary text-primary mt-1 "></i>
-                                                                                                            </a>
-                                                                                                            <a onclick="confirmationtax(@item.SlabId,this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
-                                                                                                            </a>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
+                                                                                <tr slabid="@item.SlabId">
+                                                                                    <td>@count</td>
+                                                                                    <td>@item.Title</td>
+                                                                                    <td>
+                                                                                        @item.MinIncome
+                                                                                        @*<div class="form-group m-0">
+                                                                                <input class="form-control" id="MinIncome_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.MinIncome" type="number" name="number">
+                                                                                </div>*@
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @item.MaxIncome
+                                                                                        @*<div class="form-group m-0">
+                                                                                <input class="form-control" id="MaxIncome_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.MaxIncome" type="number" name="number">
+                                                                                </div>*@
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @item.TaxRatePercentage
+                                                                                        @*<div class="form-group m-0">
+                                                                                <input class="form-control" id="TaxRatePercentage_@item.SlabId" onchange="setvalue(this.id,this)" value="@item.TaxRatePercentage" type="number" name="number">
+                                                                                </div>*@
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="d-flex">
+                                                                                            <a onclick="edittaxrecord(this)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                                                                <i class="feather feather-edit primary text-primary mt-1 "></i>
+                                                                                            </a>
+                                                                                            <a onclick="confirmationtax(this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
                                                                                 count++;
                                                                             }
                                                                         }
@@ -696,27 +707,43 @@
                                                                 </table>
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                     </div>
 
-                                                    @*<div class="mb-5">
-                                                    <label class="custom-switch form-switch mb-0">
-                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
-                                                    <span class="custom-switch-indicator"></span>
-                                                    <span class="custom-switch-description fs-15 me-3 text-dark">Pay over Time</span>
-                                                    <a href="#">
-                                                    <i class="fa fa-info text-info"></i>
+                                                    <div hidden id="div_OverTime">
+                                                        <div class="mb-5">
+                                                            <label class="custom-switch form-switch mb-0">
+                                                                <input type="checkbox" id="IsOverTimeApplicable" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                                <span class="custom-switch-indicator"></span>
+                                                                <span class="custom-switch-description fs-15 me-3 text-dark">Is OverTime Applicable</span>
+                                                                <a id="OverTimeTooltip" href="#">
+                                                                    <i class="fa fa-info"></i>
 
-                                                    </a>
-                                                    </label>
-                                                    </div>*@
+                                                                </a>
+                                                            </label>
+                                                            <div class="mb-2 mt-2">
+                                                                <p id="overtime-description" class="w-100 ps-2 fs-14 "></p>
+                                                            </div>
+                                                            <label class="custom-switch form-switch mb-0">
+                                                                <input type="checkbox" id="IsShortMinutesDeduction" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                                <span class="custom-switch-indicator"></span>
+                                                                <span class="custom-switch-description fs-15 me-3 text-dark">Is Short Minutes Deduction</span>
+                                                                <a id="ShortMinutesDeductionTooltip" href="#">
+                                                                    <i class="fa fa-info"></i>
+                                                                </a>
+                                                            </label>
+                                                            <div class="mb-2 mt-2">
+                                                                <p id="shortminuites-description" class="w-100 ps-2 fs-14 "></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="ms-auto">
-                                                <a href="javascript:void(0);" class="btn btn-success">Save</a>
+                                                <a onclick="savePolicyConfiguration()" href="#" class="btn btn-success">Save</a>
                                                 <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                                             </div>
                                         </div>
@@ -740,28 +767,28 @@
                                                     var countt = 1;
                                                     foreach (var item in ViewBag.ListPayrollPolicy)
                                                     {
-                                                                        <tr>
-                                                                            <td>@countt</td>
-                                                                            <td>
-                                                                                @item.Title
-                                                                                <a href="javascript:void(0);" class="ms-3 border-0 action-btns1 sidebarmodal-collpase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View">
-                                                                                    <i class="fa fa-info text-info"></i>
-                                                                                </a>
-                                                                            </td>
-                                                                            <td>
-                                                                                <label class="custom-switch form-switch mb-0">
-                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.PolicyConfigurationId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
-                                                                                    <span class="custom-switch-indicator"></span>
-                                                                                </label>
-                                                                            </td>
-                                                                            <td>
+                                                        <tr>
+                                                            <td>@countt</td>
+                                                            <td>
+                                                                @item.Title
+                                                                <a href="javascript:void(0);" class="ms-3 border-0 action-btns1 sidebarmodal-collpase" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View">
+                                                                    <i class="fa fa-info text-info"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <label class="custom-switch form-switch mb-0">
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.PolicyConfigurationId" onchange="setpolicyvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
 
-                                                                                <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@item.PolicyConfigurationId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
-                                                                                </a>
-                                                                                <a href="#" class="child-center fs-18 btn btn-danger text-white"><i class="fa fa-trash"></i></a>
-                                                                            </td>
-                                                                        </tr>
+                                                                <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@item.PolicyConfigurationId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                </a>
+
+                                                            </td>
+                                                        </tr>
                                                         countt++;
                                                     }
                                                 }
@@ -773,7 +800,7 @@
                         </div>
 
                         <div class="card-footer">
-                            <a href="javascript:void(0);" class="btn btn-success">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
                             <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
                         </div>
 
@@ -890,13 +917,23 @@
             $('#Category').select2({ placeholder: 'Select Category', width: '100%', allowClear: true }).val('').trigger('change');
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
 
+            debugger;
+            var str = '@Model.MonthlyIsSpecificDayofEveryMonth';
 
+            if (str.toUpperCase() == "TRUE") {
+                $('#SpecificDay').prop('checked', true);
+                $('#SpecificDay').trigger('change');
+            }
+            else {
+                $('#LastWorkingDayOfMonth').prop('checked', true);
+                $('#LastWorkingDayOfMonth').trigger('change');
+            }
 
 
 
             //$('.custom-switch-input').prop('checked', true);
 
-            $('.switch-unchecked').prop('checked', false);
+            // $('.switch-unchecked').prop('checked', false);
             $('.dismiss').on('click', function () {
                 $('.sidebar-modal').removeClass('active');
                 $('body').removeClass('overlay-open');
@@ -959,97 +996,260 @@
             weekModule.fadeIn(400);
         })
 
-        var policyTypes = $('#policy-types');
-        var policyDescription = $('.policy-description');
-        //var leavePolicyModule = $('#leave-policy-module');
-        var policyModule = $('.policy-module');
-        //var TardinessPolicyModule1 = $('#tardiness-policy-module1');
-        //var TardinessPolicyModule2 = $('#tardiness-policy-module2');
-        var overTimePolicyModule = $('#overtime-policy-module');
-        policyTypes.on('change', function () {
-            var selectedPolicy = policyTypes.val();
+        $('#LastWorkingDayOfMonth').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $('#SpecificDay').prop('checked', false)
+                $("#MonthlyDateOfEveryMonth").val(0);
+                $("#MonthlyDateOfEveryMonth").addClass("divdisable");
 
-            if (selectedPolicy == '1') {
+            }
+        })
+        $('#SpecificDay').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $('#LastWorkingDayOfMonth').prop('checked', false)
+                $("#MonthlyDateOfEveryMonth").prop("Disabled", false);
+                $("#MonthlyDateOfEveryMonth").removeClass("divdisable");
+            }
+        })
+        $('.btn_Save').on('click', function () {
+            debugger;
+            var status = true;
+            var MonthlyDateOfEveryMonth = $('#MonthlyDateOfEveryMonth').val();
+            var LastWorkingDayOfMonth = $('#LastWorkingDayOfMonth').is(':checked');
+            var IsSpecificDayofEveryMonth = true;
+            if (LastWorkingDayOfMonth) {
+                IsSpecificDayofEveryMonth = false;
+                MonthlyDateOfEveryMonth = 0;
+            }
+            else {
+                if ($("#MonthlyDateOfEveryMonth").val() == 0 || $("#MonthlyDateOfEveryMonth").val() == "") {
+                    $.growl.warning({
+                        message: "Choose Day of Month"
+                    });
+                    $("#MonthlyDateOfEveryMonth").css("border-color", "red");
+                    status = false;
+                    return false;
+                }
+                else {
+                    $("#MonthlyDateOfEveryMonth").css("border-color", "#ddd");
+                }
 
-                policyModule.hide();
-                overTimePolicyModule.fadeIn(400);
-                policyDescription.text("Hi I am working hours and overtime policy. kindly read carefully about me so that you could know about the rules and regulations");
             }
 
-            //else if (selectedPolicy == '2') {
-            //	policyModule.hide();
-            //	TardinessPolicyModule1.fadeIn(400);
-            //	policyDescription.text("Hi I am tardiness policy kindly read carefully about me so that you could know about the rules and regulations");
-            //}
+            var Data = {
+                MonthlyDateOfEveryMonth: MonthlyDateOfEveryMonth,
+                IsSpecificDayofEveryMonth: IsSpecificDayofEveryMonth
+            }
 
-            //else if(selectedPolicy == '3'){
-            //	policyModule.hide();
-            //	overTimePolicyModule.fadeIn(400);
-            //	policyDescription.text("Hi I am over time policy kindly read carefully about me so that you could know about the rules and regulations");
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
 
-            //}
-            //else if(selectedPolicy == '4'){
-            //	policyModule.hide();
-            //	TardinessPolicyModule2.fadeIn(400);
-            //	policyDescription.text("Hi I am tardniess consequences & accumulated policy  kindly read carefully about me so that you could know about the rules and regulations");
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/SavePayrollSetting",
+                        type: "Post",
+                        data: Data,
+                        success: function (data) {
+                            if (data != "") {
+                                debugger
+                                //var b = JSON.parse(data)
+                                if (data.success) {
 
-            //}
+                                    //window.location.href =  window.location.href;
+                                    var url = '@Url.Action("PayrollSettings", "Setting",new { data = 2 })';
+                                    window.location.href = url;
+                                    status = false;
+                                }
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+
 
         })
 
-        function AddRow(){
+        var editmode = false;
+
+        function AddRow() {
             var slabid = $("#SlabId").val();
             var slabtitle = $("#SlabTitle").val();
             var maxincome = $("#MaxIncome").val();
-            var minincome= $("#MinIncome").val();
-            var taxratepercentage= $("#TaxRatePercentage").val();
+            var minincome = $("#MinIncome").val();
+            var taxratepercentage = $("#TaxRatePercentage").val();
 
-            var lastRow = $('#tax-table tr:last');
-             var srno = parseInt(lastRow.find('td:nth-child(1)').text()) + 1;
 
-            // Create a new row with the input values
-            var newRow = $('<tr stabid="' + slabid + '">');
-            newRow.append('<td>' + srno + '</td>');
-            newRow.append('<td>' + slabtitle + '</td>');
-            newRow.append('<td>' + minincome + '</td>');
-            newRow.append('<td>' + maxincome + '</td>');
-            newRow.append('<td>' + taxratepercentage + '</td>');
+            if (!editmode) {
+                var lastRow = $('#tax-table tr:last');
+                var srno = parseInt(lastRow.find('td:nth-child(1)').text()) + 1;
 
-            var btn = '<td> <div class="d-flex"> <a onclick="editrecord(' +slabid+',this)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">  <i class="feather feather-edit primary text-primary mt-1 "> </i> </a>';
-            btn+= '<a onclick="confirmation(' +slabid+',this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete"> <i class="feather feather-trash-2 text-danger mt-1"> </i> </a> </div>  </td></tr>';
+                // Create a new row with the input values
+                var newRow = $('<tr stabid="' + slabid + '">');
+                newRow.append('<td>' + srno + '</td>');
+                newRow.append('<td>' + slabtitle + '</td>');
+                newRow.append('<td>' + minincome + '</td>');
+                newRow.append('<td>' + maxincome + '</td>');
+                newRow.append('<td>' + taxratepercentage + '</td>');
 
-            newRow.append(btn);
-            //newRow.append('<td> <div class="d-flex"> <a onclick="editrecord(' +slabid+')" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">  <i class="feather feather-edit primary text-primary mt-1 "> </i> </a>');
-            //newRow.append('<a onclick="confirmation(' +slabid+',this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete"> <i class="feather feather-trash-2 text-danger mt-1"> </i> </a> </div>  </td></tr>');
+                var btn = '<td> <div class="d-flex"> <a onclick="edittaxrecord(this)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">  <i class="feather feather-edit primary text-primary mt-1 "> </i> </a>';
+                btn += '<a onclick="confirmationtax(this)" class="action-btns1 btn-xs" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-bs-original-title="Delete" aria-label="Delete"> <i class="feather feather-trash-2 text-danger mt-1"> </i> </a> </div>  </td></tr>';
 
-            // Append the new row to the table
-            $('#tax-table').append(newRow);
+                newRow.append(btn);
+
+                // Append the new row to the table
+                $('#tax-table').append(newRow);
+            }
+            else if (editmode) {
+                // Find the selected row
+                var selectedRow = $('#tax-table tr.selected');
+                var srno = parseInt(selectedRow.find('td:nth-child(1)').text());
+                // Update the row with the edited values
+                selectedRow.find('td:eq(0)').text(srno);
+                selectedRow.find('td:eq(1)').text(slabtitle);
+                selectedRow.find('td:eq(2)').text(maxincome);
+                selectedRow.find('td:eq(3)').text(minincome);
+                selectedRow.find('td:eq(4)').text(taxratepercentage);
+
+            }
 
             ClearControl();
 
         }
 
-        function edittaxrecord(slabid,control){
+        function edittaxrecord(control) {
             var currentrow = $(control).closest('tr');
-            var slabid = $(control).closest('tr').attr('stabid').val();
-            var title = currentrow.find('td:nth-child(2)').text();
-            var maxincome = currentrow.find('td:nth-child(3)').text();
-            var minincome = currentrow.find('td:nth-child(4)').text();
-            var taxratepercentage = currentrow.find('td:nth-child(5)').text();
+            var slabid = $(control).closest('tr').attr('stabid');
+            var title = currentrow.find('td:nth-child(2)').text().trim();
+            var minincome = currentrow.find('td:nth-child(3)').text().trim();
+            var maxincome = currentrow.find('td:nth-child(4)').text().trim();
+            var taxratepercentage = currentrow.find('td:nth-child(5)').text().trim();
 
+            $("#SlabId").val(slabid);
+            $("#SlabTitle").val(title);
+            $("#MaxIncome").val(maxincome);
+            $("#MinIncome").val(minincome);
+            $("#TaxRatePercentage").val(taxratepercentage);
+
+            $(control).closest('tr').addClass("selected");
+
+            editmode = true;
             //currentrow.remove();
         }
 
-        function ClearControl(){
+        function confirmation(control) {
+            var currentrow = $(control).closest('tr');
+            var slabid = $(control).closest('tr').attr('stabid');
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (slabid > 0) {
+                        var Data = { id: slabid }
+                        $.ajax({
+                            url: "/Setting/TaxSlabDelete",
+                            method: 'GET',
+                            data: Data,
+                            success: function (response) {
+                                if (response.success) {
+
+                                    var currentrow = $(control).closest('tr');
+                                    currentrow.remove();
+
+                                    notif({
+                                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                        type: "success"
+                                    });
+
+                                    refreshWeekendTable();
+                                }
+
+
+                            },
+                            error: function () {
+                                // Handle error if the AJAX request fails
+                                console.log('Failed to fetch data from the database.');
+                            }
+                        });
+                    }
+                    var currentrow = $(control).closest('tr');
+                    currentrow.remove();
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+        function confirmationtax(control) {
+            var currentrow = $(control).closest('tr');
+            currentrow.remove();
+
+        }
+
+
+        function ClearControl() {
             var slabid = $("#SlabId").val(0);
             var slabtitle = $("#SlabTitle").val('');
             var maxincome = $("#MaxIncome").val(0);
-            var minincome= $("#MinIncome").val(0);
-            var taxratepercentage= $("#TaxRatePercentage").val(0);
+            var minincome = $("#MinIncome").val(0);
+            var taxratepercentage = $("#TaxRatePercentage").val(0);
         }
 
         $('#policy-types').on('change', function () {
-            var selectedPolicy = policyTypes.val();
+            var selectedPolicy = $('#policy-types').val();
             debugger;
 
             if (selectedPolicy > 0) {
@@ -1057,14 +1257,21 @@
                 $.ajax({
                     url: "/Setting/GetPolicyDescription",
                     method: 'GET',
+                    async: false,
                     data: Data,
                     success: function (response) {
                         if (response != null) {
                             if (selectedPolicy == '14') { // Tardiness Policy
                                 $('#div_TaxSlabSetting').prop('hidden', false)
+                                $('#div_OverTime').prop('hidden', true)
                                 $('#IsIncomeTaxApplicable').prop('checked', false);
                             }
+                            else if (selectedPolicy == '15') {
+                                $('#div_OverTime').prop('hidden', false)
+                                $('#div_TaxSlabSetting').prop('hidden', true)
 
+                            }
+                            $('#IsIncomeTaxApplicable').trigger('change');
                             $('.policy-description').text(response.description);
                         }
                     },
@@ -1113,12 +1320,27 @@
                 $("#Title").css("border-color", "#ddd");
                 $("#policy-types").css("border-color", "#ddd");
             }
+
+            var TaxSlabList = new Array();
+            $('#tax-table tbody tr').each(function () {
+                var row = $(this);
+                var tax = {};
+                tax.SlabId = row.attr("slabid");
+                tax.Title = row.find('td:nth-child(2)').text().trim();
+                tax.MinIncome = row.find('td:nth-child(3)').text().trim();
+                tax.MaxIncome = row.find('td:nth-child(4)').text().trim();
+                tax.TaxRatePercentage = row.find('td:nth-child(5)').text().trim();
+                TaxSlabList.push(tax);
+            });
+
             var Data = {
                 id: $("#PolicyConfigurationId").val(),
                 title: $('#Title').val(),
                 policyId: $("#policy-types").val(),
-                halfleave: $("#HalfLeave").is(':checked'),
-                quarterleave: $("#QuarterLeave").is(':checked')
+                isincometaxapplicable: $('#IsIncomeTaxApplicable').is(':checked'),
+                listTaxSlab: TaxSlabList,
+                isovertimeapplicable: $('#IsOverTimeApplicable').is(':checked'),
+                isshortminutesdeduction: $('#IsShortMinutesDeduction').is(':checked')
 
             }
             console.log(Data)
@@ -1173,7 +1395,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             async: false,
-                            url: "/Setting/LeavePolicyCreateOrUpdate",
+                            url: "/Setting/PayrollPolicyCreateOrUpdate",
                             type: "Post",
                             data: Data,
                             success: function (data) {
@@ -1221,8 +1443,40 @@
 
 
         }
+        function editpolicyconfiguration(id) {
+            debugger;
+            addpolicymodel();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/GetPayrollPolicyConfigurationById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
 
+                        $("#PolicyConfigurationId").val(data.policyConfigurationId)
+                        $("#Title").val(data.title);
+                        $("#policy-types").val(data.policyId).trigger('change');
 
+                        if (data.policyId == 14) {
+                            $('#IsIncomeTaxApplicable').prop('checked', data.isIncomeTaxApplicable);
+                            $('#IsIncomeTaxApplicable').trigger('change')
+
+                            //if (data.isIncomeTaxApplicable)
+                            //    $('#div_TaxSlabSetting').prop('hidden', false)
+                        }
+                        $("#addPolicy").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
 
         /// End of Add or Edit payroll Policy
 
@@ -1623,9 +1877,59 @@
             $("#Status").prop('checked', true)
         }
 
+        function addpolicymodel() {
+
+            $("#addPolicy").modal('show');
+            $("#PolicyConfigurationId").val(0)
+            $("#Title").val('')
+            $('#div_TaxSlabSetting').prop('hidden', true)
+            $('#div_OverTime').prop('hidden', true)
 
 
+            $("#IsOverTimeApplicable").prop('checked', false);
+            $("#IsShortMinutesDeduction").prop('checked', false);
+            $("#IsIncomeTaxApplicable").prop('checked', false);
+            $("#Title").css("border-color", "#ddd");
+            $('.policy-description').text("");
+            $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
+        }
 
+        $("#OverTimeTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Overtime refers to the additional time worked by an employee beyond their regular or scheduled working hours. Overtime occurs when an employee exceeds the predefined hours of work established by their employer or the applicable labor laws.";
+            $("#overtime-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#overtime-description").text(tooltipText);
+        });
+        $("#OverTimeTooltip").mouseout(function () {
+            debugger
+            $("#overtime-description").text("");
+        });
+
+        $("#ShortMinutesTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Short minutes deduction refers to the practice of reducing an employee's salary or wages for the time they are absent from work due to arriving late or leaving early by a few minutes. It involves subtracting a certain amount from their salary or wages to account for the missed time.";
+            $("#shortminutes-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#shortminutes-description").text(tooltipText);
+        });
+        $("#ShortMinutesTooltip").mouseout(function () {
+            debugger
+            $("#shortminutes-description").text("");
+        });
+        $("#IncomeTaxTooltip").mouseover(function () {
+            debugger
+            var tooltipText = "Income tax is a tax imposed on individuals or entities based on their income or earnings, typically calculated as a percentage of their taxable income.";
+            $("#incometax-description").fadeIn(400);
+            // Set the tooltip text dynamically using JavaScript
+            $("#incometax-description").text(tooltipText);
+        });
+        $("#IncomeTaxTooltip").mouseout(function () {
+            debugger
+            $("#incometax-description").text("");
+        });
+
+        IncomeTaxTooltip
     </script>
 }
 
