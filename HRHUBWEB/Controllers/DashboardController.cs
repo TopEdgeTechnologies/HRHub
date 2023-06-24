@@ -18,8 +18,6 @@ namespace HRHUBWEB.Controllers
         private readonly User _user;
         private readonly IEmailHelper _EmailHelper;
   
-
-
         public DashboardController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, 
             APIHelper APIHelper, IHttpContextAccessor httpContextAccessor, IEmailHelper EmailHelper)
         {
@@ -234,6 +232,16 @@ namespace HRHUBWEB.Controllers
 		public async Task<IActionResult> Staff_UpComingBirthdays()
 		{
 			string procrdure = "BI.GetStaff_UpComingBirthdays";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_Loan_Statistics()
+		{
+			string procrdure = "BI.GetStaff_Loan_Statistics";
 			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);

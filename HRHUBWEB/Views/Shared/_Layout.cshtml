@@ -1125,6 +1125,25 @@
 		<!-- Custom function js -->
 		<script src="~/js/site.js"></script>
 
+		<!-- INTERNAL Index js-->
+		<script src="~/assets/js/admin/admin-general.js"></script>
+		<!-- INTERNAL Colorpicker js -->
+		<script src="~/assets/plugins/spectrum-colorpicker/spectrum-colorpicker.js"></script>
+	
+
+		<script type="text/javascript">
+
+
+
+        $('.number').keypress(function (event) {
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+    
+    </script>
+	<script>
+
 			<script>
 
 

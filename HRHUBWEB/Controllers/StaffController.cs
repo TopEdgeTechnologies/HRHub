@@ -99,7 +99,7 @@ namespace HRHUBWEB.Controllers
             int month = DateTime.Now.Month;
             int year = DateTime.Now.Year;
 
-            var staffAttendanceStatistics = await _APIHelper.CallApiAsyncGet<Staff>($"api/Staffs/GetStaffAttendanceStatistics{objStaff.CompanyId}/{month}/{year}/{Id}", HttpMethod.Get);
+            var staffAttendanceStatistics = await _APIHelper.CallApiAsyncGet<Staff>($"api/Staffs/GetStaffAttendanceStatistics{_user.CompanyId}/{month}/{year}/{Id}", HttpMethod.Get);
 
             objStaff.MTDPresentCount = staffAttendanceStatistics.MTDPresentCount;
             objStaff.YTDPaidLeaveCount = staffAttendanceStatistics.YTDPaidLeaveCount;

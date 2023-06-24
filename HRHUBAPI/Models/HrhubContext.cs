@@ -155,10 +155,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ActivityLog>(entity =>
@@ -732,6 +728,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.LoanTypeId).HasColumnName("LoanTypeID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -1093,6 +1090,8 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.MonthlyDateOfEveryMonth).HasColumnName("Monthly_DateOfEveryMonth");
+            entity.Property(e => e.MonthlyIsSpecificDayofEveryMonth).HasColumnName("Monthly_IsSpecificDayofEveryMonth");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
         });
 
@@ -1275,23 +1274,6 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
             entity.Property(e => e.SectionTitle).IsUnicode(false);
-        });
-
-        modelBuilder.Entity<ViewPerformanceReviewQuestionsList>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("view_PerformanceReviewQuestionsList");
-
-            entity.Property(e => e.PerformanceFormTitle).IsUnicode(false);
-            entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
-            entity.Property(e => e.QuestionTitle).IsUnicode(false);
-            entity.Property(e => e.ReviewFormId).HasColumnName("ReviewFormID");
-            entity.Property(e => e.SectionDescription).IsUnicode(false);
-            entity.Property(e => e.SectionId).HasColumnName("SectionID");
-            entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
-            entity.Property(e => e.SectionTitle).IsUnicode(false);
-            entity.Property(e => e.Weightage).HasColumnType("decimal(18, 0)");
         });
 
         modelBuilder.Entity<WeekendRule>(entity =>

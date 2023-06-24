@@ -11,6 +11,8 @@ public partial class LoanType
 
     public string? Title { get; set; }
 
+    public string? SnapPath { get; set; }
+
     public bool Status { get; set; }
 
     public bool IsNeedApproval { get; set; }
