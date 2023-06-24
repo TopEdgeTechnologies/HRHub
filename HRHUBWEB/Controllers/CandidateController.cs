@@ -12,6 +12,7 @@ using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System;
+using HRHUBAPI.BackGroundService;
 
 namespace HRHUBWEB.Controllers
 {
@@ -19,10 +20,21 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-        public CandidateController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+        private readonly IEmailHelper _EmailHelper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly APIHelper _APIHelper;
+        private readonly User _user;
+
+
+        public CandidateController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, IEmailHelper EmailHelper , APIHelper aPIHelper,
+            IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
+            _EmailHelper = EmailHelper;
+            _APIHelper = aPIHelper;
+            _httpContextAccessor = httpContextAccessor;
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
         }
 
         #region CandidateInfo
@@ -45,50 +57,22 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
             Candidate ObjCandidate = new Candidate();
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ObjCandidate.CompanyId = userObject.CompanyId;
-            if (Token != null)
-            {
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{ObjCandidate.CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x=>x.StatusId== id);
-                    ObjCandidate.UrlRequestSatausID = id;
-                }
+           var list= await _APIHelper.CallApiAsyncGet<IEnumerable<Candidate>>($"api/Candidate/GetCandidateInfos{_user.CompanyId}", HttpMethod.Get);
+            ObjCandidate.ListCandidate = list.Where(x => x.StatusId == id);
 
 
+            ObjCandidate.UrlRequestSatausID = id;
+            ObjCandidate.CompanyId = _user.CompanyId;
 
-                HttpResponseMessage message1 = await _client.GetAsync("api/Candidate/GetCandidateStatusInfos");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateStatus = JsonConvert.DeserializeObject<List<StatusInfo>>(result);
-
-                }
-
-                HttpResponseMessage message2 = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjCandidate.CompanyId}");
-                if (message2.IsSuccessStatusCode)
-                {
-                    var result = message2.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
-
-
-
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+            ViewBag.CandidateStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<StatusInfo>>($"api/Candidate/GetCandidateStatusInfos", HttpMethod.Get);
+            ViewBag.CandidateDesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
 
 
             return View(ObjCandidate);
+
+
+           
         }
 
 
@@ -97,23 +81,17 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> SearchList(string Name, int DesignationId, int ExperienceId,int CompanyId, int id = 0)
         {
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-
-
 
             Candidate objCandidate = new Candidate();
-           
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
+            var list = await _APIHelper.CallApiAsyncGet<IEnumerable<Candidate>>($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{_user.CompanyId}", HttpMethod.Get);
+            var ListCandidate = list.Where(x => x.StatusId == id);
+            objCandidate.UrlRequestSatausID = id;
+
+          
+            if (ListCandidate !=null)
             {
-                var result1 = message.Content.ReadAsStringAsync().Result;
-                var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1).Where(x => x.StatusId == id);
-                objCandidate.UrlRequestSatausID = id;
+                
 
                 return Json(new
                 {
@@ -147,101 +125,51 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             ViewBag.CandidateId = id;
-            if(Token != null) {
+            var CandidateId = id;
 
-                var CandidateId = id;
-                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
+            ViewBag.CandidateSkill = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateSkill>>($"api/Candidate/GetCandidateSkillInfos{CandidateId}", HttpMethod.Get);
 
-                }
-
-                
-
-
-
-
-                Candidate ObjCandidate = await GetCandidatebyID(id);
+            Candidate ObjCandidate = await GetCandidatebyID(id);
 
             return View(ObjCandidate);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-
-            }
+           
         }
         private async Task<Candidate> GetCandidatebyID(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+           
             Candidate ObjCandidate = new Candidate();
-            
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
-
-            }
+            ObjCandidate = await _APIHelper.CallApiAsyncGet<Candidate>($"api/Candidate/GetCandidateInfoId{id}", HttpMethod.Get);
 
             return ObjCandidate;
         }
         [HttpGet]
         public async Task<IActionResult> CandidateCreateOrUpdate(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            //var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            //Get Company ID through Sessions
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ViewBag.CompanyId = userObject.CompanyId;
+            ////Get Company ID through Sessions
+            //var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            ViewBag.CompanyId = _user.CompanyId;
             var CompanyId = ViewBag.CompanyId;
             var CandidateId = id;
-            if (Token != null) {
-
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Configuration/GetDesignationInfos{CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
-
-
-                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
-
-                }
 
 
 
-              
+            ViewBag.CandidateDesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{CompanyId}", HttpMethod.Get);
+            ViewBag.CandidateSkill = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateSkill>>($"api/Candidate/GetCandidateSkillInfos{CandidateId}", HttpMethod.Get);
 
-                if (id == 0)
+
+            if (id == 0)
             {
                 Candidate Info = new Candidate();
-                
+
                 return View(Info);
             }
             Candidate Candidateinfo = await GetCandidatebyID(id);
 
             return View(Candidateinfo);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-
-            }
+            
         }
         [HttpPost]
         public async Task<IActionResult> CandidateCreateOrUpdate(IFormCollection my,Candidate ObjCandidate)
@@ -276,8 +204,8 @@ namespace HRHUBWEB.Controllers
                     ObjCandidate.Picture = uploadImage(ObjCandidate.Name, CandidatePicture, "CandidateImages");
                 }
                 var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjCandidate.CompanyId = userObject.CompanyId;
-                ObjCandidate.CreatedBy = userObject.UserId;
+                ObjCandidate.CompanyId = _user.CompanyId;
+                ObjCandidate.CreatedBy = _user.UserId;
                 HttpResponseMessage message = await _client.PostAsJsonAsync("api/Candidate/CandidateAddOrCreate", ObjCandidate);
 
                 if (message.IsSuccessStatusCode)
@@ -288,7 +216,7 @@ namespace HRHUBWEB.Controllers
 
                     var model = JsonConvert.DeserializeObject<Response>(body.Result);
 
-
+                    
                     int status = 0;
                     if (model.Success)
                     {
@@ -303,6 +231,7 @@ namespace HRHUBWEB.Controllers
                             status = 2;
                         }
 
+                      //var result = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, "", "Test email hello hello");
 
                     }
 
@@ -436,13 +365,22 @@ namespace HRHUBWEB.Controllers
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
+                var candidateObj = JsonConvert.DeserializeObject<CandidateScreening>(result);
+
+
+                // send email on status update 
+                SendToCandidateEmail(candidateObj.CandidateId, candidateObj.StatusId);
+
+
 
                 // Update list of candidates
                 HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateInfos{userObject.CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result1 = message1.Content.ReadAsStringAsync().Result;
-                   var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1);
+                   
+                   
+                    var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1);
 
                     return Json(new
                     {
@@ -514,7 +452,133 @@ namespace HRHUBWEB.Controllers
         #endregion
 
 
+        #region SendEmailNotification
+        
+        
+        
+        private async void SendToCandidateEmail(int? CandidateId, int? StatusId)
+        {
+            
+            Candidate ObjCandidate = new Candidate();
+            EmailTemplate objEmail = new EmailTemplate();
+            EmailNotificationSetting objEmailSetting = new EmailNotificationSetting();
 
+           int? statusid = StatusId;
+
+            if (statusid == 9)// it means its rejected now get rejected email template 
+            {
+                //
+
+
+                ObjCandidate = await _APIHelper.CallApiAsyncGet<Candidate>($"api/Candidate/GetCandidateInfoId{CandidateId}", HttpMethod.Get);
+                objEmailSetting = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
+                var Id = objEmailSetting.OnRejectionTemplateId;
+
+                objEmail = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
+                var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+                //HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+                //if (message.IsSuccessStatusCode)
+                //{
+                //    var result = message.Content.ReadAsStringAsync().Result;
+                //    ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+                //}
+
+
+                //HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+                //if (Message.IsSuccessStatusCode)
+                //{
+                //    var result = Message.Content.ReadAsStringAsync().Result;
+                //    objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+                //}
+
+                //HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+                //if (message1.IsSuccessStatusCode)
+                //{
+                //    var result = message1.Content.ReadAsStringAsync().Result;
+                //    objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+                //}
+                //   var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+
+
+
+            }
+            //else if (statusid == 8) // it means its Offer Accepted now get Offer Accepted email template 
+            //{
+            //    HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+            //    if (message.IsSuccessStatusCode)
+            //    {
+            //        var result = message.Content.ReadAsStringAsync().Result;
+            //        ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+            //    }
+
+
+            //    HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+            //    if (Message.IsSuccessStatusCode)
+            //    {
+            //        var result = Message.Content.ReadAsStringAsync().Result;
+            //        objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+            //    }
+            //    var Id = objEmailSetting.OnStatusChangeTemplateId;
+
+            //    HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+            //    if (message1.IsSuccessStatusCode)
+            //    {
+            //        var result = message1.Content.ReadAsStringAsync().Result;
+            //        objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+            //    }
+            //    var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+            //}
+
+            //else if (statusid == 2) // it means its Short List now get Short List email template 
+            //{
+            //    HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{CandidateId}");
+            //    if (message.IsSuccessStatusCode)
+            //    {
+            //        var result = message.Content.ReadAsStringAsync().Result;
+            //        ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
+
+            //    }
+
+
+            //    HttpResponseMessage Message = await _client.GetAsync($"api/Setting/GetEmailNotificationSettingById{CompanyId}");
+            //    if (Message.IsSuccessStatusCode)
+            //    {
+            //        var result = Message.Content.ReadAsStringAsync().Result;
+            //        objEmailSetting = JsonConvert.DeserializeObject<EmailNotificationSetting>(result);
+
+            //    }
+            //    var Id = objEmailSetting.OnStatusChangeTemplateId;
+
+            //    HttpResponseMessage message1 = await _client.GetAsync($"api/Setting/EmailTemplateById{Id}");
+            //    if (message1.IsSuccessStatusCode)
+            //    {
+            //        var result = message1.Content.ReadAsStringAsync().Result;
+            //        objEmail = JsonConvert.DeserializeObject<EmailTemplate>(result);
+            //    }
+            //    var Email = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, objEmail.Subject, objEmail.Body);
+
+            //}
+            //else if (statusid == 3) // it means its Interview now get Interview  email template 
+            //{ 
+            
+            //}
+
+
+
+
+
+
+
+
+        }
+        #endregion
 
 
 

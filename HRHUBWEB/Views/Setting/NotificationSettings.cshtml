@@ -4,7 +4,6 @@
     ViewData["Title"] = "Notification Settings";
 }
 
-
 <div class="side-app main-container py-0">
 
     <!--Page header-->
@@ -263,8 +262,16 @@
                                                   <div class="form-group">
                                                     <label class="form-label">Subject: <span class="text-danger">*</span></label>
                                                     <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
-                                                </div>
-
+                                                </div>                                          
+                                              
+                                              
+                                                <span class="">Select</span>
+                                            <span class="badge badge-primary" style="font-size:14px;" id="CandidateId">[CandidateName]</span>
+                                            <span class="badge badge-secondary" style="font-size:14px;"id="CompanyId">[CompanyName]</span>
+                                            <span class="badge badge-success" style="font-size:14px;" id="HrId">[HRName]</span>
+                                            <span class="badge badge-info" style="font-size:14px;" id="DesignationId">[Designation]</span>
+                                               
+                                           
                                             <div class="form-group">
                                                 <label class="form-label">Body:</label>
                                                 <textarea id="Body" name="Body" class="summernote"></textarea>
@@ -385,9 +392,63 @@
 
 
 @section scripts{
+      
 
     <script>
         $(document).ready(function () {
+
+                var summernoteEditor = $('#Body');
+
+               
+                var candidateSpan = document.getElementById("CandidateId");
+                var companySpan = document.getElementById("CompanyId");
+                var hrSpan = document.getElementById("HrId");
+                var designationSpan = document.getElementById("DesignationId");
+
+                var summernoteEditor = $('#Body');
+
+                // Add click event handler to your text spans
+
+
+
+                 $('#CandidateId').click(function () {
+                     debugger
+    // Get the clicked text
+    var clickedText = $(this).text();
+
+    // Get the current cursor position
+    var range = summernoteEditor.summernote('editor.createRange');
+    var currentPosition = range.index
+
+    // Insert the clicked text at the current cursor position
+    summernoteEditor.summernote('editor.insertText',clickedText, currentPosition );
+
+    });
+                //$('#CandidateId').click(function () {
+                //    // Get the clicked text
+                //    var clickedText = $(this).text();   
+
+
+
+
+
+                    
+                //   //summernoteEditor.summernote('pasteHTML', clickedText);
+
+                //   // notif({
+                //   //     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Variable Add in Clip board.",
+                //   //     type: "success"
+                //   // });
+                //});
+
+
+
+
+               
+
+
+
+
 
             ClearControl();
 
