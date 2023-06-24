@@ -127,8 +127,8 @@ namespace HRHUBAPI.Controllers
                 });
             }
         }
-        [HttpGet("GetComponentInfoById{id}")]
-        public async Task<ActionResult<ComponentInfo>> GetComponentInfoById(int id)
+        [HttpGet("GetComponentsById{id}")]
+        public async Task<ActionResult<ComponentInfo>> GetComponentsById(int id)
         {
             var result = await new ComponentInfo().GetBenefitInfoById(id, _context);
             if (result != null)
