@@ -57,50 +57,22 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
             Candidate ObjCandidate = new Candidate();
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            ObjCandidate.CompanyId = userObject.CompanyId;
-            if (Token != null)
-            {
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfos{ObjCandidate.CompanyId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    ObjCandidate.ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result).Where(x=>x.StatusId== id);
-                    ObjCandidate.UrlRequestSatausID = id;
-                }
+           var list= await _APIHelper.CallApiAsyncGet<IEnumerable<Candidate>>($"api/Candidate/GetCandidateInfos{_user.CompanyId}", HttpMethod.Get);
+            ObjCandidate.ListCandidate = list.Where(x => x.StatusId == id);
 
 
+            ObjCandidate.UrlRequestSatausID = id;
+            ObjCandidate.CompanyId = _user.CompanyId;
 
-                HttpResponseMessage message1 = await _client.GetAsync("api/Candidate/GetCandidateStatusInfos");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateStatus = JsonConvert.DeserializeObject<List<StatusInfo>>(result);
-
-                }
-
-                HttpResponseMessage message2 = await _client.GetAsync($"api/Configuration/GetDesignationInfos{ObjCandidate.CompanyId}");
-                if (message2.IsSuccessStatusCode)
-                {
-                    var result = message2.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateDesignation = JsonConvert.DeserializeObject<List<Designation>>(result);
-
-                }
-
-
-
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+            ViewBag.CandidateStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<StatusInfo>>($"api/Candidate/GetCandidateStatusInfos", HttpMethod.Get);
+            ViewBag.CandidateDesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
 
 
             return View(ObjCandidate);
+
+
+           
         }
 
 
@@ -109,23 +81,17 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> SearchList(string Name, int DesignationId, int ExperienceId,int CompanyId, int id = 0)
         {
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-
-
 
             Candidate objCandidate = new Candidate();
-           
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
+            var list = await _APIHelper.CallApiAsyncGet<IEnumerable<Candidate>>($"api/Candidate/SearchAllCandidates{Name}/{DesignationId}/{ExperienceId}/{_user.CompanyId}", HttpMethod.Get);
+            var ListCandidate = list.Where(x => x.StatusId == id);
+            objCandidate.UrlRequestSatausID = id;
+
+          
+            if (ListCandidate !=null)
             {
-                var result1 = message.Content.ReadAsStringAsync().Result;
-                var ListCandidate = JsonConvert.DeserializeObject<List<Candidate>>(result1).Where(x => x.StatusId == id);
-                objCandidate.UrlRequestSatausID = id;
+                
 
                 return Json(new
                 {
@@ -159,48 +125,20 @@ namespace HRHUBWEB.Controllers
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
             ViewBag.CandidateId = id;
-            if(Token != null) {
+            var CandidateId = id;
 
-                var CandidateId = id;
-                HttpResponseMessage message1 = await _client.GetAsync($"api/Candidate/GetCandidateSkillInfos{CandidateId}");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    ViewBag.CandidateSkill = JsonConvert.DeserializeObject<List<CandidateSkill>>(result);
+            ViewBag.CandidateSkill = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateSkill>>($"api/Candidate/GetCandidateSkillInfos{CandidateId}", HttpMethod.Get);
 
-                }
-
-                
-
-
-
-
-                Candidate ObjCandidate = await GetCandidatebyID(id);
+            Candidate ObjCandidate = await GetCandidatebyID(id);
 
             return View(ObjCandidate);
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-
-            }
+           
         }
         private async Task<Candidate> GetCandidatebyID(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+           
             Candidate ObjCandidate = new Candidate();
-            
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/GetCandidateInfoId{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                ObjCandidate = JsonConvert.DeserializeObject<Candidate>(result);
-
-            }
+            ObjCandidate = await _APIHelper.CallApiAsyncGet<Candidate>($"api/Candidate/GetCandidateInfoId{id}", HttpMethod.Get);
 
             return ObjCandidate;
         }
