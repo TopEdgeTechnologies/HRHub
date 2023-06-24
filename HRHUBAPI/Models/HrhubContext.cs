@@ -151,9 +151,11 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
 
-    public virtual DbSet<ViewPerformanceReviewQuestionsList> ViewPerformanceReviewQuestionsLists { get; set; }
-
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -273,7 +275,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<Candidate>(entity =>
         {
-            entity.ToTable("Candidate", "Recuriment");
+            entity.ToTable("Candidate", "Recuriment", tb => tb.HasTrigger("AutoEntryInEmailForNewCandidateEnrollment"));
 
             entity.Property(e => e.CandidateId).HasColumnName("CandidateID");
             entity.Property(e => e.Address).IsUnicode(false);
@@ -1236,6 +1238,8 @@ public partial class HrhubContext : DbContext
                 .HasColumnName("LeaveDistribution_StartDate");
             entity.Property(e => e.LeaveDistributionStartMonth).HasColumnName("LeaveDistribution_StartMonth");
             entity.Property(e => e.MaterialStatus).IsUnicode(false);
+            entity.Property(e => e.MonthlyDateOfEveryMonth).HasColumnName("Monthly_DateOfEveryMonth");
+            entity.Property(e => e.MonthlyIsSpecificDayofEveryMonth).HasColumnName("Monthly_IsSpecificDayofEveryMonth");
             entity.Property(e => e.NationalIdnumber)
                 .IsUnicode(false)
                 .HasColumnName("NationalIDNumber");

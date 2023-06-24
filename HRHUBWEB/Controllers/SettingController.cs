@@ -107,7 +107,7 @@ namespace HRHUBWEB.Controllers
 
             return View(Obj);
         }
-        public async Task<IActionResult> AttendancePolicyCreateOrUpdate(int id, string title, int policyId,  bool halfdayafterlateminutes, int lateminutes, bool allowgraceminutes, int graceminutes)   //bool halfleave, bool quarterleave,
+        public async Task<IActionResult> AttendancePolicyCreateOrUpdate(int id, string title, int policyId, bool halfdayafterlateminutes, int lateminutes, bool allowgraceminutes, int graceminutes)   //bool halfleave, bool quarterleave,
         {
 
             var CompanyId = _user.CompanyId;
@@ -259,7 +259,7 @@ namespace HRHUBWEB.Controllers
             obj.CompanyId = _user.CompanyId;
             obj.CreatedBy = _user.UserId;
 
-            var result = await _APIHelper.CallApiAsyncPost<Response>(obj,"api/Configuration/LeaveTypeAddOrUpdate", HttpMethod.Post);
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Configuration/LeaveTypeAddOrUpdate", HttpMethod.Post);
 
             return Json(result);
 
@@ -324,63 +324,13 @@ namespace HRHUBWEB.Controllers
 
             return View(Obj);
         }
-        public async Task<IActionResult> SavePayrollSetting(int MonthlyDateOfEveryMonth, bool IsSpecificDayofEveryMonth )
+        public async Task<IActionResult> SavePayrollSetting(int MonthlyDateOfEveryMonth, bool IsSpecificDayofEveryMonth)
         {
 
             StaffSalarySetting obj = new StaffSalarySetting();
             obj.MonthlyDateOfEveryMonth = MonthlyDateOfEveryMonth;
             obj.MonthlyIsSpecificDayofEveryMonth = IsSpecificDayofEveryMonth;
             obj.CompanyId = Convert.ToInt32(_user.CompanyId);
-
-
-        #region NotificationSetting
-        [CustomAuthorization]
-        public async Task<IActionResult> NotificationSettings(string data = "")
-        {
-            ViewBag.Success = data;
-
-            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-
-            EmailNotificationSetting objEmail = new EmailNotificationSetting();
-            objEmail = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
-
-
-            objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
-
-
-            return View(objEmail);
-        }
-        [HttpPost]
-        public async Task<IActionResult> SaveNotificationSetting(EmailNotificationSetting obj)
-        {
-            obj.CompanyId = _user.CompanyId;
-
-
-            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailNotificationSetting", HttpMethod.Post);
-            return Json(result);
-        }
-
-
-        #endregion
-
-        #region Email Template 
-
-
-
-
-
-        public async Task<IActionResult> EmailTemplateDetails(int Id)
-        {
-            var result = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
-            return Json(result);
-
-
-        }
-
-
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostPayrollSetting", HttpMethod.Post);
             return Json(result);
@@ -396,7 +346,7 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> PayrollPolicyCreateOrUpdate(int id, string title, int policyId, bool isincometaxapplicable, List<TaxSlabSetting> listTaxSlab, bool isovertimeapplicable, bool isshortminutesdeduction)
         {
-            Policy  obj = new Policy();
+            Policy obj = new Policy();
             obj.PolicyConfigurationId = id;
             obj.Title = title;
             obj.PolicyId = policyId;
@@ -412,56 +362,6 @@ namespace HRHUBWEB.Controllers
 
             //var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Policy/PostPayrollPolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{isincometaxapplicable}/{listTaxSlab}", HttpMethod.Get);
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Policy/PostPayrollPolicyConfiguration", HttpMethod.Post);
-
-        [HttpPost]
-        public async Task<IActionResult> PostEmailTemplate(EmailTemplate obj)
-        {
-            obj.CompanyId = _user.CompanyId;
-            obj.CreatedBy = _user.CreateBy;
-
-
-            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailTemplateData", HttpMethod.Post);
-            return Json(result);
-        }
-
-
-
-
-
-        public async Task<IActionResult> TemplateDelete(int id)
-        {
-
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemplateDelete{id}/{_user.UserId}", HttpMethod.Get);
-            return Json(result);
-
-        }
-
-        public async Task<ActionResult<JsonObject>> EmailTemplateCheckData(int id, string title)
-        {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
-            return Json(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateEmailTemStatus(int id, bool status)
-        {
-
-            EmailTemplate ObjEmailTemplate = new EmailTemplate();
-            ObjEmailTemplate.TemplateId = id;
-            ObjEmailTemplate.Status = status;
-            ObjEmailTemplate.UpdatedBy = _user.UserId;
-
-            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjEmailTemplate, "api/Setting/UpdateStatusByEmailTemplateById", HttpMethod.Post);
-
-            return Json(result);
-
-        }
-
-
-        #endregion
-
-
-
 
             return Json(result);
 
@@ -522,6 +422,99 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteTaxSlab{id}/{UserId}", HttpMethod.Get);
             return Json(result);
         }
+
+        #endregion
+
+        #region NotificationSetting
+        [CustomAuthorization]
+        public async Task<IActionResult> NotificationSettings(string data = "")
+        {
+            ViewBag.Success = data;
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            EmailNotificationSetting objEmail = new EmailNotificationSetting();
+            objEmail = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
+
+
+            objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
+
+
+            return View(objEmail);
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveNotificationSetting(EmailNotificationSetting obj)
+        {
+            obj.CompanyId = _user.CompanyId;
+
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailNotificationSetting", HttpMethod.Post);
+            return Json(result);
+        }
+
+
+        #endregion
+
+        #region Email Template 
+
+
+
+
+
+        public async Task<IActionResult> EmailTemplateDetails(int Id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
+            return Json(result);
+
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> PostEmailTemplate(EmailTemplate obj)
+        {
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.CreateBy;
+
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailTemplateData", HttpMethod.Post);
+            return Json(result);
+        }
+
+
+
+
+
+        public async Task<IActionResult> TemplateDelete(int id)
+        {
+
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemplateDelete{id}/{_user.UserId}", HttpMethod.Get);
+            return Json(result);
+
+        }
+
+        public async Task<ActionResult<JsonObject>> EmailTemplateCheckData(int id, string title)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmailTemStatus(int id, bool status)
+        {
+
+            EmailTemplate ObjEmailTemplate = new EmailTemplate();
+            ObjEmailTemplate.TemplateId = id;
+            ObjEmailTemplate.Status = status;
+            ObjEmailTemplate.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjEmailTemplate, "api/Setting/UpdateStatusByEmailTemplateById", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+
 
         #endregion
 
