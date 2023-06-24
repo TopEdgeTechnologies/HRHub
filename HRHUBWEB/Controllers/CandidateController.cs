@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.Design;
 using System;
 using HRHUBAPI.BackGroundService;
+using System.ComponentModel;
 
 namespace HRHUBWEB.Controllers
 {
@@ -208,40 +209,57 @@ namespace HRHUBWEB.Controllers
                 ObjCandidate.CreatedBy = _user.UserId;
                 HttpResponseMessage message = await _client.PostAsJsonAsync("api/Candidate/CandidateAddOrCreate", ObjCandidate);
 
-                if (message.IsSuccessStatusCode)
+
+                var result = await _APIHelper.CallApiAsyncPost<Response>(ObjCandidate, "api/Candidate/CandidateAddOrCreate", HttpMethod.Post);
+
+                if (result.Message.Contains("Insert"))
                 {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-                    
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-                      //var result = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, "", "Test email hello hello");
-
-                    }
-
-                    return RedirectToAction("CandidateList", new { data = status,id = 1 });
-
+                    return RedirectToAction("BenefitDetails", new { data = 1, id = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("Loginpage", "User",  new {id=2 });
+                    return RedirectToAction("BenefitDetails", new { data = 2, id = 1 });
                 }
+
+
+
+
+
+
+                //if (message.IsSuccessStatusCode)
+                //{
+
+                //    var body = message.Content.ReadAsStringAsync();
+
+
+                //    var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+                    
+                //    int status = 0;
+                //    if (model.Success)
+                //    {
+
+
+                //        if (model.Message.Contains("Insert"))
+                //        {
+                //            status = 1;
+                //        }
+                //        else if (model.Message.Contains("Update"))
+                //        {
+                //            status = 2;
+                //        }
+
+                //      //var result = await _EmailHelper.SendEmailAsync(ObjCandidate.Email, "", "Test email hello hello");
+
+                //    }
+
+                //    return RedirectToAction("CandidateList", new { data = status,id = 1 });
+
+                //}
+                //else
+                //{
+                //    return RedirectToAction("Loginpage", "User",  new {id=2 });
+                //}
 
 
 
@@ -254,75 +272,89 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> CandidateDelete(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            Candidate candidateObj= new Candidate();            
-            candidateObj.CreatedBy = userObject.UserId;
-            var UserId = userObject.UserId;
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}/{UserId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
-
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                int status = 0;
-                if (model.Success)
-                {
-
-
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
 
 
 
-                }
 
-                return RedirectToAction("CandidateList", new { data = status });
+            var result = await _APIHelper.CallApiAsyncGet<StaffSalaryComponent>($"api/Candidate/DeleteCandidateInfo{id}/{_user.UserId}", HttpMethod.Get);
 
-            }
+            return RedirectToAction("CandidateList", new { data = 3,});
+            //var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            else
-            {
-                return RedirectToAction("Loginpage", "User",  new {id=2 });
-            }
+            //var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            //Candidate candidateObj= new Candidate();            
+            //candidateObj.CreatedBy = userObject.UserId;
+            //var UserId = userObject.UserId;
+            //HttpResponseMessage message = await _client.DeleteAsync($"api/Candidate/DeleteCandidateInfo{id}/{UserId}");
+            //if (message.IsSuccessStatusCode)
+            //{
+            //    var body = message.Content.ReadAsStringAsync();
+
+            //    var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+
+            //    int status = 0;
+            //    if (model.Success)
+            //    {
+
+
+            //        if (model.Message.Contains("Delete"))
+            //        {
+            //            status = 3;
+            //        }
+
+
+
+            //    }
+
+            //    return RedirectToAction("CandidateList", new { data = status });
+
+            //}
+
+            //else
+            //{
+            //    return RedirectToAction("Loginpage", "User",  new {id=2 });
+            //}
 
         }
 
         public async Task<ActionResult<JsonObject>> CandidateCheckData(int id, string email)
         {
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Candidate/CandidateCheckDataInfo{id}/{email}/{_user.CompanyId}", HttpMethod.Get);
+            return Json(result);
 
-            HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckDataInfo{id}/{email}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
 
-            }
 
-            else
-            {
-                return Json(new 
 
-                {
-                    Success = false,
-                    Message = "Error occur"
+            //var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            //_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-                }
-                );
+            //var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+            //var CompanyId = userObject.CompanyId;
+
+            //HttpResponseMessage message = await _client.GetAsync($"api/Candidate/CandidateCheckDataInfo{id}/{email}/{CompanyId}");
+            //if (message.IsSuccessStatusCode)
+            //{
+            //    var result = message.Content.ReadAsStringAsync().Result;
+            //    return Json(result);
+
+            //}
+
+            //else
+            //{
+            //    return Json(new 
+
+            //    {
+            //        Success = false,
+            //        Message = "Error occur"
+
+            //    }
+            //    );
               
-            }
+            //}
         }
 
        
@@ -362,6 +394,9 @@ namespace HRHUBWEB.Controllers
             modelobj.AttachmentPath=uploadImage(modelobj.Remarks, CandidateAttachment, "CandidateAttachmentOffer");
 
             HttpResponseMessage message = await _client.PostAsJsonAsync($"api/Candidate/CandidateStatusUpdate", modelobj);
+
+
+
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;
@@ -390,7 +425,6 @@ namespace HRHUBWEB.Controllers
                     });
 
                 }
-
                 else
                 {
                     return Json(new
@@ -401,9 +435,6 @@ namespace HRHUBWEB.Controllers
                     });
                 }
                
-
-
-
             }
 
             else

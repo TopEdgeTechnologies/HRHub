@@ -67,7 +67,7 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteCandidateInfo{id}/{UserId}")]
+        [HttpGet("DeleteCandidateInfo{id}/{UserId}")]
         public async Task<ActionResult<bool>> DeleteCandidateInfo(int id, int UserId)
         {
             var result = await new Candidate().DeleteCandidate(id,UserId, _context);
