@@ -152,37 +152,37 @@
                                     int count = 1;
                                     foreach (var item in Model.ListLoanApprovalData)
                                     {
-                                        <tr class="border-bottom">
-                                            <td>@count</td>
-                                            <td>
-                                                <div class="d-flex">
-                                                    <div class="table_img brround bg-light me-3">
-                                                        <img src="@item.ApprovedByStaffSnap" alt="img" class="">
-                                                    </div>
-                                                    <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                        <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
-                                                        <div class="clearfix"></div>
-                                                        <small class="text-muted">@item.ApprovedByDesignation</small>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                                <tr class="border-bottom">
+                                                    <td>@count</td>
+                                                    <td>
+                                                        <div class="d-flex">
+                                                            <div class="table_img brround bg-light me-3">
+                                                                <img src="@item.ApprovedByStaffSnap" alt="img" class="">
+                                                            </div>
+                                                            <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                                <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
+                                                                <div class="clearfix"></div>
+                                                                <small class="text-muted">@item.ApprovedByDesignation</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
 
-                                            <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LoanProcessDate</td>
-                                            <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
+                                                    <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LoanProcessDate</td>
+                                                    <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
 
-                                            @if (item.LoanStatusId == 1) // Approve
+                                                    @if (item.LoanStatusId == 1) // Approve
                                             {
-                                                <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
                                             }
                                             else if (item.LoanStatusId == 2) // Reject
                                             {
-                                                <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
                                             }
                                             else
                                             {
-                                                <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
+                                                        <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
                                             }
-                                        </tr>
+                                                </tr>
                                         count++;
                                     }
                                 }
@@ -397,8 +397,10 @@
                     $('#totalloanamount').text(totalloan.toLocaleString(undefined, { minimumFractionDigits: 2 }));
                     $('#paidamount').text(paidloan.toLocaleString(undefined, { minimumFractionDigits: 2 }));
 
+                    
                     // Create and render the chart with the updated options
                     var chart = new ApexCharts(document.querySelector("#leavesoverview"), options);
+                    //chart.updateOptions(options);
                     chart.render();
                 },
                 error: function () {

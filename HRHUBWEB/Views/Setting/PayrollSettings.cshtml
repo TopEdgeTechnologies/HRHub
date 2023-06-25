@@ -1461,12 +1461,16 @@
                         $("#Title").val(data.title);
                         $("#policy-types").val(data.policyId).trigger('change');
 
-                        if (data.policyId == 14) {
+                        if (data.policyId == 14) {  // Tax Withholding Policy
                             $('#IsIncomeTaxApplicable').prop('checked', data.isIncomeTaxApplicable);
                             $('#IsIncomeTaxApplicable').trigger('change')
 
                             //if (data.isIncomeTaxApplicable)
                             //    $('#div_TaxSlabSetting').prop('hidden', false)
+                        }
+                        else if(data.policyId == 15){  // Working Hours and Overtime
+                            $('#IsOverTimeApplicable').prop('checked', data.isOverTimeApplicable)
+                            $('#IsShortMinutesDeduction').prop('checked', data.isShortMinutesDeductionApplicable);
                         }
                         $("#addPolicy").modal('show');
                     }
