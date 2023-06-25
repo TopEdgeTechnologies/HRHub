@@ -205,6 +205,26 @@ namespace HRHUBAPI.Controllers
 
 
 
+        [HttpGet("GetCandidateEmailNotificationList{CompanyId}")]
+        public async Task<ActionResult<List<CandidateEmailNotificationSetting>>> GetCandidateEmailNotificationList(int CompanyId)
+        {
+            var result = await new EmailNotificationSetting().GetCandidateEmailNotification(CompanyId, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+
+
+
+
+
+
+
         [HttpGet("GetEmailNotificationSettingById{CompanyId}")]
         public async Task<ActionResult<EmailNotificationSetting>> GetEmailNotificationSettingById(int CompanyId)
         {
@@ -360,6 +380,36 @@ namespace HRHUBAPI.Controllers
             else
                 return NotFound();
         }
+
+
+
+
+
+
+        // Update Candidate Notification Status
+
+        [HttpPost("UpdateCandidateEmailNotification")]
+        public async Task<ActionResult<CandidateEmailNotificationSetting>> UpdateCandidateEmailNotification(CandidateEmailNotificationSetting obj)
+        {
+            var result = await new EmailNotificationSetting().UpdateStatusEmailTemplate(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
+
+
+
+
+
+
+
+
 
         #endregion
 

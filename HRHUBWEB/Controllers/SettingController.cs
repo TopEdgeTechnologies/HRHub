@@ -441,6 +441,7 @@ namespace HRHUBWEB.Controllers
 
 
             objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            objEmail.ListCandidateEmailNotification = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateEmailNotificationSetting>>($"api/Setting/GetCandidateEmailNotificationList{_user.CompanyId}", HttpMethod.Get);
 
 
             return View(objEmail);
@@ -499,7 +500,7 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmailTemAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
             return Json(result);
         }
-
+        // Update Email Status
         [HttpPost]
         public async Task<IActionResult> UpdateEmailTemStatus(int id, bool status)
         {
@@ -510,6 +511,22 @@ namespace HRHUBWEB.Controllers
             ObjEmailTemplate.UpdatedBy = _user.UserId;
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(ObjEmailTemplate, "api/Setting/UpdateStatusByEmailTemplateById", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+
+        //update Candidate notification status
+         [HttpPost]
+        public async Task<IActionResult> UpdateCandidatenotificationStatus(int id, bool status)
+        {
+
+            CandidateEmailNotificationSetting Obj = new CandidateEmailNotificationSetting();
+            Obj.CandidateNotificationId = id;
+            Obj.Status = status;
+            Obj.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateCandidateEmailNotification", HttpMethod.Post);
 
             return Json(result);
 

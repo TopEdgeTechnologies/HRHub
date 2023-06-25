@@ -33,6 +33,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Candidate> Candidates { get; set; }
 
+    public virtual DbSet<CandidateEmailNotificationSetting> CandidateEmailNotificationSettings { get; set; }
+
     public virtual DbSet<CandidateScreening> CandidateScreenings { get; set; }
 
     public virtual DbSet<CandidateSkill> CandidateSkills { get; set; }
@@ -50,6 +52,8 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<Department> Departments { get; set; }
 
     public virtual DbSet<Designation> Designations { get; set; }
+
+    public virtual DbSet<EmailDynamicVariable> EmailDynamicVariables { get; set; }
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
@@ -308,6 +312,22 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<CandidateEmailNotificationSetting>(entity =>
+        {
+            entity.HasKey(e => e.CandidateNotificationId);
+
+            entity.ToTable("CandidateEmailNotificationSetting");
+
+            entity.Property(e => e.CandidateNotificationId)
+                .ValueGeneratedNever()
+                .HasColumnName("CandidateNotificationID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.StatusId).HasColumnName("StatusID");
+            entity.Property(e => e.TemplateId).HasColumnName("TemplateID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<CandidateScreening>(entity =>
         {
             entity.HasKey(e => e.ScreeningId);
@@ -462,6 +482,15 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<EmailDynamicVariable>(entity =>
+        {
+            entity.HasKey(e => e.VariableId);
+
+            entity.Property(e => e.VariableId).HasColumnName("VariableID");
+            entity.Property(e => e.Type).IsUnicode(false);
+            entity.Property(e => e.VariableName).IsUnicode(false);
+        });
+
         modelBuilder.Entity<EmailLog>(entity =>
         {
             entity.HasKey(e => e.EmailId);
@@ -489,11 +518,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.OnApprovedTemplateId).HasColumnName("OnApproved_TemplateID");
-            entity.Property(e => e.OnCandidateEnrollmentTemplateId).HasColumnName("OnCandidateEnrollment_TemplateID");
-            entity.Property(e => e.OnRejectionTemplateId).HasColumnName("OnRejection_TemplateID");
             entity.Property(e => e.OnSalaryGenerationTemplateId).HasColumnName("OnSalaryGeneration_TemplateID");
-            entity.Property(e => e.OnStatusChangeTemplateId).HasColumnName("OnStatusChange_TemplateID");
         });
 
         modelBuilder.Entity<EmailTemplate>(entity =>
@@ -508,6 +533,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Subject).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.Type).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -570,6 +596,9 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Cssclass)
+                .IsUnicode(false)
+                .HasColumnName("CSSClass");
             entity.Property(e => e.DayName).IsUnicode(false);
             entity.Property(e => e.HolidayDate).HasColumnType("date");
             entity.Property(e => e.HolidayType).IsUnicode(false);

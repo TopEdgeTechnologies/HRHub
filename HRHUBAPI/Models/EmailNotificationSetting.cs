@@ -9,21 +9,7 @@ public partial class EmailNotificationSetting
 
     public int? CompanyId { get; set; }
 
-    public bool OnCandidateEnrollment { get; set; }
-
-    public int? OnCandidateEnrollmentTemplateId { get; set; }
-
     public bool OnStatusChange { get; set; }
-
-    public int? OnStatusChangeTemplateId { get; set; }
-
-    public bool OnApproved { get; set; }
-
-    public int? OnApprovedTemplateId { get; set; }
-
-    public bool OnRejection { get; set; }
-
-    public int? OnRejectionTemplateId { get; set; }
 
     public bool OnSalaryGeneration { get; set; }
 
