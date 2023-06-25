@@ -33,6 +33,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Candidate> Candidates { get; set; }
 
+    public virtual DbSet<CandidateEmailNotificationSetting> CandidateEmailNotificationSettings { get; set; }
+
     public virtual DbSet<CandidateScreening> CandidateScreenings { get; set; }
 
     public virtual DbSet<CandidateSkill> CandidateSkills { get; set; }
@@ -50,6 +52,8 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<Department> Departments { get; set; }
 
     public virtual DbSet<Designation> Designations { get; set; }
+
+    public virtual DbSet<EmailDynamicVariable> EmailDynamicVariables { get; set; }
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
@@ -151,11 +155,9 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
 
-    public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+    public virtual DbSet<ViewStaffInfo> ViewStaffInfos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
+    public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -305,6 +307,22 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Qualification).IsUnicode(false);
             entity.Property(e => e.ReasonToLeft).IsUnicode(false);
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<CandidateEmailNotificationSetting>(entity =>
+        {
+            entity.HasKey(e => e.CandidateNotificationId);
+
+            entity.ToTable("CandidateEmailNotificationSetting");
+
+            entity.Property(e => e.CandidateNotificationId)
+                .ValueGeneratedNever()
+                .HasColumnName("CandidateNotificationID");
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.StatusId).HasColumnName("StatusID");
+            entity.Property(e => e.TemplateId).HasColumnName("TemplateID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -462,6 +480,15 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<EmailDynamicVariable>(entity =>
+        {
+            entity.HasKey(e => e.VariableId);
+
+            entity.Property(e => e.VariableId).HasColumnName("VariableID");
+            entity.Property(e => e.Type).IsUnicode(false);
+            entity.Property(e => e.VariableName).IsUnicode(false);
+        });
+
         modelBuilder.Entity<EmailLog>(entity =>
         {
             entity.HasKey(e => e.EmailId);
@@ -489,11 +516,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.OnApprovedTemplateId).HasColumnName("OnApproved_TemplateID");
-            entity.Property(e => e.OnCandidateEnrollmentTemplateId).HasColumnName("OnCandidateEnrollment_TemplateID");
-            entity.Property(e => e.OnRejectionTemplateId).HasColumnName("OnRejection_TemplateID");
             entity.Property(e => e.OnSalaryGenerationTemplateId).HasColumnName("OnSalaryGeneration_TemplateID");
-            entity.Property(e => e.OnStatusChangeTemplateId).HasColumnName("OnStatusChange_TemplateID");
         });
 
         modelBuilder.Entity<EmailTemplate>(entity =>
@@ -508,6 +531,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Subject).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.Type).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -570,6 +594,9 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.HolidayId).HasColumnName("HolidayID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.Cssclass)
+                .IsUnicode(false)
+                .HasColumnName("CSSClass");
             entity.Property(e => e.DayName).IsUnicode(false);
             entity.Property(e => e.HolidayDate).HasColumnType("date");
             entity.Property(e => e.HolidayType).IsUnicode(false);
@@ -1278,6 +1305,61 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SectionId).HasColumnName("SectionID");
             entity.Property(e => e.SectionQuestionId).HasColumnName("SectionQuestionID");
             entity.Property(e => e.SectionTitle).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ViewStaffInfo>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("view_StaffInfo", "HR");
+
+            entity.Property(e => e.AccountTitle).IsUnicode(false);
+            entity.Property(e => e.BankAccountNumber).IsUnicode(false);
+            entity.Property(e => e.BankCode).IsUnicode(false);
+            entity.Property(e => e.BankLocation).IsUnicode(false);
+            entity.Property(e => e.BankName).IsUnicode(false);
+            entity.Property(e => e.BloodGroup).IsUnicode(false);
+            entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.ContactNumber1).IsUnicode(false);
+            entity.Property(e => e.ContactNumber2).IsUnicode(false);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+            entity.Property(e => e.DepartmentTitle).IsUnicode(false);
+            entity.Property(e => e.DesignationId).HasColumnName("DesignationID");
+            entity.Property(e => e.DesignationTitle).IsUnicode(false);
+            entity.Property(e => e.Dob)
+                .HasColumnType("date")
+                .HasColumnName("DOB");
+            entity.Property(e => e.Email).IsUnicode(false);
+            entity.Property(e => e.EmergencyContact1).IsUnicode(false);
+            entity.Property(e => e.EmergencyContact2).IsUnicode(false);
+            entity.Property(e => e.EmploymentTypeId).HasColumnName("EmploymentTypeID");
+            entity.Property(e => e.FatherName).IsUnicode(false);
+            entity.Property(e => e.FirstName).IsUnicode(false);
+            entity.Property(e => e.Gender).IsUnicode(false);
+            entity.Property(e => e.JobDescription).IsUnicode(false);
+            entity.Property(e => e.JobTitle).IsUnicode(false);
+            entity.Property(e => e.JoiningDate).HasColumnType("date");
+            entity.Property(e => e.LastName).IsUnicode(false);
+            entity.Property(e => e.MaterialStatus).IsUnicode(false);
+            entity.Property(e => e.NationalIdnumber)
+                .IsUnicode(false)
+                .HasColumnName("NationalIDNumber");
+            entity.Property(e => e.PermanentAddress).IsUnicode(false);
+            entity.Property(e => e.PresentAddress).IsUnicode(false);
+            entity.Property(e => e.RegistrationNo).IsUnicode(false);
+            entity.Property(e => e.ResigningDate).HasColumnType("date");
+            entity.Property(e => e.SalaryAmount).HasColumnType("money");
+            entity.Property(e => e.SalaryMethodId)
+                .IsUnicode(false)
+                .HasColumnName("SalaryMethodID");
+            entity.Property(e => e.SnapPath).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
+            entity.Property(e => e.TaxPayerNumber).IsUnicode(false);
+            entity.Property(e => e.TerminationDate).HasColumnType("date");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.WorkMode).IsUnicode(false);
         });
 
         modelBuilder.Entity<WeekendRule>(entity =>

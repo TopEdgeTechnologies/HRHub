@@ -10,62 +10,62 @@ namespace HRHUBAPI.Models
 {
     public partial class User
     {
-        [NotMapped]
-		public string? CompanyName { get; set; }
-		[NotMapped]
-		public string? ContactPerson { get; set; }
-		[NotMapped]
-		public string? Email { get; set; }
-		[NotMapped]
-		public string? Currency { get; set; }
-		[NotMapped]
-		public string? Language { get; set; }
-		[NotMapped]
-		public string? Phone { get; set; }
-		[NotMapped]
-		public string? LogoAttachment { get; set; }
-		[NotMapped]
-		public string? WebUrl { get; set; }
-		[NotMapped]
-		public int? DesignationID { get; set; }
-		[NotMapped]
-		public string? DesignationName { get; set; }
-		[NotMapped]
-		public int? DepartmentId { get; set; }
-		[NotMapped]
-		public string? Departmentname { get; set; }
-		[NotMapped]
-		public string? OldPasword { get; set; }
-		[NotMapped]
-		public int? status { get; set; }
+        #region [NotMapped]
 
-        [NotMapped]
-        public string? EmailSendFrom { get; set; }
+			[NotMapped]
+			public string? CompanyName { get; set; }
+			[NotMapped]
+			public string? ContactPerson { get; set; }
+			[NotMapped]
+			public string? Email { get; set; }
+			[NotMapped]
+			public string? Currency { get; set; }
+			[NotMapped]
+			public string? Language { get; set; }
+			[NotMapped]
+			public string? Phone { get; set; }
+			[NotMapped]
+			public string? LogoAttachment { get; set; }
+			[NotMapped]
+			public string? WebUrl { get; set; }
+			[NotMapped]
+			public int? DesignationID { get; set; }
+			[NotMapped]
+			public string? DesignationName { get; set; }
+			[NotMapped]
+			public int? DepartmentId { get; set; }
+			[NotMapped]
+			public string? Departmentname { get; set; }
+			[NotMapped]
+			public string? OldPasword { get; set; }
+			[NotMapped]
+			public int? status { get; set; }
 
-        [NotMapped]
-        public string? EmailPassword { get; set; }
+			[NotMapped]
+			public string? EmailSendFrom { get; set; }
 
-        [NotMapped]
-        public int? EmailSMTPPort { get; set; }
+			[NotMapped]
+			public string? EmailPassword { get; set; }
 
-        [NotMapped]
-        public string? EmailServerHost { get; set; }
+			[NotMapped]
+			public int? EmailSMTPPort { get; set; }
 
+			[NotMapped]
+			public string? EmailServerHost { get; set; }
 
+			[NotMapped]
+			public string? StaffName { get; set; }
 
-        [NotMapped]
-        public string? StaffName { get; set; }
+			[NotMapped]
+			public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
 
+			[NotMapped]
+			public int? MonthlyDateOfEveryMonth { get; set; }
 
-
-
-
-
+        #endregion
 
         public async Task<User> Login(User Obj, HrhubContext _context)
         {
-
-
             try
             {
                 //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
@@ -74,6 +74,7 @@ namespace HRHUBAPI.Models
 
 				var user = from u in _context.Users
 							join c in _context.Companies on u.CompanyId equals c.CompanyId
+							join sss in _context.StaffSalarySettings on u.CompanyId equals sss.CompanyId
 							join st in _context.Staff on u.StaffId equals st.StaffId
 							into staffs
 							from staff in staffs.DefaultIfEmpty()
@@ -97,7 +98,9 @@ namespace HRHUBAPI.Models
 								Phone=   c.Phone,
 								LogoAttachment= c.LogoAttachment,
 								WebUrl= c.WebUrl,
-								DesignationName= d.Title,
+                                MonthlyIsSpecificDayofEveryMonth = sss.MonthlyIsSpecificDayofEveryMonth,
+                                MonthlyDateOfEveryMonth = sss.MonthlyDateOfEveryMonth,
+                                DesignationName = d.Title,
 								DesignationID = d.DesignationId,
 								DepartmentId = dep.DepartmentId,
 								Departmentname = dep.Title,
@@ -106,39 +109,24 @@ namespace HRHUBAPI.Models
 								EmailSMTPPort=c.EmailSmtpport,
 								EmailServerHost=c.EmailServerHost,
                                 StaffName= staff.FirstName
-
                             };
-
-               
 
 				if (user != null)
                 {
-
-
                     return await user.FirstOrDefaultAsync();
-
-
                 }
                 else
                 {
                     return null;
                 }
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
+            catch (Exception) { throw; }
         }
-
 
         public async Task<Company> UserCompany(int? companyid, HrhubContext _context)
         {
-
             try
             {
-
                 var result = await _context.Companies.FirstOrDefaultAsync(x=>x.CompanyId== companyid);
                 if (result != null)
                 {
@@ -205,7 +193,6 @@ namespace HRHUBAPI.Models
 			}
 		}
 
-
 		public async Task<bool> AlreadyExist(int userid, string username, HrhubContext _context)
 		{
 			try
@@ -239,9 +226,6 @@ namespace HRHUBAPI.Models
 			}
 		}
 
-
-
-
 		// Get single record of User by company ID
 		public async Task<User> GetUserCompanyVise(int CompanyId, HrhubContext hrhubContext)
 		{
@@ -259,11 +243,6 @@ namespace HRHUBAPI.Models
 			}
 			catch { throw; }
 		}
-
-
-
-
-
 
 	}
 }

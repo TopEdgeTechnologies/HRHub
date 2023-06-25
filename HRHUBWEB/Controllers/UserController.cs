@@ -13,12 +13,12 @@ namespace HRHUBWEB.Controllers
     public class UserController : Controller
     {
         private readonly HttpClient _client;
-        private readonly CacheExtensions _cacheExtensions;
+     //   private readonly CacheExtensions _cacheExtensions;
 
-        public UserController(IHttpClientFactory httpClient, CacheExtensions cacheExtensions )
+        public UserController(IHttpClientFactory httpClient )
         {
             _client = httpClient.CreateClient("APIClient");
-            _cacheExtensions = cacheExtensions; 
+           // _cacheExtensions = cacheExtensions; 
          
         }
 
@@ -32,7 +32,7 @@ namespace HRHUBWEB.Controllers
         {
             User obj = new User();
             obj.status = id;
-            _cacheExtensions.SetObject("UserDataKey", obj);
+           // _cacheExtensions.SetObject("UserDataKey", obj);
 
             return PartialView("_Login" , obj); 
         }
@@ -62,7 +62,7 @@ namespace HRHUBWEB.Controllers
 							
 							HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
                             HttpContext.Session.SetObjectAsJson("AuthenticatedToken", model.Token);
-                            _cacheExtensions.SetObject("UserDataKey", model.Data);
+                          //  _cacheExtensions.SetObject("UserDataKey", model.Data);
 
                             return RedirectToAction("HR", "Dashboard");
                         }

@@ -21,6 +21,8 @@ public partial class Holiday
 
     public bool? IsDeleted { get; set; }
 
+    public string? Cssclass { get; set; }
+
     public string? SpanClass { get; set; }
 
     public int? CreatedBy { get; set; }

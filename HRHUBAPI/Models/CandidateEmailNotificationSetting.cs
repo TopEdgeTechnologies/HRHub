@@ -3,19 +3,17 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class EmailTemplate
+public partial class CandidateEmailNotificationSetting
 {
-    public int TemplateId { get; set; }
+    public int CandidateNotificationId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public string? Title { get; set; }
+    public int? StatusId { get; set; }
 
-    public string? Subject { get; set; }
+    public int? TemplateId { get; set; }
 
-    public string? Body { get; set; }
-
-    public bool Status { get; set; }
+    public bool? Status { get; set; }
 
     public int? CreatedBy { get; set; }
 
@@ -24,6 +22,4 @@ public partial class EmailTemplate
     public DateTime? CreatedOn { get; set; }
 
     public DateTime? UpdatedOn { get; set; }
-
-    public string? Type { get; set; }
 }
