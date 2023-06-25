@@ -84,6 +84,14 @@ namespace HRHUBAPI.Models
         public IEnumerable<StaffOffBoarding>? ListClearenceProcess { get; set; }
         [NotMapped]
         public IEnumerable<Staff>? ListStaffs { get; set; }
+
+        [NotMapped]
+        public int? NeedClearenceFrom_DepartmentID { get; set; }
+        [NotMapped]
+        public int? NeedClearenceFrom_DesignationID { get; set; }
+        [NotMapped]
+        public int OffboardingProcessSettingID { get; set; }
+
         public async Task<List<StaffOffBoarding>> GetStaffOffBoarding(int CompanyId, HrhubContext _context)
         {
             try
@@ -204,7 +212,7 @@ namespace HRHUBAPI.Models
                                      OffBoardingTypeTitle = lt.Title,
                                      AppliedOn = Convert.ToDateTime(l.ApplicationDate).ToString("dd-MMM-yyyy"),
                                      Reason = l.Reason,
-                                     InterviewDoneByStaffId = String.IsNullOrWhiteSpace(l.InterviewDoneByStaffId.ToString()) ? 0: l.InterviewDoneByStaffId,
+                                     InterviewDoneByStaffId = String.IsNullOrWhiteSpace(l.InterviewDoneByStaffId.ToString()) ? 0 : l.InterviewDoneByStaffId,
                                      InterviewDate = l.InterviewDate,
 
                                      StaffId = s.StaffId,
@@ -403,20 +411,20 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<List<StaffOffBoarding>> GetClearenceDepartment(int CompanyId,int id,int LoginStaffId, HrhubContext hrhubContext)
+        public async Task<List<StaffOffBoarding>> GetClearenceDepartment(int CompanyId, int id, int LoginStaffId, HrhubContext hrhubContext)
         {
             try
             {
 
                 DbConnection _db = new DbConnection();
 
-                string query = "EXEC Get_ClearenceDepartments " + CompanyId + " , " + id + " , "+ LoginStaffId;
+                string query = "EXEC Get_ClearenceDepartments " + CompanyId + " , " + id + " , " + LoginStaffId;
                 DataTable dt = _db.ReturnDataTable(query);
 
                 var list = dt.AsEnumerable()
                     .Select(row => new StaffOffBoarding
                     {
-                        ClearenceProcessDate = String.IsNullOrWhiteSpace(row["ProcessDate"].ToString())? "" : Convert.ToDateTime(row["ProcessDate"]).ToString("dd-MMM-yyyy"),
+                        ClearenceProcessDate = String.IsNullOrWhiteSpace(row["ProcessDate"].ToString()) ? "" : Convert.ToDateTime(row["ProcessDate"]).ToString("dd-MMM-yyyy"),
                         IsClearenceFromDepartment = Convert.ToBoolean(row["IsClearenceFromDepartment"]),
                         Department = row["Department"].ToString(),
                         AllowExitInterview = Convert.ToBoolean(row["AllowExitInterview"]),
@@ -617,6 +625,127 @@ namespace HRHUBAPI.Models
 
         }
 
+
+
+
+
+
+
+        public async Task<List<StaffOffBoarding>> GetOffBoardingSetting(int CompanyId, HrhubContext hrhubContext)
+        {
+            try
+            {
+                var list = await (from l in hrhubContext.OffBoardingProcessSettings
+                                  join dep in hrhubContext.Departments on l.NeedClearenceFromDepartmentId equals dep.DepartmentId
+                                  join d in hrhubContext.Designations on l.NeedClearenceFromDesignationId equals d.DesignationId
+
+                                  where l.CompanyId == CompanyId
+                                  select new StaffOffBoarding()
+                                  {
+                                      OffboardingProcessSettingID = l.OffboardingProcessSettingId,
+                                      Department = dep.Title,
+                                      Designation = d.Title,
+                                      AllowExitInterview = l.AllowExitInterview
+
+                                  }).ToListAsync();
+
+                return list;
+            }
+            catch { throw; }
+        }
+        public async Task<OffBoardingProcessSetting> PostOffBoardingProcessSetting(OffBoardingProcessSetting offBoardingProcess, HrhubContext hrhubContext)
+        {
+            using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.OffboardingProcessSettingId == offBoardingProcess.OffboardingProcessSettingId);
+                    if (dbResult != null && dbResult.OffboardingProcessSettingId > 0)
+                    {
+                        dbResult.OffboardingProcessSettingId = offBoardingProcess.OffboardingProcessSettingId;
+                        dbResult.NeedClearenceFromDepartmentId = offBoardingProcess.NeedClearenceFromDepartmentId;
+                        dbResult.NeedClearenceFromDesignationId = offBoardingProcess.NeedClearenceFromDesignationId;
+                        dbResult.AllowExitInterview = offBoardingProcess.AllowExitInterview;
+                        dbResult.UpdatedBy = offBoardingProcess.UpdatedBy;
+                        dbResult.UpdatedOn = DateTime.Now;
+                        await hrhubContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                        return dbResult;
+                    }
+                    else
+                    {
+                        offBoardingProcess.CreatedOn = DateTime.Now;
+                        offBoardingProcess.IsDeleted = false;
+                        hrhubContext.OffBoardingProcessSettings.Add(offBoardingProcess);
+                        await hrhubContext.SaveChangesAsync();
+                        dbContextTransaction.Commit();
+                        return offBoardingProcess;
+                    }
+                }
+                catch { dbContextTransaction.Rollback(); throw; }
+            }
+        }
+
+        public async Task<OffBoardingProcessSetting> GetOffBoardingSettingById(int Id, HrhubContext hrhubContext)
+        {
+            try
+            {
+                var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.OffboardingProcessSettingId == Id);
+                if (dbResult != null)
+                {
+                    return dbResult;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+        public async Task<bool> DeleteOffBoardingSetting(int id, int userid, HrhubContext hrhubContext)
+        {
+            try
+            {
+                bool recordDeleted = false;
+                var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.OffboardingProcessSettingId == id);
+                if (dbResult != null)
+                {
+                    dbResult.IsDeleted = true;
+                    dbResult.UpdatedOn = DateTime.Now;
+                    dbResult.UpdatedBy = userid;
+
+                    recordDeleted = true;
+                }
+                await hrhubContext.SaveChangesAsync();
+                return recordDeleted;
+            }
+            catch { throw; }
+        }
+
+        public async Task<bool> AlreadyExists(int CompanyId, int Id, int departmentid, int designationid, HrhubContext hrhubContext)
+        {
+            try
+            {
+                if (Id > 0)
+                {
+                    var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.NeedClearenceFromDepartmentId == departmentid && x.NeedClearenceFromDesignationId == designationid && x.OffboardingProcessSettingId != Id);
+                    if (dbResult != null)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.CompanyId == CompanyId && x.NeedClearenceFromDepartmentId == departmentid && x.NeedClearenceFromDesignationId == designationid);
+                    if (dbResult != null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch { throw; }
+        }
 
     }
 }

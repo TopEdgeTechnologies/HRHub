@@ -1,0 +1,1137 @@
+﻿@{
+    ViewData["Title"] = "General Settings";
+}
+
+<div class="side-app main-container py-0">
+
+    <!--Page header-->
+    <div class="page-header mt-0 mb-2 d-xl-flex d-block">
+        <div class="page-leftheader">
+            <div class="page-title">General Settings</div>
+        </div>
+        <div class="page-rightheader ms-md-auto">
+            <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+                <div class="btn-list">
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Page header-->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-md-12 col-xl-3">
+            <div class="card">
+                <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+                        <i class="fa fa-clock-o me-2 fs-16 "></i>Off Boarding Settings
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+                        <i class="fa fa-users me-2 fs-16 "></i> Employment Type
+                    </a>
+                    <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+                        <i class="fa fa-calendar me-2 fs-16 "></i> Loan Type
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-9">
+            <div class="tab-content adminsetting-content" id="setting-tabContent">
+                <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0 justify-content-between align-items-center">
+                            <h4 class="card-title">Off Boarding Setting</h4>
+                            <a onclick="addoffboardingmodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addoffboardingsetting">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+                        </div>
+                        <div class="card-body pt-2">
+
+                            <div class="modal fade" id="addoffboardingsetting">
+                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Add Employment Type</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="OffBoardingProcessSettingId" />
+                                            <div class="leave-types">
+                                               <div class="form-group">
+                                                    <label class="form-label">Clearence From Department</label>
+                                                    <select id="DepartmentId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.ListDepartments ,"DepartmentId" ,"Title"))">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label">Clearence From Designation</label>
+                                                    <select id="DesignationId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.ListDesignations ,"DesignationId" ,"Title"))">
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="custom-switch form-switch mb-0">
+                                                        <input type="checkbox" id="AllowExitInterview" name="custom-switch-radio" class="custom-switch-input">
+                                                        <span class="custom-switch-indicator"></span>
+                                                        <span class="custom-switch-description fs-16 me-3 text-dark">Allow Exit Interview</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="ms-auto">
+                                                <button type="button" onclick="postoffboardingsettingdata()" class="btn btn-success">Save</button>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="offboarding-table" class="table table-bordered text-nowrap border-bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Department</th>
+                                                    <th class="border-bottom-0">Designation</th>
+                                                    <th class="border-bottom-0">Exit Interview</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    var i = 1;
+                                                    foreach (var item in ViewBag.ListOffBoardingSetting)
+                                                    {
+                                                        <tr>
+                                                            <td>@i</td>
+                                                            <td>@item.Department</td>
+                                                            <td>@item.Designation</td>
+                                                            <td>
+                                                                <label class="custom-switch form-switch mb-0">
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="AlloeExitInterview_@item.OffboardingProcessSettingID" onchange="setvalue(this.id)" @(item.AllowExitInterview == true? "checked" : "")>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+
+                                                                <a class="action-btns1 btn-xs" onclick="editoffboarding(@item.OffboardingProcessSettingID)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                </a>
+                                                                <a class="action-btns1 btn-xs" onclick="confirmationoffboarding(@item.OffboardingProcessSettingID)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                    <i class="feather feather-trash-2 danger text-danger mt-1"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        i++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header  border-0 justify-content-between align-items-center">
+                            <h4 class="card-title">Employment Type</h4>
+                            <a onclick="addemploymenttypemodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addemploymenttype">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+                        </div>
+                        <div class="card-body pt-2">
+
+                            <div class="modal fade" id="addemploymenttype">
+                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Add Employment Type</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="EmploymentTypeId" />
+                                            <div class="leave-types">
+                                                <div class="form-group">
+                                                    <label class="form-label">Title</label>
+                                                    <input class="form-control" id="Title" type="text" placeholder="Title" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="custom-switch form-switch mb-0">
+                                                        <input type="checkbox" id="Status" name="custom-switch-radio" class="custom-switch-input">
+                                                        <span class="custom-switch-indicator"></span>
+                                                        <span class="custom-switch-description fs-16 me-3 text-dark">Status</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="ms-auto">
+                                                <button type="button" onclick="postemploymenttypedata()" class="btn btn-success">Save</button>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="employmenttype-table" class="table table-bordered text-nowrap border-bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Title</th>
+                                                    <th class="border-bottom-0">Status</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    var ii = 1;
+                                                    foreach (var item in ViewBag.ListEmploymentType)
+                                                    {
+                                                        <tr>
+                                                            <td>@ii</td>
+                                                            <td>@item.Title</td>
+                                                            <td>
+                                                                <label class="custom-switch form-switch mb-0">
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.EmploymentTypeId" onchange="setvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+
+                                                                <a class="action-btns1 btn-xs" onclick="editemploymenttype(@item.EmploymentTypeId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                </a>
+                                                                <a class="action-btns1 btn-xs" onclick="confirmationemploymenttype(@item.EmploymentTypeId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                    <i class="feather feather-trash-2 danger text-danger mt-1"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        ii++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
+                            <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-3" role="tabpanel">
+
+                    <div class="card">
+                        <div class="card-header  border-0 justify-content-between align-items-center">
+                            <h4 class="card-title">Loan Type</h4>
+                            <a onclick="addloantypemodel()" class="btn btn-primary me-3" data-bs-toggle="modal" data-bs-target="#addloantype">Add New <i class="fe fe-plus-circle me-1"></i></a>
+
+                        </div>
+                        <div class="card-body pt-2">
+
+                            <div class="modal fade" id="addloantype">
+                                <div class="modal-dialog" style="max-width:550px;" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Add Loan Type</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" id="LoanTypeId" name="LoanTypeId" />
+                                            <div class="leave-types">
+                                                <div class="form-group">
+                                                    <label class="form-label">Loan Type</label>
+                                                    <input class="form-control" id="LoanType" name="Title" type="text" placeholder="Loan Type" />
+                                                </div>
+                                                <div class="form-group">
+
+                                                    <label class="custom-switch">
+                                                        <label class="form-label me-2 mt-1">IsActive</label>
+                                                        <input type="checkbox" id="IsActive" name="Status" class="custom-switch-input" checked="checked">
+                                                        <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                    </label>
+                                                    <label class="custom-switch ms-2">
+                                                        <label class="form-label me-2 mt-1">Is Need Approval</label>
+                                                        <input type="checkbox" id="IsNeedApproval" name="IsNeedApproval" class="custom-switch-input">
+                                                        <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                    </label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="ms-auto">
+                                                <button type="button" onclick="postloandata()" class="btn btn-success">Save</button>
+                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table id="loantype-table" class="table table-bordered text-nowrap border-bottom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0">#</th>
+                                                    <th class="border-bottom-0">Title</th>
+                                                    <th class="border-bottom-0">Need Approval</th>
+                                                    <th class="border-bottom-0">Status</th>
+                                                    <th class="border-bottom-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    var countt = 1;
+                                                    foreach (var item in ViewBag.ListLoanType)
+                                                    {
+                                                        <tr>
+                                                            <td>@countt</td>
+                                                            <td>@item.Title</td>
+                                                            <td>
+                                                                <label class="custom-switch ">
+                                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsNeedApproval_@item.LoanTypeId" onchange="setloanvalue(this.id,this)" @(item.IsNeedApproval == true? "Checked":"") />
+                                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+                                                                <label class="custom-switch mt-2">
+                                                                    <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.LoanTypeId" onchange="setloanvalue(this.id,this)" @(item.Status == true? "Checked":"") />
+                                                                    <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                                </label>
+                                                            </td>
+                                                            <td>
+
+                                                                <a class="action-btns1 btn-xs" onclick="editloantype(@item.LoanTypeId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                </a>
+                                                                <a class="action-btns1 btn-xs" onclick="confirmationloantype(@item.LoanTypeId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                    <i class="feather feather-trash-2 danger text-danger mt-1"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        countt++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Row -->
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '2') {
+
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+
+
+
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+
+
+
+            }
+
+            $('#offboarding-table').DataTable();
+            $('#employmenttype-table').DataTable();
+            $('#loantype-table').DataTable();
+
+            $("#DepartmentId").select2({ placeholder: "Select Department", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#DesignationId").select2({ placeholder: "Select Designation", width: '100%', allowClear: true }).val('').trigger('change');
+
+        })
+        function postoffboardingsettingdata() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#DepartmentId").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Department"
+                });
+                $("#DepartmentId").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else if($("#DesignationId").val() == ""){
+                 $.growl.warning({
+                    message: "Please Select Designation"
+                });
+                $("#DesignationId").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#DepartmentId").css("border-color", "#ddd");
+                $("#DesignationId").css("border-color", "#ddd");
+            }
+            var Data = {
+                OffBoardingProcessSettingId: $("#OffBoardingProcessSettingId").val(),
+                NeedClearenceFromDepartmentID: $('#DepartmentId').val(),
+                NeedClearenceFromDesignationID: $('#DesignationId').val(),
+                AllowExitInterview: $("#AllowExitInterview").is(':checked')
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/OffBoardingSettingAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#OffBoardingProcessSettingId").val(),
+                    departmentid: $('#DepartmentId').val(),
+                    designationid: $("#DesignationId").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addoffboardingsetting").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/PostOffBoardingSetting",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        window.location.href = window.location.href;
+                                        status = false;
+
+
+                                    }
+                                    else {
+                                        $("#addoffboardingsetting").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+        function editoffboarding(id) {
+            debugger;
+            addoffboardingmodel();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/GetOffBoardingSettingsById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#OffboardingProcessSettingId").val(data.offboardingProcessSettingID);
+                        $("#DepartmentId").val(data.needClearenceFromDepartmentID).trigger('change');;
+                        $("#DesignationId").val(data.needClearenceFrom_DesignationID).trigger('change');;
+
+                        $("#AllowExitInterview").prop('checked', data.allowExitInterview)
+                        $("#addoffboardingsetting").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+        function confirmationoffboarding(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { id: id }
+                    $.ajax({
+                        url: "/Setting/OffBoardingSettingDelete",
+                        method: 'GET',
+                        data: Data,
+                        success: function (response) {
+                            if (response.success) {
+
+                                window.location.href = window.location.href;
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                    type: "success"
+                                });
+                            }
+
+
+                        },
+                        error: function () {
+                            // Handle error if the AJAX request fails
+                            console.log('Failed to fetch data from the database.');
+                        }
+                    });
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+        }
+
+
+
+        function postemploymenttypedata() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#Title").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#Title").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#Title").css("border-color", "#ddd");
+            }
+            var Data = {
+                EmploymentTypeId: $("#EmploymentTypeId").val(),
+                Title: $('#Title').val(),
+                Status: $("#Status").is(':checked')
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/EmploymentTypeAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#EmploymentTypeId").val(),
+                    title: $('#Title').val() == '' ? '""' : $('#Title').val(),
+                    CompanyId: $("#CompanyId").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addemploymenttype").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/PostEmploymentType",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        window.location.href = window.location.href;
+                                        status = false;
+
+
+                                    }
+                                    else {
+                                        $("#addemploymenttype").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+        function editemploymenttype(id) {
+            debugger;
+            addnewLoanType();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Setting/GetEmploymentTypeById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#EmploymentTypeId").val(data.loanTypeId);
+                        $("#Title").val(data.title);
+
+                        $("#Status").prop('checked', data.status)
+                        $("#addemploymenttype").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+        function confirmationemploymenttype(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { id: id }
+                    $.ajax({
+                        url: "/Setting/EmploymentTypeDelete",
+                        method: 'GET',
+                        data: Data,
+                        success: function (response) {
+                            if (response.success) {
+
+                                window.location.href = window.location.href;
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                    type: "success"
+                                });
+                            }
+
+
+                        },
+                        error: function () {
+                            // Handle error if the AJAX request fails
+                            console.log('Failed to fetch data from the database.');
+                        }
+                    });
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+        }
+
+        function postloandata() {
+            debugger;
+            var status = true;
+            debugger;
+            if ($("#LoanType").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Loan Type"
+                });
+                $("#LoanType").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#LoanType").css("border-color", "#ddd");
+            }
+            var Data = {
+                LoanTypeId: $("#LoanTypeId").val(),
+                Title: $('#LoanType').val(),
+                Status: $("#IsActive").is(':checked'),
+                IsNeedApproval: $("#IsNeedApproval").is(':checked')
+
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/LoanTypeAlreadyExists",
+                type: "GET",
+                data: {
+                    id: $("#LoanTypeId").val(),
+                    title: $('#LoanType').val() == '' ? '""' : $('#LoanType').val(),
+                    CompanyId: $("#CompanyId").val()
+                },
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#addloantype").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/PostLoanType",
+                            type: "Post",
+                            data: Data,
+                            success: function (data) {
+                                if (data != "") {
+                                    debugger
+                                    //var b = JSON.parse(data)
+                                    if (data.success) {
+
+                                        window.location.href = window.location.href;
+                                        status = false;
+
+
+                                    }
+                                    else {
+                                        $("#addloantype").modal('hide');
+                                    }
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+
+
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+
+
+            }
+
+
+        }
+
+        function editloantype(id) {
+            debugger;
+            addloantypemodel();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetLoanTypeById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#LoanTypeId").val(data.loanTypeId);
+                        $("#LoanType").val(data.title);
+
+                        $("#IsActive").prop('checked', data.status)
+                        $("#IsNeedApproval").prop('checked', data.isNeedApproval)
+                        $("#addloantype").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+        }
+        function confirmationloantype(id) {
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var Data = { id: id }
+                    $.ajax({
+                        url: "/Setting/LoanTypeDelete",
+                        method: 'GET',
+                        data: Data,
+                        success: function (response) {
+                            if (response.success) {
+
+                                window.location.href = window.location.href;
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                                    type: "success"
+                                });
+                            }
+
+
+                        },
+                        error: function () {
+                            // Handle error if the AJAX request fails
+                            console.log('Failed to fetch data from the database.');
+                        }
+                    });
+
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+
+
+
+        }
+
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdateEmploymentTypeStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
+
+        function setloanvalue(event, row) {
+            debugger
+            console.log(event)
+
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $("#" + control + "_" + id).prop('checked', true);
+            }
+            else {
+                $("#" + control + "_" + id).prop('checked', false);
+            }
+
+            var currentRow = $(row).closest('tr');
+            var isactive = currentRow.find("#IsActive_" + id).is(':checked');
+            var isneedapproval = currentRow.find("#IsNeedApproval_" + id).is(':checked');
+
+
+            // UPdate Status & IsNonpaid
+            var Data = { id: id, status: isactive, needapproval: isneedapproval }
+            $.ajax({
+                async: false,
+                url: "/Configuration/UpdateLoanTypeStatus",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            // no need to redirect becoz status updated in DB
+
+                            //var url = '@Url.Action("LoanTypeList", "Configuration",new { data = 2 })';
+                            //window.location.href = url;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
+        function addoffboardingmodel() {
+            $("#addoffboardingsetting").modal('show');
+            $("#EmploymentId").val(0)
+            $("#Title").val('')
+            $("#Status").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+        }
+
+        function addemploymenttypemodel() {
+            $("#addemploymenttype").modal('show');
+            $("#EmploymentId").val(0)
+            $("#Title").val('')
+            $("#Status").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+        }
+
+        function addloantypemodel() {
+            $("#addloantype").modal('show');
+            $("#LoanTypeId").val(0)
+            $("#LoanType").val('')
+            $("#IsNeedApproval").prop('checked', false);
+            $("#IsActive").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+        }
+
+    </script>
+
+
+	}
+
+
