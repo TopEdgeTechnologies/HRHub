@@ -95,7 +95,7 @@ namespace HRHUBWEB.Controllers
 
 			StaffSalaryComponent ObjComponentInfo = new StaffSalaryComponent();
 			ObjComponentInfo.ComponentId = Id;
-			obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById/{Id}", HttpMethod.Get);
+			obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById{Id}", HttpMethod.Get);
 			ViewBag.title = obj.Title;
 			// ViewBag.staffcount = obj.StaffCount;
 

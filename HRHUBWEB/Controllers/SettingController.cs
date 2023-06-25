@@ -406,7 +406,7 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> GetComponentById(int Id)
         {
-            var obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/StaffBenefits/GetStaffBenefitById{Id}", HttpMethod.Get);
+            var obj = await _APIHelper.CallApiAsyncGet<ComponentInfo>($"api/Setting/GetComponentsById{Id}", HttpMethod.Get); 
             return Json(obj);
 
         }
