@@ -137,12 +137,20 @@ namespace HRHUBWEB.Controllers
               var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
                 return View();
             }
+		
+			public async Task<IActionResult> HRAttendance(string status = "")
+			{
+
+				@ViewBag.Status = status;
+				return View();
+			}
+
 
 		#endregion
 
-        #region Staff Dashboard
+		#region Staff Dashboard
 
-            [HttpGet]
+		[HttpGet]
 		    public async Task<IActionResult> StaffMonthlyAttendance(DateTime currentDate)
 		    {
 			    string procrdure = "BI.GetStaff_Attendance_Summary";
@@ -274,9 +282,11 @@ namespace HRHUBWEB.Controllers
 			    return View();
             }
 
-        #endregion
 
-    }
+
+		#endregion
+
+	}
 
 
 }
