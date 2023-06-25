@@ -152,13 +152,13 @@ namespace HRHUBAPI.Models
                     checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
                    
                     
-					await _context.SaveChangesAsync();
-					checkEmailNotificationSettingInfo.Flag = 2;
-					return ObjEmailNotificationSettingInfo;
+				//	await _context.SaveChangesAsync();
+				//	checkEmailNotificationSettingInfo.Flag = 2;
+				//	return ObjEmailNotificationSettingInfo;
 
-				}
-                else
-                {
+				//}
+    //            else
+    //            {
                     
                     //ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
                     //ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
@@ -168,22 +168,22 @@ namespace HRHUBAPI.Models
                     _context.EmailNotificationSettings.Add(ObjEmailNotificationSettingInfo);
 					await _context.SaveChangesAsync();
 
-					ObjEmailNotificationSettingInfo.Flag = 1;
-					return ObjEmailNotificationSettingInfo;
+				//	ObjEmailNotificationSettingInfo.Flag = 1;
+				//	return ObjEmailNotificationSettingInfo;
 
-				}
+				//}
 
            
 
 
-            }
-            catch (Exception ex)
-            {
+    //        }
+    //        catch (Exception ex)
+    //        {
 
-                throw;
+    //            throw;
 
-            }
-        }
+    //        }
+    //    }
 
         #endregion
 
