@@ -59,7 +59,7 @@
                         <div class="card-body" id="OnStatusChangeTemplate">
 
                             <div class="table-responsive">
-                                <table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+                                <table id="Candidate-table" class="table table-bordered text-nowrap border-bottom">
                                     <thead>
                                         <tr>
                                             <th class="border-bottom-0 col-1">#</th>
@@ -169,18 +169,21 @@
                                                 <label class="form-label">Subject: <span class="text-danger">*</span></label>
                                                 <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
                                             </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Select Variable <span class="text-danger">*</span></label>
+                                                <select id="VariableId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" asp-items="@(new SelectList(@ViewBag.VaribleTypes  ,"Type"))">
+                                                </select>
+                                            </div>
 
 
-                                            <span class="">Select</span>
-                                            <span class="badge badge-primary" style="font-size:14px;" id="CandidateId">[CandidateName]</span>
-                                            <span class="badge badge-secondary" style="font-size:14px;" id="CompanyId">[CompanyName]</span>
-                                            <span class="badge badge-success" style="font-size:14px;" id="HrId">[HRName]</span>
-                                            <span class="badge badge-info" style="font-size:14px;" id="DesignationId">[Designation]</span>
+                                            <span class="">Select:</span>
+                                            <div class="NoteVaribleID"></div>
+                                            
 
 
                                             <div class="form-group">
                                                 <label class="form-label">Body:</label>
-                                                <textarea id="Body" name="Body" class="summernote"></textarea>
+                                                <textarea id="NoteBody" name="Body" class="summernote"></textarea>
                                             </div>
 
 
@@ -209,7 +212,7 @@
                             <div class="row row-sm">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
-                                        <table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+                                        <table id="Email-table" class="table table-bordered text-nowrap border-bottom">
                                             <thead>
                                                 <tr>
                                                     <th class="border-bottom-0">#</th>
@@ -217,7 +220,7 @@
                                                     <th class="border-bottom-0 d-none">Subject</th>
                                                     <th class="border-bottom-0 d-none">Body</th>
                                                     <th class="border-bottom-0">Status</th>
-                                                    <th class="border-bottom-0">Action</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -241,12 +244,9 @@
                                                                     <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.TemplateId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
                                                                     <span class="custom-switch-indicator custom-switch-indicator"></span>
                                                                 </label>
-                                                            </td>
-                                                            <td>
-
 
                                                                 <!----- Action Buttons Code Start From Here------>
-                                                                <div class="ms-auto">
+                                                                <div class="float-end ms-auto">
                                                                     <div class="btn-group ms-3 mb-0">
                                                                         <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                                         <div class="dropdown-menu dropdown-menu-start" style="">
@@ -273,8 +273,10 @@
                                                                     </div>
                                                                 </div>
                                                                 <!----- Action Buttons Code Ends Here------>
-
-                                                            </td>
+                                                                
+                                                                
+                                                                </td>
+                                                            
                                                         </tr>
                                                         i++;
                                                     }
@@ -301,9 +303,32 @@
 
 
         <script>
+                var lastCaretPos = 0;
+	            var parentNode;
+	            var range;
+	            var selection;
             $(document).ready(function () {
 
-                var summernoteEditor = $('#Body');
+
+               
+
+
+                var summernoteEditor = $('#NoteBody');
+
+
+                ///map coursr position 
+               
+
+	            $('.note-editable').on('keyup mouseup',function (e){
+
+		            selection = window.getSelection();
+		            range = selection.getRangeAt(0);
+		            parentNode = range.commonAncestorContainer.parentNode;
+	            });
+
+                //////////////-----------//////////
+
+
 
 
                 var candidateSpan = document.getElementById("CandidateId");
@@ -311,42 +336,36 @@
                 var hrSpan = document.getElementById("HrId");
                 var designationSpan = document.getElementById("DesignationId");
 
-                var summernoteEditor = $('#Body');
+              
 
                 // Add click event handler to your text spans
 
 
 
-                $('#CandidateId').click(function () {
+                $('#NoteVaribleID').click(function () {
                     debugger
-                    // Get the clicked text
-                    var clickedText = $(this).text();
 
-                    // Get the current cursor position
-                    var range = summernoteEditor.summernote('editor.createRange');
-                    var currentPosition = range.index
+               
+                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	            var span = document.createElement('span');	    
+	                    span.setAttribute('style','font-style:italic');
+                        span.innerHTML = '<span class="readonly-span"   >' + $('#NoteVaribleID').text() + '</span>';
 
-                    // Insert the clicked text at the current cursor position
-                    summernoteEditor.summernote('editor.insertText', clickedText, currentPosition);
+			            range.deleteContents();        
+	                    range.insertNode(span);  
+	                    //cursor at the last with this
+	                    range.collapse(false);
+	                    selection.removeAllRanges();
+			            selection.addRange(range);
+
+		            }else{
+			            return;
+		            }
 
                 });
-                //$('#CandidateId').click(function () {
-                //    // Get the clicked text
-                //    var clickedText = $(this).text();
 
 
-
-
-
-
-                //   //summernoteEditor.summernote('pasteHTML', clickedText);
-
-                //   // notif({
-                //   //     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Variable Add in Clip board.",
-                //   //     type: "success"
-                //   // });
-                //});
-
+            
 
                 ClearControl();
 
@@ -398,8 +417,8 @@
 
 
                 }
-                $('#policy-table').DataTable();
-                $('#leavetype-table').DataTable();
+                $('#Candidate-table').DataTable();
+                $('#Email-table').DataTable();
 
 
 
@@ -452,6 +471,7 @@
             function ClearControl() {
                 
                 $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                $('#VariableId').select2({ placeholder: 'Select Variable', width: '100%', allowClear: true }).val("").trigger('change');
 
             }
 
@@ -473,8 +493,7 @@
 
 
                 }
-
-
+               
 
 
 
@@ -537,12 +556,9 @@
                                 if (data != "") {
                                     debugger
 
-                                    //ClearControl();
-                                    // Data saved successfully
-                                    notif({
-                                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Save Succesfully.",
-                                        type: "success"
-                                    });
+                                    var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
+                                    window.location.href = url;
+                                    
                                 }
                             },
                             error: function () {
@@ -558,14 +574,10 @@
                             'error'
                         )
                     }
-                });
-                setTimeout(function () {
+                }); 
 
-                    location.reload();
 
-                }, 3000);
-
-            }
+            } 
 
 
 
@@ -593,7 +605,7 @@
 
 
                             //alert(date)
-                            $('#Body').summernote('code', data.body);
+                            $('#NoteBody').summernote('code', data.body);
 
                             $("#Status").prop('checked', data.status);
 
@@ -803,11 +815,21 @@
                     $("#Title").css("border-color", "#ddd");
                     $("#Subject").css("border-color", "#ddd");
                 }
+
+                
+                if ($("#VariableId").val() == '' || $("#VariableId").val() == null) {
+                        $.growl.warning({
+                            message: "Select Variable Type !"
+                        });
+                    status = false;
+                        return false;
+                    }
+
                 var Data = {
                     TemplateId: $("#TemplateId").val(),
                     Title: $('#Title').val(),
                     Subject: $("#Subject").val(),
-                    Body: $("#Body").val(),
+                    Body: $("#NoteBody").val(),
                     Status: $("#Status").is(':checked')
                 }
 
@@ -870,13 +892,14 @@
                                     if (data != "") {
                                         debugger;
                                         //var b = JSON.parse(data)
-                                        Swal.fire('Success', 'Data saved!', 'success');
+                                        var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
+                                        window.location.href = url;
 
 
                                         $("#TemplateId").val(0)
                                         $("#Title").val('')
                                         $("#Subject").val('')
-                                        $('#Body').summernote('code', '');
+                                        $('#NoteBody').summernote('code', '');
                                     } else {
                                         $("#addEmail").modal('hide');
                                     }
@@ -894,11 +917,7 @@
                             );
                         }
                     });
-                    setTimeout(function () {
-
-                        location.reload();
-
-                    }, 2000);
+                   
                 }
             }
 
@@ -913,6 +932,121 @@
                 $("#Title").css("border-color", "#ddd");
 
             }
+
+             function addTextAtCursor(text) {
+                    var summernote = $('#NoteBody').summernote();
+                    var currentRange = summernote.summernote('createRange');
+                    var html = $.parseHTML(text);
+
+                    currentRange.insertNode(html[0]);
+                currentRange.collapse(false);
+                }
+
+
+
+
+	
+	$('#caret').click(function (e){
+			
+		if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	var span = document.createElement('span');	    
+	        span.setAttribute('style','font-style:italic');
+	    	span.innerHTML="${firstName}";
+			
+			range.deleteContents();        
+	        range.insertNode(span);  
+	        //cursor at the last with this
+	        range.collapse(false);
+	        selection.removeAllRanges();
+			selection.addRange(range);
+
+		}else{
+			return;
+		}
+	});
+
+
+
+            // Load variable json call
+            $(document).ready(function () {
+
+                $('#VariableId').change(function () {
+                    var selectedValue = $(this).val();
+                   
+                    var obj=
+                    {
+                        type: selectedValue
+                    }
+                    // AJAX call
+                    $.ajax({
+                        url: "/Setting/GetVariblebyType",
+                        type: "GET",
+                        async: false,
+                        data: obj,
+                        success: function (response) {
+                            debugger
+                            if (response != null) {
+                                console.log(response)
+                                debugger
+                                var html = '';  // Create an empty string to store the HTML content
+
+                                //var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning, bg-purple "];
+
+                                var colors = [ "bg-primary"];
+                                for (var i = 0; i < response.length; i++) {
+                                    // Append each variable name to the html string
+
+                                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                    // Append each variable name to the html string within a container div
+                                    html += '<div style="display: inline-block; margin-right: 10px;margin-bottom: 10px">';
+                                    html += '<a href="#" onclick="TextPosition(' + i + ')"  > <span  id="variableid_' + i + '"  class="badge ' + randomColor + '-transparent" style="font-size: 14px;">' + response[i].variableName + '</span>';
+                                    html += '</div>';
+
+
+
+                                   // html += '<span class="badge badge-primary" style="font-size:14px;">' + response[i].variableName +  '</span>';
+                                }
+
+                                $('.NoteVaribleID').html(html);
+                            }
+
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                });
+            });
+
+
+
+
+            function TextPosition(id)
+            {
+                debugger;
+            
+            
+                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	            var span = document.createElement('span');	    
+	                   
+                        span.innerHTML = '<span>' + $('#variableid_'+id).text() + '</span>';
+
+			            range.deleteContents();        
+	                    range.insertNode(span);  
+	                    //cursor at the last with this
+	                    range.collapse(false);
+	                    selection.removeAllRanges();
+			            selection.addRange(range);
+
+		            }else{
+			            return;
+		            }}
+
+
+
+
 
 
 

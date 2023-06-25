@@ -20,10 +20,32 @@ namespace HRHUBAPI.Models
 
         [NotMapped]       
         public IEnumerable<EmailTemplate>? ListEmailTemplate { get; set; }
-         [NotMapped]       
+        [NotMapped]       
         public IEnumerable<CandidateEmailNotificationSetting>? ListCandidateEmailNotification { get; set; }
+        
+      
 
         #region EmailNotificationSetting    
+
+        // Get Dynamic Variable list
+
+        public async Task<List<EmailDynamicVariable>> GetEmailDynamicVariable( HrhubContext _context)
+        {
+            try
+            {
+                var query =await _context.EmailDynamicVariables.OrderByDescending(x => x.VariableId).ToListAsync();
+
+                return query;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
 
         // Get candidate Email Notification List 
         public async Task<List<CandidateEmailNotificationSetting>> GetCandidateEmailNotification(int CompanyId, HrhubContext _context)

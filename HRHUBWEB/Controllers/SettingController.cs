@@ -199,8 +199,6 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-
-
         #region Leave Settings
         public async Task<IActionResult> LeaveSettings(string data = "")
         {
@@ -440,12 +438,28 @@ namespace HRHUBWEB.Controllers
             objEmail = await _APIHelper.CallApiAsyncGet<EmailNotificationSetting>($"api/Setting/GetEmailNotificationSettingById{_user.CompanyId}", HttpMethod.Get);
 
 
+            var listTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailDynamicVariable>>($"api/Setting/GetEmailDynamicVariableList", HttpMethod.Get);
+            
+            ViewBag.VaribleTypes = listTypes.Select(x=>x.Type).Distinct().ToList();
+
+
+
             objEmail.ListEmailTemplate = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailTemplate>>($"api/Setting/GetEmailTemplateByCompanyId{_user.CompanyId}", HttpMethod.Get);
+            
             objEmail.ListCandidateEmailNotification = await _APIHelper.CallApiAsyncGet<IEnumerable<CandidateEmailNotificationSetting>>($"api/Setting/GetCandidateEmailNotificationList{_user.CompanyId}", HttpMethod.Get);
 
 
             return View(objEmail);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetVariblebyType(string type)
+        {
+            var listTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailDynamicVariable>>($"api/Setting/GetEmailDynamicVariableList", HttpMethod.Get);
+            var distnictdta=listTypes.Where(x=>x.Type== type).ToList();
+            return Json(distnictdta);
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> SaveNotificationSetting(EmailNotificationSetting obj)
         {
@@ -460,10 +474,6 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region Email Template 
-
-
-
-
 
         public async Task<IActionResult> EmailTemplateDetails(int Id)
         {
@@ -482,10 +492,6 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailTemplateData", HttpMethod.Post);
             return Json(result);
         }
-
-
-
-
 
         public async Task<IActionResult> TemplateDelete(int id)
         {

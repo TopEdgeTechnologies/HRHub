@@ -204,6 +204,24 @@ namespace HRHUBAPI.Controllers
         #region NotificationSetting
 
 
+        // Get Variable List 
+        [HttpGet("GetEmailDynamicVariableList")]
+        public async Task<ActionResult<List<EmailDynamicVariable>>> GetEmailDynamicVariableList()
+        {
+            var result = await new EmailNotificationSetting().GetEmailDynamicVariable( _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+
+
+
+
 
         [HttpGet("GetCandidateEmailNotificationList{CompanyId}")]
         public async Task<ActionResult<List<CandidateEmailNotificationSetting>>> GetCandidateEmailNotificationList(int CompanyId)
