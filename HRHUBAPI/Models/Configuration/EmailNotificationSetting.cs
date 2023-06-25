@@ -44,60 +44,60 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<EmailNotificationSetting> PostEmailNotificationSetting(EmailNotificationSetting ObjEmailNotificationSettingInfo, HrhubContext _context)
-        {
-            try
-            {
-                string msg = "";
-                var checkEmailNotificationSettingInfo = await _context.EmailNotificationSettings.FirstOrDefaultAsync(x => x.NotificationId == ObjEmailNotificationSettingInfo.NotificationId);
-                if (checkEmailNotificationSettingInfo != null && checkEmailNotificationSettingInfo.NotificationId > 0)
-                {
-                    checkEmailNotificationSettingInfo.NotificationId =                  ObjEmailNotificationSettingInfo.NotificationId;
-                    checkEmailNotificationSettingInfo.OnCandidateEnrollment =           ObjEmailNotificationSettingInfo.OnCandidateEnrollment;
-                    checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
-                    checkEmailNotificationSettingInfo.OnStatusChange                  = ObjEmailNotificationSettingInfo.OnStatusChange;
-                    checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
-                    checkEmailNotificationSettingInfo.OnApproved                      = ObjEmailNotificationSettingInfo.OnApproved;
-                    checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
-                    checkEmailNotificationSettingInfo.OnRejection                     = ObjEmailNotificationSettingInfo.OnRejection;
-                    checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
-                    checkEmailNotificationSettingInfo.OnSalaryGeneration              = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
-                    checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId    = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
-                    checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
+    //    public async Task<EmailNotificationSetting> PostEmailNotificationSetting(EmailNotificationSetting ObjEmailNotificationSettingInfo, HrhubContext _context)
+    //    {
+    //        try
+    //        {
+    //            string msg = "";
+    //            var checkEmailNotificationSettingInfo = await _context.EmailNotificationSettings.FirstOrDefaultAsync(x => x.NotificationId == ObjEmailNotificationSettingInfo.NotificationId);
+    //            if (checkEmailNotificationSettingInfo != null && checkEmailNotificationSettingInfo.NotificationId > 0)
+    //            {
+    //                checkEmailNotificationSettingInfo.NotificationId =                  ObjEmailNotificationSettingInfo.NotificationId;
+    //                checkEmailNotificationSettingInfo.OnCandidateEnrollment =           ObjEmailNotificationSettingInfo.OnCandidateEnrollment;
+    //                checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
+    //                checkEmailNotificationSettingInfo.OnStatusChange                  = ObjEmailNotificationSettingInfo.OnStatusChange;
+    //                checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
+    //                checkEmailNotificationSettingInfo.OnApproved                      = ObjEmailNotificationSettingInfo.OnApproved;
+    //                checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
+    //                checkEmailNotificationSettingInfo.OnRejection                     = ObjEmailNotificationSettingInfo.OnRejection;
+    //                checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
+    //                checkEmailNotificationSettingInfo.OnSalaryGeneration              = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
+    //                checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId    = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
+    //                checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
                    
                     
-					await _context.SaveChangesAsync();
-					checkEmailNotificationSettingInfo.Flag = 2;
-					return ObjEmailNotificationSettingInfo;
+				//	await _context.SaveChangesAsync();
+				//	checkEmailNotificationSettingInfo.Flag = 2;
+				//	return ObjEmailNotificationSettingInfo;
 
-				}
-                else
-                {
+				//}
+    //            else
+    //            {
                     
-                    ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnRejectionTemplateId = ObjEmailNotificationSettingInfo.OnRejectionTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId ?? 0;
-                    _context.EmailNotificationSettings.Add(ObjEmailNotificationSettingInfo);
-					await _context.SaveChangesAsync();
+    //                ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
+    //                ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
+    //                ObjEmailNotificationSettingInfo.OnRejectionTemplateId = ObjEmailNotificationSettingInfo.OnRejectionTemplateId ?? 0;
+    //                ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId ?? 0;
+    //                ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId ?? 0;
+    //                _context.EmailNotificationSettings.Add(ObjEmailNotificationSettingInfo);
+				//	await _context.SaveChangesAsync();
 
-					ObjEmailNotificationSettingInfo.Flag = 1;
-					return ObjEmailNotificationSettingInfo;
+				//	ObjEmailNotificationSettingInfo.Flag = 1;
+				//	return ObjEmailNotificationSettingInfo;
 
-				}
+				//}
 
            
 
 
-            }
-            catch (Exception ex)
-            {
+    //        }
+    //        catch (Exception ex)
+    //        {
 
-                throw;
+    //            throw;
 
-            }
-        }
+    //        }
+    //    }
 
         #endregion
 

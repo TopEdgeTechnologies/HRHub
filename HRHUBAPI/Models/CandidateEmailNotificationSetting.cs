@@ -3,21 +3,17 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class LoanType
+public partial class CandidateEmailNotificationSetting
 {
-    public int LoanTypeId { get; set; }
+    public int CandidateNotificationId { get; set; }
 
     public int? CompanyId { get; set; }
 
-    public string? Title { get; set; }
+    public int? StatusId { get; set; }
 
-    public string? SnapPath { get; set; }
+    public int? TemplateId { get; set; }
 
-    public bool Status { get; set; }
-
-    public bool IsNeedApproval { get; set; }
-
-    public bool? IsDeleted { get; set; }
+    public bool? Status { get; set; }
 
     public int? CreatedBy { get; set; }
 

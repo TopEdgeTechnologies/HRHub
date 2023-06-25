@@ -168,4 +168,8 @@ public partial class VInfoStaff
     public bool? IsShortMinutesDeductionApplicable { get; set; }
 
     public string? SalaryFrequency { get; set; }
+
+    public bool MonthlyIsSpecificDayofEveryMonth { get; set; }
+
+    public int? MonthlyDateOfEveryMonth { get; set; }
 }
