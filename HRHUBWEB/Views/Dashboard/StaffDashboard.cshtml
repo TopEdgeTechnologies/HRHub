@@ -616,6 +616,10 @@
 	<script>
 		$(document).ready(function() {
 		
+			$('#myonoffswitch2').prop('checked', true);
+			localStorage.setItem('dayonedarkMode', true);
+			localStorage.removeItem('dayonelightMode');
+			localStorage.removeItem('dayonetransparentMode');
 
 			$('#DashboardCalender').val('@DateTime.Now.ToString("yyyy-MM-dd")')
 			// Start the clock
@@ -1305,15 +1309,31 @@
 						htmlLoan += ' 		</div> '
 						htmlLoan += ' 	</td> '
 						htmlLoan += ' 	<td class="text-end"> '
-						if (response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount > 0) {
+
+						if (response[i].LoanStatus == 'Approved') {
 							htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
 						}
-						else if(response[i].LoanRemainigAmount == 0 && response[i].LoanRepaymentAmount > 0){
-							htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+						else if (response[i].LoanStatus == 'Paid') {
+							htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' ' + response[i].LoanStatus + '</a> '
 						}
-						else if(response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount == 0){
-							htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">Not Paid</a> '
+						else if (response[i].LoanStatus == 'Not Paid') {
+							htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
 						}
+						else if (response[i].LoanStatus == 'Rejected') {
+							htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
+						}
+						//if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount > 0) {
+						//	htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+						//}
+						//else if(response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount == 0 && response[i].LoanRepaymentAmount > 0){
+						//	htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+						//}
+						//else if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount == 0) {
+						//	htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">Not Paid</a> '
+						//}
+						//else if (response[i].LoanStatusID == 2) {
+						//	htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">Rejected</a> '
+						//}
 						htmlLoan += ' 	</td> '
 						htmlLoan += ' </tr> '
 						
