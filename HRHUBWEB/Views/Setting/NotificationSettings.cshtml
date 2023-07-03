@@ -33,9 +33,7 @@
                     <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
                         <i class="feather feather-mail me-2 fs-16 "></i> Email Template
                     </a>
-                 @*   <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
-                        <i class="fa fa-list-alt me-2 fs-16 "></i> Leave Types
-                    </a>*@
+                   
                 </div>
             </div>
         </div>
@@ -45,39 +43,7 @@
 
                     <input type="hidden" asp-for="NotificationId" />
 
-
-
-
-                    
-                        <div class="card">
-                        <div class="card-header mb-3" id="BorderChangeEnrollment">
-                            <h3 class="card-title">Candidate Enrollment</h3>
-
-                            <div class="card-options">
-
-                                <label class="custom-switch">
-                                    <input type="checkbox" asp-for="OnCandidateEnrollment" class="custom-switch-input">
-                                    <span class="custom-switch-indicator"></span>
-
-                                </label>
-                            </div>
-                        </div>
-                        <div class="card-body" id="OnCandidateEnrollmentTemplate">
-
-
-
-                            <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
-                                <select asp-for="OnCandidateEnrollmentTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                </select>
-                            
-
-
-                        </div>
-                    </div>
-
-
-    
-                        <div class="card">
+                    <div class="card">
                         <div class="card-header mb-3" id="BorderChangeStatus">
                             <h3 class="card-title">Status Change</h3>
 
@@ -92,87 +58,53 @@
                         </div>
                         <div class="card-body" id="OnStatusChangeTemplate">
 
-                             <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
-                                <select asp-for="OnStatusChangeTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                </select>
-                           
+                            <div class="table-responsive">
+                                <table id="Candidate-table" class="table table-bordered text-nowrap border-bottom">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-bottom-0 col-1">#</th>
+                                            <th class="border-bottom-0 col-3">Title</th>
+                                            @* <th class="border-bottom-0 d-none">Subject</th>
+                                            <th class="border-bottom-0 d-none">Body</th>*@
+                                            <th class="border-bottom-0 col-1">Status</th>
 
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int a = 1;
+                                            foreach (var item in Model.ListCandidateEmailNotification)
+                                            {
+                                                <tr>
+                                                    <td>@a</td>
+                                                    <td>@item.EmailTitle</td>
 
+                                                    @*<td class="d-none" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
+                                            Html.Raw(item.EmailSubject)
+                                            </td>*@
+                                                    @*<td class="d-none" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
+                                            @*Html.Raw(item.EmailBody)
+                                            //</td>*@
+                                                    <td>
+                                                        <label class="custom-switch mt-2">
 
-                        </div>
-                    </div>
+                                                            <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.CandidateNotificationId" onchange="Updatevalue(this.id)" @(item.Status == true? "Checked":"") />
+                                                            <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                                        </label>
+                                                    </td>
 
-
-
-                    
-                    
-    
-                        <div class="card">
-                        <div class="card-header mb-3" id="BorderChangeRejection">
-                            <h3 class="card-title">Rejection</h3>
-
-                            <div class="card-options">
-
-                                <label class="custom-switch">
-                                    <input type="checkbox" asp-for="OnRejection" class="custom-switch-input">
-                                    <span class="custom-switch-indicator"></span>
-
-                                </label>
+                                                </tr>
+                                                a++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                        <div class="card-body" id="OnRejectionTemplate">
-
-                            <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
-                                <select asp-for="OnRejectionTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                </select>
-                          
 
 
 
                         </div>
                     </div>
-
-
-
-
-                        <div class="card">
-                        <div class="card-header mb-3" id="BorderChangeApproved">
-                            <h3 class="card-title">Approved</h3>
-
-                            <div class="card-options">
-
-                                <label class="custom-switch">
-                                    <input type="checkbox" asp-for="OnApproved" class="custom-switch-input">
-                                    <span class="custom-switch-indicator"></span>
-
-                                </label>
-                            </div>
-                        </div>
-                        <div class="card-body" id="OnApprovedTemplate">
-
-                           <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
-                                <select asp-for="OnApprovedTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                </select>
-                           
-
-
-
-                        </div>
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                     <div class="card">
                         <div class="card-header mb-3" id="BorderChangeSalary">
@@ -189,49 +121,23 @@
                         </div>
                         <div class="card-body" id="SalaryGenerationTemplate">
 
-                           <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
-                                <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
-                                </select>
-                          
-
-
+                            <label class="form-label">Select Email Template <span class="text-danger">*</span></label>
+                            <select asp-for="OnSalaryGenerationTemplateId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Template" asp-items="@(new SelectList(@Model.ListEmailTemplate ,"TemplateId" ,"Title"))">
+                            </select>
 
                         </div>
                     </div>
 
+                    <div class="card-footer">
+                        <a onclick="SaveSettings()" class="btn btn-primary">Save Changes</a>
 
+                    </div>
 
-
-
-
-
-
-
-
-
-
-
-
-                <div class="card-footer">
-                    <a onclick="SaveSettings()" class="btn btn-primary">Save Changes</a>
-                   
                 </div>
-                   
-                </div>
-                
-           
-                
 
 
-
-
-
-
-
-
-               
                 <div class="tab-pane fade" id="tab-2" role="tabpanel">
-                    
+
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Email Template</h4>
@@ -242,39 +148,48 @@
                         </div>
                         <div class="card-body pt-2">
                             <div class="modal fade" id="addEmail">
-                                <div class="modal-dialog modal-lg"  role="document">
+                                <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Add Email Template</h5>
+                                            <h5 class="modal-title">Email Template</h5>
                                             <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                             <input type="hidden" id="TemplateId" />
-                                           
-                                          
 
-                                                <div class="form-group">
-                                                    <label class="form-label">Title: <span class="text-danger">*</span></label>
-                                                    <input id="Title" name="Title" class="form-control" type="text" placeholder="Enter Email Title">
-                                                </div>
-                                                  <div class="form-group">
-                                                    <label class="form-label">Subject: <span class="text-danger">*</span></label>
-                                                    <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
-                                                </div>                                          
-                                              
-                                              
-                                                <span class="">Select</span>
-                                            <span class="badge badge-primary" style="font-size:14px;" id="CandidateId">[CandidateName]</span>
-                                            <span class="badge badge-secondary" style="font-size:14px;"id="CompanyId">[CompanyName]</span>
-                                            <span class="badge badge-success" style="font-size:14px;" id="HrId">[HRName]</span>
-                                            <span class="badge badge-info" style="font-size:14px;" id="DesignationId">[Designation]</span>
-                                               
-                                           
+
+
+                                            <div class="form-group">
+                                                <label class="form-label">Title: <span class="text-danger">*</span></label>
+                                                <input id="Title" name="Title" class="form-control" type="text" placeholder="Enter Email Title">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label">Subject: <span class="text-danger">*</span></label>
+                                                <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
+                                            </div>
+                                            <div class="form-group" id="SelectTemplateId">
+                                                <label class="form-label">Select Template Type <span class="text-danger">*</span></label>                                                
+                                                <select id="TemplateTypeId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" asp-items="@(new SelectList(@ViewBag.VaribleTypes  ,"Type"))">
+                                                </select>
+                                            </div>
+                                              <div class="form-group">
+                                                <label class="form-label">Select Variable <span class="text-danger">*</span></label>                                                
+                                                <select id="VariableId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" >
+                                                
+                                                </select>
+                                            </div>
+
+
+                                            <span class="">Select:</span>
+                                            <div class="NoteVaribleID"></div>
+                                            
+
+
                                             <div class="form-group">
                                                 <label class="form-label">Body:</label>
-                                                <textarea id="Body" name="Body" class="summernote"></textarea>
+                                                <textarea id="NoteBody" name="Body" class="summernote"></textarea>
                                             </div>
 
 
@@ -290,11 +205,11 @@
                                             </div>
 
                                         </div>
-                                        
+
                                         <div class="modal-footer">
                                             <div class="ms-auto">
-                                                <a  class="btn btn-success btn_SaveEmail">Save</a>
-                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                                <a class="btn btn-primary btn_SaveEmail">Save</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -303,7 +218,7 @@
                             <div class="row row-sm">
                                 <div class="col-lg-12">
                                     <div class="table-responsive">
-                                        <table id="policy-table" class="table table-bordered text-nowrap border-bottom">
+                                        <table id="Email-table" class="table table-bordered text-nowrap border-bottom">
                                             <thead>
                                                 <tr>
                                                     <th class="border-bottom-0">#</th>
@@ -311,7 +226,7 @@
                                                     <th class="border-bottom-0 d-none">Subject</th>
                                                     <th class="border-bottom-0 d-none">Body</th>
                                                     <th class="border-bottom-0">Status</th>
-                                                    <th class="border-bottom-0">Action</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -322,7 +237,7 @@
                                                         <tr>
                                                             <td>@i</td>
                                                             <td>@item.Title</td>
-                                                            
+
                                                             <td class="d-none" style="max-width: 200px; word-wrap: break-word!important; overflow: hidden;text-overflow: ellipsis;">
                                                                 @Html.Raw(item.Subject)
                                                             </td>
@@ -335,17 +250,14 @@
                                                                     <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.TemplateId" onchange="setvalue(this.id)" @(item.Status == true? "Checked":"") />
                                                                     <span class="custom-switch-indicator custom-switch-indicator"></span>
                                                                 </label>
-                                                            </td>
-                                                            <td>
-
 
                                                                 <!----- Action Buttons Code Start From Here------>
-                                                                <div class="ms-auto">
+                                                                <div class="float-end ms-auto">
                                                                     <div class="btn-group ms-3 mb-0">
                                                                         <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                                         <div class="dropdown-menu dropdown-menu-start" style="">
 
-                                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                                             {
                                                                                 <a class="dropdown-item" href="#" onclick="editrecord(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
                                                                                     <i class="feather feather-edit  me-2"></i> Edit
@@ -354,11 +266,11 @@
                                                                                 <a class="dropdown-item" href="#" onclick="confirmation(@item.TemplateId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Edit" aria-label="Delete">
                                                                                     <i class="feather feather-trash me-2"></i> Delete
 
-                                                                            </a>
+                                                                                </a>
 
 
                                                                             }
-                                                             
+
 
 
 
@@ -367,8 +279,10 @@
                                                                     </div>
                                                                 </div>
                                                                 <!----- Action Buttons Code Ends Here------>
-
-                                                            </td>
+                                                                
+                                                                
+                                                                </td>
+                                                            
                                                         </tr>
                                                         i++;
                                                     }
@@ -379,10 +293,10 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
-              
+
             </div>
 
         </div>
@@ -391,176 +305,209 @@
 
 
 
-@section scripts{
-      
+    @section scripts{
 
-    <script>
-        $(document).ready(function () {
 
-                var summernoteEditor = $('#Body');
+        <script>
+                var lastCaretPos = 0;
+	            var parentNode;
+	            var range;
+	            var selection;
+            $(document).ready(function () {
 
+
+
+                $('#TemplateTypeId').change(function () {
+                    debugger
+                    var selectedTemplateType = $(this).val();
+
+                    // Make an AJAX request to fetch the filtered data based on the selected Template Type
+                    var Data ={
+                        Type:selectedTemplateType
+                    }
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/LoadDynmicVariable",
+                        type: "Get",
+                        data: Data,
+                        success: function (data) {
+                            if (data != "") {
+                                debugger
+                                console.log(data);
+                                    $('#VariableId').empty();
+
+                                // Append the new options based on the fetched data
+
+                                    if(data !="Company"){
+                                    $('#VariableId').append($('<option>').text(data).val(data));
+
+                                    }
+                                    $('#VariableId').append('<option value="Company">Company</option>');
+                               
+
+                                // Refresh the Select2 plugin for Variable dropdown
+                                $('#VariableId').select2('destroy').select2().trigger('change');
+
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    //$.ajax({
+                    //    url: 'Setting/LoadDynmicVariable', // Replace with the actual URL to fetch the data
+                    //    type: 'GET',
+                    //    data: { Type: selectedTemplateType },
+                    //    success: function (data) {
+                    //        debugger
+                    //        // Clear existing options in Variable dropdown
+                    //        $('#VariableId').empty();
+
+                    //        // Append the new options based on the fetched data
+                    //        $.each(data, function (index, variable) {
+                    //            $('#VariableId').append($('<option>').text(variable.type).val(variable.variableId));
+                    //            $('#VariableId').append('<option value="Company">Company</option>');
+                    //        });
+
+                    //        // Refresh the Select2 plugin for Variable dropdown
+                    //        $('#VariableId').select2('destroy').select2();
+                    //    }
+                    //});
+                
+                
+                });
+
+
+
+
+
+
+                var summernoteEditor = $('#NoteBody');
+
+
+                ///map coursr position 
                
+
+	            $('.note-editable').on('keyup mouseup',function (e){
+
+		            selection = window.getSelection();
+		            range = selection.getRangeAt(0);
+		            parentNode = range.commonAncestorContainer.parentNode;
+	            });
+
+                //////////////-----------//////////
+
+
+
+
                 var candidateSpan = document.getElementById("CandidateId");
                 var companySpan = document.getElementById("CompanyId");
                 var hrSpan = document.getElementById("HrId");
                 var designationSpan = document.getElementById("DesignationId");
 
-                var summernoteEditor = $('#Body');
+              
 
                 // Add click event handler to your text spans
 
 
 
-                 $('#CandidateId').click(function () {
-                     debugger
-    // Get the clicked text
-    var clickedText = $(this).text();
-
-    // Get the current cursor position
-    var range = summernoteEditor.summernote('editor.createRange');
-    var currentPosition = range.index
-
-    // Insert the clicked text at the current cursor position
-    summernoteEditor.summernote('editor.insertText',clickedText, currentPosition );
-
-    });
-                //$('#CandidateId').click(function () {
-                //    // Get the clicked text
-                //    var clickedText = $(this).text();   
-
-
-
-
-
-                    
-                //   //summernoteEditor.summernote('pasteHTML', clickedText);
-
-                //   // notif({
-                //   //     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Variable Add in Clip board.",
-                //   //     type: "success"
-                //   // });
-                //});
-
-
-
+                $('#NoteVaribleID').click(function () {
+                    debugger
 
                
+                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	            var span = document.createElement('span');	    
+	                    span.setAttribute('style','font-style:italic');
+                        span.innerHTML = '<span class="readonly-span"   >' + $('#NoteVaribleID').text() + '</span>';
 
+			            range.deleteContents();        
+	                    range.insertNode(span);  
+	                    //cursor at the last with this
+	                    range.collapse(false);
+	                    selection.removeAllRanges();
+			            selection.addRange(range);
 
+		            }else{
+			            return;
+		            }
 
-
-
-            ClearControl();
-
-            // Open drop down and hide drop down
-
-            $('#SalaryGenerationTemplate').hide();
-            $('#OnRejectionTemplate').hide();
-            $('#OnApprovedTemplate').hide();
-            $('#OnStatusChangeTemplate').hide();
-            $('#OnCandidateEnrollmentTemplate').hide();
-
-            $('#OnCandidateEnrollment').trigger('change');
-            $('#OnStatusChange').trigger('change');
-            $('#OnApproved').trigger('change');
-            $('#OnRejection').trigger('change');
-            $('#OnSalaryGeneration').trigger('change');
-
-                $('#OnCandidateEnrollmentTemplateId').val(@Model.OnCandidateEnrollmentTemplateId).trigger('change');
-
-
-         
-
-            //////////////////////////////////
-            var msg = '@ViewBag.Success';
-            if (msg !== "" && msg == '1') {
-
-                notif({
-                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
-                    type: "success"
                 });
 
 
+            
 
-            }
-            if (msg !== "" && msg == '2') {
+                ClearControl();
 
-                notif({
-                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
-                    type: "success"
-                });
+                // Open drop down and hide drop down
 
+                $('#SalaryGenerationTemplate').hide();
+                $('#OnStatusChangeTemplate').hide();
 
 
-            }
-            if (msg !== "" && msg == '3') {
-                notif({
-                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
-                    type: "success"
-                });
+                $('#OnStatusChange').trigger('change');
+                $('#OnSalaryGeneration').trigger('change');
 
-            }
-            if (msg !== "" && msg == '0') {
-                notif({
-                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
-                    type: "error"
-                });
+
+                //////////////////////////////////
+                var msg = '@ViewBag.Success';
+                if (msg !== "" && msg == '1') {
+
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                        type: "success"
+                    });
 
 
 
-            }
-            $('#policy-table').DataTable();
-            $('#leavetype-table').DataTable();
-
-
-            //$('.custom-switch-input').prop('checked', true);
-
-
-        })
-
-
-            $('#OnCandidateEnrollment').change(function () {
-                if ($(this).is(':checked')) {
-                    debugger
-                    // Checkbox is checked, show the controls
-                    $("#BorderChangeEnrollment").css("border-bottom", "1px solid #3366FF");
-                    if (@Model.OnCandidateEnrollmentTemplateId == 0) {
-                        $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-
-                    }
-                    else
-                    {
-                    
-                    $('#OnCandidateEnrollmentTemplateId').val(@Model.OnCandidateEnrollmentTemplateId).trigger('change');
-                    }
-
-                    $('#OnCandidateEnrollmentTemplate').show(1000);
-                } 
-                else {
-                    // Checkbox is unchecked, hide the controls
-                    $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-                    $("#BorderChangeEnrollment").css("border-bottom", "1px solid #fdfdff");
-                    
-                    
-                    $('#OnCandidateEnrollmentTemplate').hide(1000);
-                   
                 }
-            });
+                if (msg !== "" && msg == '2') {
+
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                        type: "success"
+                    });
+
+
+
+                }
+                if (msg !== "" && msg == '3') {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                        type: "success"
+                    });
+
+                }
+                if (msg !== "" && msg == '0') {
+                    notif({
+                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                        type: "error"
+                    });
+
+
+
+                }
+                $('#Candidate-table').DataTable();
+                $('#Email-table').DataTable();
+
+
+
+
+
+            })
+
+
             $('#OnStatusChange').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
-                    $("#BorderChangeStatus").css("border-bottom", "1px solid #3366FF");
-                    if (@Model.OnStatusChangeTemplateId == 0 || @Model.OnStatusChangeTemplateId == null) {
-                        $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-
-                    }
-                    else {
-
-                        $('#OnStatusChangeTemplateId').val(@Model.OnStatusChangeTemplateId).trigger('change');
-                    }
-
-
-                    
+                    $("#BorderChangeStatus").css("border-bottom", "1px solid #e9ebfa");
                     $('#OnStatusChangeTemplate').show(1000);
                 } else {
                     // Checkbox is unchecked, hide the controls
@@ -570,68 +517,23 @@
                     $('#OnStatusChangeTemplate').hide(1000);
                 }
             });
-            $('#OnApproved').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                    $("#BorderChangeApproved").css("border-bottom", "1px solid #3366FF");
-                    if (@Model.OnApprovedTemplateId == 0 || @Model.OnApprovedTemplateId == null) {
-                        $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
-                    }
-                    else {
-
-                       $('#OnApprovedTemplateId').val(@Model.OnApprovedTemplateId).trigger('change');
-                    }
-
-                    
-                    $('#OnApprovedTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                    $("#BorderChangeApproved").css("border-bottom", "1px solid #fdfdff");
-                    $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-
-                    $('#OnApprovedTemplate').hide(1000);
-                }
-            });
-
-            $('#OnRejection').change(function () {
-                if ($(this).is(':checked')) {
-                    // Checkbox is checked, show the controls
-                     $("#BorderChangeRejection").css("border-bottom", "1px solid #3366FF");
-                    if (@Model.OnRejectionTemplateId== 0 || @Model.OnRejectionTemplateId == null) {
-                        $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-
-                    }
-                    else {
-
-                        $('#OnRejectionTemplateId').val(@Model.OnRejectionTemplateId).trigger('change');
-                    }
-
-                    
-                    $('#OnRejectionTemplate').show(1000);
-                } else {
-                    // Checkbox is unchecked, hide the controls
-                      $("#BorderChangeRejection").css("border-bottom", "1px solid #fdfdff");
-                    $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-                    $('#OnRejectionTemplate').hide(1000);
-                }
-            });
 
             $('#OnSalaryGeneration').change(function () {
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
-                    $("#BorderChangeSalary").css("border-bottom", "1px solid #3366FF");
+                    $("#BorderChangeSalary").css("border-bottom", "1px solid #e9ebfa");
                     if (@Model.OnSalaryGenerationTemplateId== 0 || @Model.OnSalaryGenerationTemplateId == null) {
                         $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
 
                     }
-                    else{
+                    else {
 
-                    $('#OnSalaryGenerationTemplateId').val(@Model.OnSalaryGenerationTemplateId).trigger('change');
+                        $('#OnSalaryGenerationTemplateId').val(@Model.OnSalaryGenerationTemplateId).trigger('change');
                     }
 
                     $('#SalaryGenerationTemplate').show(1000);
-                } 
+                }
                 else {
                     // Checkbox is unchecked, hide the controls
                     $("#BorderChangeSalary").css("border-bottom", "1px solid #fdfdff");
@@ -640,26 +542,25 @@
                 }
             });
 
-        function ClearControl(){
-
-            $('#OnCandidateEnrollmentTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-            $('#OnStatusChangeTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-            $('#OnApprovedTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-            $('#OnRejectionTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-            $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
-
-        }
-
-        function SaveSettings(){
-
-            debugger
+            function ClearControl() {
                 
-                if ($("#OnCandidateEnrollment").is(':checked')) {
+                $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                $('#TemplateTypeId').select2({ placeholder: 'Select Template Type', width: '100%', allowClear: true }).val("").trigger('change');
+                $('#VariableId').select2({ placeholder: 'Select Variable', width: '100%', allowClear: true }).val("").trigger('change');
+
+            }
+
+            function SaveSettings() {
+
+                debugger
+
+
+                if ($("#OnSalaryGeneration").is(':checked')) {
                     // Checkbox is checked, show the controls
 
-                    if ($("#OnCandidateEnrollmentTemplateId").val() == '' || $("#OnCandidateEnrollmentTemplateId").val() == null) {
+                    if ($("#OnSalaryGenerationTemplateId").val() == '' || $("#OnSalaryGenerationTemplateId").val() == null) {
                         $.growl.warning({
-                            message: "Select Candidate Enrollment Template !"
+                            message: "Select Salary Generation Template !"
                         });
 
                         return false;
@@ -667,376 +568,49 @@
 
 
                 }
-                 if ($("#OnStatusChange").is(':checked')) 
-                {
-                        // Checkbox is checked, show the controls
-
-                    if ($("#OnStatusChangeTemplateId").val() == '' || $("#OnStatusChangeTemplateId").val() == null) {
-                            $.growl.warning({
-                            message: "Select StatusChange Template !"
-                            });
-
-                            return false;
-                        }
-
-
-                 }
-                 if ($("#OnApproved").is(':checked')) 
-                 {
-                        // Checkbox is checked, show the controls
-                       
-                    if ($("#OnApprovedTemplateId").val() == '' || $("#OnApprovedTemplateId").val() == null) {
-                            $.growl.warning({
-                            message: "Select Approved Template !"
-                            });
-
-                            return false;
-                        }
-
-
-                 }
-                 if ($("#OnSalaryGeneration").is(':checked')) 
-                 {
-                        // Checkbox is checked, show the controls
-
-                    if ($("#OnSalaryGenerationTemplateId").val() == '' || $("#OnSalaryGenerationTemplateId").val() == null) {
-                            $.growl.warning({
-                            message: "Select Salary Generation Template !"
-                            });
-
-                            return false;
-                        }
-
-
-                  }
-
-                  if ($("#OnRejection").is(':checked')) 
-                  {
-                        // Checkbox is checked, show the controls
-
-                    if ($("#OnRejectionTemplateId").val() == '' || $("#OnRejectionTemplateId").val() == null) {
-                            $.growl.warning({
-                            message: "Select Rejection Template !"
-                            });
-
-                            return false;
-                        }
-
-
-                  }
-
-                
-
-
-
-            var AttendanceByRosters   = $('#AttendanceByRosters').is(':checked');                          
-            var OnCandidateEnrollment = $('#OnCandidateEnrollment').is(':checked');                  
-            var OnStatusChange        = $('#OnStatusChange').is(':checked');               
-            var OnApproved            = $('#OnApproved').is(':checked');                
-            var OnRejection           = $('#OnRejection').is(':checked');             
-            var OnSalaryGeneration    = $('#OnSalaryGeneration').is(':checked');
-            var OnApprovedTemplateId    = $('#OnApprovedTemplateId').val();
-            var OnRejectionTemplateId    = $('#OnRejectionTemplateId').val();
-            var OnSalaryGenerationTemplateId    = $('#OnSalaryGenerationTemplateId').val();
-            var OnStatusChangeTemplateId    = $('#OnStatusChangeTemplateId').val();
-            var OnCandidateEnrollmentTemplateId    = $('#OnCandidateEnrollmentTemplateId').val();
-           
-
-
-
-
-            var Data = {
-                NotificationId         : $("#NotificationId").val(),                         
-                OnCandidateEnrollment:OnCandidateEnrollment,                                    
-                OnStatusChange       :OnStatusChange,                                    
-                OnApproved           :OnApproved,                                    
-                OnRejection          :OnRejection,                                    
-                OnSalaryGeneration   :OnSalaryGeneration,
-                OnApprovedTemplateId :OnApprovedTemplateId,
-                OnRejectionTemplateId :OnRejectionTemplateId,
-                OnSalaryGenerationTemplateId :OnSalaryGenerationTemplateId,
-                OnStatusChangeTemplateId :OnStatusChangeTemplateId,
-                OnCandidateEnrollmentTemplateId :OnCandidateEnrollmentTemplateId,
-            }
-
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonText: 'No, cancel!',
-                confirmButtonText: 'Yes, Save it!',
-                timer: 30000,
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        async: false,
-                        url: "/Setting/SaveNotificationSetting",
-                        type: "Post",
-                        data: Data,
-                        success: function (data) {
-                            if (data != "") {
-                                debugger
-                               
-                                //ClearControl();
-                                // Data saved successfully
-                                Swal.fire('Success', 'Data saved!', 'success');
-                            }
-                        },
-                        error: function () {
-                            status = false;
-                            //   toastr.error("Please Fill Required Field");
-                        }
-                    })
-                }
-                else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swalWithBootstrapButtons.fire(
-                        'Cancelled',
-                        'Your record is safe :)',
-                        'error'
-                    )
-                }
-            });
-                setTimeout(function () {
-
-                    location.reload();
-
-                }, 3000);
-
-        }
-
-
-
-
-
-
-
-
-        function editrecord(id) {
-            
-            var Data = { id: id }
-            console.log(Data)
-            $.ajax({
-                async: false,
-                url: "/Setting/EmailTemplateDetails",
-                type: "GET",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-
-                        $("#TemplateId").val(data.templateId);
-                        $("#Title").val(data.title);
-                        $("#Subject").val(data.subject);
-
-                       
-                        //alert(date)
-                        $('#Body').summernote('code', data.body);
-
-                        $("#Status").prop('checked', data.status);
-
-                        $("#addEmail").modal('show');
-                    }
-                },
-                error: function () {
-                    status = false;
-
-                }
-            })
-
-
-        }
-
-        function confirmation(id) {
-            
-            var obj =
-            {
-            id:id
-            }
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-
-            swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonText: 'No, cancel!',
-                confirmButtonText: 'Yes, Save it!',
-                timer: 30000,
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                        $.ajax({
-                            async: false,
-                            url: "/Setting/TemplateDelete",                           
-                            data: obj,
-                            success: function (data) {
-                                if (data == "") {
-                                    debugger
-
-                                    //ClearControl();
-                                    // Data saved successfully
-                                    Swal.fire('Success', 'Data Deleted!', 'success');
-                                }
-                            },
-                            error: function () {
-                                status = false;
-                                //   toastr.error("Please Fill Required Field");
-                            }
-                        })
-                }
-                else if (result.dismiss === Swal.DismissReason.cancel) {
-                    swalWithBootstrapButtons.fire(
-                        'Cancelled',
-                        'Your record is safe :)',
-                        'error'
-                    )
-                }
-            });
-            setTimeout(function () {
-
-                        location.reload();
-
-                    }, 2000);
-        }
-
-        function setvalue(event) {
-            debugger
-            console.log(event)
-            var datasplited = event.split('_');
-            var control = datasplited[0];
-            var id = datasplited[1];
-
-            if ($("#" + control + "_" + id).is(':checked')) {
-                $('#IsActive_' + id).prop('checked', true);
-            }
-            else {
-                $('#IsActive_' + id).prop('checked', false);
-            }
-
-            // UPdate Status
-            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
-            $.ajax({
-                async: false,
-                url: "/Setting/UpdateEmailTemStatus",
-                type: "POST",
-                data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        if (data.success) {
-
-                            // no need to redirect becoz status updated in DB
-                            Swal.fire('Success', 'Status Update!', 'success');
-                            
-                            //window.location.href = url;
-
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            });
-                //setTimeout(function () {
-
-                //    location.reload();
-
-                //}, 2000);
-
-
-
-        }
-
-        $('.btn_SaveEmail').on('click', function () {
-            saveEmailTemplate();
-        })
-        /// Add or Edit Email Template
-
-        function saveEmailTemplate() {
-            debugger;
-            var status = true;
-            debugger;
-            if ($("#Title").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Title"
-                });
-                $("#Title").css("border-color", "red");
-                status = false;
-                return false;
-            } else if ($("#Subject").val() == "") {
-                $.growl.warning({
-                    message: "Please Enter Subject"
-                });
-                $("#Subject").css("border-color", "red");
-                status = false;
-                return false;
-            } else {
-                $("#Title").css("border-color", "#ddd");
-                $("#Subject").css("border-color", "#ddd");
-            }
-            var Data = {
-                TemplateId: $("#TemplateId").val(),
-                Title: $('#Title').val(),
-                Subject: $("#Subject").val(),
-                Body: $("#Body").val(),
-                Status: $("#Status").is(':checked')
-            }
-
-            $.ajax({
-                async: false,
-                url: "/Setting/EmailTemplateCheckData",
-                type: "GET",
-                data: {
-                    id: $("#TemplateId").val(),
-                    title: $("#Title").val()
-                },
-                success: function (data) {
-                    if (data != "") {
-                        debugger;
-                        //var b = JSON.parse(data)
-                        if (data.success) {
-                            // $.growl.warning(data.message);
-                            $.growl.warning({
-                                message: data.message
-                            });
-                            status = false;
-                        } else {
-                            $("#addEmail").modal('hide');
-                        }
-                    }
-                },
-                error: function () {
-                    status = false;
-                    //   toastr.error("Please Fill Required Field");
-                }
-            });
-
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-            });
-
-            if (status) {
                
+
+
+
+
+                var AttendanceByRosters = $('#AttendanceByRosters').is(':checked');
+                var OnCandidateEnrollment = $('#OnCandidateEnrollment').is(':checked');
+                var OnStatusChange = $('#OnStatusChange').is(':checked');
+                var OnApproved = $('#OnApproved').is(':checked');
+                var OnRejection = $('#OnRejection').is(':checked');
+                var OnSalaryGeneration = $('#OnSalaryGeneration').is(':checked');
+                var OnApprovedTemplateId = $('#OnApprovedTemplateId').val();
+                var OnRejectionTemplateId = $('#OnRejectionTemplateId').val();
+                var OnSalaryGenerationTemplateId = $('#OnSalaryGenerationTemplateId').val();
+                var OnStatusChangeTemplateId = $('#OnStatusChangeTemplateId').val();
+                var OnCandidateEnrollmentTemplateId = $('#OnCandidateEnrollmentTemplateId').val();
+
+
+
+
+
+                var Data = {
+                    NotificationId: $("#NotificationId").val(),
+                    OnCandidateEnrollment: OnCandidateEnrollment,
+                    OnStatusChange: OnStatusChange,
+                    OnApproved: OnApproved,
+                    OnRejection: OnRejection,
+                    OnSalaryGeneration: OnSalaryGeneration,
+                    OnApprovedTemplateId: OnApprovedTemplateId,
+                    OnRejectionTemplateId: OnRejectionTemplateId,
+                    OnSalaryGenerationTemplateId: OnSalaryGenerationTemplateId,
+                    OnStatusChangeTemplateId: OnStatusChangeTemplateId,
+                    OnCandidateEnrollmentTemplateId: OnCandidateEnrollmentTemplateId,
+                }
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
                 swalWithBootstrapButtons.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -1050,61 +624,530 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             async: false,
-                            url: "/Setting/PostEmailTemplate",
+                            url: "/Setting/SaveNotificationSetting",
                             type: "Post",
                             data: Data,
                             success: function (data) {
                                 if (data != "") {
-                                    debugger;
-                                    //var b = JSON.parse(data)
-                                    Swal.fire('Success', 'Data saved!', 'success');
+                                    debugger
 
-
-                                    $("#TemplateId").val(0)
-                                    $("#Title").val('')
-                                    $("#Subject").val('')
-                                    $('#Body').summernote('code', '');
-                                } else {
-                                    $("#addEmail").modal('hide');
+                                    var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
+                                    window.location.href = url;
+                                    
                                 }
                             },
                             error: function () {
                                 status = false;
                                 //   toastr.error("Please Fill Required Field");
                             }
-                        });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        })
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
                         swalWithBootstrapButtons.fire(
                             'Cancelled',
                             'Your record is safe :)',
                             'error'
-                        );
+                        )
+                    }
+                }); 
+
+
+            } 
+
+
+
+
+
+
+
+
+            function editrecord(id) {
+
+                $('#SelectTemplateId').hide();
+                $('.NoteVaribleID').empty();
+                var Data = { id: id }
+               
+                $.ajax({
+                    async: false,
+                    url: "/Setting/EmailTemplateDetails",
+                    type: "GET",
+                    data: Data,
+                    success: function (data) {
+                        if (data != "") {
+                            debugger
+
+                            var selectElement = $('#VariableId');
+                            var selectTemplateTypeId = $('#TemplateTypeId');
+                            // Empty the options
+                            selectElement.empty();
+                            selectTemplateTypeId.empty();
+
+                            selectElement.append('<option value="' + data.type + '">' + data.type + '</option>');
+                            selectElement.append('<option value="Company">Company</option>');
+
+                            selectElement.select2('destroy').select2().trigger('change');
+                            selectTemplateTypeId.append('<option value="' + data.type + '">' + data.type + '</option>');
+                            selectTemplateTypeId.select2('destroy').select2();
+
+
+                            //LoadVariableSelectData();
+                            $("#TemplateId").val(data.templateId);
+                            $("#Title").val(data.title);
+                            $("#Subject").val(data.subject);
+                            //alert(date)
+                            $('#NoteBody').summernote('code', data.body);
+                            $("#Status").prop('checked', data.status);
+                            $("#addEmail").modal('show');
+                        }
+                    },
+                    error: function () {
+                        status = false;
+
+                    }
+                })
+
+
+            }
+
+            $('.btn_SaveEmail').on('click', function () {
+                saveEmailTemplate();
+            })
+            /// Add or Edit Email Template
+
+            function saveEmailTemplate() {
+                debugger;               
+                var status = true;
+                debugger;
+                if ($("#Title").val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Title"
+                    });
+                    $("#Title").css("border-color", "red");
+                    status = false;
+                    return false;
+                } else if ($("#Subject").val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Subject"
+                    });
+                    $("#Subject").css("border-color", "red");
+                    status = false;
+                    return false;
+                } else {
+                    $("#Title").css("border-color", "#ddd");
+                    $("#Subject").css("border-color", "#ddd");
+                }
+
+                if ($("#TemplateId").val() == 0) {
+                    if ($("#TemplateTypeId").val() == '' || $("#TemplateTypeId").val() == null) {
+                        $.growl.warning({
+                            message: "Select Template Type !"
+                        });
+                    status = false;
+                        return false;
+                    }
+                }
+                
+               
+
+                var Data = {
+                    TemplateId: $("#TemplateId").val(),
+                    Type: $("#TemplateTypeId").val(),
+                    Title: $('#Title').val(),
+                    Subject: $("#Subject").val(),
+                    Body: $("#NoteBody").val(),
+                    Status: $("#Status").is(':checked')
+                }
+
+                $.ajax({
+                    async: false,
+                    url: "/Setting/EmailTemplateCheckData",
+                    type: "GET",
+                    data: {
+                        id: $("#TemplateId").val(),
+                        title: $("#Title").val()
+                    },
+                    success: function (data) {
+                        if (data != "") {
+                            debugger;
+                            //var b = JSON.parse(data)
+                            if (data.success) {
+                                // $.growl.warning(data.message);
+                                $.growl.warning({
+                                    message: data.message
+                                });
+                                status = false;
+                            } else {
+                                $("#addEmail").modal('hide');
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
                     }
                 });
-                    setTimeout(function () {
 
-                        location.reload();
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
 
-                    }, 2000);
+                if (status) {
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'No, cancel!',
+                        confirmButtonText: 'Yes, Save it!',
+                        timer: 30000,
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                async: false,
+                                url: "/Setting/PostEmailTemplate",
+                                type: "Post",
+                                data: Data,
+                                success: function (data) {
+                                    if (data != "") {
+                                        debugger;
+                                        //var b = JSON.parse(data)
+                                        var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
+                                        window.location.href = url;
+
+
+                                        $("#TemplateId").val(0)
+                                        $("#Title").val('')
+                                        $("#Subject").val('')
+                                        $('#NoteBody').summernote('code', '');
+                                    } else {
+                                        $("#addEmail").modal('hide');
+                                    }
+                                },
+                                error: function () {
+                                    status = false;
+                                    //   toastr.error("Please Fill Required Field");
+                                }
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your record is safe :)',
+                                'error'
+                            );
+                        }
+                    });
+                   
+                }
             }
-        }
 
-        function addnewEmail() {
+            function addnewEmail() {
+                $('#SelectTemplateId').show();
+                $("#TemplateId").val(0)
+                ClearControl();
 
-            $("#addEmail").modal('show');
-            $("#TemplateId").val(0)
-            $("#Title").val('')
-            $("#Subject").val('')
-            $('#Body').summernote('code', '');
-            $("#Status").prop('checked', true);       
-            $("#Title").css("border-color", "#ddd");           
-           
-        }
+                $("#Title").val('')
+                $("#Subject").val('')
+                $('#NoteBody').summernote('code', '');
+                $("#addEmail").modal('show');                
+                $("#Status").prop('checked', true);
+               
 
-           
+            }
 
-    </script>
+             function addTextAtCursor(text) {
+                    var summernote = $('#NoteBody').summernote();
+                    var currentRange = summernote.summernote('createRange');
+                    var html = $.parseHTML(text);
 
-					}
+                    currentRange.insertNode(html[0]);
+                currentRange.collapse(false);
+                }
+
+
+
+
+	
+	$('#caret').click(function (e){
+			
+		if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	var span = document.createElement('span');	    
+	        span.setAttribute('style','font-style:italic');
+	    	span.innerHTML="${firstName}";
+			
+			range.deleteContents();        
+	        range.insertNode(span);  
+	        //cursor at the last with this
+	        range.collapse(false);
+	        selection.removeAllRanges();
+			selection.addRange(range);
+
+		}else{
+			return;
+		}
+	});
+
+
+
+            // Load variable json call
+            $(document).ready(function () {
+                LoadVariableSelectData();
+               
+            });
+
+            function  LoadVariableSelectData(){
+
+                $('#VariableId').change(function () {
+                    var selectedValue = $(this).val();
+
+                    var obj =
+                    {
+                        type: selectedValue
+                    }
+                    // AJAX call
+                    $.ajax({
+                        url: "/Setting/GetVariblebyType",
+                        type: "GET",
+                        async: false,
+                        data: obj,
+                        success: function (response) {
+                            debugger
+                            if (response != null) {
+
+                                var html = '';  // Create an empty string to store the HTML content
+
+                                //var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning, bg-purple "];
+
+                                var colors = ["bg-primary"];
+                                for (var i = 0; i < response.length; i++) {
+                                    // Append each variable name to the html string
+
+                                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                    // Append each variable name to the html string within a container div
+                                    html += '<div style="display: inline-block; margin-right: 10px;margin-bottom: 10px">';
+                                    html += '<a href="#" onclick="TextPosition(' + i + ')"  > <span  id="variableid_' + i + '"  class="badge ' + randomColor + '-transparent" style="font-size: 14px;">' + response[i].variableName + '</span>';
+                                    html += '</div>';
+
+                                    // html += '<span class="badge badge-primary" style="font-size:14px;">' + response[i].variableName +  '</span>';
+                                }
+
+                                $('.NoteVaribleID').html(html);
+                            }
+
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                });
+
+
+            }
+
+
+            function TextPosition(id)
+            {
+                debugger;
+            
+            
+                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	            var span = document.createElement('span');	    
+	                   
+                        span.innerHTML = '<span>' + $('#variableid_'+id).text() + '</span>';
+
+			            range.deleteContents();        
+	                    range.insertNode(span);  
+	                    //cursor at the last with this
+	                    range.collapse(false);
+	                    selection.removeAllRanges();
+			            selection.addRange(range);
+
+		            }else{
+			            return;
+		            }}
+
+
+
+            function confirmation(id) {
+
+                var obj =
+                {
+                    id: id
+                }
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            async: false,
+                            url: "/Setting/TemplateDelete",
+                            data: obj,
+                            success: function (data) {
+                                if (data == "") {
+                                    debugger
+
+                                    //ClearControl();
+                                    // Data saved successfully
+                                    notif({
+                                        msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Delete Succesfully.",
+                                        type: "success"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                status = false;
+                                //   toastr.error("Please Fill Required Field");
+                            }
+                        })
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+                setTimeout(function () {
+
+                    location.reload();
+
+                }, 2000);
+            }
+            // Update Email Template Status
+            function setvalue(event) {
+                debugger
+                console.log(event)
+                var datasplited = event.split('_');
+                var control = datasplited[0];
+                var id = datasplited[1];
+
+                if ($("#" + control + "_" + id).is(':checked')) {
+                    $('#IsActive_' + id).prop('checked', true);
+                }
+                else {
+                    $('#IsActive_' + id).prop('checked', false);
+                }
+
+                // UPdate Status
+                var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+                $.ajax({
+                    async: false,
+                    url: "/Setting/UpdateEmailTemStatus",
+                    type: "POST",
+                    data: Data,
+                    success: function (data) {
+                        if (data != "") {
+                            if (data.success) {
+
+                                // no need to redirect becoz status updated in DB
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your Status is Updated Succesfully.",
+                                    type: "success"
+                                });
+
+                                //window.location.href = url;
+
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
+                    }
+                });
+                //setTimeout(function () {
+
+                //    location.reload();
+
+                //}, 2000);
+
+
+
+            }
+            /////////////////////
+
+            // Update Candidate Notification
+            function Updatevalue(event) {
+                debugger
+                console.log(event)
+                var datasplited = event.split('_');
+                var control = datasplited[0];
+                var id = datasplited[1];
+
+                if ($("#" + control + "_" + id).is(':checked')) {
+                    $('#IsActive_' + id).prop('checked', true);
+                }
+                else {
+                    $('#IsActive_' + id).prop('checked', false);
+                }
+
+                // UPdate Status
+                var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+                $.ajax({
+                    async: false,
+                    url: "/Setting/UpdateCandidatenotificationStatus",
+                    type: "POST",
+                    data: Data,
+                    success: function (data) {
+                        if (data != "") {
+                            if (data.success) {
+
+                                // no need to redirect becoz status updated in DB
+                                notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your Status is Updated Succesfully.",
+                                    type: "success"
+                                });
+
+                                //window.location.href = url;
+
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
+                    }
+                });
+                //setTimeout(function () {
+
+                //    location.reload();
+
+                //}, 2000);
+
+
+
+            }
+                        ///////////////
+
+
+
+
+
+        </script>
+
+    }
 
 

@@ -244,9 +244,7 @@
                                                         {
                                                             @if (Model.UrlRequestSatausID == 1)
                                                             {
-                                                                <a asp-action="CandidateDelete" asp-route-id="@item.CandidateId" onclick="return confirm('Are you sure you want to delete')" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
-                                                                    <i class="feather feather-trash-2 me-2"></i>Delete
-                                                                </a>
+                                                                <a onclick="confirmation(@item.CandidateId)" href="#" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Delete" aria-label="Delete"><i class="fe fe-trash me-2"></i> Delete</a>
                                                             }
                                                             <a target="_blank" href="@Url.Content(item.AttachmentPath)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Resume" data-bs-original-title="Download Resume" aria-label="Download Resume">
                                                                 <i class="feather feather-download me-2"></i>Download
@@ -565,16 +563,6 @@
         ////////////////////////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
-
         $(document).ready(function () {
 
            
@@ -620,26 +608,6 @@
 
 
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -899,6 +867,43 @@
 
 
 
+        function confirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    var url = "@Url.Action("CandidateDelete", "Candidate")/" + id; // replace with the desired action and controller names
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+
+
+
      function SearchCandidadte(){
 
             var obj = {
@@ -937,19 +942,21 @@
 
                             var rowData = [];
                             var action = '<div class="d-flex">';
-                            action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="top" title="" data-bs-original-title="Accept" aria-label="Accept">';
+                            action +='<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="bottom" title="" data-bs-original-title="Accept" aria-label="Accept">';
                             action += '<i class="feather feather-check text-success mt-1"></i></a>';
-                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="View" aria-label="View" href="/Candidate/CandidateDetails/' + listcandidate[i]["candidateId"] + '">';
                             action += '<i class="feather feather-eye  text-primary mt-1"> </i></a>';
-                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<a class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="Edit" aria-label="Edit" href="/Candidate/CandidateCreateOrUpdate/' + listcandidate[i]["candidateId"] + '">';
                             action += '<i class="feather feather-edit  text-primary mt-1"> </i> </a>';
-                            action += '<a onclick="return confirm("Are you sure you want to delete ")" class="action-btns1" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete" href="/Candidate/CandidateDelete/' + listcandidate[i]["candidateId"] + '">';
+                            action += '<a onclick="confirmation(' + listcandidate[i]["candidateId"] + ')" class="action-btns1" data-bs-toggle="" data-bs-placement="bottom" title="" data-bs-original-title="Delete" aria-label="Delete" href="#">';
+                            //action += '<a class="action-btns1" onclick="loadModal(' + listcandidate[i]["candidateId"] + ')" data-bs-placement="bottom" title="" data-bs-original-title="Accept" aria-label="Accept">';
+
                             action += '<i class="feather feather-trash-2 text-danger mt-1"></i> </a>';
-                            action += '<a target="_blank" href="' + listcandidate[i]["attachmentPath"] + '"  class="action-btns1"data-bs-toggle="" data - bs - placement="top" title = "" data - bs - original - title="Download Resume" aria - label="Download Resume" > ';
+                            action += '<a target="_blank" href="' + listcandidate[i]["attachmentPath"] + '"  class="action-btns1"data-bs-toggle=""data-bs-placement="bottom" title = "" data - bs - original - title="Download Resume" aria - label="Download Resume" > ';
                             action += '<i class="feather feather-download  text-secondary mt-1"></i> </a> </div>';
 
 
-                            rowData.push([i + 1, listcandidate[i]["name"], listcandidate[i]["email"], listcandidate[i]["phone"], listcandidate[i]["designationTitle"], listcandidate[i]["experienceInYears"], listcandidate[i]["gender"], listcandidate[i]["city"], listcandidate[i]["currentCompany"], ApplyDate, listcandidate[i]["expectedSalary"], action]);
+                            rowData.push([i + 1, listcandidate[i]["name"],  listcandidate[i]["phone"],  listcandidate[i]["experienceInYears"], listcandidate[i]["gender"], ApplyDate,  action]);
 
 
                            table.rows.add(rowData);

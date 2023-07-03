@@ -390,6 +390,56 @@ namespace HRHUBAPI.Controllers
         #region NotificationSetting
 
 
+        // Get Variable List 
+        [HttpGet("GetEmailDynamicVariableList")]
+        public async Task<ActionResult<List<EmailDynamicVariable>>> GetEmailDynamicVariableList()
+        {
+            var result = await new EmailNotificationSetting().GetEmailDynamicVariable( _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+        // Get Variable List 
+        [HttpGet("GetEmailDynamicVariableType{Type}")]
+        public async Task<ActionResult<List<EmailDynamicVariable>>> GetEmailDynamicVariableType(string Type)
+        {
+            var result = await new EmailNotificationSetting().GetEmailDynamicVariableType(Type,_context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+
+
+
+        [HttpGet("GetCandidateEmailNotificationList{CompanyId}")]
+        public async Task<ActionResult<List<CandidateEmailNotificationSetting>>> GetCandidateEmailNotificationList(int CompanyId)
+        {
+            var result = await new EmailNotificationSetting().GetCandidateEmailNotification(CompanyId, _context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
+
+
+
+
+
+
+
+
 
         [HttpGet("GetEmailNotificationSettingById{CompanyId}")]
         public async Task<ActionResult<EmailNotificationSetting>> GetEmailNotificationSettingById(int CompanyId)
@@ -408,28 +458,28 @@ namespace HRHUBAPI.Controllers
 
 
 
-        [HttpPost("PostEmailNotificationSetting")]
-        public async Task<ActionResult<EmailNotificationSetting>> PostEmailNotificationSetting(EmailNotificationSetting Obj)
-        {
+        //[HttpPost("PostEmailNotificationSetting")]
+        //public async Task<ActionResult<EmailNotificationSetting>> PostEmailNotificationSetting(EmailNotificationSetting Obj)
+        //{
 
-            var dbResult = await new EmailNotificationSetting().PostEmailNotificationSetting(Obj, _context);
-            if (dbResult != null && dbResult.Flag == 2)
-            {
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Updated Successfully"
-                }); ;
-            }
-            else
-            {
-                return Ok(new
-                {
-                    Success = true,
-                    Message = "Data Inserted Successfully"
-                });
-            }
-        }
+        //    var dbResult = await new EmailNotificationSetting().PostEmailNotificationSetting(Obj, _context);
+        //    if (dbResult != null && dbResult.Flag == 2)
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Updated Successfully"
+        //        }); ;
+        //    }
+        //    else
+        //    {
+        //        return Ok(new
+        //        {
+        //            Success = true,
+        //            Message = "Data Inserted Successfully"
+        //        });
+        //    }
+        //}
 
 
 
@@ -546,6 +596,36 @@ namespace HRHUBAPI.Controllers
             else
                 return NotFound();
         }
+
+
+
+
+
+
+        // Update Candidate Notification Status
+
+        [HttpPost("UpdateCandidateEmailNotification")]
+        public async Task<ActionResult<CandidateEmailNotificationSetting>> UpdateCandidateEmailNotification(CandidateEmailNotificationSetting obj)
+        {
+            var result = await new EmailNotificationSetting().UpdateStatusEmailTemplate(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
+
+
+
+
+
+
+
+
 
         #endregion
 

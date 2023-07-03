@@ -40,6 +40,13 @@ namespace HRHUBAPI.Models
         public string? Department { get; set; }
         [NotMapped]
         public string? Designation { get; set; }
+        
+        [NotMapped]
+        public string? LeaveStatusTitle { get; set; }
+        
+        [NotMapped]
+        public string? CssClass { get; set; }
+
         [NotMapped]
         public int[]? ForwardToStaffID { get; set; }
 
@@ -84,7 +91,9 @@ namespace HRHUBAPI.Models
                         LeaveSubject = row["LeaveSubject"].ToString(),
                         LeaveAppliedOnDate = Convert.ToDateTime(row["AppliedOn"]).ToString("dd-MMM-yyyy"),
                         LeaveStatusId = Convert.ToInt32(row["LeaveStatusId"]),
-                        RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
+						LeaveStatusTitle = row["LeaveStatusTitle"].ToString(),
+						CssClass = row["CssClass"].ToString(),
+						RemainingLeaves = Convert.ToDecimal(row["RemainingLeaves"]),
                         ConsumedLeaves = Convert.ToDecimal(row["ConsumedLeaves"]),
                         MarkAsHalfLeave = Convert.ToBoolean(row["MarkAs_HalfLeave"]),
                         MarkAsShortLeave = Convert.ToBoolean(row["MarkAs_ShortLeave"]),

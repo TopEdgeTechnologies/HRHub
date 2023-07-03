@@ -15,16 +15,126 @@ namespace HRHUBAPI.Models
 
 
         [NotMapped]
-        public int? Flag { get; set; } 
+        public int? Flag { get; set; }
 
-        [NotMapped]       
+
+        [NotMapped]
         public IEnumerable<EmailTemplate>? ListEmailTemplate { get; set; }
+        [NotMapped]
+        public IEnumerable<CandidateEmailNotificationSetting>? ListCandidateEmailNotification { get; set; }
+
+
 
         #region EmailNotificationSetting    
 
+        // Get Dynamic Variable list
 
-        
+        public async Task<List<EmailDynamicVariable>> GetEmailDynamicVariable(HrhubContext _context)
+        {
+            try
+            {
+                var query = await _context.EmailDynamicVariables.OrderByDescending(x => x.VariableId).ToListAsync();
 
+                return query;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+        // Get Dynamic Variable list
+
+        public async Task<List<EmailDynamicVariable>> GetEmailDynamicVariableType(string Type,HrhubContext _context)
+        {
+            try
+            {
+                var query = await _context.EmailDynamicVariables.Where(x=>x.Type== Type).ToListAsync();
+
+                return query;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
+        // Get candidate Email Notification List 
+        public async Task<List<CandidateEmailNotificationSetting>> GetCandidateEmailNotification(int CompanyId, HrhubContext _context)
+        {
+            try
+            {
+
+
+                var query = from cn in _context.CandidateEmailNotificationSettings
+                            join S in _context.StatusInfos on cn.StatusId equals S.StatusId
+                            join T in _context.EmailTemplates on cn.TemplateId equals T.TemplateId
+
+                            where cn.CompanyId == CompanyId && S.IsDeleted == false && T.Type == "Candidate"
+                            select new CandidateEmailNotificationSetting
+                            {
+
+                                CandidateNotificationId = cn.CandidateNotificationId,
+                                Status = cn.Status,
+                                EmailTitle = T.Title,
+                                EmailBody = T.Body,
+                                EmailSubject = T.Subject,
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.CandidateNotificationId).ToList() : new List<CandidateEmailNotificationSetting>();
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+        // Update Candidate Email Notification Status
+
+        public async Task<CandidateEmailNotificationSetting> UpdateStatusEmailTemplate(CandidateEmailNotificationSetting Obj, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var check = await _context.CandidateEmailNotificationSettings.FirstOrDefaultAsync(x => x.CandidateNotificationId == Obj.CandidateNotificationId);
+                if (check != null && check.CandidateNotificationId > 0)
+                {
+                    check.CandidateNotificationId = Obj.CandidateNotificationId;
+                    check.Status = Obj.Status;
+                    check.UpdatedBy = Obj.UpdatedBy;
+                    check.UpdatedOn = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    return Obj;
+
+                }
+                return Obj;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
 
         public async Task<EmailNotificationSetting> GetEmailNotificationSettingById(int CompanyId, HrhubContext hrhubContext)
         {
@@ -52,42 +162,43 @@ namespace HRHUBAPI.Models
                 var checkEmailNotificationSettingInfo = await _context.EmailNotificationSettings.FirstOrDefaultAsync(x => x.NotificationId == ObjEmailNotificationSettingInfo.NotificationId);
                 if (checkEmailNotificationSettingInfo != null && checkEmailNotificationSettingInfo.NotificationId > 0)
                 {
-                    checkEmailNotificationSettingInfo.NotificationId =                  ObjEmailNotificationSettingInfo.NotificationId;
-                    checkEmailNotificationSettingInfo.OnCandidateEnrollment =           ObjEmailNotificationSettingInfo.OnCandidateEnrollment;
-                    checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
-                    checkEmailNotificationSettingInfo.OnStatusChange                  = ObjEmailNotificationSettingInfo.OnStatusChange;
-                    checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
-                    checkEmailNotificationSettingInfo.OnApproved                      = ObjEmailNotificationSettingInfo.OnApproved;
-                    checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
-                    checkEmailNotificationSettingInfo.OnRejection                     = ObjEmailNotificationSettingInfo.OnRejection;
-                    checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
-                    checkEmailNotificationSettingInfo.OnSalaryGeneration              = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
-                    checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId    = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
+                    checkEmailNotificationSettingInfo.NotificationId = ObjEmailNotificationSettingInfo.NotificationId;
+                    //checkEmailNotificationSettingInfo.OnCandidateEnrollment =           ObjEmailNotificationSettingInfo.OnCandidateEnrollment;
+                    //checkEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId;
+                    checkEmailNotificationSettingInfo.OnStatusChange = ObjEmailNotificationSettingInfo.OnStatusChange;
+                    //checkEmailNotificationSettingInfo.OnStatusChangeTemplateId        = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId;
+                    //checkEmailNotificationSettingInfo.OnApproved                      = ObjEmailNotificationSettingInfo.OnApproved;
+                    //checkEmailNotificationSettingInfo.OnApprovedTemplateId            = ObjEmailNotificationSettingInfo.OnApprovedTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnApprovedTemplateId;
+                    //checkEmailNotificationSettingInfo.OnRejection                     = ObjEmailNotificationSettingInfo.OnRejection;
+                    //checkEmailNotificationSettingInfo.OnRejectionTemplateId           = ObjEmailNotificationSettingInfo.OnRejectionTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnRejectionTemplateId;
+                    checkEmailNotificationSettingInfo.OnSalaryGeneration = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
+                    checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
                     checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
-                   
                     
-					await _context.SaveChangesAsync();
-					checkEmailNotificationSettingInfo.Flag = 2;
-					return ObjEmailNotificationSettingInfo;
 
-				}
+
+                    await _context.SaveChangesAsync();
+                    checkEmailNotificationSettingInfo.Flag = 2;
+                    return ObjEmailNotificationSettingInfo;
+
+                }
                 else
                 {
-                    
-                    ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnRejectionTemplateId = ObjEmailNotificationSettingInfo.OnRejectionTemplateId ?? 0;
+
+                    //ObjEmailNotificationSettingInfo.OnApprovedTemplateId = ObjEmailNotificationSettingInfo.OnApprovedTemplateId ?? 0;
+                    //ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId = ObjEmailNotificationSettingInfo.OnCandidateEnrollmentTemplateId ?? 0;
+                    //ObjEmailNotificationSettingInfo.OnRejectionTemplateId = ObjEmailNotificationSettingInfo.OnRejectionTemplateId ?? 0;
                     ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId ?? 0;
-                    ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId ?? 0;
+                    // ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId = ObjEmailNotificationSettingInfo.OnStatusChangeTemplateId ?? 0;
                     _context.EmailNotificationSettings.Add(ObjEmailNotificationSettingInfo);
-					await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-					ObjEmailNotificationSettingInfo.Flag = 1;
-					return ObjEmailNotificationSettingInfo;
+                    ObjEmailNotificationSettingInfo.Flag = 1;
+                    return ObjEmailNotificationSettingInfo;
 
-				}
+                }
 
-           
+
 
 
             }
@@ -132,17 +243,18 @@ namespace HRHUBAPI.Models
                 {
 
                     checkObjEmailTemplateInfo.TemplateId = ObjEmailTemplateInfo.TemplateId;
-                    checkObjEmailTemplateInfo.Title =   ObjEmailTemplateInfo.Title;
+                    checkObjEmailTemplateInfo.Title = ObjEmailTemplateInfo.Title;
                     checkObjEmailTemplateInfo.Subject = ObjEmailTemplateInfo.Subject;
-                    checkObjEmailTemplateInfo.Body= ObjEmailTemplateInfo.Body;
+                    checkObjEmailTemplateInfo.Body = ObjEmailTemplateInfo.Body;
                     checkObjEmailTemplateInfo.Status = ObjEmailTemplateInfo.Status;
                     checkObjEmailTemplateInfo.UpdatedBy = ObjEmailTemplateInfo.CreatedBy;
-                    checkObjEmailTemplateInfo.UpdatedOn= DateTime.Now;
-                    checkObjEmailTemplateInfo.CompanyId= ObjEmailTemplateInfo.CompanyId;
+                    checkObjEmailTemplateInfo.UpdatedOn = DateTime.Now;
+                    checkObjEmailTemplateInfo.CompanyId = ObjEmailTemplateInfo.CompanyId;
+                    checkObjEmailTemplateInfo.Type = ObjEmailTemplateInfo.Type;
 
 
                     await _context.SaveChangesAsync();
-                  
+
                     return ObjEmailTemplateInfo;
 
                 }
@@ -150,11 +262,13 @@ namespace HRHUBAPI.Models
                 {
 
                     ObjEmailTemplateInfo.CreatedOn = DateTime.Now;
+                    ObjEmailTemplateInfo.CreatedBy = ObjEmailTemplateInfo.CreatedBy;
+
                     _context.EmailTemplates.Add(ObjEmailTemplateInfo);
 
                     await _context.SaveChangesAsync();
 
-                   
+
                     return ObjEmailTemplateInfo;
 
                 }
@@ -176,7 +290,7 @@ namespace HRHUBAPI.Models
         {
             try
             {
-                var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x=>x.TemplateId == Id);
+                var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x => x.TemplateId == Id);
                 if (dbResult != null)
                 {
                     return dbResult;
@@ -195,7 +309,7 @@ namespace HRHUBAPI.Models
             {
                 bool recordDeleted = false;
                 var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x => x.TemplateId == id);
-                
+
                 hrhubContext.Remove(dbResult);
                 await hrhubContext.SaveChangesAsync();
                 return recordDeleted;
@@ -209,7 +323,7 @@ namespace HRHUBAPI.Models
             {
                 if (Id > 0)
                 {
-                    var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x =>  x.CompanyId == CompanyId && x.Title == title && x.TemplateId != Id);
+                    var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.Title == title && x.TemplateId != Id);
                     if (dbResult != null)
                     {
                         return true;
@@ -217,7 +331,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x =>  x.CompanyId == CompanyId && x.Title == title);
+                    var dbResult = await hrhubContext.EmailTemplates.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.Title == title);
                     if (dbResult != null)
                     {
                         return true;
@@ -232,7 +346,7 @@ namespace HRHUBAPI.Models
 
 
 
-        // update only status 
+        // update only EmailTemplatestatus 
         public async Task<EmailTemplate> UpdateStatusByEmailTempId(EmailTemplate ObjEmailTemplate, HrhubContext _context)
         {
             try

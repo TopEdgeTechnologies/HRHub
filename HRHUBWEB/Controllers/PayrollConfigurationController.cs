@@ -352,6 +352,8 @@ namespace HRHUBWEB.Controllers
 			return RedirectToAction("StaffSalaryList", new { data = 0, month = objStaffSalary.MonthNumber, year = objStaffSalary.Year });
 		}
 
-		#endregion
-	}
+        #endregion
+
+       
+    }
 }

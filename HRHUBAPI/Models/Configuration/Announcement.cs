@@ -64,8 +64,8 @@ namespace HRHUBAPI.Models
         }
         public async Task<Announcement> PostAnnouncement(Announcement ObjAnnouncement, HrhubContext hrhubContext)
         {
-          
-                try
+
+            try
             {
                 var dbResult = await hrhubContext.Announcements.FirstOrDefaultAsync(x => x.IsDeleted == false && x.AnnouncementId == ObjAnnouncement.AnnouncementId);
                 if (dbResult != null && dbResult.AnnouncementId > 0)
@@ -75,28 +75,28 @@ namespace HRHUBAPI.Models
                     dbResult.AnnouncementDate = ObjAnnouncement.AnnouncementDate;
                     dbResult.Description = ObjAnnouncement.Description;
 
-					dbResult.Status = ObjAnnouncement.Status;
+                    dbResult.Status = ObjAnnouncement.Status;
                     dbResult.UpdatedBy = ObjAnnouncement.UpdatedBy;
                     dbResult.UpdatedOn = DateTime.Now;
                     await hrhubContext.SaveChangesAsync();
-                   
-                 
+
+
                     return dbResult;
                 }
                 else
                 {
-						ObjAnnouncement.CreatedOn = DateTime.Now;
-						ObjAnnouncement.IsDeleted = false;
+                    ObjAnnouncement.CreatedOn = DateTime.Now;
+                    ObjAnnouncement.IsDeleted = false;
                     hrhubContext.Announcements.Add(ObjAnnouncement);
                     await hrhubContext.SaveChangesAsync();
-                  
-                  
+
+
                     return ObjAnnouncement;
                 }
             }
-            catch {  throw; }
-           
-        }
+			catch {  throw; }
+
+		}
 
         public async Task<bool> DeleteAnnouncement(int id , int userid, HrhubContext hrhubContext)
         {
