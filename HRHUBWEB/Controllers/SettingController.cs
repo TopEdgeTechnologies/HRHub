@@ -439,8 +439,7 @@ namespace HRHUBWEB.Controllers
             var CompanyId = _user.CompanyId;
             var PolicyCategoryId = 3; // LeavePolicyCategoryId
 
-            StaffSalarySetting Obj = new StaffSalarySetting();
-            Obj = await _APIHelper.CallApiAsyncGet<StaffSalarySetting>($"api/Setting/GetSalarySettingByCompanyId{CompanyId}", HttpMethod.Get);
+            ViewBag.CompanyId = CompanyId;
 
             ViewBag.ListDesignations = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
             ViewBag.ListDepartments = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
@@ -448,7 +447,7 @@ namespace HRHUBWEB.Controllers
             ViewBag.ListLoanType = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
             ViewBag.ListOffBoardingSetting = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffOffBoarding>>($"api/Setting/GetOffBoardingSetting{_user.CompanyId}", HttpMethod.Get);
           
-            return View(Obj);
+            return View();
         }
 
         public async Task<IActionResult> PostOffBoardingSetting(OffBoardingProcessSetting obj)
@@ -465,7 +464,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> GetOffBoardingSettingsById(int id)
         {
             OffBoardingProcessSetting obj = new OffBoardingProcessSetting();
-            obj = await _APIHelper.CallApiAsyncGet<OffBoardingProcessSetting>($"api/Setting/GetOffBoardingSettingById{id}", HttpMethod.Get);
+            obj = await _APIHelper.CallApiAsyncGet<OffBoardingProcessSetting>($"api/Setting/GetOffBoardingSettingById/{id}", HttpMethod.Get);
             return Json(obj);
         }
         public async Task<IActionResult> OffBoardingSettingAlreadyExists(int id, int departmentid , int designationid)
@@ -476,9 +475,23 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> OffBoardingSettingDelete(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/DeleteOffBoardingSetting{id}/{_user.UserId}", HttpMethod.Get);
-            return RedirectToAction("GeneralTypeSettings", new { data = 3 });
+            return Json(result);
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateOffBoardingAllowInterview(int id, bool allowinterview)
+        {
 
+            OffBoardingProcessSetting Obj = new OffBoardingProcessSetting();
+            Obj.OffboardingProcessSettingId = id;
+            Obj.AllowExitInterview = allowinterview;
+            Obj.UpdatedBy = _user.UserId;
+            Obj.CompanyId = _user.CompanyId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateStaffOffBoardingAllowInterview", HttpMethod.Post);
+
+            return Json(result);
+
+        }
         public async Task<IActionResult> PostLoanType(LoanType obj)
         {
 
@@ -499,7 +512,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> EmploymentTypeDelete(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/DeleteEmploymentType{id}/{_user.UserId}", HttpMethod.Get);
-            return RedirectToAction("GeneralTypeSettings", new { data = 3 });
+            return Json(result);
         }
         public async Task<IActionResult> PostEmploymentType(EmploymentType obj)
         {
@@ -515,7 +528,7 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> GetEmploymentTypeById(int id)
         {
             EmploymentType employmenttype = new EmploymentType();
-            employmenttype = await _APIHelper.CallApiAsyncGet<EmploymentType>($"api/Setting/GetEmploymentTypeById{id}", HttpMethod.Get);
+            employmenttype = await _APIHelper.CallApiAsyncGet<EmploymentType>($"api/Setting/GetEmploymentTypeById/{id}", HttpMethod.Get);
             return Json(employmenttype);
         }
         public async Task<IActionResult> EmploymentTypeAlreadyExists(int id, string title)

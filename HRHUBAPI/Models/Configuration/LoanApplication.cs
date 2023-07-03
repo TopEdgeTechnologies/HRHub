@@ -339,8 +339,8 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    obj.CreatedBy = obj.CreatedBy;
                     obj.CreatedOn = DateTime.Now;
+                    obj.PaymentDate = null;
                     _context.LoanApplications.Add(obj);
                 }
                 await _context.SaveChangesAsync();

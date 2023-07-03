@@ -229,7 +229,7 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        [HttpGet("GetOffBoardingSettingById{id}")]
+        [HttpGet("GetOffBoardingSettingById/{id}")]
         public async Task<ActionResult<OffBoardingProcessSetting>> GetOffBoardingSettingById(int id)
         {
             var dbResult = await new StaffOffBoarding().GetOffBoardingSettingById(id, _context);
@@ -240,9 +240,9 @@ namespace HRHUBAPI.Controllers
             return NotFound();
         }
         [HttpGet("OffBoardingSettingAlreadyExists{CompanyId}/{id}/{departmentid}/{designationid}")]
-        public async Task<ActionResult<bool>> OffBoardingSettingAlreadyExists(int CompanyId, int Id, int departmentid, int designationid)
+        public async Task<ActionResult<bool>> OffBoardingSettingAlreadyExists(int CompanyId, int id, int departmentid, int designationid)
         {
-            var dbResult = await new StaffOffBoarding().AlreadyExists(CompanyId, Id, departmentid, designationid, _context);
+            var dbResult = await new StaffOffBoarding().AlreadyExists(CompanyId, id, departmentid, designationid, _context);
             if (dbResult == true)
             {
                 return Ok(new
@@ -278,6 +278,21 @@ namespace HRHUBAPI.Controllers
             }
             return NotFound("Data Not Found!");
         }
+
+        [HttpPost("UpdateStaffOffBoardingAllowInterview")]
+        public async Task<ActionResult<OffBoardingProcessSetting>> UpdateStaffOffBoardingAllowInterview(OffBoardingProcessSetting obj)
+        {
+            var result = await new StaffOffBoarding().UpdateStaffOffBoardingAllowInterview(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
 
         [HttpGet("GetEmploymentType{CompanyId}")]
         public async Task<ActionResult<List<EmploymentType>>> GetEmploymentType(int CompanyId)
@@ -346,7 +361,7 @@ namespace HRHUBAPI.Controllers
             }
             return NotFound("Data Not Found!");
         }
-        [HttpGet("GetEmploymentTypeById{Id}")]
+        [HttpGet("GetEmploymentTypeById/{Id}")]
         public async Task<ActionResult<EmploymentType>> GetEmploymentTypeById(int Id)
         {
             var dbResult = await new EmploymentType().GetEmploymentTypeById(Id, _context);

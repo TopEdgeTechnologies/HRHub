@@ -38,6 +38,7 @@
             </div>
         </div>
         <div class="col-md-12 col-xl-9">
+            <input type="hidden" id="CompanyId" value="@ViewBag.CompanyId" />
             <div class="tab-content adminsetting-content" id="setting-tabContent">
                 <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
                     <div class="card">
@@ -52,7 +53,7 @@
                                 <div class="modal-dialog" style="max-width:550px;" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Add Employment Type</h5>
+                                            <h5 class="modal-title">Off Boarding Setting</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
@@ -112,7 +113,7 @@
                                                             <td>@item.Designation</td>
                                                             <td>
                                                                 <label class="custom-switch form-switch mb-0">
-                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="AlloeExitInterview_@item.OffboardingProcessSettingID" onchange="setvalue(this.id)" @(item.AllowExitInterview == true? "checked" : "")>
+                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="AllowExitInterview_@item.OffboardingProcessSettingID" onchange="setallowinterviewvalue(this.id)" @(item.AllowExitInterview == true? "checked" : "")>
                                                                     <span class="custom-switch-indicator"></span>
                                                                 </label>
                                                             </td>
@@ -135,10 +136,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        @*<div class="card-footer">
                             <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
                             <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="tab-2" role="tabpanel">
@@ -229,10 +230,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        @*<div class="card-footer">
                             <a href="javascript:void(0);" class="btn btn-success btn_Save">Save Changes</a>
                             <a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="tab-3" role="tabpanel">
@@ -402,7 +403,7 @@
             debugger;
             var status = true;
             debugger;
-            if ($("#DepartmentId").val() == "") {
+            if ($("#DepartmentId").val() == "" || $("#DepartmentId").val() == null) {
                 $.growl.warning({
                     message: "Please Select Department"
                 });
@@ -410,7 +411,7 @@
                 status = false;
                 return false;
             }
-            else if($("#DesignationId").val() == ""){
+            else if($("#DesignationId").val() == "" || $("#DesignationId").val() == null){
                  $.growl.warning({
                     message: "Please Select Designation"
                 });
@@ -537,9 +538,9 @@
                     if (data != "") {
                         debugger
 
-                        $("#OffboardingProcessSettingId").val(data.offboardingProcessSettingID);
-                        $("#DepartmentId").val(data.needClearenceFromDepartmentID).trigger('change');;
-                        $("#DesignationId").val(data.needClearenceFrom_DesignationID).trigger('change');;
+                        $("#OffBoardingProcessSettingId").val(data.offboardingProcessSettingId);
+                        $("#DepartmentId").val(data.needClearenceFromDepartmentId).trigger('change');;
+                        $("#DesignationId").val(data.needClearenceFromDesignationId).trigger('change');;
 
                         $("#AllowExitInterview").prop('checked', data.allowExitInterview)
                         $("#addoffboardingsetting").modal('show');
@@ -639,8 +640,7 @@
                 type: "GET",
                 data: {
                     id: $("#EmploymentTypeId").val(),
-                    title: $('#Title').val() == '' ? '""' : $('#Title').val(),
-                    CompanyId: $("#CompanyId").val()
+                    title: $('#Title').val() == '' ? '""' : $('#Title').val()
                 },
                 success: function (data) {
                     if (data != "") {
@@ -726,10 +726,9 @@
 
 
         }
-
         function editemploymenttype(id) {
             debugger;
-            addnewLoanType();
+            addemploymenttypemodel();
             var Data = { id: id }
             console.log(Data)
             $.ajax({
@@ -741,7 +740,7 @@
                     if (data != "") {
                         debugger
 
-                        $("#EmploymentTypeId").val(data.loanTypeId);
+                        $("#EmploymentTypeId").val(data.employmentTypeId);
                         $("#Title").val(data.title);
 
                         $("#Status").prop('checked', data.status)
@@ -847,12 +846,12 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        //var b = JSON.parse(data)
-                        if (data.success) {
+                        var b = JSON.parse(data)
+                        if (b.success) {
 
                             // $.growl.warning(data.message);
                             $.growl.warning({
-                                message: data.message
+                                message: b.message
                             });
                             status = false;
                         }
@@ -1017,6 +1016,42 @@
 
 
         }
+        function setallowinterviewvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#AllowExitInterview_' + id).prop('checked', true);
+            }
+            else {
+                $('#AllowExitInterview_' + id).prop('checked', false);
+            }
+
+            // UPdate AllowExitInterview
+            var Data = { id: id, allowinterview: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/Setting/UpdateOffBoardingAllowInterview",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        if (data.success) {
+
+                            window.location.href = window.location.href;
+
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+        }
 
         function setvalue(event) {
             debugger
@@ -1106,10 +1141,11 @@
         }
         function addoffboardingmodel() {
             $("#addoffboardingsetting").modal('show');
-            $("#EmploymentId").val(0)
-            $("#Title").val('')
-            $("#Status").prop('checked', true);
-            $("#Title").css("border-color", "#ddd");
+            $("#OffBoardingProcessSettingId").val(0)
+            $("#DepartmentId").select2({ placeholder: "Select Department", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#DesignationId").select2({ placeholder: "Select Designation", width: '100%', allowClear: true }).val('').trigger('change');
+            $("#AllowExitInterview").prop('checked', false);
+
         }
 
         function addemploymenttypemodel() {

@@ -639,7 +639,7 @@ namespace HRHUBAPI.Models
                                   join dep in hrhubContext.Departments on l.NeedClearenceFromDepartmentId equals dep.DepartmentId
                                   join d in hrhubContext.Designations on l.NeedClearenceFromDesignationId equals d.DesignationId
 
-                                  where l.CompanyId == CompanyId
+                                  where l.CompanyId == CompanyId && l.IsDeleted == false
                                   select new StaffOffBoarding()
                                   {
                                       OffboardingProcessSettingID = l.OffboardingProcessSettingId,
@@ -659,6 +659,21 @@ namespace HRHUBAPI.Models
             {
                 try
                 {
+                    if(offBoardingProcess.AllowExitInterview == true)
+                    {
+                        var list = await hrhubContext.OffBoardingProcessSettings.Where(p => p.CompanyId == offBoardingProcess.CompanyId).ToListAsync();
+
+                        foreach (var item in list)
+                        {
+                            item.AllowExitInterview = false;
+                        }
+
+                        await hrhubContext.SaveChangesAsync();
+                    }
+
+                    
+
+
                     var dbResult = await hrhubContext.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.IsDeleted == false && x.OffboardingProcessSettingId == offBoardingProcess.OffboardingProcessSettingId);
                     if (dbResult != null && dbResult.OffboardingProcessSettingId > 0)
                     {
@@ -685,7 +700,49 @@ namespace HRHUBAPI.Models
                 catch { dbContextTransaction.Rollback(); throw; }
             }
         }
+        public async Task<OffBoardingProcessSetting> UpdateStaffOffBoardingAllowInterview(OffBoardingProcessSetting ObjInfo, HrhubContext _context)
+        {
+            using (var dbContextTransaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    string msg = "";
 
+                    if (ObjInfo.AllowExitInterview == true)
+                    {
+                        var list = await _context.OffBoardingProcessSettings.Where(p => p.CompanyId == ObjInfo.CompanyId).ToListAsync();
+
+                        foreach (var item in list)
+                        {
+                            item.AllowExitInterview = false;
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+
+                    var checkoffboardingInfo = await _context.OffBoardingProcessSettings.FirstOrDefaultAsync(x => x.OffboardingProcessSettingId == ObjInfo.OffboardingProcessSettingId && x.IsDeleted == false);
+                    if (checkoffboardingInfo != null && checkoffboardingInfo.OffboardingProcessSettingId > 0)
+                    {
+                        checkoffboardingInfo.OffboardingProcessSettingId = ObjInfo.OffboardingProcessSettingId;
+                        checkoffboardingInfo.UpdatedOn = DateTime.Now;
+                        checkoffboardingInfo.AllowExitInterview = ObjInfo.AllowExitInterview;
+                        checkoffboardingInfo.UpdatedBy = ObjInfo.UpdatedBy;
+
+                        await _context.SaveChangesAsync();
+                        //return ObjInfo;
+
+                    }
+                    dbContextTransaction.Commit();
+                    return ObjInfo;
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.Rollback();
+                    throw;
+
+                }
+            }
+        }
         public async Task<OffBoardingProcessSetting> GetOffBoardingSettingById(int Id, HrhubContext hrhubContext)
         {
             try
