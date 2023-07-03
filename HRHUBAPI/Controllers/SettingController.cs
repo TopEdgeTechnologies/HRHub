@@ -218,6 +218,18 @@ namespace HRHUBAPI.Controllers
         }
 
 
+        // Get Variable List 
+        [HttpGet("GetEmailDynamicVariableType{Type}")]
+        public async Task<ActionResult<List<EmailDynamicVariable>>> GetEmailDynamicVariableType(string Type)
+        {
+            var result = await new EmailNotificationSetting().GetEmailDynamicVariableType(Type,_context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
 
 
 

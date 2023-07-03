@@ -47,6 +47,30 @@ namespace HRHUBAPI.Models
         }
 
 
+
+        // Get Dynamic Variable list
+
+        public async Task<List<EmailDynamicVariable>> GetEmailDynamicVariableType(string Type,HrhubContext _context)
+        {
+            try
+            {
+                var query = await _context.EmailDynamicVariables.Where(x=>x.Type== Type).ToListAsync();
+
+                return query;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
         // Get candidate Email Notification List 
         public async Task<List<CandidateEmailNotificationSetting>> GetCandidateEmailNotification(int CompanyId, HrhubContext _context)
         {
@@ -150,6 +174,7 @@ namespace HRHUBAPI.Models
                     checkEmailNotificationSettingInfo.OnSalaryGeneration = ObjEmailNotificationSettingInfo.OnSalaryGeneration;
                     checkEmailNotificationSettingInfo.OnSalaryGenerationTemplateId = ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId == null ? 0 : ObjEmailNotificationSettingInfo.OnSalaryGenerationTemplateId;
                     checkEmailNotificationSettingInfo.CompanyId = ObjEmailNotificationSettingInfo.CompanyId;
+                    
 
 
                     await _context.SaveChangesAsync();
@@ -225,6 +250,7 @@ namespace HRHUBAPI.Models
                     checkObjEmailTemplateInfo.UpdatedBy = ObjEmailTemplateInfo.CreatedBy;
                     checkObjEmailTemplateInfo.UpdatedOn = DateTime.Now;
                     checkObjEmailTemplateInfo.CompanyId = ObjEmailTemplateInfo.CompanyId;
+                    checkObjEmailTemplateInfo.Type = ObjEmailTemplateInfo.Type;
 
 
                     await _context.SaveChangesAsync();
@@ -236,6 +262,8 @@ namespace HRHUBAPI.Models
                 {
 
                     ObjEmailTemplateInfo.CreatedOn = DateTime.Now;
+                    ObjEmailTemplateInfo.CreatedBy = ObjEmailTemplateInfo.CreatedBy;
+
                     _context.EmailTemplates.Add(ObjEmailTemplateInfo);
 
                     await _context.SaveChangesAsync();

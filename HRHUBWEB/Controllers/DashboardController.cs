@@ -134,7 +134,7 @@ namespace HRHUBWEB.Controllers
             [CustomAuthorization]
             public async Task< IActionResult> HR()
             {
-              var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
+              //var result = await _EmailHelper.SendEmailAsync("athar.choudary@gmail.com",  "Test", "Test email hello hello");
                 return View();
             }
 		
