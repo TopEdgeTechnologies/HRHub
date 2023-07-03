@@ -386,6 +386,32 @@ namespace HRHUBAPI.Controllers
         }
         #endregion
 
+        #region SMTPSetting
+        [HttpPost("PostSMTPSetting")]
+        public async Task<ActionResult<Company>> PostSMTPSetting(Company Obj)
+        {
+
+            var dbResult = await new Policy().PostSMTPSetting(Obj, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                }); ;
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        #endregion
+
 
         #region NotificationSetting
 
@@ -628,6 +654,10 @@ namespace HRHUBAPI.Controllers
 
 
         #endregion
+
+
+
+
 
     }
 }

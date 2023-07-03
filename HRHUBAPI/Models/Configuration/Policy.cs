@@ -481,7 +481,7 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<PolicyConfiguration> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool HalfLeave, bool QuarterLeave, bool CalenderYearApproach,bool AccrualApproach, int MonthNo, HrhubContext _context)
+        public async Task<PolicyConfiguration> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool HalfLeave, bool QuarterLeave, bool CalenderYearApproach, bool AccrualApproach, int MonthNo, HrhubContext _context)
         {
             using (var dbContextTransaction = _context.Database.BeginTransaction())
             {
@@ -954,9 +954,42 @@ namespace HRHUBAPI.Models
         #endregion
 
 
-        #region GeneralType Settings
+        #region SMTP Settings
+        public async Task<Company> PostSMTPSetting(Company obj, HrhubContext _context)
+        {
+            try
+            {
+                var checkCompanyInfo = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyId == obj.CompanyId && x.IsDeleted == false);
+                if (checkCompanyInfo != null && checkCompanyInfo.CompanyId > 0)
+                {
+                    checkCompanyInfo.EmailSendFrom = obj.EmailSendFrom;
+                    checkCompanyInfo.EmailPassword = obj.EmailPassword;
+                    checkCompanyInfo.EmailSmtpport = obj.EmailSmtpport;
+                    checkCompanyInfo.EmailServerHost = obj.EmailServerHost;
+                    checkCompanyInfo.UpdatedOn = DateTime.Now;
+                    checkCompanyInfo.UpdatedBy = Convert.ToInt32(obj.UserId);
 
-        
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    obj.CreatedBy = Convert.ToInt32(obj.UserId);
+                    obj.CreatedOn = DateTime.Now;
+                    _context.Companies.Add(obj);
+                    await _context.SaveChangesAsync();
+                }
+                return checkCompanyInfo;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+
+            }
+        }
+
 
         #endregion
 
