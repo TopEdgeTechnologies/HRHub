@@ -192,3 +192,24 @@ function changePassword() {
 
     }
 }
+
+function convertTimeToAMPM(timeString) {
+    if (timeString != null && timeString != '' && timeString != 'NaN') {
+        var time = timeString.split(':');
+
+        var hours = parseInt(time[0]);
+        var minutes = parseInt(time[1]);
+
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // '0' should be converted to '12'
+
+        var formattedTime = hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+        return formattedTime;
+
+    }
+    else {
+        return '';
+    }
+
+}

@@ -1,0 +1,715 @@
+﻿@model HRHUBAPI.Models.Staff
+
+
+@{
+	ViewData["Title"] = "StaffProfile";
+}
+
+<style>
+	.child-center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.custom-progress-bar {
+		border-radius: 16px;
+		height: 0.6rem;
+	}
+</style>
+@*  Employe Profile View
+*@
+<div class="row">
+	<div class="col-md-12 col-lg-4 col-xl-3">
+		@*Employe profile card*@
+		<div class="card overflow-hidden" style="height:527px;">
+			<div class="card-body">
+				<div class="card-header p-0 border-0">
+					<div class="card-title">
+					</div>
+				</div>
+				<div class="user-pic text-center">
+					<img class="rounded-circle img-fluid" alt="avatar" src="~/assets/images/users/profile-img.webp" style=" width:150px">
+					</img>
+					<div class="pro-user mt-3">
+						<h5 class="pro-user-username text-dark mb-2 fs-20">Muhammad Saqib</h5>
+						<p class="pro-user-desc text-muted mb-1 fs-16">Frontend Developer</p>
+						<p class="text-muted mb-3 fs-20">Software Department</p>
+						<div class="social social-profile-buttons mt-3 mb-2">
+							<ul class="mb-0">
+								<li>
+									<a class="social-icon d-flex child-center" href=""><i class="fa fa-facebook" style="color: #3b5998;"></i></a>
+								</li>
+								<li>
+									<a class="social-icon d-flex child-center" href=""><i class="fa fa-twitter" style="color: #55acee;"></i></a>
+								</li>
+
+								<li>
+									<a class="social-icon d-flex child-center" href=""><i class="fa fa-linkedin" style="color:#0A66C2;"></i></a>
+								</li>
+								<li>
+									<a class="social-icon d-flex child-center text-danger" href=""><i class="fa fa-google-plus"></i></a>
+								</li>
+							</ul>
+						</div>
+						<div class="mb-3 clearfix">
+							<span class="fa fa-star text-warning"></span>
+							<span class="fa fa-star text-warning"></span>
+							<span class="fa fa-star text-warning"></span>
+							<span class="fa fa-star-half-o text-warning"></span>
+							<span class="fa fa-star-o text-warning"></span>
+						</div>
+						<div class="btn-list">
+							<a href="profile-1.html" class="btn btn-primary mt-3">Edit Profile</a>
+							<a href="javascript:void(0);" class="btn btn-success mt-3">Message</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer p-0">
+				<div class="row">
+					<div class="col-6 text-center py-3 border-end">
+						<h5 class="mb-2">
+							<span class="fs-18 text-success">Experience</span>
+						</h5>
+						<h5 class="fs-14 mb-0">02 years</h5>
+					</div>
+					<div class="col-6  py-3 text-center border-end">
+						<h5 class="mb-2">
+							<span class="fs-18 text-orange">Status</span>
+						</h5>
+						<h5 class="fs-14 mb-0">Active</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12 col-lg-8 col-xl-9">
+		<div class="card overflow-auto" style="height:527px;">
+			<div class="card-header d-flex justify-content-between align-items-center border-bottom-0">
+				<h4 class="card-title">Staff Details</h4>
+				<div class="card-options">
+					<a href="" class="me-0 option-dots text-default" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						<span class="feather feather-more-vertical"></span>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+						<li><a href="javascript:void(0);"><i class="fa fa-sign-out me-2"></i>Apply for resignation</a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-money me-2"></i>Apply for loan</a></li>
+						<li><a href="javascript:void(0);"><i class="fa fa-sign-out me-2"></i>Apply for leave</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="tab-menu-heading table_tabs mt-2 p-0 ">
+				<div class="tabs-menu1">
+					<!-- Tabs -->
+					<ul class="nav panel-tabs">
+						<li><a href="#tab1" data-bs-toggle="tab"> <i class="fa fa-clock-o me-2" aria-hidden="true"></i> Attendance</a></li>
+						<li><a href="#tab2" data-bs-toggle="tab"><i class="fa fa-tasks me-2"></i>Loan</a></li>
+						<li><a href="#tab3" data-bs-toggle="tab"> <i class="fa fa-sign-out me-2"></i>Leaves</a></li>
+						<li><a href="#tab4" data-bs-toggle="tab"> <i class="fa fa-plus-square me-2 " aria-hidden="true"></i> Benifits</a></li>
+						<li><a href="#tab5" data-bs-toggle="tab"> <i class="fa fa-money me-2" aria-hidden="true"></i>Salary</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab1">
+						<div class="table-responsive">
+							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer">
+								
+								<thead style="border-bottom: 1px solid #0000004a;">
+									<tr>
+										<th class="border-bottom-0">Date</th>
+										<th class="border-bottom-0">Status</th>
+										<th class="border-bottom-0">Clock-In</th>
+										<th class="border-bottom-0">Clock-Out</th>
+										<th class="border-bottom-0">Progress</th>
+										<th class="border-bottom-0">Hours</th>
+									</tr>
+								</thead>
+								<tbody id="TblBodyAttendance">
+
+								</tbody>	
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab2">
+						<div class="table-responsive">
+							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer" id="empAttendance">
+								<thead style="border-bottom: 1px solid #0000004a;">
+									<tr>
+										<th class="border-bottom-0 text-center">Sr.#</th>
+										<th class="border-bottom-0">Applied On</th>
+										<th class="border-bottom-0">Loan</th>
+										<th class="border-bottom-0">Installment</th>
+										<th class="border-bottom-0">Per Month</th>
+										<th class="border-bottom-0">Payment</th>
+										<th class="border-bottom-0">Status</th>
+									</tr>
+								</thead>
+								<tbody id="TblBodyLoan">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab3">
+						<div class="table-responsive">
+							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer" id="emp-leaves">
+								<thead style="border-bottom: 1px solid #0000004a;">
+									<tr>
+										<th class="border-bottom-0 text-center">#ID</th>
+										<th class="border-bottom-0">Leave Type</th>
+										<th class="border-bottom-0">Days</th>
+										<th class="border-bottom-0">Reason</th>
+										<th class="border-bottom-0">Applied On</th>
+										<th class="border-bottom-0">Status</th>
+									</tr>
+								</thead>
+								<tbody id="TblBodyLeave">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab4">
+						<div class="table-responsive">
+							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer" id="emp-leaves">
+								<thead style="border-bottom: 1px solid #0000004a;">
+									<tr>
+										<th class="border-bottom-0 text-center">Sr#</th>
+										<th class="border-bottom-0">Benifits</th>
+										<th class="border-bottom-0">Staff Count</th>
+										<th class="border-bottom-0">Status</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">1</td>
+										<td>Demo</td>
+										<td class="font-weight-semibold">0</td>
+										<td>
+											<span class="badge badge-success">Active</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="tab-pane" id="tab5">
+						<div class="table-responsive">
+							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer" id="emp-leaves">
+								<thead style="border-bottom: 1px solid #0000004a;">
+									<tr>
+										<th class="border-bottom-0">Sr.#</th>
+										<th class="border-bottom-0">Month-Year</th>
+										<th class="border-bottom-0">Earning</th>
+										<th class="border-bottom-0">Deduction</th>
+										<th class="border-bottom-0">Net Salary</th>
+										<th class="border-bottom-0">Status</th>
+									</tr>
+								</thead>
+								<tbody id="TblBodySalary">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="row">
+	@*
+	<div class="col-sm-6 col-lg-3 col-xl-3">
+		<div class="card overflow-hidden" style="height:400px;">
+			<div class="card-header">
+				<div class="card-title">
+					<h4 class="card-title">Personal Details</h4>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table mb-0">
+						<tbody>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">Full Name</span>
+								</td>
+								<td class="py-2 px-0">London,UK</td>
+							</tr>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">Registration No:</span>
+								</td>
+								<td class="py-2 px-0">4015</td>
+							</tr>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">Address</span>
+								</td>
+								<td class="py-2 px-0">London,UK</td>
+							</tr>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">Phone </span>
+								</td>
+								<td class="py-2 px-0">English, German</td>
+							</tr>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">CNIC</span>
+								</td>
+								<td class="py-2 px-0">3456789023111</td>
+							</tr>
+							<tr>
+								<td class="py-2 px-0">
+									<span class="font-weight-semibold w-50">DOB</span>
+								</td>
+								<td class="py-2 px-0">05 Dec, 2001</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	*@
+	<div class="col-sm-6 col-lg-3 col-xl-4">
+
+		<div class="card border p-0 shadow-none" style="height:400px;">
+			<div class="card-header">
+				<div class="card-title">Academia</div>
+			</div>
+			<div class="card-body">
+				<div class="main-profile-contact-list">
+					<div class="media me-5 mt-0">
+						<div class="media-icon child-center bg-success text-white me-4">
+							<i class="fa fa-whatsapp"></i>
+						</div>
+						<div class="media-body">
+							<h6 class="font-weight-semibold mb-1">Web Designer at <a href="" class="btn-link">Spruko</a></h6>
+							<span>2018 - present</span>
+							<p>Past Work: Spruko, Inc.</p>
+						</div>
+					</div>
+
+					<div class="media me-5">
+						<div class="media-icon child-center bg-danger text-white me-4">
+							<i class="fa fa-briefcase"></i>
+						</div>
+						<div class="media-body">
+							<h6 class="font-weight-semibold mb-1">Studied at <a href="" class="btn-link">University</a></h6>
+							<span>2004-2008</span>
+							<p>Graduation: Bachelor of Science in Computer Science</p>
+						</div>
+					</div><div class="media me-5">
+						<div class="media-icon child-center bg-danger text-white me-4">
+							<i class="fa fa-briefcase"></i>
+						</div>
+						<div class="media-body">
+							<h6 class="font-weight-semibold mb-1">Studied at <a href="" class="btn-link">University</a></h6>
+							<span>2004-2008</span>
+							<p>Graduation: Bachelor of Science in Computer Science</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<div class="col-sm-6 col-lg-3 col-xl-4">
+
+		<div class="card overflow-hidden" style="height:400px;">
+			<div class="card-header">
+				<h4 class="card-title">Activity</h4>
+			</div>
+			<div class="pt-2">
+				<div class="list-group">
+					<div class="list-group-item d-flex pt-3 pb-3 border-0">
+						<div class="me-3 me-xs-0">
+							<div class="calendar-icon icons">
+								<div class="date_time bg-pink-transparent"> <span class="date">18</span> <span class="month">FEB</span> </div>
+							</div>
+						</div>
+						<div class="ms-1">
+							<div class="h5 fs-14 mb-1">Board meeting Completed</div> <small class="text-muted">attend the  company mangers...</small>
+						</div>
+					</div>
+					<div class="list-group-item d-flex pt-3 pb-3 border-0">
+						<div class="me-3 me-xs-0">
+							<div class="calendar-icon icons">
+								<div class="date_time bg-success-transparent "> <span class="date">16</span> <span class="month">FEB</span> </div>
+							</div>
+						</div>
+						<div class="ms-1">
+							<div class="h5 fs-14 mb-1">Updated the Company Policy</div>
+							<small class="text-muted">some changes &amp; add the  terms &amp; conditions </small>
+						</div>
+					</div>
+					<div class="list-group-item d-flex pt-3 pb-3 border-0">
+						<div class="me-3 me-xs-0">
+							<div class="calendar-icon icons">
+								<div class="date_time bg-orange-transparent "> <span class="date">17</span> <span class="month">FEB</span> </div>
+							</div>
+						</div>
+						<div class="ms-1">
+							<div class="h5 fs-14 mb-1">Office Timings Changed</div> <small class="text-muted"> this effetct  after March 01st 9:00 Am To 5:00 Pm</small>
+						</div>
+					</div>
+					<div class="list-group-item d-flex pt-3 pb-5 border-0">
+						<div class="me-3 me-xs-0">
+							<div class="calendar-icon icons">
+								<div class="date_time bg-info-transparent "> <span class="date">26</span> <span class="month">JAN</span> </div>
+							</div>
+						</div>
+						<div class="ms-1">
+							<div class="h5 fs-15 mb-1"> Republic Day Celebrated </div> <small class="text-muted">participate the all employess </small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 col-lg-3 col-xl-4">
+		@*		<div class="card" style="height:400px;">
+		<div class="card-header">
+		<h4 class="card-title">Skills</h4>
+		</div>
+		<div class="card-body">
+		<ul class="timeline">
+		<li>
+		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">JavaScript / TypeScript</a>
+		<p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">API integration,core, Interactive UI </p>
+		</li>
+		<li class="primary">
+		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">React JS</a>
+		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Hooks, REsuable Components</p>
+		</li>
+		<li class="pink">
+		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">NodeJS</a>
+		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Web applications"</p>
+		</li>
+
+		<li class="success mb-0 pb-0">
+		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
+		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
+		</li>
+		<li class="success mb-0 pb-0">
+		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
+		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
+		</li>
+		</ul>
+		</div>
+		</div>*@
+
+		<div class="card" style="height:400px;">
+			<div class="card-header">
+				<div class="card-title">Statistics-2023</div>
+			</div>
+			<div class="card-body">
+				<div class="row mb-7">
+					<div class="col-4 text-center">
+						<div class="chart-circle chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
+							<canvas width="64" height="64"></canvas>
+							<div class="chart-circle-value text-primary">89</div>
+						</div>
+						<h6 class="fs-14 font-weight-semibold mt-3">Attendance</h6>
+					</div>
+					<div class="col-4 text-center">
+						<div class="chart-circle chart-circle-sm" data-value="0.23" data-thickness="5" data-color="#fe7f00">
+							<canvas width="64" height="64"></canvas>
+							<div class="chart-circle-value text-secondary">23</div>
+						</div>
+						<h6 class="fs-14 font-weight-semibold mt-3">Projects</h6>
+					</div>
+					<div class="col-4 text-center">
+						<div class="chart-circle chart-circle-sm" data-value="0.67" data-thickness="5" data-color="#0dcd94">
+							<canvas width="64" height="64"></canvas>
+							<div class="chart-circle-value text-success">67%</div>
+						</div>
+						<h6 class="fs-14 font-weight-semibold mt-3">Performance</h6>
+					</div>
+				</div>
+				<div class="d-flex align-items-end justify-content-between mg-b-5">
+					<h6 class="">This Week</h6>
+					<h6 class="font-weight-bold mb-1">01</h6>
+				</div>
+				<div class="progress progress-sm mb-5">
+					<div class="progress-bar bg-danger w-10"></div>
+				</div>
+				<div class="d-flex align-items-end justify-content-between mg-b-5">
+					<h6 class="">This Month</h6>
+					<h6 class="font-weight-bold mb-1">05</h6>
+				</div>
+				<div class="progress progress-sm mb-5">
+					<div class="progress-bar bg-info w-30"></div>
+				</div>
+				<div class="d-flex align-items-end justify-content-between mg-b-5">
+					<h6 class="">This Year</h6>
+					<h6 class="font-weight-bold mb-1">22</h6>
+				</div>
+				<div class="progress progress-sm mb-5">
+					<div class="progress-bar bg-warning w-50"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts{
+	<script>
+		
+		$(document).ready(function() {
+			$('#myonoffswitch2').prop('checked', true);
+			localStorage.setItem('dayonedarkMode', true);
+			localStorage.removeItem('dayonelightMode');
+			localStorage.removeItem('dayonetransparentMode');
+
+			LoadAttendance()
+			loadStaffLeaveInfo()
+			loadStaffLoanInfo()
+			loadStaffSalaryInfo()
+		});
+
+		function LoadAttendance() {
+			debugger
+			var data = {}
+			var html_Attendance = ''
+			$.ajax({
+				url: "/Staff/GetAttendanceData",
+                type: "GET",
+                async: false,
+				data: data,
+				success: function (data) {
+					if (data != null) {
+						debugger
+						for(var i = 0; i < data.length; i++) {
+							var Totalhours = Math.floor(  parseInt(data[i]["totalDefinedMinutes"]) / 60);
+							var TotalremainingMinutes = parseInt(data[i]["totalDefinedMinutes"]) % 60;
+							var Emphours = Math.floor(parseInt(data[i]["totalWorkingMinutes"]) / 60);
+							var EmpremainingMinutes = parseInt(data[i]["totalWorkingMinutes"]) % 60;
+							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
+							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
+							var progress = '<div class="progress progress-sm d-block"   data-toggle="tooltip" title="' + Totalhours + ':' + TotalremainingMinutes + '"   ><div class="progress-bar bg-success w-' + parseInt(percenatge) + '"   data-toggle="tooltip" title="' + Emphours + ':' + EmpremainingMinutes + '" > </div>	</div>';
+
+							html_Attendance += ' <tr> '
+							html_Attendance += '	 <td>' + data[i].attendanceFormateDate + '</td> '
+							html_Attendance += '	 <td><span class="badge ' + data[i].cssClass + '-light">' + data[i].attendancestatus + '</span></td> '
+							if(data[i].attendancestatus == 'Leave' || data[i].attendancestatus == 'Absent'){
+								html_Attendance += '	 <td> </td>'
+								html_Attendance += '	 <td> </td>'
+								html_Attendance += '	 <td> </td>'
+								html_Attendance += '	 <td> </td>'
+							}
+							else{
+								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["firstPunchIn"]) + '</td> '
+								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["lastPunchOut"]) + '</td> '
+								html_Attendance += '	 <td> ' + progress + '</td>'
+								html_Attendance += '	 <td>' + Emphours + 'h :' + EmpremainingMinutes + ' mins</td> '
+							}
+							html_Attendance += ' </tr> '
+						}
+						$('#TblBodyAttendance').html(html_Attendance);
+					}
+				},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });  
+		}
+
+		function loadStaffLeaveInfo() {
+			debugger
+			var data = {}
+			var html_Leave = ''
+			$.ajax({
+				url: "/Staff/GetLeaveData",
+				type: "GET",
+				async: false,
+				data: data,
+				success: function (data) {
+					if (data != null) {
+						debugger
+						for (var i = 0; i < data.length; i++) {
+							html_Leave += ' <tr> '
+							html_Leave += ' 	<td class="text-center">1</td> '
+							html_Leave += ' 	<td>' + data[i].leaveTypeTitle + '</td> '
+							html_Leave += ' 	<td class="font-weight-semibold">' + data[i].days + '</td> '
+							html_Leave += ' 	<td>Personal</td> '
+							html_Leave += ' 	<td>' + data[i].leaveAppliedOnDate + '</td> '
+							html_Leave += ' 	<td> '
+							html_Leave += ' 		<span class="badge badge-' + data[i].cssClass + '-light">' + data[i].leaveStatusTitle + '</span> '
+							html_Leave += ' 	</td> '
+							html_Leave += ' </tr> '
+						}
+						$('#TblBodyLeave').html(html_Leave);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+		}
+
+		function loadStaffLoanInfo() {		
+			debugger
+			var requestData = { }
+			makeAjaxRequest("/Staff/Staff_Loan_Statistics", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					var htmlLoan = ''
+					for (var i = 0; i < response.length; i++) {
+						htmlLoan += ' <tr> '
+						htmlLoan += ' 	<td class="text-center">' + response[i].SNO + '</td> '
+						htmlLoan += ' 	<td>' + response[i].LoanTypeTitle + '</td> '
+						htmlLoan += ' 	<td>' + response[i].LoanAmount.toLocaleString() + '</td> '
+						htmlLoan += ' 	<td>Total: ' + response[i].NoOfInstallments + ' | Paid: ' + response[i].LoanRepaymentInstallment + '</td> '
+						htmlLoan += ' 	<td>' + response[i].InstallmentPerMonth.toLocaleString() + '</td> '
+						htmlLoan += ' 	<td> '
+						htmlLoan += '		<div class="progress progress-md"> '
+						htmlLoan += ' 			<div class="progress-bar bg-primary" style="width: ' + response[i].LoanRepaymentPercent + '%"> ' + Math.round(response[i].LoanRepaymentPercent * 10) / 10 + '%</div> '
+						htmlLoan += '		</div>  '
+						htmlLoan += ' 	</td> '
+						htmlLoan += ' 	<td> '
+
+						if (response[i].LoanStatus == 'Approved') {
+							htmlLoan += ' 		<span class="badge badge-success-light">' + response[i].LoanStatus + '</span> '
+						}
+						else if (response[i].LoanStatus == 'Paid') {
+							htmlLoan += ' 		<span class="badge badge-info-light">' + response[i].LoanStatus + '</span> '
+						}
+						else if (response[i].LoanStatus == 'Not Paid') {
+							htmlLoan += ' 		<span class="badge badge-danger-light">' + response[i].LoanStatus + '</span> '
+						}
+						else if (response[i].LoanStatus == 'Rejected') {
+							htmlLoan += ' 		<span class="badge badge-orange-light">' + response[i].LoanStatus + '</span> '
+						}
+
+						htmlLoan += ' 	</td> '
+						htmlLoan += ' </tr> '
+					}
+					
+
+					$("#TblBodyLoan").html(htmlLoan)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+
+		function loadStaffSalaryInfo() {
+			debugger
+			var data = {}
+			var html_Salary = ''
+			$.ajax({
+				url: "/Staff/GetStaffSalaryHistory",
+				type: "GET",
+				async: false,
+				data: data,
+				success: function (data) {
+					if (data != null) {
+						debugger
+						for (var i = 0; i < data.length; i++) {
+							html_Salary += '<tr id="' + i + '">'
+							html_Salary += '<td> ' + data[i].sno + ' </td>'
+							html_Salary += '<td> ' + data[i].monthName + '-' + data[i].year + ' </td>'
+							html_Salary += '<td> ' + data[i].oV_EarningAmount.toLocaleString() + ' </td>'
+							html_Salary += '<td> ' + data[i].oV_DeductionAmount.toLocaleString() + ' </td>'
+							html_Salary += '<td> ' + data[i].oV_PayableAmount.toLocaleString() + ' </td>'
+
+							if (data[i].salaryStatusTitle == 'Generated') {
+								html_Salary += '<td> <span class="badge badge-success-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+							}
+							else if (data[i].salaryStatusTitle == 'Paid') {
+								html_Salary += '<td> <span class="badge badge-info-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+							}
+							else if (data[i].salaryStatusTitle == 'Hold') {
+								html_Salary += '<td> <span class="badge badge-danger-light"> ' + data[i].salaryStatusTitle + ' </span></td>'
+							}
+							html_Salary += '</tr>'
+							//html_Salary += ' <tr> '
+							//html_Salary += ' 	<td class="text-center">1</td> '
+							//html_Salary += ' 	<td>' + data[i].leaveTypeTitle + '</td> '
+							//html_Salary += ' 	<td class="font-weight-semibold">' + data[i].days + '</td> '
+							//html_Salary += ' 	<td>Personal</td> '
+							//html_Salary += ' 	<td>' + data[i].leaveAppliedOnDate + '</td> '
+							//html_Salary += ' 	<td> '
+							//html_Salary += ' 		<span class="badge badge-' + data[i].cssClass + '-light">' + data[i].leaveStatusTitle + '</span> '
+							//html_Salary += ' 	</td> '
+							//html_Salary += ' </tr> '
+						}
+						$('#TblBodySalary').html(html_Salary);
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+		}
+
+
+	</script>
+
+}
