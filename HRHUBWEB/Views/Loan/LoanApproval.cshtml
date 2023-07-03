@@ -133,7 +133,7 @@
             <div class="card">
                 <div class="card-header  border-0">
                     <h4 class="card-title">Loan Approval Detail</h4>
-                   
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive recent_jobs p-0 card-body">
@@ -152,37 +152,37 @@
                                     int count = 1;
                                     foreach (var item in Model.ListLoanApprovalData)
                                     {
-                                                <tr class="border-bottom">
-                                                    <td>@count</td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <div class="table_img brround bg-light me-3">
-                                                                <img src="@item.ApprovedByStaffSnap" alt="img" class="">
-                                                            </div>
-                                                            <div class="me-3 mt-0 mt-sm-2 d-block">
-                                                                <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
-                                                                <div class="clearfix"></div>
-                                                                <small class="text-muted">@item.ApprovedByDesignation</small>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                        <tr class="border-bottom">
+                                            <td>@count</td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <div class="table_img brround bg-light me-3">
+                                                        <img src="@item.ApprovedByStaffSnap" alt="img" class="">
+                                                    </div>
+                                                    <div class="me-3 mt-0 mt-sm-2 d-block">
+                                                        <h6 class="mb-0 fs-13 font-weight-semibold">@item.ApprovedByStaffName</h6>
+                                                        <div class="clearfix"></div>
+                                                        <small class="text-muted">@item.ApprovedByDesignation</small>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                                    <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LoanProcessDate</td>
-                                                    <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
+                                            <td class="text-start fs-13 text-muted"><i class="feather feather-calendar  me-2"></i>@item.LoanProcessDate</td>
+                                            <td class=" text-start mb-0 fs-13 font-weight-semibold">@item.Remarks</td>
 
-                                                    @if (item.LoanStatusId == 1) // Approve
+                                            @if (item.LoanStatusId == 1) // Approve
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-success text-white">Approved</span></td>
                                             }
                                             else if (item.LoanStatusId == 2) // Reject
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-danger text-white">Rejected</span></td>
                                             }
                                             else
                                             {
-                                                        <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
+                                                <td class="col-1 text-start"><span class="task-btn bg-warning text-white">Pending</span></td>
                                             }
-                                                </tr>
+                                        </tr>
                                         count++;
                                     }
                                 }
@@ -194,17 +194,23 @@
                     <div class="d-flex">
 
                         <div class="ms-auto">
-                            @if (ViewBag.ApprovalBtnVisibility == true && Model.LoanStatusId != 1 && Model.LoanStatusId != 2)
+                            @if (ViewBag.ApprovalBtnVisibility == true)
                             {
-                                <a onclick="showloanApprovalmodel(1)" class="btn btn-success my-1">Approve</a>
-                                <a onclick="showloanApprovalmodel(2)" class="btn btn-danger my-1">Reject</a>
-                                @if (ViewBag.ForwardBtnVisibility == true)
+                                if (Model.LoanStatusId != 1 && Model.LoanStatusId != 2)
                                 {
-                                    <a onclick="showforwardloanmodel()" class="btn btn-primary my-1">Forward</a>
+                                    <a onclick="showloanApprovalmodel(1)" class="btn btn-success my-1">Approve</a>
+                                    <a onclick="showloanApprovalmodel(2)" class="btn btn-danger my-1">Reject</a>
+                                    if (ViewBag.ForwardBtnVisibility == true)
+                                    {
+                                        <a onclick="showforwardloanmodel()" class="btn btn-primary my-1">Forward</a>
+                                    }
                                 }
+
+
                                 <a asp-action="HRLoanList" asp-controller="Loan" class="btn btn-outline-primary my-1">Close</a>
                             }
-                            else{
+                            else
+                            {
                                 <a asp-action="LoanList" asp-controller="Loan" class="btn btn-outline-primary my-1">Close</a>
                             }
 
@@ -229,18 +235,21 @@
             </div>
             <input type="hidden" id="LoanStatusID" />
             <div class="modal-body">
-                <div class="form-group" id="div_Date">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Payment Date</label>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="input-group">
-                                <input type="date" class="form-control fc-datepicker" placeholder="DD-MM-YYY" type="text">
+                @if (ViewBag.ControlVisibility == true)
+                {
+                    <div class="form-group" id="div_Date">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label mb-0 mt-2">Payment Date</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input type="date" class="form-control" id="PaymentDate" placeholder="DD-MM-YYYY">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-3">
@@ -397,7 +406,7 @@
                     $('#totalloanamount').text(totalloan.toLocaleString(undefined, { minimumFractionDigits: 2 }));
                     $('#paidamount').text(paidloan.toLocaleString(undefined, { minimumFractionDigits: 2 }));
 
-                    
+
                     // Create and render the chart with the updated options
                     var chart = new ApexCharts(document.querySelector("#leavesoverview"), options);
                     //chart.updateOptions(options);
@@ -503,8 +512,8 @@
                                 message: b.message
                             });
 
-                            var url = '@Url.Action("LoanList", "Loan")';
-                            window.location.href = url;
+                            //var url = '@Url.Action("LoanList", "Loan")';
+                            window.location.href = window.location.href;
 
                         }
                         else {
@@ -512,8 +521,8 @@
                                 message: b.message
                             });
 
-                            var url = '@Url.Action("LoanList", "Loan")';
-                            window.location.href = url;
+                            //var url = '@Url.Action("LoanList", "Loan")';
+                            window.location.href = window.location.href;
 
 
                         }
