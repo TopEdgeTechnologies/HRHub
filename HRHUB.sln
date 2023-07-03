@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRHUBAPI", "HRHUBAPI\HRHUBA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HRHUBWEB", "HRHUBWEB\HRHUBWEB.csproj", "{BC48FA60-4E5F-43C7-A7C4-1567BA8A8B79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRONBOARDING", "HRONBOARDING\HRONBOARDING.csproj", "{10DE0E69-BD0B-4340-AF66-2902DA4C648E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BC48FA60-4E5F-43C7-A7C4-1567BA8A8B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC48FA60-4E5F-43C7-A7C4-1567BA8A8B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC48FA60-4E5F-43C7-A7C4-1567BA8A8B79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10DE0E69-BD0B-4340-AF66-2902DA4C648E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10DE0E69-BD0B-4340-AF66-2902DA4C648E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10DE0E69-BD0B-4340-AF66-2902DA4C648E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10DE0E69-BD0B-4340-AF66-2902DA4C648E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

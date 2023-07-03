@@ -111,7 +111,16 @@ namespace HRHUBAPI.Models
                     }
                     else
                     {
+
+                        if (objStaffSalaryComponent.Check== "Fixed")
+                        {
+
+                        }
+
 						hrhubContext.Add(objStaffSalaryComponent);
+                        objStaffSalaryComponent.IsDeleted= false;
+                        objStaffSalaryComponent.CreatedOn= DateTime.Now;
+                        
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
                         dbContextTransaction.Commit();
@@ -131,7 +140,8 @@ namespace HRHUBAPI.Models
                     var dbResult = await hrhubContext.StaffSalaryComponents.FirstOrDefaultAsync(x => x.StaffSalaryComponentId == Id);
                     if (dbResult != null)
                     {
-                       
+                        dbResult.UpdatedOn = DateTime.Now;
+                        dbResult.UpdatedBy = UserId;
                         await hrhubContext.SaveChangesAsync();
                         dbContextTransaction.Commit();
                     }
