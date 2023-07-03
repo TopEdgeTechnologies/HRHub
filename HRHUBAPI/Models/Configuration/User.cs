@@ -89,7 +89,7 @@ namespace HRHUBAPI.Models
 								CompanyId= u.CompanyId,
 								StaffId= u.StaffId,
 								GroupId = u.GroupId,
-								UserImage = u.UserImage,
+								UserImage = staff.SnapPath,
 								CompanyName = c.CompanyName,
 								ContactPerson= c.ContactPerson,
 								Email= c.Email,
