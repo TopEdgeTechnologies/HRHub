@@ -156,6 +156,25 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
+        public async Task<VInfoStaff> GetStaffProfilebyId(int StaffID, HrhubContext hrhubContext)
+        {
+    
+            try
+            {
+                var result= await hrhubContext.VInfoStaffs.FirstOrDefaultAsync(x => x.StaffId == StaffID && x.IsDeleted == false && x.Status == true);
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+
+
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {
             DbConnection _db = new DbConnection();

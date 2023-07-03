@@ -1,0 +1,164 @@
+﻿@model HRHUBAPI.Models.VInfoStaff
+
+
+
+<div class="row">
+	<div class="col-md-12 col-lg-12">
+		<div class="card overflow-hidden border-bottom-1 border-secondary mb-5">
+			<div class="card-header border-bottom-0">
+				<div class="card-title"> Staff Information Detail
+				</div>
+			</div>
+			<div class="card-body p-4">
+				<div class="row">
+					<div class="col-md-6 border-dashed-right">
+						<div class="row">
+							<div class="col-md-4 text-center text-md-start">
+								<img src="@Model.SnapPath" class="img-fluid img-fit rounded-circle" style="width:175px; height:175px" />
+							</div>
+							<div class="col-md-8">
+								@*	<div class="profile-info text-center text-md-start mt-2 mt-md-0">
+								<h3 class="user-name fs-22 mb-2">John Doe</h3>
+								<h6 class="text-primary fs-18 mb-2">Software Department</h6>
+								<small class="text-muted fs-16 mb-1">Web Designer</small>
+								<div class="staff-id font-weight-bold fs-16 mb-2">Employee ID : FT-0001</div>
+								<div class="text-dark font-weight-bold fs-16">Offboarding Date : 1st Jan 2013</div>
+								</div>*@
+								<ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+									<li>
+										<div class="row">
+											<div class="col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Name:</div>
+											</div>
+											<div class="col-6 col-md-8">
+												<div class="text"><span>@Model.FirstName @Model.LastName</span></div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Employee Id:</div>
+											</div>
+											<div class=" col-6 col-md-8">
+												<div class="text"><span>@Model.RegistrationNo</span></div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class=" col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Job Title:</div>
+											</div>
+											<div class="col-6 col-md-8">
+												<div class="text"><span>@Model.JobTitle</span></div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Designation:</div>
+											</div>
+											<div class="col-6 col-md-8">
+												<div class="text"><span>@Model.DesignationTitle</span></div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Department:</div>
+											</div>
+											<div class="col-6 col-md-8">
+												<div class="text"><span>@Model.DepartmentTitle</span></div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="col-6 col-md-4">
+												<div class="title mb-1 font-weight-bold fs-16">Hire Date:</div>
+											</div>
+											<div class="col-6 col-md-8">
+												<div class="text"><span>@Model.JoiningDate.Value.Date.ToString("dd-MMM-yyyy")</span></div>
+											</div>
+										</div>
+									</li>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<ul class="personal-info mt-3 pt-3 mt-md-0 px-3 px-md-0 border-2 border-secondary border-md-0">
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Phone:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>@Model.ContactNumber1</span></div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Email:</div>
+									</div>
+									<div class=" col-6 col-md-9">
+										<div class="text"><span>@Model.Email</span></div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="row">
+									<div class=" col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Address:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>@Model.PresentAddress</span></div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">CNIC</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>@Model.NationalIdnumber</span></div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">DOB:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>@Model.Dob.Value.Date.ToString("dd-MMM-yyyy")</span></div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="row">
+									<div class="col-6 col-md-3">
+										<div class="title mb-1 font-weight-bold fs-16">Material:</div>
+									</div>
+									<div class="col-6 col-md-9">
+										<div class="text"><span>@Model.MaterialStatus</span></div>
+									</div>
+								</div>
+							</li>
+
+						</ul>
+					</div>
+
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
