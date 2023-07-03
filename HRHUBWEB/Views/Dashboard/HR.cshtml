@@ -2,6 +2,8 @@
     ViewData["Title"] = "HR Dashboard";
 }
 
+
+
 <link href="~/assets/css/animated.css" rel="stylesheet">
 <div class="modal fade" id="ModelNotice">
     <div class="modal-dialog" role="document">
@@ -34,6 +36,86 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal fade" id="ModelAttendance">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendanceTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card-options">
+
+
+
+                    <div class="form-group">
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div><input id="dateModel" name="dateModel" class="form-control fc-datepicker" type="text">
+                        </div>
+                    </div>
+
+
+@*
+                    <div class="btn-list d-flex">
+
+                        <div class="input-group">
+                           
+                            <input id="dateModel" name="dateModel" class="form-control fc-datepicker" type="text">
+                        </div>
+                    </div>
+*@
+                </div>
+
+                <div class="row row-sm mt-4">
+                    <div class="col-xl-12 col-lg-12 col-md-12">
+                    
+                          
+                          
+                                <div class="table-responsive">
+                            <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="tableAttendanceModal">
+                                        <thead>
+                                            <tr>
+                                                @*<th class="text-center">Sr.#</th>*@
+                                                <th class="text-start">Employee</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center">CheckIn</th>
+                                                <th class="text-center">CheckOut</th>
+                                                 
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbodyAttendanceModel">
+                                        </tbody>
+                                    </table>
+                                </div>
+                   
+                    
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+
+                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 
 <div class="modal fade" id="ModelEvent">
@@ -150,7 +232,8 @@
                                 <div class="mt-0 text-start">
                                     <span class="fs-14 font-weight-semibold">Total Present</span>
                                     <h3 class="mb-0 mt-1 mb-2" id="TotalPresent">0</h3>
-                                        <a href="/Dashboard/HRAttendance?status=Present">
+                                    <input type="hidden" id="attendanceStatus" /> 
+                                        <a  onclick="showAttendanceModel('Present')" href="#" @*href="/Dashboard/HRAttendance?status=Present"*@>
                                     <span class="text-muted">
                                         <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
                                         View All
@@ -174,7 +257,7 @@
                                     <span class="fs-14 font-weight-semibold">Total Absent</span>
                                     <h3 class="mb-0 mt-1  mb-2" id="TotalAbsent"></h3>
                                 </div>
-                                  <a href="/Dashboard/HRAttendance?status=Absent">
+                                <a onclick="showAttendanceModel('Absent')" href="#">
                                 <span class="text-muted">
                                     <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
                                     View All
@@ -345,7 +428,7 @@
     <div class="col-xl-6 col-lg-12 col-md-12">
         <div class="card">
             <div class="card-header border-bottom-0">
-                <h3 class="card-title">Recent Job Application</h3>
+                <h3 class="card-title">Recent Application</h3>
           
 
 
@@ -353,11 +436,11 @@
                     <div class="form-group">
 
                         <div class="input-group">
-                            <div class="input-group-prepend">
+                            @*<div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="feather feather-calendar"></i>
                                 </div>
-                            </div><input id="leavedate" class="form-control fc-datepicker " type="text">
+                            </div><input id="leavedate" class="form-control fc-datepicker " type="text">*@
                         </div>
                     </div>
 
@@ -368,17 +451,37 @@
                 <div class="tabs-menu1">
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
-                        <li class="ms-sm-4"><a class="active" href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
+                        <li><a class="active" href="#tab7" data-bs-toggle="tab">Hired Candidates</a></li>
+                        <li class="ms-sm-4"><a  href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
                         <li><a href="#tab6" data-bs-toggle="tab">Loan Request</a></li>
-                        <li><a href="#tab7" data-bs-toggle="tab">Hired Candidates</a></li>
                     </ul>
                 </div>
             </div>
             <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tab5">
+                    <div class="tab-pane  active " id="tab7">
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 485px;">
+                            <table class="table  card-table  table-sm text-nowrap">
+
+                                <thead>
+                                    <tr>
+
+                                        <th class="text-start">Employee</th>
+                                        <th>Applied On</th>
+                                        <th class="text-center">Action</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody id="candidatebody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab5">
                         
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 450px;">
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 485px;">
                            
 
                             <table class="table  card-table  table-sm text-nowrap" id="tableLeaves">
@@ -397,7 +500,7 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="tab6">
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body"  style="height: 450px;">
+                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 485px;">
                             <table class="table  card-table  table-sm text-nowrap">
                                 <thead>
                                     <tr>
@@ -416,26 +519,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="tab-pane " id="tab7">
-                        <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 450px;">
-                            <table class="table  card-table  table-sm text-nowrap">
-
-                                <thead>
-                                    <tr>
-
-                                        <th class="text-start">Employee</th>
-                                        <th>Applied On</th>
-                                        <th class="text-center">Action</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody id="candidatebody" >
-                           
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                 
                 </div>
             </div>
         </div>
@@ -484,9 +568,13 @@
 @section scripts{
 
     <script>
+     
+
 
         $(document).ready(function () {
 
+         
+ 
             $('#sumaryYear').select2();
             $('#sumaryMonth').select2();
 
@@ -498,21 +586,14 @@
 
 
             var currentDate = new Date(); // Get the current date
-            $('#fromdate').datepicker({
-                dateFormat: 'dd M yy',
-                autoHide: true
-
-            });
-
-            //$('#leavedate').datepicker({
-            //    dateFormat: 'dd M yy',
-            //    autoHide: true
-
-            //});
-
+          
 
             $('#fromdate').datepicker('setDate', currentDate);
             $('#leavedate').val('@DateTime.Now.ToString("dd-MM-yyyy")');
+            $('#dateModel').datepicker('setDate', currentDate);
+            
+  
+
 
 
 
@@ -549,8 +630,13 @@
 
             });
 
+            $('#dateModel').change(function () {
+          showAttendanceModel(  $("#attendanceStatus").val());
+
+            });
 
 
+        
         });
 
         function CheckAtendence() {
@@ -1143,6 +1229,65 @@
 
         }
 
+        
+
+
+        function showAttendanceModel(status) {
+            debugger
+
+            $("#attendanceStatus").val(status)
+         
+            $("#attendanceTitle").text("Attendance "+status)
+            
+               $("#ModelAttendance").modal('show');
+            var requestData = { date: $("#dateModel").val(), attendanceStatus: status };
+            makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
+
+                if (response != null) {
+                    debugger
+
+                    console.log(response)
+
+
+
+                    var table = $('#tableAttendanceModal').DataTable();
+                        table.clear();
+                        table.draw();
+
+                        
+                        for (var i = 0; i < response.length; i++) {
+                        var rows = [];
+                          var htmt ='<div class="d-flex">'
+                            htmt +='<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '">'
+                            htmt +='<div class="me-3 mt-0 mt-sm-1 d-block">'
+                            htmt +='<h6 class="mb-1 fs-14">' + response[i]["EmployeeName"] + '</h6>'
+                            htmt +='<p class="text-muted mb-0 fs-12">' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + '</p>'
+                            htmt +='</div>'
+                            htmt +='</div>'
+
+
+                        rows.push([htmt, '<span class="badge ' + response[i]["CssClass"].replace('badge', 'bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span>', response[i]["FirstPunchIN"], response[i]["LastPunchOut"]]);
+                       
+                        table.rows.add(rows);
+                        table.draw();
+                      
+                
+                        }
+
+                      
+
+
+      
+
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus);
+            });
+
+
+
+
+        }
 
     </script>
 

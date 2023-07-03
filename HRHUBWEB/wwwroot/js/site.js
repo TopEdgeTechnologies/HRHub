@@ -98,8 +98,19 @@ $('.number').keypress(function (event) {
 //________ Datepicker
 $(".fc-datepicker").datepicker({
     dateFormat: "dd-M-yy",
-    monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]
+    monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+   
+     beforeShow: function (input, inst) {
+        inst.dpDiv.css({
+            'zIndex': '999998 !important'
+          
+        });
+    }
+   /// zIndex: '999998 !important' 
+
 });
+
+
 
 //________ Countdonwtimer
 $("#clocktimer").countdowntimer({
