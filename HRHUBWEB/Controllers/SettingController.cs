@@ -439,7 +439,9 @@ namespace HRHUBWEB.Controllers
 
 
             var listTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailDynamicVariable>>($"api/Setting/GetEmailDynamicVariableList", HttpMethod.Get);
-            
+
+
+         
             ViewBag.VaribleTypes = listTypes.Select(x=>x.Type).Distinct().ToList();
 
 
@@ -459,13 +461,10 @@ namespace HRHUBWEB.Controllers
             return Json(distnictdta);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> SaveNotificationSetting(EmailNotificationSetting obj)
         {
             obj.CompanyId = _user.CompanyId;
-
-
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmailNotificationSetting", HttpMethod.Post);
             return Json(result);
         }
@@ -475,11 +474,24 @@ namespace HRHUBWEB.Controllers
 
         #region Email Template 
 
+
+      
+
+
         public async Task<IActionResult> EmailTemplateDetails(int Id)
         {
             var result = await _APIHelper.CallApiAsyncGet<EmailTemplate>($"api/Setting/EmailTemplateById{Id}", HttpMethod.Get);
             return Json(result);
 
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> LoadDynmicVariable(string Type)
+        {
+            var listTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<EmailDynamicVariable>>($"api/Setting/GetEmailDynamicVariableList", HttpMethod.Get);
+
+            var VaribleTypes = listTypes.Where(z=>z.Type== Type).Select(x => x.Type).Distinct().ToList();
+            return Json(VaribleTypes);
 
         }
         [HttpPost]
