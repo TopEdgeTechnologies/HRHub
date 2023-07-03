@@ -83,6 +83,7 @@ namespace HRHUBWEB.Controllers
         }
 
         #region Attendance Settings
+        [CustomAuthorization]
         public async Task<IActionResult> AttendanceSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -200,6 +201,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region Leave Settings
+        [CustomAuthorization]
         public async Task<IActionResult> LeaveSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -294,7 +296,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region Payroll Settings
-
+        [CustomAuthorization]
         public async Task<IActionResult> PayrollSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -424,7 +426,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region General Type Settings
-
+        [CustomAuthorization]
         public async Task<IActionResult> GeneralTypeSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -548,6 +550,35 @@ namespace HRHUBWEB.Controllers
             return Json(result);
 
         }
+
+        #endregion
+
+        #region SMTPSetting
+        [CustomAuthorization]
+        public async Task<IActionResult> SMTPSettings(string data = "")
+        {
+            ViewBag.Success = data;
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            Company Obj = new Company();
+            Obj = await _APIHelper.CallApiAsyncGet<Company>($"api/Company/GetCompanyInfoId{_user.CompanyId}", HttpMethod.Get);
+
+            return View(Obj);
+        }
+
+        public async Task<IActionResult> SaveSMTPSetting(Company obj)
+        {
+            obj.UserId = _user.UserId.ToString();
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostSMTPSetting", HttpMethod.Post);
+            return Json(result);
+
+        }
+
 
         #endregion
 
