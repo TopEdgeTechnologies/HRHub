@@ -34,7 +34,6 @@ namespace HRONBOARDING.Controllers
         public async Task<IActionResult> OnBoard(Company ObjCompany)
         {
 
-           
             var result = await _APIHelper.CallApiAsyncPost<Response>(ObjCompany, "api/Company/CompanyAddOrUpdate", HttpMethod.Post);
             ObjCompany.LogoAttachment = "~/Images/CompanyLogo.png";
 
@@ -50,6 +49,7 @@ namespace HRONBOARDING.Controllers
 
 
         // check duplicate company name
+        [HttpGet]
         public async Task<ActionResult<JsonObject>> CompanyNameCheckData(int id, string companyName)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Company/CompanyNameCheck{id}/{companyName}", HttpMethod.Get);
@@ -57,6 +57,22 @@ namespace HRONBOARDING.Controllers
 
 
         }
+
+
+
+
+
+        // check duplicate company name
+        [HttpGet]
+        public async Task<ActionResult<JsonObject>> UserCheckData(int id, string username)
+        {
+
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/User/UserCheckData{id}/{username}", HttpMethod.Get);
+            return Json(result);
+
+        }
+
+
 
 
 
