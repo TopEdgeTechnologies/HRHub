@@ -16,112 +16,127 @@
 
             @using (@Html.BeginForm("OnBoard", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
             {
-                   
-                        <div id="form-step1">
-                            <div class="form-group mt-5">
-                                <label for="companyName" class="form-label fw-bold text-capitalize">
-                                    Type your
-                                    Organization name <span id="alreadyexistid" class="text-danger"></span>
-                                </label>
-                                <div class="position-relative">
-
-                                    <input asp-for="CompanyName" type="text" class="form-control shadow-sm" placeholder="enter your organization name" required autocomplete="off">
-
-
-                                    @*<input type="text" class="form-control shadow-sm" id="companyName"
-                                           placeholder="Top Edge Technologies">*@
-                                    <button class="indicator">
-                                        <i class="success-icon fa fa-check fw-bold"></i>
-                                    </button>
-                                </div>
-                                <span class="d-block mt-2 validation-message"></span>
-                            </div>
-                        </div>
-                        <div id="form-step2" class="d-none">
-                            <div class="form-group mt-5">
-                                <label for="companyWebsite" class="form-label fw-bold text-capitalize">
-                                    Type your
-                                    Full name
-                                </label>
-
-                                <input asp-for="ContactPerson" type="text" class="form-control shadow-sm" placeholder="enter your full name" required>
 
 
 
-
-                                @*<input type="url" class="form-control shadow-sm" id="companyWebsite"
-                                       placeholder="www.topedgeTechnologies.com">*@
-                            </div>
-                        </div>
-
-                        <div id="form-step3" class="d-none">
-                            <span class="d-block fw-bold fs-4 mb-3 text-dark">
-                                Finally, please enter your name and email address to try your branded staff
-                                portal.
-                            </span>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-
-                                    <input asp-for="StaffDepartment" type="text" class="form-control mb-3 mb-md-0 shadow-sm" placeholder="enter your department" required>
-
-
-
-                                    @*<input type="text" class="form-control mb-3 mb-md-0 shadow-sm"
-                                           id="firstStaffName" placeholder="First Name">*@
-                                </div>
-                                <div class="col-md-6">
-
-
-                                    <input asp-for="StaffDesignation" type="text" class="form-control mb-3 mb-md-0 shadow-sm" placeholder="enter your designation" required>
-
-
-                                   @* <input type="text" class="form-control shadow-sm" id="lastStaffName"
-                                           placeholder="Last Name">*@
-                                </div>
-                            </div>
-                            <div class="row">
-                                <input asp-for="Username" type="hidden" class="form-control" placeholder="enter your email address">
-                                <div class="col-md-6">
-                                    <input asp-for="StaffEmail" type="email" class="form-control" placeholder="enter your email address" required>
+                
+                                <div id="form-step1">
+                                    <div class="form-group mt-5">
+                                        <label for="companyName" class="form-label fw-bold text-capitalize">Type your
+                                            company name</label>
+                                        <div class="position-relative">
+                                            <input type="text" class="form-control shadow-sm" id="companyName"
+                                                placeholder="Company Name">
+                                            <button class="indicator">
+                                                <i class="success-icon fa fa-check fw-bold"></i>
+                                            </button>
+                                        </div>
+                                        <span class="d-block mt-2 validation-message"></span>
                                     </div>
-                                <div class="col-md-6">
-                                    <input asp-for="UserPassword" type="password" class="form-control" placeholder="enter your password" required>
+                                </div>
+                                <!-- <div id="form-step2" class="d-none">
+                                    <div class="form-group mt-5">
+                                        <label for="companyWebsite" class="form-label fw-bold text-capitalize">What's
+                                            the URL for your Website</label>
+                                        <input type="url" class="form-control shadow-sm" id="companyWebsite"
+                                            placeholder="www.topedgeTechnologies.com">
                                     </div>
-                                    
-                                
-                             </div>
-                           @* <div class="form-group mt-5">
-                                <input type="email" class="form-control shadow-sm" id="staffEmail"
-                                       placeholder="Email">
-                            </div>*@
+                                </div> -->
 
-                        </div>
-                        <div class="d-flex mt-3 justify-content-between">
-                            <div class="animated-img fw-bold mt-3 text-dark">
-                                <!-- <img src="/images/arrow-indication.png" alt="">
-                                Try Me -->
-                                <svg width="199" height="104" viewBox="0 0 199 104" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M118.962 40.7678L111.475 40.7294L111.377 60.0931L107.487 60.0732L107.586 40.7095L100.131 40.6713L100.15 37L118.981 37.0965L118.962 40.7678ZM127.878 44.2574L127.858 48.0912C127.437 48.024 127.016 47.9894 126.627 47.9874C123.71 47.9724 122.372 49.6551 122.357 52.6116L122.319 60.1491L118.559 60.1299L118.64 44.3076L122.302 44.3263L122.289 46.8605C123.044 45.1424 124.799 44.1442 126.873 44.1548C127.327 44.1571 127.716 44.2241 127.878 44.2574ZM135.866 66.6191L131.847 66.5985L135.681 58.3332L129.01 44.3607L133.256 44.3824L137.743 54.4124L142.04 44.4274L146.026 44.4479L135.866 66.6191ZM159.382 60.339L155.655 60.3199L155.736 44.4976L159.333 44.516L159.323 46.5304C160.239 44.9106 162.22 44.076 164.003 44.0851C166.077 44.0957 167.888 45.0472 168.721 46.9034C169.963 44.8304 171.814 44.1251 173.856 44.1356C176.708 44.1502 179.422 45.9835 179.4 50.1747L179.348 60.4413L175.718 60.4227L175.767 50.7734C175.777 48.9215 174.844 47.5196 172.737 47.5088C170.76 47.4987 169.455 49.0515 169.446 51.0009L169.398 60.3903L165.703 60.3714L165.752 50.7221C165.761 48.9027 164.861 47.4685 162.722 47.4575C160.712 47.4472 159.441 48.9353 159.43 50.9496L159.382 60.339ZM186.759 50.8297L194.505 50.8694C194.45 49.0171 193.226 47.3539 190.634 47.3406C188.268 47.3285 186.897 49.1409 186.759 50.8297ZM194.905 54.9977L198.077 56.0211C197.22 58.7784 194.713 61.0074 190.92 60.988C186.642 60.966 182.866 57.8276 182.893 52.4669C182.919 47.4635 186.631 44.1685 190.617 44.189C195.479 44.2139 198.315 47.4449 198.289 52.4483C198.286 53.0656 198.219 53.5851 198.186 53.6499L186.647 53.5908C186.732 55.9955 188.603 57.7271 190.937 57.739C193.206 57.7506 194.379 56.5545 194.905 54.9977Z"
-                                          fill="black" />
-                                    <path d="M135.423 80.8378C119.804 92.1984 101.203 92.6279 87.4554 84.5605C80.8401 80.6783 75.2722 75.1458 70.7485 68.6421C66.131 62.0029 61.4714 53.7884 60.924 44.6045C60.542 38.1986 63.5864 27.0309 71.2623 26.7918C78.0158 26.5818 84.0331 34.0532 84.0132 41.359C83.9905 49.5409 77.1203 56.5805 70.2894 59.0436C62.1386 61.9836 53.4932 60.1041 46.4988 57.2327C31.1892 50.9482 19.9728 36.2111 17.0143 17.7835C16.732 16.0262 19.2512 14.6962 19.5526 16.4713C21.816 29.7979 28.234 41.0225 37.6912 48.4693C42.5114 52.2644 48.1104 55.0247 54.1509 56.4406C61.07 58.0623 69.814 58.6468 76.5078 52.3254C83.8952 45.3488 82.0945 35.8975 76.012 31.4716C72.4594 28.8873 68.0643 28.5783 65.1497 34.1806C62.7832 38.7285 63.0124 44.0745 64.0254 48.3552C67.2689 62.0727 76.774 74.3759 87.3167 81.2127C100.537 89.7861 118.88 90.4624 134.54 79.3817C135.544 78.6711 136.438 80.0999 135.423 80.8378Z"
-                                          fill="black" />
-                                    <path d="M30.8092 30.9272C25.5618 23.0107 20.3547 15.0542 15.0141 7.22182C15.9322 6.89453 16.8492 6.56601 17.7677 6.23779C16.07 11.2654 14.409 16.2828 13.0218 21.3705C11.745 26.0511 11.1445 31.1511 9.29407 35.6888C8.70859 37.1224 6.85565 36.8512 6.85354 35.4863C6.84308 30.7053 8.75377 25.214 10.1093 20.4342C11.527 15.4355 13.1259 10.4504 15.0066 5.55347C15.4901 4.29529 17.0781 4.1102 17.6098 4.99665C22.5283 13.1947 27.5861 21.2758 32.6002 29.3917C33.2932 30.5131 31.5286 32.0121 30.8092 30.9272Z"
-                                          fill="black" />
-                                </svg>
-                            </div>
-                            <button  type="button" class="btn btn-primary mt-4 mb-0 fw-bold" id="next-btn">
-                                Next <i class="ms-2 fa fa-arrow-right" aria-label="fa fa-arrow-right"></i>
-                            </button>
-                            <button class="btn btn-primary d-none mt-4 mb-0 fw-bold"
-                                    id="create-portal-btn">
-                                Create my staff portal
-                            </button>
+                                <div id="form-step2" class="d-none">
+                                    <span class="d-block fw-bold fs-4 mb-3 text-dark">
+                                        Finally, please enter your name and email address to try your branded staff
+                                        portal.
+                                    </span>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control mb-3 mb-md-0 shadow-sm"
+                                                        id="staffName" name="staffName" placeholder="Full Name">
+                                                    <button class="indicator">
+                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                                    </button>
+                                                </div>
+                                                <span class="d-block mt-2 validation-message"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control shadow-sm"
+                                                        id="staffDepartment" name="staffDepartment"
+                                                        placeholder="Department">
+                                                    <button class="indicator">
+                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                                    </button>
+                                                </div>
+                                                <span class="d-block mt-2 validation-message"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control shadow-sm"
+                                                        id="staffDesignation" name="staffDesignation"
+                                                        placeholder="Designation">
+                                                    <button class="indicator">
+                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                                    </button>
+                                                </div>
+                                                <span class="d-block mt-2 validation-message"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <div class="position-relative">
+                                                    <input type="email" class="form-control shadow-sm" id="staffEmail"
+                                                    name="staffEmail" placeholder="Email">
+                                                    <button class="indicator">
+                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                                    </button>
+                                                </div>
+                                                <span class="d-block mt-2 validation-message"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <div class="position-relative">
+                                                    <input type="password" class="form-control shadow-sm"
+                                                        id="staffPassword" name="staffPassword" placeholder="Password">
+                                                    <button class="indicator">
+                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                                    </button>
+                                                </div>
+                                                <span class="d-block mt-2 validation-message"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-3 justify-content-between">
+                                    <div class="animated-img fw-bold mt-3 text-dark">
+                                        <!-- <img src="/images/arrow-indication.png" alt="">
+                                        Try Me -->
+                                        <svg width="199" height="104" viewBox="0 0 199 104" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M118.962 40.7678L111.475 40.7294L111.377 60.0931L107.487 60.0732L107.586 40.7095L100.131 40.6713L100.15 37L118.981 37.0965L118.962 40.7678ZM127.878 44.2574L127.858 48.0912C127.437 48.024 127.016 47.9894 126.627 47.9874C123.71 47.9724 122.372 49.6551 122.357 52.6116L122.319 60.1491L118.559 60.1299L118.64 44.3076L122.302 44.3263L122.289 46.8605C123.044 45.1424 124.799 44.1442 126.873 44.1548C127.327 44.1571 127.716 44.2241 127.878 44.2574ZM135.866 66.6191L131.847 66.5985L135.681 58.3332L129.01 44.3607L133.256 44.3824L137.743 54.4124L142.04 44.4274L146.026 44.4479L135.866 66.6191ZM159.382 60.339L155.655 60.3199L155.736 44.4976L159.333 44.516L159.323 46.5304C160.239 44.9106 162.22 44.076 164.003 44.0851C166.077 44.0957 167.888 45.0472 168.721 46.9034C169.963 44.8304 171.814 44.1251 173.856 44.1356C176.708 44.1502 179.422 45.9835 179.4 50.1747L179.348 60.4413L175.718 60.4227L175.767 50.7734C175.777 48.9215 174.844 47.5196 172.737 47.5088C170.76 47.4987 169.455 49.0515 169.446 51.0009L169.398 60.3903L165.703 60.3714L165.752 50.7221C165.761 48.9027 164.861 47.4685 162.722 47.4575C160.712 47.4472 159.441 48.9353 159.43 50.9496L159.382 60.339ZM186.759 50.8297L194.505 50.8694C194.45 49.0171 193.226 47.3539 190.634 47.3406C188.268 47.3285 186.897 49.1409 186.759 50.8297ZM194.905 54.9977L198.077 56.0211C197.22 58.7784 194.713 61.0074 190.92 60.988C186.642 60.966 182.866 57.8276 182.893 52.4669C182.919 47.4635 186.631 44.1685 190.617 44.189C195.479 44.2139 198.315 47.4449 198.289 52.4483C198.286 53.0656 198.219 53.5851 198.186 53.6499L186.647 53.5908C186.732 55.9955 188.603 57.7271 190.937 57.739C193.206 57.7506 194.379 56.5545 194.905 54.9977Z"
+                                                fill="black" />
+                                            <path
+                                                d="M135.423 80.8378C119.804 92.1984 101.203 92.6279 87.4554 84.5605C80.8401 80.6783 75.2722 75.1458 70.7485 68.6421C66.131 62.0029 61.4714 53.7884 60.924 44.6045C60.542 38.1986 63.5864 27.0309 71.2623 26.7918C78.0158 26.5818 84.0331 34.0532 84.0132 41.359C83.9905 49.5409 77.1203 56.5805 70.2894 59.0436C62.1386 61.9836 53.4932 60.1041 46.4988 57.2327C31.1892 50.9482 19.9728 36.2111 17.0143 17.7835C16.732 16.0262 19.2512 14.6962 19.5526 16.4713C21.816 29.7979 28.234 41.0225 37.6912 48.4693C42.5114 52.2644 48.1104 55.0247 54.1509 56.4406C61.07 58.0623 69.814 58.6468 76.5078 52.3254C83.8952 45.3488 82.0945 35.8975 76.012 31.4716C72.4594 28.8873 68.0643 28.5783 65.1497 34.1806C62.7832 38.7285 63.0124 44.0745 64.0254 48.3552C67.2689 62.0727 76.774 74.3759 87.3167 81.2127C100.537 89.7861 118.88 90.4624 134.54 79.3817C135.544 78.6711 136.438 80.0999 135.423 80.8378Z"
+                                                fill="black" />
+                                            <path
+                                                d="M30.8092 30.9272C25.5618 23.0107 20.3547 15.0542 15.0141 7.22182C15.9322 6.89453 16.8492 6.56601 17.7677 6.23779C16.07 11.2654 14.409 16.2828 13.0218 21.3705C11.745 26.0511 11.1445 31.1511 9.29407 35.6888C8.70859 37.1224 6.85565 36.8512 6.85354 35.4863C6.84308 30.7053 8.75377 25.214 10.1093 20.4342C11.527 15.4355 13.1259 10.4504 15.0066 5.55347C15.4901 4.29529 17.0781 4.1102 17.6098 4.99665C22.5283 13.1947 27.5861 21.2758 32.6002 29.3917C33.2932 30.5131 31.5286 32.0121 30.8092 30.9272Z"
+                                                fill="black" />
+                                        </svg>
+                                    </div>
+                                    <button class="btn btn-primary mt-4 mb-0 fw-bold" id="next-btn">Next <i
+                                            class="ms-2 fa fa-arrow-right" aria-label="fa fa-arrow-right"></i></button>
+                                    <button type="button" class="btn btn-primary d-none mt-4 mb-0 fw-bold"
+                                        id="createAccountBtn">Create Account</button>
+                                </div>
 
-                        </div>
-
-                   
+                       
                 
              }   
                 
