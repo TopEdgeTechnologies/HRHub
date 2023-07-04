@@ -26,46 +26,30 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<ComponentInfo>? ComponentInfoList { get; set; }
 
-
         public async Task<List<ComponentInfo>> GetBenefitInfo(int CompanyId, HrhubContext hrhubContext)
         {
-           
-                try
-                {
+            try
+            {
+                List<ComponentInfo> list = new List<ComponentInfo>();
 
-                    List<ComponentInfo> list = new List<ComponentInfo>();
+                string query = "EXEC dbo.sp_Benefit_Count_Staff " + CompanyId + "  ";
+                DataTable dt = _db.ReturnDataTable(query);
 
-                    string query = "EXEC dbo.sp_Benefit_Count_Staff " + CompanyId + "  ";
-                    DataTable dt = _db.ReturnDataTable(query);
-
-                    list = dt.AsEnumerable()
-                        .Select(row => new ComponentInfo
-                        {
-
-
-                            ComponentId = Convert.ToInt32(row["ComponentID"]),                           
-                            Title = row["Title"].ToString(),
-                            Status= Convert.ToBoolean(row["Status"]),
-                            StaffCount = Convert.ToInt32(row["StaffCount"])
-                           
-
-                        }).OrderByDescending(x => x.ComponentId).ToList();
-                    return list;
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    throw;
-
-                }
-
+                list = dt.AsEnumerable()
+                    .Select(row => new ComponentInfo
+                    {
+                        ComponentId = Convert.ToInt32(row["ComponentID"]),                           
+                        Title = row["Title"].ToString(),
+                        Status= Convert.ToBoolean(row["Status"]),
+                        StaffCount = Convert.ToInt32(row["StaffCount"])
+                    }).OrderByDescending(x => x.ComponentId).ToList();
+                return list;
             }
-
-       
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         public async Task<ComponentInfo> GetBenefitInfoById(int Id, HrhubContext hrhubContext)
         {
@@ -175,8 +159,6 @@ namespace HRHUBAPI.Models
             catch (Exception e) { throw; }
         }
 
-
-
         #region Component in Setting
 
         public async Task<List<ComponentInfo>> GetComponentsInfo(int CompanyId, HrhubContext hrhubContext)
@@ -256,11 +238,6 @@ namespace HRHUBAPI.Models
         }
 
         #endregion
-
-
-
-
-
 
     }
 }

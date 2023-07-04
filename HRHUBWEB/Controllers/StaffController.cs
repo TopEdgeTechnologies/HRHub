@@ -352,10 +352,30 @@ namespace HRHUBWEB.Controllers
 			return null;
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> Staff_Activity(DateTime currentDate)
+		{
+			string procrdure = "BI.GetStaff_Activity";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId, "'" + currentDate.ToString("yyyy-MMM-dd") + "'" };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> Staff_Performance(int currentYear)
+		{
+			string procrdure = "BI.GetStaff_Performance";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId, currentYear };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
+
 		#endregion
 
 		#region Staff Contract
-
 
 		// staff Contract By Waheed
 		[CustomAuthorization]
@@ -384,7 +404,6 @@ namespace HRHUBWEB.Controllers
 
 			return View(ObjStaffContract);
 		}
-
 
 		public async Task<IActionResult> GetContractById(int id)
 		{
@@ -436,11 +455,6 @@ namespace HRHUBWEB.Controllers
 			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffContractAlreadyExists{id}/{EndDate.ToString("dd-MMM-yyyy")}/{StaffId}", HttpMethod.Get);
 			return Json(result);
 		}
-
-
-
-
-
 
 		#endregion
 

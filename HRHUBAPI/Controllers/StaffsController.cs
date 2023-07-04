@@ -154,18 +154,22 @@ namespace HRHUBAPI.Controllers
 		}
 
 
+        [HttpGet("GetStaffProfilebyId{StaffId}")]
+        public async Task<ActionResult<VInfoStaff>> GetStaffProfilebyId( int StaffId)
+        {
+            return await new Staff().GetStaffProfilebyId( StaffId, _context);
+        }
 
 
 
-
-		#endregion
-
-
-		#region Staff Contract
+        #endregion
 
 
-		// Load all contract Staff List
-		[HttpGet("ListStaffAllContract{CompanyId}")]
+        #region Staff Contract
+
+
+        // Load all contract Staff List
+        [HttpGet("ListStaffAllContract{CompanyId}")]
 		public async Task<ActionResult<List<StaffContract>>> ListStaffAllContract(int CompanyId)
 		{
 			return await new StaffContract().GetStaffAllContract(CompanyId, _context);

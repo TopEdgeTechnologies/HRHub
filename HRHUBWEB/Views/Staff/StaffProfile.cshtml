@@ -5,6 +5,7 @@
 	ViewData["Title"] = "StaffProfile";
 }
 
+
 <style>
 	.child-center {
 		display: flex;
@@ -16,53 +17,95 @@
 		border-radius: 16px;
 		height: 0.6rem;
 	}
+
+	.stats-chart {
+		transition: 0.4s;
+		cursor: pointer;
+	}
+
+	.stats-chart-active {
+		background: #fff;
+		padding: 10px 5px;
+		border-radius: 21px;
+		box-shadow: 0px 0px 14px -7px;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.stats-chart-active #chart-circle-primary-title {
+		border-bottom: 3px solid #3366ff;
+	}
+
+	.stats-chart-active #chart-circle-success-title {
+		border-bottom: 3px solid #0dcd94;
+	}
+
+	.stats-chart-inactive {
+		opacity: 0.7;
+	}
+
+	.dark-mode .stats-chart-active {
+		background: #262b5a;
+		box-shadow: 0px 0px 12px -7px;
+	}
+
+	
+
 </style>
+
 @*  Employe Profile View
 *@
 <div class="row">
 	<div class="col-md-12 col-lg-4 col-xl-3">
 		@*Employe profile card*@
-		<div class="card overflow-hidden" style="height:527px;">
+		<div class="card overflow-hidden" @*style="height:527px;"*@>
 			<div class="card-body">
 				<div class="card-header p-0 border-0">
 					<div class="card-title">
 					</div>
 				</div>
-				<div class="user-pic text-center">
-					<img class="rounded-circle img-fluid" alt="avatar" src="~/assets/images/users/profile-img.webp" style=" width:150px">
-					</img>
-					<div class="pro-user mt-3">
+				<div class="user-pic d-flex flex-column align-items-center justify-content-center">
+					<img class="rounded-circle img-fluid" alt="avatar" src="~/assets/images/users/staff-pic.jpg" style="width: 126px;height: 126px;object-fit: cover;">
+
+					<div class="pro-user mt-3 text-center">
 						<h5 class="pro-user-username text-dark mb-2 fs-20">Muhammad Saqib</h5>
 						<p class="pro-user-desc text-muted mb-1 fs-16">Frontend Developer</p>
-						<p class="text-muted mb-3 fs-20">Software Department</p>
-						<div class="social social-profile-buttons mt-3 mb-2">
-							<ul class="mb-0">
-								<li>
-									<a class="social-icon d-flex child-center" href=""><i class="fa fa-facebook" style="color: #3b5998;"></i></a>
-								</li>
-								<li>
-									<a class="social-icon d-flex child-center" href=""><i class="fa fa-twitter" style="color: #55acee;"></i></a>
-								</li>
+						<p class="text-muted mb-1 fs-20">Software Department</p>
+						<table class="table mb-0 mt-2">
+							<tbody>
+								<tr>
+									<td class="py-2 pe-2 fs-14">
+										<span class="font-weight-semibold">Reg No:</span>
+									</td>
+									<td class="py-2 fs-14 ps-2">4015</td>
+								</tr>
+								<tr>
+									<td class="py-2 fs-14 pe-2">
+										<span class="font-weight-semibold">Address</span>
+									</td>
+									<td class="py-2 fs-14 ps-2">London,UK</td>
+								</tr>
+								<tr>
+									<td class="py-2 fs-14 pe-2">
+										<span class="font-weight-semibold">Phone </span>
+									</td>
+									<td class="py-2 fs-14 ps-2">English, German</td>
+								</tr>
+								<tr>
+									<td class="py-2 fs-14 pe-2">
+										<span class="font-weight-semibold">CNIC</span>
+									</td>
+									<td class="py-2 fs-14 ps-2">3456789023111</td>
+								</tr>
+								<tr>
+									<td class="py-2 fs-14 pe-2">
+										<span class="font-weight-semibold">DOB</span>
+									</td>
+									<td class="py-2 fs-14 ps-2">05 Dec, 2001</td>
+								</tr>
 
-								<li>
-									<a class="social-icon d-flex child-center" href=""><i class="fa fa-linkedin" style="color:#0A66C2;"></i></a>
-								</li>
-								<li>
-									<a class="social-icon d-flex child-center text-danger" href=""><i class="fa fa-google-plus"></i></a>
-								</li>
-							</ul>
-						</div>
-						<div class="mb-3 clearfix">
-							<span class="fa fa-star text-warning"></span>
-							<span class="fa fa-star text-warning"></span>
-							<span class="fa fa-star text-warning"></span>
-							<span class="fa fa-star-half-o text-warning"></span>
-							<span class="fa fa-star-o text-warning"></span>
-						</div>
-						<div class="btn-list">
-							<a href="profile-1.html" class="btn btn-primary mt-3">Edit Profile</a>
-							<a href="javascript:void(0);" class="btn btn-success mt-3">Message</a>
-						</div>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -85,7 +128,7 @@
 		</div>
 	</div>
 	<div class="col-md-12 col-lg-8 col-xl-9">
-		<div class="card overflow-auto" style="height:527px;">
+		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center border-bottom-0">
 				<h4 class="card-title">Staff Details</h4>
 				<div class="card-options">
@@ -103,7 +146,7 @@
 				<div class="tabs-menu1">
 					<!-- Tabs -->
 					<ul class="nav panel-tabs">
-						<li><a href="#tab1" data-bs-toggle="tab"> <i class="fa fa-clock-o me-2" aria-hidden="true"></i> Attendance</a></li>
+						<li><a href="#tab1" data-bs-toggle="tab" class="active"> <i class="fa fa-clock-o me-2" aria-hidden="true"></i> Attendance</a></li>
 						<li><a href="#tab2" data-bs-toggle="tab"><i class="fa fa-tasks me-2"></i>Loan</a></li>
 						<li><a href="#tab3" data-bs-toggle="tab"> <i class="fa fa-sign-out me-2"></i>Leaves</a></li>
 						<li><a href="#tab4" data-bs-toggle="tab"> <i class="fa fa-plus-square me-2 " aria-hidden="true"></i> Benifits</a></li>
@@ -115,22 +158,23 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab1">
 						<div class="table-responsive">
-							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer">
-								
-								<thead style="border-bottom: 1px solid #0000004a;">
-									<tr>
-										<th class="border-bottom-0">Date</th>
-										<th class="border-bottom-0">Status</th>
-										<th class="border-bottom-0">Clock-In</th>
-										<th class="border-bottom-0">Clock-Out</th>
-										<th class="border-bottom-0">Progress</th>
-										<th class="border-bottom-0">Hours</th>
-									</tr>
-								</thead>
-								<tbody id="TblBodyAttendance">
+							<div class="table-wrapper" style="display:block; overflow-y:auto; width:100%; height:390px;">
+								<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer">
+									<thead style="border-bottom: 1px solid #0000004a;" class="sticky-thead">
+										<tr>
+											<th class="border-bottom-0">Date</th>
+											<th class="border-bottom-0">Status</th>
+											<th class="border-bottom-0">Clock-In</th>
+											<th class="border-bottom-0">Clock-Out</th>
+											<th class="border-bottom-0">Progress</th>
+											<th class="border-bottom-0">Hours</th>
+										</tr>
+									</thead>
+									<tbody id="TblBodyAttendance">
 
-								</tbody>	
-							</table>
+									</tbody>	
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab2">
@@ -379,120 +423,88 @@
 
 	</div>
 
-
 	<div class="col-sm-6 col-lg-3 col-xl-4">
-
-		<div class="card overflow-hidden" style="height:400px;">
-			<div class="card-header">
-				<h4 class="card-title">Activity</h4>
-			</div>
-			<div class="pt-2">
-				<div class="list-group">
-					<div class="list-group-item d-flex pt-3 pb-3 border-0">
-						<div class="me-3 me-xs-0">
-							<div class="calendar-icon icons">
-								<div class="date_time bg-pink-transparent"> <span class="date">18</span> <span class="month">FEB</span> </div>
-							</div>
-						</div>
-						<div class="ms-1">
-							<div class="h5 fs-14 mb-1">Board meeting Completed</div> <small class="text-muted">attend the  company mangers...</small>
-						</div>
-					</div>
-					<div class="list-group-item d-flex pt-3 pb-3 border-0">
-						<div class="me-3 me-xs-0">
-							<div class="calendar-icon icons">
-								<div class="date_time bg-success-transparent "> <span class="date">16</span> <span class="month">FEB</span> </div>
-							</div>
-						</div>
-						<div class="ms-1">
-							<div class="h5 fs-14 mb-1">Updated the Company Policy</div>
-							<small class="text-muted">some changes &amp; add the  terms &amp; conditions </small>
-						</div>
-					</div>
-					<div class="list-group-item d-flex pt-3 pb-3 border-0">
-						<div class="me-3 me-xs-0">
-							<div class="calendar-icon icons">
-								<div class="date_time bg-orange-transparent "> <span class="date">17</span> <span class="month">FEB</span> </div>
-							</div>
-						</div>
-						<div class="ms-1">
-							<div class="h5 fs-14 mb-1">Office Timings Changed</div> <small class="text-muted"> this effetct  after March 01st 9:00 Am To 5:00 Pm</small>
-						</div>
-					</div>
-					<div class="list-group-item d-flex pt-3 pb-5 border-0">
-						<div class="me-3 me-xs-0">
-							<div class="calendar-icon icons">
-								<div class="date_time bg-info-transparent "> <span class="date">26</span> <span class="month">JAN</span> </div>
-							</div>
-						</div>
-						<div class="ms-1">
-							<div class="h5 fs-15 mb-1"> Republic Day Celebrated </div> <small class="text-muted">participate the all employess </small>
+		<div class="card">
+			<div class="card-header align-items-center py-3">
+				<h4 class="card-title">Recent Activity</h4>
+				<div class="card-options col-md-7">
+					<div class="form-group m-0">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="feather feather-calendar"></i>
+								</div>
+							</div><input id="activityDate" class="form-control fc-datepicker" type="text">
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="card-body pt-0">
+				<ul id="CardActivity" class="timeline">
+
+					<li>
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">Leave Approval Request</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">6 min ago</a>
+						<p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">From "RuthDyer" UiDesign Leave</p>
+						<span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span>
+					</li>
+					<li class="primary">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Wok Update</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">10 min ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From "Robert Marshall" Developer</p>
+						<span class="text-muted ms-3 fs-11">Task Completed.</span>
+					</li>
+					<li class="pink">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Received Mail</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">15 min ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Emergency Sick Leave from "jacob Berry"</p>
+						<span class="text-muted ms-3 fs-11">Ui Designer, Designer Team.</span>
+					</li>
+					<li class="success mb-0 pb-0">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Job Application Mail</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">1 Hour ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From jobmail@gmail.com laravel developer.</p>
+					</li>
+
+				</ul>
+			</div>
 		</div>
 	</div>
-	<div class="col-sm-6 col-lg-3 col-xl-4">
-		@*		<div class="card" style="height:400px;">
-		<div class="card-header">
-		<h4 class="card-title">Skills</h4>
-		</div>
-		<div class="card-body">
-		<ul class="timeline">
-		<li>
-		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">JavaScript / TypeScript</a>
-		<p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">API integration,core, Interactive UI </p>
-		</li>
-		<li class="primary">
-		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">React JS</a>
-		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Hooks, REsuable Components</p>
-		</li>
-		<li class="pink">
-		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">NodeJS</a>
-		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Web applications"</p>
-		</li>
 
-		<li class="success mb-0 pb-0">
-		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
-		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
-		</li>
-		<li class="success mb-0 pb-0">
-		<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Web design &amp; Development</a>
-		<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">structures, dashboards</p>
-		</li>
-		</ul>
-		</div>
-		</div>*@
+	<div class="col-sm-6 col-lg-3 col-xl-4">
 
 		<div class="card" style="height:400px;">
 			<div class="card-header">
 				<div class="card-title">Statistics-2023</div>
+				<div class="card-options col-md-2">
+					<select id="chartDate" class=" form-control custom-select select2">
+						<option value="2023">2023</option>
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
 			</div>
 			<div class="card-body">
-				<div class="row mb-7">
-					<div class="col-4 text-center">
-						<div class="chart-circle chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
+				<div class="row mb-5 justify-content-center">
+					<div class="col-4 text-center stats-chart stats-chart-active">
+						<div class="chart-circle  chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
 							<canvas width="64" height="64"></canvas>
 							<div class="chart-circle-value text-primary">89</div>
 						</div>
-						<h6 class="fs-14 font-weight-semibold mt-3">Attendance</h6>
+						<h6 id="chart-circle-primary-title" class="fs-14  py-1 chart-circle-title chart-circle-title-active position-relative d-inline-block font-weight-semibold mt-3">Attendance</h6>
 					</div>
-					<div class="col-4 text-center">
-						<div class="chart-circle chart-circle-sm" data-value="0.23" data-thickness="5" data-color="#fe7f00">
-							<canvas width="64" height="64"></canvas>
-							<div class="chart-circle-value text-secondary">23</div>
-						</div>
-						<h6 class="fs-14 font-weight-semibold mt-3">Projects</h6>
-					</div>
-					<div class="col-4 text-center">
+					<div class="col-4 text-center stats-chart stats-chart-inactive">
 						<div class="chart-circle chart-circle-sm" data-value="0.67" data-thickness="5" data-color="#0dcd94">
 							<canvas width="64" height="64"></canvas>
 							<div class="chart-circle-value text-success">67%</div>
 						</div>
-						<h6 class="fs-14 font-weight-semibold mt-3">Performance</h6>
+						<h6 id="chart-circle-success-title" class="fs-14 py-1 chart-circle-title position-relative d-inline-block font-weight-semibold mt-3">Performance</h6>
 					</div>
 				</div>
+				<div id="CardPerformance">
+
+				</div>
+				@*
 				<div class="d-flex align-items-end justify-content-between mg-b-5">
 					<h6 class="">This Week</h6>
 					<h6 class="font-weight-bold mb-1">01</h6>
@@ -514,28 +526,47 @@
 				<div class="progress progress-sm mb-5">
 					<div class="progress-bar bg-warning w-50"></div>
 				</div>
+				*@
 			</div>
 		</div>
+
+		
 	</div>
 </div>
+
+	
+
+
 
 @section scripts{
 	<script>
 		
 		$(document).ready(function() {
-			$('#myonoffswitch2').prop('checked', true);
-			localStorage.setItem('dayonedarkMode', true);
-			localStorage.removeItem('dayonelightMode');
-			localStorage.removeItem('dayonetransparentMode');
+			$('#myonoffswitch2').prop('checked', true)
+			localStorage.setItem('dayonedarkMode', true)
+			localStorage.removeItem('dayonelightMode')
+			localStorage.removeItem('dayonetransparentMode')
+
+			$('.stats-chart').click(function () {
+				$('.stats-chart').removeClass('stats-chart-active').addClass('stats-chart-inactive')
+				$(this).addClass('stats-chart-active').removeClass('stats-chart-inactive')
+			});
+
+			var currentDate = new Date()
+			$('#activityDate').val('@DateTime.Now.ToString("dd-MMM-yyyy")')
+			$('#activityDate').change(function () {
+				loadStaffActivity()
+            });
 
 			LoadAttendance()
 			loadStaffLeaveInfo()
 			loadStaffLoanInfo()
 			loadStaffSalaryInfo()
+			loadStaffActivity()
+			loadStaffPerformance()
 		});
 
 		function LoadAttendance() {
-			debugger
 			var data = {}
 			var html_Attendance = ''
 			$.ajax({
@@ -545,7 +576,6 @@
 				data: data,
 				success: function (data) {
 					if (data != null) {
-						debugger
 						for(var i = 0; i < data.length; i++) {
 							var Totalhours = Math.floor(  parseInt(data[i]["totalDefinedMinutes"]) / 60);
 							var TotalremainingMinutes = parseInt(data[i]["totalDefinedMinutes"]) % 60;
@@ -582,7 +612,6 @@
 		}
 
 		function loadStaffLeaveInfo() {
-			debugger
 			var data = {}
 			var html_Leave = ''
 			$.ajax({
@@ -592,7 +621,6 @@
 				data: data,
 				success: function (data) {
 					if (data != null) {
-						debugger
 						for (var i = 0; i < data.length; i++) {
 							html_Leave += ' <tr> '
 							html_Leave += ' 	<td class="text-center">1</td> '
@@ -614,8 +642,7 @@
 			});
 		}
 
-		function loadStaffLoanInfo() {		
-			debugger
+		function loadStaffLoanInfo() {
 			var requestData = { }
 			makeAjaxRequest("/Staff/Staff_Loan_Statistics", 'GET', requestData, false, function (response) {
 				if (response != null) {
@@ -650,8 +677,7 @@
 						htmlLoan += ' 	</td> '
 						htmlLoan += ' </tr> '
 					}
-					
-
+				
 					$("#TblBodyLoan").html(htmlLoan)
 				}
 			}, function (errorStatus) {
@@ -660,7 +686,6 @@
 		}
 
 		function loadStaffSalaryInfo() {
-			debugger
 			var data = {}
 			var html_Salary = ''
 			$.ajax({
@@ -670,7 +695,6 @@
 				data: data,
 				success: function (data) {
 					if (data != null) {
-						debugger
 						for (var i = 0; i < data.length; i++) {
 							html_Salary += '<tr id="' + i + '">'
 							html_Salary += '<td> ' + data[i].sno + ' </td>'
@@ -709,6 +733,53 @@
 			});
 		}
 
+		function loadStaffActivity() {
+			var dateValue = $("#activityDate").val()
+			var requestData = { currentDate: dateValue }
+			makeAjaxRequest("/Staff/Staff_Activity", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					debugger
+					var htmlActivity = ''
+					for (var i = 0; i < response.length; i++) {
+						htmlActivity += ' <li class="' + response[i].CssClass + '"> '
+						htmlActivity += '     <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">' + response[i].Heading + '</a> '
+						htmlActivity += '     <a href="javascript:void(0);" class="text-muted float-end fs-13">' + response[i].Ago + ' min ago</a> '
+						htmlActivity += '     <p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">' + response[i].Title + '</p> '
+						//htmlActivity += '     <span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span> '
+						htmlActivity += ' </li> '
+					}
+
+					$("#CardActivity").html(htmlActivity)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+
+		function loadStaffPerformance() {
+			debugger
+			var dateValue = 2023
+			var requestData = { currentYear: dateValue }
+			makeAjaxRequest("/Staff/Staff_Performance", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					debugger
+					var htmlPerformance = ''
+					for (var i = 0; i < response.length; i++) {
+						htmlPerformance += ' <div class="d-flex align-items-end justify-content-between mg-b-5"> '
+						htmlPerformance += ' 	<h6 class="">' + response[i].PerformanceTitle + '</h6> '
+						htmlPerformance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].EarnedWeightage + '</h6> '
+						htmlPerformance += ' </div> '
+						htmlPerformance += ' <div class="progress progress-sm mb-5"> '
+						htmlPerformance += ' 	<div class="progress-bar bg-info w-' + response[i].TotalWeightage + '"></div> '
+						htmlPerformance += ' </div> '
+					}
+
+					$("#CardPerformance").html(htmlPerformance)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
 
 	</script>
 

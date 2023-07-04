@@ -156,6 +156,25 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
+        public async Task<VInfoStaff> GetStaffProfilebyId(int StaffID, HrhubContext hrhubContext)
+        {
+    
+            try
+            {
+                var result= await hrhubContext.VInfoStaffs.FirstOrDefaultAsync(x => x.StaffId == StaffID && x.IsDeleted == false && x.Status == true);
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+
+
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {
             DbConnection _db = new DbConnection();
@@ -267,70 +286,60 @@ namespace HRHUBAPI.Models
 
         public async Task<List<StaffSalaryComponent>> GetStaffSalaryDetail(int CompanyId, int StaffId, HrhubContext hrhubContext)
         {
-            DbConnection _db = new DbConnection();
-            try
-            {
-                var queryList = from ci in hrhubContext.ComponentInfos
-                                join ssc in (
-                                    from s in hrhubContext.StaffSalaryComponents
-                                    where s.StaffId == StaffId
-                                    select new
-                                    {
-                                        s.StaffSalaryComponentId,
-                                        s.ComponentId,
-                                        s.PercentageValue,
-                                        s.ComponentAmount
-                                    }
-                                ) on ci.ComponentId equals ssc.ComponentId into joinedData
-                                from result in joinedData.DefaultIfEmpty()
-                                where ci.CompanyId == CompanyId &&
-                                      ci.Status == true &&
-                                      ci.IsDeleted == false &&
-                                      (ci.Category == "Earning" || ci.Category == "Deduction") &&
-                                      (ci.CompanyContribution == null || ci.CompanyContribution == 0)
-                                orderby ci.Category descending, ci.Title
-                                select new StaffSalaryComponent
-                                {
-                                    ComponentId = ci.ComponentId,
-                                    Category = ci.Category,
-                                    ComponentTitle = ci.Title,
-                                    PercentageValue = result.PercentageValue ?? 0,
-                                    ComponentAmount = result.ComponentAmount ?? 0,
-                                };
+			DbConnection _db = new DbConnection();
+			try
+			{
+				string query = "EXEC HR.GetStaffWise_ComponentInfo " + CompanyId + ", " + StaffId;
+				DataTable dt = _db.ReturnDataTable(query);
 
-                return await queryList.ToListAsync();
+				var dtStaffSalaryComponent = dt.AsEnumerable()
+					.Select(row => new StaffSalaryComponent
+					{
+						ComponentId = Convert.ToInt32(row["ComponentId"]),
+						Category = row["Category"].ToString(),
+						ComponentTitle = row["ComponentTitle"].ToString(),
+						PercentageValue = string.IsNullOrWhiteSpace(row["PercentageValue"].ToString()) ? 0 : Convert.ToDecimal(row["PercentageValue"]),
+						ComponentAmount = string.IsNullOrWhiteSpace(row["ComponentAmount"].ToString()) ? 0 : Convert.ToDecimal(row["ComponentAmount"])
+					})
+					.ToList();
+				return dtStaffSalaryComponent;
+			}
+			catch { throw; }
 
-                //var queryList = from ci in hrhubContext.ComponentInfos
-                //                join ssc in (
-                //                    from s in hrhubContext.StaffSalaryComponents
-                //                    where s.StaffId == CompanyId
-                //                    select new
-                //                    {
-                //                        s.StaffSalaryComponentId,
-                //                        s.ComponentId,
-                //                        s.PercentageValue,
-                //                        s.ComponentAmount
-                //                    }
-                //                ) on ci.ComponentId equals ssc.ComponentId into joinedData
-                //                from result in joinedData.DefaultIfEmpty()
-                //                where ci.CompanyId == StaffId && 
-                //                      ci.Status == true && ci.IsDeleted == false &&
-                //                      (ci.Category == "Earning" || ci.Category == "Deduction") &&
-                //                      (ci.CompanyContribution == null || ci.CompanyContribution == 0)
-                //                orderby ci.Category descending, ci.Title
-                //                select new StaffSalaryComponent
-                //                {
-                //                    StaffSalaryComponentId = result.StaffSalaryComponentId,
-                //                    ComponentId = ci.ComponentId,
-                //                    Category = ci.Category,
-                //                    ComponentTitle = ci.Title,
-                //                    PercentageValue = result.PercentageValue,
-                //                    ComponentAmount = result.ComponentAmount
-                //                };
+			//DbConnection _db = new DbConnection();
+   //         try
+   //         {
+   //             var queryList = from ci in hrhubContext.ComponentInfos
+   //                             join ssc in (
+   //                                 from s in hrhubContext.StaffSalaryComponents
+   //                                 where s.StaffId == StaffId
+   //                                 select new
+   //                                 {
+   //                                     s.StaffSalaryComponentId,
+   //                                     s.ComponentId,
+   //                                     s.PercentageValue,
+   //                                     s.ComponentAmount
+   //                                 }
+   //                             ) on ci.ComponentId equals ssc.ComponentId into joinedData
+   //                             from result in joinedData.DefaultIfEmpty()
+   //                             where ci.CompanyId == CompanyId &&
+   //                                   ci.Status == true &&
+   //                                   ci.IsDeleted == false &&
+   //                                   (ci.Category == "Earning" || ci.Category == "Deduction") &&
+   //                                   (ci.CompanyContribution == null || ci.CompanyContribution == 0)
+   //                             orderby ci.Category descending, ci.Title
+   //                             select new StaffSalaryComponent
+   //                             {
+   //                                 ComponentId = ci.ComponentId,
+   //                                 Category = ci.Category,
+   //                                 ComponentTitle = ci.Title,
+   //                                 PercentageValue = result.PercentageValue ?? 0,
+   //                                 ComponentAmount = result.ComponentAmount ?? 0,
+   //                             };
 
-                //return await queryList.ToListAsync();
-            }
-            catch (Exception e) { throw; }
+   //             return await queryList.ToListAsync();
+   //         }
+   //         catch (Exception e) { throw; }
         }
 
         // Get single record of Staff by company ID
