@@ -71669,7 +71669,16 @@ a.text-dark:focus {
     z-index: 9999999 !important;
 }
 
+.sticky-thead {
+    position: sticky;
+    top: 0px;
+    background: #fff;
+    z-index: 1;
+    margin-bottom: 12px;
+}
 
-
+.dark-mode .sticky-thead {
+    background: #262b5a;
+}
 
 /*# sourceMappingURL=style.css.map */

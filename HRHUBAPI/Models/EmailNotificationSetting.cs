@@ -14,4 +14,16 @@ public partial class EmailNotificationSetting
     public bool OnSalaryGeneration { get; set; }
 
     public int? OnSalaryGenerationTemplateId { get; set; }
+
+    public bool? OnBenefitEnrollment { get; set; }
+
+    public int? OnBenefitEnrollmentTemplateId { get; set; }
+
+    public bool? OnAnnouncements { get; set; }
+
+    public int? OnAnnouncementsTemplateId { get; set; }
+
+    public bool? OnLeaveApproval { get; set; }
+
+    public int? OnLeaveApprovalTemplateId { get; set; }
 }

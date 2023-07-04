@@ -67,7 +67,8 @@ namespace HRHUBAPI.Models
         public async Task<User> Login(User Obj, HrhubContext _context)
         {
             try
-            {
+            
+			{
                 //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
                 Obj.Password = Obj.Password;
                 // var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == Obj.UserName && x.Password == Obj.Password && x.IsActive == true);

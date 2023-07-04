@@ -49,7 +49,10 @@
 		box-shadow: 0px 0px 12px -7px;
 	}
 
+	
+
 </style>
+
 @*  Employe Profile View
 *@
 <div class="row">
@@ -125,7 +128,7 @@
 		</div>
 	</div>
 	<div class="col-md-12 col-lg-8 col-xl-9">
-		<div class="card overflow-auto" style="height:527px;">
+		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center border-bottom-0">
 				<h4 class="card-title">Staff Details</h4>
 				<div class="card-options">
@@ -155,22 +158,23 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab1">
 						<div class="table-responsive">
-							<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer">
-								
-								<thead style="border-bottom: 1px solid #0000004a;">
-									<tr>
-										<th class="border-bottom-0">Date</th>
-										<th class="border-bottom-0">Status</th>
-										<th class="border-bottom-0">Clock-In</th>
-										<th class="border-bottom-0">Clock-Out</th>
-										<th class="border-bottom-0">Progress</th>
-										<th class="border-bottom-0">Hours</th>
-									</tr>
-								</thead>
-								<tbody id="TblBodyAttendance">
+							<div class="table-wrapper" style="display:block; overflow-y:auto; width:100%; height:390px;">
+								<table class="table card-table table-hover table-vcenter table-sm text-nowrap dataTable no-footer">
+									<thead style="border-bottom: 1px solid #0000004a;" class="sticky-thead">
+										<tr>
+											<th class="border-bottom-0">Date</th>
+											<th class="border-bottom-0">Status</th>
+											<th class="border-bottom-0">Clock-In</th>
+											<th class="border-bottom-0">Clock-Out</th>
+											<th class="border-bottom-0">Progress</th>
+											<th class="border-bottom-0">Hours</th>
+										</tr>
+									</thead>
+									<tbody id="TblBodyAttendance">
 
-								</tbody>	
-							</table>
+									</tbody>	
+								</table>
+							</div>
 						</div>
 					</div>
 					<div class="tab-pane" id="tab2">
