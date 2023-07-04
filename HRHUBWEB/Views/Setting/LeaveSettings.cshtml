@@ -103,16 +103,18 @@
                                                     <select id="policy-types" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" asp-items="@(new SelectList(ViewBag.LeavePolicy ,"PolicyId" ,"Title"))">
                                                     </select>
                                                 </div>
+                                                <div class="mb-5">
+                                                    <p class="w-100 ps-2 fs-14 policy-description"></p>
+                                                </div>
+
+                                                <div class="form-control px-0 border-0 w-30 mb-3">
+                                                    <label class="form-label">Title</label>
+                                                    <input class="form-control" id="Title" type="text" placeholder="leave policy" />
+                                                </div>
+
+
                                                 <div hidden class="policy-module" id="leave-policy-module">
-                                                    <div class="mb-5">
-                                                        <p class="w-100 ps-2 fs-14 policy-description"></p>
-                                                    </div>
-
-                                                    <div class="form-control px-0 border-0 w-30 mb-3">
-                                                        <label class="form-label">Title</label>
-                                                        <input class="form-control" id="Title" type="text" placeholder="leave policy" />
-                                                    </div>
-
+                                                    
                                                     <div class="mb-5">
                                                         <label class="custom-switch form-switch mb-0">
                                                             <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
@@ -156,27 +158,37 @@
                                                     </div>*@
                                                 </div>
                                                 <div hidden class="policy-module" id="leave-distribution-module">
-                                                    <div class="mb-5">
-                                                        <p class="w-100 ps-2 fs-14 policy-description"></p>
-                                                    </div>
-
-                                                    <div class="form-control px-0 border-0 w-30 mb-3">
-                                                        <label class="form-label">Title</label>
-                                                        <input class="form-control" id="Title" type="text" placeholder="leave policy" />
-                                                    </div>
-
+                                                   
                                                     <div class="mb-5">
                                                         <label class="custom-switch form-switch mb-0">
-                                                            <input type="checkbox" id="HalfLeave" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <input type="checkbox" id="CalenderYearApproach" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
                                                             <span class="custom-switch-indicator"></span>
-                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Half Day leave</span>
-                                                            <a id="HalfLeaveTooltip" href="#">
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Calender Year Approach</span>
+                                                            <a id="CalenderYearTooltip" href="#">
                                                                 <i class="fa fa-info"></i>
 
                                                             </a>
                                                         </label>
                                                         <div class="mb-2 mt-2">
-                                                            <p id="halfleave-description" class="w-100 ps-2 fs-14 "></p>
+                                                            <p id="calenderyear-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-5">
+                                                        <label class="custom-switch form-switch mb-0">
+                                                            <input type="checkbox" id="AccrualApproach" name="custom-switch-radio" class="custom-switch-input switch-unchecked">
+                                                            <span class="custom-switch-indicator"></span>
+                                                            <span class="custom-switch-description fs-15 me-3 text-dark">Accrual Approach</span>
+                                                            <a id="AccrualApproachTooltip" href="#">
+                                                                <i class="fa fa-info"></i>
+
+                                                            </a>
+                                                        </label>
+                                                        <div class="mb-2 mt-2">
+                                                            <p id="accrualapproach-description" class="w-100 ps-2 fs-14 "></p>
+                                                        </div>
+                                                        <div id="div_MonthNo" class="form-control px-0 border-0 w-30 mb-3">
+                                                            <label class="form-label">Month</label>
+                                                            <input class="form-control" id="MonthNo" type="number" placeholder="Grace Minutes" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,7 +196,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <div class="ms-auto">
-                                                <a onclick="savePolicyConfiguration()" class="btn btn-success btn_Save">Save</a>
+                                                <a onclick="savePolicyConfiguration()" class="btn btn-success">Save</a>
                                                 <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
                                             </div>
                                         </div>
@@ -858,17 +870,28 @@
                 status = false;
                 return false;
             }
+            else if (($("#MonthNo").val() == "" || $("#MonthNo").val() == "0") && $('#CalenderYearApproach').is(":checked") == true && $("#policy-types").val() == 1) { // Leave Distribution Approach
+                $.growl.warning({
+                    message: "Enter Month"
+                });
+                $("#MonthNo").css("border-color", "red");
+                status = false;
+                return false;
+            }
             else {
                 $("#Title").css("border-color", "#ddd");
                 $("#policy-types").css("border-color", "#ddd");
+                $("#MonthNo").css("border-color", "#ddd");
             }
             var Data = {
                 id: $("#PolicyConfigurationId").val(),
                 title: $('#Title').val(),
                 policyId: $("#policy-types").val(),
                 halfleave: $("#HalfLeave").is(':checked'),
-                quarterleave: $("#QuarterLeave").is(':checked')
-
+                quarterleave: $("#QuarterLeave").is(':checked'),
+                calenderyearapproach: $("#CalenderYearApproach").is(':checked'),
+                accrualapproach: $("#AccrualApproach").is(':checked'),
+                monthno: $("#MonthNo").val()
             }
             console.log(Data)
             $.ajax({
@@ -989,10 +1012,22 @@
                         $("#Title").val(data.title);
                         $("#policy-types").val(data.policyId).trigger('change');
 
+                        $('#CalenderYearApproach').prop('checked',false);
+                        $('#AccrualApproach').prop('checked', false);
+
                         if (data.policyId == 9) {
                             $('#leave-policy-module').prop('hidden', false)
+                            $('#leave-distribution-module').prop('hidden', true)
                             $('#HalfLeave').prop('checked', data.halfLeave);
                             $('#QuarterLeave').prop('checked', data.quarterLeave);
+                        }
+                        else if(data.policyId == 1){
+                            $('#leave-distribution-module').prop('hidden', false)
+                            $('#leave-policy-module').prop('hidden', true)
+                            $('#CalenderYearApproach').prop('checked', data.leaveDistributionIsCalendarYearApproach);
+                            $('#AccrualApproach').prop('checked', data.leaveDistributionIsAccrualApproach);
+                            $('#AccrualApproach').trigger('change');
+                            $('#MonthNo').val(data.monthNo)
                         }
                         $("#addPolicy").modal('show');
                     }
@@ -1109,14 +1144,18 @@
                 $.ajax({
                     url: "/Setting/GetPolicyDescription",
                     method: 'GET',
+                    async:false,
                     data: Data,
                     success: function (response) {
                         if (response != null) {
                             if (selectedPolicy == '9') { // Flexibility in Leave Utilization
                                 $('#leave-policy-module').prop('hidden', false)
-
+                                $('#leave-distribution-module').prop('hidden', true)
                             }
                             else if (selectedPolicy == '1') { // Leave Distribution Approach
+                                $('#leave-distribution-module').prop('hidden', false)
+                                $('#leave-policy-module').prop('hidden', true)
+                                $('#CalenderYearApproach').prop('checked', true)
 
                             }
 
@@ -1132,19 +1171,44 @@
 
         })
 
+        $('#CalenderYearApproach').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $('#AccrualApproach').prop('checked', false)
+                $("#MonthNo").val(0);
+                $('#div_MonthNo').prop('hidden', false)
+            }
+        })
+        $('#AccrualApproach').on('change', function () {
+            debugger;
+            var checked = $(this).is(":checked");
+            if (checked) {
+                $('#CalenderYearApproach').prop('checked', false)
+               $("#MonthNo").val(0);
+                $('#div_MonthNo').prop('hidden', true)
+            }
+        })
+
+
         function addpolicymodel() {
 
             $("#addPolicy").modal('show');
             $("#PolicyConfigurationId").val(0)
             $("#Title").val('')
             $('#leave-policy-module').prop('hidden', true)
-
+            $('#leave-distribution-module').prop('hidden', true)
 
             $("#HalfLeave").prop('checked', true);
             $("#QuarterLeave").prop('checked', true);
             $("#Title").css("border-color", "#ddd");
             $('.policy-description').text("");
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
+
+            $('#CalenderYearApproach').prop('checked', true)
+            $("#MonthNo").val(0);
+            $('#div_MonthNo').prop('hidden', false)
+
         }
 
         function addnewleavetype() {

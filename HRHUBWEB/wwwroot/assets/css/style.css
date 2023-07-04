@@ -71663,4 +71663,13 @@ a.text-dark:focus {
 .w-200 {
     width: 200px;
 }
+
+
+.modal-open .ui-datepicker {
+    z-index: 9999999 !important;
+}
+
+
+
+
 /*# sourceMappingURL=style.css.map */

@@ -47,38 +47,6 @@
                 </thead>
                 <tbody id="tbodyAttendance">
 
-                      @*  @{
-                            int count = 1;
-                            foreach (var item in ViewBag.Attendanceresult)
-                            {
-
-                                       <tr class="border-bottom">
-                                    <td class="text-center"> @count</td>
-                                       <td class="font-weight-semibold fs-14"> 
-
-                                       <div class="d-flex">
-                                            <img class="avatar avatar-md brround me-3" src="@item.SnapPath">
-                                       <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                <h6 class="mb-1 fs-14">@item.EmployeeName </h6>
-                                                <p class="text-muted mb-0 fs-12"> @item.DepartmentTitle  | @item.DesignationTitle </p>
-                                       </div></div> 
-                                       </td>
-
-
-                                    <td class="text-center"><span class="badge @item.CssClassR">@item.attendanceStatus</span></td>
-                                    <td class="text-center"> @item.FirstPunchIN</td>
-                                    <td class="text-center">@item.LastPunchOut</td>
-                                </tr>
-
-                                count++;
-                            }
-
-
-                    }
-*@
-
-
-
                 </tbody>
             </table>
         </div>

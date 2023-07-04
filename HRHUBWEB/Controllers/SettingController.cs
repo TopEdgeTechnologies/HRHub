@@ -83,6 +83,7 @@ namespace HRHUBWEB.Controllers
         }
 
         #region Attendance Settings
+        [CustomAuthorization]
         public async Task<IActionResult> AttendanceSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -200,6 +201,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region Leave Settings
+        [CustomAuthorization]
         public async Task<IActionResult> LeaveSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -227,13 +229,13 @@ namespace HRHUBWEB.Controllers
             return View(Obj);
         }
 
-        public async Task<IActionResult> LeavePolicyCreateOrUpdate(int id, string title, int policyId, bool halfleave, bool quarterleave)
+        public async Task<IActionResult> LeavePolicyCreateOrUpdate(int id, string title, int policyId, bool halfleave, bool quarterleave, bool calenderyearapproach, bool accrualapproach, int monthno)
         {
 
             var CompanyId = _user.CompanyId;
             var UserId = _user.UserId;
 
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Policy/PostLeavePolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{halfleave}/{quarterleave}", HttpMethod.Get);
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Policy/PostLeavePolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{halfleave}/{quarterleave}/{calenderyearapproach}/{accrualapproach}/{monthno}", HttpMethod.Get);
 
             return Json(result);
 
@@ -294,7 +296,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region Payroll Settings
-
+        [CustomAuthorization]
         public async Task<IActionResult> PayrollSettings(string data = "")
         {
             ViewBag.Success = data;
@@ -420,6 +422,163 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteTaxSlab{id}/{UserId}", HttpMethod.Get);
             return Json(result);
         }
+
+        #endregion
+
+        #region General Type Settings
+        [CustomAuthorization]
+        public async Task<IActionResult> GeneralTypeSettings(string data = "")
+        {
+            ViewBag.Success = data;
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            var CompanyId = _user.CompanyId;
+            var PolicyCategoryId = 3; // LeavePolicyCategoryId
+
+            ViewBag.CompanyId = CompanyId;
+
+            ViewBag.ListDesignations = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ListDepartments = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ListEmploymentType = await _APIHelper.CallApiAsyncGet<IEnumerable<EmploymentType>>($"api/Setting/GetEmploymentType{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ListLoanType = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
+            ViewBag.ListOffBoardingSetting = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffOffBoarding>>($"api/Setting/GetOffBoardingSetting{_user.CompanyId}", HttpMethod.Get);
+          
+            return View();
+        }
+
+        public async Task<IActionResult> PostOffBoardingSetting(OffBoardingProcessSetting obj)
+        {
+
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostOffBoardingProcessSetting", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> GetOffBoardingSettingsById(int id)
+        {
+            OffBoardingProcessSetting obj = new OffBoardingProcessSetting();
+            obj = await _APIHelper.CallApiAsyncGet<OffBoardingProcessSetting>($"api/Setting/GetOffBoardingSettingById/{id}", HttpMethod.Get);
+            return Json(obj);
+        }
+        public async Task<IActionResult> OffBoardingSettingAlreadyExists(int id, int departmentid , int designationid)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/OffBoardingSettingAlreadyExists{_user.CompanyId}/{id}/{departmentid}/{designationid}", HttpMethod.Get);
+            return Json(result);
+        }
+        public async Task<IActionResult> OffBoardingSettingDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/DeleteOffBoardingSetting{id}/{_user.UserId}", HttpMethod.Get);
+            return Json(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateOffBoardingAllowInterview(int id, bool allowinterview)
+        {
+
+            OffBoardingProcessSetting Obj = new OffBoardingProcessSetting();
+            Obj.OffboardingProcessSettingId = id;
+            Obj.AllowExitInterview = allowinterview;
+            Obj.UpdatedBy = _user.UserId;
+            Obj.CompanyId = _user.CompanyId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateStaffOffBoardingAllowInterview", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> PostLoanType(LoanType obj)
+        {
+
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Configuration/LoanTypeAddOrUpdate", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> LoanTypeDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteLoanTypeInfo{id}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        public async Task<IActionResult> EmploymentTypeDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/DeleteEmploymentType{id}/{_user.UserId}", HttpMethod.Get);
+            return Json(result);
+        }
+        public async Task<IActionResult> PostEmploymentType(EmploymentType obj)
+        {
+
+            obj.CompanyId = _user.CompanyId;
+            obj.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostEmploymentType", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+        public async Task<IActionResult> GetEmploymentTypeById(int id)
+        {
+            EmploymentType employmenttype = new EmploymentType();
+            employmenttype = await _APIHelper.CallApiAsyncGet<EmploymentType>($"api/Setting/GetEmploymentTypeById/{id}", HttpMethod.Get);
+            return Json(employmenttype);
+        }
+        public async Task<IActionResult> EmploymentTypeAlreadyExists(int id, string title)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Setting/EmploymentTypeAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
+            return Json(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateEmploymentTypeStatus(int id, bool status)
+        {
+
+            EmploymentType Obj = new EmploymentType();
+            Obj.EmploymentTypeId = id;
+            Obj.Status = status;
+            Obj.UpdatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateStatusByEmploymentTypeId", HttpMethod.Post);
+
+            return Json(result);
+
+        }
+
+        #endregion
+
+        #region SMTPSetting
+        [CustomAuthorization]
+        public async Task<IActionResult> SMTPSettings(string data = "")
+        {
+            ViewBag.Success = data;
+
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+            Company Obj = new Company();
+            Obj = await _APIHelper.CallApiAsyncGet<Company>($"api/Company/GetCompanyInfoId{_user.CompanyId}", HttpMethod.Get);
+
+            return View(Obj);
+        }
+
+        public async Task<IActionResult> SaveSMTPSetting(Company obj)
+        {
+            obj.UserId = _user.UserId.ToString();
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostSMTPSetting", HttpMethod.Post);
+            return Json(result);
+
+        }
+
 
         #endregion
 
