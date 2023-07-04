@@ -13,6 +13,8 @@ public partial class LeaveStatus
 
     public bool Status { get; set; }
 
+    public string? CssClass { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }
