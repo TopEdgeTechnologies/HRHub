@@ -49,22 +49,12 @@ namespace HRHUBAPI.Models
 		[NotMapped]
         public IEnumerable<AttendanceMaster>? listAttendance { get; set; }
 
-
-
-
         public Task<List<AttendanceMaster>> GetAttendance(int staffid,  string datefrom, string dateTo,  HrhubContext _context)
         {
             try
             {
-				
 				//DateTime Newdatefrom = DateTime.ParseExact(datefrom, "dd MMM yyyy", CultureInfo.InvariantCulture);
-			///	DateTime Newdateto = DateTime.ParseExact(dateTo, "dd MMM yyyy", CultureInfo.InvariantCulture);
-
-
-
-
-
-
+				//DateTime Newdateto = DateTime.ParseExact(dateTo, "dd MMM yyyy", CultureInfo.InvariantCulture);
 				var query = from at in _context.AttendanceMasters
                             join s in _context.AttendanceStatuses on at.AttendanceStatusId equals s.AttendanceStatusId
                             where at.StaffId == staffid && at.IsDeleted == false && at.AttendanceDate >= Convert.ToDateTime(datefrom) && at.AttendanceDate <= Convert.ToDateTime(dateTo)
@@ -99,49 +89,22 @@ namespace HRHUBAPI.Models
 
 								// AttendanceFormateDateIn = at.FirstPunchIn.Value.ToString("h:mm tt"),
 								// AttendanceFormateDateOut = at.LastPunchOut.Value.ToString("h:mm tt")
-
-
-
 							};
-
                return Task.FromResult(query != null ? query.OrderByDescending(x => x.AttendanceDate).ToList() : new List<AttendanceMaster>());
-
-
-
-
             }
-            catch (Exception ex)
-            {
-
-                throw;
-
-            }
+            catch (Exception ex) { throw; }
         }
-
-
 
 		// Get Attendence Over View List From and To Date Wise
 		public async Task<List<dynamic>> GetAttendanceOverViewList(int StaffId, int DepartmentId, int monthId, int yearId, HrhubContext _context)
 		{
-
-
-			
-
 			try
 			{
 				string query = "EXEC dbo.sp_getAttendanceMonthlyReport " + monthId + "," + yearId + "," + DepartmentId + "," + StaffId + " ";
 				return  _db.ReturnDataTable(query).ToDynamicList();
-
-	
-			
-
-				
 			}
 			catch { throw; }
-
-
 		}
-
 
         // Get Attendence Over View List From and To Date Wise
         public async Task<List<dynamic>> GetAttendanceLeaveWiseList(int StaffId, int DepartmentId, string datefrom, string dateTo, HrhubContext _context)
