@@ -122,7 +122,13 @@
                                                
                                                     @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                     {
-                                                        <a href="#" onclick="EditRecord(@item.ComponentId)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+
+                                                                <a asp-action="BenefitDetails" asp-route-id="@item.ComponentId" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
+                                                                    <i class="fa fa-male me-2"></i>Enroll Staff
+                                                                </a>
+
+
+                                                                <a href="#" onclick="EditRecord(@item.ComponentId)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Edit">
                                                             <i class="feather feather-edit me-2"></i>Edit
                                                         </a>
                                                     } @if (Convert.ToBoolean(ViewBag.IsDelete))

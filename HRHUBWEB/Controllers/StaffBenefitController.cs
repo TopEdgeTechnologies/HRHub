@@ -111,7 +111,7 @@ namespace HRHUBWEB.Controllers
 		public async Task<IActionResult> StaffSalaryCreateOrUpdate(StaffSalaryComponent objStaffSalaryComponent)
         {
 
-            objStaffSalaryComponent.CreatedBy = _user.CreateBy;
+            objStaffSalaryComponent.CreatedBy = _user.UserId;
             var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalaryComponent, "api/StaffBenefits/PostStaffSalaryComponent", HttpMethod.Post);
 
             if (result.Message.Contains("Insert"))

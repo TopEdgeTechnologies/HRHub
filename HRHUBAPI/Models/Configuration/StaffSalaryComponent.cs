@@ -27,7 +27,7 @@ namespace HRHUBAPI.Models
             {
                 var List = from SC in hrhubContext.StaffSalaryComponents
                            join s in hrhubContext.Staff on SC.StaffId equals s.StaffId                          
-                           where s.CompanyId == CompanyId && s.IsDeleted == false &&  s.Status == true && SC.ComponentId== ComponentId && SC.IsDeleted== false
+                           where s.CompanyId == CompanyId && s.IsDeleted == false && SC.ComponentId== ComponentId && SC.IsDeleted== false
 
                            select new StaffSalaryComponent
                            {
@@ -41,7 +41,7 @@ namespace HRHUBAPI.Models
                               ComponentAmount = SC.ComponentAmount,
                               CompanyContributionValue= SC.CompanyContributionValue,
                               CompanyContributionCalculationMethod = SC.CompanyContributionCalculationMethod,
-                              CompanyContributionAmount = SC.CompanyContributionAmount,
+                              CompanyContributionAmount = SC.CompanyContributionAmount
                                
 
                            };
@@ -83,10 +83,19 @@ namespace HRHUBAPI.Models
                     if (dbResult != null && objStaffSalaryComponent.StaffSalaryComponentId > 0)
                     {
 
-                        if (dbResult.CompanyContributionCalculationMethod == "Percentage" || objStaffSalaryComponent.Check == "Per %")
+                        if (objStaffSalaryComponent.Check == "Per %")
                         {
+
                             dbResult.CompanyContributionCalculationMethod = "Percentage";
+
+
                             dbResult.CompanyContributionAmount = (GrossSalary * objStaffSalaryComponent.CompanyContributionValue) / 100; // for company
+                            dbResult.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
+                            dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
+
+
+
+                            //  for staff
                             dbResult.ComponentAmount = (GrossSalary * objStaffSalaryComponent.PercentageValue) / 100; // for staff
                         }
                         else
@@ -101,10 +110,10 @@ namespace HRHUBAPI.Models
                         dbResult.StaffSalaryComponentId = objStaffSalaryComponent.StaffSalaryComponentId;
                         dbResult.StaffId = objStaffSalaryComponent.StaffId;
                         dbResult.ComponentId = objStaffSalaryComponent.ComponentId;
-                        dbResult.PercentageValue = objStaffSalaryComponent.PercentageValue;
-                        dbResult.ComponentAmount = objStaffSalaryComponent.ComponentAmount;
+                        dbResult.UpdatedOn = DateTime.Now;
+                        dbResult.UpdatedBy = objStaffSalaryComponent.CreatedBy;
 
-						await hrhubContext.SaveChangesAsync();
+                        await hrhubContext.SaveChangesAsync();
                         dbResult.TranFlag = 2;
                         dbContextTransaction.Commit();
                         return dbResult;
@@ -114,12 +123,41 @@ namespace HRHUBAPI.Models
 
                         if (objStaffSalaryComponent.Check== "Fixed")
                         {
+                            StaffSalaryComponent obj = new StaffSalaryComponent();
+                            obj.CompanyContributionCalculationMethod = "Amount";
+                            obj.StaffId = objStaffSalaryComponent.StaffId;
+                            obj.ComponentId = objStaffSalaryComponent.ComponentId;
+                            obj.CompanyContributionValue = 0;
+                            obj.PercentageValue = 0;
+                            obj.CompanyContributionAmount = objStaffSalaryComponent.CompanyContributionValue;
+                            obj.ComponentAmount = objStaffSalaryComponent.PercentageValue;
+                            obj.CreatedBy = objStaffSalaryComponent.CreatedBy;
+                            obj.CreatedOn = DateTime.Now;
+                            obj.IsDeleted = false;
+                            hrhubContext.Add(obj);
+                        }
+                        else
+                        {
 
+                            StaffSalaryComponent objNew = new StaffSalaryComponent();
+
+                            objNew.CompanyContributionCalculationMethod = "Percentage";
+                            objNew.CompanyContributionAmount = (GrossSalary * objStaffSalaryComponent.CompanyContributionValue) / 100; // for company
+                            objNew.ComponentAmount = (GrossSalary * objStaffSalaryComponent.PercentageValue) / 100; // for staff
+
+                            objNew.CompanyContributionValue = objStaffSalaryComponent.CompanyContributionValue;
+                            objNew.PercentageValue = objStaffSalaryComponent.PercentageValue;
+                            
+
+                            objNew.StaffId = objStaffSalaryComponent.StaffId;
+                            objNew.ComponentId = objStaffSalaryComponent.ComponentId;
+                            objNew.IsDeleted = false;
+                            objNew.CreatedBy = objStaffSalaryComponent.CreatedBy;
+                            objNew.CreatedOn = DateTime.Now;
+                            hrhubContext.Add(objNew);
                         }
 
-						hrhubContext.Add(objStaffSalaryComponent);
-                        objStaffSalaryComponent.IsDeleted= false;
-                        objStaffSalaryComponent.CreatedOn= DateTime.Now;
+					
                         
                         await hrhubContext.SaveChangesAsync();
                         objStaffSalaryComponent.TranFlag = 1;
