@@ -142,7 +142,7 @@
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Email Template</h4>
                             <div>
-                                <a class="btn btn-primary me-3 d-none" data-bs-toggle="modal" onclick="addnewEmail();"> <i class="fe fe-plus-circle me-1"></i> Add New</a>
+                                <a class="btn btn-primary me-3" data-bs-toggle="modal" onclick="addnewEmail();"> <i class="fe fe-plus-circle me-1"></i> Add New</a>
 
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Add Email Template</h5>
+                                            <h5 class="modal-title">Email Template</h5>
                                             <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
@@ -169,9 +169,15 @@
                                                 <label class="form-label">Subject: <span class="text-danger">*</span></label>
                                                 <input id="Subject" name="Subject" class="form-control" type="text" placeholder="Enter Email Subject">
                                             </div>
-                                            <div class="form-group">
-                                                <label class="form-label">Select Variable <span class="text-danger">*</span></label>
-                                                <select id="VariableId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" asp-items="@(new SelectList(@ViewBag.VaribleTypes  ,"Type"))">
+                                            <div class="form-group" id="SelectTemplateId">
+                                                <label class="form-label">Select Template Type <span class="text-danger">*</span></label>                                                
+                                                <select id="TemplateTypeId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" asp-items="@(new SelectList(@ViewBag.VaribleTypes  ,"Type"))">
+                                                </select>
+                                            </div>
+                                              <div class="form-group">
+                                                <label class="form-label">Select Variable <span class="text-danger">*</span></label>                                                
+                                                <select id="VariableId" class="form-control select2 custom-select select2-hidden-accessible" tabindex="-1" aria-hidden="true" data-placeholder="Select Variables" >
+                                                
                                                 </select>
                                             </div>
 
@@ -202,8 +208,8 @@
 
                                         <div class="modal-footer">
                                             <div class="ms-auto">
-                                                <a class="btn btn-success btn_SaveEmail">Save</a>
-                                                <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                                                <a class="btn btn-primary btn_SaveEmail">Save</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger" data-bs-dismiss="modal">Close</a>
                                             </div>
                                         </div>
                                     </div>
@@ -310,7 +316,78 @@
             $(document).ready(function () {
 
 
-               
+
+                $('#TemplateTypeId').change(function () {
+                    debugger
+                    var selectedTemplateType = $(this).val();
+
+                    // Make an AJAX request to fetch the filtered data based on the selected Template Type
+                    var Data ={
+                        Type:selectedTemplateType
+                    }
+                    $.ajax({
+                        async: false,
+                        url: "/Setting/LoadDynmicVariable",
+                        type: "Get",
+                        data: Data,
+                        success: function (data) {
+                            if (data != "") {
+                                debugger
+                                console.log(data);
+                                    $('#VariableId').empty();
+
+                                // Append the new options based on the fetched data
+
+                                    if(data !="Company"){
+                                    $('#VariableId').append($('<option>').text(data).val(data));
+
+                                    }
+                                    $('#VariableId').append('<option value="Company">Company</option>');
+                               
+
+                                // Refresh the Select2 plugin for Variable dropdown
+                                $('#VariableId').select2('destroy').select2().trigger('change');
+
+                            }
+                        },
+                        error: function () {
+                            status = false;
+                            //   toastr.error("Please Fill Required Field");
+                        }
+                    })
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    //$.ajax({
+                    //    url: 'Setting/LoadDynmicVariable', // Replace with the actual URL to fetch the data
+                    //    type: 'GET',
+                    //    data: { Type: selectedTemplateType },
+                    //    success: function (data) {
+                    //        debugger
+                    //        // Clear existing options in Variable dropdown
+                    //        $('#VariableId').empty();
+
+                    //        // Append the new options based on the fetched data
+                    //        $.each(data, function (index, variable) {
+                    //            $('#VariableId').append($('<option>').text(variable.type).val(variable.variableId));
+                    //            $('#VariableId').append('<option value="Company">Company</option>');
+                    //        });
+
+                    //        // Refresh the Select2 plugin for Variable dropdown
+                    //        $('#VariableId').select2('destroy').select2();
+                    //    }
+                    //});
+                
+                
+                });
+
+
+
+
 
 
                 var summernoteEditor = $('#NoteBody');
@@ -431,9 +508,6 @@
                 if ($(this).is(':checked')) {
                     // Checkbox is checked, show the controls
                     $("#BorderChangeStatus").css("border-bottom", "1px solid #e9ebfa");
-
-
-
                     $('#OnStatusChangeTemplate').show(1000);
                 } else {
                     // Checkbox is unchecked, hide the controls
@@ -471,6 +545,7 @@
             function ClearControl() {
                 
                 $('#OnSalaryGenerationTemplateId').select2({ placeholder: 'Select Template', width: '100%', allowClear: true }).val("").trigger('change');
+                $('#TemplateTypeId').select2({ placeholder: 'Select Template Type', width: '100%', allowClear: true }).val("").trigger('change');
                 $('#VariableId').select2({ placeholder: 'Select Variable', width: '100%', allowClear: true }).val("").trigger('change');
 
             }
@@ -588,8 +663,10 @@
 
             function editrecord(id) {
 
+                $('#SelectTemplateId').hide();
+                $('.NoteVaribleID').empty();
                 var Data = { id: id }
-                console.log(Data)
+               
                 $.ajax({
                     async: false,
                     url: "/Setting/EmailTemplateDetails",
@@ -599,16 +676,27 @@
                         if (data != "") {
                             debugger
 
+                            var selectElement = $('#VariableId');
+                            var selectTemplateTypeId = $('#TemplateTypeId');
+                            // Empty the options
+                            selectElement.empty();
+                            selectTemplateTypeId.empty();
+
+                            selectElement.append('<option value="' + data.type + '">' + data.type + '</option>');
+                            selectElement.append('<option value="Company">Company</option>');
+
+                            selectElement.select2('destroy').select2().trigger('change');
+                            selectTemplateTypeId.append('<option value="' + data.type + '">' + data.type + '</option>');
+                            selectTemplateTypeId.select2('destroy').select2();
+
+
+                            //LoadVariableSelectData();
                             $("#TemplateId").val(data.templateId);
                             $("#Title").val(data.title);
                             $("#Subject").val(data.subject);
-
-
                             //alert(date)
                             $('#NoteBody').summernote('code', data.body);
-
                             $("#Status").prop('checked', data.status);
-
                             $("#addEmail").modal('show');
                         }
                     },
@@ -620,6 +708,272 @@
 
 
             }
+
+            $('.btn_SaveEmail').on('click', function () {
+                saveEmailTemplate();
+            })
+            /// Add or Edit Email Template
+
+            function saveEmailTemplate() {
+                debugger;               
+                var status = true;
+                debugger;
+                if ($("#Title").val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Title"
+                    });
+                    $("#Title").css("border-color", "red");
+                    status = false;
+                    return false;
+                } else if ($("#Subject").val() == "") {
+                    $.growl.warning({
+                        message: "Please Enter Subject"
+                    });
+                    $("#Subject").css("border-color", "red");
+                    status = false;
+                    return false;
+                } else {
+                    $("#Title").css("border-color", "#ddd");
+                    $("#Subject").css("border-color", "#ddd");
+                }
+
+                if ($("#TemplateId").val() == 0) {
+                    if ($("#TemplateTypeId").val() == '' || $("#TemplateTypeId").val() == null) {
+                        $.growl.warning({
+                            message: "Select Template Type !"
+                        });
+                    status = false;
+                        return false;
+                    }
+                }
+                
+               
+
+                var Data = {
+                    TemplateId: $("#TemplateId").val(),
+                    Type: $("#TemplateTypeId").val(),
+                    Title: $('#Title').val(),
+                    Subject: $("#Subject").val(),
+                    Body: $("#NoteBody").val(),
+                    Status: $("#Status").is(':checked')
+                }
+
+                $.ajax({
+                    async: false,
+                    url: "/Setting/EmailTemplateCheckData",
+                    type: "GET",
+                    data: {
+                        id: $("#TemplateId").val(),
+                        title: $("#Title").val()
+                    },
+                    success: function (data) {
+                        if (data != "") {
+                            debugger;
+                            //var b = JSON.parse(data)
+                            if (data.success) {
+                                // $.growl.warning(data.message);
+                                $.growl.warning({
+                                    message: data.message
+                                });
+                                status = false;
+                            } else {
+                                $("#addEmail").modal('hide');
+                            }
+                        }
+                    },
+                    error: function () {
+                        status = false;
+                        //   toastr.error("Please Fill Required Field");
+                    }
+                });
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+                if (status) {
+
+                    swalWithBootstrapButtons.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText: 'No, cancel!',
+                        confirmButtonText: 'Yes, Save it!',
+                        timer: 30000,
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                async: false,
+                                url: "/Setting/PostEmailTemplate",
+                                type: "Post",
+                                data: Data,
+                                success: function (data) {
+                                    if (data != "") {
+                                        debugger;
+                                        //var b = JSON.parse(data)
+                                        var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
+                                        window.location.href = url;
+
+
+                                        $("#TemplateId").val(0)
+                                        $("#Title").val('')
+                                        $("#Subject").val('')
+                                        $('#NoteBody').summernote('code', '');
+                                    } else {
+                                        $("#addEmail").modal('hide');
+                                    }
+                                },
+                                error: function () {
+                                    status = false;
+                                    //   toastr.error("Please Fill Required Field");
+                                }
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            swalWithBootstrapButtons.fire(
+                                'Cancelled',
+                                'Your record is safe :)',
+                                'error'
+                            );
+                        }
+                    });
+                   
+                }
+            }
+
+            function addnewEmail() {
+                $('#SelectTemplateId').show();
+                $("#TemplateId").val(0)
+                ClearControl();
+
+                $("#Title").val('')
+                $("#Subject").val('')
+                $('#NoteBody').summernote('code', '');
+                $("#addEmail").modal('show');                
+                $("#Status").prop('checked', true);
+               
+
+            }
+
+             function addTextAtCursor(text) {
+                    var summernote = $('#NoteBody').summernote();
+                    var currentRange = summernote.summernote('createRange');
+                    var html = $.parseHTML(text);
+
+                    currentRange.insertNode(html[0]);
+                currentRange.collapse(false);
+                }
+
+
+
+
+	
+	$('#caret').click(function (e){
+			
+		if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	var span = document.createElement('span');	    
+	        span.setAttribute('style','font-style:italic');
+	    	span.innerHTML="${firstName}";
+			
+			range.deleteContents();        
+	        range.insertNode(span);  
+	        //cursor at the last with this
+	        range.collapse(false);
+	        selection.removeAllRanges();
+			selection.addRange(range);
+
+		}else{
+			return;
+		}
+	});
+
+
+
+            // Load variable json call
+            $(document).ready(function () {
+                LoadVariableSelectData();
+               
+            });
+
+            function  LoadVariableSelectData(){
+
+                $('#VariableId').change(function () {
+                    var selectedValue = $(this).val();
+
+                    var obj =
+                    {
+                        type: selectedValue
+                    }
+                    // AJAX call
+                    $.ajax({
+                        url: "/Setting/GetVariblebyType",
+                        type: "GET",
+                        async: false,
+                        data: obj,
+                        success: function (response) {
+                            debugger
+                            if (response != null) {
+
+                                var html = '';  // Create an empty string to store the HTML content
+
+                                //var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning, bg-purple "];
+
+                                var colors = ["bg-primary"];
+                                for (var i = 0; i < response.length; i++) {
+                                    // Append each variable name to the html string
+
+                                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                                    // Append each variable name to the html string within a container div
+                                    html += '<div style="display: inline-block; margin-right: 10px;margin-bottom: 10px">';
+                                    html += '<a href="#" onclick="TextPosition(' + i + ')"  > <span  id="variableid_' + i + '"  class="badge ' + randomColor + '-transparent" style="font-size: 14px;">' + response[i].variableName + '</span>';
+                                    html += '</div>';
+
+                                    // html += '<span class="badge badge-primary" style="font-size:14px;">' + response[i].variableName +  '</span>';
+                                }
+
+                                $('.NoteVaribleID').html(html);
+                            }
+
+
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                        }
+                    });
+                });
+
+
+            }
+
+
+            function TextPosition(id)
+            {
+                debugger;
+            
+            
+                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
+        	            var span = document.createElement('span');	    
+	                   
+                        span.innerHTML = '<span>' + $('#variableid_'+id).text() + '</span>';
+
+			            range.deleteContents();        
+	                    range.insertNode(span);  
+	                    //cursor at the last with this
+	                    range.collapse(false);
+	                    selection.removeAllRanges();
+			            selection.addRange(range);
+
+		            }else{
+			            return;
+		            }}
+
+
 
             function confirmation(id) {
 
@@ -786,265 +1140,7 @@
 
 
             }
-            ///////////////
-
-            $('.btn_SaveEmail').on('click', function () {
-                saveEmailTemplate();
-            })
-            /// Add or Edit Email Template
-
-            function saveEmailTemplate() {
-                debugger;
-                var status = true;
-                debugger;
-                if ($("#Title").val() == "") {
-                    $.growl.warning({
-                        message: "Please Enter Title"
-                    });
-                    $("#Title").css("border-color", "red");
-                    status = false;
-                    return false;
-                } else if ($("#Subject").val() == "") {
-                    $.growl.warning({
-                        message: "Please Enter Subject"
-                    });
-                    $("#Subject").css("border-color", "red");
-                    status = false;
-                    return false;
-                } else {
-                    $("#Title").css("border-color", "#ddd");
-                    $("#Subject").css("border-color", "#ddd");
-                }
-
-                
-                if ($("#VariableId").val() == '' || $("#VariableId").val() == null) {
-                        $.growl.warning({
-                            message: "Select Variable Type !"
-                        });
-                    status = false;
-                        return false;
-                    }
-
-                var Data = {
-                    TemplateId: $("#TemplateId").val(),
-                    Title: $('#Title').val(),
-                    Subject: $("#Subject").val(),
-                    Body: $("#NoteBody").val(),
-                    Status: $("#Status").is(':checked')
-                }
-
-                $.ajax({
-                    async: false,
-                    url: "/Setting/EmailTemplateCheckData",
-                    type: "GET",
-                    data: {
-                        id: $("#TemplateId").val(),
-                        title: $("#Title").val()
-                    },
-                    success: function (data) {
-                        if (data != "") {
-                            debugger;
-                            //var b = JSON.parse(data)
-                            if (data.success) {
-                                // $.growl.warning(data.message);
-                                $.growl.warning({
-                                    message: data.message
-                                });
-                                status = false;
-                            } else {
-                                $("#addEmail").modal('hide');
-                            }
-                        }
-                    },
-                    error: function () {
-                        status = false;
-                        //   toastr.error("Please Fill Required Field");
-                    }
-                });
-
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                });
-
-                if (status) {
-
-                    swalWithBootstrapButtons.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        cancelButtonText: 'No, cancel!',
-                        confirmButtonText: 'Yes, Save it!',
-                        timer: 30000,
-                        reverseButtons: true
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $.ajax({
-                                async: false,
-                                url: "/Setting/PostEmailTemplate",
-                                type: "Post",
-                                data: Data,
-                                success: function (data) {
-                                    if (data != "") {
-                                        debugger;
-                                        //var b = JSON.parse(data)
-                                        var url = '@Url.Action("NotificationSettings", "Setting",new { data = 2 })';
-                                        window.location.href = url;
-
-
-                                        $("#TemplateId").val(0)
-                                        $("#Title").val('')
-                                        $("#Subject").val('')
-                                        $('#NoteBody').summernote('code', '');
-                                    } else {
-                                        $("#addEmail").modal('hide');
-                                    }
-                                },
-                                error: function () {
-                                    status = false;
-                                    //   toastr.error("Please Fill Required Field");
-                                }
-                            });
-                        } else if (result.dismiss === Swal.DismissReason.cancel) {
-                            swalWithBootstrapButtons.fire(
-                                'Cancelled',
-                                'Your record is safe :)',
-                                'error'
-                            );
-                        }
-                    });
-                   
-                }
-            }
-
-            function addnewEmail() {
-
-                $("#addEmail").modal('show');
-                $("#TemplateId").val(0)
-                $("#Title").val('')
-                $("#Subject").val('')
-                $('#Body').summernote('code', '');
-                $("#Status").prop('checked', true);
-                $("#Title").css("border-color", "#ddd");
-
-            }
-
-             function addTextAtCursor(text) {
-                    var summernote = $('#NoteBody').summernote();
-                    var currentRange = summernote.summernote('createRange');
-                    var html = $.parseHTML(text);
-
-                    currentRange.insertNode(html[0]);
-                currentRange.collapse(false);
-                }
-
-
-
-
-	
-	$('#caret').click(function (e){
-			
-		if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
-        	var span = document.createElement('span');	    
-	        span.setAttribute('style','font-style:italic');
-	    	span.innerHTML="${firstName}";
-			
-			range.deleteContents();        
-	        range.insertNode(span);  
-	        //cursor at the last with this
-	        range.collapse(false);
-	        selection.removeAllRanges();
-			selection.addRange(range);
-
-		}else{
-			return;
-		}
-	});
-
-
-
-            // Load variable json call
-            $(document).ready(function () {
-
-                $('#VariableId').change(function () {
-                    var selectedValue = $(this).val();
-                   
-                    var obj=
-                    {
-                        type: selectedValue
-                    }
-                    // AJAX call
-                    $.ajax({
-                        url: "/Setting/GetVariblebyType",
-                        type: "GET",
-                        async: false,
-                        data: obj,
-                        success: function (response) {
-                            debugger
-                            if (response != null) {
-                                console.log(response)
-                                debugger
-                                var html = '';  // Create an empty string to store the HTML content
-
-                                //var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning, bg-purple "];
-
-                                var colors = [ "bg-primary"];
-                                for (var i = 0; i < response.length; i++) {
-                                    // Append each variable name to the html string
-
-                                    var randomColor = colors[Math.floor(Math.random() * colors.length)];
-                                    // Append each variable name to the html string within a container div
-                                    html += '<div style="display: inline-block; margin-right: 10px;margin-bottom: 10px">';
-                                    html += '<a href="#" onclick="TextPosition(' + i + ')"  > <span  id="variableid_' + i + '"  class="badge ' + randomColor + '-transparent" style="font-size: 14px;">' + response[i].variableName + '</span>';
-                                    html += '</div>';
-
-
-
-                                   // html += '<span class="badge badge-primary" style="font-size:14px;">' + response[i].variableName +  '</span>';
-                                }
-
-                                $('.NoteVaribleID').html(html);
-                            }
-
-
-
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus, errorThrown);
-                        }
-                    });
-                });
-            });
-
-
-
-
-            function TextPosition(id)
-            {
-                debugger;
-            
-            
-                    if($(parentNode).parents().is('.note-editable') || $(parentNode).is('.note-editable') ){
-        	            var span = document.createElement('span');	    
-	                   
-                        span.innerHTML = '<span>' + $('#variableid_'+id).text() + '</span>';
-
-			            range.deleteContents();        
-	                    range.insertNode(span);  
-	                    //cursor at the last with this
-	                    range.collapse(false);
-	                    selection.removeAllRanges();
-			            selection.addRange(range);
-
-		            }else{
-			            return;
-		            }}
-
-
+                        ///////////////
 
 
 

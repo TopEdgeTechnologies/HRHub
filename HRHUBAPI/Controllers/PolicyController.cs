@@ -115,11 +115,11 @@ namespace HRHUBAPI.Controllers
 
         #region Leave Policy
 
-        [HttpGet("PostLeavePolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{halfleave}/{quarterleave}")]
-        public async Task<ActionResult<Policy>> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool halfleave, bool quarterleave)
+        [HttpGet("PostLeavePolicyConfiguration{id}/{policyId}/{title}/{CompanyId}/{UserId}/{halfleave}/{quarterleave}/{calenderyearapproach}/{accrualapproach}/{monthno}")]
+        public async Task<ActionResult<Policy>> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool halfleave, bool quarterleave, bool calenderyearapproach, bool accrualapproach, int monthno)
         {
 
-            var dbResult = await new Policy().PostLeavePolicyConfiguration(id, policyId, title, CompanyId, UserId, halfleave, quarterleave, _context);
+            var dbResult = await new Policy().PostLeavePolicyConfiguration(id, policyId, title, CompanyId, UserId, halfleave, quarterleave, calenderyearapproach, accrualapproach, monthno, _context);
             if (dbResult != null)
             {
                 return Ok(new

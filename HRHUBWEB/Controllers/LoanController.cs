@@ -688,23 +688,26 @@ namespace HRHUBWEB.Controllers
 
                 if (Token != null)
                 {
+
                     ViewBag.ApprovalBtnVisibility = true;
                     if (staffid == _user.StaffId)
                     {
                         ViewBag.ApprovalBtnVisibility = false;
                     }
 
-                    var setting = await _APIHelper.CallApiAsyncGet<LeaveApprovalSetting>($"api/Leave/GetLeaveApprovalSettingInfos{CompanyId}", HttpMethod.Get);
+                    var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{CompanyId}", HttpMethod.Get);
                     // Extract the column name from the response
-                    var FinalApprovalDesignationID = setting.FinalApprovalByDesignationId;
+                    var FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
 
                     ViewBag.ForwardBtnVisibility = false;
+                    ViewBag.ControlVisibility = false;
                     if (FinalApprovalDesignationID == _user.DesignationID)
                     {
                         ViewBag.ForwardBtnVisibility = true;
+                        ViewBag.ControlVisibility = true;
                     }
 
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); // Staffs must be gotten from Staff api
+                    HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); 
                     if (message1.IsSuccessStatusCode)
                     {
                         var result = message1.Content.ReadAsStringAsync().Result;
@@ -712,17 +715,17 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    LoanApplication ObjLeave = await GetLoanDetailById(id);
+                    LoanApplication ObjLoan = await GetLoanDetailById(id);
 
-                    HttpResponseMessage message2 = await _client.GetAsync($"api/PayrollConfiguration/GetLoanApprovalByLoanId{id}"); //
+                    HttpResponseMessage message2 = await _client.GetAsync($"api/PayrollConfiguration/GetLoanApprovalByLoanId{id}");
                     if (message2.IsSuccessStatusCode)
                     {
                         var result = message2.Content.ReadAsStringAsync().Result;
-                        ObjLeave.ListLoanApprovalData = JsonConvert.DeserializeObject<List<LoanApplicationProcess>>(result);
+                        ObjLoan.ListLoanApprovalData = JsonConvert.DeserializeObject<List<LoanApplicationProcess>>(result);
 
                     }
 
-                    return View(ObjLeave);
+                    return View(ObjLoan);
                 }
                 else
                 {

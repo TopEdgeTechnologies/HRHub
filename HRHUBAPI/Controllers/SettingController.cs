@@ -198,7 +198,219 @@ namespace HRHUBAPI.Controllers
         }
         #endregion
 
+        #region GeneralTypeSetting
 
+        [HttpGet("GetOffBoardingSetting{CompanyId}")]
+        public async Task<ActionResult<List<StaffOffBoarding>>> GetOffBoardingSetting(int CompanyId)
+        {
+
+            return await new StaffOffBoarding().GetOffBoardingSetting(CompanyId, _context);
+        }
+        [HttpPost("PostOffBoardingProcessSetting")]
+        public async Task<ActionResult<OffBoardingProcessSetting>> PostOffBoardingProcessSetting(OffBoardingProcessSetting employmentType)
+        {
+
+            var dbResult = await new StaffOffBoarding().PostOffBoardingProcessSetting(employmentType, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("GetOffBoardingSettingById/{id}")]
+        public async Task<ActionResult<OffBoardingProcessSetting>> GetOffBoardingSettingById(int id)
+        {
+            var dbResult = await new StaffOffBoarding().GetOffBoardingSettingById(id, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+        [HttpGet("OffBoardingSettingAlreadyExists{CompanyId}/{id}/{departmentid}/{designationid}")]
+        public async Task<ActionResult<bool>> OffBoardingSettingAlreadyExists(int CompanyId, int id, int departmentid, int designationid)
+        {
+            var dbResult = await new StaffOffBoarding().AlreadyExists(CompanyId, id, departmentid, designationid, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+        [HttpGet("DeleteOffBoardingSetting{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteOffBoardingSetting(int Id, int UserId)
+        {
+            if (Id > 0)
+            {
+
+                var dbResult = await new StaffOffBoarding().DeleteOffBoardingSetting(Id, UserId, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpPost("UpdateStaffOffBoardingAllowInterview")]
+        public async Task<ActionResult<OffBoardingProcessSetting>> UpdateStaffOffBoardingAllowInterview(OffBoardingProcessSetting obj)
+        {
+            var result = await new StaffOffBoarding().UpdateStaffOffBoardingAllowInterview(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
+
+        [HttpGet("GetEmploymentType{CompanyId}")]
+        public async Task<ActionResult<List<EmploymentType>>> GetEmploymentType(int CompanyId)
+        {
+
+            return await new EmploymentType().GetEmploymentType(CompanyId, _context);
+        }
+        [HttpPost("PostEmploymentType")]
+        public async Task<ActionResult<EmploymentType>> PostEmploymentType(EmploymentType employmentType)
+        {
+
+            var dbResult = await new EmploymentType().PostEmploymentType(employmentType, _context);
+            if (dbResult != null && dbResult.TransFlag == 2)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+        [HttpGet("EmploymentTypeAlreadyExists{CompanyId}/{id}/{title}")]
+        public async Task<ActionResult<bool>> EmploymentTypeAlreadyExists(int CompanyId, int Id, string title)
+        {
+            var dbResult = await new EmploymentType().AlreadyExists(CompanyId, Id, title, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+        [HttpGet("DeleteEmploymentType{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteEmploymentType(int Id, int UserId)
+        {
+            if (Id > 0)
+            {
+
+                var dbResult = await new EmploymentType().DeleteEmploymentType(Id, UserId, _context);
+                if (dbResult == true)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
+            return NotFound("Data Not Found!");
+        }
+        [HttpGet("GetEmploymentTypeById/{Id}")]
+        public async Task<ActionResult<EmploymentType>> GetEmploymentTypeById(int Id)
+        {
+            var dbResult = await new EmploymentType().GetEmploymentTypeById(Id, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+        [HttpPost("UpdateStatusByEmploymentTypeId")]
+        public async Task<ActionResult<EmploymentType>> UpdateStatusByEmploymentTypeId(EmploymentType obj)
+        {
+            var result = await new EmploymentType().UpdateStatusByEmploymentTypeId(obj, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+        #endregion
+
+        #region SMTPSetting
+        [HttpPost("PostSMTPSetting")]
+        public async Task<ActionResult<Company>> PostSMTPSetting(Company Obj)
+        {
+
+            var dbResult = await new Policy().PostSMTPSetting(Obj, _context);
+            if (dbResult != null)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Updated Successfully"
+                }); ;
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        #endregion
 
 
         #region NotificationSetting
@@ -218,6 +430,18 @@ namespace HRHUBAPI.Controllers
         }
 
 
+        // Get Variable List 
+        [HttpGet("GetEmailDynamicVariableType{Type}")]
+        public async Task<ActionResult<List<EmailDynamicVariable>>> GetEmailDynamicVariableType(string Type)
+        {
+            var result = await new EmailNotificationSetting().GetEmailDynamicVariableType(Type,_context);
+            if (result != null)
+                return Ok(result);
+
+            return NotFound();
+
+
+        }
 
 
 
@@ -430,6 +654,10 @@ namespace HRHUBAPI.Controllers
 
 
         #endregion
+
+
+
+
 
     }
 }

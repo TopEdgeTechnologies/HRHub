@@ -198,8 +198,10 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
+		modelBuilder.Entity<Announcement>().ToTable(tb => tb.HasTrigger("Email_SendNotificationOnAnnouncement"));
 
-        modelBuilder.Entity<Appraisal>(entity =>
+
+		modelBuilder.Entity<Appraisal>(entity =>
         {
             entity.ToTable("Appraisal", "Performance");
 

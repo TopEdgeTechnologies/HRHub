@@ -396,20 +396,39 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteLoanTypeInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int id)
+        //[HttpDelete("DeleteLoanTypeInfo{id}")]
+        //public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int id)
+        //{
+        //    var result = await new LoanType().DeleteLoanTypeInfo(id, _context);
+        //    if (id > 0)
+        //        return Ok(new
+        //        {
+
+        //            Success = true,
+        //            Message = "Data Delete Successfully!"
+
+
+        //        });
+
+        //    return NotFound("Data Not Found!");
+        //}
+
+        [HttpGet("DeleteLoanTypeInfo{Id}")]
+        public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int Id)
         {
-            var result = await new LoanType().DeleteLoanTypeInfo(id, _context);
-            if (id > 0)
-                return Ok(new
+            if (Id > 0)
+            {
+
+                var dbResult = await new LoanType().DeleteLoanTypeInfo(Id, _context);
+                if (dbResult == true)
                 {
-
-                    Success = true,
-                    Message = "Data Delete Successfully!"
-
-
-                });
-
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
             return NotFound("Data Not Found!");
         }
 

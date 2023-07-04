@@ -40,6 +40,12 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public bool? IsShortMinutesDeduction { get; set; }
         [NotMapped]
+        public bool? leaveDistributionIsCalendarYearApproach { get; set; }
+        [NotMapped]
+        public bool? leaveDistributionIsAccrualApproach { get; set; }
+        [NotMapped]
+        public int? MonthNo { get; set; }
+        [NotMapped]
         public IEnumerable<Policy>? ListPolicy { get; set; }
         public async Task<List<Policy>> GetPolicy(HrhubContext _context)
         {
@@ -428,9 +434,6 @@ namespace HRHUBAPI.Models
 
         #endregion
 
-
-
-
         #region LeaveSettings
         public async Task<LeaveApprovalSetting> PostLeaveSetting(LeaveApprovalSetting obj, HrhubContext _context)
         {
@@ -478,7 +481,7 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<PolicyConfiguration> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool HalfLeave, bool QuarterLeave, HrhubContext _context)
+        public async Task<PolicyConfiguration> PostLeavePolicyConfiguration(int id, int policyId, string title, int CompanyId, int UserId, bool HalfLeave, bool QuarterLeave, bool CalenderYearApproach, bool AccrualApproach, int MonthNo, HrhubContext _context)
         {
             using (var dbContextTransaction = _context.Database.BeginTransaction())
             {
@@ -513,13 +516,31 @@ namespace HRHUBAPI.Models
                     }
 
                     #region updation in leaves setting 
-                    if (policyId == 9) // Tardiness policy
+                    if (policyId == 9) // Flexibility in Leave Utilization
                     {
                         var checkLeaveInfo = await _context.LeaveApprovalSettings.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.IsDeleted == false);
                         if (checkLeaveInfo != null && checkLeaveInfo.SettingId > 0)
                         {
                             checkLeaveInfo.AllowApplyHalfDayLeave = HalfLeave;
                             checkLeaveInfo.AllowApplyShortDayLeave = QuarterLeave;
+                            checkLeaveInfo.UpdatedOn = DateTime.Now;
+                            checkLeaveInfo.UpdatedBy = UserId;
+
+                            await _context.SaveChangesAsync();
+
+                        }
+                    }
+                    #endregion
+
+                    #region updation in Company table
+                    if (policyId == 1) // Leave Distribution Approach
+                    {
+                        var checkLeaveInfo = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.IsDeleted == false);
+                        if (checkLeaveInfo != null && checkLeaveInfo.CompanyId > 0)
+                        {
+                            checkLeaveInfo.LeaveDistributionIsCalendarYearApproach = CalenderYearApproach;
+                            checkLeaveInfo.LeaveDistributionIsAccrualApproach = AccrualApproach;
+                            checkLeaveInfo.LeaveDistributionStartMonth = MonthNo;
                             checkLeaveInfo.UpdatedOn = DateTime.Now;
                             checkLeaveInfo.UpdatedBy = UserId;
 
@@ -552,6 +573,7 @@ namespace HRHUBAPI.Models
                 var list = await (from p in _context.PolicyConfigurations
                                   join pp in _context.Policies on p.PolicyId equals pp.PolicyId
                                   join l in _context.LeaveApprovalSettings on p.CompanyId equals l.CompanyId
+                                  join c in _context.Companies on p.CompanyId equals c.CompanyId
 
 
                                   where p.PolicyConfigurationId == id && p.IsDeleted == false
@@ -566,7 +588,10 @@ namespace HRHUBAPI.Models
                                       Status = p.Status,
                                       Description = pp.Description,
                                       HalfLeave = l.AllowApplyHalfDayLeave,
-                                      QuarterLeave = l.AllowApplyShortDayLeave
+                                      QuarterLeave = l.AllowApplyShortDayLeave,
+                                      leaveDistributionIsCalendarYearApproach = c.LeaveDistributionIsCalendarYearApproach,
+                                      leaveDistributionIsAccrualApproach = c.LeaveDistributionIsAccrualApproach,
+                                      MonthNo = c.LeaveDistributionStartMonth,
 
                                   }).FirstOrDefaultAsync();
 
@@ -925,6 +950,46 @@ namespace HRHUBAPI.Models
         //        }
         //    }
         //}
+
+        #endregion
+
+
+        #region SMTP Settings
+        public async Task<Company> PostSMTPSetting(Company obj, HrhubContext _context)
+        {
+            try
+            {
+                var checkCompanyInfo = await _context.Companies.FirstOrDefaultAsync(x => x.CompanyId == obj.CompanyId && x.IsDeleted == false);
+                if (checkCompanyInfo != null && checkCompanyInfo.CompanyId > 0)
+                {
+                    checkCompanyInfo.EmailSendFrom = obj.EmailSendFrom;
+                    checkCompanyInfo.EmailPassword = obj.EmailPassword;
+                    checkCompanyInfo.EmailSmtpport = obj.EmailSmtpport;
+                    checkCompanyInfo.EmailServerHost = obj.EmailServerHost;
+                    checkCompanyInfo.UpdatedOn = DateTime.Now;
+                    checkCompanyInfo.UpdatedBy = Convert.ToInt32(obj.UserId);
+
+                    await _context.SaveChangesAsync();
+
+                }
+                else
+                {
+                    obj.CreatedBy = Convert.ToInt32(obj.UserId);
+                    obj.CreatedOn = DateTime.Now;
+                    _context.Companies.Add(obj);
+                    await _context.SaveChangesAsync();
+                }
+                return checkCompanyInfo;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+
+            }
+        }
+
 
         #endregion
 
