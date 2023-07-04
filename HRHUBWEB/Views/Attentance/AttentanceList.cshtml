@@ -165,11 +165,7 @@
 @section scripts{
 
     <script>
-
-
         $(document).ready(function () {
-
-			
 			CheckStatusNow();
 			function updateTime() {
 				var currentTime = new Date();
@@ -374,79 +370,44 @@
 
 		}
 
-
-
-
         function LoadAttendance() {
-
-
-
             var obj = {
-
 				fromdate: $("#fromdate").val(),
-				todate: $("#todate").val()
-              
-            }
-		
-		
+				todate: $("#todate").val()         
+            }	
             $.ajax({
 				url: "/Attentance/GetAttendanceData",
                 type: "GET",
                 async: false,
                 data: obj,
-                success: function (data) {
-                 
+                success: function (data) {                 
                     if(data!=null)
-                    {
-						
-						debugger;
-					
+                    {						
+						debugger;					
 						var table = $('#emp-attendance').DataTable();
                           table.clear();
                           table.draw();
-                      
-                  
-
 							for(var i = 0; i < data.length; i++) {
-                           
                             var rowData = [];
-
-
 							var Totalhours = Math.floor(  parseInt(data[i]["totalDefinedMinutes"]) / 60);
 							var TotalremainingMinutes = parseInt(data[i]["totalDefinedMinutes"]) % 60;
-
 							var Emphours = Math.floor(parseInt(data[i]["totalWorkingMinutes"]) / 60);
 							var EmpremainingMinutes = parseInt(data[i]["totalWorkingMinutes"]) % 60;
-
-
-
 							var percenatge = (parseInt(data[i]["totalWorkingMinutes"]) / parseInt(data[i]["totalDefinedMinutes"])) * 100
 							var statusHtml = '<td><span class="badge ' + data[i]["cssClass"] + '">' + data[i]["attendancestatus"] + '</span></td>';
 							var progress = '<div class="progress progress-sm d-block"   data-toggle="tooltip" title="' + Totalhours + ':' + TotalremainingMinutes + '"   ><div class="progress-bar bg-success w-' + parseInt(percenatge) + '"   data-toggle="tooltip" title="' + Emphours + ':' + EmpremainingMinutes + '" > </div>	</div>';
-
+							
 							rowData.push([i + 1, data[i]["attendanceFormateDate"], statusHtml, convertTimeToAMPM(data[i]["firstPunchIn"]), convertTimeToAMPM(data[i]["lastPunchOut"]), progress]);
-
-
-                          table.rows.add(rowData);
-                          table.draw();
-
+	                        table.rows.add(rowData);
+							table.draw();
                          }
-
-                      
-                       
                     }
-                  
-                    
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
                 }
             });
-
-               
-     
      }
-
 
 		//function convertTimeToAMPM(timeString) {
 		//	if (timeString != null && timeString != '' && timeString!='NaN'){
@@ -469,13 +430,6 @@
 		//	}
 
 		//}
-
-
-		
-
-
-
-
 
     </script>
 	}

@@ -9,8 +9,7 @@ using System;
 using System.ComponentModel.Design;
 
 namespace HRHUBWEB.Controllers
-{
-   
+{ 
     public class DashboardController : Controller
     {
         private IWebHostEnvironment _webHostEnvironment;
@@ -140,11 +139,9 @@ namespace HRHUBWEB.Controllers
 		
 			public async Task<IActionResult> HRAttendance(string status = "")
 			{
-
 				@ViewBag.Status = status;
 				return View();
 			}
-
 
 		#endregion
 
@@ -282,11 +279,8 @@ namespace HRHUBWEB.Controllers
 			    return View();
             }
 
-
-
 		#endregion
 
 	}
-
 
 }

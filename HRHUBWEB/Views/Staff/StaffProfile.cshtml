@@ -1,10 +1,8 @@
 ﻿@model HRHUBAPI.Models.Staff
 
-
 @{
 	ViewData["Title"] = "StaffProfile";
 }
-
 
 <style>
 	.child-center {
@@ -534,10 +532,6 @@
 	</div>
 </div>
 
-	
-
-
-
 @section scripts{
 	<script>
 		
@@ -588,6 +582,7 @@
 							html_Attendance += ' <tr> '
 							html_Attendance += '	 <td>' + data[i].attendanceFormateDate + '</td> '
 							html_Attendance += '	 <td><span class="badge ' + data[i].cssClass + '-light">' + data[i].attendancestatus + '</span></td> '
+							
 							if(data[i].attendancestatus == 'Leave' || data[i].attendancestatus == 'Absent'){
 								html_Attendance += '	 <td> </td>'
 								html_Attendance += '	 <td> </td>'
@@ -595,10 +590,11 @@
 								html_Attendance += '	 <td> </td>'
 							}
 							else{
+								debugger
 								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["firstPunchIn"]) + '</td> '
 								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["lastPunchOut"]) + '</td> '
 								html_Attendance += '	 <td> ' + progress + '</td>'
-								html_Attendance += '	 <td>' + Emphours + 'h :' + EmpremainingMinutes + ' mins</td> '
+								html_Attendance += data[i]["lastPunchOut"] == null ? '<td></td>' : '	 <td>' + Emphours + 'h :' + EmpremainingMinutes + ' mins</td> '
 							}
 							html_Attendance += ' </tr> '
 						}

@@ -13,21 +13,17 @@ namespace HRHUBWEB.Controllers
     public class UserController : Controller
     {
         private readonly HttpClient _client;
-     //   private readonly CacheExtensions _cacheExtensions;
-
+        //   private readonly CacheExtensions _cacheExtensions;
         public UserController(IHttpClientFactory httpClient )
         {
             _client = httpClient.CreateClient("APIClient");
            // _cacheExtensions = cacheExtensions; 
-         
         }
 
-    
         #region Login      
 
-
         [HttpGet]
-       [AllowAnonymous]
+        [AllowAnonymous]
         public async Task<IActionResult> Loginpage(int id=0)
         {
             User obj = new User();
@@ -36,7 +32,6 @@ namespace HRHUBWEB.Controllers
 
             return PartialView("_Login" , obj); 
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,42 +46,29 @@ namespace HRHUBWEB.Controllers
                 if (message.IsSuccessStatusCode)
                 {
                     var body = message.Content.ReadAsStringAsync();
-                    
                     var model = JsonConvert.DeserializeObject<Response>(body.Result);
 					if (model.Success)
                     {
-
                         if (model.Message.Contains("Successfully"))
                         {
-
-							
-							HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
+                            HttpContext.Session.SetObjectAsJson("AuthenticatedUser", model.Data);
                             HttpContext.Session.SetObjectAsJson("AuthenticatedToken", model.Token);
-                          //  _cacheExtensions.SetObject("UserDataKey", model.Data);
-
-                            return RedirectToAction("HR", "Dashboard");
+                            //  _cacheExtensions.SetObject("UserDataKey", model.Data);
+                            return RedirectToAction("StaffDashboard", "Dashboard");
                         }
-
                     }
                     else
                     {
                         return RedirectToAction("Loginpage", "User" , new {id=1 });
-
                     }
-
-
                 }
-
                 return RedirectToAction("Loginpage", "User", new { id = 1 });
-
             }
             catch (Exception)
             {
-
                 return RedirectToAction("Loginpage", "User", new { id = 1 });
             }
         }
-
 
 		[HttpPost]
 		public async Task<IActionResult> passwordchange(string Password ,string OldPasword) 
@@ -179,8 +161,6 @@ namespace HRHUBWEB.Controllers
 		}
 		#endregion
 
-
-
 		#region Register
 
 		[HttpGet]
@@ -235,7 +215,6 @@ namespace HRHUBWEB.Controllers
         }
         #endregion
 
-
         [HttpGet]
         public IActionResult Logout()
         {
@@ -252,14 +231,8 @@ namespace HRHUBWEB.Controllers
             {
                 throw new Exception(ex.Message, ex.InnerException);
             }
-            finally
-            {
-            }
-        }
-    
-    
-    
-    //destroy session befor login user
+        } 
+        //destroy session befor login user
 
         private void Destroy()
         {
@@ -270,8 +243,5 @@ namespace HRHUBWEB.Controllers
             HttpContext.Session.Clear();
         }
 
-
-    
-    
     }
 }
