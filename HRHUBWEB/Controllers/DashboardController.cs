@@ -151,10 +151,10 @@ namespace HRHUBWEB.Controllers
 		#region Staff Dashboard
 
 		[HttpGet]
-		    public async Task<IActionResult> StaffMonthlyAttendance(DateTime currentDate)
+		    public async Task<IActionResult> StaffMonthlyAttendance(int currentDate)
 		    {
 			    string procrdure = "BI.GetStaff_Attendance_Summary";
-			    object[] parameters = new object[] { _user.CompanyId ?? 0, "'" + currentDate.ToString("yyyy") + "'", _user.UserId };
+			    object[] parameters = new object[] { _user.CompanyId ?? 0,  currentDate, _user.UserId };
 
 			    var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			    return Json(result);

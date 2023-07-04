@@ -71669,7 +71669,23 @@ a.text-dark:focus {
     z-index: 9999999 !important;
 }
 
+.table-scroll {
+    display: block;
+    overflow-y: auto;
+    width: 100%;
+}
 
+.sticky-thead {
+    position: sticky;
+    top: 0px;
+    background: #fff;
+    color:#000;
+    z-index: 1;
+    margin-bottom: 12px;
+}
 
+.dark-mode .sticky-thead {
+    background: #262b5a;
+}
 
 /*# sourceMappingURL=style.css.map */
