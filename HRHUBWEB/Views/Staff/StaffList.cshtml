@@ -143,22 +143,24 @@
                                             }
                                         }
                                         <td>
-                                            @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                            {
-                                                <a asp-action="GetStaffCreateOrUpdate" asp-route-id="@item.StaffId" class="btn btn-primary btn-icon btn-sm">
-                                                    <i class="feather feather-edit" data-bs-toggle="tooltip" data-original-title="View/Edit"></i>
-                                                </a>
-                                            }
-                                            @if (Convert.ToBoolean(ViewBag.IsDelete))
-                                            {
-                                                <a class="btn btn-danger btn-icon btn-sm" data-bs-toggle="tooltip" data-original-title="Delete"><i class="feather feather-trash-2"></i></a>
-                                            }
                                             <!----- Action Buttons Code Start From Here------>
                                             <div class="float-end ms-auto">
                                                 <div class="btn-group ms-3 mb-0">
                                                     <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
                                                     <div class="dropdown-menu dropdown-menu-start" style="">
-                                                        <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>
+                                                        @*<a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>*@
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="View/Edit" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>View/Edit
+                                                            </a>
+                                                        }
+                                                        @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-trash-2 me-2"></i>Delete
+                                                            </a>
+                                                        }
                                                         <a onclick="OpenStaffProfile(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile" class="dropdown-item" href="javascript:void(0);">
                                                             <i class="feather feather-eye me-2"></i>Profile
                                                         </a>
@@ -287,6 +289,11 @@
             var url = "/Staff/StaffProfile?staffId=" + encodeURIComponent(staffId);
             window.location.href = url;
         }
+
+        function LoadStaffCreateOrUpdate(staffId) {
+            var url = "/Staff/GetStaffCreateOrUpdate?id=" + encodeURIComponent(staffId);
+			window.location.href = url;
+		}
 
     </script>
 
