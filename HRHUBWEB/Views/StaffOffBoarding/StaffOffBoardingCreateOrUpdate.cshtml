@@ -48,10 +48,22 @@
                                 </select>
                             </div>
                             <div class="leave-content active" id="single">
-                                <div class="form-group">
+
+                                <div class="header-datepicker me-3">
+                                    <label class="form-label">Apply Date</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="feather feather-calendar"></i>
+                                            </div>
+                                        </div><input asp-for="LastWorkingDay" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group">
                                     <label class="form-label">Last Working Day Date</label>
                                     <input type="date" asp-for="LastWorkingDay" name="LastWorkingDay" class="form-control" placeholder="select dates" />
-                                </div>
+                                </div>*@
                             </div>
 
                             <div class="form-group">

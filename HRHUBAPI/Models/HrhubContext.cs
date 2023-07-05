@@ -151,6 +151,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
+    public virtual DbSet<UserLoginHistory> UserLoginHistories { get; set; }
+
     public virtual DbSet<VInfoStaff> VInfoStaffs { get; set; }
 
     public virtual DbSet<ViewPerformanceForm> ViewPerformanceForms { get; set; }
@@ -188,7 +190,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<Announcement>(entity =>
         {
-            entity.ToTable("Announcement");
+            entity.ToTable("Announcement", tb => tb.HasTrigger("Email_SendNotificationOnAnnouncement"));
 
             entity.Property(e => e.AnnouncementId).HasColumnName("AnnouncementID");
             entity.Property(e => e.AnnouncementDate).HasColumnType("date");
@@ -198,10 +200,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
-		modelBuilder.Entity<Announcement>().ToTable(tb => tb.HasTrigger("Email_SendNotificationOnAnnouncement"));
 
-
-		modelBuilder.Entity<Appraisal>(entity =>
+        modelBuilder.Entity<Appraisal>(entity =>
         {
             entity.ToTable("Appraisal", "Performance");
 
@@ -518,6 +518,9 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.OnAnnouncementsTemplateId).HasColumnName("OnAnnouncements_TemplateID");
+            entity.Property(e => e.OnBenefitEnrollmentTemplateId).HasColumnName("OnBenefitEnrollment_TemplateID");
+            entity.Property(e => e.OnLeaveApprovalTemplateId).HasColumnName("OnLeaveApproval_TemplateID");
             entity.Property(e => e.OnSalaryGenerationTemplateId).HasColumnName("OnSalaryGeneration_TemplateID");
         });
 
@@ -609,7 +612,7 @@ public partial class HrhubContext : DbContext
 
         modelBuilder.Entity<Leave>(entity =>
         {
-            entity.ToTable("Leave", "HR");
+            entity.ToTable("Leave", "HR", tb => tb.HasTrigger("Email_SendNotificationOnLeaveApproval"));
 
             entity.Property(e => e.LeaveId).HasColumnName("LeaveID");
             entity.Property(e => e.ApplicationHtml)
@@ -668,6 +671,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.LeaveStatusId).HasColumnName("LeaveStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CssClass).IsUnicode(false);
             entity.Property(e => e.Description).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -964,6 +968,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PermanentAddress).IsUnicode(false);
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
+            entity.Property(e => e.ReportingToStaffId).HasColumnName("ReportingTo_StaffID");
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryMethodId)
@@ -1091,7 +1096,7 @@ public partial class HrhubContext : DbContext
         {
             entity.HasKey(e => e.StaffSalaryComponentId).HasName("PK_StaffSalaryComponents");
 
-            entity.ToTable("StaffSalaryComponent", "Payroll");
+            entity.ToTable("StaffSalaryComponent", "Payroll", tb => tb.HasTrigger("Email_SendNotificationOnBenefitEnrollment"));
 
             entity.Property(e => e.StaffSalaryComponentId).HasColumnName("StaffSalaryComponentID");
             entity.Property(e => e.CompanyContributionAmount).HasColumnType("money");
@@ -1204,6 +1209,18 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ParentId).HasColumnName("parentId");
             entity.Property(e => e.ReferenceId).HasColumnName("ReferenceID");
             entity.Property(e => e.Status).HasColumnName("status");
+        });
+
+        modelBuilder.Entity<UserLoginHistory>(entity =>
+        {
+            entity.ToTable("UserLoginHistory");
+
+            entity.Property(e => e.UserLoginHistoryId).HasColumnName("UserLoginHistoryID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.SessionFrom).HasColumnType("datetime");
+            entity.Property(e => e.SessionTo).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
         modelBuilder.Entity<VInfoStaff>(entity =>

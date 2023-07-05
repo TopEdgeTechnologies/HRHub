@@ -31,10 +31,26 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+
+                            <div class="header-datepicker me-3">
                                 <label class="form-label">Apply Date</label>
-                                <input type="date" asp-for="ApplicationDate" class="form-control fc-datepicker" placeholder="select date" />
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input asp-for="ApplicationDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                </div>
                             </div>
+
+                            @*<div class="input-group"><label class="form-label">Apply Date</label>
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="feather feather-calendar"></i>
+                                    </div>
+                                </div>
+                                <input  type="text" asp-for="ApplicationDate" class="form-control fc-datepicker" />
+                            </div>*@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -90,7 +106,7 @@
             <!-- Row -->
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xxl-12">
-                    <div class="card">
+                    
                         <div class="card-header">
 
                             <h4 class="card-title">Loan Summary</h4>
@@ -272,7 +288,6 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
                 </div>
 
             </div>
@@ -437,16 +452,11 @@
             $("#LoanApplicationId").val(0)
             $('#LoanTypeId').val('').change();
 
-            var d = new Date();
+            var currentDate = new Date(); // Get the current date
+          
+            $('#ApplicationDate').datepicker('setDate', currentDate);
 
-            var month = d.getMonth() + 1;
-            var day = d.getDate();
 
-            var output = d.getFullYear() + '-' +
-                (month < 10 ? '0' : '') + month + '-' +
-                (day < 10 ? '0' : '') + day;
-
-            $("#ApplicationDate").val(output)
             $("#Amount").val(0)
             $("#NoOfInstallments").val(0)
             $("#InstallmentPerMonth").val(0)

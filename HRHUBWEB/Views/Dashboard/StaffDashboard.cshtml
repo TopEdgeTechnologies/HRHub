@@ -8,81 +8,96 @@
 
 <!--Apply Leaves Modal -->
 <div class="modal fade" id="applyleaves">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title">Apply Leaves</h5>
-				<button  class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div class="leave-types">
-					<div class="form-group">
-						
-						<input type="hidden" id="LeaveId" name="LeaveId" />
-						<label class="form-label">Leaves Dates</label>
-						<select name="projects"  class="form-control custom-select select2" id="daterange-categories">
-							<option value="single">Single Leaves</option>
-							<option value="multiple">Multiple Leaves</option>
-						</select>
-					</div>
-					<div class="leave-content active" id="single">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Apply Leaves</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="leave-types">
+                    <div class="form-group">
+
+                        <input type="hidden" id="LeaveId" name="LeaveId" />
+                        <label class="form-label">Leaves Dates</label>
+                        <select name="projects" class="form-control custom-select select2" id="daterange-categories">
+                            <option value="single">Single Leaves</option>
+                            <option value="multiple">Multiple Leaves</option>
+                        </select>
+                    </div>
+                    <div class="leave-content active" id="single">
                         <div class="row form-group">
                             <label class="form-label">Date Range:</label>
                             <div class="col-xl-12 col-md-12 col-lg-12" id="singledate">
-                                <div class="input-group">
-									<input id="StartDate" name="StartDate" type="date" class="form-control " placeholder="select date" />
+                                <div class="header-datepicker me-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="feather feather-calendar"></i>
+                                            </div>
+                                        </div><input id="EndDate" name="EndDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                    </div>
                                 </div>
+
                             </div>
                             <div class="col-xl-6 col-md-12 col-lg-12">
-                                <div class="input-group" hidden id="MultipleDate">
-									<input id="EndDate" name="EndDate" type="date" class="form-control " placeholder="select date" />
+                                <div hidden id="MultipleDate">
+
+                                    <div class="header-datepicker me-0">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="feather feather-calendar"></i>
+                                                </div>
+                                            </div><input id="EndDate" name="EndDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
-					<div class="form-group">
-						<label class="form-label">Leaves Types</label>						
-						<select id="LeaveTypeId" class="form-control">
-
-						</select>	
-					</div>
-					<div class="form-group">
-						<label class="form-label">Reason:</label>
-						<textarea id="LeaveSubject" name="LeaveSubject" class="form-control" rows="2" placeholder="Some text here..."></textarea>
-					</div>
-					<div class="row form-group leavecheckbox">
-						<div class="col-xl-6 col-md-12 col-lg-12 mt-2 half">
-							<label class="custom-control custom-checkbox chkbox">
-								<input type="checkbox" id="MarkAsHalfLeave" name="MarkAsHalfLeave" class="custom-control-input">
-								<span class="custom-control-label">Half Leave</span>
-							</label>
-						</div>
-						<div class="col-xl-6 col-md-12 col-lg-12 mt-2 short">
-							<label class="custom-control custom-checkbox chkbox">
-								<input type="checkbox" id="MarkAsShortLeave" name="MarkAsShortLeave" class="custom-control-input">
-								<span class="custom-control-label">Short Leave</span>
-							</label>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<div class="">
-					<label class="mb-0 font-weight-semibold">Selected Days:</label>
-					<span class="badge badge-success badge-pill ms-2" id="SelectedDays">0</span>
-				</div>
-				<div class="ms-auto">
-					<button type="button" onclick="PostLeaveApplication()" class="btn btn-primary">Submit</button>
-					<a  href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
-				</div>
-			</div>
-		</div>
-	</div>
+                    <div class="form-group">
+                        <label class="form-label">Leaves Types</label>
+                        <select id="LeaveTypeId" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Reason:</label>
+                        <textarea id="LeaveSubject" name="LeaveSubject" class="form-control" rows="2" placeholder="Some text here..."></textarea>
+                    </div>
+                    <div class="row form-group leavecheckbox">
+                        <div class="col-xl-6 col-md-12 col-lg-12 mt-2 half">
+                            <label class="custom-control custom-checkbox chkbox">
+                                <input type="checkbox" id="MarkAsHalfLeave" name="MarkAsHalfLeave" class="custom-control-input">
+                                <span class="custom-control-label">Half Leave</span>
+                            </label>
+                        </div>
+                        <div class="col-xl-6 col-md-12 col-lg-12 mt-2 short">
+                            <label class="custom-control custom-checkbox chkbox">
+                                <input type="checkbox" id="MarkAsShortLeave" name="MarkAsShortLeave" class="custom-control-input">
+                                <span class="custom-control-label">Short Leave</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="">
+                    <label class="mb-0 font-weight-semibold">Selected Days:</label>
+                    <span class="badge badge-success badge-pill ms-2" id="SelectedDays">0</span>
+                </div>
+                <div class="ms-auto">
+                    <button type="button" onclick="PostLeaveApplication()" class="btn btn-primary">Submit</button>
+                    <a href="javascript:void(0);" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- End Apply Leaves Modal  -->
-
 <!--UpComing Holiday Modal -->
 <div class="modal fade" id="UpComingHolidayModelEvent">
     <div class="modal-dialog modal-lg" role="document">
@@ -92,7 +107,7 @@
                 <div class="card-options col-md-3">
                     <select id="sumaryMonthHoliday" class=" form-control custom-select select2">
                         <option value="0">All</option>
-						<option value="1">January</option>
+                        <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
                         <option value="4">April</option>
@@ -112,16 +127,16 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="table-responsive attendance_table mt-4">
-								<table class="table mb-0 text-nowrap" style="max-height: 500px; overflow-y: scroll;">
-									@*
+                                <table class="table mb-0 text-nowrap" style="max-height: 500px; overflow-y: scroll;">
+                                    @*
                                     <thead>
-                                        <tr>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Description</th>
-                                        </tr>
+                                    <tr>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Description</th>
+                                    </tr>
                                     </thead>
-									*@
-									<tbody id="tblBodyUpComingHoliday" style="max-height: 500px; overflow-y: scroll;">
+                                    *@
+                                    <tbody id="tblBodyUpComingHoliday" style="max-height: 500px; overflow-y: scroll;">
                                     </tbody>
                                 </table>
                             </div>
@@ -136,55 +151,53 @@
     </div>
 </div>
 <!--End UpComing Holiday Modal -->
-
 <!--Loan Management Modal -->
 <div class="modal fade" id="LoanModelEvent">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-				<h5 class="modal-title">Loan Management</h5>
-				@*
+                <h5 class="modal-title">Loan Management</h5>
+                @*
                 <div class="card-options col-md-3">
-                    <select id="sumaryMonthLoan" class=" form-control custom-select select2">
-                        <option value="0">All</option>
-						<option value="1">January</option>
-                        <option value="2">February</option>
-                        <option value="3">March</option>
-                        <option value="4">April</option>
-                        <option value="5">May</option>
-                        <option value="6">June</option>
-                        <option value="7">July</option>
-                        <option value="8">August</option>
-                        <option value="9">September</option>
-                        <option value="10">October</option>
-                        <option value="11">November</option>
-                        <option value="12">December</option>
-                    </select>
+                <select id="sumaryMonthLoan" class=" form-control custom-select select2">
+                <option value="0">All</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+                </select>
                 </div>
-				*@
+                *@
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="table-responsive attendance_table mt-4">
-								<table class="table mb-0 text-nowrap">
-									@*
+                                <table class="table mb-0 text-nowrap">
+                                    @*
                                     <thead>
-                                        <tr>
-                                            <th class="text-center">S.No</th>
-                                            <th class="text-start">Employee</th>
-                                            <th class="text-center">Date</th>
-                                            <th class="text-center">Description</th>
-                                        </tr>
+                                    <tr>
+                                    <th class="text-center">S.No</th>
+                                    <th class="text-start">Employee</th>
+                                    <th class="text-center">Date</th>
+                                    <th class="text-center">Description</th>
+                                    </tr>
                                     </thead>
-									*@
-									<tbody id="tblBodyLoanModal" style="max-height: 500px; overflow-y: scroll;">
+                                    *@
+                                    <tbody id="tblBodyLoanModal" style="max-height: 500px; overflow-y: scroll;">
                                     </tbody>
                                 </table>
-								<div id="LoanBalanceSummaryModal" class="row mb-0 pb-0">
-
-								</div>
+                                <div id="LoanBalanceSummaryModal" class="row mb-0 pb-0">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -197,7 +210,6 @@
     </div>
 </div>
 <!--End Loan Management Modal -->
-
 <!--UpComing Birthday Modal -->
 <div class="modal fade" id="UpComingBirthdayModelEvent">
     <div class="modal-dialog modal-lg" role="document">
@@ -207,7 +219,7 @@
                 <div class="card-options col-md-3">
                     <select id="sumaryMonth" class=" form-control custom-select select2">
                         <option value="0">All</option>
-						<option value="1">January</option>
+                        <option value="1">January</option>
                         <option value="2">February</option>
                         <option value="3">March</option>
                         <option value="4">April</option>
@@ -227,7 +239,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="table-responsive attendance_table mt-4">
-								<table class="table mb-0 text-nowrap">
+                                <table class="table mb-0 text-nowrap">
                                     <thead>
                                         <tr>
                                             <th class="text-center">S.No</th>
@@ -236,7 +248,7 @@
                                             <th class="text-center">Description</th>
                                         </tr>
                                     </thead>
-									<tbody id="tblBodyUpComingBirthday" style="max-height: 500px; overflow-y: scroll;">
+                                    <tbody id="tblBodyUpComingBirthday" style="max-height: 500px; overflow-y: scroll;">
                                     </tbody>
                                 </table>
                             </div>
@@ -251,490 +263,483 @@
     </div>
 </div>
 <!--End UpComing Birthday Modal -->
+<!--Page header-->
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <div class="page-title">Staff<span class="font-weight-normal text-muted ms-2">Dashboard</span></div>
+    </div>
+    <div class="page-rightheader ms-md-auto">
+        <div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
+            <a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal">Apply Leaves</a> @*data-bs-target="#applyleaves"*@
+            <div class="d-flex">
+                <div class="header-datepicker me-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="feather feather-calendar"></i>
+                            </div>
+                        </div><input id="DashboardCalender" class="form-control fc-datepicker" placeholder="19 Feb 2020" type="text">
+                    </div>
+                </div>
+                <div class="header-datepicker me-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="feather feather-clock"></i>
+                            </div><!-- input-group-text -->
+                        </div><!-- input-group-prepend -->
+                        <input id="tpBasic" type="text" placeholder="09:30:15 am" class="form-control input-small">
+                        <button id="toggleClockButton" type="button" class="btn btn-primary" data-bs-toggle="button" aria-pressed="false">am/pm</button>
+                    </div>
+                </div><!-- wd-150 -->
+            </div>
+            <div class="d-lg-flex d-block">
+                <div class="btn-list">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clockinmodal">Clock In</button>
+                    <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
+                    <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                    <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Page header-->
+<!--Row-->
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-start">
+                            <h5 class="">Present</h5>
+                            <h3 id="PresentCount" class="mb-0 mt-auto text-primary">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-primary my-auto  float-end"> <i class=" IconCenterAlignment feather feather-box"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-start">
+                            <h5 class="">Paid Leave</h5>
+                            <h3 id="PaidLeaveCount" class="mb-0 mt-auto text-secondary">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-secondary my-auto  float-end"> <i class="IconCenterAlignment feather feather-briefcase"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-start">
+                            <h5 class="">Absent</h5>
+                            <h3 id="AbsentCount" class="mb-0 mt-auto text-danger">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-danger my-auto  float-end"> <i class="IconCenterAlignment feather feather-award"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-7">
+                        <div class="mt-0 text-start">
+                            <h5 class="">Projects</h5>
+                            <h3 class="mb-0 mt-auto text-success">0</h3>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="icon1 bg-success my-auto  float-end"> <i class="IconCenterAlignment feather feather-file-text"></i> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Row-->
+<!--Row-->
+<div class="row">
+    <div class="col-xl-12 col-md-12 col-lg-12">
+        <div class="col-sm-12 col-xl-12">
+            <div class="card">
+                <div class="card-header border-bottom-0">
+                    <div class="card-title">Attendance Summary</div>
+                    <div class="card-options col-md-2">
+                        <select id="chartDate" class=" form-control custom-select select2">
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
 
-	<!--Page header-->
-	<div class="page-header d-xl-flex d-block">
-		<div class="page-leftheader">
-			<div class="page-title">Staff<span class="font-weight-normal text-muted ms-2">Dashboard</span></div>
-		</div>
-		<div class="page-rightheader ms-md-auto">
-			<div class="d-flex align-items-end flex-wrap my-auto end-content breadcrumb-end">
-				<a onclick="openApplyLeaveModal()" href="javascript:void(0);" class="btn btn-primary me-3 mt-3 mt-lg-0 mb-3 mb-md-0" data-bs-toggle="modal">Apply Leaves</a> @*data-bs-target="#applyleaves"*@
-				<div class="d-flex">
-					<div class="header-datepicker me-3">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="feather feather-calendar"></i>
-								</div>
-							</div><input id="DashboardCalender" class="form-control fc-datepicker" placeholder="19 Feb 2020" type="text">
-						</div>
-					</div>
-					<div class="header-datepicker me-3">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="feather feather-clock"></i>
-								</div><!-- input-group-text -->
-							</div><!-- input-group-prepend -->
-							<input id="tpBasic" type="text" placeholder="09:30:15 am" class="form-control input-small">
-							<button id="toggleClockButton" type="button" class="btn btn-primary" data-bs-toggle="button" aria-pressed="false">am/pm</button>
-						</div>
-					</div><!-- wd-150 -->
-				</div>
-				<div class="d-lg-flex d-block">
-					<div class="btn-list">
-						<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clockinmodal">Clock In</button>
-						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-						<button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-						<button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--End Page header-->
-
-	<!--Row-->
-	<div class="row">
-		<div class="col-xl-3 col-lg-6 col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-7">
-							<div class="mt-0 text-start">
-								<h5 class="">Present</h5>
-								<h3 id="PresentCount" class="mb-0 mt-auto text-primary">0</h3>
-							</div>
-						</div>
-						<div class="col-5">
-							<div class="icon1 bg-primary my-auto  float-end"> <i class=" IconCenterAlignment feather feather-box"></i> </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-lg-6 col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-7">
-							<div class="mt-0 text-start">
-								<h5 class="">Paid Leave</h5>
-								<h3 id="PaidLeaveCount" class="mb-0 mt-auto text-secondary">0</h3>
-							</div>
-						</div>
-						<div class="col-5">
-							<div class="icon1 bg-secondary my-auto  float-end"> <i class="IconCenterAlignment feather feather-briefcase"></i> </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-lg-6 col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-7">
-							<div class="mt-0 text-start">
-								<h5 class="">Absent</h5>
-								<h3 id="AbsentCount" class="mb-0 mt-auto text-danger">0</h3>
-							</div>
-						</div>
-						<div class="col-5">
-						<div class="icon1 bg-danger my-auto  float-end"> <i class="IconCenterAlignment feather feather-award"></i> </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-3 col-lg-6 col-md-12">
-			<div class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="col-7">
-							<div class="mt-0 text-start">
-								<h5 class="">Projects</h5>
-								<h3 class="mb-0 mt-auto text-success">0</h3>
-							</div>
-						</div>
-						<div class="col-5">
-							<div class="icon1 bg-success my-auto  float-end"> <i class="IconCenterAlignment feather feather-file-text"></i> </div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- /Row-->
-	<!--Row-->
-	<div class="row">
-		<div class="col-xl-12 col-md-12 col-lg-12">
-			<div class="col-sm-12 col-xl-12">
-				<div class="card">
-					<div class="card-header border-bottom-0"> 
-						<div class="card-title">Attendance Summary</div> 
-						<div class="card-options col-md-2">
-							<select id="chartDate" class=" form-control custom-select select2">
-								<option value="2023">2023</option>
-								<option value="2024">2024</option>
-								<option value="2025">2025</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="card-body"> 
-						<div class="chartjs-wrapper-demo">
-							<canvas id="chartStackedAttendance" class="h-300"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xl-8 col-lg-12 col-md-12">
-			<div class="card">
-				<div class="p-0">
-					@*<div class="card-header border-0">
-					<h4 class="card-title">Calendar</h4>
+                <div class="card-body">
+                    <div class="chartjs-wrapper-demo">
+                        <canvas id="chartStackedAttendance" class="h-300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-8 col-lg-12 col-md-12">
+        <div class="card">
+            <div class="p-0">
+                @*<div class="card-header border-0">
+                <h4 class="card-title">Calendar</h4>
                 </div>*@
-					<div class="calendar p-4 pt-0">
-						<div id="calendar1"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="col-xl-4 col-lg-12 col-md-12">
-			<div class="card">
-				<div class="card-header border-0">
-				@*
-				<div class="card-header border-bottom-0">
-					<h4 class="card-title">Up Coming Birthdays</h4>
-					<div class="card-options"> me-3
-						<a href="javascript:void(0);" class="btn btn-outline-light">View All</a>
-					</div>
-				</div>
-				*@
-					<h4 class="card-title">Leave Balance</h4>
-					<div class="card-options">
-						<a href="javascript:void(0);" class="btn btn-outline-light">View All</a>
-					</div>
-				</div>
-				<div class="table-responsive leave_table fs-13 mt-5">
-					<table class="table mb-0 text-nowrap">
-						<thead class="border-top">
-							<tr>
-								<th class="text-start">Balance</th>
-								<th class="text-start">Used</th>
-								<th class="text-center">Available</th>
-							</tr>
-						</thead>
-						<tbody id="TblBodyLeaveBalance" style="max-height: 170px; overflow-y: scroll;">
-
-						</tbody>
-					</table>
-				</div>
-				<div id="LeaveBalanceSummary" class="row mb-0 pb-0">
-					@*
-					<div class="col-4 text-center py-5 border-end">
-						<h5>Vacation</h5>
-						<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 16</span></div>
-					</div>
-					<div class="col-4 text-center py-5 border-end">
-						<h5>Sick leave</h5>
-						<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
-					</div>
-					<div class="col-4 text-center py-5">
-						<h5>Unpaid leave</h5>
-						<div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
-					</div>
-					*@
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">	
-		<div class="col-xl-6 col-lg-12 col-md-12">
-			<div class="card">
-				<div class="card-header border-0">
-					<h4 class="card-title">Up Coming Holidays</h4>
-					<div class="card-options">
-					<a onclick="openUpComingHolidayView()" href="javascript:void(0);" class="btn btn-outline-light">View All</a>
-					</div>
-				</div>
-				<div id="holidaysCard" class="card-body mt-1" style="max-height: 450px; overflow-y: scroll;">
-
-				</div>
-			</div>
-		</div>
-		<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
-			<div class="card">
-				<div class="card-header border-bottom-0">
-					<h4 class="card-title">Up Coming Birthdays</h4>
-					<div class="card-options">
-					<a onclick="openUpComingBirthdayView()" href="javascript:void(0);" class="btn btn-outline-light" data-bs-toggle="modal">View All</a>
-					</div>
-				</div>
-				<div class="card-body p-3">
-					<div class="table-responsive">
-						<table class="table text-nowrap mb-0 text-nowrap">
-							<tbody id="TblBodyBirthday">
-
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
-		<div class="card">
-			<div class="card-header border-bottom-0">
-				<h4 class="card-title">Loan Management</h4>
-				<div class="card-options">
-					<a onclick="loadStaffLoanInfo('modal')" href="javascript:void(0);" class="btn btn-outline-light" data-bs-toggle="modal">View All</a>
-				</div>
-			</div>
-			<div class="card-body p-3">
-				<div class="table-responsive">
-					<table class="table text-nowrap mb-0 text-nowrap">
-						<tbody id="TblBodyLoan">
-						</tbody>
-					</table>
-					<div id="LoanBalanceSummary" class="row mb-0 pb-0">
-						@*
-						<div class="col-4 text-center py-5 border-end">
-							<h5>Paid Loan</h5>
-							<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 16</span></div>
-						</div>
-						<div class="col-4 text-center py-5 border-end">
-							<h5>Remaining Loan</h5>
-							<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
-						</div>
-						<div class="col-4 text-center py-5">
-							<h5>Total Loan</h5>
-							<div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
-						</div>
-						*@
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-		<div class="col-xl-6 col-md-12 col-lg-12">
-		<div class="card">
-			<div class="card-header  border-0">
-				<h4 class="card-title">Recent Activity</h4>
-			</div>
-			<div class="pt-4">
-				<div class="table-responsive">
-					<table class="table transaction-table mb-0 text-nowrap">
-						<tbody>
-							<tr class="border-bottom">
-								<td class="d-flex ps-6">
-									<span class="bg-pink pink-border brround d-block me-5 mt-1 h-5 w-5"></span>
-									<div class="my-auto">
-										<span class="mb-1 font-weight-semibold fs-17">You Late to day</span>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Your office intime is 9:42</small>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Late time 14min</small>
-									</div>
-								</td>
-								<td class="text-end pe-6">
-									<a class="text-muted d-block fs-16" href="javascript:void(0);">Just Now</a>
-								</td>
-							</tr>
-							<tr class="border-bottom">
-								<td class="d-flex ps-6">
-									<span class="bg-warning warning-border brround d-block me-5 mt-1 h-5 w-5"></span>
-									<div class="my-auto">
-										<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Undoubtable source</small>
-									</div>
-								</td>
-								<td class="text-end pe-6">
-									<a class="text-muted d-block fs-16" href="javascript:void(0);">1 Hour ago</a>
-								</td>
-							</tr>
-							<tr class="border-bottom">
-								<td class="d-flex ps-6">
-									<span class="bg-primary primary-border brround d-block me-5 mt-1 h-5 w-5"></span>
-									<div class="my-auto">
-										<span class="mb-1 font-weight-semibold fs-17">Success! your Lunch Time</span>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Lunch time 1:30 To 2:30</small>
-									</div>
-								</td>
-								<td class="text-end pe-6">
-									<a class="text-muted d-block fs-16" href="javascript:void(0);">4 hours ago</a>
-								</td>
-							</tr>
-							<tr class="border-bottom">
-								<td class="d-flex ps-6">
-									<span class="bg-success success-border brround d-block me-5 mt-1 h-5 w-5"></span>
-									<div class="my-auto">
-										<span class="mb-1 font-weight-semibold fs-17">Many desktops Publishing The</span>
-										<div class="clearfix"></div>
-										<span class="mb-1 font-weight-semibold fs-17"> versions are evolved</span>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Page editors now use...</small>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Late time 14min</small>
-									</div>
-								</td>
-								<td class="text-end pe-6">
-									<a class="text-muted d-block fs-16" href="javascript:void(0);">5 hours ago</a>
-								</td>
-							</tr>
-							<tr>
-								<td class="d-flex ps-6">
-									<span class="bg-orange orange-border brround d-block me-5 mt-1 h-5 w-5"></span>
-									<div class="my-auto">
-										<span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
-										<div class="clearfix"></div>
-										<small class="text-muted fs-14">Birthday on Feb 16</small>
-									</div>
-								</td>
-								<td class="text-end pe-6">
-									<a class="text-muted d-block fs-16" href="javascript:void(0);">11 Jan 2020</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-	</div>
+                <div class="calendar p-4 pt-0">
+                    <div id="calendar1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header border-0">
+                @*
+                <div class="card-header border-bottom-0">
+                <h4 class="card-title">Up Coming Birthdays</h4>
+                <div class="card-options"> me-3
+                <a href="javascript:void(0);" class="btn btn-outline-light">View All</a>
+                </div>
+                </div>
+                *@
+                <h4 class="card-title">Leave Balance</h4>
+                <div class="card-options">
+                    <a href="javascript:void(0);" class="btn btn-outline-light">View All</a>
+                </div>
+            </div>
+            <div class="table-responsive leave_table fs-13 mt-5">
+                <table class="table mb-0 text-nowrap">
+                    <thead class="border-top">
+                        <tr>
+                            <th class="text-start">Balance</th>
+                            <th class="text-start">Used</th>
+                            <th class="text-center">Available</th>
+                        </tr>
+                    </thead>
+                    <tbody id="TblBodyLeaveBalance" style="max-height: 170px; overflow-y: scroll;">
+                    </tbody>
+                </table>
+            </div>
+            <div id="LeaveBalanceSummary" class="row mb-0 pb-0">
+                @*
+                <div class="col-4 text-center py-5 border-end">
+                <h5>Vacation</h5>
+                <div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 16</span></div>
+                </div>
+                <div class="col-4 text-center py-5 border-end">
+                <h5>Sick leave</h5>
+                <div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
+                </div>
+                <div class="col-4 text-center py-5">
+                <h5>Unpaid leave</h5>
+                <div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
+                </div>
+                *@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-6 col-lg-12 col-md-12">
+        <div class="card">
+            <div class="card-header border-0">
+                <h4 class="card-title">Up Coming Holidays</h4>
+                <div class="card-options">
+                    <a onclick="openUpComingHolidayView()" href="javascript:void(0);" class="btn btn-outline-light">View All</a>
+                </div>
+            </div>
+            <div id="holidaysCard" class="card-body mt-1" style="max-height: 450px; overflow-y: scroll;">
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
+        <div class="card">
+            <div class="card-header border-bottom-0">
+                <h4 class="card-title">Up Coming Birthdays</h4>
+                <div class="card-options">
+                    <a onclick="openUpComingBirthdayView()" href="javascript:void(0);" class="btn btn-outline-light" data-bs-toggle="modal">View All</a>
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 text-nowrap">
+                        <tbody id="TblBodyBirthday">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-4 col-xl-6 col-lg-12 col-md-12 ">
+        <div class="card">
+            <div class="card-header border-bottom-0">
+                <h4 class="card-title">Loan Management</h4>
+                <div class="card-options">
+                    <a onclick="loadStaffLoanInfo('modal')" href="javascript:void(0);" class="btn btn-outline-light" data-bs-toggle="modal">View All</a>
+                </div>
+            </div>
+            <div class="card-body p-3">
+                <div class="table-responsive">
+                    <table class="table text-nowrap mb-0 text-nowrap">
+                        <tbody id="TblBodyLoan">
+                        </tbody>
+                    </table>
+                    <div id="LoanBalanceSummary" class="row mb-0 pb-0">
+                        @*
+                        <div class="col-4 text-center py-5 border-end">
+                        <h5>Paid Loan</h5>
+                        <div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">8 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 16</span></div>
+                        </div>
+                        <div class="col-4 text-center py-5 border-end">
+                        <h5>Remaining Loan</h5>
+                        <div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">4.5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 10</span></div>
+                        </div>
+                        <div class="col-4 text-center py-5">
+                        <h5>Total Loan</h5>
+                        <div class="justify-content-center text-center d-flex my-auto"><span class="fs-20 font-weight-semibold">5 <span class="my-auto fs-14 font-weight-normal text-light">/</span> 365</span></div>
+                        </div>
+                        *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header  border-0">
+                <h4 class="card-title">Recent Activity</h4>
+            </div>
+            <div class="pt-4">
+                <div class="table-responsive">
+                    <table class="table transaction-table mb-0 text-nowrap">
+                        <tbody>
+                            <tr class="border-bottom">
+                                <td class="d-flex ps-6">
+                                    <span class="bg-pink pink-border brround d-block me-5 mt-1 h-5 w-5"></span>
+                                    <div class="my-auto">
+                                        <span class="mb-1 font-weight-semibold fs-17">You Late to day</span>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Your office intime is 9:42</small>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Late time 14min</small>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-6">
+                                    <a class="text-muted d-block fs-16" href="javascript:void(0);">Just Now</a>
+                                </td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <td class="d-flex ps-6">
+                                    <span class="bg-warning warning-border brround d-block me-5 mt-1 h-5 w-5"></span>
+                                    <div class="my-auto">
+                                        <span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Undoubtable source</small>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-6">
+                                    <a class="text-muted d-block fs-16" href="javascript:void(0);">1 Hour ago</a>
+                                </td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <td class="d-flex ps-6">
+                                    <span class="bg-primary primary-border brround d-block me-5 mt-1 h-5 w-5"></span>
+                                    <div class="my-auto">
+                                        <span class="mb-1 font-weight-semibold fs-17">Success! your Lunch Time</span>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Lunch time 1:30 To 2:30</small>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-6">
+                                    <a class="text-muted d-block fs-16" href="javascript:void(0);">4 hours ago</a>
+                                </td>
+                            </tr>
+                            <tr class="border-bottom">
+                                <td class="d-flex ps-6">
+                                    <span class="bg-success success-border brround d-block me-5 mt-1 h-5 w-5"></span>
+                                    <div class="my-auto">
+                                        <span class="mb-1 font-weight-semibold fs-17">Many desktops Publishing The</span>
+                                        <div class="clearfix"></div>
+                                        <span class="mb-1 font-weight-semibold fs-17"> versions are evolved</span>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Page editors now use...</small>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Late time 14min</small>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-6">
+                                    <a class="text-muted d-block fs-16" href="javascript:void(0);">5 hours ago</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="d-flex ps-6">
+                                    <span class="bg-orange orange-border brround d-block me-5 mt-1 h-5 w-5"></span>
+                                    <div class="my-auto">
+                                        <span class="mb-1 font-weight-semibold fs-17">Below for those interested</span>
+                                        <div class="clearfix"></div>
+                                        <small class="text-muted fs-14">Birthday on Feb 16</small>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-6">
+                                    <a class="text-muted d-block fs-16" href="javascript:void(0);">11 Jan 2020</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- end app-content-->
-
 @section scripts{
-	<script>
-		$(document).ready(function() {
-		
-			$('#myonoffswitch2').prop('checked', true);
-			localStorage.setItem('dayonedarkMode', true);
-			localStorage.removeItem('dayonelightMode');
-			localStorage.removeItem('dayonetransparentMode');
+    <script>
+        $(document).ready(function () {
 
-			$('#DashboardCalender').val('@DateTime.Now.ToString("yyyy-MM-dd")')
-			// Start the clock
-			updateClock();
+            $('#myonoffswitch2').prop('checked', true);
+            localStorage.setItem('dayonedarkMode', true);
+            localStorage.removeItem('dayonelightMode');
+            localStorage.removeItem('dayonetransparentMode');
 
-			var currentDate = new Date(); // Get the current date
-			$('#singledaterange').datepicker({
+            $('#DashboardCalender').val('@DateTime.Now.ToString("yyyy-MM-dd")')
+            // Start the clock
+            updateClock();
+
+            var currentDate = new Date(); // Get the current date
+            $('#singledaterange').datepicker({
                 dateFormat: 'yy M dd',
                 autoHide: true
             });
-			$('#singledaterange').datepicker('setDate', currentDate)
+            $('#singledaterange').datepicker('setDate', currentDate)
 
-			$('#chartDate').val('@DateTime.Now.ToString("yyyy")')
+            $('#chartDate').val('@DateTime.Now.ToString("yyyy")')
 
-			StaffCalendarData()
-			StaffCalendar()
+            StaffCalendarData()
+            StaffCalendar()
 
-			loadStaff_Attendance_Present_Leave()
-			loadStaffMonthlyAttendanceGraph()
-			loadStaffUpComingHoliday()
-			
-			loadStaffLeaveBalance_Statistics()
-			loadStaffLeaveBalance_Summary()
-			loadStaffLoanInfo('direct')
-			loadStaffUpComingBirthdays()
-			
-			$('#chartDate').change(function () {
-				loadStaffMonthlyAttendanceGraph()
+            loadStaff_Attendance_Present_Leave()
+            loadStaffMonthlyAttendanceGraph()
+            loadStaffUpComingHoliday()
+
+            loadStaffLeaveBalance_Statistics()
+            loadStaffLeaveBalance_Summary()
+            loadStaffLoanInfo('direct')
+            loadStaffUpComingBirthdays()
+
+            $('#chartDate').change(function () {
+                loadStaffMonthlyAttendanceGraph()
             });
 
-		});
+        });
 
-		$("#toggleClockButton").click(function() {
-			debugger;
-			var newText = $(this).text();
+        $("#toggleClockButton").click(function () {
+            debugger;
+            var newText = $(this).text();
 
-			if (newText !== 'am/pm') {
-				newText = 'am/pm';
-				$(this).text(newText);
-			} else {
-				newText = '24Hrs';
-				$(this).text(newText);
-			}
-			updateClock()
-		});
+            if (newText !== 'am/pm') {
+                newText = 'am/pm';
+                $(this).text(newText);
+            } else {
+                newText = '24Hrs';
+                $(this).text(newText);
+            }
+            updateClock()
+        });
 
-		function updateClock() {
-			var now = new Date();
-			var hours = now.getHours();
-			var minutes = now.getMinutes();
-			var seconds = now.getSeconds();
-			var amOrPm = hours >= 12 ? 'pm' : 'am';
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var amOrPm = hours >= 12 ? 'pm' : 'am';
 
-			// Add leading zeros to minutes and seconds
-			minutes = minutes < 10 ? '0' + minutes : minutes;
-			seconds = seconds < 10 ? '0' + seconds : seconds;
+            // Add leading zeros to minutes and seconds
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
 
-			var timeFormat = $("#toggleClockButton").text()
+            var timeFormat = $("#toggleClockButton").text()
 
-			if (timeFormat == 'am/pm') {
-				// Convert to 12-hour format
-				hours = hours % 12;
-				hours = hours ? hours : 12;
-    
-				// Update the input field value
-				document.getElementById('tpBasic').value = hours + ':' + minutes + ':' + seconds + ' ' + amOrPm;
-			}
-			else{
-				// Update the input field value
-				document.getElementById('tpBasic').value = hours + ':' + minutes + ':' + seconds;
-			}
+            if (timeFormat == 'am/pm') {
+                // Convert to 12-hour format
+                hours = hours % 12;
+                hours = hours ? hours : 12;
 
-			// Schedule the next update after 1 second
-			setTimeout(updateClock, 1000);
-		  }
+                // Update the input field value
+                document.getElementById('tpBasic').value = hours + ':' + minutes + ':' + seconds + ' ' + amOrPm;
+            }
+            else {
+                // Update the input field value
+                document.getElementById('tpBasic').value = hours + ':' + minutes + ':' + seconds;
+            }
 
-		function openApplyLeaveModal() {
-			var statusCount = 0;
-			var dropdown = $('#LeaveTypeId');
-			var ddlHtml = ''
-			
-			var data = { }
+            // Schedule the next update after 1 second
+            setTimeout(updateClock, 1000);
+        }
 
-			$.ajax({
-				async: false,
-					url: "/Dashboard/GetleaveTypeList",
-				type: "GET",
-				data: data,
-				success: function (data) {
-					if (data != "") {
-						console.log(data)
+        function openApplyLeaveModal() {
+            var statusCount = 0;
+            var dropdown = $('#LeaveTypeId');
+            var ddlHtml = ''
 
-						for (var i = 0; i < data.listleaveTypes.length; i++) {
-							ddlHtml += '<option value="' + data.listleaveTypes[i].leaveTypeId + '">' + data.listleaveTypes[i].title + '</option>'
-						}
-						dropdown.html(ddlHtml);
+            var data = {}
 
-						statusCount = data.listleaveTypes.length;
-					}
-				},
-				error: function () 
-				{
-					statusCount = 0;
-					//   toastr.error("Please Fill Required Field");
-				}
-			})
-			if(statusCount > 0){
-				debugger
-				$("#applyleaves").modal('show')
-			}
-			
-			return status;
-		}
+            $.ajax({
+                async: false,
+                url: "/Dashboard/GetleaveTypeList",
+                type: "GET",
+                data: data,
+                success: function (data) {
+                    if (data != "") {
+                        console.log(data)
 
-		$("#daterange-categories").change(function () {
+                        for (var i = 0; i < data.listleaveTypes.length; i++) {
+                            ddlHtml += '<option value="' + data.listleaveTypes[i].leaveTypeId + '">' + data.listleaveTypes[i].title + '</option>'
+                        }
+                        dropdown.html(ddlHtml);
+
+                        statusCount = data.listleaveTypes.length;
+                    }
+                },
+                error: function () {
+                    statusCount = 0;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            if (statusCount > 0) {
+                debugger
+                $("#applyleaves").modal('show')
+            }
+
+            return status;
+        }
+
+        $("#daterange-categories").change(function () {
             debugger;
             var leavecategory = $("#daterange-categories").val();
             if (leavecategory == "multiple") {
@@ -772,24 +777,24 @@
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
         })
 
-		function DateRangeinDays(startdate, enddate) {
-			debugger
-			if (startdate != "" && enddate != "") {
+        function DateRangeinDays(startdate, enddate) {
+            debugger
+            if (startdate != "" && enddate != "") {
 
-				var startdate = new Date($("#StartDate").val());
-				var enddate = new Date($("#EndDate").val());
+                var startdate = new Date($("#StartDate").val());
+                var enddate = new Date($("#EndDate").val());
 
-				// end - start returns difference in milliseconds
-				var diff = new Date(enddate - startdate);
+                // end - start returns difference in milliseconds
+                var diff = new Date(enddate - startdate);
 
-				// get days
-				var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
+                // get days
+                var days = parseInt(diff / 1000 / 60 / 60 / 24) + 1;
 
-				$("#SelectedDays").text(days);
-			}
-		}
+                $("#SelectedDays").text(days);
+            }
+        }
 
-		function CheckLeaveApplication() {
+        function CheckLeaveApplication() {
             debugger
             var status = true;
 
@@ -834,7 +839,7 @@
                 type: "GET",
                 data: Data,
                 success: function (data) {
-                    if (data >0) {
+                    if (data > 0) {
                         debugger
                         var selecteddays = $("#SelectedDays").text();
                         if (selecteddays > data) {
@@ -845,7 +850,7 @@
                             status = false;
                         }
                     }
-                    else if(data == 0){
+                    else if (data == 0) {
                         $.growl.warning({
                             message: "You have Consumed All leaves"
                         });
@@ -878,7 +883,7 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-						PostLeaveApplication()
+                        PostLeaveApplication()
                     }
                     else if (
                         result.dismiss === Swal.DismissReason.cancel
@@ -893,347 +898,346 @@
             }
         }
 
-		function PostLeaveApplication() {
-			var status = false;
+        function PostLeaveApplication() {
+            var status = false;
 
-			var Data = { 
-				leaveTypeId: $("#LeaveTypeId").val(),
-				startDate: $("#StartDate").val(),
-				endDate: $("#EndDate").val(),
-				leaveSubject: $("#LeaveSubject").val(),
-				markAsHalfLeave: $("#MarkAsHalfLeave").prop("checked"),
-				markAsShortLeave: $("#MarkAsShortLeave").prop("checked")
-			}
-			console.log(Data)
-			$.ajax({
-				async: false,
-				url: "/Dashboard/LeaveCreateOrUpdate",
-				type: "GET",
-				data: Data,
-				success: function (data) {
-					if (data != "") {
-						console.log(data)
-						status = data.success;
-						var url = "/Dashboard/StaffDashboard";
-						window.location.href = url;
-					}
-				},
-				error: function () 
-				{
-					status = false;
-					//   toastr.error("Please Fill Required Field");
-				}
-			})
-			return status;
-		}
+            var Data = {
+                leaveTypeId: $("#LeaveTypeId").val(),
+                startDate: $("#StartDate").val(),
+                endDate: $("#EndDate").val(),
+                leaveSubject: $("#LeaveSubject").val(),
+                markAsHalfLeave: $("#MarkAsHalfLeave").prop("checked"),
+                markAsShortLeave: $("#MarkAsShortLeave").prop("checked")
+            }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Dashboard/LeaveCreateOrUpdate",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        console.log(data)
+                        status = data.success;
+                        var url = "/Dashboard/StaffDashboard";
+                        window.location.href = url;
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            return status;
+        }
 
-		function loadStaffMonthlyAttendanceGraph() {
-			var MonthName = []
-			var PresentCount = []
-			var AbsentCount = []
-			var dateValue = $('#chartDate').val()
-			var requestData = { currentDate: dateValue }
+        function loadStaffMonthlyAttendanceGraph() {
+            var MonthName = []
+            var PresentCount = []
+            var AbsentCount = []
+            var dateValue = $('#chartDate').val()
+            var requestData = { currentDate: dateValue }
 
-			makeAjaxRequest("/Dashboard/StaffMonthlyAttendance", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					for (var i = 0; i < response.length; i++) {
-						MonthName.push(response[i].MonthName);
-						PresentCount.push(response[i].PresentCount);
-						var totalAbsent = response[i].NonPaidLeaveCount + response[i].AbsentCount
-						AbsentCount.push(totalAbsent);
-					}
-				}
-				}, function (errorStatus) {
-					console.log('Error:', errorStatus)
-			});
+            makeAjaxRequest("/Dashboard/StaffMonthlyAttendance", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    for (var i = 0; i < response.length; i++) {
+                        MonthName.push(response[i].MonthName);
+                        PresentCount.push(response[i].PresentCount);
+                        var totalAbsent = response[i].NonPaidLeaveCount + response[i].AbsentCount
+                        AbsentCount.push(totalAbsent);
+                    }
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
 
-			// Bar-Chart
-			var ctx = document.getElementById("chartStackedAttendance").getContext('2d');
-			var myChart = new Chart(ctx, {
-				type: 'bar',
-				data: {
-					labels: MonthName, //['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-					datasets: [{
-						barPercentage: .8,
-						categoryPercentage: 0.38,
-						label: 'PRESENT',
-						data: PresentCount, //[27,17,19,23,17,19,23,17,13,28,22,27],
-						borderWidth: 0,
-						backgroundColor:hexToRgba(myVarVal, 0.2),
-						borderColor: hexToRgba(myVarVal, 0.2),
-						pointBackgroundColor: '#ffffff',
-					},
-					{
-						label: 'ABSENT',
-						barPercentage: .8,
-						categoryPercentage: 0.38,
-						data: AbsentCount, //[28,22,21,18,13,22,24,18,16,21,18,24],
-						borderWidth: 0,
-						backgroundColor:myVarVal ,
-						borderColor: myVarVal,
-						pointBackgroundColor: myVarVal,
+            // Bar-Chart
+            var ctx = document.getElementById("chartStackedAttendance").getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: MonthName, //['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        barPercentage: .8,
+                        categoryPercentage: 0.38,
+                        label: 'PRESENT',
+                        data: PresentCount, //[27,17,19,23,17,19,23,17,13,28,22,27],
+                        borderWidth: 0,
+                        backgroundColor: hexToRgba(myVarVal, 0.2),
+                        borderColor: hexToRgba(myVarVal, 0.2),
+                        pointBackgroundColor: '#ffffff',
+                    },
+                    {
+                        label: 'ABSENT',
+                        barPercentage: .8,
+                        categoryPercentage: 0.38,
+                        data: AbsentCount, //[28,22,21,18,13,22,24,18,16,21,18,24],
+                        borderWidth: 0,
+                        backgroundColor: myVarVal,
+                        borderColor: myVarVal,
+                        pointBackgroundColor: myVarVal,
 
-					}]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					layout: {
-						padding: {
-							left: 0,
-							right: 0,
-							top: 0,
-							bottom: 0
-						}
-					},
-					tooltips: {
-						enabled: false,
-					},
-					scales: {
-						yAxes: [{
-							gridLines: {
-								display: true,
-								drawBorder: false,
-								zeroLineColor: 'rgba(142, 156, 173,0.1)',
-								color: "rgba(142, 156, 173,0.1)",
-							},
-							scaleLabel: {
-								display: false,
-							},
-							ticks: {
-								min: 5,
-								stepSize: 5,
-								max: 30,
-								fontColor: "#8492a6",
-								fontFamily: 'Poppins',
-							},
-						}],
-						xAxes: [{
-							barValueSpacing :-2,
-							barDatasetSpacing : 0,
-							barRadius: 15,
-							stacked: false,
-							ticks: {
-								beginAtZero: true,
-								fontColor: "#8492a6",
-								fontFamily: 'Poppins',
-							},
-							gridLines: {
-								color: "rgba(142, 156, 173,0.1)",
-								display: false
-							},
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0
+                        }
+                    },
+                    tooltips: {
+                        enabled: false,
+                    },
+                    scales: {
+                        yAxes: [{
+                            gridLines: {
+                                display: true,
+                                drawBorder: false,
+                                zeroLineColor: 'rgba(142, 156, 173,0.1)',
+                                color: "rgba(142, 156, 173,0.1)",
+                            },
+                            scaleLabel: {
+                                display: false,
+                            },
+                            ticks: {
+                                min: 5,
+                                stepSize: 5,
+                                max: 30,
+                                fontColor: "#8492a6",
+                                fontFamily: 'Poppins',
+                            },
+                        }],
+                        xAxes: [{
+                            barValueSpacing: -2,
+                            barDatasetSpacing: 0,
+                            barRadius: 15,
+                            stacked: false,
+                            ticks: {
+                                beginAtZero: true,
+                                fontColor: "#8492a6",
+                                fontFamily: 'Poppins',
+                            },
+                            gridLines: {
+                                color: "rgba(142, 156, 173,0.1)",
+                                display: false
+                            },
 
-						}]
-					},
-					legend: {
-						display: false
-					},
-					elements: {
-						point: {
-							radius: 0
-						}
-					}
-				}
-			});
-		}
-		
-		function loadStaff_Attendance_Present_Leave() {
-			var dateValue = $('#chartDate').val()
-			var requestData = { currentDate: dateValue }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    },
+                    elements: {
+                        point: {
+                            radius: 0
+                        }
+                    }
+                }
+            });
+        }
 
-			makeAjaxRequest("/Dashboard/Staff_Attendance_Present_Leave", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					$('#PresentCount').text(response[0].PresentCount)
-					$('#PaidLeaveCount').text(response[0].PaidLeaveCount)
-					$('#AbsentCount').text(response[0].AbsentCount)
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
-	
-		function loadStaffUpComingHoliday() {
-			var dateValue = $('#chartDate').val()
-			var requestData = { }
-			makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					var htmlHoliday = ''
-					for (var i = 0; i < response.length && i < 4; i++) {
-						//if (i = response.length - 1) {
-						//	htmlHoliday += ' <div class="mb-5"> '
-						//}
-						//else{
-						//	htmlHoliday += ' <div class="mb-5"> '
-						//}
-						htmlHoliday += ' <div class="mb-5"> '
-						htmlHoliday += ' 	<div class="d-flex comming_holidays calendar-icon icons"> '
-						htmlHoliday += ' 		<span class="date_time ' + response[i].SpanClass + ' bradius me-3"> '
-						htmlHoliday += ' 			<span class="date fs-20"> ' + response[i].HolidayDayNumber + '</span>  '
-						htmlHoliday += ' 			<span class="month fs-13">' + response[i].HolidayShortMonthName + '</span> '
-						htmlHoliday += ' 		</span> '
-						htmlHoliday += ' 		<div class="me-3 mt-0 mt-sm-1 d-block"> '
-						htmlHoliday += ' 			<h6 class="mb-1 font-weight-semibold">' + response[i].HolidayType + '</h6> '
-						htmlHoliday += ' 			<span class="clearfix"></span> '
-						htmlHoliday += ' 			<small>' + response[i].DayWithTitle + '</small> '
-						htmlHoliday += ' 		</div> '
-						htmlHoliday += ' 		<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">' + response[i].DaysLeft + ' days left</p> '
-						htmlHoliday += ' 	</div> '
-						htmlHoliday += ' </div> '
-					}
+        function loadStaff_Attendance_Present_Leave() {
+            var dateValue = $('#chartDate').val()
+            var requestData = { currentDate: dateValue }
 
-					$("#holidaysCard").html(htmlHoliday)
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
+            makeAjaxRequest("/Dashboard/Staff_Attendance_Present_Leave", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    $('#PresentCount').text(response[0].PresentCount)
+                    $('#PaidLeaveCount').text(response[0].PaidLeaveCount)
+                    $('#AbsentCount').text(response[0].AbsentCount)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
 
-		$('#sumaryMonthHoliday').change(function () {
-			openUpComingHolidayView()
-        });
-
-		function openUpComingHolidayView(){
-			$("#UpComingHolidayModelEvent").modal('show')
-			var requestData = { };
-			makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, true, function (response) {
+        function loadStaffUpComingHoliday() {
+            var dateValue = $('#chartDate').val()
+            var requestData = {}
+            makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, false, function (response) {
                 if (response != null) {
                     var htmlHoliday = ''
-					var j = 0
-					var monthNumber = 0
-					monthNumber = $('#sumaryMonthHoliday').val()
-                    for (var i = 0; i < response.length; i++) {	
-						if (monthNumber == response[i].HolidayMonthNumber || monthNumber == 0) {
-							debugger
-							htmlHoliday += ' <div class="mb-5"> '
-							htmlHoliday += ' 	<div class="d-flex comming_holidays calendar-icon icons"> '
-							htmlHoliday += ' 		<span class="date_time ' + response[i].SpanClass + ' bradius me-3"> '
-							htmlHoliday += ' 			<span class="date fs-20"> ' + response[i].HolidayDayNumber + '</span>  '
-							htmlHoliday += ' 			<span class="month fs-13">' + response[i].HolidayShortMonthName + '</span> '
-							htmlHoliday += ' 		</span> '
-							htmlHoliday += ' 		<div class="me-3 mt-0 mt-sm-1 d-block"> '
-							htmlHoliday += ' 			<h6 class="mb-1 font-weight-semibold">' + response[i].HolidayType + '</h6> '
-							htmlHoliday += ' 			<span class="clearfix"></span> '
-							htmlHoliday += ' 			<small>' + response[i].DayWithTitle + '</small> '
-							htmlHoliday += ' 		</div> '
-							htmlHoliday += ' 		<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">' + response[i].DaysLeft + ' days left</p> '
-							htmlHoliday += ' 	</div> '
-							htmlHoliday += ' </div> '
-							//htmltable += '<tr class="border-bottom">'
-							//htmltable += '<td class="text-center"> <span class="avatar avatar-sm brround" > ' + (j + 1) + ' </span></td>'
-							//htmltable += '<td class="font-weight-semibold fs-14">'
-							//htmltable += '<div class="d-flex">'
-							//htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
-							//htmltable += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
-							//htmltable += '<h6 class="mb-1 fs-14"> ' + response[i]["FullName"] + ' </h6>'
-							//htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
-							//htmltable += '</div></div> </td>'
-							//htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["BirthDay"] + ' </span></td>'
-							//if (response[i].DayLeft == 0) {
-							//	htmltable += '<td class="text-center" >Today</td></tr>'
-							//}
-							//else{
-							//	htmltable += '<td class="text-center" > ' + response[i]["DayLeft"] + ' Days Left</td></tr>'
-							//}
-							//j++;
-						}
+                    for (var i = 0; i < response.length && i < 4; i++) {
+                        //if (i = response.length - 1) {
+                        //	htmlHoliday += ' <div class="mb-5"> '
+                        //}
+                        //else{
+                        //	htmlHoliday += ' <div class="mb-5"> '
+                        //}
+                        htmlHoliday += ' <div class="mb-5"> '
+                        htmlHoliday += ' 	<div class="d-flex comming_holidays calendar-icon icons"> '
+                        htmlHoliday += ' 		<span class="date_time ' + response[i].SpanClass + ' bradius me-3"> '
+                        htmlHoliday += ' 			<span class="date fs-20"> ' + response[i].HolidayDayNumber + '</span>  '
+                        htmlHoliday += ' 			<span class="month fs-13">' + response[i].HolidayShortMonthName + '</span> '
+                        htmlHoliday += ' 		</span> '
+                        htmlHoliday += ' 		<div class="me-3 mt-0 mt-sm-1 d-block"> '
+                        htmlHoliday += ' 			<h6 class="mb-1 font-weight-semibold">' + response[i].HolidayType + '</h6> '
+                        htmlHoliday += ' 			<span class="clearfix"></span> '
+                        htmlHoliday += ' 			<small>' + response[i].DayWithTitle + '</small> '
+                        htmlHoliday += ' 		</div> '
+                        htmlHoliday += ' 		<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">' + response[i].DaysLeft + ' days left</p> '
+                        htmlHoliday += ' 	</div> '
+                        htmlHoliday += ' </div> '
                     }
-					$('#tblBodyUpComingHoliday').html(htmlHoliday)
+
+                    $("#holidaysCard").html(htmlHoliday)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
+
+        $('#sumaryMonthHoliday').change(function () {
+            openUpComingHolidayView()
+        });
+
+        function openUpComingHolidayView() {
+            $("#UpComingHolidayModelEvent").modal('show')
+            var requestData = {};
+            makeAjaxRequest("/Dashboard/Staff_UpComingHolidays", 'GET', requestData, true, function (response) {
+                if (response != null) {
+                    var htmlHoliday = ''
+                    var j = 0
+                    var monthNumber = 0
+                    monthNumber = $('#sumaryMonthHoliday').val()
+                    for (var i = 0; i < response.length; i++) {
+                        if (monthNumber == response[i].HolidayMonthNumber || monthNumber == 0) {
+                            debugger
+                            htmlHoliday += ' <div class="mb-5"> '
+                            htmlHoliday += ' 	<div class="d-flex comming_holidays calendar-icon icons"> '
+                            htmlHoliday += ' 		<span class="date_time ' + response[i].SpanClass + ' bradius me-3"> '
+                            htmlHoliday += ' 			<span class="date fs-20"> ' + response[i].HolidayDayNumber + '</span>  '
+                            htmlHoliday += ' 			<span class="month fs-13">' + response[i].HolidayShortMonthName + '</span> '
+                            htmlHoliday += ' 		</span> '
+                            htmlHoliday += ' 		<div class="me-3 mt-0 mt-sm-1 d-block"> '
+                            htmlHoliday += ' 			<h6 class="mb-1 font-weight-semibold">' + response[i].HolidayType + '</h6> '
+                            htmlHoliday += ' 			<span class="clearfix"></span> '
+                            htmlHoliday += ' 			<small>' + response[i].DayWithTitle + '</small> '
+                            htmlHoliday += ' 		</div> '
+                            htmlHoliday += ' 		<p class="float-end text-muted  mb-0 fs-13 ms-auto bradius my-auto">' + response[i].DaysLeft + ' days left</p> '
+                            htmlHoliday += ' 	</div> '
+                            htmlHoliday += ' </div> '
+                            //htmltable += '<tr class="border-bottom">'
+                            //htmltable += '<td class="text-center"> <span class="avatar avatar-sm brround" > ' + (j + 1) + ' </span></td>'
+                            //htmltable += '<td class="font-weight-semibold fs-14">'
+                            //htmltable += '<div class="d-flex">'
+                            //htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
+                            //htmltable += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                            //htmltable += '<h6 class="mb-1 fs-14"> ' + response[i]["FullName"] + ' </h6>'
+                            //htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                            //htmltable += '</div></div> </td>'
+                            //htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["BirthDay"] + ' </span></td>'
+                            //if (response[i].DayLeft == 0) {
+                            //	htmltable += '<td class="text-center" >Today</td></tr>'
+                            //}
+                            //else{
+                            //	htmltable += '<td class="text-center" > ' + response[i]["DayLeft"] + ' Days Left</td></tr>'
+                            //}
+                            //j++;
+                        }
+                    }
+                    $('#tblBodyUpComingHoliday').html(htmlHoliday)
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
-		}
+        }
 
-		function loadStaffLeaveBalance_Statistics() {
-			var requestData = { }
-			makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Statistics", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					var htmlLeaveBalance = ''
-					for (var i = 0; i < response.length; i++) {
-						htmlLeaveBalance += ' <tr class="border-bottom fs-15"> '
-						htmlLeaveBalance += ' 	<td class="text-center d-flex"><span class="bg-' + response[i].LeaveTypeCSSClass + ' brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">' + response[i].LeaveTypeTitle + '</span></td> '
-						htmlLeaveBalance += ' 	<td class="font-weight-semibold fs-15">' + response[i].LeaveCount + '</td> '
-						htmlLeaveBalance += ' 	<td class="text-center text-muted">' + response[i].RemainingLeaves + '</td> '
-						htmlLeaveBalance += ' </tr> '
-					}
+        function loadStaffLeaveBalance_Statistics() {
+            var requestData = {}
+            makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Statistics", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    var htmlLeaveBalance = ''
+                    for (var i = 0; i < response.length; i++) {
+                        htmlLeaveBalance += ' <tr class="border-bottom fs-15"> '
+                        htmlLeaveBalance += ' 	<td class="text-center d-flex"><span class="bg-' + response[i].LeaveTypeCSSClass + ' brround d-block me-3 mt-1 h-3 w-3"></span><span class="font-weight-semibold fs-15">' + response[i].LeaveTypeTitle + '</span></td> '
+                        htmlLeaveBalance += ' 	<td class="font-weight-semibold fs-15">' + response[i].LeaveCount + '</td> '
+                        htmlLeaveBalance += ' 	<td class="text-center text-muted">' + response[i].RemainingLeaves + '</td> '
+                        htmlLeaveBalance += ' </tr> '
+                    }
 
-					$("#TblBodyLeaveBalance").html(htmlLeaveBalance)
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
+                    $("#TblBodyLeaveBalance").html(htmlLeaveBalance)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
 
-		function loadStaffLeaveBalance_Summary() {
-			var requestData = { }
-			makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Summary", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					var htmlLeaveBalance = ''
-					for (var i = 0; i < response.length; i++) {
-						htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
-						htmlLeaveBalance += ' 	<h5>Paid Leave</h5> '
-						htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">' + response[i].PaidLeaveCount + ' </span></div> '
-						htmlLeaveBalance += ' </div> '
+        function loadStaffLeaveBalance_Summary() {
+            var requestData = {}
+            makeAjaxRequest("/Dashboard/Staff_LeaveBalance_Summary", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    var htmlLeaveBalance = ''
+                    for (var i = 0; i < response.length; i++) {
+                        htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                        htmlLeaveBalance += ' 	<h5>Paid Leave</h5> '
+                        htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">' + response[i].PaidLeaveCount + ' </span></div> '
+                        htmlLeaveBalance += ' </div> '
 
-						htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
-						htmlLeaveBalance += ' 	<h5>Non Paid Leave</h5> '
-						htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">' + response[i].NonPaidLeaveCount + ' </span></div> '
-						htmlLeaveBalance += ' </div> '
+                        htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                        htmlLeaveBalance += ' 	<h5>Non Paid Leave</h5> '
+                        htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">' + response[i].NonPaidLeaveCount + ' </span></div> '
+                        htmlLeaveBalance += ' </div> '
 
-						htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
-						htmlLeaveBalance += ' 	<h5>Allowed Leave</h5> '
-						htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-success fs-20 font-weight-semibold">' + response[i].AllowedLeaves + ' </span></div> '
-						htmlLeaveBalance += ' </div> '
-					}
+                        htmlLeaveBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                        htmlLeaveBalance += ' 	<h5>Allowed Leave</h5> '
+                        htmlLeaveBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-success fs-20 font-weight-semibold">' + response[i].AllowedLeaves + ' </span></div> '
+                        htmlLeaveBalance += ' </div> '
+                    }
 
-					$("#LeaveBalanceSummary").html(htmlLeaveBalance)
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
+                    $("#LeaveBalanceSummary").html(htmlLeaveBalance)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
 
-		function loadStaffUpComingBirthdays() {
-			var requestData = { }
-			makeAjaxRequest("/Dashboard/Staff_UpComingBirthdays", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					var htmlBirthday = ''
-					for (var i = 0; i < response.length && i < 5; i++) {
-						htmlBirthday += ' <tr> '
-						htmlBirthday += ' 	<td class="d-flex"> '
-						htmlBirthday += ' 		<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '" alt="media1"> '
-						htmlBirthday += ' 		<div class="my-auto"> '
-						htmlBirthday += ' 			<a href="javascript:void(0);" class="mb-1 font-weight-semibold fs-16">' + response[i].FullName + '</a> '
-						htmlBirthday += '			<p class="text-muted fs-13 mb-0">' + response[i].BirthDay + ' | ' + response[i].AgeInYears + ' Years Old</p> ';
-						htmlBirthday += ' 		</div> '
-						htmlBirthday += ' 	</td> '
-						htmlBirthday += ' 	<td class="text-end"> '
+        function loadStaffUpComingBirthdays() {
+            var requestData = {}
+            makeAjaxRequest("/Dashboard/Staff_UpComingBirthdays", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    var htmlBirthday = ''
+                    for (var i = 0; i < response.length && i < 5; i++) {
+                        htmlBirthday += ' <tr> '
+                        htmlBirthday += ' 	<td class="d-flex"> '
+                        htmlBirthday += ' 		<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '" alt="media1"> '
+                        htmlBirthday += ' 		<div class="my-auto"> '
+                        htmlBirthday += ' 			<a href="javascript:void(0);" class="mb-1 font-weight-semibold fs-16">' + response[i].FullName + '</a> '
+                        htmlBirthday += '			<p class="text-muted fs-13 mb-0">' + response[i].BirthDay + ' | ' + response[i].AgeInYears + ' Years Old</p> ';
+                        htmlBirthday += ' 		</div> '
+                        htmlBirthday += ' 	</td> '
+                        htmlBirthday += ' 	<td class="text-end"> '
 
-						if (response[i].DayLeft == 0) {
-							htmlBirthday += ' 		<a class="text-success d-block fs-16" href="javascript:void(0);">Today</a> '
-							htmlBirthday += ' 		<a class="btn btn-outline-orange mt-1" href="javascript:void(0);"><i class="fa fa-birthday-cake me-2"></i>Wish Now</a> '
-						}
-						else {
-							htmlBirthday += ' 		<a class="text-muted d-block" href="javascript:void(0);">' + response[i].DayLeft + ' Days Left</a> '
-						}
-						
-						htmlBirthday += ' 	</td> '
-						htmlBirthday += ' </tr> '
-					}
+                        if (response[i].DayLeft == 0) {
+                            htmlBirthday += ' 		<a class="text-success d-block fs-16" href="javascript:void(0);">Today</a> '
+                            htmlBirthday += ' 		<a class="btn btn-outline-orange mt-1" href="javascript:void(0);"><i class="fa fa-birthday-cake me-2"></i>Wish Now</a> '
+                        }
+                        else {
+                            htmlBirthday += ' 		<a class="text-muted d-block" href="javascript:void(0);">' + response[i].DayLeft + ' Days Left</a> '
+                        }
 
-					$("#TblBodyBirthday").html(htmlBirthday)
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
+                        htmlBirthday += ' 	</td> '
+                        htmlBirthday += ' </tr> '
+                    }
 
-		$('#sumaryMonth').change(function () {
-			openUpComingBirthdayView()
+                    $("#TblBodyBirthday").html(htmlBirthday)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
+
+        $('#sumaryMonth').change(function () {
+            openUpComingBirthdayView()
         });
 
-		function openUpComingBirthdayView() {
-			$("#UpComingBirthdayModelEvent").modal('show')
+        function openUpComingBirthdayView() {
+            $("#UpComingBirthdayModelEvent").modal('show')
             var requestData = { month: $('#sumaryMonth').val() };
             makeAjaxRequest("/Dashboard/Staff_UpComingBirthdays", 'GET', requestData, true, function (response) {
                 if (response != null) {
@@ -1242,146 +1246,146 @@
                     //var html = '';
                     //var colors = ["bg-success", "bg-danger", "bg-primary", "bg-warning"]; // List of predefined colors
                     var htmltable = ''
-					var j = 0
-					var monthNumber = 0
-					monthNumber = $('#sumaryMonth').val()
-                    for (var i = 0; i < response.length; i++) {	
-						if (monthNumber == response[i].BirthMonthNumber || monthNumber == 0) {
-							//var randomColor = colors[Math.floor(Math.random() * colors.length)];
-							//html += '<li class="item"> <div class="pt-2">	<div class="list-group">'
-							//html += '<div class="list-group-item d-flex pt-1 pb-1 border-0">'
-							//html += '<div class="me-3 me-xs-0">'
-							//html += '<div class="calendar-icon icons">'
-							//html += '<div class="date_time ' + randomColor + '"> <span class="date">  ' + response[i]["dayof"] + ' </span> <span class="month">' + response[i]["Monthof"] + '</span > </div></div></div>'
-							//html += '<div class="ms-1">'
-							//html += '<div class="h5 fs-14 mb-1" > ' + response[i]["EmployeeName"] + ' </div> <small class="text-muted">' + response[i]["description"] + '</small ></div></div></div></div> '
-							//html += '</li>';
+                    var j = 0
+                    var monthNumber = 0
+                    monthNumber = $('#sumaryMonth').val()
+                    for (var i = 0; i < response.length; i++) {
+                        if (monthNumber == response[i].BirthMonthNumber || monthNumber == 0) {
+                            //var randomColor = colors[Math.floor(Math.random() * colors.length)];
+                            //html += '<li class="item"> <div class="pt-2">	<div class="list-group">'
+                            //html += '<div class="list-group-item d-flex pt-1 pb-1 border-0">'
+                            //html += '<div class="me-3 me-xs-0">'
+                            //html += '<div class="calendar-icon icons">'
+                            //html += '<div class="date_time ' + randomColor + '"> <span class="date">  ' + response[i]["dayof"] + ' </span> <span class="month">' + response[i]["Monthof"] + '</span > </div></div></div>'
+                            //html += '<div class="ms-1">'
+                            //html += '<div class="h5 fs-14 mb-1" > ' + response[i]["EmployeeName"] + ' </div> <small class="text-muted">' + response[i]["description"] + '</small ></div></div></div></div> '
+                            //html += '</li>';
 
-							///model tabel load
+                            ///model tabel load
 
-							htmltable += '<tr class="border-bottom">'
-							htmltable += '<td class="text-center"> <span class="avatar avatar-sm brround" > ' + (j + 1) + ' </span></td>'
-							htmltable += '<td class="font-weight-semibold fs-14">'
-							htmltable += '<div class="d-flex">'
-							htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
-							htmltable += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
-							htmltable += '<h6 class="mb-1 fs-14"> ' + response[i]["FullName"] + ' </h6>'
-							htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
-							htmltable += '</div></div> </td>'
-							htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["BirthDay"] + ' </span></td>'
-							if (response[i].DayLeft == 0) {
-								htmltable += '<td class="text-center" >Today</td></tr>'
-							}
-							else{
-								htmltable += '<td class="text-center" > ' + response[i]["DayLeft"] + ' Days Left</td></tr>'
-							}
-							j++;
-						}
+                            htmltable += '<tr class="border-bottom">'
+                            htmltable += '<td class="text-center"> <span class="avatar avatar-sm brround" > ' + (j + 1) + ' </span></td>'
+                            htmltable += '<td class="font-weight-semibold fs-14">'
+                            htmltable += '<div class="d-flex">'
+                            htmltable += '<img class="avatar avatar-md brround me-3" src = "' + response[i]["SnapPath"] + '" >'
+                            htmltable += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
+                            htmltable += '<h6 class="mb-1 fs-14"> ' + response[i]["FullName"] + ' </h6>'
+                            htmltable += '<p class="text-muted mb-0 fs-12"> ' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + ' </p>'
+                            htmltable += '</div></div> </td>'
+                            htmltable += '<td class="text-center" > <span class="badge bg-success-transparent"> ' + response[i]["BirthDay"] + ' </span></td>'
+                            if (response[i].DayLeft == 0) {
+                                htmltable += '<td class="text-center" >Today</td></tr>'
+                            }
+                            else {
+                                htmltable += '<td class="text-center" > ' + response[i]["DayLeft"] + ' Days Left</td></tr>'
+                            }
+                            j++;
+                        }
                     }
 
                     //$('#EventBoarddata').html(html)
-					$('#tblBodyUpComingBirthday').html(htmltable)
+                    $('#tblBodyUpComingBirthday').html(htmltable)
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
         }
 
-		function loadStaffLoanInfo(directOpen) {			
-			var requestData = { }
-			makeAjaxRequest("/Dashboard/Staff_Loan_Statistics", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					var htmlLoan = ''
-					var totalLoanAmount = 0
-					var totalLoanRepaymentAmount = 0
-					var totalLoanRemainingAmount = 0
-					//for (var i = 0; i < response.length && i < 5; i++) {
-					for (var i = 0; i < response.length && i < (directOpen == 'direct' ? 3 : response.length) ; i++) {
-						htmlLoan += ' <tr> '
-						htmlLoan += ' 	<td class="d-flex"> '
-						htmlLoan += ' 		<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '" alt="media1"> '
-						htmlLoan += ' 		<div class="my-auto"> '
-						htmlLoan += ' 			<a href="javascript:void(0);" class="mb-1 font-weight-semibold fs-16">' + response[i].LoanTypeTitle + ' | Amount: ' + response[i].LoanAmount.toLocaleString() + '</a> '
-						htmlLoan += '			<p class="text-muted fs-13 mb-0">Total Installments: ' + response[i].NoOfInstallments + ' | Paid: ' + response[i].LoanRepaymentInstallment + '</p> ';
-						htmlLoan += '			<div class="progress progress-md"> '
-						htmlLoan += ' 				<div class="progress-bar bg-primary" style="width: ' + response[i].LoanRepaymentPercent + '%"> ' + Math.round(response[i].LoanRepaymentPercent * 10) / 10 + '%</div> '
-						htmlLoan += '			</div>  '
-						htmlLoan += ' 		</div> '
-						htmlLoan += ' 	</td> '
-						htmlLoan += ' 	<td class="text-end"> '
+        function loadStaffLoanInfo(directOpen) {
+            var requestData = {}
+            makeAjaxRequest("/Dashboard/Staff_Loan_Statistics", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    var htmlLoan = ''
+                    var totalLoanAmount = 0
+                    var totalLoanRepaymentAmount = 0
+                    var totalLoanRemainingAmount = 0
+                    //for (var i = 0; i < response.length && i < 5; i++) {
+                    for (var i = 0; i < response.length && i < (directOpen == 'direct' ? 3 : response.length); i++) {
+                        htmlLoan += ' <tr> '
+                        htmlLoan += ' 	<td class="d-flex"> '
+                        htmlLoan += ' 		<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '" alt="media1"> '
+                        htmlLoan += ' 		<div class="my-auto"> '
+                        htmlLoan += ' 			<a href="javascript:void(0);" class="mb-1 font-weight-semibold fs-16">' + response[i].LoanTypeTitle + ' | Amount: ' + response[i].LoanAmount.toLocaleString() + '</a> '
+                        htmlLoan += '			<p class="text-muted fs-13 mb-0">Total Installments: ' + response[i].NoOfInstallments + ' | Paid: ' + response[i].LoanRepaymentInstallment + '</p> ';
+                        htmlLoan += '			<div class="progress progress-md"> '
+                        htmlLoan += ' 				<div class="progress-bar bg-primary" style="width: ' + response[i].LoanRepaymentPercent + '%"> ' + Math.round(response[i].LoanRepaymentPercent * 10) / 10 + '%</div> '
+                        htmlLoan += '			</div>  '
+                        htmlLoan += ' 		</div> '
+                        htmlLoan += ' 	</td> '
+                        htmlLoan += ' 	<td class="text-end"> '
 
-						if (response[i].LoanStatus == 'Approved') {
-							htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
-						}
-						else if (response[i].LoanStatus == 'Paid') {
-							htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' ' + response[i].LoanStatus + '</a> '
-						}
-						else if (response[i].LoanStatus == 'Not Paid') {
-							htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
-						}
-						else if (response[i].LoanStatus == 'Rejected') {
-							htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
-						}
-						//if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount > 0) {
-						//	htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
-						//}
-						//else if(response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount == 0 && response[i].LoanRepaymentAmount > 0){
-						//	htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
-						//}
-						//else if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount == 0) {
-						//	htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">Not Paid</a> '
-						//}
-						//else if (response[i].LoanStatusID == 2) {
-						//	htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">Rejected</a> '
-						//}
-						htmlLoan += ' 	</td> '
-						htmlLoan += ' </tr> '
-						
-						totalLoanRepaymentAmount += response[i].LoanRepaymentAmount
-						totalLoanAmount += response[i].LoanAmount
-						totalLoanRemainingAmount = totalLoanAmount - totalLoanRepaymentAmount
-					}
+                        if (response[i].LoanStatus == 'Approved') {
+                            htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+                        }
+                        else if (response[i].LoanStatus == 'Paid') {
+                            htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' ' + response[i].LoanStatus + '</a> '
+                        }
+                        else if (response[i].LoanStatus == 'Not Paid') {
+                            htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
+                        }
+                        else if (response[i].LoanStatus == 'Rejected') {
+                            htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">' + response[i].LoanStatus + '</a> '
+                        }
+                        //if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount > 0) {
+                        //	htmlLoan += ' 		<a class="text-muted d-block fs-16" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+                        //}
+                        //else if(response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount == 0 && response[i].LoanRepaymentAmount > 0){
+                        //	htmlLoan += ' 		<a class="text-primary d-block" href="javascript:void(0);">' + response[i].LoanRepaymentAmount.toLocaleString() + ' Paid</a> '
+                        //}
+                        //else if (response[i].LoanStatusID == 1 && response[i].LoanRemainigAmount > 0 && response[i].LoanRepaymentAmount == 0) {
+                        //	htmlLoan += ' 		<a class="text-muted d-block" href="javascript:void(0);">Not Paid</a> '
+                        //}
+                        //else if (response[i].LoanStatusID == 2) {
+                        //	htmlLoan += ' 		<a class="text-orange d-block" href="javascript:void(0);">Rejected</a> '
+                        //}
+                        htmlLoan += ' 	</td> '
+                        htmlLoan += ' </tr> '
 
-					// Loan Balance Summary
-					var htmlLoanBalance = ''
-					htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
-					htmlLoanBalance += ' 	<h5>Paid Loan</h5> '
-					htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">' + totalLoanRepaymentAmount.toLocaleString() + ' </span></div> '
-					htmlLoanBalance += ' </div> '
+                        totalLoanRepaymentAmount += response[i].LoanRepaymentAmount
+                        totalLoanAmount += response[i].LoanAmount
+                        totalLoanRemainingAmount = totalLoanAmount - totalLoanRepaymentAmount
+                    }
 
-					htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
-					htmlLoanBalance += ' 	<h5>Remaining Loan</h5> '
-					htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">' + totalLoanRemainingAmount.toLocaleString() + ' </span></div> '
-					htmlLoanBalance += ' </div> '
+                    // Loan Balance Summary
+                    var htmlLoanBalance = ''
+                    htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                    htmlLoanBalance += ' 	<h5>Paid Loan</h5> '
+                    htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-primary fs-20 font-weight-semibold">' + totalLoanRepaymentAmount.toLocaleString() + ' </span></div> '
+                    htmlLoanBalance += ' </div> '
 
-					htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
-					htmlLoanBalance += ' 	<h5>Total Loan</h5> '
-					htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-success fs-20 font-weight-semibold">' + totalLoanAmount.toLocaleString() + ' </span></div> '
-					htmlLoanBalance += ' </div> '
-					
-					if(directOpen == 'direct'){
-						$("#TblBodyLoan").html(htmlLoan)
-						$("#LoanBalanceSummary").html(htmlLoanBalance)
-					}
-					else if(directOpen == 'modal'){
-						$("#tblBodyLoanModal").html(htmlLoan)
-						$("#LoanBalanceSummaryModal").html(htmlLoanBalance)
+                    htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                    htmlLoanBalance += ' 	<h5>Remaining Loan</h5> '
+                    htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-danger fs-20 font-weight-semibold">' + totalLoanRemainingAmount.toLocaleString() + ' </span></div> '
+                    htmlLoanBalance += ' </div> '
 
-						$("#LoanModelEvent").modal('show')
-					}
-				}
-			}, function (errorStatus) {
-				console.log('Error:', errorStatus)
-			});
-		}
+                    htmlLoanBalance += ' <div class="col-4 text-center py-5 border-end"> '
+                    htmlLoanBalance += ' 	<h5>Total Loan</h5> '
+                    htmlLoanBalance += ' 	<div class="justify-content-center text-center d-flex my-auto"><span class="text-success fs-20 font-weight-semibold">' + totalLoanAmount.toLocaleString() + ' </span></div> '
+                    htmlLoanBalance += ' </div> '
 
-		/*---- Full Calendar -----*/
-		var FinalDates = []
-		var FinalTitle = []
-		var FinalClass = []
+                    if (directOpen == 'direct') {
+                        $("#TblBodyLoan").html(htmlLoan)
+                        $("#LoanBalanceSummary").html(htmlLoanBalance)
+                    }
+                    else if (directOpen == 'modal') {
+                        $("#tblBodyLoanModal").html(htmlLoan)
+                        $("#LoanBalanceSummaryModal").html(htmlLoanBalance)
 
-		function StaffCalendar() {
-			debugger
+                        $("#LoanModelEvent").modal('show')
+                    }
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
+
+        /*---- Full Calendar -----*/
+        var FinalDates = []
+        var FinalTitle = []
+        var FinalClass = []
+
+        function StaffCalendar() {
+            debugger
             var calendarEl = document.getElementById('calendar1');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 headerToolbar: {
@@ -1390,31 +1394,31 @@
                     right: 'next'
                 },
 
-				// Add click events for prev and next buttons
-				datesSet: function (info) {
-					var prevButton = calendarEl.querySelector('.fc-prev-button');
-					var nextButton = calendarEl.querySelector('.fc-next-button');
+                // Add click events for prev and next buttons
+                datesSet: function (info) {
+                    var prevButton = calendarEl.querySelector('.fc-prev-button');
+                    var nextButton = calendarEl.querySelector('.fc-next-button');
 
-					prevButton.addEventListener('click', function () {
-						debugger
-						var currentDate = calendar.getDate();
-						var monthNumber = currentDate.getMonth() + 1;
-						var year = currentDate.getFullYear();
-						
-						// Handle prev button click event
-						//console.log('Previous button clicked');						
-					});
+                    prevButton.addEventListener('click', function () {
+                        debugger
+                        var currentDate = calendar.getDate();
+                        var monthNumber = currentDate.getMonth() + 1;
+                        var year = currentDate.getFullYear();
 
-					nextButton.addEventListener('click', function () {
-						debugger
-						var currentDate = calendar.getDate();
-						var monthNumber = currentDate.getMonth() + 1;
-						var year = currentDate.getFullYear();
-						
-						// Handle next button click event
-						//console.log('Next button clicked');
-					});
-				},
+                        // Handle prev button click event
+                        //console.log('Previous button clicked');
+                    });
+
+                    nextButton.addEventListener('click', function () {
+                        debugger
+                        var currentDate = calendar.getDate();
+                        var monthNumber = currentDate.getMonth() + 1;
+                        var year = currentDate.getFullYear();
+
+                        // Handle next button click event
+                        //console.log('Next button clicked');
+                    });
+                },
 
                 //navLinks: true, // can click day/week names to navigate views
                 businessHours: true, // display business hours
@@ -1445,56 +1449,56 @@
                         element.find(".fc-event-time").after($("<span class=\"fc-event-icons\"></span>").html("<i class='fe fe-view'></i> "));
                     }
                 },
-				
-				events: FinalTitle.map(function (title, index) {
-					return {
 
-						title: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalTitle[index],
-						start: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalDates[index],
-						color: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalClass[index],
-						textColor: 'black'
-					};
-				})
+                events: FinalTitle.map(function (title, index) {
+                    return {
+
+                        title: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalTitle[index],
+                        start: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalDates[index],
+                        color: (FinalClass[index] == "" || FinalClass[index] == null) ? '' : FinalClass[index],
+                        textColor: 'black'
+                    };
+                })
 
             });
             calendar.render();
         }
 
-		function StaffCalendarData(monthNumber, year){
-			debugger
-			var requestData = { } //{ month: monthNumber, year: year }
-			makeAjaxRequest("/Dashboard/Staff_Attendance_Calendar", 'GET', requestData, false, function (response) {
-				if (response != null) {
-					for (var i = 0; i < response.length; i++) {
-						if(response[i].FinalTitle != null){
-							FinalDates = response.map(function (item) {
-								return item.MonthDate;
-							});
-							FinalTitle = response.map(function (item) {
-								return item.FinalTitle;
-							});
-							FinalClass = response.map(function (item) {
-								return item.FinalClass;
-							});
-						}
-					}
-				}
-				}, function (errorStatus) {
-					console.log('Error:', errorStatus)
-			});
-		}
+        function StaffCalendarData(monthNumber, year) {
+            debugger
+            var requestData = {} //{ month: monthNumber, year: year }
+            makeAjaxRequest("/Dashboard/Staff_Attendance_Calendar", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    for (var i = 0; i < response.length; i++) {
+                        if (response[i].FinalTitle != null) {
+                            FinalDates = response.map(function (item) {
+                                return item.MonthDate;
+                            });
+                            FinalTitle = response.map(function (item) {
+                                return item.FinalTitle;
+                            });
+                            FinalClass = response.map(function (item) {
+                                return item.FinalClass;
+                            });
+                        }
+                    }
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
+        }
 
-	</script>
+    </script>
 }
 
-<!-- INTERNAL Chartjs rounded-barchart -->
-<script src="~/assets/plugins/chart.min/chart.min.js"></script>
-<script src="~/assets/plugins/chart.min/rounded-barchart.js"></script>
+    <!-- INTERNAL Chartjs rounded-barchart -->
+    <script src="~/assets/plugins/chart.min/chart.min.js"></script>
+    <script src="~/assets/plugins/chart.min/rounded-barchart.js"></script>
 
-<!-- Circle-progress js-->
-<script src="~/assets/plugins/circle-progress/circle-progress.min.js"></script>
+    <!-- Circle-progress js-->
+    <script src="~/assets/plugins/circle-progress/circle-progress.min.js"></script>
 
-<!-- INTERNAL Daterangepicker js-->
-<script src="~/assets/plugins/daterangepicker/moment.min.js"></script>
-<script src="~/assets/plugins/fullcalendar/fullcalendar.min.js"></script>
+    <!-- INTERNAL Daterangepicker js-->
+    <script src="~/assets/plugins/daterangepicker/moment.min.js"></script>
+    <script src="~/assets/plugins/fullcalendar/fullcalendar.min.js"></script>
 

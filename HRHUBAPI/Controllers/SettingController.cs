@@ -65,8 +65,7 @@ namespace HRHUBAPI.Controllers
         {
             if (Id > 0)
             {
-
-                var dbResult = await new LeaveType().DeleteLeaveTypeInfo(Id, _context);
+                var dbResult = await new LeaveType().DeleteLeaveTypeInfo(Id, UserId, _context);
                 if (dbResult == true)
                 {
                     return Ok(new

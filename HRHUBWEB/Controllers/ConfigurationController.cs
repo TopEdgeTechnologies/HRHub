@@ -21,19 +21,19 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         private IWebHostEnvironment _webHostEnvironment;
-		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly APIHelper _APIHelper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly APIHelper _APIHelper;
         private readonly User _user;
 
-		public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
+        public ConfigurationController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
             _webHostEnvironment = webHostEnvironment;
-			_APIHelper=APIHelper;
-			_httpContextAccessor = httpContextAccessor;
+            _APIHelper = APIHelper;
+            _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-		}
-        
+        }
+
         #region DesignationInfo
         [CustomAuthorization]
         public async Task<IActionResult> DesignationList(string data = "")
@@ -50,16 +50,16 @@ namespace HRHUBWEB.Controllers
             ObjDesignation.CompanyId = _user.CompanyId;
             ObjDesignation.Status = true;
 
-			ObjDesignation.Listdesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>( $"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get);
+            ObjDesignation.Listdesignation = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{ObjDesignation.CompanyId}", HttpMethod.Get);
 
             return View(ObjDesignation);
         }
         public async Task<IActionResult> DesignationDetails(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Designation>($"api/Configuration/GetDesignationInfoId{id}", HttpMethod.Get);
-			return Json(result);
+            return Json(result);
 
-           
+
         }
         [HttpPost]
         public async Task<IActionResult> UpdateDesignationStatus(int id, bool status)
@@ -71,9 +71,9 @@ namespace HRHUBWEB.Controllers
             ObjDesignation.UpdatedBy = _user.UserId;
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation, "api/Configuration/UpdateStatusByDesignationId", HttpMethod.Post);
-           
+
             return Json(result);
-           
+
         }
 
         [HttpPost]
@@ -81,20 +81,20 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-				
-				ObjDesignation.CompanyId = _user.CompanyId;
-				ObjDesignation.CreatedBy = _user.UserId;
-				var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation,"api/Configuration/DesignationAddOrUpdate", HttpMethod.Post);
 
-				if (result.Message.Contains("Insert"))
-				{
-					return RedirectToAction("DesignationList", new { data = 1 });
-				}
-				else 
-				{
-					return RedirectToAction("DesignationList", new { data = 2 });
+                ObjDesignation.CompanyId = _user.CompanyId;
+                ObjDesignation.CreatedBy = _user.UserId;
+                var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation, "api/Configuration/DesignationAddOrUpdate", HttpMethod.Post);
 
-				}
+                if (result.Message.Contains("Insert"))
+                {
+                    return RedirectToAction("DesignationList", new { data = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("DesignationList", new { data = 2 });
+
+                }
 
 
             }
@@ -114,8 +114,8 @@ namespace HRHUBWEB.Controllers
 
         public async Task<ActionResult<JsonObject>> DesignationCheckData(int id, string title)
         {
-		    var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DesignationCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
-			return Json(result);
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DesignationCheckData{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+            return Json(result);
         }
 
         #endregion
@@ -123,13 +123,13 @@ namespace HRHUBWEB.Controllers
         #region Department Info
 
         [CustomAuthorization]
-        public async Task<IActionResult> DepartmentList(string data = "" )
+        public async Task<IActionResult> DepartmentList(string data = "")
         {
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
-            
+
             ViewBag.Success = data;
 
             Department departments = new Department();
@@ -186,7 +186,7 @@ namespace HRHUBWEB.Controllers
 
         }
 
-        public async Task<IActionResult> DepartmentDelete(int id )
+        public async Task<IActionResult> DepartmentDelete(int id)
         {
             var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteDepartment{id}/{_user.UserId}", HttpMethod.Get);
             return RedirectToAction("DepartmentList", new { data = 3 });
@@ -201,7 +201,7 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         #region LeaveTypeInfo
-        
+
         [CustomAuthorization]
         public async Task<IActionResult> LeaveTypeList(string data = "")
         {
@@ -213,49 +213,15 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
 
             LeaveType leavetypes = new LeaveType();
+            leavetypes.ListLeaveTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LeaveType>>($"api/Configuration/GetLeaveTypeInfos{_user.CompanyId}", HttpMethod.Get);
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            leavetypes.CompanyId = userObject.CompanyId;
-
-
-            if (Token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfos{leavetypes.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    leavetypes.ListLeaveTypes = JsonConvert.DeserializeObject<List<LeaveType>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
             return View(leavetypes);
         }
-
         public async Task<IActionResult> GetLeaveTypeById(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
             LeaveType leavetype = new LeaveType();
-            var response = await _client.GetAsync($"api/Configuration/GetLeaveTypeInfoId{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                leavetype = JsonConvert.DeserializeObject<LeaveType>(content);
-                return Json(leavetype);
-            }
-            else
-            {
-
-                return Json(null);
-            }
-
-
+            leavetype = await _APIHelper.CallApiAsyncGet<LeaveType>($"api/Configuration/GetLeaveTypeInfoId{id}", HttpMethod.Get);
+            return Json(leavetype);
         }
 
         //[HttpGet]
@@ -292,9 +258,8 @@ namespace HRHUBWEB.Controllers
         //    }
         //}
         [HttpPost]
-        public async Task<IActionResult> UpdateLeaveTypeStatus(int id, bool status,bool nonpaid, int noofleaves)
+        public async Task<IActionResult> UpdateLeaveTypeStatus(int id, bool status, bool nonpaid, int noofleaves)
         {
-
             LeaveType ObjLeaveType = new LeaveType();
             ObjLeaveType.LeaveTypeId = id;
             ObjLeaveType.NoOfLeaves = noofleaves;
@@ -305,7 +270,6 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/UpdateStatusByLeaveTypeId", HttpMethod.Post);
 
             return Json(result);
-
         }
 
         [HttpPost]
@@ -313,50 +277,19 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                ObjLeaveType.CompanyId = _user.CompanyId;
+                ObjLeaveType.CreatedBy = _user.UserId;
 
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjLeaveType.CompanyId = userObject.CompanyId;
-                ObjLeaveType.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LeaveTypeAddOrUpdate", ObjLeaveType);
+                var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/LeaveTypeAddOrUpdate", HttpMethod.Post);
 
-                if (message.IsSuccessStatusCode)
+                if (result.Message.Contains("Insert"))
                 {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("LeaveTypeList", new { data = status });
-
+                    return RedirectToAction("LeaveTypeList", new { data = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                    return RedirectToAction("LeaveTypeList", new { data = 2 });
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -366,76 +299,20 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> LeaveTypeDelete(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLeaveTypeInfo{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
-
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                int status = 0;
-                if (model.Success)
-                {
-
-
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-
-
-
-                }
-
-                return RedirectToAction("LeaveTypeList", new { data = status });
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteLeaveTypeInfo{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("LeaveTypeList", new { data = 3 });
         }
-
         public async Task<ActionResult<JsonObject>> LeaveTypeAlreadyExists(int id, string title)
         {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/LeaveTypeAlreadyExists{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+            return Json(result);
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LeaveTypeAlreadyExists{id}/{title}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
         }
-
-
-
 
         #endregion
 
         #region LoanTypeInfo
-        
+
         [CustomAuthorization]
         public async Task<IActionResult> LoanTypeList(string data = "")
         {
@@ -447,47 +324,16 @@ namespace HRHUBWEB.Controllers
             ViewBag.Success = data;
 
             LoanType LoanTypes = new LoanType();
+            LoanTypes.ListLoanTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            LoanTypes.CompanyId = userObject.CompanyId;
-
-
-            if (Token != null)
-            {
-                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{LoanTypes.CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    LoanTypes.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(content);
-                }
-            }
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
             return View(LoanTypes);
         }
 
         public async Task<IActionResult> GetLoanTypeById(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
             LoanType LoanType = new LoanType();
-            var response = await _client.GetAsync($"api/Configuration/GetLoanTypeInfoId{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                LoanType = JsonConvert.DeserializeObject<LoanType>(content);
-                return Json(LoanType);
-            }
-            else
-            {
-
-                return Json(null);
-            }
+            LoanType = await _APIHelper.CallApiAsyncGet<LoanType>($"api/Configuration/GetLoanTypeInfoId{id}", HttpMethod.Get);
+            return Json(LoanType);
 
 
         }
@@ -528,7 +374,6 @@ namespace HRHUBWEB.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateLoanTypeStatus(int id, bool status, bool needapproval)
         {
-
             LoanType ObjLeaveType = new LoanType();
             ObjLeaveType.LoanTypeId = id;
             ObjLeaveType.Status = status;
@@ -538,58 +383,25 @@ namespace HRHUBWEB.Controllers
             var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLeaveType, "api/Configuration/UpdateStatusByLoanTypeId", HttpMethod.Post);
 
             return Json(result);
-
         }
-
         [HttpPost]
         public async Task<IActionResult> LoanTypeCreateOrUpdate(LoanType ObjLoanType)
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                ObjLoanType.CompanyId = _user.CompanyId;
+                ObjLoanType.CreatedBy = _user.UserId;
 
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjLoanType.CompanyId = userObject.CompanyId;
-                ObjLoanType.CreatedBy = userObject.UserId;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Configuration/LoanTypeAddOrUpdate", ObjLoanType);
+                var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLoanType, "api/Configuration/LoanTypeAddOrUpdate", HttpMethod.Post);
 
-                if (message.IsSuccessStatusCode)
+                if (result.Message.Contains("Insert"))
                 {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("LoanTypeList", new { data = status });
-
+                    return RedirectToAction("LoanTypeList", new { data = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                    return RedirectToAction("LoanTypeList", new { data = 2 });
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -599,71 +411,15 @@ namespace HRHUBWEB.Controllers
         }
         public async Task<IActionResult> LoanTypeDelete(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            HttpResponseMessage message = await _client.DeleteAsync($"api/Configuration/DeleteLoanTypeInfo{id}");
-            if (message.IsSuccessStatusCode)
-            {
-                var body = message.Content.ReadAsStringAsync();
-
-                var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                int status = 0;
-                if (model.Success)
-                {
-
-
-                    if (model.Message.Contains("Delete"))
-                    {
-                        status = 3;
-                    }
-
-
-
-                }
-
-                return RedirectToAction("LoanTypeList", new { data = status });
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
-
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteLoanTypeInfo{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("LoanTypeList", new { data = 3 });
         }
 
         public async Task<ActionResult<JsonObject>> LoanTypeAlreadyExists(int id, string title)
         {
-
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-
-
-            HttpResponseMessage message = await _client.GetAsync($"api/Configuration/LoanTypeAlreadyExists{id}/{title}/{CompanyId}");
-            if (message.IsSuccessStatusCode)
-            {
-                var result = message.Content.ReadAsStringAsync().Result;
-                return Json(result);
-
-            }
-
-            else
-            {
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
-            }
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/LoanTypeAlreadyExists{id}/{title}/{_user.CompanyId}", HttpMethod.Get);
+            return Json(result);
         }
-
-
-
 
         #endregion
 
@@ -692,8 +448,8 @@ namespace HRHUBWEB.Controllers
 
 
             if (Token != null)
-            { 
-                HttpResponseMessage response = await  _client.GetAsync($"api/Configuration/GetHolidaysByCompanyID{objHoliday.CompanyId}");
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/Configuration/GetHolidaysByCompanyID{objHoliday.CompanyId}");
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -714,7 +470,7 @@ namespace HRHUBWEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             Holiday objholiday = new Holiday();
-            
+
             var response = await _client.GetAsync($"api/Configuration/GetHolidayById{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -840,8 +596,8 @@ namespace HRHUBWEB.Controllers
 
 
         // Filter data through year
-       
-        public async Task<ActionResult<JsonObject>> FilterHolidayData(int Yeardate,string selectdate)
+
+        public async Task<ActionResult<JsonObject>> FilterHolidayData(int Yeardate, string selectdate)
         {
 
 
@@ -918,28 +674,28 @@ namespace HRHUBWEB.Controllers
         #region Announcement Info
 
         [CustomAuthorization]
-		public async Task<IActionResult> AnnouncementList(string data = "")
-		{
-			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
-			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
-			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
-			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+        public async Task<IActionResult> AnnouncementList(string data = "")
+        {
+            ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+            ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+            ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+            ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-			ViewBag.Success = data;
+            ViewBag.Success = data;
 
-			Announcement Announcements = new Announcement();
-			Announcements.CompanyId = _user.CompanyId;
-			Announcements.ListAnnouncements = await _APIHelper.CallApiAsyncGet<IEnumerable<Announcement>>($"api/Configuration/GetAnnouncementByCompanyID{Announcements.CompanyId}", HttpMethod.Get);
+            Announcement Announcements = new Announcement();
+            Announcements.CompanyId = _user.CompanyId;
+            Announcements.ListAnnouncements = await _APIHelper.CallApiAsyncGet<IEnumerable<Announcement>>($"api/Configuration/GetAnnouncementByCompanyID{Announcements.CompanyId}", HttpMethod.Get);
 
-			return View(Announcements);
-		}
+            return View(Announcements);
+        }
 
-		public async Task<IActionResult> GetAnnouncementById(int id)
-		{
-			Announcement Announcement = new Announcement();
-			Announcement = await _APIHelper.CallApiAsyncGet<Announcement>($"api/Configuration/GetAnnouncementById{id}", HttpMethod.Get);
-			return Json(Announcement);
-		}
+        public async Task<IActionResult> GetAnnouncementById(int id)
+        {
+            Announcement Announcement = new Announcement();
+            Announcement = await _APIHelper.CallApiAsyncGet<Announcement>($"api/Configuration/GetAnnouncementById{id}", HttpMethod.Get);
+            return Json(Announcement);
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateAnnouncementStatus(int id, bool status)
         {
@@ -955,46 +711,46 @@ namespace HRHUBWEB.Controllers
 
         }
         public async Task<IActionResult> AnnouncementCreateOrUpdate(Announcement Announcement)
-		{
-			
-			
-
-			Announcement.CompanyId = _user.CompanyId;
-			Announcement.CreatedBy = _user.UserId;
-
-			var result = await _APIHelper.CallApiAsyncPost<Response>(Announcement, "api/Configuration/PostAnnouncement", HttpMethod.Post);
-
-			if (result.Message.Contains("Insert"))
-			{
-				return RedirectToAction("AnnouncementList", new { data = 1 });
-			}
-			else
-			{
-				return RedirectToAction("AnnouncementList", new { data = 2 });
-			}
-		}
-
-		public async Task<IActionResult> AnnouncementDelete(int id)
-		{
-			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteAnnouncement{id}/{_user.UserId}", HttpMethod.Get);
-			return RedirectToAction("AnnouncementList", new { data = 3 });
-		}
-
-		public async Task<IActionResult> AnnouncementAlreadyExists(int id, string title)
-		{
-			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/AnnouncementAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
-			return Json(result);
-		}
-
-		#endregion
+        {
 
 
 
+            Announcement.CompanyId = _user.CompanyId;
+            Announcement.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Announcement, "api/Configuration/PostAnnouncement", HttpMethod.Post);
+
+            if (result.Message.Contains("Insert"))
+            {
+                return RedirectToAction("AnnouncementList", new { data = 1 });
+            }
+            else
+            {
+                return RedirectToAction("AnnouncementList", new { data = 2 });
+            }
+        }
+
+        public async Task<IActionResult> AnnouncementDelete(int id)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/DeleteAnnouncement{id}/{_user.UserId}", HttpMethod.Get);
+            return RedirectToAction("AnnouncementList", new { data = 3 });
+        }
+
+        public async Task<IActionResult> AnnouncementAlreadyExists(int id, string title)
+        {
+            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Configuration/AnnouncementAlreadyExists{_user.CompanyId}/{id}/{title}", HttpMethod.Get);
+            return Json(result);
+        }
+
+        #endregion
 
 
-		// Code for save images into database
 
-		private string uploadImage(string name, IFormFile file, string root)
+
+
+        // Code for save images into database
+
+        private string uploadImage(string name, IFormFile file, string root)
         {
 
             try

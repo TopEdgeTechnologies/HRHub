@@ -417,6 +417,10 @@ namespace HRHUBAPI.Models
                                 LeaveSubject = cs.LeaveSubject,
                                 MarkAsHalfLeave = cs.MarkAsHalfLeave,
                                 MarkAsShortLeave = cs.MarkAsShortLeave,
+
+                                LeaveStartDate = Convert.ToDateTime(cs.StartDate).ToString("dd-MMM-yyyy"),
+                                LeaveEndDate = Convert.ToDateTime(cs.EndDate).ToString("dd-MMM-yyyy"),
+
                                 IsDeleted = cs.IsDeleted,
 
                                 StaffId = cs.StaffId,
@@ -571,7 +575,7 @@ namespace HRHUBAPI.Models
 
             }
         }
-        public async Task<bool> DeleteLeaveInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteLeaveInfo(int id,int UserId, HrhubContext _context)
         {
             try
             {
@@ -581,6 +585,7 @@ namespace HRHUBAPI.Models
                 if (LeaveInfo != null)
                 {
                     LeaveInfo.IsDeleted = true;
+                    LeaveInfo.UpdatedBy = UserId;
                     LeaveInfo.UpdatedOn = DateTime.Now;
                     check = true;
 
@@ -605,8 +610,8 @@ namespace HRHUBAPI.Models
                 DbConnection _db = new DbConnection();
 
                 //string query = "Select [HR].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
-				string query = "Select RemainingLeaves FROM [HR].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " ) as RemainingLeave";
-				decimal RemainingLeave = Convert.ToInt32(_db.ReturnColumn(query, "RemainingLeave"));
+				string query = "Select RemainingLeaves FROM [HR].[Get_RemainingLeavesByStaffID]( " + StaffId + " , " + LeaveTypeID + " )";
+				decimal RemainingLeave = Convert.ToDecimal(_db.ReturnColumn(query, "RemainingLeaves"));
                 
                 return RemainingLeave;
             }

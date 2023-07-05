@@ -130,13 +130,13 @@
                                         <td>
 
                                             <a asp-action="LoanApproval" asp-route-id="@item.LoanApplicationId" asp-route-staffid="@item.StaffId">
-                                            <div class="d-flex">
-                                                <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
-                                                <div class="me-3 mt-0 mt-sm-1 d-block">
-                                                    <h6 class="mb-1 fs-14">@item.StaffRegistrationNo - @item.StaffName</h6>
-                                                    <p class="text-muted mb-0 fs-12">@item.Designation</p>
+                                                <div class="d-flex">
+                                                    <img class="avatar avatar-md brround me-3" src="@item.StaffSnap">
+                                                    <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                        <h6 class="mb-1 fs-14">@item.StaffRegistrationNo - @item.StaffName</h6>
+                                                        <p class="text-muted mb-0 fs-12">@item.Designation</p>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </a>
                                         </td>
                                         <td>
@@ -198,7 +198,7 @@
                                                         {
                                                             <a onclick="showloanApprovalmodel(this,@item.LoanApplicationId,1)" href="#" class="dropdown-item"><i class="feather feather-check me-2"></i> Accept</a>
                                                             <a onclick="showloanApprovalmodel(this,@item.LoanApplicationId,2)" href="#" class="dropdown-item"><i class="feather feather-x me-2"></i> Reject</a>
-                                                            @if (item.IsNeedApproval == true  && ViewBag.ControlVisibility == true) // New
+                                                            @if (item.IsNeedApproval == true && ViewBag.ControlVisibility == true) // New
                                                             {
                                                                 <a onclick="showforwardloanmodel(this,@item.LoanApplicationId)" href="#" class="dropdown-item"><i class="fe fe-arrow-right-circle me-2"></i> Forward</a>
                                                             }
@@ -213,7 +213,7 @@
 
 
 
-                                @*<td class="text-start d-flex">
+                                        @*<td class="text-start d-flex">
                                 <a href="#" onclick="showloanApprovalmodel(this,@item.LoanApplicationId,1)" class="action-btns1">
                                 <i class="feather feather-check text-success mt-1" data-bs-toggle="tooltip" data-bs-placement="top" title=""></i>
                                 </a>
@@ -304,20 +304,25 @@
                     </div>
                     </div>*@
 
-                    @if(ViewBag.ControlVisibility == true){
+                    @if (ViewBag.ControlVisibility == true)
+                    {
                         <div class="row">
-                        <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Payment Date</label>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="input-group">
-                                <input type="date" id="PaymentDate" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                            <div class="col-md-3">
+                                <label class="form-label">Payment Date</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input id="PaymentDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                </div>
                             </div>
                         </div>
-                    </div>
                     }
 
-                    
+
                 </div>
                 <div class="form-group">
                     <div class="row">
@@ -668,24 +673,30 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
+                        //var b = JSON.parse(data)
+                        if (data.success) {
                             // $.growl.warning(b.message);
-                            $.growl.warning({
-                                message: b.message
-                            });
+                             notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + data.message,
+                                    type: "success"
+                                });
 
-                            var url = '@Url.Action("HRLoanList", "Loan")';
-                            window.location.href = url;
+                            setTimeout(() => {
+                                var url = '@Url.Action("HRLoanList", "Leave")';
+                                window.location.href = url;
+                            }, 300);
 
                         }
                         else {
-                            $.growl.warning({
-                                message: b.message
+                            notif({
+                                 msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                                    type: "error"
                             });
 
-                            var url = '@Url.Action("HRLoanList", "Loan")';
-                            window.location.href = url;
+                            setTimeout(() => {
+                                var url = '@Url.Action("HRLoanList", "Leave")';
+                                window.location.href = url;
+                            }, 300);
 
 
                         }
