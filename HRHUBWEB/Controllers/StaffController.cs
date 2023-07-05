@@ -27,7 +27,7 @@ namespace HRHUBWEB.Controllers
         private readonly APIHelper _APIHelper;
         private readonly User _user;
 
-        public StaffController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor) 
+		public StaffController(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor) 
         {
             _webHostEnvironment = webHostEnvironment;
             _APIHelper = APIHelper;
@@ -276,20 +276,28 @@ namespace HRHUBWEB.Controllers
 
 		#region Staff Profile
 
-		public async Task<IActionResult> StaffProfile()
+		public async Task<IActionResult> StaffProfile(int staffId = 0)
         {
-		    Staff objStaff = new Staff();
-
-			return View(objStaff);
+         	var result = await _APIHelper.CallApiAsyncGet<VInfoStaff>($"api/Staffs/GetStaffProfilebyId{(staffId > 0 ? staffId : _user.StaffId)}", HttpMethod.Get);
+			return View(result);
 		}
 
-		public async Task<ActionResult<JsonObject>> GetLeaveData()
-		{
-            var currentDate = DateTime.Now;
-            DateTime foMonth = new DateTime(currentDate.Year, currentDate.Month, 1).Date;
-            DateTime eoMonth = foMonth.AddMonths(1).AddDays(-1).Date; 
+		//[HttpGet]
+		//public async Task<IActionResult> Staff_BioData()
+		//{
+		//	var result = await _APIHelper.CallApiAsyncGet<VInfoStaff>($"api/Staffs/GetStaffProfilebyId{_user.UserId}", HttpMethod.Get);
+        //  return Json(result);
+		//}
 
-			var result = await _APIHelper.CallApiAsyncGet<List<Leave>>($"api/Leave/GetLeaveInfos{_user.CompanyId}/{_user.UserId}", HttpMethod.Get);
+		[HttpGet]
+		public async Task<ActionResult<JsonObject>> GetAttendanceData(int staffId)
+		{
+			var currentDate = DateTime.Now;
+			DateTime foMonth = new DateTime(currentDate.Year, 1, 1).Date;
+			DateTime currentMonth = new DateTime(currentDate.Year, currentDate.Month, 1).Date;
+			DateTime eoMonth = currentMonth.AddMonths(1).AddDays(-1).Date;
+
+			var result = await _APIHelper.CallApiAsyncGet<List<AttendanceMaster>>($"api/Attendance/GetStaffAttendanceList{(staffId > 0 ? staffId : _user.StaffId)}/{foMonth.ToString("yyyy-MM-dd")}/{eoMonth.ToString("yyyy-MM-dd")}", HttpMethod.Get);
 
 			if (result != null)
 			{
@@ -306,13 +314,13 @@ namespace HRHUBWEB.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<JsonObject>> GetAttendanceData()
+		public async Task<ActionResult<JsonObject>> GetLeaveData(int staffId)
 		{
-			var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now;
 			DateTime foMonth = new DateTime(currentDate.Year, currentDate.Month, 1).Date;
 			DateTime eoMonth = foMonth.AddMonths(1).AddDays(-1).Date; 
 
-			var result = await _APIHelper.CallApiAsyncGet<List<AttendanceMaster>>($"api/Attendance/GetStaffAttendanceList{_user.StaffId}/{foMonth.ToString("yyyy-MM-dd")}/{eoMonth.ToString("yyyy-MM-dd")}", HttpMethod.Get);
+			var result = await _APIHelper.CallApiAsyncGet<List<Leave>>($"api/Leave/GetLeaveInfos{_user.CompanyId}/{(staffId > 0 ? staffId : _user.StaffId)}", HttpMethod.Get);
 
 			if (result != null)
 			{
@@ -329,16 +337,16 @@ namespace HRHUBWEB.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Staff_Loan_Statistics()
+		public async Task<IActionResult> Staff_Loan_Statistics(int staffId)
 		{
 			string procrdure = "BI.GetStaff_Loan_Statistics";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId };
+			object[] parameters = new object[] { _user.CompanyId ?? 0, (staffId > 0 ? staffId : _user.StaffId) };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
 		}
 
-		public async Task<ActionResult<JsonObject>> GetStaffSalaryHistory()
+		public async Task<ActionResult<JsonObject>> GetStaffSalaryHistory(int staffId)
 		{
 			var currentDate = DateTime.Now;
 			DateTime dateFrom = new DateTime(currentDate.Year, 1, 1).Date;
@@ -346,28 +354,37 @@ namespace HRHUBWEB.Controllers
 
 			if (dateFrom != null && dateTo != null && _user.UserId > 0)
 			{
-				var staffSalaryHistoryList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryHistory/{_user.CompanyId}/{dateFrom.ToString("dd-MMM-yyyy")}/{dateTo.ToString("dd-MMM-yyyy")}/{_user.UserId}", HttpMethod.Get);
+				var staffSalaryHistoryList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryHistory/{_user.CompanyId}/{dateFrom.ToString("dd-MMM-yyyy")}/{dateTo.ToString("dd-MMM-yyyy")}/{(staffId > 0 ? staffId : _user.StaffId)}", HttpMethod.Get);
 				return Json(staffSalaryHistoryList);
 			}
 			return null;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Staff_Activity(DateTime currentDate)
+		public async Task<IActionResult> Staff_Activity(int staffId, DateTime currentDate)
 		{
 			string procrdure = "BI.GetStaff_Activity";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId, "'" + currentDate.ToString("yyyy-MMM-dd") + "'" };
+			object[] parameters = new object[] { _user.CompanyId ?? 0, (staffId > 0 ? staffId : _user.StaffId), "'" + currentDate.ToString("yyyy-MMM-dd") + "'" };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> Staff_AttendanceChart(int staffId, int currentYear)
+		{
+			string procrdure = "BI.GetStaff_Profile_Attendance";
+			object[] parameters = new object[] { _user.CompanyId ?? 0, (staffId > 0 ? staffId : _user.StaffId), currentYear };
+
+			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+			return Json(result);
+		}
 
 		[HttpGet]
-		public async Task<IActionResult> Staff_Performance(int currentYear)
+		public async Task<IActionResult> Staff_PerformanceChart(int staffId, int currentYear)
 		{
 			string procrdure = "BI.GetStaff_Performance";
-			object[] parameters = new object[] { _user.CompanyId ?? 0, _user.UserId, currentYear };
+			object[] parameters = new object[] { _user.CompanyId ?? 0, (staffId > 0 ? staffId : _user.StaffId), currentYear };
 
 			var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
 			return Json(result);

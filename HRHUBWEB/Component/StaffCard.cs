@@ -13,7 +13,8 @@ namespace HRHUBWEB.Component
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly APIHelper _APIHelper;
         private readonly User _user;
-        public  StaffCard(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, IEmailHelper EmailHelper, APIHelper aPIHelper,
+
+		public  StaffCard(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, IEmailHelper EmailHelper, APIHelper aPIHelper,
             IHttpContextAccessor httpContextAccessor)
         {
             _webHostEnvironment = webHostEnvironment;
@@ -29,7 +30,5 @@ namespace HRHUBWEB.Component
             return View("_StaffCard", list);
         }
 
-
-
-        }
+    }
 }
