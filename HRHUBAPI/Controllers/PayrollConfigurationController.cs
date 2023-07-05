@@ -399,7 +399,7 @@ namespace HRHUBAPI.Controllers
         #region Staff Salary Component
 
         [HttpGet("GetSalaryComponent")]
-        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId,int ComponentId)
+        public async Task<ActionResult<List<StaffSalaryComponent>>> GetSalaryComponent(int CompanyId, int ComponentId)
         {
             return await new StaffSalaryComponent().GetSalaryComponent(CompanyId, ComponentId, _context);
         }
@@ -469,127 +469,127 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Staff Salary
+        #region Staff Salary
 
-		    [HttpGet("GetStaffSalary")]
-            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
+        [HttpGet("GetStaffSalary")]
+        public async Task<ActionResult<List<StaffSalary>>> GetStaffSalary()
+        {
+            return await new StaffSalary().GetStaffSalary(_context);
+        }
+
+        [HttpGet("GetStaffSalaryHistory/{CompanyId}/{DateFrom}/{DateTo}/{StaffId}")]
+        public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryHistory(int CompanyId, string DateFrom, string DateTo, int StaffId)
+        {
+            return await new StaffSalary().GetStaffSalaryHistory(CompanyId, DateFrom, DateTo, StaffId);
+        }
+
+        [HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
+        public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
+        {
+            return await new StaffSalary().GetStaffSalaryByCompanyId(CompanyId, month, year);
+        }
+
+        [HttpGet("GetStaffSalaryById/{CompanyId}/{month}/{year}/{StaffId}")]
+        public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryById(int CompanyId, int month, int year, int StaffId)
+        {
+            return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
+        }
+
+        [HttpPost("PostStaffSalaryMaster")]
+        public async Task<ActionResult<bool>> PostStaffSalaryMaster(StaffSalary objStaffSalary)
+        {
+            var dbResult = await new StaffSalary().PostStaffSalaryMaster(objStaffSalary);
+            if (dbResult == true)
             {
-                return await new StaffSalary().GetStaffSalary(_context);
-            }
-
-            [HttpGet("GetStaffSalaryHistory/{CompanyId}/{DateFrom}/{DateTo}/{StaffId}")]
-            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryHistory(int CompanyId, string DateFrom, string DateTo, int StaffId)
-            {
-                return await new StaffSalary().GetStaffSalaryHistory(CompanyId, DateFrom, DateTo, StaffId);   
-            }
-
-			[HttpGet("GetStaffSalaryByCompanyId/{CompanyId}/{month}/{year}")]
-            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryByCompanyId(int CompanyId, int month, int year)
-            {
-                return await new StaffSalary().GetStaffSalaryByCompanyId(CompanyId, month, year);
-            }
-
-            [HttpGet("GetStaffSalaryById/{CompanyId}/{month}/{year}/{StaffId}")]
-            public async Task<ActionResult<List<StaffSalary>>> GetStaffSalaryById(int CompanyId, int month, int year, int StaffId)
-            {
-                return await new StaffSalary().GetStaffSalaryById(CompanyId, month, year, StaffId, _context);
-            }
-
-            [HttpPost("PostStaffSalaryMaster")]
-            public async Task<ActionResult<bool>> PostStaffSalaryMaster(StaffSalary objStaffSalary)
-            {
-                var dbResult = await new StaffSalary().PostStaffSalaryMaster(objStaffSalary);
-                if (dbResult == true)
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Data Inserted Successfully"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        success = false,
-                        Message = "Data Not Inserted!"
-                    });
-                } 
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
             }
-
-		    [HttpPost("PutStaffSalaryMaster")]
-		    public async Task<ActionResult<bool>> PutStaffSalaryMaster(StaffSalary objStaffSalary)
-		    {
-			    var dbResult = await new StaffSalary().PutStaffSalaryMaster(objStaffSalary);
-			    if (dbResult == true)
-			    {
-				    return Ok(new
-				    {
-					    success = true,
-					    Message = "Data Updated Successfully"
-				    });
-			    }
-			    else
-			    {
-				    return Ok(new
-				    {
-					    success = false,
-					    Message = "Data Not Updated!"
-					});
-			    }
-		    }
-
-            [HttpGet("AlreadyExistsMaster/{month}/{year}")]
-            public async Task<ActionResult<StaffSalary>> AlreadyExistsMaster(int month, int year)
+            else
             {
+                return Ok(new
+                {
+                    success = false,
+                    Message = "Data Not Inserted!"
+                });
+            }
+        }
+
+        [HttpPost("PutStaffSalaryMaster")]
+        public async Task<ActionResult<bool>> PutStaffSalaryMaster(StaffSalary objStaffSalary)
+        {
+            var dbResult = await new StaffSalary().PutStaffSalaryMaster(objStaffSalary);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = false,
+                    Message = "Data Not Updated!"
+                });
+            }
+        }
+
+        [HttpGet("AlreadyExistsMaster/{month}/{year}")]
+        public async Task<ActionResult<StaffSalary>> AlreadyExistsMaster(int month, int year)
+        {
             var dbResult = await new StaffSalary().AlreadyExistsMaster(month, year, _context);
-                if (dbResult == true)
+            if (dbResult == true)
+            {
+                return Ok(new
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Record Already Exists"
-                    });
-                }
-                else
-                {
-                    return Ok(new
-                    {
-                        Success = false,
-                        Message = "Data Not Found!"
-                    });
-                }
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
             }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
-		    [HttpPost("PostSingleStaffSalary")]
-		    public async Task<ActionResult<StaffSalary>> PostSingleStaffSalary(StaffSalary objStaffSalary)
-		    {
-			    var dbResult = await new StaffSalary().PostSingleStaffSalary(objStaffSalary, _context);
-			    if (dbResult != null && dbResult.TranFlag == 2)
-			    {
-				    return Ok(new
-				    {
-					    success = true,
-					    Message = "Data Updated Successfully"
-				    });
-			    }
-			    else
-			    {
-				    return Ok(new
-				    {
-					    success = true,
-					    Message = "Data Inserted Successfully"
-				    });
-			    }
-		    }
+        [HttpPost("PostSingleStaffSalary")]
+        public async Task<ActionResult<StaffSalary>> PostSingleStaffSalary(StaffSalary objStaffSalary)
+        {
+            var dbResult = await new StaffSalary().PostSingleStaffSalary(objStaffSalary, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
 
         #endregion
 
         #region StaffLoan
 
-        
+
         [HttpGet("GetHRLoanInfos{CompanyId}/{StaffId}")]
         public async Task<ActionResult<List<LoanApplication>>> GetHRLoanInfos(int CompanyId, int StaffId)
         {
@@ -637,7 +637,7 @@ namespace HRHUBAPI.Controllers
         // search data Loan by Status , loantype and dates
 
         [HttpGet("SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{Month}/{DateFilter}")]
-        public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month,bool DateFilter)
+        public async Task<ActionResult<List<LoanApplication>>> SearchAllLoanData(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month, bool DateFilter)
         {
             var result = await new LoanApplication().SearchLoan(CompanyId, StaffId, LoanTypeId, LoanStatusId, Month, DateFilter, _context);
             if (result != null)
@@ -647,11 +647,12 @@ namespace HRHUBAPI.Controllers
 
 
         }
-        [HttpDelete("DeleteLoanInfo{id}/{UserId}")]
+        [HttpGet("DeleteLoanInfo{id}/{UserId}")]
         public async Task<ActionResult<bool>> DeleteLoanInfo(int id, int UserId)
         {
-            var result = await new LoanApplication().DeleteLoanInfo(id, UserId, _context);
             if (id > 0)
+            {
+                var result = await new LoanApplication().DeleteLoanInfo(id, UserId, _context);
                 return Ok(new
                 {
 
@@ -660,7 +661,7 @@ namespace HRHUBAPI.Controllers
 
 
                 });
-
+            }
             return NotFound("Data Not Found!");
         }
         [HttpGet("GetLoanApprovalByLoanId{id}")]

@@ -890,27 +890,30 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
+                        //var b = JSON.parse(data)
+                        if (data.success) {
 
+                             notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + data.message,
+                                    type: "success"
+                                });
 
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
-
-                            // $.growl.warning(b.message);
-                            $.growl.warning({
-                                message: b.message
-                            });
+                            setTimeout(() => {
+                                var url = '@Url.Action("HRLeaveList", "Leave")';
+                                window.location.href = url;
+                            }, 300);
 
                         }
                         else {
-                            $.growl.warning({
-                                message: b.message
+                            notif({
+                                 msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                                    type: "error"
                             });
 
-                            var url = '@Url.Action("HRLeaveList", "Leave")';
-                            window.location.href = url;
-
+                            setTimeout(() => {
+                                var url = '@Url.Action("HRLeaveList", "Leave")';
+                                window.location.href = url;
+                            }, 300);
 
                         }
                     }

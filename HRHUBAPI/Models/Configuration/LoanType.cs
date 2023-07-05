@@ -134,7 +134,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteLoanTypeInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteLoanTypeInfo(int id, int UserId, HrhubContext _context)
         {
             try
             {
@@ -144,6 +144,7 @@ namespace HRHUBAPI.Models
                 if (LoanTypeInfo != null)
                 {
                     LoanTypeInfo.IsDeleted = true;
+                    LoanTypeInfo.UpdatedBy = UserId;
                     LoanTypeInfo.UpdatedOn = DateTime.Now;
                     check = true;
 

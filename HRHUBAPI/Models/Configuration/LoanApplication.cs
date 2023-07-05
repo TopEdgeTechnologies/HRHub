@@ -239,7 +239,6 @@ namespace HRHUBAPI.Models
         }
 
         // Search Loan 
-
         public async Task<List<LoanApplication>> SearchLoan(int CompanyId, int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month, bool DateFilter, HrhubContext _context)
         {
             try
