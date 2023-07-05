@@ -1,4 +1,4 @@
-﻿@model HRHUBAPI.Models.Staff
+﻿@model HRHUBAPI.Models.VInfoStaff
 
 @{
 	ViewData["Title"] = "StaffProfile";
@@ -47,85 +47,59 @@
 		box-shadow: 0px 0px 12px -7px;
 	}
 
-	
-
 </style>
 
-@*  Employe Profile View
-*@
+@await Component.InvokeAsync("StaffCard", new { id = Model.StaffId })
 <div class="row">
-	<div class="col-md-12 col-lg-4 col-xl-3">
-		@*Employe profile card*@
-		<div class="card overflow-hidden" @*style="height:527px;"*@>
-			<div class="card-body">
-				<div class="card-header p-0 border-0">
-					<div class="card-title">
-					</div>
-				</div>
-				<div class="user-pic d-flex flex-column align-items-center justify-content-center">
-					<img class="rounded-circle img-fluid" alt="avatar" src="~/assets/images/users/staff-pic.jpg" style="width: 126px;height: 126px;object-fit: cover;">
-
-					<div class="pro-user mt-3 text-center">
-						<h5 class="pro-user-username text-dark mb-2 fs-20">Muhammad Saqib</h5>
-						<p class="pro-user-desc text-muted mb-1 fs-16">Frontend Developer</p>
-						<p class="text-muted mb-1 fs-20">Software Department</p>
-						<table class="table mb-0 mt-2">
-							<tbody>
-								<tr>
-									<td class="py-2 pe-2 fs-14">
-										<span class="font-weight-semibold">Reg No:</span>
-									</td>
-									<td class="py-2 fs-14 ps-2">4015</td>
-								</tr>
-								<tr>
-									<td class="py-2 fs-14 pe-2">
-										<span class="font-weight-semibold">Address</span>
-									</td>
-									<td class="py-2 fs-14 ps-2">London,UK</td>
-								</tr>
-								<tr>
-									<td class="py-2 fs-14 pe-2">
-										<span class="font-weight-semibold">Phone </span>
-									</td>
-									<td class="py-2 fs-14 ps-2">English, German</td>
-								</tr>
-								<tr>
-									<td class="py-2 fs-14 pe-2">
-										<span class="font-weight-semibold">CNIC</span>
-									</td>
-									<td class="py-2 fs-14 ps-2">3456789023111</td>
-								</tr>
-								<tr>
-									<td class="py-2 fs-14 pe-2">
-										<span class="font-weight-semibold">DOB</span>
-									</td>
-									<td class="py-2 fs-14 ps-2">05 Dec, 2001</td>
-								</tr>
-
-							</tbody>
-						</table>
+	<input type="hidden" id="staff_ID" value="@Model.StaffId" />
+	<div class="col-sm-6 col-lg-3 col-xl-4">
+		<div class="card">
+			<div class="card-header align-items-center py-3">
+				<h4 class="card-title">Recent Activity</h4>
+				<div class="card-options col-md-7">
+					<div class="form-group m-0">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<div class="input-group-text">
+									<i class="feather feather-calendar"></i>
+								</div>
+							</div><input id="activityDate" class="form-control fc-datepicker" type="text">
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="card-footer p-0">
-				<div class="row">
-					<div class="col-6 text-center py-3 border-end">
-						<h5 class="mb-2">
-							<span class="fs-18 text-success">Experience</span>
-						</h5>
-						<h5 class="fs-14 mb-0">02 years</h5>
-					</div>
-					<div class="col-6  py-3 text-center border-end">
-						<h5 class="mb-2">
-							<span class="fs-18 text-orange">Status</span>
-						</h5>
-						<h5 class="fs-14 mb-0">Active</h5>
-					</div>
-				</div>
+			<div class="card-body pt-0">
+				<ul id="CardActivity" class="timeline">
+
+					<li>
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">Leave Approval Request</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">6 min ago</a>
+						<p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">From "RuthDyer" UiDesign Leave</p>
+						<span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span>
+					</li>
+					<li class="primary">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Wok Update</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">10 min ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From "Robert Marshall" Developer</p>
+						<span class="text-muted ms-3 fs-11">Task Completed.</span>
+					</li>
+					<li class="pink">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Received Mail</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">15 min ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Emergency Sick Leave from "jacob Berry"</p>
+						<span class="text-muted ms-3 fs-11">Ui Designer, Designer Team.</span>
+					</li>
+					<li class="success mb-0 pb-0">
+						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Job Application Mail</a>
+						<a href="javascript:void(0);" class="text-muted float-end fs-13">1 Hour ago</a>
+						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From jobmail@gmail.com laravel developer.</p>
+					</li>
+
+				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-12 col-lg-8 col-xl-9">
+	<div class="col-md-12 col-lg-8 col-xl-8">
 		<div class="card">
 			<div class="card-header d-flex justify-content-between align-items-center border-bottom-0">
 				<h4 class="card-title">Staff Details</h4>
@@ -317,68 +291,48 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <div class="row">
-	@*
-	<div class="col-sm-6 col-lg-3 col-xl-3">
-		<div class="card overflow-hidden" style="height:400px;">
+	<div class="col-sm-6 col-lg-3 col-xl-4">
+		<div class="card" >
 			<div class="card-header">
-				<div class="card-title">
-					<h4 class="card-title">Personal Details</h4>
+				<div class="card-title">Statistics-2023</div>
+				<div class="card-options col-md-6">
+					<select id="DatePerformance" class=" form-control custom-select select2">
+						<option value="2023">2023</option>
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
 				</div>
 			</div>
 			<div class="card-body">
-				<div class="table-responsive">
-					<table class="table mb-0">
-						<tbody>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">Full Name</span>
-								</td>
-								<td class="py-2 px-0">London,UK</td>
-							</tr>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">Registration No:</span>
-								</td>
-								<td class="py-2 px-0">4015</td>
-							</tr>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">Address</span>
-								</td>
-								<td class="py-2 px-0">London,UK</td>
-							</tr>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">Phone </span>
-								</td>
-								<td class="py-2 px-0">English, German</td>
-							</tr>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">CNIC</span>
-								</td>
-								<td class="py-2 px-0">3456789023111</td>
-							</tr>
-							<tr>
-								<td class="py-2 px-0">
-									<span class="font-weight-semibold w-50">DOB</span>
-								</td>
-								<td class="py-2 px-0">05 Dec, 2001</td>
-							</tr>
+				<div class="row mb-5 justify-content-center">
+					<div id="StatisticsAttendanceChart" class="col-4 text-center stats-chart stats-chart-active">
+						
+						<div class="chart-circle chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
+							<canvas width="64" height="64"></canvas>
+							<div class="chart-circle-value text-primary">89</div>
+						</div>
+						
+						<h6 id="chart-circle-primary-title" class="fs-14 py-1 chart-circle-title chart-circle-title-active position-relative d-inline-block font-weight-semibold mt-3">Attendance</h6>
+					</div>
+					<div id="StatisticsPerformanceChart" class="col-4 text-center stats-chart stats-chart-inactive">
+						<div class="chart-circle chart-circle-sm" data-value="0.67" data-thickness="5" data-color="#0dcd94">
+							<canvas width="64" height="64"></canvas>
+							<div class="chart-circle-value text-success">67%</div>
+						</div>
+						<h6 id="chart-circle-success-title" class="fs-14 py-1 chart-circle-title position-relative d-inline-block font-weight-semibold mt-3">Performance</h6>
+					</div>
+				</div>
+				<div id="CardPerformance">
 
-						</tbody>
-					</table>
 				</div>
 			</div>
 		</div>
+		
 	</div>
-	*@
 	<div class="col-sm-6 col-lg-3 col-xl-4">
-
 		<div class="card border p-0 shadow-none" style="height:400px;">
 			<div class="card-header">
 				<div class="card-title">Academia</div>
@@ -418,117 +372,6 @@
 				</div>
 			</div>
 		</div>
-
-	</div>
-
-	<div class="col-sm-6 col-lg-3 col-xl-4">
-		<div class="card">
-			<div class="card-header align-items-center py-3">
-				<h4 class="card-title">Recent Activity</h4>
-				<div class="card-options col-md-7">
-					<div class="form-group m-0">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<div class="input-group-text">
-									<i class="feather feather-calendar"></i>
-								</div>
-							</div><input id="activityDate" class="form-control fc-datepicker" type="text">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="card-body pt-0">
-				<ul id="CardActivity" class="timeline">
-
-					<li>
-						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">Leave Approval Request</a>
-						<a href="javascript:void(0);" class="text-muted float-end fs-13">6 min ago</a>
-						<p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">From "RuthDyer" UiDesign Leave</p>
-						<span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span>
-					</li>
-					<li class="primary">
-						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Wok Update</a>
-						<a href="javascript:void(0);" class="text-muted float-end fs-13">10 min ago</a>
-						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From "Robert Marshall" Developer</p>
-						<span class="text-muted ms-3 fs-11">Task Completed.</span>
-					</li>
-					<li class="pink">
-						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Received Mail</a>
-						<a href="javascript:void(0);" class="text-muted float-end fs-13">15 min ago</a>
-						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Emergency Sick Leave from "jacob Berry"</p>
-						<span class="text-muted ms-3 fs-11">Ui Designer, Designer Team.</span>
-					</li>
-					<li class="success mb-0 pb-0">
-						<a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Job Application Mail</a>
-						<a href="javascript:void(0);" class="text-muted float-end fs-13">1 Hour ago</a>
-						<p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From jobmail@gmail.com laravel developer.</p>
-					</li>
-
-				</ul>
-			</div>
-		</div>
-	</div>
-
-	<div class="col-sm-6 col-lg-3 col-xl-4">
-
-		<div class="card" style="height:400px;">
-			<div class="card-header">
-				<div class="card-title">Statistics-2023</div>
-				<div class="card-options col-md-2">
-					<select id="chartDate" class=" form-control custom-select select2">
-						<option value="2023">2023</option>
-						<option value="2024">2024</option>
-						<option value="2025">2025</option>
-					</select>
-				</div>
-			</div>
-			<div class="card-body">
-				<div class="row mb-5 justify-content-center">
-					<div class="col-4 text-center stats-chart stats-chart-active">
-						<div class="chart-circle  chart-circle-sm" data-value="0.89" data-thickness="5" data-color="#3366ff">
-							<canvas width="64" height="64"></canvas>
-							<div class="chart-circle-value text-primary">89</div>
-						</div>
-						<h6 id="chart-circle-primary-title" class="fs-14  py-1 chart-circle-title chart-circle-title-active position-relative d-inline-block font-weight-semibold mt-3">Attendance</h6>
-					</div>
-					<div class="col-4 text-center stats-chart stats-chart-inactive">
-						<div class="chart-circle chart-circle-sm" data-value="0.67" data-thickness="5" data-color="#0dcd94">
-							<canvas width="64" height="64"></canvas>
-							<div class="chart-circle-value text-success">67%</div>
-						</div>
-						<h6 id="chart-circle-success-title" class="fs-14 py-1 chart-circle-title position-relative d-inline-block font-weight-semibold mt-3">Performance</h6>
-					</div>
-				</div>
-				<div id="CardPerformance">
-
-				</div>
-				@*
-				<div class="d-flex align-items-end justify-content-between mg-b-5">
-					<h6 class="">This Week</h6>
-					<h6 class="font-weight-bold mb-1">01</h6>
-				</div>
-				<div class="progress progress-sm mb-5">
-					<div class="progress-bar bg-danger w-10"></div>
-				</div>
-				<div class="d-flex align-items-end justify-content-between mg-b-5">
-					<h6 class="">This Month</h6>
-					<h6 class="font-weight-bold mb-1">05</h6>
-				</div>
-				<div class="progress progress-sm mb-5">
-					<div class="progress-bar bg-info w-30"></div>
-				</div>
-				<div class="d-flex align-items-end justify-content-between mg-b-5">
-					<h6 class="">This Year</h6>
-					<h6 class="font-weight-bold mb-1">22</h6>
-				</div>
-				<div class="progress progress-sm mb-5">
-					<div class="progress-bar bg-warning w-50"></div>
-				</div>
-				*@
-			</div>
-		</div>
-
-		
 	</div>
 </div>
 
@@ -541,6 +384,8 @@
 			localStorage.removeItem('dayonelightMode')
 			localStorage.removeItem('dayonetransparentMode')
 
+			$('#DatePerformance').select2()
+
 			$('.stats-chart').click(function () {
 				$('.stats-chart').removeClass('stats-chart-active').addClass('stats-chart-inactive')
 				$(this).addClass('stats-chart-active').removeClass('stats-chart-inactive')
@@ -549,19 +394,50 @@
 			var currentDate = new Date()
 			$('#activityDate').val('@DateTime.Now.ToString("dd-MMM-yyyy")')
 			$('#activityDate').change(function () {
-				loadStaffActivity()
+				loadStaffActivity(staff_ID)
             });
+			
+			var staff_ID = $("#staff_ID").val()
+			LoadAttendance(staff_ID)
+			loadStaffLeaveInfo(staff_ID)
+			loadStaffLoanInfo(staff_ID)
+			loadStaffSalaryInfo(staff_ID)
+			loadStaffActivity(staff_ID)
 
-			LoadAttendance()
-			loadStaffLeaveInfo()
-			loadStaffLoanInfo()
-			loadStaffSalaryInfo()
-			loadStaffActivity()
-			loadStaffPerformance()
+			$('#DatePerformance').val('@DateTime.Now.ToString("yyyy")')
+			loadStaffAttendanceChart($("#staff_ID").val())
+			//$('#DatePerformance').change(function () {
+			//	loadStaffAttendanceChart(staff_ID)
+			//});
+			//loadStaffAttendanceChart(staff_ID)
 		});
 
-		function LoadAttendance() {
-			var data = {}
+		//function loadStaffBioData() {
+		//	debugger
+		//	var requestData = { }
+		//	makeAjaxRequest("/Staff/Staff_BioData", 'GET', requestData, false, function (response) {
+		//		if (response != null) {
+		//			debugger
+		//			var htmlPerformance = ''
+		//			for (var i = 0; i < response.length; i++) {
+		//				htmlPerformance += ' <div class="d-flex align-items-end justify-content-between mg-b-5"> '
+		//				htmlPerformance += ' 	<h6 class="">' + response[i].PerformanceTitle + '</h6> '
+		//				htmlPerformance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].EarnedWeightage + '</h6> '
+		//				htmlPerformance += ' </div> '
+		//				htmlPerformance += ' <div class="progress progress-sm mb-5"> '
+		//				htmlPerformance += ' 	<div class="progress-bar bg-info w-' + response[i].TotalWeightage + '"></div> '
+		//				htmlPerformance += ' </div> '
+		//			}
+
+		//			$("#CardPerformance").html(htmlPerformance)
+		//		}
+		//	}, function (errorStatus) {
+		//		console.log('Error:', errorStatus)
+		//	});
+		//}
+
+		function LoadAttendance(staff_ID) {
+			var data = { staffId: staff_ID }
 			var html_Attendance = ''
 			$.ajax({
 				url: "/Staff/GetAttendanceData",
@@ -590,7 +466,6 @@
 								html_Attendance += '	 <td> </td>'
 							}
 							else{
-								debugger
 								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["firstPunchIn"]) + '</td> '
 								html_Attendance += '	 <td>' + convertTimeToAMPM(data[i]["lastPunchOut"]) + '</td> '
 								html_Attendance += '	 <td> ' + progress + '</td>'
@@ -607,8 +482,8 @@
             });  
 		}
 
-		function loadStaffLeaveInfo() {
-			var data = {}
+		function loadStaffLeaveInfo(staff_ID) {
+			var data = { staffId: staff_ID }
 			var html_Leave = ''
 			$.ajax({
 				url: "/Staff/GetLeaveData",
@@ -638,8 +513,8 @@
 			});
 		}
 
-		function loadStaffLoanInfo() {
-			var requestData = { }
+		function loadStaffLoanInfo(staff_ID) {
+			var requestData = { staffId: staff_ID }
 			makeAjaxRequest("/Staff/Staff_Loan_Statistics", 'GET', requestData, false, function (response) {
 				if (response != null) {
 					var htmlLoan = ''
@@ -681,8 +556,8 @@
 			});
 		}
 
-		function loadStaffSalaryInfo() {
-			var data = {}
+		function loadStaffSalaryInfo(staff_ID) {
+			var data = { staffId: staff_ID }
 			var html_Salary = ''
 			$.ajax({
 				url: "/Staff/GetStaffSalaryHistory",
@@ -729,9 +604,9 @@
 			});
 		}
 
-		function loadStaffActivity() {
+		function loadStaffActivity(staff_ID) {
 			var dateValue = $("#activityDate").val()
-			var requestData = { currentDate: dateValue }
+			var requestData = { staffId: staff_ID, currentDate: dateValue }
 			makeAjaxRequest("/Staff/Staff_Activity", 'GET', requestData, false, function (response) {
 				if (response != null) {
 					debugger
@@ -752,11 +627,56 @@
 			});
 		}
 
-		function loadStaffPerformance() {
+		$('#StatisticsAttendanceChart').on('click', function(){
 			debugger
-			var dateValue = 2023
-			var requestData = { currentYear: dateValue }
-			makeAjaxRequest("/Staff/Staff_Performance", 'GET', requestData, false, function (response) {
+			loadStaffAttendanceChart($("#staff_ID").val())
+		});
+
+		function loadStaffAttendanceChart(staff_ID) {
+			debugger
+			var dateValue = $('#DatePerformance').val()
+			var requestData = { staffId: staff_ID, currentYear: dateValue }
+			makeAjaxRequest("/Staff/Staff_AttendanceChart", 'GET', requestData, false, function (response) {
+				if (response != null) {
+					debugger
+					var htmlAttendanceHeader = ''
+					var htmlAttendance = ''
+					for (var i = 0; i < response.length; i++) {
+						debugger
+						//if (response[i].MonthNumber == 13) {
+						//	htmlAttendanceHeader += ' <div class="chart-circle chart-circle-sm" data-value="' + response[i].MTDPresentPercentage / 100.0 + '" data-thickness="5" data-color="#3366ff"> '
+						//	htmlAttendanceHeader += ' 	<canvas width="64" height="64"></canvas> '
+						//	htmlAttendanceHeader += ' 	<div class="chart-circle-value text-primary">' + response[i].MTDPresentPercentage + '</div> '
+						//	htmlAttendanceHeader += ' </div> '
+						//}
+
+						htmlAttendance += ' <div class="d-flex align-items-end justify-content-between mg-b-5"> '
+						htmlAttendance += ' 	<h6 class="">' + response[i].MonthName + '</h6> '
+						htmlAttendance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].MTDPresentCount + '</h6> '
+						htmlAttendance += ' </div> '
+						htmlAttendance += ' <div class="progress progress-xs mb-3" data-toggle="tooltip" title="' + response[i].MTDPresentPercentage + '%"> '
+						htmlAttendance += ' 	<div class="progress-bar bg-info" style="width: ' + response[i].MTDPresentPercentage + '%"></div> '
+						htmlAttendance += ' </div> '
+					}
+
+					//$("#StatisticsAttendanceChart").html(htmlAttendanceHeader)
+					$("#CardPerformance").html(htmlAttendance)
+				}
+			}, function (errorStatus) {
+				console.log('Error:', errorStatus)
+			});
+		}
+		
+		$('#StatisticsPerformanceChart').on('click', function () {
+			debugger
+			loadStaffPerformanceChart($("#staff_ID").val())
+		});
+
+		function loadStaffPerformanceChart(staff_ID) {
+			debugger
+			var dateValue = $('#DatePerformance').val()
+			var requestData = { staffId: staff_ID, currentYear: dateValue }
+			makeAjaxRequest("/Staff/Staff_PerformanceChart", 'GET', requestData, false, function (response) {
 				if (response != null) {
 					debugger
 					var htmlPerformance = ''
@@ -765,8 +685,8 @@
 						htmlPerformance += ' 	<h6 class="">' + response[i].PerformanceTitle + '</h6> '
 						htmlPerformance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].EarnedWeightage + '</h6> '
 						htmlPerformance += ' </div> '
-						htmlPerformance += ' <div class="progress progress-sm mb-5"> '
-						htmlPerformance += ' 	<div class="progress-bar bg-info w-' + response[i].TotalWeightage + '"></div> '
+						htmlPerformance += ' <div class="progress progress-xs mb-3"> '
+						htmlPerformance += ' 	<div class="progress-bar bg-info" style="width: ' + response[i].TotalWeightage + '"></div> '
 						htmlPerformance += ' </div> '
 					}
 

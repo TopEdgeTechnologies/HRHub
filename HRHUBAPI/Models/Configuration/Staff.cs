@@ -158,10 +158,9 @@ namespace HRHUBAPI.Models
 
         public async Task<VInfoStaff> GetStaffProfilebyId(int StaffID, HrhubContext hrhubContext)
         {
-    
             try
             {
-                var result= await hrhubContext.VInfoStaffs.FirstOrDefaultAsync(x => x.StaffId == StaffID && x.IsDeleted == false && x.Status == true);
+                var result = await hrhubContext.VInfoStaffs.FirstOrDefaultAsync(x => x.StaffId == StaffID);
                 if (result != null)
                 {
                     return result;
@@ -173,7 +172,6 @@ namespace HRHUBAPI.Models
             }
             catch { throw; }
         }
-
 
         public async Task<List<Staff>> GetStaffByCompanyId(int CompanyId)
         {
