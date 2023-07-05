@@ -216,11 +216,20 @@ namespace HRHUBWEB.Controllers
         #endregion
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             try
             {
-                foreach (var cookie in Request.Cookies.Keys)
+				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+				HttpResponseMessage message = await _client.PostAsJsonAsync("api/User/UserLogOutHistory", userObject);
+
+                if (message.IsSuccessStatusCode)
+                {
+
+                 }
+
+				foreach (var cookie in Request.Cookies.Keys)
                 {
                     Response.Cookies.Delete(cookie);
                 }

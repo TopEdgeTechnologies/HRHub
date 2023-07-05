@@ -128,7 +128,40 @@ namespace SchoolManagementSystem.API.Controllers
 
         }
 
-        [Authorize]
+
+		[HttpPost("UserLogOutHistory")]
+		public async Task<ActionResult<JsonObject>> UserLogOutHistory(User Obj)
+		{
+			if (await new User().UserLogOutHistory(Obj.UserId, _context))
+			{
+				return Ok(new
+				{
+
+					Success = true,
+					Message = "User logout!"
+
+
+				});
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					Message = "Not found"
+
+
+				});
+			}
+
+		}
+
+
+
+		
+		[Authorize]
 
 		[HttpPost("UserChangePassword")]
 		public async Task<ActionResult<JsonObject>> UserChangePassword(User obj  )
