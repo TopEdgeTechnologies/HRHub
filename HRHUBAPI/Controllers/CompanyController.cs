@@ -47,7 +47,7 @@ namespace HRHUBAPI.Controllers
 
 
             var result = await new Company().PostCompany(obj, _context);
-            if (result != null && result.CompanyId > 0)
+            if (result != null && result.TransFlag == 2)
                 return Ok(new
                 {
                     Success = true,

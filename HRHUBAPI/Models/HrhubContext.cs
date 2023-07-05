@@ -61,6 +61,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<EmailTemplate> EmailTemplates { get; set; }
 
+    public virtual DbSet<EmailTemplateHrhub> EmailTemplateHrhubs { get; set; }
+
     public virtual DbSet<EmploymentType> EmploymentTypes { get; set; }
 
     public virtual DbSet<ExceptionLog> ExceptionLogs { get; set; }
@@ -544,6 +546,18 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<EmailTemplateHrhub>(entity =>
+        {
+            entity.HasKey(e => e.TemplateId);
+
+            entity.ToTable("EmailTemplate_HRHUB");
+
+            entity.Property(e => e.TemplateId).HasColumnName("TemplateID");
+            entity.Property(e => e.Body).IsUnicode(false);
+            entity.Property(e => e.Subject).IsUnicode(false);
+            entity.Property(e => e.Title).IsUnicode(false);
+        });
+
         modelBuilder.Entity<EmploymentType>(entity =>
         {
             entity.ToTable("EmploymentType");
@@ -972,6 +986,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PermanentAddress).IsUnicode(false);
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
+            entity.Property(e => e.ReportingToStaffId).HasColumnName("ReportingTo_StaffID");
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryMethodId)

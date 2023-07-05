@@ -1,14 +1,15 @@
 let nextBtn = document.querySelector('#next-btn');
-let companyName = document.querySelector('#companyName');
+let companyName = document.querySelector('#CompanyName');
 let companyTitle = document.querySelector('#company-title');
-// let staffName = document.querySelector('#staffName');
+let staffName = document.querySelector('#ContactPerson');
 // let staffDepartment = document.querySelector('#staffDepartment');
 // let staffDesignation = document.querySelector('#staffDesignation');
 // let staffPassword = document.querySelector('#staffPassword');
 let staffNameOutput = document.querySelector('#staff-name-output');
-let companyWebsite = document.querySelector('#companyWebsite');
+let companyWebsite = document.querySelector('#WebUrl');
 let formStep1 = document.querySelector('#form-step1');
 let formStep2 = document.querySelector('#form-step2');
+let formStep3 = document.querySelector('#form-step3');
 let createAccountBtn = document.querySelector('#createAccountBtn');
 let indicator = document.querySelectorAll('.indicator');
 let emailIndicator = document.querySelector('.email-indicator');
@@ -38,11 +39,20 @@ function validateInput(inputElement, indicatorElement, validationMessageElement,
         validationMessageElement.textContent = inputFieldElement.placeholder + " is required**";
         inputFieldElement.style.border = "1px solid red";
     } else {
-        validationMessageElement.textContent = "Numbers are not allowed**";
-        successIconElement.classList.remove('fa-check');
-        indicatorElement.style.visibility = "visible";
-        successIconElement.classList.add('fa-exclamation');
-        indicatorElement.style.background = "#da0830";
+        if (inputFieldElement.type != 'password') {
+            validationMessageElement.textContent = "Numbers are not allowed**";
+            successIconElement.classList.remove('fa-check');
+            indicatorElement.style.visibility = "visible";
+            successIconElement.classList.add('fa-exclamation');
+            indicatorElement.style.background = "#da0830";
+        }
+        else {
+            validationMessageElement.textContent = "";
+            indicatorElement.style.backgroundColor = "#27aa4e";
+            successIconElement.classList.remove('fa-exclamation');
+            successIconElement.classList.add('fa-check');
+            inputFieldElement.style.border = "1px solid green";
+        }
     }
 }
 var regex = /[0-9]/gi;
@@ -110,18 +120,20 @@ const validateEmail = () => {
 
 inputFields.forEach(inputField => {
     inputField.addEventListener('input', function () {
+        debugger
         const index = Array.from(document.querySelectorAll('.form-control')).indexOf(this);
         const indicatorElement = indicator[index];
         const validationMessageElement = validationMessage[index];
         const successIconElement = successIcon[index];
         const inputFieldElement = inputFields[index];
 
-        if (this.id === 'companyName') {
-            companyTitle.textContent = companyName.value;
+
+        if (this.id == 'CompanyName') {
+            companyTitle.textContent = CompanyName.value;
         }
 
-        if (this.id === 'staffName') {
-            staffNameOutput.textContent = staffName.value;
+        if (this.id == 'ContactPerson') {
+            staffNameOutput.textContent = ContactPerson.value;
         }
         validateInput(this, indicatorElement, validationMessageElement, successIconElement, inputFieldElement);
     });
@@ -133,18 +145,28 @@ nextBtn.addEventListener('click', (event) => {
     if (!formStep1.classList.contains('d-none')) {
         if (companyName.value.trim() == "") {
             companyName.style.border = "1px solid red";
-            validationMessage[0].textContent = companyName.placeholder + " is required**";
+            document.querySelector('.companyNameValidationMessage').textContent = companyName.placeholder + " is required**";
             return;
         }
         formStep1.classList.add('d-none');
         formStep2.classList.remove('d-none');
-        createAccountBtn.classList.remove('d-none');
+    }
+    else if (!formStep2.classList.contains('d-none')) {
+        if (companyWebsite.value.trim() == "") {
+            companyWebsite.style.border = "1px solid red";
+            document.querySelector('.companyWebsiteValidationMessage').textContent = companyWebsite.placeholder + " is required**";
+            return;
+        }
+        formStep2.classList.add('d-none');
+        formStep3.classList.remove('d-none');
         nextBtn.classList.add('d-none');
+        createAccountBtn.classList.remove('d-none');
+
     }
 })
 //function for ensuring all the fields are filled at the time of submission
 const checkValidity = () => {
-    debugger
+    
     var isValid = true;
     for (let i = 0; i < inputFields.length; i++) {
         

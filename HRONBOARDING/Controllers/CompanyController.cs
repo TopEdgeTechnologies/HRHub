@@ -1,24 +1,24 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
 using HRHUBWEB.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http.Headers;
+using Microsoft.SqlServer.Server;
+using Newtonsoft.Json;
 using System.Text.Json.Nodes;
 
 namespace HRONBOARDING.Controllers
 {
     public class CompanyController : Controller
     {
-        private readonly HttpClient _client;
-        private IWebHostEnvironment _webHostEnvironment;
+        private readonly HttpClient _client;       
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly APIHelper _APIHelper;
         private readonly User _user;
 
-        public CompanyController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
+        public CompanyController(IHttpClientFactory httpClient,  APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
-            _client = httpClient.CreateClient("APIClient");
-            _webHostEnvironment = webHostEnvironment;
+            _client = httpClient.CreateClient("APIClient");           
             _APIHelper = APIHelper;
             _httpContextAccessor = httpContextAccessor;
             _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
@@ -31,20 +31,31 @@ namespace HRONBOARDING.Controllers
         }
 
          [HttpPost]
-        public async Task<IActionResult> OnBoard(Company ObjCompany)
+        [AllowAnonymous]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> OnBoard(IFormCollection my)
         {
+            
+          
+            var Obj = new Company
+            {                
+                ContactPerson = my["ContactPerson"],
+                CompanyName = my["CompanyName"],
+                WebUrl = my["WebUrl"],
+                StaffDesignation = my["StaffDesignation"],
+                StaffDepartment = my["StaffDepartment"],
+                StaffEmail = my["StaffEmail"],
+                Username = my["Username"],
+                UserPassword = my["UserPassword"],
+                LogoAttachment = "~/Images/CompanyLogo.png"
 
-            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjCompany, "api/Company/CompanyAddOrUpdate", HttpMethod.Post);
-            ObjCompany.LogoAttachment = "~/Images/CompanyLogo.png";
+        };
 
-            return View();
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, $"api/Company/CompanyAddOrUpdate", HttpMethod.Post);
+
+            return RedirectToAction("Loginpage", "User", new { id = 1 });
         }
-
-
-
-
-
-
 
 
 

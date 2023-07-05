@@ -1,6 +1,6 @@
 ﻿@model HRHUBAPI.Models.Company
 @{
-    ViewData["Title"] = "OnBoard";
+    ViewData["Title"] = "On Board";
     
 }
 <section id="hero-section" class="my-5">
@@ -32,12 +32,31 @@
                                                 <i class="success-icon fa fa-check fw-bold"></i>
                                             </button>
                                         </div>
-                                        <span class="d-block mt-2 validation-message"></span>
+                                <span class="d-block mt-2 validation-message companyNameValidationMessage"></span>
                                     </div>
                                 </div>
-                               
 
-                                <div id="form-step2" class="d-none">
+                        <div id="form-step2" class="d-none">
+                            <div class="form-group mt-5">
+                                <label for="companyWebsite" class="form-label fw-bold text-capitalize">
+                                    What's
+                                    the URL for your Website
+                                </label>
+                                <div class="position-relative">
+                                    <input asp-for="WebUrl" type="url" class="form-control shadow-sm" 
+                                       placeholder="Company URL">
+                                    <button class="indicator">
+                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                    </button>
+                                </div>
+                                <span class="d-block mt-2 validation-message companyWebsiteValidationMessage"></span>
+                            </div>
+                        </div>
+
+
+
+
+                                <div id="form-step3" class="d-none">
                                     <span class="d-block fw-bold fs-4 mb-3 text-dark">
                                         Finally, please enter your name and email address to try your branded staff
                                         portal.
@@ -200,16 +219,12 @@
 
 
 
-
         $("#StaffEmail").on("keyup", function (event) {
 
             var email = $("#StaffEmail").val();
 
             $("#Username").val(email);
         });
-
-
-
 
 
         // Check duplicate entry company
@@ -230,15 +245,11 @@
                 url: "/Company/CompanyNameCheckData",
                 type: "GET",
                 data: Data,
-                success: function (data) {
-                    
-                        debugger
-
+                success: function (data) {                    
+                      
                         //var b = JSON.parse(data)
-                        console.log(data);
-                        if (data.success) {
-
-                            
+                        
+                        if (data.success) {                            
                             $('#alreadyexistid').text(data.message)
                        // $('.indicator').css('visibility', 'hidden');
                         $('.indicator .fa-check').removeClass('fa-check').addClass('fa-exclamation');
@@ -254,9 +265,7 @@
                            
                             $('#alreadyexistid').text('')
 
-                            status = true;
-
-                    
+                            status = true;                  
 
 
                     }
@@ -266,13 +275,11 @@
 
                     status = false;
 
-
                 }
             })
 
             return status;
         }
-
 
 
         // Check Duplicate staff
@@ -292,12 +299,8 @@
                 data: Data,
                 success: function (data) {
                   
-                        debugger
-
-                       
-                        if (data.success) {
-
-                            
+                                           
+                        if (data.success) {                            
                             $('#alreadyexistUser').text(data.message)
                             //$("#Username").addClass("is-invalid");
                        $('.indicator').css('visibility', 'hidden');
@@ -306,16 +309,11 @@
 
                             status = false;
                         }
-                        else {
-                            
+                        else {                            
                             $('#alreadyexistUser').text('')
-
                             status = true;
-
                         }
-
-
-                    
+                                            
                 },
                 error: function () {
                     //$('#myForm').invalid();
@@ -325,7 +323,6 @@
 
                 }
             })
-
             return status;
         }
 

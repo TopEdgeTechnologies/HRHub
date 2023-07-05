@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System;
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
 
 
 namespace HRHUBAPI.Models
@@ -13,8 +14,9 @@ namespace HRHUBAPI.Models
     public partial class Company
     {
 
-
-		[NotMapped]
+        [NotMapped]
+        public int TransFlag { get; set; }
+        [NotMapped]
 		public int LeaveStatusId { get; set; }
 		
 		[NotMapped]
@@ -131,24 +133,25 @@ namespace HRHUBAPI.Models
                     checkCompanyInfo.UpdatedOn = DateTime.Now;
                     checkCompanyInfo.Status = ObjCompanyInfo.Status;
                     checkCompanyInfo.UpdatedBy = ObjCompanyInfo.CreatedBy;
-                  
+                    checkCompanyInfo.TransFlag = 2;
                     await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
 					return ObjCompanyInfo;
 
 				}
                 else
                 {
-                        /// Intial Entry Company Register
+                        //----------- Intial Entry Company Register
                        
-                    ObjCompanyInfo.CreatedOn = DateTime.Now;
-                    ObjCompanyInfo.IsDeleted=false;
-                    ObjCompanyInfo.Language = "English";
-                    ObjCompanyInfo.Currency = "0";
-                    ObjCompanyInfo.StartTimeGraceMinutes = 0;
-                    ObjCompanyInfo.MarkHalfDayAfterLateMinutes = 0;
-                    ObjCompanyInfo.Status = true;
-                    _context.Companies.Add(ObjCompanyInfo);
-					await _context.SaveChangesAsync();
+                        ObjCompanyInfo.CreatedOn = DateTime.Now;
+                        ObjCompanyInfo.IsDeleted=false;
+                        ObjCompanyInfo.Language = "English";
+                        ObjCompanyInfo.Currency = "0";
+                        ObjCompanyInfo.StartTimeGraceMinutes = 0;
+                        ObjCompanyInfo.MarkHalfDayAfterLateMinutes = 0;
+                        ObjCompanyInfo.Status = true;
+                        _context.Companies.Add(ObjCompanyInfo);
+					    await _context.SaveChangesAsync();
 
 
 
@@ -220,14 +223,85 @@ namespace HRHUBAPI.Models
 						_context.Users.Add(objUser);
 						await _context.SaveChangesAsync();
 
-						// ---------------------------------------------
+                        // ---------------------------------------------
+
+
+                        // ---------------get subject and body from EmailTemplate_HRHUB
+                        
+                        var obj = _context.EmailTemplateHrhubs.FirstOrDefault(x => x.TemplateId == 1);
+                        // template id 1 is company onboarding welcome Email 
+                        string EmailSubject = obj.Subject;
+                        string EmailBody = obj.Body;
+
+                        EmailBody = EmailBody.Replace("[StaffName]", objStaff.FirstName);
+
+                        //------------------------------------------------------------------------------
 
 
 
-					}
+
+                        
+                        // ------------------------insert into Email Log table
+                        EmailLog ObjEmail = new EmailLog();
+                        ObjEmail.CompanyId = 0;
+                        ObjEmail.Subject = EmailSubject;
+                        ObjEmail.Body = EmailBody;
+                        ObjEmail.EmailTo = objStaff.Email;
+                        ObjEmail.IsSent = false;
 
 
-					
+                        _context.EmailLogs.Add(ObjEmail);
+                        await _context.SaveChangesAsync();
+
+
+
+
+                        //--------------------------------------------
+
+
+
+                        // ------------------------Get Email Template From Company Id 1 And Insert into new Company 
+
+                        //var ObjTemplate = _context.EmailTemplates.Where(x => x.CompanyId == 1).ToList();
+                        //List<EmailTemplate> objT = new List<EmailTemplate>();
+
+                        //int b = 0;
+                        //if (ObjTemplate != null)
+                        //{
+
+                        //    foreach (var item in ObjTemplate)
+                        //    {
+
+                        //        EmailTemplate objAca = new EmailTemplate();
+                        //        objAca.CompanyId = ObjCompanyInfo.CompanyId;
+                        //        objAca.AnswerComments = item;
+                        //        objAca.AnswerWeightage = 0;
+                        //        objAca.CreatedOn = DateTime.Now;
+                        //        objAca.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
+                        //        objAca.ReviewerDesignationId = SectionAnswerInfo.ReviewerDesignationId;
+                        //        objAca.SectionId = (int)SectionAnswerInfo.ListSectionId.ToArray()[a];
+                        //        objAca.ReviewerStaffId = SectionAnswerInfo.ReviewerStaffId;
+                        //        objAca.CreatedBy = SectionAnswerInfo.CreatedBy;
+                        //        objQ.Add(objAca);
+                        //        b++;
+
+                        //    }
+                        //    _context.SectionAnswers.AddRange(objQ);
+                        //    await _context.SaveChangesAsync();
+
+                        //}
+
+
+
+
+
+
+
+                        ////
+                    }
+
+
+                    ObjCompanyInfo.TransFlag = 1;
                     dbContextTransaction.Commit();
                     return ObjCompanyInfo;
                 }
