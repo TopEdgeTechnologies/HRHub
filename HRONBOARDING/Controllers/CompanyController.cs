@@ -35,26 +35,34 @@ namespace HRONBOARDING.Controllers
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> OnBoard(IFormCollection my)
         {
-            
+            try
+            {
+                var Obj = new Company
+                {
+                    ContactPerson = my["ContactPerson"],
+                    CompanyName = my["CompanyName"],
+                    WebUrl = my["WebUrl"],
+                    StaffDesignation = my["StaffDesignation"],
+                    StaffDepartment = my["StaffDepartment"],
+                    StaffEmail = my["StaffEmail"],
+                    Username = my["Username"],
+                    UserPassword = my["UserPassword"],
+                    LogoAttachment = "~/Images/CompanyLogo.png"
+
+                };
+
+
+                var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, $"api/Company/CompanyAddOrUpdate", HttpMethod.Post);
+
+                return Redirect("https://localhost:7211/User/Loginpage");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            } 
           
-            var Obj = new Company
-            {                
-                ContactPerson = my["ContactPerson"],
-                CompanyName = my["CompanyName"],
-                WebUrl = my["WebUrl"],
-                StaffDesignation = my["StaffDesignation"],
-                StaffDepartment = my["StaffDepartment"],
-                StaffEmail = my["StaffEmail"],
-                Username = my["Username"],
-                UserPassword = my["UserPassword"],
-                LogoAttachment = "~/Images/CompanyLogo.png"
-
-        };
-
-
-            var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, $"api/Company/CompanyAddOrUpdate", HttpMethod.Post);
-
-            return RedirectToAction("Loginpage", "User", new { id = 1 });
+           
         }
 
 
@@ -63,8 +71,16 @@ namespace HRONBOARDING.Controllers
         [HttpGet]
         public async Task<ActionResult<JsonObject>> CompanyNameCheckData(int id, string companyName)
         {
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Company/CompanyNameCheck{id}/{companyName}", HttpMethod.Get);
-            return Json(result);
+            try
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Company/CompanyNameCheck{id}/{companyName}", HttpMethod.Get);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
 
         }
@@ -78,8 +94,16 @@ namespace HRONBOARDING.Controllers
         public async Task<ActionResult<JsonObject>> UserCheckData(int id, string username)
         {
 
-            var result = await _APIHelper.CallApiAsyncGet<Response>($"api/User/UserCheckData{id}/{username}", HttpMethod.Get);
-            return Json(result);
+            try
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/User/UserCheckData{id}/{username}", HttpMethod.Get);
+                return Json(result);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
         }
 

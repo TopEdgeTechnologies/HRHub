@@ -247,7 +247,7 @@ namespace HRHUBAPI.Models
                         
                         // ------------------------insert into Email Log table
                         EmailLog ObjEmail = new EmailLog();
-                        ObjEmail.CompanyId = 0;
+                        ObjEmail.CompanyId = 1;
                         ObjEmail.Subject = EmailSubject;
                         ObjEmail.Body = EmailBody;
                         ObjEmail.EmailTo = objStaff.Email;
@@ -260,24 +260,28 @@ namespace HRHUBAPI.Models
 
 
 
+
+
+                        ObjCompanyInfo.TransFlag = 1;
+                        dbContextTransaction.Commit();
+
                         //--------------------------------------------
 
 
                         //----------- Call Store Procedure on Company New Configuration
 
-                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId;
-                        DataTable dt = _db.ReturnDataTable(query);
-                       
+                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId + "," + objUser.UserId;
+                         DataTable dt = _db.ReturnDataTable(query);
+
                         //----------------------
 
 
 
-                       
+
                     }
 
 
-                    ObjCompanyInfo.TransFlag = 1;
-                    dbContextTransaction.Commit();
+                   
                     return ObjCompanyInfo;
                 }
             catch (Exception ex)

@@ -166,27 +166,37 @@ nextBtn.addEventListener('click', (event) => {
 })
 //function for ensuring all the fields are filled at the time of submission
 const checkValidity = () => {
-    
+    debugger
     var isValid = true;
     for (let i = 0; i < inputFields.length; i++) {
-        
-        if (indicator[i].style.visibility != "visible" && indicator[i].style.background != "#27aa4e") {
+
+        console.log(inputFields[i].value)
+
+        if (inputFields[i].value == '' || inputFields[i].value == null  ) {//if (indicator[i].style.visibility != "visible" && indicator[i].style.background != "#27aa4e") {
             inputFields[i].style.border = "1px solid red";
             validationMessage[i].textContent = inputFields[i].placeholder + " is required**";
             isValid = false;
         }
+        else {
+
+            if (document.getElementById("HDUemail").value == 'true' && document.getElementById("HDUCompany").value == 'true') {
+
+                isValid = true;
+            }
+            else {
+                isValid = false;
+
+            }
+
+
+
+        }
     }
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    });
+   
     if (isValid)
     {
         $("#myform").submit();   
-        console.log("Data submit Success")
+        
     }
 }
 createAccountBtn.addEventListener('click', checkValidity);
