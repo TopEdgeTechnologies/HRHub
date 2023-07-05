@@ -4,7 +4,8 @@ using System;
 
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Policy;
-
+using HRHUBAPI.Models.Configuration;
+using System.Data;
 
 namespace HRHUBAPI.Models
 {
@@ -13,6 +14,9 @@ namespace HRHUBAPI.Models
 
     public partial class Company
     {
+
+
+        DbConnection _db = new DbConnection();
 
         [NotMapped]
         public int TransFlag { get; set; }
@@ -248,7 +252,7 @@ namespace HRHUBAPI.Models
                         ObjEmail.Body = EmailBody;
                         ObjEmail.EmailTo = objStaff.Email;
                         ObjEmail.IsSent = false;
-
+                        ObjEmail.CreatedOn  = DateTime.Now;
 
                         _context.EmailLogs.Add(ObjEmail);
                         await _context.SaveChangesAsync();
@@ -259,45 +263,16 @@ namespace HRHUBAPI.Models
                         //--------------------------------------------
 
 
+                        //----------- Call Store Procedure on Company New Configuration
 
-                        // ------------------------Get Email Template From Company Id 1 And Insert into new Company 
-
-                        //var ObjTemplate = _context.EmailTemplates.Where(x => x.CompanyId == 1).ToList();
-                        //List<EmailTemplate> objT = new List<EmailTemplate>();
-
-                        //int b = 0;
-                        //if (ObjTemplate != null)
-                        //{
-
-                        //    foreach (var item in ObjTemplate)
-                        //    {
-
-                        //        EmailTemplate objAca = new EmailTemplate();
-                        //        objAca.CompanyId = ObjCompanyInfo.CompanyId;
-                        //        objAca.AnswerComments = item;
-                        //        objAca.AnswerWeightage = 0;
-                        //        objAca.CreatedOn = DateTime.Now;
-                        //        objAca.ReviewedStaffId = SectionAnswerInfo.ReviewedStaffId;
-                        //        objAca.ReviewerDesignationId = SectionAnswerInfo.ReviewerDesignationId;
-                        //        objAca.SectionId = (int)SectionAnswerInfo.ListSectionId.ToArray()[a];
-                        //        objAca.ReviewerStaffId = SectionAnswerInfo.ReviewerStaffId;
-                        //        objAca.CreatedBy = SectionAnswerInfo.CreatedBy;
-                        //        objQ.Add(objAca);
-                        //        b++;
-
-                        //    }
-                        //    _context.SectionAnswers.AddRange(objQ);
-                        //    await _context.SaveChangesAsync();
-
-                        //}
+                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId;
+                        DataTable dt = _db.ReturnDataTable(query);
+                       
+                        //----------------------
 
 
 
-
-
-
-
-                        ////
+                       
                     }
 
 

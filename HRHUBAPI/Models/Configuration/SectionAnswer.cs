@@ -298,8 +298,7 @@ namespace HRHUBAPI.Models
             try
             {
 
-                try
-                {
+               
                     string query = "EXEC dbo.sp_Load_Section_Question " + ReviewFormId + ","+ CompanyId +"";
                     DataTable dt = _db.ReturnDataTable(query);
 
@@ -322,8 +321,7 @@ namespace HRHUBAPI.Models
                         }).OrderByDescending(x => x.SectionQuestionId)
                         .ToList();
                     return obj;
-                }
-                catch { throw; }
+               
 
 
             }
@@ -341,8 +339,6 @@ namespace HRHUBAPI.Models
             try
             {
 
-                try
-                {
                     string query = "EXEC dbo.sp_Load_Section_Question_SelfScoring " + ReviewFormId + "," + CompanyId + "";
                     DataTable dt = _db.ReturnDataTable(query);
 
@@ -365,14 +361,7 @@ namespace HRHUBAPI.Models
                         }).OrderByDescending(x => x.SectionQuestionId)
                         .ToList();
                     return obj;
-                }
-                catch { throw; }
-
-
-
-
-
-
+               
             }
             catch (Exception ex)
             {

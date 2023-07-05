@@ -185,40 +185,7 @@ const checkValidity = () => {
     });
     if (isValid)
     {
-
-        swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            cancelButtonText: 'No, cancel!',
-            confirmButtonText: 'Yes, Save it!',
-            timer: 30000,
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $("#myform").submit();
-
-
-
-            }
-            else if (
-
-                result.dismiss === Swal.DismissReason.cancel
-            ) {
-                swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your record is safe :)',
-                    'error'
-                )
-            }
-        });
-
-
-
-
-
-
+        $("#myform").submit();   
         console.log("Data submit Success")
     }
 }
