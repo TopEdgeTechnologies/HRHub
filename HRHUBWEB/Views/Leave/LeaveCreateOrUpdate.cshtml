@@ -11,9 +11,9 @@
     .note-editing-area {
         height: 400px !important
     }
+
     .chkboxdisable {
         pointer-events: none;
-
     }
 
 </style>
@@ -63,19 +63,42 @@
                                 <div class="row form-group">
                                     <label class="form-label">Date Range:</label>
                                     <div class="col-xl-12 col-md-12 col-lg-12" id="singledate">
-                                        <div class="input-group">
-                                            <input type="date" asp-for="StartDate" class="form-control " placeholder="select date" />
-                                            @* <div class="input-group-append">
-                                        <div class="input-group-text">
-                                        <i class="bx bx-calendar"></i>
+
+                                        <div class="header-datepicker me-0">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text p-2">
+                                                        <i class="feather feather-calendar"></i>
+                                                    </div>
+                                                </div><input asp-for="StartDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                            </div>
                                         </div>
-                                        </div>
-                                        *@
-                                        </div>
+
+
+
+                                        @*<input type="date" asp-for="StartDate" class="form-control " placeholder="select date" />*@
+                                        @* <div class="input-group-append">
+                                    <div class="input-group-text">
+                                    <i class="bx bx-calendar"></i>
+                                    </div>
+                                    </div>
+                                    *@
                                     </div>
                                     <div class="col-xl-6 col-md-12 col-lg-12">
-                                        <div class="input-group" hidden id="divMultipleDate">
-                                            <input type="date" asp-for="EndDate" class="form-control " placeholder="select date" />
+                                        <div hidden id="divMultipleDate">
+
+                                            <div class="header-datepicker me-0">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text p-2">
+                                                            <i class="feather feather-calendar"></i>
+                                                        </div>
+                                                    </div><input asp-for="EndDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
+                                                </div>
+                                            </div>
+
+
+                                            @*<input type="date" asp-for="EndDate" class="form-control " placeholder="select date" />*@
                                             @*<div class="input-group-append">
                                         <div class="input-group-text">
                                         <i class="bx bx-calendar"></i>
@@ -204,6 +227,21 @@
         $(document).ready(function () {
 
             debugger;
+
+            $('#StartDate').datepicker({
+                options: {
+                    dateFormat: 'yy M dd',
+                    autoHide: true
+                }
+            });
+
+            $('#EndDate').datepicker({
+                dateFormat: 'yy M dd',
+                autoHide: true
+            });
+
+            $('#StartDate').val('@Model.LeaveStartDate')
+            $('#EndDate').val('@Model.LeaveEndDate')
 
             $('#LeaveTypeId').select2();
             if (@Model.LeaveId > 0) {
@@ -397,7 +435,7 @@
                 type: "GET",
                 data: Data,
                 success: function (data) {
-                    if (data >0) {
+                    if (data > 0) {
                         debugger
                         var selecteddays = $("#SelectedDays").text();
                         if (selecteddays > data) {
@@ -409,7 +447,7 @@
                         }
 
                     }
-                    else if(data == 0){
+                    else if (data == 0) {
                         $.growl.warning({
                             message: "You have Consumed All leaves"
                         });
@@ -504,6 +542,7 @@
         $("#StartDate").change(function () {
             debugger;
             var leavecategory = $("#daterange-categories").val();
+            var selectedDate = $("#StartDate").val()
             if (leavecategory == "single") {
                 var strtdate = $("#StartDate").val();
                 $("#EndDate").val(strtdate);
@@ -512,6 +551,8 @@
                 $("#EndDate").val("");
             }
             DateRangeinDays($("#StartDate").val(), $("#EndDate").val());
+
+            $('#EndDate').datepicker('option', 'minDate', selectedDate);
         })
 
         $("#EndDate").change(function () {

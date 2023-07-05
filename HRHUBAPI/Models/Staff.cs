@@ -90,4 +90,6 @@ public partial class Staff
     public int? StaffStatusId { get; set; }
 
     public string? WorkMode { get; set; }
+
+    public int? ReportingToStaffId { get; set; }
 }

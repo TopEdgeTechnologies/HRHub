@@ -87,9 +87,15 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">Apply Date:</label>
-                                    <input type="date" asp-for="ApplicationDate" class="form-control fc-datepicker" placeholder="select date" />
+                                <div class="header-datepicker me-3">
+                                    <label class="form-label">Apply Date</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="feather feather-calendar"></i>
+                                            </div>
+                                        </div><input asp-for="ApplicationDate" class="form-control fc-datepicker" type="text">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -238,13 +244,18 @@
                 @if (ViewBag.ControlVisibility == true)
                 {
                     <div class="form-group" id="div_Date">
+
                         <div class="row">
                             <div class="col-md-3">
-                                <label class="form-label mb-0 mt-2">Payment Date</label>
+                                <label class="form-label">Payment Date</label>
                             </div>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <input type="date" class="form-control" id="PaymentDate" placeholder="DD-MM-YYYY">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="feather feather-calendar"></i>
+                                        </div>
+                                    </div><input id="PaymentDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" type="text">
                                 </div>
                             </div>
                         </div>
@@ -310,6 +321,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            $('#ApplicationDate').val('@Convert.ToDateTime(Model.ApplicationDate).ToString("dd-MMM-yyyy")')
 
             $('#LoanTypeId').select2();
             $('#athars').select2();
@@ -505,24 +518,30 @@
                 success: function (data) {
                     if (data != "") {
                         debugger
-                        var b = JSON.parse(data)
-                        if (b.success) {
+                        //var b = JSON.parse(data)
+                        if (data.success) {
                             // $.growl.warning(b.message);
-                            $.growl.warning({
-                                message: b.message
+                            notif({
+                                msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + data.message,
+                                type: "success"
                             });
 
+                            setTimeout(() => { window.location.href = window.location.href; }, 300);
+
                             //var url = '@Url.Action("LoanList", "Loan")';
-                            window.location.href = window.location.href;
+                            //window.location.href = window.location.href;
 
                         }
                         else {
-                            $.growl.warning({
-                                message: b.message
-                            });
+                           notif({
+                                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                                    type: "error"
+                                });
+
+                            setTimeout(() => {window.location.href = window.location.href;}, 300);
 
                             //var url = '@Url.Action("LoanList", "Loan")';
-                            window.location.href = window.location.href;
+                            //window.location.href = window.location.href;
 
 
                         }

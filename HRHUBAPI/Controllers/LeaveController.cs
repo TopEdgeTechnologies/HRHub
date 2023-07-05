@@ -100,25 +100,28 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        [HttpDelete("DeleteLeaveInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteLeaveInfo(int id)
+        [HttpGet("DeleteLeaveInfo{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteLeaveInfo(int id, int UserId)
         {
-            var result = await new Leave().DeleteLeaveInfo(id, _context);
+
             if (id > 0)
-                return Ok(new
+            {
+                var dbResult = await new Leave().DeleteLeaveInfo(id, UserId, _context);
+                if (dbResult == true)
                 {
-
-                    Success = true,
-                    Message = "Data Delete Successfully!"
-
-
-                });
-
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
             return NotFound("Data Not Found!");
+
         }
 
 
-        [HttpGet("LeaveCheckData{staffid}/{leavetypeid}")]
+        [HttpGet("LeaveCheckData/{staffid}/{leavetypeid}")]
         public async Task<ActionResult<JsonObject>> LeaveCheckData(int staffid,int leavetypeid)
         {
             var result = await new Leave().CheckLeaveCount(staffid, leavetypeid, _context);

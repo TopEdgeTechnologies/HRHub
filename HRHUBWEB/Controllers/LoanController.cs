@@ -45,48 +45,15 @@ namespace HRHUBWEB.Controllers
                 ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
                 ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-
                 ViewBag.Success = data;
                 LoanApplication Obj = new LoanApplication();
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = userObject.StaffId;
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
-                if (Token != null)
-                {
+                Obj.ListLoanData = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanApplication>>($"api/PayrollConfiguration/GetLoanInfos{_user.CompanyId}/{_user.StaffId}", HttpMethod.Get);
+                ViewBag.StaffID = _user.StaffId;
 
-                    HttpResponseMessage message = await _client.GetAsync($"api/PayrollConfiguration/GetLoanInfos{CompanyId}/{StaffId}");
-                    if (message.IsSuccessStatusCode)
-                    {
-                        var result = message.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanData = JsonConvert.DeserializeObject<List<LoanApplication>>(result);
-                        ViewBag.StaffID = StaffId;
-                    }
+                Obj.ListLoanStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanStatus>>("api/PayrollConfiguration/GetLoanStatusInfos", HttpMethod.Get);
+                Obj.ListLoanTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
 
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/PayrollConfiguration/GetLoanStatusInfos");
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanStatus = JsonConvert.DeserializeObject<List<LoanStatus>>(result);
-
-                    }
-
-                    HttpResponseMessage message2 = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{CompanyId}");
-                    if (message2.IsSuccessStatusCode)
-                    {
-                        var result = message2.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(result);
-
-                    }
-
-
-                }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
                 return View(Obj);
             }
             catch (Exception ex)
@@ -123,31 +90,9 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
                 LoanApplication Obj = new LoanApplication();
-
-                //Get Instutute ID through Sessions
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = userObject.StaffId;
-
-                HttpResponseMessage message = await _client.GetAsync($"api/PayrollConfiguration/GetLoanInfoId{id}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    Obj = JsonConvert.DeserializeObject<LoanApplication>(result);
-
-                }
-                HttpResponseMessage message1 = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{CompanyId}");
-                if (message1.IsSuccessStatusCode)
-                {
-                    var result = message1.Content.ReadAsStringAsync().Result;
-                    Obj.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(result);
-
-                }
-
+                Obj = await _APIHelper.CallApiAsyncGet<LoanApplication>($"api/PayrollConfiguration/GetLoanInfoId{id}", HttpMethod.Get);
+                Obj.ListLoanTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
 
                 return Obj;
             }
@@ -156,26 +101,11 @@ namespace HRHUBWEB.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> GetLoanById(int id)
         {
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            LoanApplication Loan= new LoanApplication();
-            var response = await _client.GetAsync($"api/PayrollConfiguration/GetLoanInfoId{id}");
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                Loan = JsonConvert.DeserializeObject<LoanApplication>(content);
-                return Json(Loan);
-            }
-            else
-            {
-
-                return Json(null);
-            }
-
+            LoanApplication Loan = new LoanApplication();
+            Loan = await _APIHelper.CallApiAsyncGet<LoanApplication>($"api/PayrollConfiguration/GetLoanInfoId{id}", HttpMethod.Get);
+            return Json(Loan);
 
         }
 
@@ -202,7 +132,7 @@ namespace HRHUBWEB.Controllers
         //                Info.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(result);
 
         //            }
-                   
+
 
         //            if (id == 0)
         //            {
@@ -223,57 +153,26 @@ namespace HRHUBWEB.Controllers
         //    }
         //}
         [HttpPost]
-        public async Task<IActionResult> LoanCreateOrUpdate(LoanApplication ObjLeave)
+        public async Task<IActionResult> LoanCreateOrUpdate(LoanApplication ObjLoan)
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+                ObjLoan.StaffId = _user.StaffId;
+                ObjLoan.ApplicationDate = DateTime.Now;
+                ObjLoan.LoanStatusId = 0; // New
+                ObjLoan.CreatedBy = _user.UserId;
+                ObjLoan.IsDeleted = false;
 
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                ObjLeave.StaffId = userObject.StaffId;
-                ObjLeave.ApplicationDate = DateTime.Now;
-                ObjLeave.LoanStatusId = 0; // New
-                ObjLeave.CreatedBy = userObject.UserId;
-                ObjLeave.IsDeleted = false;
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/PayrollConfiguration/LoanAddOrCreate", ObjLeave);
+                var result = await _APIHelper.CallApiAsyncPost<Response>(ObjLoan, "api/PayrollConfiguration/LoanAddOrCreate", HttpMethod.Post);
 
-                if (message.IsSuccessStatusCode)
+                if (result.Message.Contains("Insert"))
                 {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("LoanList", new { data = status });
-
+                    return RedirectToAction("LoanList", new { data = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                    return RedirectToAction("LoanList", new { data = 2 });
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -285,70 +184,8 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-                HttpResponseMessage message = await _client.DeleteAsync($"api/PayrollConfiguration/DeleteLoanInfo{id}/{userObject.UserId}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var body = message.Content.ReadAsStringAsync();
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Delete"))
-                        {
-                            status = 3;
-                        }
-
-
-
-                    }
-
-                    return RedirectToAction("LoanList", new { data = status });
-
-                }
-
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task<ActionResult<JsonObject>> LeaveCheckData(int leavetypeid)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var staffid = userObject.StaffId;
-
-                HttpResponseMessage message = await _client.GetAsync($"api/Leave/LeaveCheckData{staffid}/{leavetypeid}");
-                if (message.IsSuccessStatusCode)
-                {
-                    var result = message.Content.ReadAsStringAsync().Result;
-                    return Json(result);
-
-                }
-
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/PayrollConfiguration/DeleteLoanInfo{id}/{_user.UserId}", HttpMethod.Get);
+                return RedirectToAction("LoanList", new { data = 3 });
             }
             catch (Exception ex)
             {
@@ -359,27 +196,9 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                //Get Instutute ID through Sessions
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                //var StaffId = userObject.StaffId;
-
-
-                List<LoanType> loantype = new List<LoanType>();
-                var response = await _client.GetAsync($"api/PayrollConfiguration/GetStaffLoanRemainingAmount{StaffId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    loantype = JsonConvert.DeserializeObject<List<LoanType>>(content);
-                    return Json(loantype);
-                }
-                else
-                {
-
-                    return Json(null);
-                }
+                IEnumerable<LoanType> loantype;
+                loantype = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/PayrollConfiguration/GetStaffLoanRemainingAmount{StaffId}", HttpMethod.Get);
+                return Json(loantype);
             }
             catch (Exception ex)
             {
@@ -387,102 +206,19 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-        public async Task<IActionResult> GetLeaveApprovalSettingData()
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                //Get Instutute ID through Sessions
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-
-
-                LeaveApprovalSetting leavetype = new LeaveApprovalSetting();
-                var response = await _client.GetAsync($"api/Leave/GetLeaveApprovalSettingInfos{CompanyId}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    leavetype = JsonConvert.DeserializeObject<LeaveApprovalSetting>(content);
-                    return Json(leavetype);
-                }
-                else
-                {
-
-                    return Json(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-        public async Task<IActionResult> ViewLeaveDetail(int id)
-        {
-            try
-            {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                List<Leave> leave = new List<Leave>();
-                var response = await _client.GetAsync($"api/Leave/GetLeaveDetailInfoId{id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    leave = JsonConvert.DeserializeObject<List<Leave>>(content);
-                    return Json(leave);
-                }
-                else
-                {
-
-                    return Json(null);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-
 
         // Load filter wise data from database
         [HttpPost]
         public async Task<IActionResult> SearchList(int StaffId, int LoanTypeId, int LoanStatusId, DateTime Month, bool DateFilter)
         {
+            var loan = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanApplication>>($"api/PayrollConfiguration/SearchAllLoanData{_user.CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{Month}/{DateFilter}", HttpMethod.Get);
 
-            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-            var CompanyId = userObject.CompanyId;
-
-            HttpResponseMessage message = await _client.GetAsync($"api/PayrollConfiguration/SearchAllLoanData{CompanyId}/{StaffId}/{LoanTypeId}/{LoanStatusId}/{Month}/{DateFilter}");
-            if (message.IsSuccessStatusCode)
+            return Json(new
             {
-                var result1 = message.Content.ReadAsStringAsync().Result;
-                var loan = JsonConvert.DeserializeObject<List<LoanApplication>>(result1);
+                success = true,
+                ListLoans = loan,
 
-                return Json(new
-                {
-                    success = true,
-                    ListLoans = loan,
-
-                });
-
-            }
-
-            else
-            {
-                return Json(new
-                {
-                    success = false,
-                    Listcandidate = "",
-
-                });
-            }
+            });
         }
 
         #endregion
@@ -502,65 +238,21 @@ namespace HRHUBWEB.Controllers
 
                 ViewBag.Success = data;
                 LoanApplication Obj = new LoanApplication();
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = userObject.StaffId;
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
+                var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{_user.CompanyId}", HttpMethod.Get);
+                // Extract the column name from the response
+                var FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
 
-
-
-                if (Token != null)
+                ViewBag.ControlVisibility = false;
+                if (FinalApprovalDesignationID == _user.DesignationID)
                 {
-
-                    var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{CompanyId}", HttpMethod.Get);
-                    // Extract the column name from the response
-                    var FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
-
-                    ViewBag.ControlVisibility = false;
-                    if (FinalApprovalDesignationID == _user.DesignationID)
-                    {
-                        ViewBag.ControlVisibility = true;
-                    }
-
-
-                    HttpResponseMessage message = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}");
-                    if (message.IsSuccessStatusCode)
-                    {
-                        var result = message.Content.ReadAsStringAsync().Result;
-                        ViewBag.Staffs = JsonConvert.DeserializeObject<List<Staff>>(result);
-
-                    }
-
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/PayrollConfiguration/GetHRLoanInfos{CompanyId}/{StaffId}");
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanData = JsonConvert.DeserializeObject<List<LoanApplication>>(result);
-
-                    }
-                    HttpResponseMessage message2 = await _client.GetAsync($"api/PayrollConfiguration/GetLoanStatusInfos");
-                    if (message2.IsSuccessStatusCode)
-                    {
-                        var result = message2.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanStatus = JsonConvert.DeserializeObject<List<LoanStatus>>(result);
-
-                    }
-
-                    HttpResponseMessage message3 = await _client.GetAsync($"api/Configuration/GetLoanTypeInfos{CompanyId}");
-                    if (message3.IsSuccessStatusCode)
-                    {
-                        var result = message3.Content.ReadAsStringAsync().Result;
-                        Obj.ListLoanTypes = JsonConvert.DeserializeObject<List<LoanType>>(result);
-
-                    }
-
+                    ViewBag.ControlVisibility = true;
                 }
-                else
-                {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-                }
+
+                ViewBag.Staffs = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+                Obj.ListLoanData = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanApplication>>($"api/PayrollConfiguration/GetHRLoanInfos{_user.CompanyId}/{_user.StaffId}", HttpMethod.Get);
+                Obj.ListLoanStatus = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanStatus>>("api/PayrollConfiguration/GetLoanStatusInfos", HttpMethod.Get);
+                Obj.ListLoanTypes = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanType>>($"api/Configuration/GetLoanTypeInfos{_user.CompanyId}", HttpMethod.Get);
 
                 return View(Obj);
 
@@ -570,46 +262,27 @@ namespace HRHUBWEB.Controllers
                 throw ex;
             }
         }
-
-
         public async Task<IActionResult> SaveLoanApprovalData(int id, int loanstatusid, string remarks, DateTime PaymentDate)
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-
                 LoanApplicationProcess obj = new LoanApplicationProcess();
                 obj.LoanApplicationId = id;
                 obj.LoanStatusId = loanstatusid;
-                if (loanstatusid == 2)
-                {
-                    obj.PaymentDate = null;
-                }
-                else
-                {
-                    obj.PaymentDate = PaymentDate;
-                }
+                if (loanstatusid == 2) { obj.PaymentDate = null; }
+                else { obj.PaymentDate = PaymentDate; }
                 obj.Remarks = remarks;
-                obj.ApprovedByStaffId = userObject.StaffId;
-                obj.ApprovedByDesignationID = userObject.DesignationID;
+                obj.ApprovedByStaffId = _user.StaffId;
+                obj.ApprovedByDesignationID = _user.DesignationID;
                 obj.IsDelete = false;
                 obj.ProcessDate = DateTime.Now;
 
-                var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{CompanyId}", HttpMethod.Get);
+                var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{_user.CompanyId}", HttpMethod.Get);
                 // Extract the column name from the response
                 obj.FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
+                var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/PayrollConfiguration/SaveLoanApprovalDetail", HttpMethod.Post);
 
-                var response = await _client.PostAsJsonAsync("api/PayrollConfiguration/SaveLoanApprovalDetail", obj);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = response.Content.ReadAsStringAsync().Result;
-                    return Json(content);
-                }
-                return RedirectToAction("Loginpage", "User", new { id = 2 });
+                return Json(result);
             }
             catch (Exception ex)
             {
@@ -622,49 +295,15 @@ namespace HRHUBWEB.Controllers
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
-                HttpResponseMessage message = await _client.PostAsJsonAsync("api/PayrollConfiguration/SaveForwardLoanDetail", Obj);
-
-                if (message.IsSuccessStatusCode)
+                var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/PayrollConfiguration/SaveForwardLoanDetail", HttpMethod.Post);
+                if (result.Message.Contains("Insert"))
                 {
-
-                    var body = message.Content.ReadAsStringAsync();
-
-
-                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
-
-                    int status = 0;
-                    if (model.Success)
-                    {
-
-
-                        if (model.Message.Contains("Insert"))
-                        {
-                            status = 1;
-                        }
-                        else if (model.Message.Contains("Update"))
-                        {
-                            status = 2;
-                        }
-
-
-                    }
-
-                    return RedirectToAction("HRLoanList", new { data = status });
-
+                    return RedirectToAction("HRLoanList", new { data = 1 });
                 }
                 else
                 {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                    return RedirectToAction("HRLoanList", new { data = 2 });
                 }
-
-
-
             }
             catch (Exception)
             {
@@ -672,66 +311,33 @@ namespace HRHUBWEB.Controllers
                 return View();
             }
         }
-
-
         public async Task<IActionResult> LoanApproval(int id, int staffid)
         {
             try
             {
-                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-                //Get Instutute ID through Sessions
-                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-                var CompanyId = userObject.CompanyId;
-                var StaffId = staffid;
-
-                if (Token != null)
+                ViewBag.ApprovalBtnVisibility = true;
+                if (staffid == _user.StaffId)
                 {
-
-                    ViewBag.ApprovalBtnVisibility = true;
-                    if (staffid == _user.StaffId)
-                    {
-                        ViewBag.ApprovalBtnVisibility = false;
-                    }
-
-                    var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{CompanyId}", HttpMethod.Get);
-                    // Extract the column name from the response
-                    var FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
-
-                    ViewBag.ForwardBtnVisibility = false;
-                    ViewBag.ControlVisibility = false;
-                    if (FinalApprovalDesignationID == _user.DesignationID)
-                    {
-                        ViewBag.ForwardBtnVisibility = true;
-                        ViewBag.ControlVisibility = true;
-                    }
-
-                    HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}"); 
-                    if (message1.IsSuccessStatusCode)
-                    {
-                        var result = message1.Content.ReadAsStringAsync().Result;
-                        ViewBag.Staffs = JsonConvert.DeserializeObject<List<Staff>>(result);
-
-                    }
-
-                    LoanApplication ObjLoan = await GetLoanDetailById(id);
-
-                    HttpResponseMessage message2 = await _client.GetAsync($"api/PayrollConfiguration/GetLoanApprovalByLoanId{id}");
-                    if (message2.IsSuccessStatusCode)
-                    {
-                        var result = message2.Content.ReadAsStringAsync().Result;
-                        ObjLoan.ListLoanApprovalData = JsonConvert.DeserializeObject<List<LoanApplicationProcess>>(result);
-
-                    }
-
-                    return View(ObjLoan);
+                    ViewBag.ApprovalBtnVisibility = false;
                 }
-                else
+
+                var setting = await _APIHelper.CallApiAsyncGet<LoanApprovalSetting>($"api/PayrollConfiguration/GetLoanApprovalSettingInfos{_user.CompanyId}", HttpMethod.Get);
+                // Extract the column name from the response
+                var FinalApprovalDesignationID = setting.LoanFinalApprovalDesignationId;
+
+                ViewBag.ForwardBtnVisibility = false;
+                ViewBag.ControlVisibility = false;
+                if (FinalApprovalDesignationID == _user.DesignationID)
                 {
-                    return RedirectToAction("Loginpage", "User", new { id = 2 });
-
+                    ViewBag.ForwardBtnVisibility = true;
+                    ViewBag.ControlVisibility = true;
                 }
+                ViewBag.Staffs = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
+
+                LoanApplication ObjLoan = await GetLoanDetailById(id);
+                ObjLoan.ListLoanApprovalData = await _APIHelper.CallApiAsyncGet<IEnumerable<LoanApplicationProcess>>($"api/PayrollConfiguration/GetLoanApprovalByLoanId{id}", HttpMethod.Get);
+
+                return View(ObjLoan);
             }
             catch (Exception ex)
             {

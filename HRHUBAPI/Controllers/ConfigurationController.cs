@@ -297,20 +297,21 @@ namespace HRHUBAPI.Controllers
                 });
         }
 
-        [HttpDelete("DeleteLeaveTypeInfo{id}")]
-        public async Task<ActionResult<bool>> DeleteLeaveTypeInfo(int id)
+        [HttpGet("DeleteLeaveTypeInfo{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteLeaveTypeInfo(int id, int UserId)
         {
-            var result = await new LeaveType().DeleteLeaveTypeInfo(id, _context);
             if (id > 0)
-                return Ok(new
+            {
+                var dbResult = await new LeaveType().DeleteLeaveTypeInfo(id, UserId, _context);
+                if (dbResult == true)
                 {
-
-                    Success = true,
-                    Message = "Data Delete Successfully!"
-
-
-                });
-
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Data Deleted Successfully"
+                    });
+                }
+            }
             return NotFound("Data Not Found!");
         }
 
@@ -396,30 +397,13 @@ namespace HRHUBAPI.Controllers
 
         }
 
-        //[HttpDelete("DeleteLoanTypeInfo{id}")]
-        //public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int id)
-        //{
-        //    var result = await new LoanType().DeleteLoanTypeInfo(id, _context);
-        //    if (id > 0)
-        //        return Ok(new
-        //        {
-
-        //            Success = true,
-        //            Message = "Data Delete Successfully!"
-
-
-        //        });
-
-        //    return NotFound("Data Not Found!");
-        //}
-
-        [HttpGet("DeleteLoanTypeInfo{Id}")]
-        public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int Id)
+        [HttpGet("DeleteLoanTypeInfo{id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteLoanTypeInfo(int Id, int UserId)
         {
             if (Id > 0)
             {
 
-                var dbResult = await new LoanType().DeleteLoanTypeInfo(Id, _context);
+                var dbResult = await new LoanType().DeleteLoanTypeInfo(Id, UserId, _context);
                 if (dbResult == true)
                 {
                     return Ok(new

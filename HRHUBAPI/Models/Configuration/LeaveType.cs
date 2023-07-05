@@ -190,7 +190,7 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> DeleteLeaveTypeInfo(int id, HrhubContext _context)
+        public async Task<bool> DeleteLeaveTypeInfo(int id, int UserId, HrhubContext _context)
         {
             try
             {
@@ -200,6 +200,7 @@ namespace HRHUBAPI.Models
                 if (LeaveTypeInfo != null)
                 {
                     LeaveTypeInfo.IsDeleted = true;
+                    LeaveTypeInfo.UpdatedBy = UserId;
                     LeaveTypeInfo.UpdatedOn = DateTime.Now;
                     check = true;
 

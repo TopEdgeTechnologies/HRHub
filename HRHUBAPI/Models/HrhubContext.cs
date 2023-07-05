@@ -968,6 +968,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PermanentAddress).IsUnicode(false);
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
+            entity.Property(e => e.ReportingToStaffId).HasColumnName("ReportingTo_StaffID");
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryMethodId)
