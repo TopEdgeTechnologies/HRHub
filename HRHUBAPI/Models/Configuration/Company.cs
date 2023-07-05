@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System;
 
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Security.Policy;
+using HRHUBAPI.Models.Configuration;
+using System.Data;
 
 namespace HRHUBAPI.Models
 {
@@ -14,7 +16,11 @@ namespace HRHUBAPI.Models
     {
 
 
-		[NotMapped]
+        DbConnection _db = new DbConnection();
+
+        [NotMapped]
+        public int TransFlag { get; set; }
+        [NotMapped]
 		public int LeaveStatusId { get; set; }
 		
 		[NotMapped]
@@ -131,24 +137,25 @@ namespace HRHUBAPI.Models
                     checkCompanyInfo.UpdatedOn = DateTime.Now;
                     checkCompanyInfo.Status = ObjCompanyInfo.Status;
                     checkCompanyInfo.UpdatedBy = ObjCompanyInfo.CreatedBy;
-                  
+                    checkCompanyInfo.TransFlag = 2;
                     await _context.SaveChangesAsync();
+                    dbContextTransaction.Commit();
 					return ObjCompanyInfo;
 
 				}
                 else
                 {
-                        /// Intial Entry Company Register
+                        //----------- Intial Entry Company Register
                        
-                    ObjCompanyInfo.CreatedOn = DateTime.Now;
-                    ObjCompanyInfo.IsDeleted=false;
-                    ObjCompanyInfo.Language = "English";
-                    ObjCompanyInfo.Currency = "0";
-                    ObjCompanyInfo.StartTimeGraceMinutes = 0;
-                    ObjCompanyInfo.MarkHalfDayAfterLateMinutes = 0;
-                    ObjCompanyInfo.Status = true;
-                    _context.Companies.Add(ObjCompanyInfo);
-					await _context.SaveChangesAsync();
+                        ObjCompanyInfo.CreatedOn = DateTime.Now;
+                        ObjCompanyInfo.IsDeleted=false;
+                        ObjCompanyInfo.Language = "English";
+                        ObjCompanyInfo.Currency = "0";
+                        ObjCompanyInfo.StartTimeGraceMinutes = 0;
+                        ObjCompanyInfo.MarkHalfDayAfterLateMinutes = 0;
+                        ObjCompanyInfo.Status = true;
+                        _context.Companies.Add(ObjCompanyInfo);
+					    await _context.SaveChangesAsync();
 
 
 
@@ -220,14 +227,56 @@ namespace HRHUBAPI.Models
 						_context.Users.Add(objUser);
 						await _context.SaveChangesAsync();
 
-						// ---------------------------------------------
+                        // ---------------------------------------------
+
+
+                        // ---------------get subject and body from EmailTemplate_HRHUB
+                        
+                        var obj = _context.EmailTemplateHrhubs.FirstOrDefault(x => x.TemplateId == 1);
+                        // template id 1 is company onboarding welcome Email 
+                        string EmailSubject = obj.Subject;
+                        string EmailBody = obj.Body;
+
+                        EmailBody = EmailBody.Replace("[StaffName]", objStaff.FirstName);
+
+                        //------------------------------------------------------------------------------
 
 
 
-					}
+
+                        
+                        // ------------------------insert into Email Log table
+                        EmailLog ObjEmail = new EmailLog();
+                        ObjEmail.CompanyId = 0;
+                        ObjEmail.Subject = EmailSubject;
+                        ObjEmail.Body = EmailBody;
+                        ObjEmail.EmailTo = objStaff.Email;
+                        ObjEmail.IsSent = false;
+                        ObjEmail.CreatedOn  = DateTime.Now;
+
+                        _context.EmailLogs.Add(ObjEmail);
+                        await _context.SaveChangesAsync();
 
 
-					
+
+
+                        //--------------------------------------------
+
+
+                        //----------- Call Store Procedure on Company New Configuration
+
+                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId;
+                        DataTable dt = _db.ReturnDataTable(query);
+                       
+                        //----------------------
+
+
+
+                       
+                    }
+
+
+                    ObjCompanyInfo.TransFlag = 1;
                     dbContextTransaction.Commit();
                     return ObjCompanyInfo;
                 }

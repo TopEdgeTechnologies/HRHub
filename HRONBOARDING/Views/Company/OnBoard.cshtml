@@ -1,6 +1,6 @@
 ﻿@model HRHUBAPI.Models.Company
 @{
-    ViewData["Title"] = "OnBoard";
+    ViewData["Title"] = "On Board";
     
 }
 <section id="hero-section" class="my-5">
@@ -14,36 +14,49 @@
                         experience that ensures your new hires are ready for day one.
                     </p>
 
-            @using (@Html.BeginForm("OnBoard", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
+            @using (@Html.BeginForm("OnBoard", "Company", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
             {
 
+                        <input asp-for="CompanyId"  type="hidden" />
+                        <input type="hidden"  asp-for="UserId" />
 
-
-                
                                 <div id="form-step1">
                                     <div class="form-group mt-5">
                                         <label for="companyName" class="form-label fw-bold text-capitalize">Type your
-                                            company name</label>
-                                        <div class="position-relative">
-                                            <input type="text" class="form-control shadow-sm" id="companyName"
-                                                placeholder="Company Name">
+                                    company name <span>*</span> <span id="alreadyexistid" class="text-danger"></span>
+                                </label>
+                                        <div class="position-relative">                               
+                                    <input asp-for="CompanyName" type="text" class="form-control shadow-sm"
+                                       placeholder="Company Name" required autocomplete="off">
                                             <button class="indicator">
                                                 <i class="success-icon fa fa-check fw-bold"></i>
                                             </button>
                                         </div>
-                                        <span class="d-block mt-2 validation-message"></span>
+                                <span class="d-block mt-2 validation-message companyNameValidationMessage"></span>
                                     </div>
                                 </div>
-                                <!-- <div id="form-step2" class="d-none">
-                                    <div class="form-group mt-5">
-                                        <label for="companyWebsite" class="form-label fw-bold text-capitalize">What's
-                                            the URL for your Website</label>
-                                        <input type="url" class="form-control shadow-sm" id="companyWebsite"
-                                            placeholder="www.topedgeTechnologies.com">
-                                    </div>
-                                </div> -->
 
-                                <div id="form-step2" class="d-none">
+                        <div id="form-step2" class="d-none">
+                            <div class="form-group mt-5">
+                                <label for="companyWebsite" class="form-label fw-bold text-capitalize">
+                                    What's
+                                    the URL for your Website
+                                </label>
+                                <div class="position-relative">
+                                    <input asp-for="WebUrl" type="url" class="form-control shadow-sm" 
+                                       placeholder="Company URL">
+                                    <button class="indicator">
+                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                    </button>
+                                </div>
+                                <span class="d-block mt-2 validation-message companyWebsiteValidationMessage"></span>
+                            </div>
+                        </div>
+
+
+
+
+                                <div id="form-step3" class="d-none">
                                     <span class="d-block fw-bold fs-4 mb-3 text-dark">
                                         Finally, please enter your name and email address to try your branded staff
                                         portal.
@@ -52,8 +65,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group mb-3">
                                                 <div class="position-relative">
-                                                    <input type="text" class="form-control mb-3 mb-md-0 shadow-sm"
-                                                        id="staffName" name="staffName" placeholder="Full Name">
+                                            <input asp-for="ContactPerson" type="text" class="form-control mb-3 mb-md-0 shadow-sm"
+                                                         placeholder="Full Name">
                                                     <button class="indicator">
                                                         <i class="success-icon fa fa-check fw-bold"></i>
                                                     </button>
@@ -64,8 +77,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <div class="position-relative">
-                                                    <input type="text" class="form-control shadow-sm"
-                                                        id="staffDepartment" name="staffDepartment"
+                                            <input asp-for="StaffDepartment" type="text" class="form-control shadow-sm"
+                                                       
                                                         placeholder="Department">
                                                     <button class="indicator">
                                                         <i class="success-icon fa fa-check fw-bold"></i>
@@ -77,8 +90,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <div class="position-relative">
-                                                    <input type="text" class="form-control shadow-sm"
-                                                        id="staffDesignation" name="staffDesignation"
+                                            <input asp-for="StaffDesignation" type="text" class="form-control shadow-sm"                                                        
                                                         placeholder="Designation">
                                                     <button class="indicator">
                                                         <i class="success-icon fa fa-check fw-bold"></i>
@@ -90,20 +102,22 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <div class="position-relative">
-                                                    <input type="email" class="form-control shadow-sm" id="staffEmail"
-                                                    name="staffEmail" placeholder="Email">
-                                                    <button class="indicator">
-                                                        <i class="success-icon fa fa-check fw-bold"></i>
+                                            <input asp-for="Username"  type="hidden">
+                                            <input asp-for="StaffEmail" type="email" class="form-control shadow-sm" 
+                                                     placeholder="Email">
+                                            <button class="indicator email-indicator">
+                                                <i class="success-icon email-success-icon fa fa-check fw-bold"></i>
                                                     </button>
                                                 </div>
-                                                <span class="d-block mt-2 validation-message"></span>
+                                                <span id="alreadyexistUser" class="d-block mt-2 text-danger"></span>
+                                        <span class="d-block mt-2 validation-message email-validation-message "></span>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <div class="position-relative">
-                                                    <input type="password" class="form-control shadow-sm"
-                                                        id="staffPassword" name="staffPassword" placeholder="Password">
+                                            <input asp-for="UserPassword" type="password" class="form-control shadow-sm"
+                                                         placeholder="Password">
                                                     <button class="indicator">
                                                         <i class="success-icon fa fa-check fw-bold"></i>
                                                     </button>
@@ -130,7 +144,7 @@
                                                 fill="black" />
                                         </svg>
                                     </div>
-                                    <button class="btn btn-primary mt-4 mb-0 fw-bold" id="next-btn">Next <i
+                                    <button type="button"class="btn btn-primary mt-4 mb-0 fw-bold" id="next-btn">Next <i
                                             class="ms-2 fa fa-arrow-right" aria-label="fa fa-arrow-right"></i></button>
                                     <button type="button" class="btn btn-primary d-none mt-4 mb-0 fw-bold"
                                         id="createAccountBtn">Create Account</button>
@@ -145,7 +159,7 @@
             <div class="col-sm-12 col-md-5 col-lg-5 col-xl-3">
                 <div class="card onboard-card">
                     <div class="card-header py-3 bg-primary onboard-card-header d-flex border-bottom-0 align-items-center">
-                        <img src="/images/company-logo2.png" class="company-logo" id="logo-img" />
+                        <img src="~/images/company-logo2.png" class="company-logo" id="logo-img" />
                         <div class="ms-4 card-title text-capitalize text-white fw-bold" id="company-title">
                             top Edge Technologies
                         </div>
@@ -205,6 +219,16 @@
 
 
 
+        $("#StaffEmail").on("keyup", function (event) {
+
+            var email = $("#StaffEmail").val();
+
+            $("#Username").val(email);
+        });
+
+
+        // Check duplicate entry company
+
         $("#CompanyName").on("keyup", function (event) {
 
             alreadyNameExist();
@@ -221,43 +245,27 @@
                 url: "/Company/CompanyNameCheckData",
                 type: "GET",
                 data: Data,
-                success: function (data) {
-                    if (data != "") {
-                        debugger
-
-                        var b = JSON.parse(data)
-                        if (b.success) {
-
-                            //$.growl.warning({
-                            //	message: b.message
-                            //});
-                            //$('#myForm').invalid();
-                            $('#alreadyexistid').text(b.message)
-                            $("#CompanyName").addClass("is-invalid");
-                            //$("#Email").addClass("is-invalid");
-                            //$("#CompanyName").addClass("state-valid");
-                            //$("#Email").addClass("state-valid");
-
-
-                            status = false;
+                success: function (data) {                    
+                      
+                        //var b = JSON.parse(data)
+                        
+                        if (data.success) {                            
+                            $('#alreadyexistid').text(data.message)
+                       // $('.indicator').css('visibility', 'hidden');
+                        $('.indicator .fa-check').removeClass('fa-check').addClass('fa-exclamation');
+                        status = false;
                         }
                         else {
-                            //$("#Email").removeClass("is-invalid");
+                           
 
                             //$("#CompanyName").removeClass("is-invalid");
-                            //$("#CompanyName").addClass("is-valid");
-                            //$("#Email").addClass("is-valid");
-
-                            //$("#Email").addClass("state-valid");
+                            //$("#CompanyName").addClass("is-valid");                           
 
                             //$("#CompanyName").addClass("state-valid");
-
-                            //$('#myForm').valid();
+                           
                             $('#alreadyexistid').text('')
 
-                            status = true;
-
-                        }
+                            status = true;                  
 
 
                     }
@@ -267,7 +275,6 @@
 
                     status = false;
 
-
                 }
             })
 
@@ -275,10 +282,49 @@
         }
 
 
+        // Check Duplicate staff
+        $("#StaffEmail").on("keyup", function (event) {
+
+            alreadyUserExist();
+        });
+
+        function alreadyUserExist() {
+            var status = false
+            var Data = { id: $("#UserId").val(), username: $('#Username').val() == '' ? '""' : $('#Username').val() }
+
+            $.ajax({
+                async: false,
+                url: "/Company/UserCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                  
+                                           
+                        if (data.success) {                            
+                            $('#alreadyexistUser').text(data.message)
+                            //$("#Username").addClass("is-invalid");
+                       $('.indicator').css('visibility', 'hidden');
+                        //add('fa-check');
+                       // $('.indicator .fa-check').removeClass('fa-check').addClass('fa-exclamation');
+
+                            status = false;
+                        }
+                        else {                            
+                            $('#alreadyexistUser').text('')
+                            status = true;
+                        }
+                                            
+                },
+                error: function () {
+                    //$('#myForm').invalid();
+
+                    status = false;
 
 
-
-
+                }
+            })
+            return status;
+        }
 
 
 

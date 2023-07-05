@@ -2,148 +2,149 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HRONBOARDING</title>
+    <title>@ViewData["Title"] - Company</title>
 
-    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/js/bootstrap.min.js"></script>    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
 
 
 </head>
 
-<style>
-    .logo {
-        width: 200px;
-    }
+ <style>
+        .logo {
+            width: 200px;
+        }
 
         .logo img {
             width: 100%;
         }
 
-    .header-section {
-        background: linear-gradient(#8032e5, #6f1fd8);
-    }
+        .header-section {
+            background: linear-gradient(#8032e5, #6f1fd8);
+        }
 
-    /* .hero-content{
-            width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 15px;
+        /* .hero-content{
+        width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 15px;
+    } */
+        h1.section-title {
+
+            font-size: 3.3rem;
+
+        }
+
+        #next-btn {
+            width: 200px;
+            height: 50px;
+        }
+
+        button#createAccountBtn {
+            height: 50px;
+        }
+
+        .company-logo {
+            background-image: url(images/hero-custom-illu/portal-logo.png);
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-position: 50%;
+            width: 36px;
+            height: 36px;
+            border-radius: 36px;
+            object-fit: cover;
+        }
+
+        .onboard-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 2px 14px -6px;
+        }
+
+        /* .onboard-card-header {
+            background-color: #8032e5;
         } */
-    h1.section-title {
-        font-size: 3.3rem;
-    }
 
-    #next-btn {
-        width: 200px;
-        height: 50px;
-    }
-
-    button#create-portal-btn {
-        height: 50px;
-    }
-
-    .company-logo {
-        background-image: url(images/hero-custom-illu/portal-logo.png);
-        background-color: #fff;
-        background-repeat: no-repeat;
-        background-size: 100%;
-        background-position: 50%;
-        width: 36px;
-        height: 36px;
-        border-radius: 36px;
-        object-fit: cover;
-    }
-
-    .onboard-card {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0px 2px 14px -6px;
-    }
-
-    /* .onboard-card-header {
-                background-color: #8032e5;
-            } */
-
-    .custom-progress-bar {
-        border-radius: 16px;
-        height: 0.7rem;
-    }
-
-    .list-title {
-        list-style: none;
-        font-size: 0.9rem;
-    }
-
-    .list-icon {
-        display: flex;
-        width: 15px;
-        height: 15px;
-        background: #0d6efd;
-        color: #fff;
-        border-radius: 100%;
-        font-size: 0.6rem;
-        justify-content: center;
-        align-items: center;
-        margin-right: 1rem;
-    }
-
-
-    .list-wrapper {
-        box-shadow: 2px 2px 6px -5px;
-        padding: 7px 10px;
-        border-radius: 20px;
-        border: 1px solid #e9ecef;
-    }
-
-    active {
-        display: block;
-    }
-
-    .animated-img {
-        animation: scale-animation 2s infinite;
-    }
-
-    @@keyframes scale-animation {
-
-        0%,
-        100% {
-            transform: scale(1);
+        .custom-progress-bar {
+            border-radius: 16px;
+            height: 0.7rem;
         }
 
-        50% {
-            transform: scale(1.05);
+        .list-title {
+            list-style: none;
+            font-size: 0.9rem;
         }
-    }
 
-    .indicator {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(0, -50%);
-        right: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        visibility: hidden;
-    }
+        .list-icon {
+            display: flex;
+            width: 15px;
+            height: 15px;
+            background: #0d6efd;
+            color: #fff;
+            border-radius: 100%;
+            font-size: 0.6rem;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+        }
 
-    button.indicator > i {
-        color: #fff;
-        font-size: 13px;
-    }
 
-    .validation-message {
-        color: #da0530;
-        font-size: 13px;
-        list-style-type: none;
-    }
-</style>
+        .list-wrapper {
+            box-shadow: 2px 2px 6px -5px;
+            padding: 7px 10px;
+            border-radius: 20px;
+            border: 1px solid #e9ecef;
+        }
+
+        active {
+            display: block;
+        }
+
+        .animated-img {
+            animation: scale-animation 2s infinite;
+        }
+
+        @@keyframes scale-animation {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(0, -50%);
+            right: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            visibility: hidden;
+            outline: none;
+        }
+
+        button.indicator>i {
+            color: #fff;
+            font-size: 13px;
+        }
+
+        .validation-message {
+            color: #da0530;
+            font-size: 13px;
+            list-style-type: none;
+        }
+    </style>
 
 <body>
     <div class="container-fluid px-0 header-section">
@@ -182,7 +183,7 @@
     </div>
 
 
-   
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
     @*<script src="~/js/site.js" asp-append-version="true"></script>*@
