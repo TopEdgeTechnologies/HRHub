@@ -265,7 +265,7 @@ namespace HRHUBAPI.Models
 
                         //----------- Call Store Procedure on Company New Configuration
 
-                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId;
+                        string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId + "," + objUser.UserId;
                         DataTable dt = _db.ReturnDataTable(query);
                        
                         //----------------------

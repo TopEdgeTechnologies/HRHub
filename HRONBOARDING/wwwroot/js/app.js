@@ -169,11 +169,27 @@ const checkValidity = () => {
     debugger
     var isValid = true;
     for (let i = 0; i < inputFields.length; i++) {
-        
-        if (indicator[i].style.visibility != "visible" && indicator[i].style.background != "#27aa4e") {
+
+        console.log(inputFields[i].value)
+
+        if (inputFields[i].value == '' || inputFields[i].value == null  ) {//if (indicator[i].style.visibility != "visible" && indicator[i].style.background != "#27aa4e") {
             inputFields[i].style.border = "1px solid red";
             validationMessage[i].textContent = inputFields[i].placeholder + " is required**";
             isValid = false;
+        }
+        else {
+
+            if (document.getElementById("HDUemail").value == 'true' && document.getElementById("HDUCompany").value == 'true') {
+
+                isValid = true;
+            }
+            else {
+                isValid = false;
+
+            }
+
+
+
         }
     }
    
