@@ -260,24 +260,28 @@ namespace HRHUBAPI.Models
 
 
 
+
+
+                        ObjCompanyInfo.TransFlag = 1;
+                        dbContextTransaction.Commit();
+
                         //--------------------------------------------
 
 
                         //----------- Call Store Procedure on Company New Configuration
 
                         string query = "EXEC dbo.Osp_CompanyOnBoarding_FirstConfiguration " + ObjCompanyInfo.CompanyId + "," + objUser.UserId;
-                        DataTable dt = _db.ReturnDataTable(query);
-                       
+                         DataTable dt = _db.ReturnDataTable(query);
+
                         //----------------------
 
 
 
-                       
+
                     }
 
 
-                    ObjCompanyInfo.TransFlag = 1;
-                    dbContextTransaction.Commit();
+                   
                     return ObjCompanyInfo;
                 }
             catch (Exception ex)
