@@ -166,7 +166,7 @@ nextBtn.addEventListener('click', (event) => {
 })
 //function for ensuring all the fields are filled at the time of submission
 const checkValidity = () => {
-    
+    debugger
     var isValid = true;
     for (let i = 0; i < inputFields.length; i++) {
         
@@ -176,17 +176,11 @@ const checkValidity = () => {
             isValid = false;
         }
     }
-    const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-            confirmButton: 'btn btn-success',
-            cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-    });
+   
     if (isValid)
     {
         $("#myform").submit();   
-        console.log("Data submit Success")
+        
     }
 }
 createAccountBtn.addEventListener('click', checkValidity);

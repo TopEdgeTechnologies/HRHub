@@ -247,7 +247,7 @@ namespace HRHUBAPI.Models
                         
                         // ------------------------insert into Email Log table
                         EmailLog ObjEmail = new EmailLog();
-                        ObjEmail.CompanyId = 0;
+                        ObjEmail.CompanyId = 1;
                         ObjEmail.Subject = EmailSubject;
                         ObjEmail.Body = EmailBody;
                         ObjEmail.EmailTo = objStaff.Email;

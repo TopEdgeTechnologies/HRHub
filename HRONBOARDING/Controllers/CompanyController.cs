@@ -54,7 +54,7 @@ namespace HRONBOARDING.Controllers
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, $"api/Company/CompanyAddOrUpdate", HttpMethod.Post);
 
-            return RedirectToAction("Loginpage", "User", new { id = 1 });
+            return Redirect("https://localhost:7211/User/Loginpage");
         }
 
 
