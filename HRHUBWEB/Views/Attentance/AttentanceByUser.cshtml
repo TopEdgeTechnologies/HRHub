@@ -14,7 +14,7 @@
 <div class="row">
 	<div class="col-xl-12 col-md-12 col-lg-12">
 		<div class="card">
-			
+			<input id="LoginId" type ="hidden" value="@ViewBag.UserId"/>
 			<div class="card-header  border-0">
 				<h4 class="card-title">Attendence By User</h4>
 
@@ -81,8 +81,8 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label class="form-label">Employee Name:</label>
-									<select id="IdEmployee" name="IdEmployee" class="form-control custom-select select2">
-										<option value="">Select Staff</option>
+									<select id="IdEmployee" name="IdEmployee" class="form-control custom-select select2" data-placeholder="Select Staff">
+										
 										@foreach (var item in ViewBag.Stafflist)
 										{
 											<option value="@item.StaffId">@item.FirstName</option>
@@ -168,7 +168,12 @@
 
 
 		$(document).ready(function () {
-			$("#IdEmployee").select2();
+			var loginId = $("#LoginId").val();
+			if(loginId >0){
+				$('#IdEmployee').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val(loginId).trigger('change');				
+			}
+			
+			//$('#IdEmployee').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
 			$("#IdEmployee").change(function () {				
 				$('#TotalCountId').text(0);
 				$('#AbsentCountId').text(0);
@@ -226,24 +231,24 @@
 					type: "error"
 				});
 
-
-
+				
+				
 			}
 
 
-			$('#myTable').DataTable();
+			$('#searchbtn').click();
 
 
-			$('#searchbtn').click(function () {
-				// Code to be executed when the button is clicked
-				LoadAttendance();
-				AtendenceCount();
-			});
+			
 		});
 
 
 
-
+		$('#searchbtn').click(function () {
+			// Code to be executed when the button is clicked
+			LoadAttendance();
+			AtendenceCount();
+		});
 
 
 		function LoadAttendance() {
@@ -270,7 +275,7 @@
 					if (data != null) {
 						
 						debugger;
-						var table = $('#emp-attendance').DataTable();
+						var table = $('#emp-attendance').DataTable({ "pageLength": 50 });
 						table.clear();
 						table.draw();
 
