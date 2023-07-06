@@ -1,6 +1,7 @@
 ﻿using HRHUBAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
@@ -58,6 +59,8 @@ namespace HRHUBAPI.Models
 
 			[NotMapped]
 			public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
+			[NotMapped]
+			public bool? IsMarkHalfDayAllow { get; set; }
 
 			[NotMapped]
 			public int? MonthlyDateOfEveryMonth { get; set; }
@@ -109,12 +112,25 @@ namespace HRHUBAPI.Models
 								EmailPassword=c.EmailPassword,
 								EmailSMTPPort=c.EmailSmtpport,
 								EmailServerHost=c.EmailServerHost,
-                                StaffName= staff.FirstName
-                            };
+                                StaffName= staff.FirstName,
+								IsMarkHalfDayAllow = c.IsMarkHalfDayAllow
+							};
 
-				if (user != null)
+				if ( user != null && user.Count()>0)
                 {
-                    return await user.FirstOrDefaultAsync();
+
+				await	UserLogOutHistory(user.FirstOrDefault().UserId, _context);
+
+					UserLoginHistory objHistory = new UserLoginHistory();
+					objHistory.UserId = user.FirstOrDefault().UserId;
+					objHistory.SessionFrom = DateTime.Now; 
+					objHistory.CreateBy = objHistory.UserId;
+					objHistory.CreatedOn= DateTime.Now;
+					_context.Add(objHistory);
+					_context.SaveChanges();
+
+
+					return await user.FirstOrDefaultAsync();
                 }
                 else
                 {
@@ -148,7 +164,37 @@ namespace HRHUBAPI.Models
             }
         }
 
-        public async Task<User> RegisterUser(User Obj, HrhubContext _context)
+
+
+		public async Task<bool> UserLogOutHistory(int userID, HrhubContext _context)
+		{
+			try
+			{
+				var result = await _context.UserLoginHistories.Where(x => x.UserId ==  userID && x.CreatedOn.Value.Date==DateTime.Now.Date && x.SessionTo==null ).ToListAsync();
+				if (result != null)
+				{
+					foreach (var item in result)
+					{
+						item.UpdatedOn = DateTime.Now;
+						item.UpdatedBy = userID;
+						item.SessionTo = DateTime.Now;
+					 
+					}
+					_context.SaveChanges();
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+		public async Task<User> RegisterUser(User Obj, HrhubContext _context)
         {
 
             try

@@ -241,6 +241,9 @@ namespace HRHUBWEB.Controllers
 		public async Task<IActionResult> AttentanceOverView(string data = "")
 		{
 
+			@ViewBag.HalfDayAllow = _user.IsMarkHalfDayAllow;
+			@ViewBag.StaffId = _user.StaffId;
+			@ViewBag.DepartmentId = _user.DepartmentId;
 			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
 			ViewBag.ListDepartment = await _APIHelper.CallApiAsyncGet<IEnumerable<Department>>($"api/Configuration/GetDepartmentByCompanyID{_user.CompanyId}", HttpMethod.Get);
 
@@ -314,7 +317,7 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> AttentanceByUser(string data = "")
 		{
-
+			@ViewBag.UserId = _user.StaffId;
 
 			ViewBag.StaffList = await _APIHelper.CallApiAsyncGet<IEnumerable<Staff>>($"api/Staffs/GetStaffByCompanyId{_user.CompanyId}", HttpMethod.Get);
 
