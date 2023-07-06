@@ -7,13 +7,9 @@ namespace HRHUBAPI.Models;
 public partial class HrhubContext : DbContext
 {
     public HrhubContext()
-    {
-    }
-
-    public HrhubContext(DbContextOptions<HrhubContext> options)
-        : base(options)
-    {
-    }
+    { }
+    public HrhubContext(DbContextOptions<HrhubContext> options) : base(options)
+    { }
 
     public virtual DbSet<ActivityLog> ActivityLogs { get; set; }
 
@@ -123,6 +119,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Staff> Staff { get; set; }
 
+    public virtual DbSet<StaffAcademic> StaffAcademics { get; set; }
+
     public virtual DbSet<StaffAttachment> StaffAttachments { get; set; }
 
     public virtual DbSet<StaffContract> StaffContracts { get; set; }
@@ -199,6 +197,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -592,6 +591,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.GroupTitle)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.GroupType).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -884,6 +884,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CssClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -994,6 +995,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.TerminationDate).HasColumnType("date");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             entity.Property(e => e.WorkMode).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<StaffAcademic>(entity =>
+        {
+            entity.HasKey(e => e.AcademicId);
+
+            entity.ToTable("StaffAcademic", "HR");
+
+            entity.Property(e => e.AcademicId).HasColumnName("AcademicID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FromDate).HasColumnType("date");
+            entity.Property(e => e.InstituteName).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.ToDate).HasColumnType("date");
+            entity.Property(e => e.Type).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<StaffAttachment>(entity =>

@@ -637,6 +637,7 @@
                                 <div>
                                     <h4 class="mb-4 font-weight-bold">Salary Breakup
                                         <span id="lbl_Earning" class="fs-18 text-success">0</span>
+                                        <span id="lbl_EarningPercenage" class="fs-18 text-success">0</span>
                                     </h4>
                                     <table id="StaffEarningTable" class="table table-vcenter text-nowrap table-bordered border-bottom">
                                             <thead>
@@ -905,8 +906,7 @@
         //    //lbl_Name.textContent($("#FirstName").val() + ' ' + $("#LastName").val())
         //}
 
-        function onchangeDesignation()
-        {
+        function onchangeDesignation() {
             var ddl_design = document.getElementById("DesignationId");
             var lbl_Design = document.getElementById("lbl_Designation")
 
@@ -945,8 +945,7 @@
             }
         }
 
-        function StaffStatusChange() 
-        {
+        function StaffStatusChange() {
             var chk_StaffStatus = document.getElementById("Status");
             var lbl_StaffStatus = document.getElementById("lbl_StaffStatus");
 
@@ -1043,8 +1042,7 @@
             });
         }
 
-        function SalaryExceedLimit(category) 
-        {
+        function SalaryExceedLimit(category) {
             debugger
             var grossSalary = parseFloat($('#SalaryAmount').val());
             var isExceed = false;
@@ -1072,7 +1070,7 @@
                     } 
                 });
             }
-            
+            console.log("totalEarning: " + totalEarning)
             //Check Gross Salary Exceed Limit
             if (totalEarning > grossSalary) 
             {
@@ -1081,7 +1079,7 @@
                 });
                 isExceed = false
             }
-
+            console.log("SalaryExceedLimit: " + isExceed)
             return isExceed
         }
 
@@ -1118,7 +1116,9 @@
             }
             debugger
             //Check Gross Salary Exceed Limit
-            if (totalEarningPercentage > 100) {
+            var totalEarningPercentageRounded = (Math.round(totalEarningPercentage * 10) / 10).toFixed(1);
+            console.log(totalEarningPercentageRounded)
+            if (totalEarningPercentageRounded > 100) {
                 $.growl.warning({
                     message: "Please Adjust Salary Percentage, it should not more than 100%!"
                 });
@@ -1133,7 +1133,7 @@
                 });
                 isExceed = false
             }
-
+            console.log("SalaryPercentageExceedLimit: " + isExceed)
             return isExceed
         }
 
