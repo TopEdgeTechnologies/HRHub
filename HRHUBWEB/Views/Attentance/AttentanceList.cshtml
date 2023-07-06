@@ -12,7 +12,7 @@
 			<div class="card">
 
 				<div class="card-body">
-					<div class="countdowntimer mt-4">
+					<div class="countdowntimer mt-3">
 						
 						<span id="clocktimer2" class="border-0 style size_md" style="background: transparent; color: rgb(49, 62, 106); border-color: transparent;"></span>
 						<label class="form-label">Current Time</label>
@@ -20,7 +20,7 @@
 
 				
 					</div>
-					<div class="btn-list text-center mt-5">
+					<div class="btn-list text-center mt-3">
 						<a id="timeInId" class="btn ripple btn-primary btn-block">Check In</a>
 						
 					</div>
@@ -53,9 +53,10 @@
 						@foreach (var item in ViewBag.ListStatusCount)
 						{
 							var test = item.CssClass.Split('-')[1];
-							<div class="col-md-6 col-xl-2 text-center py-5">
+							<div class="col text-center py-3">
 								<span class="avatar avatar-md bradius fs-20 bg-@test-transparent ">@item.TotalCount</span>
-								<h5 class="mb-0 mt-3">@item.TitleStatus</h5>
+								<h6 class="mt-3">@item.TitleStatus</h6>
+								
 							</div>
 						}
 
@@ -263,12 +264,11 @@
                     type: "error"
                 });
 
+		
+
 
 
             }
-			
-
-			$('#myTable').DataTable();
 
 
 			$('#searchbtn').click(function () {
@@ -280,7 +280,7 @@
 
         });
 
-
+		
 		
 
 		$("#timeInId").click(function () { 
@@ -383,8 +383,8 @@
                 success: function (data) {                 
                     if(data!=null)
                     {						
-						debugger;					
-						var table = $('#emp-attendance').DataTable();
+						debugger;
+						var table = $('#emp-attendance').DataTable({ "pageLength": 50 });
                           table.clear();
                           table.draw();
 							for(var i = 0; i < data.length; i++) {

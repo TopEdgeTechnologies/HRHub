@@ -59,6 +59,8 @@ namespace HRHUBAPI.Models
 
 			[NotMapped]
 			public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
+			[NotMapped]
+			public bool? IsMarkHalfDayAllow { get; set; }
 
 			[NotMapped]
 			public int? MonthlyDateOfEveryMonth { get; set; }
@@ -110,10 +112,11 @@ namespace HRHUBAPI.Models
 								EmailPassword=c.EmailPassword,
 								EmailSMTPPort=c.EmailSmtpport,
 								EmailServerHost=c.EmailServerHost,
-                                StaffName= staff.FirstName
-                            };
+                                StaffName= staff.FirstName,
+								IsMarkHalfDayAllow = c.IsMarkHalfDayAllow
+							};
 
-				if (user != null)
+				if ( user != null && user.Count()>0)
                 {
 
 				await	UserLogOutHistory(user.FirstOrDefault().UserId, _context);
