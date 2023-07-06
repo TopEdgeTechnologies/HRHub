@@ -1,4 +1,4 @@
-﻿@*<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>*@
+﻿
 <style>
     canvas {
         max-width: 600px;
@@ -598,7 +598,7 @@
 
 
 @section scripts{
-			<!-- INTERNAL Chart js -->
+@*			<!-- INTERNAL Chart js -->
 		<script src="~/assets/plugins/chart/chart.bundle.js"></script>
 		<script src="~/assets/plugins/chart/utils.js"></script>
 
@@ -608,16 +608,16 @@
 
 		<!-- INTERNAL Apexchart js-->
 		<script src="../assets/plugins/apexchart/apexcharts.js"></script>
-	<script src="~/assets/js/custom.js"></script>
+	<script src="~/assets/js/custom.js"></script>*@
 		
 
 	<script>
 		$(document).ready(function() {
 		
-			$('#myonoffswitch2').prop('checked', true);
-			localStorage.setItem('dayonedarkMode', true);
-			localStorage.removeItem('dayonelightMode');
-			localStorage.removeItem('dayonetransparentMode');
+			//$('#myonoffswitch2').prop('checked', true);
+			//localStorage.setItem('dayonedarkMode', true);
+			//localStorage.removeItem('dayonelightMode');
+			//localStorage.removeItem('dayonetransparentMode');
 
 			$('#DashboardCalender').val('@DateTime.Now.ToString("yyyy-MM-dd")')
 			// Start the clock
