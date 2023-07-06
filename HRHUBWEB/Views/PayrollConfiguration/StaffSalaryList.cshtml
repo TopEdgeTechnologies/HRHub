@@ -382,25 +382,26 @@
 												<td class="font-weight-semibold">@Convert.ToDecimal(item.OV_PayableAmount).ToString("N2")</td>
 												<td>
 													@{
-														string SalaryStatus = "";
-														SalaryStatus = @item.SalaryStatusTitle;
-														if (SalaryStatus == "")
-                                                        {
-															SalaryStatus = "Not Prepared";
-															<span class="badge badge-orange">@SalaryStatus</span>
-                                                        }
-														else if (SalaryStatus == "Generated")
-														{
-															<span class="badge badge-success">@SalaryStatus</span>
-														}
-														else if (SalaryStatus == "Paid")
-                                                        {
-                                                            <span class="badge badge-info">@SalaryStatus</span>
-                                                        }
-														else if (SalaryStatus == "Hold")
-                                                        {
-                                                            <span class="badge badge-danger">@SalaryStatus</span>
-                                                        }
+														<span id="SalaryStatus_@a" class="badge badge-@item.SalaryStatusCssClass">@item.SalaryStatusTitle</span>
+														//string SalaryStatus = "";
+														//SalaryStatus = @item.SalaryStatusTitle;
+														//if (SalaryStatus == "")
+              //                                          {
+														//	SalaryStatus = "Not Prepared";
+														//	<span class="badge badge-orange">@SalaryStatus</span>
+              //                                          }
+														//else if (SalaryStatus == "Generated")
+														//{
+														//	<span class="badge badge-success">@SalaryStatus</span>
+														//}
+														//else if (SalaryStatus == "Paid")
+              //                                          {
+              //                                              <span id="SalaryStatusPaid_@a" class="badge badge-info">@SalaryStatus</span>
+              //                                          }
+														//else if (SalaryStatus == "Hold")
+              //                                          {
+              //                                              <span id="SalaryStatusHold_@a" class="badge badge-danger">@SalaryStatus</span>
+              //                                          }
                                                     }
 
 													<!----- Action Buttons Code Start From Here------>
@@ -408,7 +409,6 @@
 														<div class="btn-group ms-3 mb-0">
 															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
 															<div class="dropdown-menu dropdown-menu-start" style="">
-																<a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>
 																<a onclick="ViewSalaryCard(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="view" class="dropdown-item" href="javascript:void(0);">
 																	<i class="feather feather-eye me-2"></i>View
 																</a>
@@ -427,13 +427,13 @@
 												<div class="d-flex align-items-center">
 													<label class="custom-switch">
 														@{
-															if (SalaryStatus == "Paid")
+															if (@item.SalaryStatusTitle == "Paid")
 															{
-																<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" checked class="custom-switch-input">			
+																	<input type="checkbox" name="chk_IsPaid_@a" id="chk_IsPaid_@a" onchange="SetPaid_Hold_StaffSalary_Update(@a, @item.StaffId)" checked class="custom-switch-input">
 															}
 															else
 															{
-																<input type="checkbox" name="chk_IsPaid" id="chk_IsPaid" onchange="setUnpaid()" class="custom-switch-input">
+																<input type="checkbox" name="chk_IsPaid_@a" id="chk_IsPaid_@a" onchange="SetPaid_Hold_StaffSalary_Update(@a, @item.StaffId)" class="custom-switch-input">
 															}
 														}
 														<span class="custom-switch-indicator"></span>
@@ -455,6 +455,7 @@
 													</a>*@
 												</td>
 											</tr>
+											a++;
 										}
 									}
 								}									
@@ -532,8 +533,7 @@
 			})
 		}
 
-		function GetStaffSalaryByIdData(data) 
-		{
+		function GetStaffSalaryByIdData(data) {
 			debugger
 			var netSalary = 0.0
 			var netSalaryInWords = ''
@@ -619,8 +619,7 @@
 			$('#lbl_netSalaryInWords').text(numberToWords(netSalary.toFixed(0)))
 		}
 
-		function ViewStaffSalaryHistoryCard(staffId) 
-		{	
+		function ViewStaffSalaryHistoryCard(staffId) {	
 			debugger
 			var Data = { dateFrom: $('#startDate').val(), dateTo: $("#endDate").val(), staffId: staffId }
 			//var Data = { month: monthNumber, year: year, staffId: staffId }
@@ -719,22 +718,48 @@
 			}
 		}
 
-		function setUnpaid()
-		{
+		function SetPaid_Hold_StaffSalary_Update(index, staffId) {
 			debugger
-			var ctr_IsPaid = document.getElementById("chk_IsPaid")
+			var status = false
+			var statusId = 0
+			var checkbox = document.getElementById('chk_IsPaid_' + index);
+			//var salaryStatus = $('#SalaryStatus_' + index);
+			if (checkbox.checked) {
+				checkbox.checked = true;
+				statusId = 2 // Paid
+				$('#SalaryStatus_' + index).text('Paid')
+				$('#SalaryStatus_' + index).removeClass('badge-danger')
+				$('#SalaryStatus_' + index).addClass('badge-info')
+			} else {
+				checkbox.checked = false;
+				statusId = 3 // Hold
+				$('#SalaryStatus_' + index).text('Hold')
+				$('#SalaryStatus_' + index).removeClass('badge-info')
+				$('#SalaryStatus_' + index).addClass('badge-danger')
+			}
 
-			if (ctr_IsPaid.checked) 
-			{
-				debugger
-				console.log("checked")
-			}
-			else 
-			{
-				debugger
-				console.log("un checked")
-			}
-			
+			debugger
+			//var Data = { staffId: staffId, salaryStatus: salaryStatus }
+			var Data = { salaryMonth: $("#endDate").val(), staffId: staffId, salaryStatusId: statusId }
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/PayrollConfiguration/PutStaffSalaryPaid_Hold",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						debugger
+						status = data.success;
+					}
+				},
+				error: function () {
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			return status;
 		}
 
 		$("#btn_PayAllSalaries").click(function () {

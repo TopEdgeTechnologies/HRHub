@@ -122,7 +122,7 @@
     });
 
     function onchangeMonthYearCheckAlreadyExistsMaster() {
-            debugger
+        debugger
         var recordInserted = false;
             var currentMonth = $("#attendanceMonth").find(":selected").index()
             var currentYear = $("#attendanceYear").find(":selected").text()
@@ -140,13 +140,13 @@
             debugger
             var htmlButton = ''
             if (currentMonth > 0 && currentYear > 0 && recordInserted == true) {
-                htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="View Payroll" class="btn btn-success btn-block" />'
+                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GenerateORViewPayroll()" value="View Payroll" class="btn btn-success btn-block" />'
                 //$.growl.warning({
                 //        message: "Record already Inserted!"
                 //});
             }
             else if (currentMonth > 0 && currentYear > 0 && recordInserted == false) {
-                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GeneratePayroll()" value="Generate Payroll" class="btn btn-info btn-block" />'
+                    htmlButton += '<input type="button" id="btn_GenerateStaffSalary" onclick="GenerateORViewPayroll()" value="Generate Payroll" class="btn btn-info btn-block" />'
                 //$.growl.warning({
                 //        message: "Record has not Inserted for selected Date!"
                 //});
@@ -186,7 +186,7 @@
         return recordInserted;
     }
 
-    function GeneratePayroll() {
+    function GenerateORViewPayroll() {
         debugger;
         var buttonTitle = $("#btn_GenerateStaffSalary").val()
 

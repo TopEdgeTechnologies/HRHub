@@ -76,6 +76,9 @@ namespace HRHUBAPI.Models
 		    public string? SalaryStatusTitle { get; set; }
 
             [NotMapped]
+            public string? SalaryStatusCssClass { get; set; }   
+
+			[NotMapped]
             public IEnumerable<StaffSalary>? StaffSalaryList { get; set; }
 
 		    [NotMapped]
@@ -202,6 +205,7 @@ namespace HRHUBAPI.Models
 					OV_DeductionAmount = string.IsNullOrWhiteSpace(row["OV_DeductionAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_DeductionAmount"]),
 					OV_PayableAmount = string.IsNullOrWhiteSpace(row["OV_PayableAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_PayableAmount"]),
 					SalaryStatusTitle = string.IsNullOrWhiteSpace(row["SalaryStatusTitle"].ToString()) ? "" : row["SalaryStatusTitle"].ToString(),
+					SalaryStatusCssClass = string.IsNullOrWhiteSpace(row["SalaryStatusCssClass"].ToString()) ? "" : row["SalaryStatusCssClass"].ToString(),
 					SalaryMasterInserted = string.IsNullOrWhiteSpace(row["SalaryMasterInserted"].ToString()) ? 0 : Convert.ToInt32(row["SalaryMasterInserted"]),
 
 				}).ToList();    
@@ -258,14 +262,26 @@ namespace HRHUBAPI.Models
 			try
 			{
 				DbConnection dbConnection = new DbConnection();
-				string query = " EXEC Payroll.StaffSalary_BulkUpdate '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.SalaryStatusId + ", " + objStaffSalary.CreatedBy;
+				string query = " EXEC Payroll.StaffSalary_BulkUpdate '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.SalaryStatusId + ", " + objStaffSalary.UpdatedBy;
 				DataTable dt = dbConnection.ReturnDataTable(query);
 				return Convert.ToBoolean(dt.Rows[0][0]);
 			}
 			catch (Exception e) { return false; }
 		}
 
-        public async Task<bool> DeleteStaffSalary(int Id, int UserId, HrhubContext hrhubContext)
+		public async Task<bool> PutStaffSalaryPaid_Hold(StaffSalary objStaffSalary)
+		{
+			try
+			{
+				DbConnection dbConnection = new DbConnection();
+				string query = " EXEC Payroll.StaffSalary_Paid_Hold_Update '" + objStaffSalary.SalaryMonth + "', " + objStaffSalary.StaffId + ", " + objStaffSalary.SalaryStatusId + ", " + objStaffSalary.UpdatedBy;
+				DataTable dt = dbConnection.ReturnDataTable(query);
+				return Convert.ToBoolean(dt.Rows[0][0]);
+			}
+			catch (Exception e) { return false; }
+		}
+
+		public async Task<bool> DeleteStaffSalary(int Id, int UserId, HrhubContext hrhubContext)
         {
             using (var dbContextTransaction = hrhubContext.Database.BeginTransaction())
             {

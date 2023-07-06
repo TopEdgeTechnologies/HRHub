@@ -412,30 +412,6 @@
 			//loadStaffAttendanceChart(staff_ID)
 		});
 
-		//function loadStaffBioData() {
-		//	debugger
-		//	var requestData = { }
-		//	makeAjaxRequest("/Staff/Staff_BioData", 'GET', requestData, false, function (response) {
-		//		if (response != null) {
-		//			debugger
-		//			var htmlPerformance = ''
-		//			for (var i = 0; i < response.length; i++) {
-		//				htmlPerformance += ' <div class="d-flex align-items-end justify-content-between mg-b-5"> '
-		//				htmlPerformance += ' 	<h6 class="">' + response[i].PerformanceTitle + '</h6> '
-		//				htmlPerformance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].EarnedWeightage + '</h6> '
-		//				htmlPerformance += ' </div> '
-		//				htmlPerformance += ' <div class="progress progress-sm mb-5"> '
-		//				htmlPerformance += ' 	<div class="progress-bar bg-info w-' + response[i].TotalWeightage + '"></div> '
-		//				htmlPerformance += ' </div> '
-		//			}
-
-		//			$("#CardPerformance").html(htmlPerformance)
-		//		}
-		//	}, function (errorStatus) {
-		//		console.log('Error:', errorStatus)
-		//	});
-		//}
-
 		function LoadAttendance(staff_ID) {
 			var data = { staffId: staff_ID }
 			var html_Attendance = ''
@@ -652,7 +628,7 @@
 
 						htmlAttendance += ' <div class="d-flex align-items-end justify-content-between mg-b-5"> '
 						htmlAttendance += ' 	<h6 class="">' + response[i].MonthName + '</h6> '
-						htmlAttendance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].MTDPresentCount + '</h6> '
+						htmlAttendance += ' 	<h6 class="font-weight-bold mb-1">' + response[i].MTDPresentCount + ' / ' + response[i].MonthDaysCount + '</h6> '
 						htmlAttendance += ' </div> '
 						htmlAttendance += ' <div class="progress progress-xs mb-3" data-toggle="tooltip" title="' + response[i].MTDPresentPercentage + '%"> '
 						htmlAttendance += ' 	<div class="progress-bar bg-info" style="width: ' + response[i].MTDPresentPercentage + '%"></div> '

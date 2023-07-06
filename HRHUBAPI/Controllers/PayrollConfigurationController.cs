@@ -541,7 +541,30 @@ namespace HRHUBAPI.Controllers
             }
         }
 
-        [HttpGet("AlreadyExistsMaster/{month}/{year}")]
+		[HttpPost("PutStaffSalaryPaid_Hold")]
+		public async Task<ActionResult<bool>> PutStaffSalaryPaid_Hold(StaffSalary objStaffSalary)
+		{
+			var dbResult = await new StaffSalary().PutStaffSalaryPaid_Hold(objStaffSalary);
+			if (dbResult == true)
+			{
+				return Ok(new
+				{
+					success = true,
+					Message = "Data Updated Successfully"
+				});
+			}
+			else
+			{
+				return Ok(new
+				{
+					success = false,
+					Message = "Data Not Updated!"
+				});
+			}
+		}
+
+
+		[HttpGet("AlreadyExistsMaster/{month}/{year}")]
         public async Task<ActionResult<StaffSalary>> AlreadyExistsMaster(int month, int year)
         {
             var dbResult = await new StaffSalary().AlreadyExistsMaster(month, year, _context);
