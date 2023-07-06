@@ -250,14 +250,29 @@ namespace HRHUBWEB.Controllers
 			    StaffSalary objStaffSalary = new StaffSalary();
 			    objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
                 objStaffSalary.SalaryStatusId = Convert.ToInt32(salaryStatusId);    
-			    objStaffSalary.CreatedBy = _user.UserId;
+			    objStaffSalary.UpdatedBy = _user.UserId;
 			    var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryMaster", HttpMethod.Post);
 			    return Json(result);
             }
             return Json(null);
 		}
 
-        public async Task<IActionResult> AlreadyExistsMaster(int month = 0, int year = 0)
+		public async Task<IActionResult> PutStaffSalaryPaid_Hold(string salaryMonth, int staffId, int salaryStatusId)
+		{
+			if (salaryStatusId > 0)
+			{
+				StaffSalary objStaffSalary = new StaffSalary();
+				objStaffSalary.SalaryMonth = Convert.ToDateTime(salaryMonth);
+				objStaffSalary.StaffId = Convert.ToInt32(staffId);
+				objStaffSalary.SalaryStatusId = Convert.ToInt32(salaryStatusId);
+				objStaffSalary.UpdatedBy = _user.UserId;
+				var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSalary, "api/PayrollConfiguration/PutStaffSalaryPaid_Hold", HttpMethod.Post);
+				return Json(result);
+			}
+			return Json(null);
+		}
+
+		public async Task<IActionResult> AlreadyExistsMaster(int month = 0, int year = 0)
         {
             if (month > 0 && year > 0)
             {
@@ -269,6 +284,11 @@ namespace HRHUBWEB.Controllers
 
         public async Task<IActionResult> StaffSalaryList(String data = "", int month = 0, int year = 0)
         {
+            if(_user == null)
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 0 });
+			}
+
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);

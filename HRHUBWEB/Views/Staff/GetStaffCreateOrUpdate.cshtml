@@ -140,215 +140,6 @@
                         <div class="tab-pane active" id="tab5">
                             <div class="card-body">
                                 <h4 class="mb-4 font-weight-bold">Basic</h4>
-                                @*
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Name<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input asp-for=FirstName type="text" id="txt_FirstName" oninput="OnTextChangeStaffName()" required class="form-control mb-md-0 mb-5" placeholder="First Name">
-                                                    <span class="text-muted"></span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input asp-for=LastName type="text" id="txt_LastName" oninput="OnTextChangeStaffName()" required class="form-control" placeholder="Last Name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="form-group ">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Parent's Name<span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-md-9">
-                            <input asp-for=FatherName type="text" required class="form-control" placeholder="Parent's or Guardian's Name">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group ">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">National Id Number<span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-md-9">
-                            <input asp-for="NationalIdnumber" type="text" required class="form-control" placeholder="National Idendity Number">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Contact Number<span class="text-danger">*</span></label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input asp-for=ContactNumber1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Contact Number 1">
-                                                    <span class="text-muted"></span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input asp-for=ContactNumber2 type="text" class="form-control" placeholder="Contact Number 2">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="form-group ">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Emergency Contact Number<span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-md-9">
-                            <div class="row">
-                            <div class="col-md-6">
-                            <input asp-for=EmergencyContact1 type="text" required class="form-control mb-md-0 mb-5" placeholder="Emergency Contact Number 1">
-                            <span class="text-muted"></span>
-                            </div>
-                            <div class="col-md-6">
-                            <input asp-for=EmergencyContact2 type="text" class="form-control" placeholder="Emergency Contact Number 2">
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label mb-0 mt-2">Date Of Birth</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input asp-for="Dob" type="text" class="form-control fc-datepicker" placeholder="DD-MM-YYY">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label class="form-label">Gender</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="custom-controls-stacked d-md-flex">
-                                                <label class="custom-control custom-radio me-4">
-                                                    <input asp-for=Gender type="radio" class="custom-control-input" name="Gender" id="Gender_male" value="Male">
-                                                    <span class="custom-control-label">Male</span>
-                                                </label>
-                                                <label class="custom-control custom-radio">
-                                                    <input asp-for=Gender type="radio" class="custom-control-input" name="Gender" id="Gender_female" value="Female">
-                                                    <span class="custom-control-label">Female</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Marital Status</label>
-                            </div>
-                            <div class="col-md-9">
-                            <select asp-for="MaterialStatus" class="form-control custom-select select2" data-placeholder="Select" asp-items="@(new SelectList(@ViewBag.MaterialStatus,"Text" ,"Text"))">
-                            <option value="">Select</option>
-                            </select>
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Blood Group</label>
-                            </div>
-                            <div class="col-md-9">
-                            <select asp-for="BloodGroup" class="form-control custom-select select2" data-placeholder="Select Group" asp-items="@(new SelectList(@ViewBag.BloodGroup,"Text", "Text"))">
-                            <option label="Select Group"></option>
-                            </select>
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group ">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Email</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input asp-for=Email type="text" class="form-control" placeholder="email">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Present Address<span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-md-9">
-                            <textarea asp-for=PresentAddress rows="3" required class="form-control" placeholder="Address1"></textarea>
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Permanent Address<span class="text-danger">*</span></label>
-                            </div>
-                            <div class="col-md-9">
-                            <textarea asp-for=PermanentAddress rows="3" class="form-control" placeholder="Address2"></textarea>
-                            </div>
-                            </div>
-                            </div>
-
-                            <div class="form-group mt-7">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <h4 class="form-label" font-weight-bold">Account Login</h4>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <label class="custom-switch">
-                                                <input type="checkbox" name="chk_AccountLoginSwitch" id="chk_AccountLoginSwitch" onchange="AccountLoginControls()" class="custom-switch-input">
-                                                <span class="custom-switch-indicator"></span>
-                                                <span class="custom-switch-description">On/Off</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Staff Email</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="text" id="txt_OfficialEmailAddress" disabled="disabled" class="form-control" placeholder="Staff email">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label mb-0 mt-2">Password</label>
-                            </div>
-                            <div class="col-md-9">
-                            <input type="password" id="txt_OfficialEmailPassword" disabled="disabled" class="form-control" placeholder="password">
-                            </div>
-                            </div>
-                            </div>
-                            <div class="form-group mt-7">
-                            <div class="row">
-                            <div class="col-md-3">
-                            <label class="form-label">Email Notification:</label>
-                            </div>
-                            <div class="col-md-9">
-                            <label class="custom-switch">
-                            <input type="checkbox" name="chk_EmailNotification" id="chk_EmailNotification" disabled="disabled" class="custom-switch-input">
-                            <span class="custom-switch-indicator"></span>
-                            <span class="custom-switch-description">On/Off</span>
-                            </label>
-                            </div>
-                            </div>
-                            </div>
-                                *@
-
                                 @{
                                     async Task doubleWidget(string labelTitle, object fieldName1, string? fieldValue1, string placeholderTitle1, object fieldName2, string? fieldValue2, string placeholderTitle2, string fieldValueType, bool isMandatory)
                                     {
@@ -359,7 +150,7 @@
                                                         @labelTitle
                                                         @{
                                                             string required = "";
-                                                            if (isMandatory == true)
+                                                            if (@isMandatory == true)
                                                             {
                                                                 <span class="text-danger">*</span>
                                                                 required = "required";
@@ -391,7 +182,7 @@
                                                         @labelTitle
                                                         @{
                                                             string required = "";
-                                                            if (isMandatory == true)
+                                                            if (@isMandatory == true)
                                                             {
                                                                 <span class="text-danger">*</span>
                                                                 required = "required";
@@ -404,6 +195,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    
                                     }
 
                                     async Task textareaWidget(string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, bool isMandatory)
@@ -448,13 +240,13 @@
                                                     </label>
                                                 </div>
                                                 <div class="col-md-9">
-                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control fc-datepicker" placeholder="DD-MM-YYY">
+                                                    <input id=@fieldName name="@fieldName" value="@fieldValue" type="@fieldValueType" @required class="form-control fc-datepicker" placeholder="DD-MMM-YYY">
                                                 </div>
                                             </div>
                                         </div>
                                     }
 
-                                    async Task radioParentGroupWidget(string labelTitle)//, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory = false)
+                                    async Task radioParentGroupWidget(string labelTitle)
                                     {
                                          <div class="form-group ">
                                             <div class="row">
@@ -558,6 +350,7 @@
                                             </div>
                                         </div>
                                     }
+                                  
                                 }
                                 
                                 @{
@@ -569,19 +362,6 @@
                                     await datePickerWidget("Date Of Birth", "Dob", Model.Dob, "DD-MM-YYY", "text", false);
                                     await radioParentGroupWidget("Gender");                                    
                                     
-                                    @*
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="form-label mb-0 mt-2">Marital Status</label>
-                                            </div>
-                                            <div class="col-md-9">
-                                                @Html.DropDownList("SelectedValue", ViewBag.MaterialStatusViewBag as List<SelectListItem>, "-- Select Month --", new { id = "MaterialStatus", name = "MaterialStatus",  @class = "form-control" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    *@
-
                                     if(Model.MaterialStatusList != null && Model.MaterialStatusList.Count() > 0)
                                     {
                                         await dropdownWidget("Material Status", "MaterialStatus", Model.MaterialStatus, "Select Material Status", false, Model.MaterialStatusList, false);
@@ -595,8 +375,8 @@
                                     await textWidget("Email", "Email", Model.Email, "Email", "text", false);
                                     await textareaWidget("Present Address", "PresentAddress", Model.PresentAddress, "Enter Present Address", true);
                                     await textareaWidget("Permanent Address", "PermanentAddress", Model.PermanentAddress, "Enter Permanent Address", false);
+                                    
                                 }                                
-                               
                                 
                                 <div class="form-group">
                                     <div class="row">
@@ -612,13 +392,6 @@
                                     </div>
                                 </div>
                                 <h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>
-                                @{
-                                    @*await textWidget("Staff Email", "OfficialEmail", Model.em, "Enter Staff official email", "text", true);
-                                    await textWidget("Password", "OfficialPassword", Model.em, "Enter Staff password", "password", true);*@
-                                }
-                                
-
-                                
                             </div>
                         </div>
                         <div class="tab-pane" id="tab6">
@@ -1014,7 +787,7 @@
             $('#DepartmentId').select2();
             $('#DesignationId').select2();
             $('#SalaryMethod').select2();
-      
+
             //StaffStatusChange();
 
             $('#StaffImageAttachmentFile').change(function () {
@@ -1023,24 +796,21 @@
                 var fileSizeLimit = 2 * 1024 * 1024; // 2 MB
                 var fileSize = this.files[0].size;
                 var filePath = fileInput.val();
-                if (!allowedExtensions.exec(filePath)) 
-                {
+                if (!allowedExtensions.exec(filePath)) {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b> Invalid file type. Please select a JPG, JPEG, or PNG file.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
-                } else if (fileSize > fileSizeLimit) 
-                {
+                } else if (fileSize > fileSizeLimit) {
                     notif({
                         msg: "<i class='fa fa-check fs-20 me-2'></i><b>Warning:</b>' File size exceeds the limit of 2MB.",
                         type: "warning"
                     });
                     fileInput.val('');
                     return false;
-                } else 
-                {
+                } else {
                     readURL(this)
                 }
             });
@@ -1052,8 +822,9 @@
             onchangeDesignation();
 
         });
-
+        
         $("#btnSaveUpdate").click(function () {
+            debugger
             const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
                     confirmButton: 'btn btn-success',
@@ -1316,6 +1087,7 @@
 
         function SalaryPercentageExceedLimit(category) 
         {
+            debugger
             var grossSalary = parseFloat($('#SalaryAmount').val());
             var isExceed = false
             var totalEarning = 0.0
@@ -1344,7 +1116,7 @@
                     } 
                 });
             }
-            
+            debugger
             //Check Gross Salary Exceed Limit
             if (totalEarningPercentage > 100) {
                 $.growl.warning({
