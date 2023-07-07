@@ -373,7 +373,60 @@ namespace HRHUBAPI.Models
 
 
 
-        #endregion
+		#endregion
+
+		#region Reset Password Via Email
+
+		public async Task<bool> SendLinkPasswordReset(string Email, HrhubContext _context)
+		{
+			try
+			{
+				string msg = "";
+				var check = await _context.Users.FirstOrDefaultAsync(x => x.Email == Email);
+				if (check != null && check.UserId > 0)
+				{
+					//check.UserId = id;
+					//check.IsActive = status;
+					//check.UpdatedBy = CreatedBy;
+					//check.UpdatedOn = DateTime.Now;
+
+					await _context.SaveChangesAsync();
+					return true;
+
+				}
+				return false;
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+
+			}
+		}
+
+
+		public async Task<bool> CheckExistEmail(string Email, HrhubContext _context)
+		{
+			try
+			{
+				var result = await _context.Users.FirstOrDefaultAsync(x => x.UserName == Email);
+				if (result != null)
+				{
+					return true;
+				}
+
+
+				return false;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+
+		#endregion
 
 
 
@@ -382,7 +435,5 @@ namespace HRHUBAPI.Models
 
 
 
-
-
-    }
+	}
 }

@@ -99,6 +99,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<OffBoardingType> OffBoardingTypes { get; set; }
 
+    public virtual DbSet<PasswordResetLog> PasswordResetLogs { get; set; }
+
     public virtual DbSet<PerformanceForm> PerformanceForms { get; set; }
 
     public virtual DbSet<Policy> Policies { get; set; }
@@ -123,11 +125,15 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Staff> Staff { get; set; }
 
+    public virtual DbSet<StaffAcademic> StaffAcademics { get; set; }
+
     public virtual DbSet<StaffAttachment> StaffAttachments { get; set; }
 
     public virtual DbSet<StaffContract> StaffContracts { get; set; }
 
     public virtual DbSet<StaffCustomField> StaffCustomFields { get; set; }
+
+    public virtual DbSet<StaffDependent> StaffDependents { get; set; }
 
     public virtual DbSet<StaffLeaveAllocation> StaffLeaveAllocations { get; set; }
 
@@ -143,6 +149,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<StaffSalarySetting> StaffSalarySettings { get; set; }
 
+    public virtual DbSet<StaffSkill> StaffSkills { get; set; }
+
     public virtual DbSet<StaffStatus> StaffStatuses { get; set; }
 
     public virtual DbSet<StatusInfo> StatusInfos { get; set; }
@@ -153,6 +161,8 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
+    public virtual DbSet<UserForms2> UserForms2s { get; set; }
+
     public virtual DbSet<UserLoginHistory> UserLoginHistories { get; set; }
 
     public virtual DbSet<VInfoStaff> VInfoStaffs { get; set; }
@@ -162,6 +172,10 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<ViewStaffInfo> ViewStaffInfos { get; set; }
 
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -199,6 +213,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -592,6 +607,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.GroupTitle)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.GroupType).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -801,6 +817,33 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.Title).IsUnicode(false);
         });
 
+        modelBuilder.Entity<PasswordResetLog>(entity =>
+        {
+            entity.HasKey(e => e.PasswordResetId);
+
+            entity.ToTable("PasswordResetLog");
+
+            entity.Property(e => e.PasswordResetId).HasColumnName("PasswordResetID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.ExpiryTime).HasColumnType("datetime");
+            entity.Property(e => e.RequestFromIp)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("RequestFromIP");
+            entity.Property(e => e.RequestOn)
+                .HasColumnType("datetime")
+                .HasColumnName("RequestON");
+            entity.Property(e => e.ResetStatus).HasDefaultValueSql("((0))");
+            entity.Property(e => e.UpdatedFromIp)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("UpdatedFromIP");
+            entity.Property(e => e.UpdatedOn)
+                .HasColumnType("datetime")
+                .HasColumnName("UpdatedON");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+        });
+
         modelBuilder.Entity<PerformanceForm>(entity =>
         {
             entity.HasKey(e => e.ReviewFormId);
@@ -884,6 +927,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CssClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -996,6 +1040,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.WorkMode).IsUnicode(false);
         });
 
+        modelBuilder.Entity<StaffAcademic>(entity =>
+        {
+            entity.HasKey(e => e.AcademicId);
+
+            entity.ToTable("StaffAcademic", "HR");
+
+            entity.Property(e => e.AcademicId).HasColumnName("AcademicID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FromDate).HasColumnType("date");
+            entity.Property(e => e.InstituteName).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.ToDate).HasColumnType("date");
+            entity.Property(e => e.Type).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StaffAttachment>(entity =>
         {
             entity.HasKey(e => e.StaffDocumentId);
@@ -1035,6 +1096,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.DefaultValue).IsUnicode(false);
             entity.Property(e => e.FieldName).IsUnicode(false);
             entity.Property(e => e.PlaceholderHelpText).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<StaffDependent>(entity =>
+        {
+            entity.HasKey(e => e.DependentId);
+
+            entity.ToTable("StaffDependent", "HR");
+
+            entity.Property(e => e.DependentId).HasColumnName("DependentID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FirstName).IsUnicode(false);
+            entity.Property(e => e.Gender).IsUnicode(false);
+            entity.Property(e => e.LastName).IsUnicode(false);
+            entity.Property(e => e.Occupation).IsUnicode(false);
+            entity.Property(e => e.Relation).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -1145,6 +1223,19 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
         });
 
+        modelBuilder.Entity<StaffSkill>(entity =>
+        {
+            entity.HasKey(e => e.SkillId);
+
+            entity.ToTable("StaffSkill", "HR");
+
+            entity.Property(e => e.SkillId).HasColumnName("SkillID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StaffStatus>(entity =>
         {
             entity.ToTable("StaffStatus");
@@ -1207,6 +1298,29 @@ public partial class HrhubContext : DbContext
         modelBuilder.Entity<UserForm>(entity =>
         {
             entity.HasKey(e => e.Formid);
+
+            entity.Property(e => e.Action)
+                .HasMaxLength(50)
+                .HasColumnName("action");
+            entity.Property(e => e.Controller)
+                .HasMaxLength(50)
+                .HasColumnName("controller");
+            entity.Property(e => e.DOrder).HasColumnName("dOrder");
+            entity.Property(e => e.FormTitle).HasMaxLength(50);
+            entity.Property(e => e.ImageClass)
+                .HasMaxLength(50)
+                .HasColumnName("imageClass");
+            entity.Property(e => e.IsParent).HasColumnName("isParent");
+            entity.Property(e => e.ParentId).HasColumnName("parentId");
+            entity.Property(e => e.ReferenceId).HasColumnName("ReferenceID");
+            entity.Property(e => e.Status).HasColumnName("status");
+        });
+
+        modelBuilder.Entity<UserForms2>(entity =>
+        {
+            entity.HasKey(e => e.Formid);
+
+            entity.ToTable("UserForms2");
 
             entity.Property(e => e.Action)
                 .HasMaxLength(50)
