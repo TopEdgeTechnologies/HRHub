@@ -28,6 +28,8 @@ namespace HRHUBWEB.Controllers
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
             ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
 
             ViewBag.Success = data;
             List<GluserGroup> ObjUserGroup = new List<GluserGroup>();
@@ -39,7 +41,7 @@ namespace HRHUBWEB.Controllers
             if (Token != null)
             {
 
-                HttpResponseMessage message = await _client.GetAsync("api/UserGroup/ListUserGroup");
+                HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/ListUserGroup{userObject.CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
@@ -239,7 +241,56 @@ namespace HRHUBWEB.Controllers
 
         }
 
-            #endregion
+
+
+
+
+
+
+        // Update status 
+
+        [HttpGet]
+        public async Task<ActionResult<JsonObject>> UpdateUserGroupStatus(int id, bool status)
+        {
+
+            var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+
+
+           
+            HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/UpdateGroupUsers{id}/{status}/{userObject.UserId}");
+
+            if (message.IsSuccessStatusCode)
+            {
+                var result = message.Content.ReadAsStringAsync().Result;
+                return Json(result);
+
+            }
+            else
+            {
+                return RedirectToAction("Loginpage", "User", new { id = 2 });
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
 
 
 

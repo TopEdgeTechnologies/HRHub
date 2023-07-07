@@ -33,7 +33,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Staff Name <span class="text-danger">*</span></label>
-                        <select asp-for=StaffId class="form-control " data-placeholder="Select Staff" asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
+                        <select asp-for=StaffId class="form-control select2 custom-select select2-hidden-accessible" data-placeholder="Select Staff" asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
                         </select>
                     </div>
 
@@ -219,8 +219,8 @@
 
 
 
+           
             $('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
-
 
 
 

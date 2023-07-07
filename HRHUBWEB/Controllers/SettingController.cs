@@ -50,8 +50,6 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-
-
         public async Task<IActionResult> GetPoliciesByCompanyId(int PolicyCategoryId)
         {
             try
@@ -66,7 +64,6 @@ namespace HRHUBWEB.Controllers
             }
 
         }
-
         [HttpPost]
         public async Task<IActionResult> UpdatePolicyConfigurationStatus(int id, bool status)
         {

@@ -1,5 +1,6 @@
 ﻿using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
+using HRHUBWEB.Filters;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
 {
@@ -252,5 +254,127 @@ namespace HRHUBWEB.Controllers
             HttpContext.Session.Clear();
         }
 
-    }
+
+
+
+
+		#region System User
+
+		[CustomAuthorization]
+		public async Task<IActionResult> UserList(string data = "")
+		{
+
+			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
+			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
+			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
+			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
+
+
+			ViewBag.Success = data;
+			List<User> ObjUser = new List<User>();
+
+
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+			if (Token != null)
+			{
+
+				HttpResponseMessage message = await _client.GetAsync($"api/User/ListUser{userObject.CompanyId}");
+				if (message.IsSuccessStatusCode)
+				{
+					var result = message.Content.ReadAsStringAsync().Result;
+					ObjUser = JsonConvert.DeserializeObject<List<User>>(result);
+
+				}
+
+				return View(ObjUser);
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+		}
+
+
+
+
+
+        [HttpGet]
+		public async Task<ActionResult<JsonObject>> UpdateUserStatus(int id, bool status)
+		{
+
+			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+
+
+			User Obj = new User();
+			Obj.UserId = id;
+			Obj.IsActive = status;
+			Obj.UpdatedBy = userObject.UserId;
+
+
+
+
+            //HttpResponseMessage message = await _client.PostAsJsonAsync("api/User/UpdateUsers", Obj);
+            HttpResponseMessage message = await _client.GetAsync($"api/User/UpdateUsers{id}/{status}/{userObject.UserId}");
+
+            if (message.IsSuccessStatusCode)
+			{
+				var result = message.Content.ReadAsStringAsync().Result;
+				return Json(result);
+
+			}
+			else
+			{
+				return RedirectToAction("Loginpage", "User", new { id = 2 });
+			}
+
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		////update Candidate notification status
+		//[HttpPost]
+		//public async Task<IActionResult> UpdateCandidatenotificationStatus(int id, bool status)
+		//{
+
+		//    CandidateEmailNotificationSetting Obj = new CandidateEmailNotificationSetting();
+		//    Obj.CandidateNotificationId = id;
+		//    Obj.Status = status;
+		//    Obj.UpdatedBy = _user.UserId;
+
+		//    var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateCandidateEmailNotification", HttpMethod.Post);
+
+		//    return Json(result);
+
+		//}
+
+
+
+
+
+
+
+
+
+		#endregion
+
+	}
 }

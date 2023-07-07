@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace HRHUBAPI.Models;
 
-public partial class SalaryStatus
+public partial class StaffSkill
 {
-    public int SalaryStatusId { get; set; }
+    public int SkillId { get; set; }
+
+    public int? StaffId { get; set; }
 
     public string? Title { get; set; }
-
-    public string? CssClass { get; set; }
-
-    public bool? IsDeleted { get; set; }
 
     public int? CreatedBy { get; set; }
 

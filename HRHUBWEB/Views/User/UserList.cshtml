@@ -1,0 +1,232 @@
+﻿@model IEnumerable<HRHUBAPI.Models.User>
+
+
+<div class="row row-sm mt-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">User System Details</h3>
+                @if (Convert.ToBoolean(ViewBag.IsNew))
+                {
+                    <div class="card-options">
+                        <div class="btn-list">
+
+                            <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                            <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                            <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="myTable">
+                        <thead style="border-bottom: 1px solid #0000004a;">
+                            <tr>
+                                <th class="border-bottom-0">Sr.#</th>
+                                <th class="border-bottom-0">Staff Name </th>
+                                <th class="border-bottom-0">User Name </th>
+                                <th class="border-bottom-0">Group Name </th>
+                                <th class="border-bottom-0">Active</th>
+                                @*<th class="">Action</th>*@
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @{
+                                int count = 1;
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <span>@count</span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StaffName)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.UserName)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.GroupName)
+                                        </td>
+
+
+
+
+                                        <td>
+
+                                            <label class="custom-switch mt-2">
+
+                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.UserId" onchange="setvalue(this.id)" @(item.IsActive == true? "Checked":"") />
+                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                            </label>
+
+                                            <div class="float-end ms-auto">
+                                                <div class="btn-group ms-3 mb-0">
+                                                    <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start" style="">
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="editrecord(@item.UserId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Edit</a>
+
+                                                        }
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+                                    count++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Row -->
+@section scripts{
+
+    <script>
+
+
+
+        $(document).ready(function () {
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
+            $('#myTable').DataTable();
+
+        });
+
+
+
+
+
+
+
+        function editrecord(id) {
+            addnewAnnouncement();
+            var Data = { id: id }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/GetAnnouncementById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+                        $("#AnnouncementId").val(data.announcementId);
+                        $("#Title").val(data.title);
+
+                        var dateTimeString = data.announcementDate;
+                        var Date = dateTimeString.split("T")[0];
+
+                        var date = $("#AnnouncementDate").val(Date);
+                        //alert(date)
+                        $('#Description').summernote('code', data.description);
+
+                        $("#Status").prop('checked', data.status);
+
+                        $("#addAnnouncementmodal").modal('show');
+                    }
+                },
+                error: function () {
+                    status = false;
+
+                }
+            })
+
+
+        }
+
+
+
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/User/UpdateUserStatus",
+                type: "Get",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                       debugger
+                        
+
+                            notif({
+                                msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your Status is Updated Succesfully.",
+                                type: "success"
+                            });
+
+                       
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
+
+
+
+    </script>
+
+}
