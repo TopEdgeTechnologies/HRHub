@@ -140,7 +140,7 @@ namespace HRHUBAPI.Models.Configuration
 
     public static class ConnectionString
     {
-        private static string cName = "Data Source=webserver; Initial Catalog=HRHUB_TET;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;";
+        private static string cName = "Data Source=webserver; Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;";
         public static string CName
         {
             get => cName;

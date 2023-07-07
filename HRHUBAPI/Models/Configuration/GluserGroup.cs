@@ -27,11 +27,11 @@ namespace HRHUBAPI.Models
         
 
 
-        public async Task<List<GluserGroup>> GetGluserGroup(HrhubContext _context)
+        public async Task<List<GluserGroup>> GetGluserGroup(int CompanyId,HrhubContext _context)
         {
             try
             {
-                return await _context.GluserGroups.Where(x=>x.IsDeleted==false).ToListAsync();
+                return await _context.GluserGroups.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -282,6 +282,46 @@ namespace HRHUBAPI.Models
                 throw;
             }
         }
+
+
+
+        // Update Active and inactive Status User
+
+        public async Task<bool> UpdateGroupStatusUser(int id, bool status, int CreatedBy, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var check = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupId == id);
+                if (check != null && check.GroupId > 0)
+                {
+                    check.GroupId = id;
+                    check.IsActive = status;
+                    check.UpdatedBy = CreatedBy;
+                    check.UpdatedOn = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    return true;
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
+
+
+
+
 
     }
 }

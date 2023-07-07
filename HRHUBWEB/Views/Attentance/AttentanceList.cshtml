@@ -384,7 +384,7 @@
                     if(data!=null)
                     {						
 						debugger;
-						var table = $('#emp-attendance').DataTable({ "pageLength": 50 });
+						var table = $('#emp-attendance').DataTable();//{ "pageLength": 50 }
                           table.clear();
                           table.draw();
 							for(var i = 0; i < data.length; i++) {
