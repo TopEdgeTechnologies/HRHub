@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Error\" />
+    <Folder Include="wwwroot\assets\images\loading-state\" />
     <Folder Include="wwwroot\Images\CompanyImages\" />
     <Folder Include="wwwroot\Images\ClearenceAttachment\" />
     <Folder Include="wwwroot\Images\StaffImages\" />

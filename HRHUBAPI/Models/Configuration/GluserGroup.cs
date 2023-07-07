@@ -24,10 +24,15 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<string>? ListisNew { get; set; }
 
-        
+
+        [NotMapped]
+		public IEnumerable<GluserGroupDetail>? ListGluserGroupDetail { get; set; }
+
+		
 
 
-        public async Task<List<GluserGroup>> GetGluserGroup(HrhubContext _context)
+
+		public async Task<List<GluserGroup>> GetGluserGroup(HrhubContext _context)
         {
             try
             {
@@ -67,9 +72,12 @@ namespace HRHUBAPI.Models
                     IsDelete = Convert.ToBoolean(row["IsDelete"]),
                     IsPrint = Convert.ToBoolean(row["IsPrint"]),
                     IsNew = Convert.ToBoolean(row["Isnew"]),
-                    FormTitle = row["FormTitle"].ToString()
-                   
-                })
+                    FormTitle = row["FormTitle"].ToString(),
+					level = Convert.ToInt32(row["level"]),
+					form_path = row["form_path"].ToString(),
+
+
+				})
                 .ToList();
 
 

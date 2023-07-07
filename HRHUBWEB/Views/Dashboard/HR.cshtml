@@ -66,40 +66,40 @@
                     </div>
 
 
-@*
+                    @*
                     <div class="btn-list d-flex">
 
-                        <div class="input-group">
-                           
-                            <input id="dateModel" name="dateModel" class="form-control fc-datepicker" type="text">
-                        </div>
+                    <div class="input-group">
+
+                    <input id="dateModel" name="dateModel" class="form-control fc-datepicker" type="text">
                     </div>
-*@
+                    </div>
+                    *@
                 </div>
 
                 <div class="row row-sm mt-4">
                     <div class="col-xl-12 col-lg-12 col-md-12">
-                    
-                          
-                          
-                                <div class="table-responsive">
+
+
+
+                        <div class="table-responsive">
                             <table class="table  card-table table-hover  table-vcenter table-sm text-nowrap" id="tableAttendanceModal">
-                                        <thead>
-                                            <tr>
-                                                @*<th class="text-center">Sr.#</th>*@
-                                                <th class="text-start">Employee</th>
-                                                <th class="text-center">Status</th>
-                                                <th class="text-center">CheckIn</th>
-                                                <th class="text-center">CheckOut</th>
-                                                 
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbodyAttendanceModel">
-                                        </tbody>
-                                    </table>
-                                </div>
-                   
-                    
+                                <thead>
+                                    <tr>
+                                        @*<th class="text-center">Sr.#</th>*@
+                                        <th class="text-start">Employee</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">CheckIn</th>
+                                        <th class="text-center">CheckOut</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyAttendanceModel">
+                                </tbody>
+                            </table>
+                        </div>
+
+
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@
             <div class="modal-body">
 
 
-           
+
 
 
                 <div class="row">
@@ -200,7 +200,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                           
+
                             <div class="col-8">
                                 <div class="mt-0 text-start">
                                     <a href="/Staff/StaffList">
@@ -208,17 +208,17 @@
                                     </a>
                                     <h3 class="mb-0 mt-1 mb-2" id="TotalEmploye">0</h3>
                                     <a href="/Staff/StaffList">
-                                    <span class="text-muted">
-                                       
-                                        <span class="text-success fs-12 mt-2 me-1" s>
-                                            <i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i><span id="lastMonth">0</span> Last Month
+                                        <span class="text-muted">
+
+                                            <span class="text-success fs-12 mt-2 me-1" s>
+                                                <i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i><span id="lastMonth">0</span> Last Month
+                                            </span>
+                                            @*for last month*@
                                         </span>
-                                        @*for last month*@
-                                    </span>
                                     </a>
                                 </div>
                             </div>
-                          
+
                             <div class="col-4">
                                 <div class="icon1 bg-success my-auto  float-end"> <i class="feather feather-users IconCenterAlignment "></i> </div>
                             </div>
@@ -234,12 +234,12 @@
                                 <div class="mt-0 text-start">
                                     <span class="fs-14 font-weight-semibold">Total Present</span>
                                     <h3 class="mb-0 mt-1 mb-2" id="TotalPresent">0</h3>
-                                    <input type="hidden" id="attendanceStatus" /> 
-                                        <a  onclick="showAttendanceModel('Present')" href="#" @*href="/Dashboard/HRAttendance?status=Present"*@>
-                                    <span class="text-muted">
-                                        <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
-                                        View All
-                                    </span>
+                                    <input type="hidden" id="attendanceStatus" />
+                                    <a onclick="showAttendanceModel('Present')" href="#" @*href="/Dashboard/HRAttendance?status=Present"*@>
+                                        <span class="text-muted">
+                                            <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
+                                            View All
+                                        </span>
                                     </a>
                                 </div>
                             </div>
@@ -260,10 +260,10 @@
                                     <h3 class="mb-0 mt-1  mb-2" id="TotalAbsent"></h3>
                                 </div>
                                 <a onclick="showAttendanceModel('Absent')" href="#">
-                                <span class="text-muted">
-                                    <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
-                                    View All
-                                </span>
+                                    <span class="text-muted">
+                                        <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
+                                        View All
+                                    </span>
                                 </a>
                             </div>
                             <div class="col-4">
@@ -316,16 +316,23 @@
             <div id="NoticeBoarddata" class="overflow-auto" style="height:255px"></div>
         </div>
 
-        <div class="card overflow-hidden">
-            <div class="card-header border-0">
+        <div class="card overflow-auto" style="height:264px">
+            <div class="card-header sticky-thead border-0">
                 <h4 class="card-title">Upcoming Events</h4>
                 <a href="#" onclick="allEventLoad()" class="text-muted">
                     <span class="text-success fs-12 mt-2 me-1"><i class="feather feather-arrow-up-right me-1 bg-success-transparent p-1 brround"></i></span>
 
                 </a>
             </div>
-            <div style="height:214px">
-                <ul class="vertical-scroll" id="EventBoarddata">
+            <div class="card-body pt-0 "> .
+                <div class="loading-state-hr" id="cardEmptyGenderState">
+                    <div class="loading-state-image-hr mb-3">
+                        <img src="/assets/images/loading-state/events.png" class="w-100 img-fluid" />
+                    </div>
+                    <span class="text-muted loading-state-text fs-16 d-block">No recent Events found</span>
+                </div>
+
+                <ul  id="EventBoarddata">
                     <li class="item">
                     </li>
                     <li class="item">
@@ -343,7 +350,7 @@
 
     </div>
     <div class="col-xl-4 col-md-12 col-lg-6">
-        <div class="card">
+        <div class="card" style="height: 420px;">
             <div class="card-header border-0">
                 <h4 class="card-title">Project Overview</h4>
                 <div class="card-options">
@@ -362,66 +369,65 @@
                     <canvas id="sales-summary" class=""></canvas>
                 </div>
                 <div class="sales-chart mt-4 row text-center">
-                    <div class="d-flex my-auto col-sm-4 mx-auto text-center justify-content-center"><span class="dot-label bg-primary me-2 my-auto"></span>On progress</div>
+                    <div class="d-flex my-auto col-sm-4 mx-auto text-center justify-content-center"><span class="dot-label bg-primary me-2 my-auto"></span>progress</div>
                     <div class="d-flex my-auto col-sm-4 mx-auto text-center justify-content-center"><span class="dot-label bg-secondary me-2 my-auto"></span>Pending</div>
                     <div class="d-flex my-auto col-sm-4 mx-auto text-center justify-content-center"><span class="dot-label bg-light4  me-2 my-auto"></span>Completed</div>
                 </div>
             </div>
         </div>
     </div>
+
+
     <div class="col-xl-4 col-md-12 col-lg-6">
-        <div class="card">
-            <div class="card-header border-0">
+        <div class="card overflow-auto  " style="height: 420px;">
+            <div class="card-header  sticky-thead align-items-center py-3">
                 <h4 class="card-title">Recent Activity</h4>
-                <div class="card-options">
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="btn btn-outline-light" data-bs-toggle="dropdown" aria-expanded="false"> View All <i class="feather feather-chevron-down"></i> </a>
-                        <ul class="dropdown-menu dropdown-menu-end" role="menu">
-                            <li><a href="javascript:void(0);">Monthly</a></li>
-                            <li><a href="javascript:void(0);">Yearly</a></li>
-                            <li><a href="javascript:void(0);">Weekly</a></li>
-                        </ul>
+                <div class="card-options col-md-7">
+                    <div class="form-group m-0">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="feather feather-calendar"></i>
+                                </div>
+                            </div><input id="activityDate" class="form-control fc-datepicker" type="text">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <ul class="timeline">
-                    <li>
-                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">Leave Approval Request</a>
-                        <a href="javascript:void(0);" class="text-muted float-end fs-13">6 min ago</a>
-                        <p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">From "RuthDyer" UiDesign Leave</p>
-                        <span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span>
-                    </li>
-                    <li class="primary">
-                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Wok Update</a>
-                        <a href="javascript:void(0);" class="text-muted float-end fs-13">10 min ago</a>
-                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From "Robert Marshall" Developer</p>
-                        <span class="text-muted ms-3 fs-11">Task Completed.</span>
-                    </li>
-                    <li class="pink">
-                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Received Mail</a>
-                        <a href="javascript:void(0);" class="text-muted float-end fs-13">15 min ago</a>
-                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">Emergency Sick Leave from "jacob Berry"</p>
-                        <span class="text-muted ms-3 fs-11">Ui Designer, Designer Team.</span>
-                    </li>
-                    <li class="success mb-0 pb-0">
-                        <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 mb-2 ms-3">Job Application Mail</a>
-                        <a href="javascript:void(0);" class="text-muted float-end fs-13">1 Hour ago</a>
-                        <p class="mb-0 pb-0 text-muted fs-11 pt-1 ms-3">From jobmail@gmail.com laravel developer.</p>
-                    </li>
+            <div class="card-body pt-0 ">
+                <div class="loading-state-hr" id="cardEmptyActivityState">
+                    <div class="loading-state-image-hr mb-3">
+                        <img src="/assets/images/loading-state/activity.png" class="w-100 img-fluid" />
+                    </div>
+                    <span class="text-muted loading-state-text fs-18 d-block">No recent activity found</span>
+                </div>
+                <ul id="CardActivity" class="timeline  " >
+
                 </ul>
             </div>
         </div>
     </div>
+   
     <div class="col-xl-4 col-md-12 col-lg-12">
-        <div class="card chart-donut1" style="height: 420px;">
-            <div class="card-header  border-0">
+        <div class="card chart-donut1 overflow-auto"  style="height: 420px;">
+            <div class="card-header sticky-thead  border-0">
                 <h4 class="card-title">Gender by Employees</h4>
             </div>
             <div class="card-body">
 
-                <div id="employeesGender" class="mx-auto apex-dount"></div>
+                    <div class="loading-state-hr" id="cardEmptyGenderState">
+                        <div class="loading-state-image-hr mb-3">
+                            <img src="/assets/images/loading-state/leave.png" class="w-100 img-fluid" />
+                        </div>
+                        <span class="text-muted loading-state-text fs-18 d-block">No recent employee found</span>
+                    </div>
+                <div id="employeesGender" class="mx-auto apex-dount">
 
+                </div>
+
+
+               
+                
             </div>
         </div>
     </div>
@@ -431,7 +437,7 @@
         <div class="card">
             <div class="card-header border-bottom-0">
                 <h3 class="card-title">Recent Application</h3>
-          
+
 
 
                 <div class="card-options col-md-4">
@@ -439,9 +445,9 @@
 
                         <div class="input-group">
                             @*<div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <i class="feather feather-calendar"></i>
-                                </div>
+                            <div class="input-group-text">
+                            <i class="feather feather-calendar"></i>
+                            </div>
                             </div><input id="leavedate" class="form-control fc-datepicker " type="text">*@
                         </div>
                     </div>
@@ -454,7 +460,7 @@
                     <!-- Tabs -->
                     <ul class="nav panel-tabs">
                         <li><a class="active" href="#tab7" data-bs-toggle="tab">Hired Candidates</a></li>
-                        <li class="ms-sm-4"><a  href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
+                        <li class="ms-sm-4"><a href="#tab5" data-bs-toggle="tab">Leave Requests</a></li>
                         <li><a href="#tab6" data-bs-toggle="tab">Loan Request</a></li>
                     </ul>
                 </div>
@@ -478,18 +484,26 @@
                                 <tbody id="candidatebody">
                                 </tbody>
                             </table>
+                               <div class="loading-state-hr" id="cardEmptyCandidateState">
+                                <div class="loading-state-image-hr mb-3">
+                                    <img src="/assets/images/loading-state/application.png" class="w-100 img-fluid" />
+                                </div>
+                                <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
+                            </div>
+
+
                         </div>
                     </div>
 
                     <div class="tab-pane" id="tab5">
-                        
+
                         <div class="table-responsive recent_jobs pt-2 pb-2 ps-2 pe-2 card-body" style="height: 485px;">
-                           
+
 
                             <table class="table  card-table  table-sm text-nowrap" id="tableLeaves">
                                 <thead>
                                     <tr>
-                                       
+
                                         <th>Employee</th>
                                         <th>Applied On</th>
                                         <th class="text-center">Action</th>
@@ -499,6 +513,12 @@
                                 <tbody id="tbodyLeaves">
                                 </tbody>
                             </table>
+                             <div class="loading-state-hr" id="cardEmptyLeavesState">
+                                <div class="loading-state-image-hr mb-3">
+                                    <img src="/assets/images/loading-state/leave.png" class="w-100 img-fluid" />
+                                </div>
+                                <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
+                            </div>
                         </div>
                     </div>
                     <div class="tab-pane" id="tab6">
@@ -515,13 +535,18 @@
                                 </thead>
 
                                 <tbody id="tbodyLoan">
-                                 
-                                    
                                 </tbody>
                             </table>
+                            <div class="loading-state-hr" id="cardEmptyLoanState">
+                                <div class="loading-state-image-hr mb-3">
+                                    <img src="/assets/images/loading-state/loan.png" class="w-100 img-fluid" />
+                                </div>
+                                <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
+                            </div>
+
                         </div>
                     </div>
-                 
+
                 </div>
             </div>
         </div>
@@ -548,7 +573,7 @@
                 <table class="table  card-table  table-sm text-nowrap" id="tableAttendance">
                     <thead>
                         <tr>
-                           @* <th class="text-center">#</th>*@
+                            @* <th class="text-center">#</th>*@
                             <th class="text-start">Employee</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">CheckIn</th>
@@ -559,7 +584,16 @@
                     <tbody id="tbodyAttendance">
                     </tbody>
                 </table>
+                <div class="loading-state-hr" id="cardEmptyAttendanceState">
+                                    <div class="loading-state-image-hr mb-3">
+                                <img src="/assets/images/loading-state/application.png" class="w-100 img-fluid" />
+                            </div>
+                     <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
+                 </div>
             </div>
+
+
+
         </div>
     </div>
 </div>
@@ -570,13 +604,13 @@
 @section scripts{
 
     <script>
-     
+
 
 
         $(document).ready(function () {
 
-         
- 
+
+
             $('#sumaryYear').select2();
             $('#sumaryMonth').select2();
 
@@ -588,29 +622,32 @@
 
 
             var currentDate = new Date(); // Get the current date
-          
+
 
             $('#fromdate').datepicker('setDate', currentDate);
             $('#leavedate').val('@DateTime.Now.ToString("dd-MM-yyyy")');
             $('#dateModel').datepicker('setDate', currentDate);
+            $('#activityDate').datepicker('setDate', currentDate);
             
-  
 
 
 
 
-
+         
             CheckAtendence();
             CheckAnnounments();
             CheckEvent();
             LoadChartGenderWise();
             loadSalarySummaryGraph();
-           checkdailyAttendance();
+            checkdailyAttendance();
             loadLeavesrequest();
             loadLoanrequest();
-             loadCandiate() ;
+            loadCandiate();
+            loadStaffActivity(0)
 
-
+               $('#activityDate').change(function () {
+				loadStaffActivity(0)
+            });
             $('#sumaryYear').change(function () {
                 loadSalarySummaryGraph();
 
@@ -633,12 +670,12 @@
             });
 
             $('#dateModel').change(function () {
-          showAttendanceModel(  $("#attendanceStatus").val());
+                showAttendanceModel($("#attendanceStatus").val());
 
             });
 
 
-        
+
         });
 
         function CheckAtendence() {
@@ -885,8 +922,11 @@
             makeAjaxRequest("/Dashboard/EmployeeSalarySummery", 'GET', requestData, false, function (response) {
 
                 if (response != null) {
+                  response.length>0? $("#cardEmptyGenderState").hide():  $("#cardEmptyGenderState").show();
 
+                    response.length > 0 ? $("#employeesGender").show() : $("#employeesGender").hide();
 
+                    
                     debugger;
                     console.log(response)
                     var MonthName = [];
@@ -1030,7 +1070,9 @@
             makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
 
                 if (response != null) {
-                    debugger
+          
+                  response.length>0? $("#cardEmptyAttendanceState").hide():  $("#cardEmptyAttendanceState").show();
+
 
                     console.log(response)
 
@@ -1060,6 +1102,10 @@
                     //$("#tableAttendance").DataTable();
 
                 }
+                else{
+                    $("#cardEmptyAttendanceState").show();
+
+                }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
@@ -1080,14 +1126,16 @@
 
                     console.log(response)
 
+                    response.length > 0 ? $("#cardEmptyLeavesState").hide() : $("#cardEmptyLeavesState").show();
+
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
                         html += '<tr class="border-bottom">'
-                    //    html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
-                        
+                        //    html += '<td class="text-center"><span class="avatar avatar-sm brround">' + (i + 1) + '</span></td>'
+
                         html += '<td class="font-weight-semibold fs-14"> '
                         html += '<div class="d-flex">'
-                        html += '<img class="avatar avatar-md brround me-3" src ="'+ response[i]["SnapPath"] + '" >'
+                        html += '<img class="avatar avatar-md brround me-3" src ="' + response[i]["SnapPath"] + '" >'
                         html += '<div class="me-3 mt-0 mt-sm-1 d-block" >'
                         html += '<h6 class="mb-1 fs-14"> ' + response[i]["ApplicantStaffName"] + ' </h6>'
                         html += '<p class="text-muted mb-0 fs-12"> ' + response[i]["ApplicantDepartment"] + ' | ' + response[i]["ApplicantDesignation"] + ' </p>'
@@ -1112,6 +1160,12 @@
 
 
                 }
+                else
+
+                {
+                    $("#cardEmptyLeavesState").show();
+                
+                }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
@@ -1133,7 +1187,8 @@
                 if (response != null) {
                     debugger
 
-                    console.log(response)
+                    response.length>0? $("#cardEmptyLoanState").hide():  $("#cardEmptyLoanState").show();
+                   
 
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
@@ -1167,6 +1222,7 @@
 
 
                 }
+               
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
@@ -1178,17 +1234,18 @@
 
 
 
-        
+
         function loadCandiate() {
             debugger
 
-            var requestData = { };
+            var requestData = {};
             makeAjaxRequest("/Dashboard/candidatePending", 'GET', requestData, false, function (response) {
 
                 if (response != null) {
                     debugger
 
-                    console.log(response)
+                  response.length>0? $("#cardEmptyCandidateState").hide():  $("#cardEmptyCandidateState").show();
+      
 
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
@@ -1221,6 +1278,11 @@
 
 
 
+                }else
+                {
+                    $("#cardEmptyCandidateState").show()
+                
+                
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
@@ -1231,17 +1293,17 @@
 
         }
 
-        
+
 
 
         function showAttendanceModel(status) {
             debugger
 
             $("#attendanceStatus").val(status)
-         
-            $("#attendanceTitle").text("Attendance "+status)
-            
-               $("#ModelAttendance").modal('show');
+
+            $("#attendanceTitle").text("Attendance " + status)
+
+            $("#ModelAttendance").modal('show');
             var requestData = { date: $("#dateModel").val(), attendanceStatus: status };
             makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
 
@@ -1253,33 +1315,33 @@
 
 
                     var table = $('#tableAttendanceModal').DataTable();
-                        table.clear();
-                        table.draw();
+                    table.clear();
+                    table.draw();
 
-                        
-                        for (var i = 0; i < response.length; i++) {
+
+                    for (var i = 0; i < response.length; i++) {
                         var rows = [];
-                          var htmt ='<div class="d-flex">'
-                            htmt +='<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '">'
-                            htmt +='<div class="me-3 mt-0 mt-sm-1 d-block">'
-                            htmt +='<h6 class="mb-1 fs-14">' + response[i]["EmployeeName"] + '</h6>'
-                            htmt +='<p class="text-muted mb-0 fs-12">' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + '</p>'
-                            htmt +='</div>'
-                            htmt +='</div>'
+                        var htmt = '<div class="d-flex">'
+                        htmt += '<img class="avatar avatar-md brround me-3" src="' + response[i]["SnapPath"] + '">'
+                        htmt += '<div class="me-3 mt-0 mt-sm-1 d-block">'
+                        htmt += '<h6 class="mb-1 fs-14">' + response[i]["EmployeeName"] + '</h6>'
+                        htmt += '<p class="text-muted mb-0 fs-12">' + response[i]["DepartmentTitle"] + ' | ' + response[i]["DesignationTitle"] + '</p>'
+                        htmt += '</div>'
+                        htmt += '</div>'
 
 
                         rows.push([htmt, '<span class="badge ' + response[i]["CssClass"].replace('badge', 'bg') + '-transparent">' + response[i]["attendanceStatus"] + '</span>', response[i]["FirstPunchIN"], response[i]["LastPunchOut"]]);
-                       
+
                         table.rows.add(rows);
                         table.draw();
-                      
-                
-                        }
-
-                      
 
 
-      
+                    }
+
+
+
+
+
 
                 }
             }, function (errorStatus) {
@@ -1289,6 +1351,31 @@
 
 
 
+        }
+
+
+
+        function loadStaffActivity(staffId) {
+            var dateValue = $("#activityDate").val()
+            var requestData = { staffId:staffId, currentDate: dateValue }
+            makeAjaxRequest("/Staff/Staff_Activity", 'GET', requestData, false, function (response) {
+                if (response != null) {
+                    debugger
+                    var htmlActivity = ''
+                    for (var i = 0; i < response.length; i++) {
+                        htmlActivity += ' <li class="' + response[i].CssClass + '"> '
+                        htmlActivity += '     <a target="_blank" href="javascript:void(0);" class="font-weight-semibold fs-15 ms-3">' + response[i].Heading + '</a> '
+                        htmlActivity += '     <a href="javascript:void(0);" class="text-muted float-end fs-13">' + response[i].Ago + ' min ago</a> '
+                        htmlActivity += '     <p class="mb-0 pb-0 text-muted pt-1 fs-11 ms-3">' + response[i].Title + '</p> '
+                        //htmlActivity += '     <span class="text-muted  ms-3 fs-11"> On Monday 12 Jan 2020.</span> '
+                        htmlActivity += ' </li> '
+                    }
+
+                    $("#CardActivity").html(htmlActivity)
+                }
+            }, function (errorStatus) {
+                console.log('Error:', errorStatus)
+            });
         }
 
     </script>
