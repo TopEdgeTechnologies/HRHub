@@ -31,10 +31,10 @@
                         <thead>
                             <tr>
                                 
-                                <th class="border-bottom-0">Group Title</th>
-                                <th class="border-bottom-0">Description</th>
-                                <th class="text-center">Status</th>
-                                <th class="">Action</th>
+                                <th class="border-bottom-0 col-4">Group Title</th>
+                                <th class="border-bottom-0 col-6">Description</th>
+                                <th class="col-2">Status</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +49,10 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Description)
                                     </td>
-                                    @if (item.IsActive == true)
+
+
+
+                                   @* @if (item.IsActive == true)
                                     {
                                         <td class="text-center"><span class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Active</span></td>
                                     }
@@ -58,7 +61,7 @@
                                         <td class="text-center"> <span class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> IsActive</span></td>
 
                                     }
-
+*@
 
                                     @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
                                     {
@@ -73,7 +76,45 @@
                                     }
                                     else
                                     {
-                                        <td class="text-end">
+
+                                        <td>
+
+                                            <label class="custom-switch mt-2">
+
+                                                <input type="checkbox" name="custom-switch-checkbox1" class="custom-switch-input" id="IsActive_@item.GroupId" onchange="setvalue(this.id)" @(item.IsActive == true? "Checked":"") />
+                                                <span class="custom-switch-indicator custom-switch-indicator"></span>
+                                            </label>
+
+                                            <div class="float-end ms-auto">
+                                                <div class="btn-group ms-3 mb-0">
+                                                    <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-start" style="">
+                                                       
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a asp-action="UserGroupCreateOrUpdate" asp-route-id="@item.GroupId" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                <i class="feather feather-edit"> Edit
+                                                                </i>
+                                                            </a>
+                                                        } @if (Convert.ToBoolean(ViewBag.IsDelete))
+                                                        {
+                                                            <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="dropdown-item d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                <i class="feather feather-trash-2 text-danger mt-1"></i>
+                                                            </a>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+
+
+
+
+
+                                       @* <td class="text-end">
                                             <div class="d-flex">
                                                 @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                 {
@@ -83,12 +124,12 @@
                                                 </a>
                                                 } @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                 {
-                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                    <a asp-action="UserGroupDelete" asp-route-id="@item.GroupId" class="action-btns1 d-none" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                         <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                 </a>}
                                             </div>
 
-                                        </td>
+                                        </td>*@
                                     }
 
 
@@ -157,6 +198,58 @@
             }
             $('#myTable').DataTable();
         });
+
+
+
+        function setvalue(event) {
+            debugger
+            console.log(event)
+            var datasplited = event.split('_');
+            var control = datasplited[0];
+            var id = datasplited[1];
+
+            if ($("#" + control + "_" + id).is(':checked')) {
+                $('#IsActive_' + id).prop('checked', true);
+            }
+            else {
+                $('#IsActive_' + id).prop('checked', false);
+            }
+
+            // UPdate Status
+            var Data = { id: id, status: $("#" + control + "_" + id).is(':checked') }
+            $.ajax({
+                async: false,
+                url: "/UserGroup/UpdateUserGroupStatus",
+                type: "Get",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+
+
+                        notif({
+                            msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your Status is Updated Succesfully.",
+                            type: "success"
+                        });
+
+
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+
+
+        }
+
+
+
+
+
+
 
     </script>
 

@@ -56,6 +56,8 @@ namespace HRHUBAPI.Models
 
 			[NotMapped]
 			public string? StaffName { get; set; }
+			[NotMapped]
+			public string? GroupName { get; set; }
 
 			[NotMapped]
 			public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
@@ -291,5 +293,96 @@ namespace HRHUBAPI.Models
 			catch { throw; }
 		}
 
-	}
+
+        #region System User
+        public async Task<List<User>> GetUser(int CompanyId, HrhubContext _context)
+        {
+            try
+            {
+                //var list = await _context.Candidates.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
+                var query = from u in _context.Users
+                            join S in _context.Staff on u.StaffId equals S.StaffId
+                            join G in _context.GluserGroups on u.GroupId equals G.GroupId
+
+                            where u.CompanyId == CompanyId
+                            select new User
+                            {
+                                UserId = u.UserId,
+                                UserName = u.UserName,
+                                StaffId = S.StaffId,
+                                StaffName = S.FirstName,
+                                GroupId = G.GroupId,
+                                GroupName = G.GroupTitle,
+                                IsActive = u.IsActive
+
+                            };
+
+                return query != null ? query.OrderByDescending(x => x.UserId).ToList() : new List<User>();
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
+        // Update Active and inactive Status User
+
+        public async Task<bool> UpdateStatusUser(int id, bool status, int CreatedBy, HrhubContext _context)
+        {
+            try
+            {
+                string msg = "";
+                var check = await _context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+                if (check != null && check.UserId > 0)
+                {
+                    check.UserId = id;
+                    check.IsActive = status;
+                    check.UpdatedBy = CreatedBy;
+                    check.UpdatedOn = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                    return true;
+
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+    }
 }

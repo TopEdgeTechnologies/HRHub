@@ -251,6 +251,48 @@ namespace SchoolManagementSystem.API.Controllers
 
 
 
+        #region System Users
 
-	}
+        [HttpGet("ListUser{CompanyId}")]
+        public async Task<ActionResult<List<User>>> ListUser(int CompanyId)
+        {
+
+            return await new User().GetUser(CompanyId, _context);
+        }
+
+
+
+
+
+
+        // Update Active and inactive Status User
+
+        [HttpGet("UpdateUsers{id}/{status}/{UserId}")]
+        public async Task<ActionResult<bool>> UpdateUsers(int id,bool status,int UserId)
+        {
+            var result = await new User().UpdateStatusUser(id, status, UserId, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
+        }
+
+
+
+
+
+
+
+
+        #endregion
+
+
+
+
+
+    }
 }

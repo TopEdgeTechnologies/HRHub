@@ -24,11 +24,11 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region UserGroup
 
-        [HttpGet("ListUserGroup")]
-        public async Task<ActionResult<List<GluserGroup>>> ListUserGroup()
+        [HttpGet("ListUserGroup{CompanyId}")]
+        public async Task<ActionResult<List<GluserGroup>>> ListUserGroup(int CompanyId)
         {
 
-            return await new GluserGroup().GetGluserGroup(_context);
+            return await new GluserGroup().GetGluserGroup(CompanyId,_context);
         }
 
 
@@ -138,13 +138,34 @@ namespace SchoolManagementSystem.API.Controllers
 
 
 
+        // Update Active and inactive Status User
 
-            #endregion
-
-
-
-
-
-
+        [HttpGet("UpdateGroupUsers{id}/{status}/{UserId}")]
+        public async Task<ActionResult<bool>> UpdateGroupUsers(int id, bool status, int UserId)
+        {
+            var result = await new GluserGroup().UpdateGroupStatusUser(id, status, UserId, _context);
+            if (result != null)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return NotFound();
         }
+
+
+
+
+
+
+
+        #endregion
+
+
+
+
+
+
+    }
 }
