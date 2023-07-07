@@ -260,23 +260,42 @@ namespace HRHUBWEB.Controllers
                 }
             }
 
-            //public async Task<IActionResult> DeleteStaff(int Id, int UserId)
-            //{
-            //    var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAlreadyExists{Id}/{UserId}", HttpMethod.Get);
-            //    return RedirectToAction("StaffList", new { data = 3 });
-            //}
-
             public async Task<IActionResult> StaffAlreadyExists(int Id, string NationalIdnumber="0")
             {
                 var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAlreadyExists/{_user.CompanyId}/{Id}/{NationalIdnumber}", HttpMethod.Get);
                 return Json(result); 
 		    }
 
-		#endregion
+        #endregion
 
-		#region Staff Profile
+        #region Staff Academic
 
-		public async Task<IActionResult> StaffProfile(int staffId = 0)
+        public async Task<IActionResult> StaffAcademicList(int staffId = 0)
+        {
+            StaffAcademic objStaffAcademic = new StaffAcademic();
+
+            loadAcademicType();
+            objStaffAcademic.StaffAcademicList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffAcademic>>($"api/Staffs/GetStaffAcademicByStaffId/{staffId}", HttpMethod.Get);
+            return View(objStaffAcademic);
+        }
+
+        private void loadAcademicType()
+        {
+            List<SelectListItem> items = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Study", Value = "Study" },
+                new SelectListItem { Text = "Work", Value = "Work" },
+            };
+
+            //ViewBag.academicTypeViewBag = items;
+            ViewData["academicTypeViewData"] = items;
+        }
+
+        #endregion
+
+        #region Staff Profile
+
+        public async Task<IActionResult> StaffProfile(int staffId = 0)
         {
          	var result = await _APIHelper.CallApiAsyncGet<VInfoStaff>($"api/Staffs/GetStaffProfilebyId{(staffId > 0 ? staffId : _user.StaffId)}", HttpMethod.Get);
 			return View(result);

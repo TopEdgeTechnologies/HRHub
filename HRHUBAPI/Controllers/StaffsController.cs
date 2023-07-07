@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using HRHUBAPI.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-using System.Reflection.Metadata.Ecma335;
-using Azure;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
 
 namespace HRHUBAPI.Controllers
 {
@@ -153,20 +142,258 @@ namespace HRHUBAPI.Controllers
 			return NotFound();
 		}
 
-
         [HttpGet("GetStaffProfilebyId{StaffId}")]
         public async Task<ActionResult<VInfoStaff>> GetStaffProfilebyId( int StaffId)
         {
             return await new Staff().GetStaffProfilebyId( StaffId, _context);
         }
 
+        #endregion
 
+        #region Staff Academic
+
+        [HttpGet("GetStaffAcademic")]
+        public async Task<ActionResult<List<StaffAcademic>>> GetStaffAcademic()
+        {
+            return await new StaffAcademic().GetStaffAcademic(_context);
+        }
+
+        [HttpGet("GetStaffAcademicById/{Id}")]
+        public async Task<ActionResult<StaffAcademic>> GetStaffAcademicById(int Id)
+        {
+            return await new StaffAcademic().GetStaffAcademicById(Id, _context);
+        }
+
+        [HttpGet("GetStaffAcademicByStaffId/{StaffId}")]
+        public async Task<ActionResult<List<StaffAcademic>>> GetStaffAcademicByStaffId(int StaffId)
+        {
+            return await new StaffAcademic().GetStaffAcademicByStaffId(StaffId, _context);
+        }
+
+        [HttpPost("PostStaffAcademic")]
+        public async Task<ActionResult<StaffAcademic>> PostStaffAcademic(StaffAcademic StaffAcademic)
+        {
+            var dbResult = await new StaffAcademic().PostStaffAcademic(StaffAcademic, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("DeleteStaffAcademic/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteStaffAcademic(int Id, int UserId)
+        {
+            var dbResult = await new StaffAcademic().DeleteStaffAcademic(Id, UserId, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpGet("StaffAcademicAlreadyExists/{Id}/{StaffId}/{Title}")]
+        public async Task<ActionResult<StaffAcademic>> StaffAcademicAlreadyExists(int Id, int StaffId, string Title)
+        {
+            var dbResult = await new StaffAcademic().AlreadyExists(Id, StaffId, Title, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
 
         #endregion
 
+        #region Staff Dependent
+
+        [HttpGet("GetStaffDependent")]
+        public async Task<ActionResult<List<StaffDependent>>> GetStaffDependent()
+        {
+            return await new StaffDependent().GetStaffDependent(_context);
+        }
+
+        [HttpGet("GetStaffDependentById/{Id}")]
+        public async Task<ActionResult<StaffDependent>> GetStaffDependentById(int Id)
+        {
+            return await new StaffDependent().GetStaffDependentById(Id, _context);
+        }
+
+        [HttpGet("GetStaffDependentByStaffId/{StaffId}")]
+        public async Task<ActionResult<StaffDependent>> GetStaffDependentByStaffId(int StaffId)
+        {
+            return await new StaffDependent().GetStaffDependentByStaffId(StaffId, _context);
+        }
+
+        [HttpPost("PostStaffDependent")]
+        public async Task<ActionResult<StaffDependent>> PostStaffDependent(StaffDependent StaffDependent)
+        {
+            var dbResult = await new StaffDependent().PostStaffDependent(StaffDependent, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("DeleteStaffDependent/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteStaffDependent(int Id, int UserId)
+        {
+            var dbResult = await new StaffDependent().DeleteStaffDependent(Id, UserId, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpGet("StaffDependentAlreadyExists/{Id}/{StaffId}/{FirstName}")]
+        public async Task<ActionResult<StaffDependent>> StaffDependentAlreadyExists(int Id, int StaffId, string FirstName)
+        {
+            var dbResult = await new StaffDependent().AlreadyExists(Id, StaffId, FirstName, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+        #endregion
+
+        #region Staff Skill
+
+        [HttpGet("GetStaffSkill")]
+        public async Task<ActionResult<List<StaffSkill>>> GetStaffSkill()
+        {
+            return await new StaffSkill().GetStaffSkill(_context);
+        }
+
+        [HttpGet("GetStaffSkillById/{Id}")]
+        public async Task<ActionResult<StaffSkill>> GetStaffSkillById(int Id)
+        {
+            return await new StaffSkill().GetStaffSkillById(Id, _context);
+        }
+
+        [HttpGet("GetStaffSkillByStaffId/{StaffId}")]
+        public async Task<ActionResult<StaffSkill>> GetStaffSkillByStaffId(int StaffId)
+        {
+            return await new StaffSkill().GetStaffSkillByStaffId(StaffId, _context);
+        }
+
+        [HttpPost("PostStaffSkill")]
+        public async Task<ActionResult<StaffSkill>> PostStaffSkill(StaffSkill StaffSkill)
+        {
+            var dbResult = await new StaffSkill().PostStaffSkill(StaffSkill, _context);
+            if (dbResult != null && dbResult.TranFlag == 2)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Updated Successfully"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Inserted Successfully"
+                });
+            }
+        }
+
+        [HttpGet("DeleteStaffSkill/{Id}/{UserId}")]
+        public async Task<ActionResult<bool>> DeleteStaffSkill(int Id, int UserId)
+        {
+            var dbResult = await new StaffSkill().DeleteStaffSkill(Id, UserId, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    success = true,
+                    Message = "Data Deleted Successfully"
+                });
+            }
+            return NotFound("Data Not Found!");
+        }
+
+        [HttpGet("StaffSkillAlreadyExists/{Id}/{StaffId}/{Title}")]
+        public async Task<ActionResult<StaffSkill>> StaffSkillAlreadyExists(int Id, int StaffId, string Title)
+        {
+            var dbResult = await new StaffSkill().AlreadyExists(Id, StaffId, Title, _context);
+            if (dbResult == true)
+            {
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Record Already Exists"
+                });
+            }
+            else
+            {
+                return Ok(new
+                {
+                    Success = false,
+                    Message = "Data Not Found!"
+                });
+            }
+        }
+
+        #endregion
 
         #region Staff Contract
-
 
         // Load all contract Staff List
         [HttpGet("ListStaffAllContract{CompanyId}")]
@@ -181,9 +408,6 @@ namespace HRHUBAPI.Controllers
 		{
 			return await new StaffContract().GetStaffExpiredContract(CompanyId, _context);
 		}
-
-		
-
 
 		[HttpGet("GetStaffContractById{Id}")]
 		public async Task<ActionResult<StaffContract>> GetStaffContractById(int Id)
@@ -260,13 +484,6 @@ namespace HRHUBAPI.Controllers
 			}
 		}
 
-
-
-
-
-
-
-
 		//Load dropdown WeekendRule
 		[HttpGet("GetEmploymentTypeInfos{CompnayId}")]
 		public async Task<ActionResult<List<EmploymentType>>> GetEmploymentTypeInfos(int CompnayId)
@@ -275,17 +492,7 @@ namespace HRHUBAPI.Controllers
 			return await new StaffContract().GetEmploymentType(CompnayId, _context);
 		}
 
-
-
-
-
-
-
 		#endregion
-
-
-
-
 
 	}
 }

@@ -1183,9 +1183,11 @@
 
         function validateForm() 
         {
+            debugger
+            console.log("validateForm:open")
             var form = $("#myform");
-            var inputs = form.find("input");
-            var textareaInputs = form.find("textarea");
+            var inputs = form.find("input:required");
+            var textareaInputs = form.find("textarea:required");
 
             inputs.each(function () {
                 validateInput($(this));
@@ -1194,8 +1196,9 @@
             textareaInputs.each(function () {
                 validateInput($(this));
             });
-
+            debugger
             if (customValidation() && form[0].checkValidity() ) {
+                debugger
                 console.log("Form is valid");
                 // Submit the form or perform other actions here
                 return true;
@@ -1203,6 +1206,7 @@
                 console.log("Form is invalid");
                 return false;
             }
+            console.log("validateForm:end")
             //form.addClass("was-validated");
         }
 
@@ -1226,6 +1230,7 @@
                 });
                 isvalid = false;
             }
+            console.log("customValidation Department & Designation: " + isvalid)
             return isvalid;
        }
 

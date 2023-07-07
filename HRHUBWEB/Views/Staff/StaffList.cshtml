@@ -151,8 +151,14 @@
                                                         @*<a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>*@
                                                         @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                         {
-                                                            <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="View/Edit" class="dropdown-item" href="javascript:void(0);">
-                                                                <i class="feather feather-edit me-2"></i>View/Edit
+                                                            <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Staff" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Edit Staff
+                                                            </a>
+                                                        }
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="LoadStaffAcademicCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Academic" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Add/Edit Academic
                                                             </a>
                                                         }
                                                         @if (Convert.ToBoolean(ViewBag.IsDelete))
@@ -181,10 +187,10 @@
     <!-- End List Row-->
 
 </div><!-- end app-content-->
-@*</div>*@
 
 @section scripts{
     <script>
+
         $(document).ready(function () {
             var table = $('#hr-table').DataTable({
                 dom: 'Bfrtip',
@@ -286,7 +292,6 @@
 
         function OpenStaffProfile(staffId){
             debugger
-            //var url = "/Staff/StaffProfile/" + staffId;
             var url = "/Staff/StaffProfile?staffId=" + encodeURIComponent(staffId);
             window.location.href = url;
         }
@@ -296,7 +301,12 @@
 			window.location.href = url;
 		}
 
-    </script>
+        function LoadStaffAcademicCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffAcademicList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
 
+    </script>
 }
 
