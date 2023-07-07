@@ -588,7 +588,7 @@
                             </div>
                                 *@
                                 @{
-                                    await textWidget("Staff Registration #", "RegistrationNo", Model.RegistrationNo, "Registration Number", "text", true);
+                                    await textWidget("Registration #", "RegistrationNo", Model.RegistrationNo, "Registration Number", "text", true);
 
                                     if (Model.DepartmentList != null && Model.DepartmentList.Count() > 0)
                                     {
@@ -602,7 +602,7 @@
                                         await dropdownWidget("Designation", "DesignationId", Model.DesignationId.ToString(), "Select Designation", true, designationItems, true);
                                     }
 
-                                    await textWidget("Job Title", "JobTitle", Model.JobTitle, "Describe Staff Job Title", "text", true);
+                                    await textWidget("Job Title", "JobTitle", Model.JobTitle, "Job Title", "text", true);
                                     await textareaWidget("Job Description", "JobDescription", Model.JobDescription, "Job Description", true);
                                     await datePickerWidget("Date Of Joining", "JoiningDate", Model.JoiningDate, "DD-MM-YYY", "text", false);
                                     //await datePickerWidget("Resigning Date", "ResigningDate", Model.ResigningDate, "DD-MM-YYY", "text", false);
