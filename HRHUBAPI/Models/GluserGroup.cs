@@ -24,4 +24,6 @@ public partial class GluserGroup
     public DateTime? UpdatedOn { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public string? GroupType { get; set; }
 }

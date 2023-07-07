@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-7">
                             <div class="mt-0 text-start">
-                                <span class="font-weight-semibold">Total Staff</span>
+                                <span class="font-weight-semibold">Total Employee</span>
                                 <h3 class="mb-0 mt-1 text-success">@Model.TotalActiveStaff</h3>
                             </div>
                         </div>
@@ -27,7 +27,7 @@
                     <div class="row">
                         <div class="col-7">
                             <div class="mt-0 text-start">
-                                <span class="font-weight-semibold">Male Staff</span>
+                                <span class="font-weight-semibold">Male</span>
                                 <h3 class="mb-0 mt-1 text-primary">@Model.TotalMaleStaff</h3>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                     <div class="row">
                         <div class="col-7">
                             <div class="mt-0 text-start">
-                                <span class="font-weight-semibold">Female Staff</span>
+                                <span class="font-weight-semibold">Female</span>
                                 <h3 class="mb-0 mt-1 text-secondary">@Model.TotalFemaleStaff</h3>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                     <div class="row">
                         <div class="col-7">
                             <div class="mt-0 text-start">
-                                <span class="font-weight-semibold">Probation Staff</span>
+                                <span class="font-weight-semibold">On Probation</span>
                                 <h3 class="mb-0 mt-1 text-danger">@Model.TotalProbationStaff</h3>
                             </div>
                         </div>
@@ -79,13 +79,13 @@
         <div class="col-xl-12 col-md-12 col-lg-12">
             <div class="card">
                 <div class="card-header  border-0">
-                    <h4 class="card-title">Staff List</h4>
+                    <h4 class="card-title">Employee List</h4>
                     <div class="page-rightheader ms-md-auto">
                         <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
                             <div class="btn-list">
                                 @if (Convert.ToBoolean(ViewBag.IsNew))
                                 {
-                                    <a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add New Staff</a>
+                                    <a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add New Employee</a>
                                 }
                                 <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
                                 <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
@@ -101,7 +101,7 @@
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0 w-5">Sr.#</th>
-                                    <th class="border-bottom-0">Staff Name</th>
+                                    <th class="border-bottom-0">Name</th>
                                     <th class="border-bottom-0 w-10">Reg.#</th>
                                     <th class="border-bottom-0">Department</th>
                                     <th class="border-bottom-0">Designation</th>
@@ -151,8 +151,14 @@
                                                         @*<a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top" title="info"><i class="fe fe-info me-2"></i> Info</a>*@
                                                         @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                         {
-                                                            <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="View/Edit" class="dropdown-item" href="javascript:void(0);">
-                                                                <i class="feather feather-edit me-2"></i>View/Edit
+                                                            <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Record" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Edit Record
+                                                            </a>
+                                                        }
+                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                        {
+                                                            <a onclick="LoadStaffAcademicCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Academic" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Add/Edit Academic
                                                             </a>
                                                         }
                                                         @if (Convert.ToBoolean(ViewBag.IsDelete))
@@ -181,10 +187,10 @@
     <!-- End List Row-->
 
 </div><!-- end app-content-->
-@*</div>*@
 
 @section scripts{
     <script>
+
         $(document).ready(function () {
             var table = $('#hr-table').DataTable({
                 dom: 'Bfrtip',
@@ -286,7 +292,6 @@
 
         function OpenStaffProfile(staffId){
             debugger
-            //var url = "/Staff/StaffProfile/" + staffId;
             var url = "/Staff/StaffProfile?staffId=" + encodeURIComponent(staffId);
             window.location.href = url;
         }
@@ -296,7 +301,12 @@
 			window.location.href = url;
 		}
 
-    </script>
+        function LoadStaffAcademicCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffAcademicList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
 
+    </script>
 }
 

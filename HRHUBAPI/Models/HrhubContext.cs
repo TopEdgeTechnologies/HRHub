@@ -123,11 +123,15 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<Staff> Staff { get; set; }
 
+    public virtual DbSet<StaffAcademic> StaffAcademics { get; set; }
+
     public virtual DbSet<StaffAttachment> StaffAttachments { get; set; }
 
     public virtual DbSet<StaffContract> StaffContracts { get; set; }
 
     public virtual DbSet<StaffCustomField> StaffCustomFields { get; set; }
+
+    public virtual DbSet<StaffDependent> StaffDependents { get; set; }
 
     public virtual DbSet<StaffLeaveAllocation> StaffLeaveAllocations { get; set; }
 
@@ -142,6 +146,8 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<StaffSalaryDetail> StaffSalaryDetails { get; set; }
 
     public virtual DbSet<StaffSalarySetting> StaffSalarySettings { get; set; }
+
+    public virtual DbSet<StaffSkill> StaffSkills { get; set; }
 
     public virtual DbSet<StaffStatus> StaffStatuses { get; set; }
 
@@ -199,6 +205,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.Description).IsUnicode(false);
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -592,6 +599,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.GroupTitle)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.GroupType).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -884,6 +892,7 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.SalaryStatusId).HasColumnName("SalaryStatusID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CssClass).IsUnicode(false);
             entity.Property(e => e.Title).IsUnicode(false);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -996,6 +1005,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.WorkMode).IsUnicode(false);
         });
 
+        modelBuilder.Entity<StaffAcademic>(entity =>
+        {
+            entity.HasKey(e => e.AcademicId);
+
+            entity.ToTable("StaffAcademic", "HR");
+
+            entity.Property(e => e.AcademicId).HasColumnName("AcademicID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FromDate).HasColumnType("date");
+            entity.Property(e => e.InstituteName).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.ToDate).HasColumnType("date");
+            entity.Property(e => e.Type).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<StaffAttachment>(entity =>
         {
             entity.HasKey(e => e.StaffDocumentId);
@@ -1035,6 +1061,23 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.DefaultValue).IsUnicode(false);
             entity.Property(e => e.FieldName).IsUnicode(false);
             entity.Property(e => e.PlaceholderHelpText).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<StaffDependent>(entity =>
+        {
+            entity.HasKey(e => e.DependentId);
+
+            entity.ToTable("StaffDependent", "HR");
+
+            entity.Property(e => e.DependentId).HasColumnName("DependentID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FirstName).IsUnicode(false);
+            entity.Property(e => e.Gender).IsUnicode(false);
+            entity.Property(e => e.LastName).IsUnicode(false);
+            entity.Property(e => e.Occupation).IsUnicode(false);
+            entity.Property(e => e.Relation).IsUnicode(false);
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -1143,6 +1186,19 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.MonthlyDateOfEveryMonth).HasColumnName("Monthly_DateOfEveryMonth");
             entity.Property(e => e.MonthlyIsSpecificDayofEveryMonth).HasColumnName("Monthly_IsSpecificDayofEveryMonth");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
+        });
+
+        modelBuilder.Entity<StaffSkill>(entity =>
+        {
+            entity.HasKey(e => e.SkillId);
+
+            entity.ToTable("StaffSkill", "HR");
+
+            entity.Property(e => e.SkillId).HasColumnName("SkillID");
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+            entity.Property(e => e.Title).IsUnicode(false);
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<StaffStatus>(entity =>
