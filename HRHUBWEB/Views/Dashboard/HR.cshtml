@@ -325,7 +325,7 @@
                 </a>
             </div>
             <div class="card-body pt-0 "> .
-                <div class="loading-state-hr" id="cardEmptyGenderState">
+                <div class="loading-state-hr" id="cardEmptyEventsState">
                     <div class="loading-state-image-hr mb-3">
                         <img src="/assets/images/loading-state/events.png" class="w-100 img-fluid" />
                     </div>
@@ -754,6 +754,9 @@
 
                 if (response != null) {
 
+                    response.length > 0 ? $("#cardEmptyEventsState").hide() : $("#cardEmptyEventsState").show();
+
+                    
                     //var html = ' <ul class="vertical-scroll">';
                     $('#EventBoarddata').html('')
                     var html = '';
