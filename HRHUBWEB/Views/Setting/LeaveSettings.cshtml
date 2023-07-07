@@ -28,13 +28,13 @@
         <div class="col-md-12 col-xl-3">
             <div class="card">
                 <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+                    <a class="nav-link active GereralSetting" data-bs-toggle="pill" href="#tab-1" role="tab">
                         <i class="fa fa-cog me-2 fs-16 "></i>General Settings
                     </a>
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+                    <a class="nav-link LeavePolicy" data-bs-toggle="pill" href="#tab-2" role="tab">
                         <i class="fa fa-edit me-2 fs-16 "></i> Leave Policies
                     </a>
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+                    <a class="nav-link LeaveType" data-bs-toggle="pill" href="#tab-3" role="tab">
                         <i class="fa fa-list-alt me-2 fs-16 "></i> Leave Types
                     </a>
                 </div>
@@ -42,7 +42,7 @@
         </div>
         <div class="col-md-12 col-xl-9">
             <div class="tab-content adminsetting-content" id="setting-tabContent">
-                <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                <div class="tab-pane fade show active LeaveGereralSetting" id="tab-1" role="tabpanel">
                     <div class="card">
                         <div class="card-header  border-0">
                             <h4 class="card-title">General Settings</h4>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                <div class="tab-pane fade LeavePolicy" id="tab-2" role="tabpanel">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Leave Policies</h4>
@@ -255,7 +255,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-3" role="tabpanel">
+                <div class="tab-pane fade LeaveType" id="tab-3" role="tabpanel">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Leave Types</h4>
@@ -394,6 +394,18 @@
 
     <script>
         $(document).ready(function () {
+
+            var currentUrl = window.location.href;
+            var tab = currentUrl.split('=')[1];
+
+            if (tab !== "" && tab !== undefined ){
+               
+                $('a.nav-link').removeClass('active');
+                $('div.tab-pane').removeClass('active show');
+
+                $('.' + tab).addClass('active show');
+
+            }
 
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {

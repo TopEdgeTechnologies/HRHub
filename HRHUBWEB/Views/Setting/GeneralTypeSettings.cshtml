@@ -25,13 +25,13 @@
         <div class="col-md-12 col-xl-3">
             <div class="card">
                 <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+                    <a class="nav-link active OffBoarding" data-bs-toggle="pill" href="#tab-1" role="tab">
                         <i class="fa fa-clock-o me-2 fs-16 "></i>Off Boarding Settings
                     </a>
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+                    <a class="nav-link EmploymentType" data-bs-toggle="pill" href="#tab-2" role="tab">
                         <i class="fa fa-users me-2 fs-16 "></i> Employment Type
                     </a>
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
+                    <a class="nav-link LoanType" data-bs-toggle="pill" href="#tab-3" role="tab">
                         <i class="fa fa-calendar me-2 fs-16 "></i> Loan Type
                     </a>
                 </div>
@@ -40,7 +40,7 @@
         <div class="col-md-12 col-xl-9">
             <input type="hidden" id="CompanyId" value="@ViewBag.CompanyId" />
             <div class="tab-content adminsetting-content" id="setting-tabContent">
-                <div class="tab-pane fade show active" id="tab-1" role="tabpanel">
+                <div class="tab-pane fade show active OffBoarding" id="tab-1" role="tabpanel">
                     <div class="card">
                         <div class="card-header  border-0 justify-content-between align-items-center">
                             <h4 class="card-title">Off Boarding Setting</h4>
@@ -142,7 +142,7 @@
                         </div>*@
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                <div class="tab-pane fade EmploymentType" id="tab-2" role="tabpanel">
                     <div class="card">
                         <div class="card-header  border-0 justify-content-between align-items-center">
                             <h4 class="card-title">Employment Type</h4>
@@ -236,7 +236,7 @@
                         </div>*@
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-3" role="tabpanel">
+                <div class="tab-pane fade LoanType" id="tab-3" role="tabpanel">
 
                     <div class="card">
                         <div class="card-header  border-0 justify-content-between align-items-center">
@@ -353,6 +353,17 @@
 
         $(document).ready(function () {
 
+            var currentUrl = window.location.href;
+            var tab = currentUrl.split('=')[1];
+
+            if (tab !== "" && tab !== undefined ){
+               
+                $('a.nav-link').removeClass('active');
+                $('div.tab-pane').removeClass('active show');
+
+                $('.' + tab).addClass('active show');
+
+            }
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
 
