@@ -3,6 +3,7 @@ using HRHUBWEB.Extensions;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
@@ -39,12 +40,19 @@ namespace HRHUBWEB.Controllers
 		
 		}
 		[HttpPost]
-		public async Task<IActionResult> ForgetPassword(string Email)
+		public async Task<IActionResult> ForgetPassword(PasswordResetLog Obj)
 		{
+			var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+			Obj.RequestFromIp = ipAddress;
 
+			var baseUrl = $"{Request.Scheme}://{Request.Host.Host}:{Request.Host.Port}";
+			Obj.Url = baseUrl;
 
-			var result = await _APIHelper.CallApiAsyncGet<Response>($"api/ResetsPassowrd/ForgetPassword{Email}", HttpMethod.Get);
+			var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ForgetPassword", HttpMethod.Post);
+
+			
 			return Json(result);
+
 
 		}
 
@@ -53,6 +61,7 @@ namespace HRHUBWEB.Controllers
 
 		// check Email Exit or not In User Table
 		[HttpGet]
+	
 		public async Task<ActionResult<JsonObject>> CheckEmail(string Email)
 		{
 			try
@@ -69,10 +78,32 @@ namespace HRHUBWEB.Controllers
 
 		}
 
+		[HttpGet]
+		[AllowAnonymous]
+		[IgnoreAntiforgeryToken]
+		public async Task<IActionResult> NewChangePassword()
+		{
+
+			return View();
+
+		}
+		[HttpPost]
+		public async Task<IActionResult> NewChangePassword(PasswordResetLog Obj)
+		{
+
+			var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+			Obj.UpdatedFromIp = ipAddress;			
+
+			var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ChangePassword", HttpMethod.Post);
+
+
+			return Json(result);
+
+		}
 
 
 
-
+		
 
 
 

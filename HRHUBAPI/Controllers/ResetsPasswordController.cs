@@ -24,19 +24,43 @@ namespace HRHUBAPI.Controllers
 
 		// Send Email on User Reset password
 
-		[HttpGet("ForgetPassword{Email}")]
-		public async Task<ActionResult<bool>> ForgetPassword(string Email)
+		[HttpPost("ForgetPassword")]
+		public async Task<ActionResult<PasswordResetLog>> ForgetPassword(PasswordResetLog obj)
 		{
-			var result = await new User().SendLinkPasswordReset(Email, _context);
+			var result = await new PasswordResetLog().SendLinkPasswordReset(obj, _context);
 			if (result != null)
 				return Ok(new
 				{
 					Success = true,
-					Message = "Email Send Successfully!"
+					Message = "Email Send Successfully! Check your Email"
 				});
 			else
 				return NotFound();
 		}
+
+
+
+
+		// Update or  Reset user password
+
+		[HttpPost("ForgetPassword")]
+		public async Task<ActionResult<PasswordResetLog>> ChangePassword(PasswordResetLog obj)
+		{
+			var result = await new PasswordResetLog().PasswordReset(obj, _context);
+			if (result != null)
+				return Ok(new
+				{
+					Success = true,
+					Message = "Youre Password Change Successfully!"
+				});
+			else
+				return NotFound();
+		}
+
+
+
+
+
 
 		// Check user Email exits or not 
 		[HttpGet("UserCheckData{Email}")]
@@ -60,7 +84,7 @@ namespace HRHUBAPI.Controllers
 				{
 
 					Success = false,
-					Message = "User Email Not Exist!"
+					Message = "User Account Not Exist! Register It"
 
 
 				});
