@@ -24,8 +24,8 @@ namespace HRHUBAPI.Controllers
 
 		// Send Email on User Reset password
 
-		[HttpPost("ForgetPassword")]
-		public async Task<ActionResult<PasswordResetLog>> ForgetPassword(PasswordResetLog obj)
+		[HttpPost("ForgetPasswords")]
+		public async Task<ActionResult<PasswordResetLog>> ForgetPasswords(PasswordResetLog obj)
 		{
 			var result = await new PasswordResetLog().SendLinkPasswordReset(obj, _context);
 			if (result != null)
@@ -43,22 +43,55 @@ namespace HRHUBAPI.Controllers
 
 		// Update or  Reset user password
 
-		[HttpPost("ForgetPassword")]
+		[HttpPost("ChangePassword")]
 		public async Task<ActionResult<PasswordResetLog>> ChangePassword(PasswordResetLog obj)
 		{
 			var result = await new PasswordResetLog().PasswordReset(obj, _context);
-			if (result != null)
+			if (result)
+			{
 				return Ok(new
 				{
 					Success = true,
 					Message = "Youre Password Change Successfully!"
 				});
+			}
 			else
-				return NotFound();
+			{
+				return Ok(new
+				{
+					Success = false,
+					Message = "Fail!"
+				});
+			}
 		}
 
 
+		//Check Expire date time with the help of token
+		[HttpGet("CheckExpiryDate{Token}")]
+		public async Task<ActionResult<PasswordResetLog>> CheckExpiryDate(string Token)
+		{
 
+			var obj = await new PasswordResetLog().CheckEpiryDates(Token, _context);
+
+
+			if (obj !=null)
+			{
+				return Ok(obj);
+			}
+			else
+			{
+
+				return Ok(new
+				{
+
+					Success = false,
+					
+
+
+				});
+			}
+
+		}
 
 
 

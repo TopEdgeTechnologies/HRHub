@@ -78,6 +78,25 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>*@
                         }
+
+                        @if (Model.status != null && Model.status == 4)
+                        {
+
+                            <div id="AlertValidationSession" class="alert alert-success" role="alert">
+                                <button class="btn-close"
+                                    data-bs-dismiss="alert" aria-hidden="true">
+                                    ×
+                                </button><strong>Success! </strong> Your password successfully change .
+                                <a href="javascript:void(0);" class="alert-link"></a>
+                            </div>
+
+
+
+                            @*<div id="AlertValidationSession" class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Login Failed </strong>Please Login Again, Session expired.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>*@
+                        }
                         <div class="pt-4 pb-2 ps-2">
                             <a class="header-brand" href="index.html">
                                 <img src="~/assets/images/brand/logo.png" class="header-brand-img custom-logo" alt="Dayonelogo">
@@ -180,7 +199,7 @@
 
           
 
-            $(".alert").delay(4000).slideUp(200, function () {
+            $(".alert").delay(5000).slideUp(200, function () {
                 $(this).alert('close');
             });
 

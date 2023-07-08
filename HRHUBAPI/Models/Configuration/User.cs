@@ -404,7 +404,6 @@ namespace HRHUBAPI.Models
 			}
 		}
 
-
 		public async Task<bool> CheckExistEmail(string Email, HrhubContext _context)
 		{
 			try

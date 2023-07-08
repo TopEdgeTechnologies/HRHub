@@ -92,7 +92,7 @@ namespace HRHUBAPI.Models
 						string EmailBody = obj.Body;
 
 						EmailBody = EmailBody.Replace("[StaffName]", Getstaff.FirstName);
-						EmailBody = EmailBody.Replace("[ResetPasswordLink]", passwordResetLog.Url + "/ResetPassword/ChangePassword" + objReset.Token); // enter reset password link 
+						EmailBody = EmailBody.Replace("[ResetPasswordLink]", passwordResetLog.Url + "/ResetPassword/NewChangePassword/" + objReset.Token); // enter reset password link 
 
 						//------------------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ namespace HRHUBAPI.Models
 		}
 
 		// Change Password 
-		public async Task<PasswordResetLog> PasswordReset(PasswordResetLog passwordResetLog, HrhubContext _context)
+		public async Task<bool> PasswordReset(PasswordResetLog passwordResetLog, HrhubContext _context)
 		{
 			using (var dbContextTransaction = _context.Database.BeginTransaction())
 			{
@@ -151,34 +151,52 @@ namespace HRHUBAPI.Models
 				try
 				{
 
-					Random random = new Random();
-					string msg = "";
-					var checkUserInfo = await _context.Users.FirstOrDefaultAsync(x => x.UserName == passwordResetLog.Email);
-					if (checkUserInfo != null && checkUserInfo.UserId > 0)
-					{
-
-
-						// Entry Password Reset Log table
-
-						PasswordResetLog objReset = new PasswordResetLog();
-						objReset.UserId = checkUserInfo.UserId;
-						objReset.RequestOn = DateTime.Now;						
-						objReset.ResetStatus = true;						
-						objReset.UpdatedOn = DateTime.Now;
-						objReset.UpdatedFromIp = passwordResetLog.UpdatedFromIp;
 					
-						// Entry Password Reset Log table
+					string msg = "";
 
-						_context.PasswordResetLogs.Add(objReset);
+
+					PasswordResetLog? checkPasswordLog = await _context.PasswordResetLogs.OrderByDescending(x => x.PasswordResetId).FirstOrDefaultAsync(x => x.Token == passwordResetLog.Token);// 
+
+
+
+					if (checkPasswordLog != null && checkPasswordLog.PasswordResetId > 0 && checkPasswordLog.ExpiryTime > DateTime.Now)
+					{
+						// Update User table Password
+
+						checkPasswordLog.UserId = checkPasswordLog.UserId;
+						checkPasswordLog.RequestOn = DateTime.Now;
+						checkPasswordLog.ResetStatus = true;
+						checkPasswordLog.UpdatedOn = DateTime.Now;
+						checkPasswordLog.UpdatedFromIp = passwordResetLog.UpdatedFromIp;
+
 						await _context.SaveChangesAsync();
 
+
+
+						/////////////////////////
+
+						// Entry Password Reset Log table
+						var Obj = await _context.Users.FirstOrDefaultAsync(x => x.UserId == checkPasswordLog.UserId);
+						if (Obj != null && Obj.UserId > 0)
+						{
+
+							Obj.Password = passwordResetLog.Password;
+							Obj.UpdatedOn = DateTime.Now;
+							await _context.SaveChangesAsync();
+						}
+
+
+						await _context.SaveChangesAsync();
+						dbContextTransaction.Commit();
+						return true;
+
+
 					}
+					else {
+						dbContextTransaction.Rollback();
+						return false;
 
-					await _context.SaveChangesAsync();
-					dbContextTransaction.Commit();
-					return passwordResetLog;
-
-
+					}
 
 				}
 				catch (Exception ex)
@@ -193,6 +211,26 @@ namespace HRHUBAPI.Models
 		}
 
 
+		//Get expiry date time through token
+		public async Task<PasswordResetLog> CheckEpiryDates(string Token, HrhubContext _context)
+		{
+			try
+			{
+				var result = await _context.PasswordResetLogs.FirstOrDefaultAsync(x => x.Token == Token);
+				if (result != null)
+				{
+					return result;
+				}
+
+
+				return null;
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
 
 		public async Task<bool> CheckExistEmail(string Email, HrhubContext _context)
 		{

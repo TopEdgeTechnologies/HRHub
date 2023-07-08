@@ -1,9 +1,11 @@
-﻿using HRHUBAPI.Models;
+﻿using Azure.Core;
+using HRHUBAPI.Models;
 using HRHUBWEB.Extensions;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Text.Json.Nodes;
 
 namespace HRHUBWEB.Controllers
@@ -36,6 +38,7 @@ namespace HRHUBWEB.Controllers
 		[IgnoreAntiforgeryToken]
         public async Task<IActionResult> ForgetPassword()
 		{
+
 			return View();
 		
 		}
@@ -48,7 +51,7 @@ namespace HRHUBWEB.Controllers
 			var baseUrl = $"{Request.Scheme}://{Request.Host.Host}:{Request.Host.Port}";
 			Obj.Url = baseUrl;
 
-			var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ForgetPassword", HttpMethod.Post);
+			var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ForgetPasswords", HttpMethod.Post);
 
 			
 			return Json(result);
@@ -81,24 +84,69 @@ namespace HRHUBWEB.Controllers
 		[HttpGet]
 		[AllowAnonymous]
 		[IgnoreAntiforgeryToken]
-		public async Task<IActionResult> NewChangePassword()
+		public async Task<IActionResult> NewChangePassword(string id)
 		{
+			try
+			{
+				string Token =id;
+				/// check expiry validatity 
+				var currentdate = DateTime.Now;
+				var result = await _APIHelper.CallApiAsyncGet<PasswordResetLog>($"api/ResetsPassword/CheckExpiryDate{Token}", HttpMethod.Get);
+				if (result != null && result.ExpiryTime < currentdate)
+				{
+					return NotFound();
+					
+				}
+				else
+				{
+					ViewBag.Token = Token;
+					return View();
+				}
 
-			return View();
+				
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+
+
+			
 
 		}
 		[HttpPost]
 		public async Task<IActionResult> NewChangePassword(PasswordResetLog Obj)
 		{
 
-			var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
-			Obj.UpdatedFromIp = ipAddress;			
 
-			var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ChangePassword", HttpMethod.Post);
+			try
+			{
 
 
-			return Json(result);
 
+				var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+				Obj.UpdatedFromIp = ipAddress;
+				var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/ResetsPassword/ChangePassword", HttpMethod.Post);
+
+				if (result.Success)
+				{
+					//login
+					return Json(result);
+                   // return RedirectToAction("Loginpage", "User", new { id = 4 });
+                }
+				else
+				{
+					return NotFound();
+				}
+				
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
 		}
 
 
