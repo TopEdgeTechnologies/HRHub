@@ -172,10 +172,9 @@ namespace HRHUBAPI.Models
 					OV_DeductionAmount = string.IsNullOrWhiteSpace(row["OV_DeductionAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_DeductionAmount"]),
 					OV_PayableAmount = string.IsNullOrWhiteSpace(row["OV_PayableAmount"].ToString()) ? 0 : Convert.ToDecimal(row["OV_PayableAmount"]),
 					SalaryStatusTitle = string.IsNullOrWhiteSpace(row["SalaryStatusTitle"].ToString()) ? "" : row["SalaryStatusTitle"].ToString(),
+                    SalaryStatusCssClass = string.IsNullOrWhiteSpace(row["SalaryStatusCssClass"].ToString()) ? "" : row["SalaryStatusCssClass"].ToString(),
 
-	
-
-				}).ToList();
+                }).ToList();
                 return resultRows;
 			}
             catch (Exception ex) { throw; }

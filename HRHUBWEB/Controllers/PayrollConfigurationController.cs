@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
 using System.Threading;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HRHUBWEB.Controllers
 {
@@ -183,7 +184,7 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-        #region Staff Salary
+        #region Staff Payroll
 
         [CustomAuthorization]
         public async Task<IActionResult> StaffSalaryMaster()
@@ -374,6 +375,25 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-       
+        #region Staff Payroll History
+
+        [CustomAuthorization]
+        public async Task<IActionResult> PayrollHsitory(int staffId)
+        {
+            var currentDate = DateTime.Now;
+            DateTime dateFrom = new DateTime(currentDate.Year, 1, 1).Date;
+            DateTime dateTo = DateTime.Now;
+
+            if (dateFrom != null && dateTo != null && _user.UserId > 0)
+            {
+                StaffSalary objStaffSalary = new StaffSalary();
+                objStaffSalary.StaffSalaryList = await _APIHelper.CallApiAsyncGet<List<StaffSalary>>($"api/PayrollConfiguration/GetStaffSalaryHistory/{_user.CompanyId}/{dateFrom.ToString("dd-MMM-yyyy")}/{dateTo.ToString("dd-MMM-yyyy")}/{(staffId > 0 ? staffId : _user.StaffId)}", HttpMethod.Get);
+                return View(objStaffSalary);
+            }
+            return null;
+        }
+
+        #endregion
+
     }
 }

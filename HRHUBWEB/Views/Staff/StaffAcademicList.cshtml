@@ -1,131 +1,319 @@
 ﻿@model HRHUBAPI.Models.StaffAcademic
 
-<div class="row">
-    <div class="col-xl-12 col-md-12 col-lg-12">
-        <div class="card-header  border-0">
-            <h4 class="card-title">Employee Academic Details</h4>
-            <div class="page-rightheader ms-md-auto">
-                <div class="align-items-end flex-wrap my-auto right-content breadcrumb-right">
-                    <div class="btn-list">
-                       @* @if (Convert.ToBoolean(ViewBag.IsNew))
-                        {
-                            <a asp-action="GetStaffCreateOrUpdate" asp-controller"Staff" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add New Staff</a>
-                        }*@
-                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="top" title="E-mail"> <i class="feather feather-mail"></i> </button>
-                        <button class="btn btn-light" data-bs-placement="top" data-bs-toggle="tooltip" title="Contact"> <i class="feather feather-phone-call"></i> </button>
-                        <button class="btn btn-primary" data-bs-placement="top" data-bs-toggle="tooltip" title="Info"> <i class="feather feather-info"></i> </button>
-                    </div>
+
+<div class="side-app main-container">
+
+    <div class="row">
+        <div class="col-xl-12 col-md-12 col-lg-12">
+            <div class="tab-menu-heading hremp-tabs p-0 ">
+                <div class="tabs-menu1">
+                    <!-- Tabs -->
+                    <ul class="nav panel-tabs">
+                        <li class="ms-2"><a href="#tab5" class="active" data-bs-toggle="tab">Study Details</a></li>
+                        <li><a href="#tab6" data-bs-toggle="tab">Work Details</a></li>
+                    </ul>
                 </div>
             </div>
-
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="documentTable" class="table table-vcenter text-nowrap table-bordered border-bottom">
-                        <thead>
-                            <tr>
-                                <th>Sr.#</th>
-                                <th>Document Type</th>
-                                <th>Document Title</th>
-                                <th>Institute Name</th>
-                                <th>From Date</th>
-                                <th>To Date</th>
-                                <th>In Process</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody id="TBodyID1">
-                            @{
-                                int i = 0;
-                                int j = 1;
-                                if (Model.StaffAcademicList != null && Model.StaffAcademicList.Count() > 0)
-                                {
-                                    foreach (var item in Model.StaffAcademicList)
-                                    {
-                                        <tr id="@i">
-                                            <td> @j </td>
-                                            <td>
-                                                @{
-                                                    var academicTypeList = ViewData["academicTypeViewData"] as List<SelectListItem>;
-                                                    var defaultOptionText = (item.Type == null || item.Type == "" ? "- Select Type -" : item.Type);
-                                                    var defaultOptionValue = item.Type;
-                                                    var dropdownId = item.Type + @i;
-                                                    var dropdownName = "Type";
-                                                    var dropdownClass = "form-control";
-                                                }
-                                                @Html.DropDownList("SelectedValue", academicTypeList, defaultOptionText, new { id = dropdownId, name = dropdownName, @class = dropdownClass, @value = defaultOptionValue })
-                                            </td>
-
-                                            <td><input type="text" id="Title_@i" name="Title" value="@item.Title" class="form-control" /></td>
-                                            <td><input type="text" id="InstituteName_@i" name="InstituteName" value="@item.InstituteName" class="form-control" /></td>
-                                            <td><input type="text" id="FromDate_@i" name="FromDate" value="@item.FromDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
-                                            <td><input type="text" id="ToDate_@i" name="ToDate" value="@item.ToDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <label class="custom-switch">
-                                                        <input type="checkbox" id="InProcess_@i" name="InProcess" checked="@item.InProcess" class="custom-switch-input">
-                                                        <span class="custom-switch-indicator"></span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button type="button" title="Add" id="detailDocDataAdd_@i" value="+" onclick="AddNewRow(@i)" class="btn btn-info btn-xs btn-circle">
-                                                    <span class="fa fa-plus" aria-hidden="true"></span>
-                                                    <span><strong></strong></span>
-                                                </button>
-                                                <button type="button" title="Remove" id="detailDocDataDelete_@i" value=" - " onclick="DeleteDataRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
-                                                    <span class="fa fa-trash" aria-hidden="true"></span>
-                                                    <span><strong></strong></span>
-                                                </button>
-                                            </td>
+            <div class="panel-body tabs-menu-body hremp-tabs1 p-0">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab5">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="TblStudy" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.#</th>
+                                            <th>Document Title</th>
+                                            <th>Institute Name</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>In Process</th>
+                                            <th></th>
                                         </tr>
-                                        i++;
-                                        j++;
-                                    }
-                                }
-                            }
-                        </tbody>
-                    </table>
+                                    </thead>
+                                    <tbody id="TBodyStudy">
+                                        @{
+                                            int a = 0;
+                                            int b = 1;
+                                            if (Model.StaffAcademicList != null && Model.StaffAcademicList.Where(x => x.Type == "Study").Count() > 0)
+                                            {
+                                                foreach (var item in Model.StaffAcademicList.Where(x => x.Type == "Study"))
+                                                {
+                                                    <tr id="Study_@a">
+                                                        <td> @b </td>
+                                                        <td><input type="text" id="Title_Study_@a" name="Title" value="@item.Title" class="form-control" /></td>
+                                                        <td><input type="text" id="InstituteName_Study_@a" name="InstituteName" value="@item.InstituteName" class="form-control" /></td>
+                                                        @if (@item.FromDate == null)
+                                                        {
+                                                            <td><input type="text" id="FromDate_Study_@a" name="FromDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><input type="text" id="FromDate_Study_@a" name="FromDate" value="@item.FromDate.Value.ToString("dd-MMM-yyyy")" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        @if (@item.ToDate == null)
+                                                        {
+                                                            <td><input type="text" id="ToDate_Study_@a" name="ToDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><input type="text" id="ToDate_Study_@a" name="ToDate" value="@item.ToDate.Value.ToString("dd-MMM-yyyy")" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <label class="custom-switch">
+                                                                    <input type="checkbox" id="InProcess_Study_@a" name="InProcess" checked="@item.InProcess" class="custom-switch-input">
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" title="Add" id="detailDocDataAdd_Study_@a" value="+" onclick="AddStudyNewRow(@a)" class="btn btn-info btn-xs btn-circle">
+                                                                <span class="fa fa-plus" aria-hidden="true"></span>
+                                                                <span><strong></strong></span>
+                                                            </button>
+                                                            <button type="button" title="Remove" id="detailDocDataDelete_Study_@a" value=" - " onclick="DeleteStudyRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                                <span class="fa fa-trash" aria-hidden="true"></span>
+                                                                <span><strong></strong></span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    a++;
+                                                    b++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                int c = 0;
+                                                int d = 1;
+                                                <tr id="Study_@c">
+                                                    <td> @d </td>
+                                                    <td><input type="text" id="Title_Study_@c" name="Title" value="" class="form-control" /></td>
+                                                    <td><input type="text" id="InstituteName_Study_@c" name="InstituteName" value="" class="form-control" /></td>
+                                                    <td><input type="text" id="FromDate_Study_@c" name="FromDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                    <td><input type="text" id="ToDate_Study_@c" name="ToDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <label class="custom-switch">
+                                                                <input type="checkbox" id="InProcess_Study_@c" name="InProcess" class="custom-switch-input">
+                                                                <span class="custom-switch-indicator"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" title="Add" id="detailDocDataAdd_Study_@c" value="+" onclick="AddStudyNewRow(@c)" class="btn btn-info btn-xs btn-circle">
+                                                            <span class="fa fa-plus" aria-hidden="true"></span>
+                                                            <span><strong></strong></span>
+                                                        </button>
+                                                        <button type="button" title="Remove" id="detailDocDataDelete_Study_@c" value=" - " onclick="DeleteStudyRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                            <span class="fa fa-trash" aria-hidden="true"></span>
+                                                            <span><strong></strong></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab6">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="TblWork" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                    <thead>
+                                        <tr>
+                                            <th>Sr.#</th>
+                                            <th>Job Title</th>
+                                            <th>Company Name</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>In Process</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="TBodyWork">
+                                        @{
+                                            int i = 0;
+                                            int j = 1;
+                                            if (Model.StaffAcademicList != null && Model.StaffAcademicList.Where(x => x.Type == "Work").Count() > 0)
+                                            {
+                                                foreach (var item in Model.StaffAcademicList.Where(x => x.Type == "Work"))
+                                                {
+                                                    <tr id="@i">
+                                                        <td> @j </td>
+                                                        <td><input type="text" id="Title_@i" name="Title" value="@item.Title" class="form-control" /></td>
+                                                        <td><input type="text" id="InstituteName_@i" name="InstituteName" value="@item.InstituteName" class="form-control" /></td>
+                                                        @if (@item.FromDate == null)
+                                                        {
+                                                            <td><input type="text" id="FromDate_@i" name="FromDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><input type="text" id="FromDate_@i" name="FromDate" value="@item.FromDate.Value.ToString("dd-MMM-yyyy")" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>                                                            
+                                                        }
+                                                        @if (@item.ToDate == null)
+                                                        {
+                                                            <td><input type="text" id="ToDate_@i" name="ToDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td><input type="text" id="ToDate_@i" name="ToDate" value="@item.ToDate.Value.ToString("dd-MMM-yyyy")" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                        }
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <label class="custom-switch">
+                                                                    <input type="checkbox" id="InProcess_@i" name="InProcess" checked="@item.InProcess" class="custom-switch-input">
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" title="Add" id="detailDocDataAdd_@i" value="+" onclick="AddNewRow(@i)" class="btn btn-info btn-xs btn-circle">
+                                                                <span class="fa fa-plus" aria-hidden="true"></span>
+                                                                <span><strong></strong></span>
+                                                            </button>
+                                                            <button type="button" title="Remove" id="detailDocDataDelete_@i" value=" - " onclick="DeleteDataRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                                <span class="fa fa-trash" aria-hidden="true"></span>
+                                                                <span><strong></strong></span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    i++;
+                                                    j++;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                int k = 0;
+                                                int l = 1;
+                                                <tr id="@k">
+                                                    <td> @l </td>
+                                                    <td><input type="text" id="Title_@k" name="Title" value="" class="form-control" /></td>
+                                                    <td><input type="text" id="InstituteName_@k" name="InstituteName" value="" class="form-control" /></td>
+                                                    <td><input type="text" id="FromDate_@k" name="FromDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                    <td><input type="text" id="ToDate_@k" name="ToDate" value="" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <label class="custom-switch">
+                                                                <input type="checkbox" id="InProcess_@k" name="InProcess" class="custom-switch-input">
+                                                                <span class="custom-switch-indicator"></span>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" title="Add" id="detailDocDataAdd_@k" value="+" onclick="AddNewRow(@k)" class="btn btn-info btn-xs btn-circle">
+                                                            <span class="fa fa-plus" aria-hidden="true"></span>
+                                                            <span><strong></strong></span>
+                                                        </button>
+                                                        <button type="button" title="Remove" id="detailDocDataDelete_@k" value=" - " onclick="DeleteDataRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                            <span class="fa fa-trash" aria-hidden="true"></span>
+                                                            <span><strong></strong></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <input type="button" value="Save" id="btnSaveUpdate" onclick="StaffAcademicInsertUpdate()" class="btn btn-primary" />
+                        <a asp-action="StaffList" asp-controller="Staff" class="btn btn-danger">Cancel</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
+
+
 @section scripts{
     <script>
 
-        function AddNewRow(i) {
+        $(document).ready(function(){
+
+
+        });
+
+        function AddStudyNewRow(i) {
             debugger
-            var rowCount = $('#documentTable tbody tr').length
+            var rowCount = $('#TblStudy tbody tr').length
+            //var lastIndex = rowCount - 1
+            //var title = $('#Title_Study_' + lastIndex).val()
+            //if (title == null || title === ""){
+            //    return
+            //}
+
             var i = rowCount + 1
             
             var newRow = document.createElement("tr");
             // Add the HTML markup for the new row
             newRow.innerHTML = '<td>' + i + '</td>';
-        
-            var cell2 = document.createElement("td");
-            var dropdown = document.createElement("select");
-            dropdown.id = "Type_" + i;
-            dropdown.name = "Type";
-            dropdown.className = "form-control";
 
-            // Create the default option
-            var defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "- Select Type -";
-            dropdown.appendChild(defaultOption);
+            newRow.innerHTML += '<td><input type="text" id="Title_Study_' + i + '" name="Title" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="InstituteName_Study_' + i + '" name="InstituteName" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="FromDate_Study_' + i + '" name="FromDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="ToDate_Study_' + i + '" name="ToDate" class="form-control fc-datepicker" placeholder="DD-MMM-YYYY" /></td>';
+            newRow.innerHTML += '<td>' +
+                '<div class="d-flex align-items-center">' +
+                '<label class="custom-switch">' +
+                '<input type="checkbox" id="InProcess_Study_' + i + '" name="InProcess" class="custom-switch-input">' +
+                '<span class="custom-switch-indicator"></span>' +
+                '</label>' +
+                '</div>' +
+                '</td>';
+            newRow.innerHTML += '<td>' +
+                '<button type="button" title="Add" id="detailDocDataAdd_Study_' + i + '" value="+" onclick="AddStudyNewRow(' + i + ')" class="btn btn-info btn-xs btn-circle">' +
+                '<span class="fa fa-plus" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '<button type="button" title="Remove" id="detailDocDataDelete_Study_' + i + '" value=" - " onclick="DeleteStudyRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">' +
+                '<span class="fa fa-trash" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '</td>';
 
-            // Add options from ViewData
-            var academicTypeList = @Html.Raw(Json.Serialize(ViewData["academicTypeViewData"]));
-            for (var k = 0; k < academicTypeList.length; k++) {
-                var option = document.createElement("option");
-                option.value = academicTypeList[k].value;
-                option.textContent = academicTypeList[k].text;
-                dropdown.appendChild(option);
+            // Add the new row to the table body
+            document.getElementById("TBodyStudy").appendChild(newRow);
+
+            // Initialize the datepickers after adding the new row
+            $('.fc-datepicker').datepicker();
+
+            // Initialize the custom switch after adding the new row
+            $('.custom-switch-input').each(function () {
+                new Switchery(this);
+            });
+        }
+
+        function DeleteStudyRow(button) {
+            debugger
+            // Get the reference to the table row
+            var row = button.parentNode.parentNode
+
+            // Remove the row from the table
+            if (row) {
+                row.parentNode.removeChild(row)
             }
-            cell2.appendChild(dropdown);
-            newRow.appendChild(cell2);
+            
+            var rowCount = $('#TblStudy tbody tr').length
+            if(rowCount < 1){
+                AddStudyNewRow(0)
+            }
+        }
+
+        function AddNewRow(i) {
+            debugger
+            var rowCount = $('#TblWork tbody tr').length
+            var i = rowCount + 1
+            
+            var newRow = document.createElement("tr");
+            // Add the HTML markup for the new row
+            newRow.innerHTML = '<td>' + i + '</td>';
 
             newRow.innerHTML += '<td><input type="text" id="Title_' + i + '" name="Title" class="form-control" /></td>';
             newRow.innerHTML += '<td><input type="text" id="InstituteName_' + i + '" name="InstituteName" class="form-control" /></td>';
@@ -151,7 +339,7 @@
                 '</td>';
 
             // Add the new row to the table body
-            document.getElementById("TBodyID1").appendChild(newRow);
+            document.getElementById("TBodyWork").appendChild(newRow);
 
             // Initialize the datepickers after adding the new row
             $('.fc-datepicker').datepicker();
@@ -163,6 +351,7 @@
         }
 
         function DeleteDataRow(button) {
+            debugger
             // Get the reference to the table row
             var row = button.parentNode.parentNode
 
@@ -170,7 +359,60 @@
             if (row) {
                 row.parentNode.removeChild(row)
             }
+            
+            var rowCount = $('#TblWork tbody tr').length
+            if(rowCount < 1){
+                AddNewRow(0)
+            }
         }
+
+        function StaffAcademicInsertUpdate() {
+            debugger
+            var status = false;
+            var Data = {};
+            console.log(Data);
+            $.ajax({
+                async: false,
+                url: "/Staff/StaffAcademicCreateOrUpdate",
+                type: "POST",
+                data: Data,
+                success: function (data) {
+                    if (data != null && data.success) {
+                        console.log(data);
+                        status = true;
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            });
+            return status;
+        }
+
+        //function StaffAcademicInsertUpdate() {
+        //    var status = false
+        //    debugger
+        //    var Data = { }
+        //    console.log(Data)
+        //    $.ajax({
+        //        async: false,
+        //        url: "/Staff/StaffAcademicCreateOrUpdate",
+        //        type: "POST",
+        //        data: Data,
+        //        success: function (data) {
+        //            if (data != "") {
+        //                console.log(data)
+        //                debugger
+        //                status = data.success
+        //            }
+        //        },
+        //        error: function () 
+        //        {
+        //            status = false
+        //        }
+        //    })
+        //    return status
+        //}
 
     </script>
 }

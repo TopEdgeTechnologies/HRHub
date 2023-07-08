@@ -291,6 +291,26 @@ namespace HRHUBWEB.Controllers
             ViewData["academicTypeViewData"] = items;
         }
 
+        public async Task<IActionResult> StaffAcademicCreateOrUpdate([FromBody] StaffAcademic objStaffAcademic)
+        {
+            objStaffAcademic.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffAcademic, "api/Staffs/PostStaffAcademic", HttpMethod.Post);
+
+            return Json(result);
+        }
+
+        public async Task<IActionResult> AlreadyExists(int StaffId, string Title)
+        {
+            if (StaffId > 0)
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAcademicAlreadyExists/{StaffId}/{Title}", HttpMethod.Get);
+                return Json(result);
+            }
+            return Json(null);
+        }
+
+
         #endregion
 
         #region Staff Profile
