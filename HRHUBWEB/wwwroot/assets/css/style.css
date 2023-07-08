@@ -71686,6 +71686,28 @@ a.text-dark:focus {
 
 .dark-mode .sticky-thead {
     background: #262b5a;
+    color:#fff;
+}
+
+.loading-state-hr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75%;
+}
+
+.loading-state-image-hr {
+    width: 80px;
+    object-fit: cover;
+}
+
+.loading-state-image-hr > img {
+transition: 0.4s;
+}
+
+.loading-state-image-hr > img:hover {
+    transform: scale(1.1);
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -97,8 +97,9 @@ namespace HRHUBWEB.Controllers
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
-            if(Token !=null) {
+			GluserGroup ObjUserGroup = new GluserGroup();
+			ObjUserGroup = await GetUserGroupID(id);
+			if (Token !=null) {
 
                
                 HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/GetUserGroupDetails{id}");
@@ -106,18 +107,19 @@ namespace HRHUBWEB.Controllers
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
-                    ViewBag.ListUserForm = JsonConvert.DeserializeObject<List<GluserGroupDetail>>(result);
+					ObjUserGroup.ListGluserGroupDetail = JsonConvert.DeserializeObject<List<GluserGroupDetail>>(result);
+					
 
-                }
+				}
 
             if (id == 0)
             {
-                 GluserGroup ObjUserGroup = new GluserGroup();
+           
                 return View(ObjUserGroup);
             }
-            GluserGroup ObjUserGroupInfo = await GetUserGroupID(id);
+				
 
-            return View(ObjUserGroupInfo);
+            return View(ObjUserGroup);
             }
             else
             {
