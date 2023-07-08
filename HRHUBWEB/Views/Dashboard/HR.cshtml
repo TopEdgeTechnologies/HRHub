@@ -401,7 +401,7 @@
                     </div>
                     <span class="text-muted loading-state-text fs-18 d-block">No recent activity found</span>
                 </div>
-                <ul id="CardActivity" class="timeline  " >
+                <ul id="CardActivity" class="timeline" >
 
                 </ul>
             </div>
@@ -1340,12 +1340,6 @@
 
 
                     }
-
-
-
-
-
-
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
@@ -1363,6 +1357,10 @@
             var requestData = { staffId:staffId, currentDate: dateValue }
             makeAjaxRequest("/Staff/Staff_Activity", 'GET', requestData, false, function (response) {
                 if (response != null) {
+
+                  response.length>0? $("#cardEmptyActivityState").hide():  $("#cardEmptyActivityState").show();
+
+         
                     debugger
                     var htmlActivity = ''
                     for (var i = 0; i < response.length; i++) {
