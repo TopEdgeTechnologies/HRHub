@@ -276,6 +276,7 @@ namespace HRHUBWEB.Controllers
 
             loadAcademicType();
             objStaffAcademic.StaffAcademicList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffAcademic>>($"api/Staffs/GetStaffAcademicByStaffId/{staffId}", HttpMethod.Get);
+            objStaffAcademic.StaffId = staffId;
             return View(objStaffAcademic);
         }
 
@@ -290,14 +291,18 @@ namespace HRHUBWEB.Controllers
             //ViewBag.academicTypeViewBag = items;
             ViewData["academicTypeViewData"] = items;
         }
-
-        public async Task<IActionResult> StaffAcademicCreateOrUpdate([FromBody] StaffAcademic objStaffAcademic)
+        
+        public async Task<IActionResult> StaffAcademicCreateOrUpdate(IFormCollection MyAttachment, StaffAcademic objStaffAcademic)
         {
             objStaffAcademic.CreatedBy = _user.UserId;
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffAcademic, "api/Staffs/PostStaffAcademic", HttpMethod.Post);
 
-            return Json(result);
+            if(result.Success)
+            {
+                return RedirectToAction("StaffList", new { data = "1"});
+            }
+            return RedirectToAction("StaffAcademicList");
         }
 
         public async Task<IActionResult> AlreadyExists(int StaffId, string Title)

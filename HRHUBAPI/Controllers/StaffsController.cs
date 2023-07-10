@@ -174,20 +174,20 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<StaffAcademic>> PostStaffAcademic(StaffAcademic StaffAcademic)
         {
             var dbResult = await new StaffAcademic().PostStaffAcademic(StaffAcademic, _context);
-            if (dbResult != null && dbResult.TranFlag == 2)
+            if (dbResult != null && dbResult.TranFlag == 1)
             {
                 return Ok(new
                 {
                     success = true,
-                    Message = "Data Updated Successfully"
+                    Message = "Data Inserted Successfully"
                 });
             }
             else
             {
                 return Ok(new
                 {
-                    success = true,
-                    Message = "Data Inserted Successfully"
+                    success = false,
+                    Message = "Data Not Inserted"
                 });
             }
         }
