@@ -74,7 +74,7 @@
                                                     <div class="dropdown-menu dropdown-menu-start" style="">
                                                         @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                         {
-                                                            <a onclick="editrecord(@item.UserId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Reset Password</a>
+                                                            <a onclick="resetPassword(@item.UserId)" href="#" class="dropdown-item"><i class="fe fe-edit me-2"></i> Reset Password</a>
 
                                                         }
 
@@ -137,41 +137,40 @@
         });
 
 
+       
 
 
 
 
-
-        function editrecord(id) {
-            addnewAnnouncement();
-            var Data = { id: id }
-            console.log(Data)
+        function resetPassword(UserId) {
+            debugger
+            var Data = { UserId: UserId }
+           
             $.ajax({
                 async: false,
-                url: "/Configuration/GetAnnouncementById",
-                type: "GET",
+                url: "/ResetPassword/ForgetPassword",
+                type: "Post",
                 data: Data,
                 success: function (data) {
                     if (data != "") {
                         debugger
 
-                        $("#AnnouncementId").val(data.announcementId);
-                        $("#Title").val(data.title);
+                        if (data.success == true) {
 
-                        var dateTimeString = data.announcementDate;
-                        var Date = dateTimeString.split("T")[0];
-
-                        var date = $("#AnnouncementDate").val(Date);
-                        //alert(date)
-                        $('#Description').summernote('code', data.description);
-
-                        $("#Status").prop('checked', data.status);
-
-                        $("#addAnnouncementmodal").modal('show');
+                            notif({
+                                msg: `<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> ${data.message}`,
+                                type: "success"
+                            });
+                        
+                    }
+                    
                     }
                 },
                 error: function () {
-                    status = false;
+                        $.growl.warning({
+                            message: "Something Went Wrong "
+                        });
+
 
                 }
             })

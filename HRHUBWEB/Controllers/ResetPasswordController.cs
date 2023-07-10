@@ -4,6 +4,7 @@ using HRHUBWEB.Extensions;
 using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Common;
 using System.Net;
 using System.Reflection.Metadata;
 using System.Text.Json.Nodes;
@@ -45,7 +46,26 @@ namespace HRHUBWEB.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ForgetPassword(PasswordResetLog Obj)
 		{
-			var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+
+
+            // Send password reset email from Admin sides
+			if(Obj.UserId > 0)
+			{
+                var GetUser = await _APIHelper.CallApiAsyncGet<User>($"api/User/GetUserViseId{_user.CompanyId}/{Obj.UserId}", HttpMethod.Get);
+                if (GetUser != null)
+                {
+					Obj.Email = GetUser.UserName;
+                }
+            }
+            
+
+            /////
+
+
+
+
+
+            var ipAddress = HttpContext.Connection.RemoteIpAddress.ToString();
 			Obj.RequestFromIp = ipAddress;
 
 			var baseUrl = $"{Request.Scheme}://{Request.Host.Host}:{Request.Host.Port}";

@@ -166,8 +166,6 @@ namespace HRHUBAPI.Models
             }
         }
 
-
-
 		public async Task<bool> UserLogOutHistory(int userID, HrhubContext _context)
 		{
 			try
@@ -292,6 +290,26 @@ namespace HRHUBAPI.Models
 			}
 			catch { throw; }
 		}
+
+
+        // Get single record of User by company ID and UserId
+        public async Task<User> GetUserIdVise(int CompanyId,int UserId ,HrhubContext hrhubContext)
+        {
+            try
+            {
+                var dbResult = await hrhubContext.Users.FirstOrDefaultAsync(x => x.CompanyId == CompanyId && x.UserId==UserId);
+                if (dbResult != null)
+                {
+                    return dbResult;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+
 
 
         #region System User

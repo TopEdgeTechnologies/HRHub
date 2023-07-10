@@ -246,6 +246,19 @@ namespace SchoolManagementSystem.API.Controllers
 			return NotFound();
 		}
 
+        // Get single record of User by company ID and User Id 
+
+        [HttpGet("GetUserViseId{CompanyId}/{UserId}")]
+        public async Task<ActionResult<User>> GetUserViseId(int CompanyId, int UserId)
+        {
+            var dbResult = await new User().GetUserIdVise(CompanyId,UserId, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+
 
 
 

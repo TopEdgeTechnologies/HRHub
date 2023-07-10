@@ -338,42 +338,6 @@ namespace HRHUBWEB.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-		////update Candidate notification status
-		//[HttpPost]
-		//public async Task<IActionResult> UpdateCandidatenotificationStatus(int id, bool status)
-		//{
-
-		//    CandidateEmailNotificationSetting Obj = new CandidateEmailNotificationSetting();
-		//    Obj.CandidateNotificationId = id;
-		//    Obj.Status = status;
-		//    Obj.UpdatedBy = _user.UserId;
-
-		//    var result = await _APIHelper.CallApiAsyncPost<Response>(Obj, "api/Setting/UpdateCandidateEmailNotification", HttpMethod.Post);
-
-		//    return Json(result);
-
-		//}
-
-
-
-
-
-
-
-
-
 		#endregion
 
 	}
