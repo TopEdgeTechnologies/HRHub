@@ -273,8 +273,6 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> StaffAcademicList(int staffId = 0)
         {
             StaffAcademic objStaffAcademic = new StaffAcademic();
-
-            loadAcademicType();
             objStaffAcademic.StaffAcademicList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffAcademic>>($"api/Staffs/GetStaffAcademicByStaffId/{staffId}", HttpMethod.Get);
             objStaffAcademic.StaffId = staffId;
             return View(objStaffAcademic);
@@ -305,11 +303,48 @@ namespace HRHUBWEB.Controllers
             return RedirectToAction("StaffAcademicList");
         }
 
-        public async Task<IActionResult> AlreadyExists(int StaffId, string Title)
+        public async Task<IActionResult> StaffAcademicAlreadyExists(int StaffId, string Title)
         {
             if (StaffId > 0)
             {
                 var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffAcademicAlreadyExists/{StaffId}/{Title}", HttpMethod.Get);
+                return Json(result);
+            }
+            return Json(null);
+        }
+
+
+        #endregion
+
+        #region Staff Dependent
+
+        public async Task<IActionResult> StaffDependentList(int staffId = 0)
+        {
+            StaffDependent objStaffDependent = new StaffDependent();
+
+            objStaffDependent.StaffDependentList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffDependent>>($"api/Staffs/GetStaffDependentByStaffId/{staffId}", HttpMethod.Get);
+            objStaffDependent.StaffId = staffId;
+            return View(objStaffDependent);
+        }    
+
+        public async Task<IActionResult> StaffDependentCreateOrUpdate(IFormCollection MyAttachment, StaffDependent objStaffDependent)
+        {
+            objStaffDependent.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffDependent, "api/Staffs/PostStaffDependent", HttpMethod.Post);
+
+            if (result.Success)
+            {
+                return RedirectToAction("StaffList", new { data = "1" });
+            }
+            return RedirectToAction("StaffDependentList");
+        }
+
+        public async Task<IActionResult> StaffDependentAlreadyExists(int StaffId, string Title)
+        {
+            if (StaffId > 0)
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffDependentAlreadyExists/{StaffId}/{Title}", HttpMethod.Get);
                 return Json(result);
             }
             return Json(null);

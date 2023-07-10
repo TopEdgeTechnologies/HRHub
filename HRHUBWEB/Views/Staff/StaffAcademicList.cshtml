@@ -168,7 +168,7 @@
                                                                                     }
                                                                                 }
                                                                                 <input type="hidden" id="H_InProcess_Work_@a" name="WorkInProcessList" value="@inProcess">
-                                                                                <input type="checkbox" id="InProcess_@i" checked="@item.InProcess" class="custom-switch-input">
+                                                                                <input type="checkbox" id="InProcess_@i" checked="@item.InProcess" onchange="WorkSetValues(@a)" class="custom-switch-input">
                                                                                 <span class="custom-switch-indicator"></span>
                                                                             </label>
                                                                         </div>
@@ -253,7 +253,7 @@
             newRow.innerHTML += '<td> <input type="hidden" id="H_InProcess_Study_' + i + '" name="StudyInProcessList" value="0" />' +
                 '<div class="d-flex align-items-center">' +
                 '<label class="custom-switch">' +
-                '<input type="checkbox" id="InProcess_Study_' + i + '" class="custom-switch-input">' +
+                '<input type="checkbox" id="InProcess_Study_' + i + '" onchange="StudySetValues(' + i + ')" class="custom-switch-input">' +
                 '<span class="custom-switch-indicator"></span>' +
                 '</label>' +
                 '</div>' +
@@ -313,7 +313,7 @@
             newRow.innerHTML += '<td> <input type="hidden" id="H_InProcess_Work_' + i + '" name="WorkInProcessList" value="0" />' +
                 '<div class="d-flex align-items-center">' +
                 '<label class="custom-switch">' +
-                '<input type="checkbox" id="InProcess_' + i + '" class="custom-switch-input">' +
+                '<input type="checkbox" id="InProcess_' + i + '" onchange="WorkSetValues(' + i + ')" class="custom-switch-input">' +
                 '<span class="custom-switch-indicator"></span>' +
                 '</label>' +
                 '</div>' +
@@ -366,6 +366,18 @@
             }
             else{
                 $('#H_InProcess_Study_' + a).val(0)
+            }
+        }
+
+        function WorkSetValues(a) {
+            debugger
+            var checkbox = document.getElementById('InProcess_Work_' + a);
+
+            if (checkbox.checked) {
+                $('#H_InProcess_Work_' + a).val(1)
+            }
+            else {
+                $('#H_InProcess_Work_' + a).val(0)
             }
         }
 

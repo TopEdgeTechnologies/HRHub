@@ -1,0 +1,276 @@
+﻿@model HRHUBAPI.Models.StaffDependent
+
+
+<div class="side-app main-container">
+    @using (Html.BeginForm("StaffDependentCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" id="StaffId" name="StaffId" value="@Model.StaffId" />
+        <div class="col-md-12 col-lg-8 col-xl-12">
+            <div class="card">
+                <div class="card-header d-flex mb-4 justify-content-between align-items-center border-bottom-0">
+                    <h4 class="card-title">Dependent Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="tab-menu-heading table_tabs mt-2 p-0 ">
+                        <div class="tabs-menu1">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li><a href="#tab1" data-bs-toggle="tab" class="active"> <i class="fa fa-tasks me-2" aria-hidden="true"></i>Male Dependent</a></li>
+                                <li><a href="#tab2" data-bs-toggle="tab"><i class="fa fa-plus-square me-2"></i>Female Dependent</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <div class="table-wrapper" style="display:block; width:100%; height:390px;">
+                                            <table id="TblMale" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                                <thead class="sticky-thead">
+                                                    <tr>
+                                                        <th>Sr.#</th>
+                                                        <th>Relation</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Occupation</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TBodyMale">
+                                                    @{
+                                                        int a = 0;
+                                                        int b = 1;
+                                                        if (Model.StaffDependentList != null && Model.StaffDependentList.Where(x => x.Gender == "Male").Count() > 0)
+                                                        {
+                                                            foreach (var item in Model.StaffDependentList.Where(x => x.Gender == "Male"))
+                                                            {
+                                                                <tr id="Male_@a">
+                                                                    <td> @b </td>
+                                                                    <td><input type="text" id="Relation_Male_@a" name="RelationMaleList" value="@item.Relation" class="form-control" /></td>
+                                                                    <td><input type="text" id="FirstName_Male_@a" name="FirstNameMaleList" value="@item.FirstName" class="form-control" /></td>
+                                                                    <td><input type="text" id="LastName_Male_@a" name="LastNameMaleList" value="@item.LastName" class="form-control" /></td>
+                                                                    <td><input type="text" id="Occupation_Male_@a" name="OccupationMaleList" value="@item.Occupation" class="form-control" /></td>
+                                                                    <td>
+                                                                        <button type="button" title="Add" id="detailDocDataAdd_Male_@a" value="+" onclick="AddMaleNewRow(@a)" class="btn btn-info btn-xs btn-circle">
+                                                                            <span class="fa fa-plus" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                        <button type="button" title="Remove" id="detailDocDataDelete_Male_@a" value=" - " onclick="DeleteMaleRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                                            <span class="fa fa-trash" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                a++;
+                                                                b++;
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tab2">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <div class="table-wrapper" style="display:block; width:100%; height:390px;">
+                                            <table id="TblFemale" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                                <thead class="sticky-thead">
+                                                    <tr>
+                                                        <th>Sr.#</th>
+                                                        <th>Relation</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Occupation</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TBodyFemale">
+                                                    @{
+                                                        int i = 0;
+                                                        int j = 1;
+                                                        if (Model.StaffDependentList != null && Model.StaffDependentList.Where(x => x.Gender == "Female").Count() > 0)
+                                                        {
+                                                            foreach (var item in Model.StaffDependentList.Where(x => x.Gender == "Female"))
+                                                            {
+                                                                <tr id="@i">
+                                                                    <td> @j </td>
+                                                                    <td><input type="text" id="Relation_Female_@i" name="RelationFemaleList" value="@item.Relation" class="form-control" /></td>
+                                                                    <td><input type="text" id="FirstName_Female_@i" name="FirstNameFemaleList" value="@item.FirstName" class="form-control" /></td>
+                                                                    <td><input type="text" id="LastName_Female_@i" name="LastNameFemaleList" value="@item.LastName" class="form-control" /></td>
+                                                                    <td><input type="text" id="Occupation_Female_@i" name="OccupationFemaleList" value="@item.Occupation" class="form-control" /></td>
+                                                                    <td>
+                                                                        <button type="button" title="Add" id="detailDocDataAdd_@i" value="+" onclick="AddNewRow(@i)" class="btn btn-info btn-xs btn-circle">
+                                                                            <span class="fa fa-plus" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                        <button type="button" title="Remove" id="detailDocDataDelete_@i" value=" - " onclick="DeleteDataRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                                            <span class="fa fa-trash" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                i++;
+                                                                j++;
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <input type="button" value="Save" id="btnSaveUpdate" onclick='$("#myform").submit()' class="btn btn-primary" />
+                    <a asp-action="StaffList" asp-controller="Staff" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            debugger
+            var rowCount_Male = $('#TblMale tbody tr').length
+            if (rowCount_Male == 0) {
+                AddMaleNewRow(0)
+            }
+            debugger
+            var rowCount_Female = $('#TblFemale tbody tr').length
+            if (rowCount_Female == 0) {
+                AddNewRow(0)
+            }
+
+        });
+
+        function isNullOrWhiteSpace(str) {
+            return !str || str.trim() === '';
+        }
+
+        function AddMaleNewRow(i) {
+            debugger
+            var rowCount = $('#TblMale tbody tr').length
+            var i = rowCount + 1
+
+            //var lastIndex = rowCount - 1
+            //var title = ""
+            //title = ($('#Title_Male_' + lastIndex).val() || $('#Title_Male_' + lastIndex).text())
+
+            //if (isNullOrWhiteSpace(title.trim())) {
+            //    return
+            //}
+
+            var newRow = document.createElement("tr");
+            // Add the HTML markup for the new row
+            newRow.innerHTML = '<td>' + i + '</td>';
+
+            newRow.innerHTML += '<td><input type="text" id="Relation_Male_' + i + '" name="RelationMaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="FirstName_Male_' + i + '" name="FirstNameMaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="LastName_Male_' + i + '" name="LastNameMaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="Occupation_Male_' + i + '" name="OccupationMaleList" class="form-control" /></td>';
+
+            newRow.innerHTML += '<td>' +
+                '<button type="button" title="Add" id="detailDocDataAdd_Male_' + i + '" value="+" onclick="AddMaleNewRow(' + i + ')" class="btn btn-info btn-xs btn-circle">' +
+                '<span class="fa fa-plus" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '<button type="button" title="Remove" id="detailDocDataDelete_Male_' + i + '" value=" - " onclick="DeleteMaleRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">' +
+                '<span class="fa fa-trash" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '</td>';
+
+            // Add the new row to the table body
+            document.getElementById("TBodyMale").appendChild(newRow);
+
+            // Initialize the datepickers after adding the new row
+            $('.fc-datepicker').datepicker();
+
+            // Initialize the custom switch after adding the new row
+            //$('.custom-switch-input').each(function () {
+            //    new Switchery(this);
+            //});
+        }
+
+        function DeleteMaleRow(button) {
+            debugger
+            // Get the reference to the table row
+            var row = button.parentNode.parentNode
+
+            // Remove the row from the table
+            if (row) {
+                row.parentNode.removeChild(row)
+            }
+
+            var rowCount = $('#TblMale tbody tr').length
+            if (rowCount < 1) {
+                AddMaleNewRow(0)
+            }
+        }
+
+        function AddNewRow(i) {
+            debugger
+            var rowCount = $('#TblFemale tbody tr').length
+            var i = rowCount + 1
+
+            var newRow = document.createElement("tr");
+            // Add the HTML markup for the new row
+            newRow.innerHTML = '<td>' + i + '</td>';
+
+            newRow.innerHTML += '<td><input type="text" id="Relation_Female_' + i + '" name="RelationFemaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="FirstName_Female_' + i + '" name="FirstNameFemaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="LastName_Female_' + i + '" name="LastNameFemaleList" class="form-control" /></td>';
+            newRow.innerHTML += '<td><input type="text" id="Occupation_Female_' + i + '" name="OccupationFemaleList" class="form-control" /></td>';
+
+            newRow.innerHTML += '<td>' +
+                '<button type="button" title="Add" id="detailDocDataAdd_' + i + '" value="+" onclick="AddNewRow(' + i + ')" class="btn btn-info btn-xs btn-circle">' +
+                '<span class="fa fa-plus" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '<button type="button" title="Remove" id="detailDocDataDelete_' + i + '" value=" - " onclick="DeleteDataRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">' +
+                '<span class="fa fa-trash" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '</td>';
+
+            // Add the new row to the table body
+            document.getElementById("TBodyFemale").appendChild(newRow);
+
+            // Initialize the datepickers after adding the new row
+            $('.fc-datepicker').datepicker();
+
+            // Initialize the custom switch after adding the new row
+            //$('.custom-switch-input').each(function () {
+            //    new Switchery(this);
+            //});
+        }
+
+        function DeleteDataRow(button) {
+            debugger
+            // Get the reference to the table row
+            var row = button.parentNode.parentNode
+
+            // Remove the row from the table
+            if (row) {
+                row.parentNode.removeChild(row)
+            }
+
+            var rowCount = $('#TblFemale tbody tr').length
+            if (rowCount < 1) {
+                AddNewRow(0)
+            }
+        }
+
+    </script>
+}

@@ -154,13 +154,14 @@
                                                             <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Record" class="dropdown-item" href="javascript:void(0);">
                                                                 <i class="feather feather-edit me-2"></i>Edit Record
                                                             </a>
-                                                        }
-                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                        {
                                                             <a onclick="LoadStaffAcademicCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Academic" class="dropdown-item" href="javascript:void(0);">
                                                                 <i class="feather feather-edit me-2"></i>Add/Edit Academic
                                                             </a>
+                                                            <a onclick="LoadStaffDependantCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Dependant" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Add/Edit Dependant
+                                                            </a>
                                                         }
+                                                        
                                                         @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                         {
                                                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" class="dropdown-item" href="javascript:void(0);">
@@ -335,6 +336,12 @@
             window.location.href = url;
         }
 
+        function LoadStaffDependantCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffDependentList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
+        
     </script>
 }
 
