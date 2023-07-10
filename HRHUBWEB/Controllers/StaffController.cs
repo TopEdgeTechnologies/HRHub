@@ -353,6 +353,43 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
+        #region Staff Skill
+
+        public async Task<IActionResult> StaffSkillList(int staffId = 0)
+        {
+            StaffSkill objStaffSkill = new StaffSkill();
+
+            objStaffSkill.StaffSkillList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSkill>>($"api/Staffs/GetStaffSkillByStaffId/{staffId}", HttpMethod.Get);
+            objStaffSkill.StaffId = staffId;
+            return View(objStaffSkill);
+        }
+
+        public async Task<IActionResult> StaffSkillCreateOrUpdate(IFormCollection MyAttachment, StaffSkill objStaffSkill)
+        {
+            objStaffSkill.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(objStaffSkill, "api/Staffs/PostStaffSkill", HttpMethod.Post);
+
+            if (result.Success)
+            {
+                return RedirectToAction("StaffList", new { data = "1" });
+            }
+            return RedirectToAction("StaffSkillList");
+        }
+
+        public async Task<IActionResult> StaffSkillAlreadyExists(int StaffId, string Title)
+        {
+            if (StaffId > 0)
+            {
+                var result = await _APIHelper.CallApiAsyncGet<Response>($"api/Staffs/StaffSkillAlreadyExists/{StaffId}/{Title}", HttpMethod.Get);
+                return Json(result);
+            }
+            return Json(null);
+        }
+
+
+        #endregion
+
         #region Staff Profile
 
         public async Task<IActionResult> StaffProfile(int staffId = 0)

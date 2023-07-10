@@ -11,6 +11,9 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<StaffSkill>? StaffSkillList { get; set; }
 
+        [NotMapped]
+        public IEnumerable<string>? SkillTitleList { get; set; }
+
         public async Task<List<StaffSkill>> GetStaffSkill(HrhubContext hrhubContext)
         {
             try
@@ -37,14 +40,15 @@ namespace HRHUBAPI.Models
             catch (Exception ex) { throw; }
         }
 
-        public async Task<StaffSkill> GetStaffSkillByStaffId(int StaffId, HrhubContext hrhubContext)
+        public async Task<List<StaffSkill>> GetStaffSkillByStaffId(int StaffId, HrhubContext hrhubContext)
         {
             try
             {
-                var dbResult = await hrhubContext.StaffSkills.FirstOrDefaultAsync(x => x.StaffId == StaffId);
-                if (dbResult != null)
+                List<StaffSkill> ListStaffSkill = new List<StaffSkill>();
+                ListStaffSkill = await hrhubContext.StaffSkills.Where(x => x.StaffId == StaffId).ToListAsync();
+                if (ListStaffSkill != null)
                 {
-                    return dbResult;
+                    return ListStaffSkill;
                 }
                 else
                 {
@@ -60,30 +64,42 @@ namespace HRHUBAPI.Models
             {
                 try
                 {
-                    var dbResult = await hrhubContext.StaffSkills.FirstOrDefaultAsync(x => x.SkillId == objStaffSkill.SkillId);
-                    if (dbResult != null && objStaffSkill.SkillId > 0)
+                    var result = hrhubContext.StaffSkills.Where(x => x.StaffId == objStaffSkill.StaffId).ToList();
+                    if (result != null && result.Count > 0)
                     {
-                        dbResult.SkillId = objStaffSkill.SkillId;
-                        dbResult.StaffId = objStaffSkill.StaffId;
-                        dbResult.Title = objStaffSkill.Title;
-                        dbResult.UpdatedBy = objStaffSkill.UpdatedBy;
-                        dbResult.UpdatedOn = DateTime.Now;
-
+                        hrhubContext.RemoveRange(result);
                         await hrhubContext.SaveChangesAsync();
-                        dbResult.TranFlag = 2;
-                        dbContextTransaction.Commit();
-                        return dbResult;
                     }
-                    else
-                    {
-                        objStaffSkill.CreatedOn = DateTime.Now;
 
-                        hrhubContext.Add(objStaffSkill);
+                    List<StaffSkill> ListStaffSkill = new List<StaffSkill>();
+
+                    int i = 0;
+                    if (objStaffSkill.SkillTitleList != null)
+                    {
+                        foreach (var item in objStaffSkill.SkillTitleList)
+                        {
+                            if (objStaffSkill.SkillTitleList.ToArray()[i] != null)
+                            {
+                                StaffSkill obj = new StaffSkill();
+                                obj.StaffId = objStaffSkill.StaffId;
+                                obj.Title = objStaffSkill.SkillTitleList.ToArray()[i];
+                                obj.CreatedBy = objStaffSkill.CreatedBy;
+                                obj.CreatedOn = DateTime.Now;
+
+                                ListStaffSkill.Add(obj);
+                            }
+                            i++;
+                        }
+                    }
+
+                    if (ListStaffSkill.Count > 0)
+                    {
+                        await hrhubContext.AddRangeAsync(ListStaffSkill);
                         await hrhubContext.SaveChangesAsync();
                         objStaffSkill.TranFlag = 1;
-                        dbContextTransaction.Commit();
-                        return objStaffSkill;
                     }
+                    dbContextTransaction.Commit();
+                    return objStaffSkill;
                 }
                 catch (Exception ex) { dbContextTransaction.Rollback(); throw; }
             }

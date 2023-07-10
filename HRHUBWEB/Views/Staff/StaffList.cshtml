@@ -160,6 +160,9 @@
                                                             <a onclick="LoadStaffDependantCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Dependant" class="dropdown-item" href="javascript:void(0);">
                                                                 <i class="feather feather-edit me-2"></i>Add/Edit Dependant
                                                             </a>
+                                                            <a onclick="LoadStaffSkillCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Skill" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="feather feather-edit me-2"></i>Add/Edit Skill
+                                                            </a>
                                                         }
                                                         
                                                         @if (Convert.ToBoolean(ViewBag.IsDelete))
@@ -341,7 +344,13 @@
             var url = "/Staff/StaffDependentList?staffId=" + encodeURIComponent(staffId);
             window.location.href = url;
         }
-        
+
+        function LoadStaffSkillCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffSkillList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
+
     </script>
 }
 

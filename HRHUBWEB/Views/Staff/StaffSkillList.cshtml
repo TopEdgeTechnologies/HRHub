@@ -1,0 +1,156 @@
+﻿@model HRHUBAPI.Models.StaffSkill
+
+
+<div class="side-app main-container">
+    @using (Html.BeginForm("StaffSkillCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" id="StaffId" name="StaffId" value="@Model.StaffId" />
+        <div class="col-md-12 col-lg-8 col-xl-12">
+            <div class="card">
+                <div class="card-header d-flex mb-4 justify-content-between align-items-center border-bottom-0">
+                    <h4 class="card-title">Skill Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="tab-menu-heading table_tabs mt-2 p-0 ">
+                        <div class="tabs-menu1">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li><a href="#tab1" data-bs-toggle="tab" class="active"> <i class="fa fa-tasks me-2" aria-hidden="true"></i>Employee Skill</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab1">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <div class="table-wrapper" style="display:block; width:100%; height:390px;">
+                                            <table id="TblSkill" class="table table-vcenter text-nowrap table-bordered border-bottom">
+                                                <thead class="sticky-thead">
+                                                    <tr>
+                                                        <th>Sr.#</th>
+                                                        <th>Skill Title</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TBodySkill">
+                                                    @{
+                                                        int a = 0;
+                                                        int b = 1;
+                                                        if (Model.StaffSkillList != null && Model.StaffSkillList.Count() > 0)
+                                                        {
+                                                            foreach (var item in Model.StaffSkillList)
+                                                            {
+                                                                <tr id="Skill_@a">
+                                                                    <td> @b </td>
+                                                                    <td><input type="text" id="SkillTitle_@a" name="SkillTitleList" value="@item.Title" class="form-control" /></td>
+                                                                    <td>
+                                                                        <button type="button" title="Add" id="detailDocDataAdd_Skill_@a" value="+" onclick="AddSkillNewRow(@a)" class="btn btn-info btn-xs btn-circle">
+                                                                            <span class="fa fa-plus" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                        <button type="button" title="Remove" id="detailDocDataDelete_Skill_@a" value=" - " onclick="DeleteSkillRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">
+                                                                            <span class="fa fa-trash" aria-hidden="true"></span>
+                                                                            <span><strong></strong></span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                a++;
+                                                                b++;
+                                                            }
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <input type="button" value="Save" id="btnSaveUpdate" onclick='$("#myform").submit()' class="btn btn-primary" />
+                    <a asp-action="StaffList" asp-controller="Staff" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            debugger
+            var rowCount_Skill = $('#TblSkill tbody tr').length
+            if (rowCount_Skill == 0) {
+                AddSkillNewRow(0)
+            }
+           
+        });
+
+        function isNullOrWhiteSpace(str) {
+            return !str || str.trim() === '';
+        }
+
+        function AddSkillNewRow(i) {
+            debugger
+            var rowCount = $('#TblSkill tbody tr').length
+            var i = rowCount + 1
+
+            //var lastIndex = rowCount - 1
+            //var title = ""
+            //title = ($('#Title_Skill_' + lastIndex).val() || $('#Title_Skill_' + lastIndex).text())
+
+            //if (isNullOrWhiteSpace(title.trim())) {
+            //    return
+            //}
+
+            var newRow = document.createElement("tr");
+            // Add the HTML markup for the new row
+            newRow.innerHTML = '<td>' + i + '</td>';
+            newRow.innerHTML += '<td><input type="text" id="SkillTitle_' + i + '" name="SkillTitleList" class="form-control" /></td>';
+            
+            newRow.innerHTML += '<td>' +
+                '<button type="button" title="Add" id="detailDocDataAdd_Skill_' + i + '" value="+" onclick="AddSkillNewRow(' + i + ')" class="btn btn-info btn-xs btn-circle">' +
+                '<span class="fa fa-plus" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '<button type="button" title="Remove" id="detailDocDataDelete_Skill_' + i + '" value=" - " onclick="DeleteSkillRow(this)" class="btn btn-danger btn-xs btn-circle userDellbtn">' +
+                '<span class="fa fa-trash" aria-hidden="true"></span>' +
+                '<span><strong></strong></span>' +
+                '</button>' +
+                '</td>';
+
+            // Add the new row to the table body
+            document.getElementById("TBodySkill").appendChild(newRow);
+
+            // Initialize the datepickers after adding the new row
+            $('.fc-datepicker').datepicker();
+
+            // Initialize the custom switch after adding the new row
+            //$('.custom-switch-input').each(function () {
+            //    new Switchery(this);
+            //});
+        }
+
+        function DeleteSkillRow(button) {
+            debugger
+            // Get the reference to the table row
+            var row = button.parentNode.parentNode
+
+            // Remove the row from the table
+            if (row) {
+                row.parentNode.removeChild(row)
+            }
+
+            var rowCount = $('#TblSkill tbody tr').length
+            if (rowCount < 1) {
+                AddSkillNewRow(0)
+            }
+        }
+
+    </script>
+}

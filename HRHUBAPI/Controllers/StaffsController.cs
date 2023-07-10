@@ -327,7 +327,7 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("GetStaffSkillByStaffId/{StaffId}")]
-        public async Task<ActionResult<StaffSkill>> GetStaffSkillByStaffId(int StaffId)
+        public async Task<ActionResult<List<StaffSkill>>> GetStaffSkillByStaffId(int StaffId)
         {
             return await new StaffSkill().GetStaffSkillByStaffId(StaffId, _context);
         }
