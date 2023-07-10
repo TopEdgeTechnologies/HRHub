@@ -464,19 +464,22 @@ namespace HRHUBAPI.Models
                 List<StaffSalaryComponent> ListStaffSalaryComponents = new List<StaffSalaryComponent>();
 
                 int i = 0;
-                foreach (var item in objStaff.ListComponentAmountEarning)
-                {
-                    if (item != null && item > 0)
+                if(objStaff.ListComponentAmountEarning != null) 
+                { 
+                    foreach (var item in objStaff.ListComponentAmountEarning)
                     {
-                        StaffSalaryComponent staffSalaryComponent = new StaffSalaryComponent();
-                        staffSalaryComponent.StaffId = objStaff.StaffId;
-                        staffSalaryComponent.ComponentId = objStaff.ListComponentId.ToArray()[i];
-                        staffSalaryComponent.ComponentAmount = item;
-                        staffSalaryComponent.PercentageValue = objStaff.ListComponentPercentageEarning.ToArray()[i];
+                        if (item != null && item > 0)
+                        {
+                            StaffSalaryComponent staffSalaryComponent = new StaffSalaryComponent();
+                            staffSalaryComponent.StaffId = objStaff.StaffId;
+                            staffSalaryComponent.ComponentId = objStaff.ListComponentId.ToArray()[i];
+                            staffSalaryComponent.ComponentAmount = item;
+                            staffSalaryComponent.PercentageValue = objStaff.ListComponentPercentageEarning.ToArray()[i];
 
-                        ListStaffSalaryComponents.Add(staffSalaryComponent);
+                            ListStaffSalaryComponents.Add(staffSalaryComponent);
+                        }
+                        i++;
                     }
-                    i++;
                 }
                 hrhubContext.AddRange(ListStaffSalaryComponents);
 				hrhubContext.SaveChanges();

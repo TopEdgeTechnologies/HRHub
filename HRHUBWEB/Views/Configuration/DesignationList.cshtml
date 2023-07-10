@@ -193,51 +193,34 @@
 
         $(document).ready(function () {
 
-
             var msg = '@ViewBag.Success';
             if (msg !== "" && msg == '1') {
-
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
                     type: "success"
                 });
-
-
-
             }
             if (msg !== "" && msg == '2') {
-
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
                     type: "success"
                 });
-
-
-
             }
             if (msg !== "" && msg == '3') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
                     type: "success"
                 });
-
             }
             if (msg !== "" && msg == '0') {
                 notif({
                     msg: "<i class='fa fa-check fs-20 me-2'></i><b>Error:</b> Error Occured.",
                     type: "error"
                 });
-
-
-
             }
             $('#myTable').DataTable();
 
         });
-
-
-
-
 
         function postdata() {
             var status = true;
