@@ -5,119 +5,120 @@
 
 
 <style>
-	.datepicker{z-index:9999 !important}
+    .datepicker {
+        z-index: 9999 !important
+    }
 
 </style>
 
 
 @using (Html.BeginForm("StaffContractCreateOrUpdate", "Staff", FormMethod.Post, new { @id = "myform", enctype = "multipart/form-data" }))
 {
-	<input type="hidden" asp-for="StaffContractId" />
-	<input type="hidden" asp-for="Renew" />
+    <input type="hidden" asp-for="StaffContractId" />
+    <input type="hidden" asp-for="Renew" />
 
-	
 
-	<!--Add Department Modal -->
-	<div class="modal fade" id="AddGeneralModal"  >
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Add Contract</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body" style="z-index:99999">
-					<div class="row">
-					<div class="col-md-6">
 
-					<div class="form-group">
-								<label class="form-label">Staff Name <span class="text-danger">*</span></label>
-						<select asp-for=StaffId  class="form-control " data-placeholder="Select Staff"  asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
-							
-						</select>
-					</div>
-					</div>
-				
-					<div class="col-md-6">
-					<div class="form-group">
-						<label class="form-label">Contract Type <span class="text-danger">*</span></label>
-								<select asp-for="EmploymentTypeId" class="form-control " data-placeholder="Select Contract Type" asp-items="@(new SelectList(@ViewBag.ContractType,"EmploymentTypeId", "Title"))">
-							
-						</select>
-					</div>
-					</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Contract Duration in Months <span class="text-danger">*</span></label>
-								<select asp-for="ContractDuration" class="form-control" data-placeholder="Select Months">									
-									<option value="3 Month">3 Month</option>
-									<option value="6 Months">6 Months</option>
-									<option value="9 Months">9 Months</option>
-									<option value="Custom">Custom</option>
-								</select>
-							</div>
-					</div>
-					<div class="col-md-3">
-								
-							<div class="form-group">
-								<label class="form-label">Start Date <span class="text-danger">*</span></label>
-								<input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
-							</div>
-							
-					</div>
-					<div class="col-md-3">
-							<div class="form-group">
-								<label class="form-label">End Date <span class="text-danger">*</span></label>
-								<input type="date" asp-for="EndDate" class="form-control" />
-							</div>
-					</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label class="form-label">Attachment <span class="text-danger">*</span>
+    <!--Add Department Modal -->
+    <div class="modal fade" id="AddGeneralModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Contract</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="z-index:99999">
+                    <div class="row">
+                        <div class="col-md-6">
 
-									@if (!string.IsNullOrEmpty(Model.Attachment))
-									{
-										<a href="@Model.Attachment" target="_blank" data-bs-original-title="Download" aria-label="Download"><i class="feather feather-download  text-secondary me-2"> Download</i></a>
-										<input type="hidden" value="@Model.Attachment" name="Attachment"id="Attachment" />
-									}
-								
-								</label>
-								<div class="form-group local-forms">
-									<label for="form-label" class="form-label"></label> <input class="form-control" id="ContractAttachment" name="ContractAttachment" type="file" accept=".pdf, .doc, .docx,.jpg, .jpeg, .png">
-								</div>
-							</div>
+                            <div class="form-group">
+                                <label class="form-label">Staff Name <span class="text-danger">*</span></label>
+                                <select asp-for=StaffId class="form-control select2" data-placeholder="Select Staff" asp-items="@(new SelectList(@ViewBag.StaffList,"StaffId", "FirstName"))">
+                                </select>
                             </div>
-							
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<label class="form-label">Additional Details</label>
-							<div class="form-group local-forms">
-								<textarea asp-for="AdditionalDetails" rows="3" class="form-control" placeholder="Additional Details"></textarea>
-							</div>
-						</div>
-						
-					</div>
-					<div class="form-group">
-						<label class="custom-control custom-checkbox">
-							<input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
-							<span class="custom-control-label">IsActive</span>
-						</label>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
-					<a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Add Department Modal  -->
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Contract Type <span class="text-danger">*</span></label>
+                                <select asp-for="EmploymentTypeId" class="form-control " data-placeholder="Select Contract Type" asp-items="@(new SelectList(@ViewBag.ContractType,"EmploymentTypeId", "Title"))">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Contract Duration in Months <span class="text-danger">*</span></label>
+                                <select asp-for="ContractDuration" class="form-control" data-placeholder="Select Months">
+                                    <option value="3 Month">3 Month</option>
+                                    <option value="6 Months">6 Months</option>
+                                    <option value="9 Months">9 Months</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+
+                            <div class="form-group">
+                                <label class="form-label">Start Date <span class="text-danger">*</span></label>
+                                <input type="date" asp-for="StartDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">End Date <span class="text-danger">*</span></label>
+                                <input type="date" asp-for="EndDate" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Attachment <span class="text-danger">*</span>
+
+                                    @if (!string.IsNullOrEmpty(Model.Attachment))
+                                    {
+                                        <a href="@Model.Attachment" target="_blank" data-bs-original-title="Download" aria-label="Download"><i class="feather feather-download  text-secondary me-2"> Download</i></a>
+                                        <input type="hidden" value="@Model.Attachment" name="Attachment" id="Attachment" />
+                                    }
+
+                                </label>
+                                <div class="form-group local-forms">
+                                    <label for="form-label" class="form-label"></label> <input class="form-control" id="ContractAttachment" name="ContractAttachment" type="file" accept=".pdf, .doc, .docx,.jpg, .jpeg, .png">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-label">Additional Details</label>
+                            <div class="form-group local-forms">
+                                <textarea asp-for="AdditionalDetails" rows="3" class="form-control" placeholder="Additional Details"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="custom-control custom-checkbox">
+                            <input type="checkbox" asp-for="Status" type="checkbox" class="custom-control-input" checked>
+                            <span class="custom-control-label">IsActive</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="Save" id="btnsave" onclick="SaveRecord()" class="btn btn-primary" />
+                    <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Add Department Modal  -->
 }
 
 
@@ -125,243 +126,243 @@
 
 
 <div class="col-xl-12 col-md-12 col-lg-12">
-	<div class="card">
-		<div class="card-header border-bottom-0">
-			<h4 class="card-title">Contracts Details</h4>
-			@if (Convert.ToBoolean(ViewBag.IsNew))
-			{
-				<div class="card-options">
-					<div class="btn-list">
-						<a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Contract</a>
-						<button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
-						<button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
-						<button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
-					</div>
-				</div>
-			}
-		</div>
-		<div class="tab-menu-heading table_tabs mt-2 p-0 ">
-			<div class="tabs-menu1">
-				<!-- Tabs -->
-				<ul class="nav panel-tabs">
-					<li><a href="#tab6" class="active" data-bs-toggle="tab">Expire Contracts</a></li>
-					<li class="ms-sm-4"><a href="#tab5"  data-bs-toggle="tab">All Contracts</a></li>
-					
-				</ul>
-			</div>
-		</div>
-		<div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
-			<div class="tab-content">
-				<div class="tab-pane" id="tab5">
+    <div class="card">
+        <div class="card-header border-bottom-0">
+            <h4 class="card-title">Contracts Details</h4>
+            @if (Convert.ToBoolean(ViewBag.IsNew))
+            {
+                <div class="card-options">
+                    <div class="btn-list">
+                        <a onclick="AddNewRecord()" class="btn btn-primary me-3"><i class="fe fe-plus-circle me-1"></i>Add Contract</a>
+                        <button class="btn btn-light" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="E-mail"> <i class="feather feather-mail"></i> </button>
+                        <button class="btn btn-light" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Contact"> <i class="feather feather-phone-call"></i> </button>
+                        <button class="btn btn-primary" data-bs-placement="bottom" data-bs-toggle="tooltip" title="" data-bs-original-title="Info"> <i class="feather feather-info"></i> </button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="tab-menu-heading table_tabs mt-2 p-0 ">
+            <div class="tabs-menu1">
+                <!-- Tabs -->
+                <ul class="nav panel-tabs">
+                    <li><a href="#tab6" class="active" data-bs-toggle="tab">Expire Contracts</a></li>
+                    <li class="ms-sm-4"><a href="#tab5" data-bs-toggle="tab">All Contracts</a></li>
 
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered text-nowrap border-bottom" id="myTable">
-					
-							<thead>
-								<tr>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-body tabs-menu-body table_tabs1 p-0 border-0">
+            <div class="tab-content">
+                <div class="tab-pane" id="tab5">
 
-										<th class="border-bottom-0">Staff Name</th>
-										
-										@*<th class="text-center">Contract Duration</th>*@
-										<th>Start Date</th>
-										<th>End Date</th>
-										<th class="text-center">Status</th>
-										<th class="">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-									@foreach (var item in Model.AllStaffContract)
-									{
-										<tr>
-											
-											<td>
-												<div class="d-flex">
-													<img class="avatar avatar-md brround me-3" src="@item.StaffImg">
-													<div class="me-3 mt-0 mt-sm-1 d-block">
-														@{
-															string fullName = item.SatffFName + " " + item.SatffLName;
-														}
-														<h6 class="mb-1 fs-14">@fullName</h6>
-														<p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.DesigantionName)</p>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-nowrap border-bottom" id="myTable">
 
-													</div>
-												</div>
-											</td>
-											
-																					
-											@*<td class="text-center">
-												<span class="badge badge-primary  side-badge">@Html.DisplayFor(modelitem => item.ContractDuration)</span>
-											</td>*@
-											<td>@item.StartDate.Value.ToString("dd-MMM-yyyy")</td>
-											<td>@item.EndDate.Value.ToString("dd-MMM-yyyy")</td>
-																					
-											
-											@{
-												var isActive = item.Status;
-												if (isActive == true)
-												{
-													<td class="text-center"> <span class="badge badge-success  side-badge">Active</span></td>
-												}
-												else
-												{
-													<td class="text-center"> <span class="badge badge-danger  side-badge">In-Active</span></td>
-												}
-											}
-											@if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-											{
-												<th class="d-none">
-												</th>
-											}
-											else
-											{
-												<td>
-													<!----- Action Buttons Code Start From Here------>
-													<div class="ms-auto">
-														<div class="btn-group ms-3 mb-0">
-															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-															<div class="dropdown-menu dropdown-menu-start" style="">
+                                <thead>
+                                    <tr>
+
+                                        <th class="border-bottom-0">Staff Name</th>
+
+                                        @*<th class="text-center">Contract Duration</th>*@
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.AllStaffContract)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                <div class="d-flex">
+                                                    <img class="avatar avatar-md brround me-3" src="@item.StaffImg">
+                                                    <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                        @{
+                                                            string fullName = item.SatffFName + " " + item.SatffLName;
+                                                        }
+                                                        <h6 class="mb-1 fs-14">@fullName</h6>
+                                                        <p class="text-muted mb-0 fs-12">@Html.DisplayFor(modelitem => item.DesigantionName)</p>
+
+                                                    </div>
+                                                </div>
+                                            </td>
 
 
+                                            @*<td class="text-center">
+                                        <span class="badge badge-primary  side-badge">@Html.DisplayFor(modelitem => item.ContractDuration)</span>
+                                        </td>*@
+                                            <td>@item.StartDate.Value.ToString("dd-MMM-yyyy")</td>
+                                            <td>@item.EndDate.Value.ToString("dd-MMM-yyyy")</td>
 
 
-
-																@if (Convert.ToBoolean(ViewBag.IsEdit))
-																{
-																	<a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
-																		<i class="fa fa-file-text me-2"></i>Re-New Contract
-																	</a>
-
-																	<a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
-																		<i class="feather feather-download me-2"></i>Download Contract
-																	</a>
-																}
+                                            @{
+                                                var isActive = item.Status;
+                                                if (isActive == true)
+                                                {
+                                                    <td class="text-center"> <span class="badge badge-success  side-badge">Active</span></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">In-Active</span></td>
+                                                }
+                                            }
+                                            @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                            {
+                                                <th class="d-none">
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <!----- Action Buttons Code Start From Here------>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group ms-3 mb-0">
+                                                            <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-start" style="">
 
 
 
 
-															</div>
-														</div>
-													</div>
-													<!----- Action Buttons Code Ends Here------>
-												</td>
-											}
-										</tr>
-									}
-							</tbody>
-						
-						</table>
-					</div>
-					</div>
-					
-				</div>
-				<div class="tab-pane active" id="tab6">
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered text-nowrap border-bottom" id="ExpireContractTable">
 
-								<thead>
-									<tr>
+                                                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                {
+                                                                    <a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
+                                                                        <i class="fa fa-file-text me-2"></i>Re-New Contract
+                                                                    </a>
 
-										<th class="border-bottom-0">Staff Name</th>										
-										@*<th class="text-center">Contract Duration</th>*@
-										<th>Start Date</th>
-										<th>End Date</th>
-										<th class="text-center">Status</th>
-										<th class="">Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var item in ViewBag.ExpireContract)
-									{
-										<tr>
-
-											<td>
-												<div class="d-flex">
-													<img class="avatar avatar-md brround me-3" src="@item.StaffImg">
-													<div class="me-3 mt-0 mt-sm-1 d-block">
-														@{
-															string fullName = item.SatffFName + " " + item.SatffLName;
-														}
-														<h6 class="mb-1 fs-14">@fullName</h6>
-														<p class="text-muted mb-0 fs-12">@item.DesigantionName</p>
-
-													</div>
-												</div>
-											</td>
-
-
-											@*<td class="text-center">
-												<span class="badge badge-primary  side-badge">@item.ContractDuration</span>
-											</td>*@
-											<td>@item.StartDate.ToString("dd-MMM-yyyy")</td>
-											<td>@item.EndDate.ToString("dd-MMM-yyyy")</td>
-
-
-											@{
-												var StatusExpiry = item.ExpirayStatus;
-												if (StatusExpiry == "Near Expiry")
-												{
-													<td class="text-center"> <span class="badge badge-warning  side-badge">Near Expiry</span></td>
-												}
-												else
-												{
-													<td class="text-center"> <span class="badge badge-danger  side-badge">Expired</span></td>
-												}
-											}
-											@if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
-											{
-												<th class="d-none">
-												</th>
-											}
-											else
-											{
-												<td>
-
-
-													<!----- Action Buttons Code Start From Here------>
-													<div class="ms-auto">
-														<div class="btn-group ms-3 mb-0">
-															<a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-															<div class="dropdown-menu dropdown-menu-start" style="">
+                                                                    <a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
+                                                                        <i class="feather feather-download me-2"></i>Download Contract
+                                                                    </a>
+                                                                }
 
 
 
 
-																@if (Convert.ToBoolean(ViewBag.IsEdit))
-																{
-																	<a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
-																		<i class="fa fa-file-text me-2"></i>Re-New Contract
-																	</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!----- Action Buttons Code Ends Here------>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
 
-																	<a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
-																		<i class="feather feather-download me-2"></i>Download Contract
-																	</a>
-																}
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane active" id="tab6">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-nowrap border-bottom" id="ExpireContractTable">
+
+                                <thead>
+                                    <tr>
+
+                                        <th class="border-bottom-0">Staff Name</th>
+                                        @*<th class="text-center">Contract Duration</th>*@
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.ExpireContract)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                <div class="d-flex">
+                                                    <img class="avatar avatar-md brround me-3" src="@item.StaffImg">
+                                                    <div class="me-3 mt-0 mt-sm-1 d-block">
+                                                        @{
+                                                            string fullName = item.SatffFName + " " + item.SatffLName;
+                                                        }
+                                                        <h6 class="mb-1 fs-14">@fullName</h6>
+                                                        <p class="text-muted mb-0 fs-12">@item.DesigantionName</p>
+
+                                                    </div>
+                                                </div>
+                                            </td>
+
+
+                                            @*<td class="text-center">
+                                        <span class="badge badge-primary  side-badge">@item.ContractDuration</span>
+                                        </td>*@
+                                            <td>@item.StartDate.ToString("dd-MMM-yyyy")</td>
+                                            <td>@item.EndDate.ToString("dd-MMM-yyyy")</td>
+
+
+                                            @{
+                                                var StatusExpiry = item.ExpirayStatus;
+                                                if (StatusExpiry == "Near Expiry")
+                                                {
+                                                    <td class="text-center"> <span class="badge badge-warning  side-badge">Near Expiry</span></td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="text-center"> <span class="badge badge-danger  side-badge">Expired</span></td>
+                                                }
+                                            }
+                                            @if (Convert.ToBoolean(ViewBag.IsNew) == false && Convert.ToBoolean(ViewBag.IsEdit) == false && Convert.ToBoolean(ViewBag.IsDelete) == false)
+                                            {
+                                                <th class="d-none">
+                                                </th>
+                                            }
+                                            else
+                                            {
+                                                <td>
+
+
+                                                    <!----- Action Buttons Code Start From Here------>
+                                                    <div class="ms-auto">
+                                                        <div class="btn-group ms-3 mb-0">
+                                                            <a href="javascript:void(0);" class="option-dots" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-start" style="">
 
 
 
-															</div>
-														</div>
-													</div>
-													<!----- Action Buttons Code Ends Here------>
 
-												
-												
-												</td>
-											}
-										</tr>
-									}
-								</tbody>
+                                                                @if (Convert.ToBoolean(ViewBag.IsEdit))
+                                                                {
+                                                                    <a href="#" onclick="EditRecord(@item.StaffContractId,1)" class="dropdown-item" data-bs-placement="bottom" data-bs-toggle="tooltip" title="Re-New Contract" data-bs-original-title="Re-New Contract">
+                                                                        <i class="fa fa-file-text me-2"></i>Re-New Contract
+                                                                    </a>
 
-							</table>
-						</div>
-					</div>
-				</div>
-				
-			</div>
-		</div>
-	</div>
+                                                                    <a target="_blank" href="@Url.Content(item.Attachment)" class="dropdown-item" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download Contract" data-bs-original-title="Download Contract" aria-label="Download Contract">
+                                                                        <i class="feather feather-download me-2"></i>Download Contract
+                                                                    </a>
+                                                                }
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!----- Action Buttons Code Ends Here------>
+
+
+
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -370,406 +371,378 @@
 
 @section scripts{
 
-	<script>
+    <script>
 
 
-		$(document).ready(function () {
+        $(document).ready(function () {
 
 
-			$("#ContractDuration").change(function () {
+            $("#ContractDuration").change(function () {
 
 
-				debugger
-				var months = parseInt($(this).val()); // Get the selected contract duration in months
+                debugger
+                var months = parseInt($(this).val()); // Get the selected contract duration in months
 
 
-				var currentDate = new Date(); // Get the current date
-				var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
-				var year = incrementedDate.getFullYear();
-				var month = (incrementedDate.getMonth() + 1).toString().padStart(2, '0');
-				var day = incrementedDate.getDate().toString().padStart(2, '0');
-				var formattedDate = `${year}-${month}-${day}`;
+                var currentDate = new Date(); // Get the current date
+                var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
+                var year = incrementedDate.getFullYear();
+                var month = (incrementedDate.getMonth() + 1).toString().padStart(2, '0');
+                var day = incrementedDate.getDate().toString().padStart(2, '0');
+                var formattedDate = `${year}-${month}-${day}`;
 
-				$("#EndDate").val(formattedDate);
+                $("#EndDate").val(formattedDate);
 
 
 
 
-				//var currentDate = new Date(); // Get the current date
-				//var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
-				//var formattedDate = incrementedDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }); // Format the incremented date as "MM/dd/yyyy"
+                //var currentDate = new Date(); // Get the current date
+                //var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
+                //var formattedDate = incrementedDate.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }); // Format the incremented date as "MM/dd/yyyy"
 
-				
 
 
 
 
-				//var currentDate = new Date(); // Get the current date
-				//var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
-				//var formattedDate = $.datepicker.formatDate('yy-mm-dd', incrementedDate); // Format the incremented date as "yyyy-MM-dd"
 
+                //var currentDate = new Date(); // Get the current date
+                //var incrementedDate = new Date(currentDate.setMonth(currentDate.getMonth() + months)); // Increment the current date by the selected duration
+                //var formattedDate = $.datepicker.formatDate('yy-mm-dd', incrementedDate); // Format the incremented date as "yyyy-MM-dd"
 
-				//$("#EndDate").val(formattedDate);
-				
-				
-    });
 
-		//	//// set date
-		//	var currentDate = new Date(); // Get the current date
-		//	var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-		//	var lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-		//	$('#StartDate').datepicker({
-		//		dateFormat: 'dd M yy',
-		//		autoHide: true
-				
+                //$("#EndDate").val(formattedDate);
 
 
+            });
 
-		//	});
 
-		//	$('#StartDate').datepicker('setDate', currentDate);
 
-		////	$('#EndDate').datepicker({
-		////		dateFormat: 'dd M yy',
-		////		autoHide: true,
-		////		zIndex: 9999
+            $('#StartDate').prop('readonly', true);
+            $('#EndDate').prop('readonly', true);
 
+            $('#ContractDuration').change(function () {
+                var selectOption = $(this).val();
 
-		////});
-		////$('#todate').datepicker('setDate', lastDayOfMonth);
+                debugger
+                if (selectOption == 'Custom') {
 
+                    $('#StartDate').prop('readonly', false);
+                    $('#EndDate').prop('readonly', false);
+                } else {
+                    $('#StartDate').prop('readonly', true);
+                    $('#EndDate').prop('readonly', true);
+                }
+            });
 
-		//	///////
+            //$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
+            $('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
 
 
+            $('#myTable,#ExpireContractTable').DataTable();
 
-
-			$('#StartDate').prop('readonly', true);
-			$('#EndDate').prop('readonly', true);
-
-			$('#ContractDuration').change(function () {
-				var selectOption = $(this).val();
-
-				debugger
-				if (selectOption == 'Custom') {
-
-					$('#StartDate').prop('readonly', false);
-					$('#EndDate').prop('readonly', false);
-				} else {
-					$('#StartDate').prop('readonly', true);
-					$('#EndDate').prop('readonly', true);
-				}
-			});
-
-			//$("#StaffId,#EmploymentTypeId,#ContractDuration").select2();
-			$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
-			$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
-			$('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
-
-
-			$('#myTable,#ExpireContractTable').DataTable();
-
-			if (@Model.StaffContractId > 0) {
-				$('#AddGeneralModal').modal.show();
-			}
-
-			var msg = '@ViewBag.Success';
-			if (msg !== "" && msg == '1') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '2') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '3') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
-					type: "success"
-				});
-			}
-			if (msg !== "" && msg == '0') {
-				notif({
-					msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
-					type: "error"
-				});
-			}
-
-		
-
-		});
-
-
-		function AddNewRecord() {
-			debugger
-			ClearControl();
-			$("#AddGeneralModal").modal('show');	
-			
-			$("#Status").prop('checked', true)
-		}
-
-		function EditRecord(id,renew) {
-			AddNewRecord();
-			debugger
-			
-			var Data = { id: id }
-			
-			$.ajax({
-				async: false,
-				url: "/Staff/GetContractById",
-				type: "GET",
-				data: Data,
-				success: function (data) {
-					if (data != "") {
-						debugger
-						var dateTimeString = data.startDate;
-						var dateTime = data.endDate;
-                        var DateStart = dateTimeString.split("T")[0];
-						var DateEnd = dateTime.split("T")[0];
-
-						$("#Renew").val(renew);
-
-						$("#StaffContractId").val(data.staffContractId);
-
-
-
-						$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val(data.staffId).trigger('change');
-						//$("#StaffId").val(data.staffId).trigger("change");
-						$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val(data.employmentTypeId).trigger('change');
-
-						//$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
-						$("#Title").val(data.title);
-						$('#ContractDuration').select2({ placeholder: 'Select Contract Duration', width: '100%', allowClear: true }).val(data.contractDuration).trigger('change');
-
-
-						//$("#ContractDuration").val(data.contractDuration).trigger("change");
-						$("#StartDate").val(DateStart)
-						 $("#EndDate").val(DateEnd)
-						var a =$("#AdditionalDetails").val(data.additionalDetails)
-					
-						var abc =$("#Attachment").val(data.attachment)					
-			
-						$("#Status").prop('checked', data.status);
-						$("#AddGeneralModal").modal('show');
-
-
-					}
-				},
-				error: function () {
-					status = false;
-				}
-			})
-		}
-
-		function DeleteConfirmation(id) {
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			});
-
-			swalWithBootstrapButtons.fire({
-				title: 'Are you sure?',
-				text: "You won't be able to revert this!",
-				icon: 'warning',
-				showCancelButton: true,
-				cancelButtonText: 'No, cancel!',
-				confirmButtonText: 'Yes, Save it!',
-				timer: 30000,
-				reverseButtons: true
-			}).then((result) => {
-				if (result.isConfirmed) {
-					var url = "@Url.Action("StaffContractDelete", "Staff")/" + id;
-
-					//alert(url);
-					window.location.href = url;
-				}
-				else if (result.dismiss === Swal.DismissReason.cancel) {
-					swalWithBootstrapButtons.fire(
-						'Cancelled',
-						'Your record is safe :)',
-						'error'
-					)
-				}
-			});
-		}
-
-		function SaveRecord() {
-			var status = true;
-			//$("#AddGeneralModal").modal('hide');
-			debugger;
-
-			
-			if ($("#StaffId").val() == null || $("#StaffId").val() == "") {
-				
-				$.growl.warning({
-					message: "Please Select Staff Name"
-				});
-				$("#StaffId").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#StaffId").css("border-color", "#ddd");
-			}
-			
-			if ($("#EmploymentTypeId").val() == "" || $("#EmploymentTypeId").val() == null) {
-				$.growl.warning({
-					message: "Please Select Contract Type"
-				});
-				$("#EmploymentTypeId").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#EmploymentTypeId").css("border-color", "#ddd");
-			}
-			if ($("#ContractDuration").val() == "" || $("#ContractDuration").val()==null ) {
-				$.growl.warning({
-					message: "Please Select Contract Duration"
-				});
-				$("#ContractDuration").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#ContractDuration").css("border-color", "#ddd");
-			}
-			
-			if ($("#StartDate").val() == "") {
-				$.growl.warning({
-					message: "Please Select Start Date"
-				});
-				$("#StartDate").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#StartDate").css("border-color", "#ddd");
-			}
-
-			if ($("#EndDate").val() == "") {
-				$.growl.warning({
-					message: "Please Select End Date"
-				});
-				$("#EndDate").css("border-color", "red");
-				status = false;
-				return false;
-			}
-			else {
-				$("#EndDate").css("border-color", "#ddd");
-			}
-
-
-
-			if('@Model.Attachment'=='')
-            {
-				if (document.getElementById("ContractAttachment").value == "") {
-
-					$.growl.warning({
-						message: "Please Select Attachment"
-					});
-
-
-					$("#ContractAttachment").css("border-color", "red");
-					status = false;
-					return false;
-				}
-				else {
-					$("#ContractAttachment").css("border-color", "#ddd");
-				}
+            if (@Model.StaffContractId > 0) {
+                $('#AddGeneralModal').modal.show();
             }
-			
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Your record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> Error Occured.",
+                    type: "error"
+                });
+            }
 
 
-			var Data = { id: $("#StaffContractId").val(), EndDate: $('#EndDate').val() == '' ? '""' : $('#EndDate').val(), StaffId: $("#StaffId").val() }
-			
-			$.ajax({
-				async: false,
-				url: "/Staff/StaffContractAlreadyExist",
-				type: "GET",
-				data: Data,
-				success: function (data) {
-					if (data != "") {
-						debugger
-						///  var b = JSON.parse(data)
-						if (data.success) {
 
-							// $.growl.warning(b.message);
-							$.growl.warning({
-								message: data.message
-							});
-							status = false;
-						}
-						else {
-							$("#AddGeneralModal").modal('hide');
-						}
-					}
-				},
-				error: function () {
-					status = false;
-					//   toastr.error("Please Fill Required Field");
-				}
-			})
-			const swalWithBootstrapButtons = Swal.mixin({
-				customClass: {
-					confirmButton: 'btn btn-success',
-					cancelButton: 'btn btn-danger'
-				},
-				buttonsStyling: false
-			});
-			if (status) {
-				swalWithBootstrapButtons.fire({
-					title: 'Are you sure?',
-					text: "You won't be able to revert this!",
-					icon: 'warning',
-					showCancelButton: true,
-					cancelButtonText: 'No, cancel!',
-					confirmButtonText: 'Yes, Save it!',
-					timer: 30000,
-					reverseButtons: true
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$("#myform").submit();
-						ClearControl();
-					}
-					else if (result.dismiss === Swal.DismissReason.cancel) {
-						swalWithBootstrapButtons.fire(
-							'Cancelled',
-							'Your record is safe :)',
-							'error'
-						)
-					}
-				});
-			}
-		}
-
-		function ClearControl(){
-
-			$('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
-			$('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
-			$('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
+        });
 
 
-			
-			$(".EndDate").val('');
-			$("#AdditionalDetails").val('');
+        function AddNewRecord() {
+            debugger
+            ClearControl();
+            $("#AddGeneralModal").modal('show');
 
-			$("#Attachment").val('');
-		
-		}
+            $("#Status").prop('checked', true)
+        }
+
+        function EditRecord(id, renew) {
+            AddNewRecord();
+            debugger
+
+            var Data = { id: id }
+
+            $.ajax({
+                async: false,
+                url: "/Staff/GetContractById",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        var dateTimeString = data.startDate;
+                        var dateTime = data.endDate;
+                        var DateStart = dateTimeString.split("T")[0];
+                        var DateEnd = dateTime.split("T")[0];
+
+                        $("#Renew").val(renew);
+
+                        $("#StaffContractId").val(data.staffContractId);
 
 
-		$('#ContractAttachment').change(function () {
+
+                        $('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val(data.staffId).trigger('change');
+                        //$("#StaffId").val(data.staffId).trigger("change");
+                        $('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val(data.employmentTypeId).trigger('change');
+
+                        //$("#EmploymentTypeId").val(data.employmentTypeId).trigger("change");
+                        $("#Title").val(data.title);
+                        $('#ContractDuration').select2({ placeholder: 'Select Contract Duration', width: '100%', allowClear: true }).val(data.contractDuration).trigger('change');
+
+
+                        //$("#ContractDuration").val(data.contractDuration).trigger("change");
+                        $("#StartDate").val(DateStart)
+                        $("#EndDate").val(DateEnd)
+                        var a = $("#AdditionalDetails").val(data.additionalDetails)
+
+                        var abc = $("#Attachment").val(data.attachment)
+
+                        $("#Status").prop('checked', data.status);
+                        $("#AddGeneralModal").modal('show');
+
+
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            })
+        }
+
+        function DeleteConfirmation(id) {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            swalWithBootstrapButtons.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'No, cancel!',
+                confirmButtonText: 'Yes, Save it!',
+                timer: 30000,
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var url = "@Url.Action("StaffContractDelete", "Staff")/" + id;
+
+                    //alert(url);
+                    window.location.href = url;
+                }
+                else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire(
+                        'Cancelled',
+                        'Your record is safe :)',
+                        'error'
+                    )
+                }
+            });
+        }
+
+        function SaveRecord() {
+            var status = true;
+            //$("#AddGeneralModal").modal('hide');
+            debugger;
+
+
+            if ($("#StaffId").val() == null || $("#StaffId").val() == "") {
+
+                $.growl.warning({
+                    message: "Please Select Staff Name"
+                });
+                $("#StaffId").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#StaffId").css("border-color", "#ddd");
+            }
+
+            if ($("#EmploymentTypeId").val() == "" || $("#EmploymentTypeId").val() == null) {
+                $.growl.warning({
+                    message: "Please Select Contract Type"
+                });
+                $("#EmploymentTypeId").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#EmploymentTypeId").css("border-color", "#ddd");
+            }
+            if ($("#ContractDuration").val() == "" || $("#ContractDuration").val() == null) {
+                $.growl.warning({
+                    message: "Please Select Contract Duration"
+                });
+                $("#ContractDuration").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#ContractDuration").css("border-color", "#ddd");
+            }
+
+            if ($("#StartDate").val() == "") {
+                $.growl.warning({
+                    message: "Please Select Start Date"
+                });
+                $("#StartDate").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#StartDate").css("border-color", "#ddd");
+            }
+
+            if ($("#EndDate").val() == "") {
+                $.growl.warning({
+                    message: "Please Select End Date"
+                });
+                $("#EndDate").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#EndDate").css("border-color", "#ddd");
+            }
+
+
+
+            if ('@Model.Attachment' == '') {
+                if (document.getElementById("ContractAttachment").value == "") {
+
+                    $.growl.warning({
+                        message: "Please Select Attachment"
+                    });
+
+
+                    $("#ContractAttachment").css("border-color", "red");
+                    status = false;
+                    return false;
+                }
+                else {
+                    $("#ContractAttachment").css("border-color", "#ddd");
+                }
+            }
+
+
+
+            var Data = { id: $("#StaffContractId").val(), EndDate: $('#EndDate').val() == '' ? '""' : $('#EndDate').val(), StaffId: $("#StaffId").val() }
+
+            $.ajax({
+                async: false,
+                url: "/Staff/StaffContractAlreadyExist",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        ///  var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#AddGeneralModal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $("#myform").submit();
+                        ClearControl();
+                    }
+                    else if (result.dismiss === Swal.DismissReason.cancel) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+        function ClearControl() {
+
+            $('#StaffId').select2({ placeholder: 'Select Staff', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#EmploymentTypeId').select2({ placeholder: 'Select Contract Type', width: '100%', allowClear: true }).val("").trigger('change');
+            $('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
+
+
+
+            $("#StartDate").val(new Date().toISOString().split('T')[0]);
+            $(".EndDate").val('');
+            $("#AdditionalDetails").val('');
+
+            $("#Attachment").val('');
+
+        }
+
+
+        $('#ContractAttachment').change(function () {
             debugger
             var fileInput = $(this);
-			var allowedExtensions = /(\.pdf|\.doc|\.docx\.jpg|\.jpeg|\.png)$/i;
+            var allowedExtensions = /(\.pdf|\.doc|\.docx\.jpg|\.jpeg|\.png)$/i;
             var fileSizeLimit = 5 * 1024 * 1024; // 2 MB
             var fileSize = this.files[0].size;
             var filePath = fileInput.val();
@@ -809,150 +782,150 @@
 
 
 
-		function AllContract() {
+        function AllContract() {
 
 
 
-			var obj = {
+            var obj = {
 
-				selectdate: $('#selectdate').val() == '' ? '""' : $('#selectdate').val(),
-				Yeardatesss: $("#Yeardatesss").val()
+                selectdate: $('#selectdate').val() == '' ? '""' : $('#selectdate').val(),
+                Yeardatesss: $("#Yeardatesss").val()
 
 
 
-			}
+            }
 
 
 
 
-			$.ajax({
-				url: "/Configuration/FilterHolidayData",
-				type: "GET",
-				async: false,
-				data: obj,
-				success: function (data) {
+            $.ajax({
+                url: "/Configuration/FilterHolidayData",
+                type: "GET",
+                async: false,
+                data: obj,
+                success: function (data) {
 
-					if (data != null) {
-						
-						debugger;
-						var table = $('#hr-holiday').DataTable();
-						table.clear();
-						table.draw();
+                    if (data != null) {
 
+                        debugger;
+                        var table = $('#hr-holiday').DataTable();
+                        table.clear();
+                        table.draw();
 
 
-						for (var i = 0; i < data.length; i++) {
 
-							var rowData = [];
-							var dateTimeString = data[i]["holidayDate"];
-							var DateHoliday = dateTimeString.split("T")[0];
+                        for (var i = 0; i < data.length; i++) {
 
+                            var rowData = [];
+                            var dateTimeString = data[i]["holidayDate"];
+                            var DateHoliday = dateTimeString.split("T")[0];
 
 
-							var action = '';
-							action += '<a class="btn btn-primary btn-icon btn-sm me-1" onclick="EditRecord(' + data[i]["holidayId"] + ')" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">';
-							action += '<i class="feather feather-edit"> </i> </a>';
-							action += '<a onclick="confirmation(' + data[i]["holidayId"] + ')" class="btn btn-danger btn-icon btn-sm" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">';
-							action += '<i class="feather feather-trash-2"></i> </a>';
 
+                            var action = '';
+                            action += '<a class="btn btn-primary btn-icon btn-sm me-1" onclick="EditRecord(' + data[i]["holidayId"] + ')" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">';
+                            action += '<i class="feather feather-edit"> </i> </a>';
+                            action += '<a onclick="confirmation(' + data[i]["holidayId"] + ')" class="btn btn-danger btn-icon btn-sm" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">';
+                            action += '<i class="feather feather-trash-2"></i> </a>';
 
-							rowData.push([i + 1, data[i]["dayName"], DateHoliday, data[i]["title"], action]);
 
+                            rowData.push([i + 1, data[i]["dayName"], DateHoliday, data[i]["title"], action]);
 
-							table.rows.add(rowData);
-							table.draw();
 
-						}
+                            table.rows.add(rowData);
+                            table.draw();
 
+                        }
 
 
-					}
 
+                    }
 
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log(textStatus, errorThrown);
-				}
-			});
 
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
 
 
-		}
 
-		function ExpireContract() {
+        }
 
+        function ExpireContract() {
 
 
-			var obj = {
 
-				selectdate: $('#selectdate').val() == '' ? '""' : $('#selectdate').val(),
-				Yeardatesss: $("#Yeardatesss").val()
+            var obj = {
 
+                selectdate: $('#selectdate').val() == '' ? '""' : $('#selectdate').val(),
+                Yeardatesss: $("#Yeardatesss").val()
 
 
-			}
 
+            }
 
 
 
-			$.ajax({
-				url: "/Configuration/FilterHolidayData",
-				type: "GET",
-				async: false,
-				data: obj,
-				success: function (data) {
 
-					if (data != null) {
-					
-						debugger;
-						var table = $('#hr-holiday').DataTable();
-						table.clear();
-						table.draw();
+            $.ajax({
+                url: "/Configuration/FilterHolidayData",
+                type: "GET",
+                async: false,
+                data: obj,
+                success: function (data) {
 
+                    if (data != null) {
 
+                        debugger;
+                        var table = $('#hr-holiday').DataTable();
+                        table.clear();
+                        table.draw();
 
-						for (var i = 0; i < data.length; i++) {
 
-							var rowData = [];
-							var dateTimeString = data[i]["holidayDate"];
-							var DateHoliday = dateTimeString.split("T")[0];
 
+                        for (var i = 0; i < data.length; i++) {
 
+                            var rowData = [];
+                            var dateTimeString = data[i]["holidayDate"];
+                            var DateHoliday = dateTimeString.split("T")[0];
 
-							var action = '';
-							action += '<a class="btn btn-primary btn-icon btn-sm me-1" onclick="EditRecord(' + data[i]["holidayId"] + ')" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">';
-							action += '<i class="feather feather-edit"> </i> </a>';
-							action += '<a onclick="confirmation(' + data[i]["holidayId"] + ')" class="btn btn-danger btn-icon btn-sm" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">';
-							action += '<i class="feather feather-trash-2"></i> </a>';
 
 
-							rowData.push([i + 1, data[i]["dayName"], DateHoliday, data[i]["title"], action]);
+                            var action = '';
+                            action += '<a class="btn btn-primary btn-icon btn-sm me-1" onclick="EditRecord(' + data[i]["holidayId"] + ')" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit" aria-label="Edit">';
+                            action += '<i class="feather feather-edit"> </i> </a>';
+                            action += '<a onclick="confirmation(' + data[i]["holidayId"] + ')" class="btn btn-danger btn-icon btn-sm" data-bs-toggle="" data-bs-placement="top" title="" data-bs-original-title="Delete" aria-label="Delete">';
+                            action += '<i class="feather feather-trash-2"></i> </a>';
 
 
-							table.rows.add(rowData);
-							table.draw();
+                            rowData.push([i + 1, data[i]["dayName"], DateHoliday, data[i]["title"], action]);
 
-						}
 
+                            table.rows.add(rowData);
+                            table.draw();
 
+                        }
 
-					}
 
 
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					console.log(textStatus, errorThrown);
-				}
-			});
+                    }
 
 
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
 
-		}
 
 
+        }
 
 
 
-	</script>
+
+
+    </script>
 
 }

@@ -223,10 +223,10 @@ namespace HRHUBWEB.Controllers
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+            var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
 
-
-            HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/UserGroupCheckData{id}/{title}");
+            HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/UserGroupCheckData{id}/{title}/{userObject.CompanyId}");
             if (message.IsSuccessStatusCode)
             {
                 var result = message.Content.ReadAsStringAsync().Result;

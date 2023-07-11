@@ -255,13 +255,13 @@ namespace HRHUBAPI.Models
         }
 
 
-        public async Task<bool> AlreadyExist(int GluserGroupId, string GluserGroupname, HrhubContext _context)
+        public async Task<bool> AlreadyExist(int GluserGroupId, string GluserGroupname,int CompnayId, HrhubContext _context)
         {
             try
             {
                 if (GluserGroupId > 0)
                 {
-                    var result = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupTitle.ToLower() == GluserGroupname.ToLower() && x.GroupId != GluserGroupId && x.IsDeleted==false);
+                    var result = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupTitle.ToLower() == GluserGroupname.ToLower() && x.GroupId != GluserGroupId && x.IsDeleted==false && x.CompanyId== CompnayId);
                     if (result != null)
                     {
                         return true;
@@ -271,7 +271,7 @@ namespace HRHUBAPI.Models
                 }
                 else
                 {
-                    var result = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupTitle.ToLower() == GluserGroupname.ToLower() && x.IsDeleted == false);
+                    var result = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupTitle.ToLower() == GluserGroupname.ToLower() && x.IsDeleted == false && x.CompanyId == CompnayId);
                     if (result != null)
                     {
                         return true;

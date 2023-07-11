@@ -87,10 +87,10 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
 
-        [HttpGet("UserGroupCheckData{id}/{title}")]
-        public async Task<ActionResult<JsonObject>> UserGroupCheckData(int id, string title)
+        [HttpGet("UserGroupCheckData{id}/{title}/{CompnayId}")]
+        public async Task<ActionResult<JsonObject>> UserGroupCheckData(int id, string title,int CompnayId)
         {
-            if (await new GluserGroup().AlreadyExist(id, title.Trim(), _context))
+            if (await new GluserGroup().AlreadyExist(id, title.Trim(), CompnayId, _context))
             {
                 return Ok(new
                 {
