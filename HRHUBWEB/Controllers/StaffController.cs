@@ -122,6 +122,11 @@ namespace HRHUBWEB.Controllers
                 //ViewBag.ObjDesignationList = await _APIHelper.CallApiAsyncGet<IEnumerable<Designation>>($"api/Configuration/GetDesignationInfos{_user.CompanyId}", HttpMethod.Get);
                 //ViewBag.ObjSalaryMethodList = await _APIHelper.CallApiAsyncGet<IEnumerable<SalaryMethod>>("api/PayrollConfiguration/GetSalaryMethod", HttpMethod.Get);
 
+                var objGetUserByStaff = await _APIHelper.CallApiAsyncGet<User>($"api/Staffs/GetUserByStaffId{_user.CompanyId}/{Id}", HttpMethod.Get);
+
+                objStaff.UserName = objGetUserByStaff.UserName;
+                objStaff.UserPassword = objGetUserByStaff.Password;
+
                 objStaff.StaffLeaveAllocationslist = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffLeaveAllocation>>($"api/Staffs/GetStaffLeaveAllocationsDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
 
                 objStaff.StaffSalaryComponentList = await _APIHelper.CallApiAsyncGet<IEnumerable<StaffSalaryComponent>>($"api/Staffs/GetStaffSalaryDetail{_user.CompanyId}/{Id}", HttpMethod.Get);
