@@ -67,7 +67,19 @@ namespace HRHUBAPI.Controllers
             return NotFound();
         }
 
-		[HttpPost("PostStaff")]
+        [HttpGet("GetUserByStaffId{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<User>> GetUserByStaffId(int CompanyId, int StaffId)
+        {
+            //return await new Staff().GetUserByStaffId(CompanyId, StaffId, _context);
+            var dbResult = await new Staff().GetUserByStaffId(CompanyId, StaffId, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+
+        [HttpPost("PostStaff")]
         public async Task<ActionResult<Staff>> PostStaff(Staff staff)
         {
             var dbResult = await new Staff().PostStaff(staff, _context);    

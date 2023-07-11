@@ -81,24 +81,19 @@ namespace HRHUBWEB.Controllers
             {
                 string procrdure = "BI.sp_staffDailyAttendance";
         
-            if (string.IsNullOrWhiteSpace(attendanceStatus))
-            {
-
-                object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0 };
-                 var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
-                  return Json(result);
-
-            }
-            else { 
-            
-                object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, "'"+attendanceStatus+"'" };
-                var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
-                return Json(result);
-
-            }
-
-
-        }
+				if (string.IsNullOrWhiteSpace(attendanceStatus))
+				{
+					object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0 };
+					 var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+					  return Json(result);
+				}
+				else 
+				{ 
+					object[] parameters = new object[] { "'" + date.ToString("dd-MMM-yyyy") + "'", _user.CompanyId ?? 0, "'"+attendanceStatus+"'" };
+					var result = await _APIHelper.CallApiDynamic<dynamic>(parameters, $"api/Dashboard/GetDashboardData{_user.CompanyId}/{procrdure}", HttpMethod.Get);
+					return Json(result);
+				}
+			}
         
             [HttpGet]
             public async Task<IActionResult> StaffLeaves(DateTime leavedate)

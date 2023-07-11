@@ -744,10 +744,6 @@ namespace HRHUBWEB.Controllers
 
         #endregion
 
-
-
-
-
         // Code for save images into database
 
         private string uploadImage(string name, IFormFile file, string root)
