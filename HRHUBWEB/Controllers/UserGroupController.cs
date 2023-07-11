@@ -19,10 +19,10 @@ namespace HRHUBWEB.Controllers
         }
 
         #region UserGroupController
+
         [CustomAuthorization]
         public async Task<IActionResult> UserGroupList(string data = "")
         {
-
             ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
             ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
             ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
@@ -30,25 +30,20 @@ namespace HRHUBWEB.Controllers
 
             var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 
-
             ViewBag.Success = data;
             List<GluserGroup> ObjUserGroup = new List<GluserGroup>();
-
 
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
             if (Token != null)
             {
-
                 HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/ListUserGroup{userObject.CompanyId}");
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
                     ObjUserGroup = JsonConvert.DeserializeObject<List<GluserGroup>>(result);
-
                 }
-
                 return View(ObjUserGroup);
             }
             else
@@ -86,9 +81,7 @@ namespace HRHUBWEB.Controllers
             {
                 var result = message.Content.ReadAsStringAsync().Result;
                 ObjUserGroup = JsonConvert.DeserializeObject<GluserGroup>(result);
-
             }
-
             return ObjUserGroup;
         }
 
@@ -101,32 +94,26 @@ namespace HRHUBWEB.Controllers
 			ObjUserGroup = await GetUserGroupID(id);
 			if (Token !=null) {
 
-               
                 HttpResponseMessage message = await _client.GetAsync($"api/UserGroup/GetUserGroupDetails{id}");
 
                 if (message.IsSuccessStatusCode)
                 {
                     var result = message.Content.ReadAsStringAsync().Result;
-					ObjUserGroup.ListGluserGroupDetail = JsonConvert.DeserializeObject<List<GluserGroupDetail>>(result);
-					
-
+					ObjUserGroup.ListGluserGroupDetail = JsonConvert.DeserializeObject<List<GluserGroupDetail>>(result);					
 				}
 
-            if (id == 0)
-            {
-           
+                if (id == 0)
+                {
+                    return View(ObjUserGroup);
+                }		
                 return View(ObjUserGroup);
-            }
-				
-
-            return View(ObjUserGroup);
             }
             else
             {
                 return RedirectToAction("Loginpage", "User",  new {id=2 });
             }
-
         }
+
         [HttpPost]
         public async Task<IActionResult> UserGroupCreateOrUpdate(GluserGroup ObjUserGroup , IFormCollection data)
         {
@@ -241,14 +228,6 @@ namespace HRHUBWEB.Controllers
 
         }
 
-
-
-
-
-
-
-        // Update status 
-
         [HttpGet]
         public async Task<ActionResult<JsonObject>> UpdateUserGroupStatus(int id, bool status)
         {
@@ -276,23 +255,7 @@ namespace HRHUBWEB.Controllers
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         #endregion
-
-
 
     }
 }
