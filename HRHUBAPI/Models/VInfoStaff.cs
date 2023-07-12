@@ -168,4 +168,10 @@ public partial class VInfoStaff
     public bool? IsShortMinutesDeductionApplicable { get; set; }
 
     public string? SalaryFrequency { get; set; }
+
+    public string? WeekDay { get; set; }
+
+    public short? FirstDateNumber { get; set; }
+
+    public short? SecondDateNumber { get; set; }
 }
