@@ -227,6 +227,38 @@ namespace HRHUBWEB.Controllers
             ViewBag.monthViewBag = items;
         }
 
+        public async Task<IActionResult> SalaryGenerationDateCheck(int month, int year)
+        {
+            //List<(string, string)>? datesList = new List<(string, string)>();  
+
+            if(_user.MonthlyIsSpecificDayofEveryMonth == false)
+            {
+                var dayMonth = "1";
+                var FOM = $"{year}/{month}/{dayMonth}";
+                DateTime EOM = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                int canGenerateSalary = DateTime.Now >= EOM ? 1 : 0;
+
+                //datesList.Add(("FOM", FOM.ToString()));
+                //datesList.Add(("EOM", EOM.ToString()));  
+                //datesList.Add(("canGenerateSalary", canGenerateSalary.ToString()));
+
+
+                return Json(new
+                {
+                    FOM = FOM.ToString(),
+                    EOM = EOM.ToString(),
+                    canGenerateSalary = canGenerateSalary.ToString()
+                });
+            }
+            else if (_user.MonthlyIsSpecificDayofEveryMonth == true)
+            {
+                return Json(null);
+
+            }
+                return Json(null);
+
+        }
+
         public async Task<IActionResult> PostStaffSalaryMaster(int month = 0, int year = 0)
         {
             StaffSalary objStaffSalary = new StaffSalary();
