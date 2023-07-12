@@ -243,7 +243,7 @@
 									<i class="feather feather-calendar"></i>
 								</div>
 							</div><input id="DashboardCalender" class="form-control fc-datepicker" placeholder="19 Feb 2020" type="text">
-								<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#clockinmodal">Clock In</button>
+						<button class="btn btn-primary" id="timeInId" ">Clock In</button>
 
 							@*<button id="toggleClockButton" type="button" class="btn btn-primary" data-bs-toggle="button" aria-pressed="false">am/pm</button>*@
 						</div>
@@ -556,6 +556,7 @@
 	<script>
 		$(document).ready(function() {
 
+			CheckStatusNow()
 			
 			localStorage.removeItem('loginCounter');
 			
@@ -601,6 +602,16 @@
 			});
 
 		});
+
+
+		$("#timeInId").click(function () {
+			debugger;
+
+			CheckAtendence();
+
+
+		});
+
 
 		$("#toggleClockButton").click(function() {
 			debugger;
@@ -1498,6 +1509,86 @@
                 console.log('Error:', errorStatus)
             });
         }
+
+
+		
+
+        function CheckAtendence() {
+
+            $.ajax({
+                url: "/Attentance/MarkAttendenceSubmit",
+                type: "POST",
+                async: false,
+                success: function (response) {
+                    debugger
+                    if (response != null) {
+                        if (response.attendanceId == 0) {
+                            notif({
+                                msg: "<i class='fa fa-info-circle fs-15 me-2'></i><b>Warning:</b> Today is Rest Day.",
+                                type: "warning"
+                            });
+                        }
+                        else {
+
+                            notif({
+                                msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> " + $("#timeInId").text() + " Succesfully.",
+                                type: "success"
+                            });
+                            var test = $("#timeInId").text();
+                            if (test == "Check In") {
+                                $("#timeInId").text('Check Out');
+                            }
+                            else {
+                                $("#timeInId").text('Check In');
+                            }
+                        
+
+                        }
+
+                    }
+
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+
+
+
+		function CheckStatusNow() {
+			$.ajax({
+				url: "/Attentance/StatusCheckData",
+				method: 'GET',
+				dataType: 'json',
+				success: function (response) {
+					debugger
+
+					if (response == null) {
+						$("#timeInId").text('Check In');
+					}
+					else if (response.timeIn != null && response.timeOut != null && response.timeIn == null && response.timeOut == null) {
+						$("#timeInId").text('Check In');
+					}
+
+					else if (response.timeOut == null && response.timeIn != null) {
+						$("#timeInId").text('Check Out');
+					}
+
+
+
+				},
+				error: function (xhr, status, error) {
+
+					console.error('AJAX request failed');
+				}
+			});
+
+
+		}
+
 
 	</script>
 }
