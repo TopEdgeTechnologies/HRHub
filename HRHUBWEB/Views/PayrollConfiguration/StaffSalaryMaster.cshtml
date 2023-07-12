@@ -122,13 +122,105 @@
             onchangeMonthYearCheckAlreadyExistsMaster()
     });
 
+    //async function Salary_GenerationDateCheck(currentMonth, currentYear) {
+    //    debugger
+    //    try {
+    //        var status = false;
+    //        var columns = {};
+
+    //        var response = await fetch('/PayrollConfiguration/SalaryGenerationDateCheck?month=${currentMonth}&year=${currentYear}');
+    //        debugger
+    //        if (response.ok) {
+    //            var data = await response.json();
+    //            if (data != "") {
+    //                debugger
+    //                columns = Object.fromEntries(data);
+    //                console.log(data);
+    //                status = true;
+    //            }
+    //        } else {
+    //            status = false;
+    //        }
+
+    //        debugger
+    //        var firstDateOfMonth = columns["FOM"];
+    //        var endOfMonth = columns["EOM"];
+    //        var canGenerateSalary = columns["canGenerateSalary"];
+
+    //        return {
+    //            endOfMonth: endOfMonth,
+    //            firstDateOfMonth: firstDateOfMonth,
+    //            canGenerateSalary: canGenerateSalary,
+    //            status: status
+    //        };
+    //    } catch (error) {
+    //        console.error('An error occurred:', error);
+    //        // Handle the error here, e.g., display an error message to the user
+    //        return {
+    //            endOfMonth: null,
+    //            firstDateOfMonth: null,
+    //            canGenerateSalary: null,
+    //            status: false
+    //        };
+    //    }
+    //}
+
+    function Salary_GenerationDateCheck(currentMonth, currentYear) {
+        debugger
+        var status = false
+        var firstDateOfMonth = ""
+        var endOfMonth = ""
+        var canGenerateSalary = ""
+
+        //try {
+            var Data = { month: currentMonth, year: currentYear };
+            $.ajax({
+                async: false,
+                url: "/PayrollConfiguration/SalaryGenerationDateCheck",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        console.log(data);
+                        firstDateOfMonth = columns["FOM"];
+                        endOfMonth = columns["EOM"];
+                        canGenerateSalary = columns["canGenerateSalary"];
+                        status = data.success;
+                    }
+                },
+                error: function () {
+                    status = false;
+                }
+            });            
+
+        //} catch (error) {
+            //console.error('An error occurred:', error);
+            // Handle the error here, e.g., display an error message to the user
+        //}
+
+        return {
+            endOfMonth: endOfMonth,
+            firstDateOfMonth: firstDateOfMonth,
+            canGenerateSalary: canGenerateSalary,
+            status: status
+        };
+    }
+
     function onchangeMonthYearCheckAlreadyExistsMaster() {
         debugger
         var recordInserted = false;
             var currentMonth = $("#attendanceMonth").find(":selected").index()
             var currentYear = $("#attendanceYear").find(":selected").text()
 
-        if (currentMonth != "" && currentYear != "") {
+        if (currentMonth > 0 && currentYear > 0) {
+            //var result = Salary_GenerationDateCheck(currentMonth, currentYear)
+            //debugger
+            //var firstDateOfMonth = result.firstDateOfMonth;
+            //var endOfMonth = result.endOfMonth;
+            //var canGenerateSalary = result.canGenerateSalary;
+            //var status = result.status;
+
             var date = new Date(currentYear, currentMonth - 1)
             var currentMonthName = date.toLocaleString('default', { month: 'short' })
             $("#lbl_Duration").text(currentMonthName + ' - ' + currentYear)
@@ -285,36 +377,33 @@
 
     function StaffSalary_BulkInsert(currentMonth, currentYear) {
         var status = false;
-        debugger
-        //var Data = { month: $('#salaryMonth').val(), year: $("#salaryYear").val(), staffId: staffId }
-        var Data = { month: currentMonth, year: currentYear}
-        console.log(Data)
-        $.ajax({
-            async: false,
-            url: "/PayrollConfiguration/PostStaffSalaryMaster",
-            type: "GET",
-            data: Data,
-            success: function (data) {
-                if (data != "") {
-                    console.log(data)
-                    debugger
-                    status = data.success;
+
+        try {
+            var Data = { month: currentMonth, year: currentYear };
+            console.log(Data);
+
+            $.ajax({
+                async: false,
+                url: "/PayrollConfiguration/PostStaffSalaryMaster",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        console.log(data);
+                        status = data.success;
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
                 }
-            },
-            error: function () 
-            {
-                status = false;
-                //   toastr.error("Please Fill Required Field");
-            }
-        })
+            });
+        } catch (error) {
+            console.error('An error occurred:', error);
+            // Handle the error here, e.g., display an error message to the user
+        }
         return status;
     }
-
-    //function openPayrollPolicy() {
-    //    debugger
-    //    var url = "/Setting/PayrollSettings/;
-    //    window.location.href = url;
-    //}
 
 </script>
 }

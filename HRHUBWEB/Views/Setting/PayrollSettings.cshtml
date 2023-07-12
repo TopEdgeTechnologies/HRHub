@@ -152,7 +152,7 @@
                             <p class="fs-18 font-weight-semibold">How often do you pay your staff? <span class="text-danger">*</span></p>
                             <div class="row">
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -161,7 +161,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="other-week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="other-week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -170,7 +170,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="twice-month-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="twice-month-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -323,7 +323,7 @@
                                             </label>
                                             <label class="custom-control custom-radio mb-4 d-flex align-items-center">
                                                 <input type="radio" id="SpecificDay" class="custom-control-input" name="example-radios" value="option2">
-                                                <span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
+                                                @*<span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>*@
                                             </label>
                                         </div>
                                     </div>
@@ -927,7 +927,7 @@
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
 
             debugger;
-            var str = '@Model.MonthlyIsSpecificDayofEveryMonth';
+            //var str = '@*Model.MonthlyIsSpecificDayofEveryMonth*@';
 
             if (str.toUpperCase() == "TRUE") {
                 $('#SpecificDay').prop('checked', true);

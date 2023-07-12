@@ -17,7 +17,9 @@ public partial class StaffSalarySetting
 
     public string? SalaryFrequency { get; set; }
 
-    public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
+    public string? WeekDay { get; set; }
 
-    public int? MonthlyDateOfEveryMonth { get; set; }
+    public short? FirstDateNumber { get; set; }
+
+    public short? SecondDateNumber { get; set; }
 }
