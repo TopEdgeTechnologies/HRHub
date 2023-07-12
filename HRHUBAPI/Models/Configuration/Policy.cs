@@ -633,8 +633,8 @@ namespace HRHUBAPI.Models
                 var checkCompanyInfo = await _context.StaffSalarySettings.FirstOrDefaultAsync(x => x.CompanyId == obj.CompanyId);
                 if (checkCompanyInfo != null && checkCompanyInfo.StaffSalarySettingId > 0)
                 {
-                    checkCompanyInfo.MonthlyIsSpecificDayofEveryMonth = obj.MonthlyIsSpecificDayofEveryMonth;
-                    checkCompanyInfo.MonthlyDateOfEveryMonth = obj.MonthlyDateOfEveryMonth;
+                   // checkCompanyInfo.MonthlyIsSpecificDayofEveryMonth = obj.MonthlyIsSpecificDayofEveryMonth;
+                   // checkCompanyInfo.MonthlyDateOfEveryMonth = obj.MonthlyDateOfEveryMonth;
 
                     await _context.SaveChangesAsync();
 

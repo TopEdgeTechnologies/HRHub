@@ -161,8 +161,6 @@ public partial class HrhubContext : DbContext
 
     public virtual DbSet<UserForm> UserForms { get; set; }
 
-    public virtual DbSet<UserForms2> UserForms2s { get; set; }
-
     public virtual DbSet<UserLoginHistory> UserLoginHistories { get; set; }
 
     public virtual DbSet<VInfoStaff> VInfoStaffs { get; set; }
@@ -174,6 +172,10 @@ public partial class HrhubContext : DbContext
     public virtual DbSet<WeekendRule> WeekendRules { get; set; }
 
     public virtual DbSet<XuserForm> XuserForms { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WebServer;Initial Catalog=HRHUB;User ID=team;Password=dynamixsolpassword;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1218,9 +1220,8 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
-            entity.Property(e => e.MonthlyDateOfEveryMonth).HasColumnName("Monthly_DateOfEveryMonth");
-            entity.Property(e => e.MonthlyIsSpecificDayofEveryMonth).HasColumnName("Monthly_IsSpecificDayofEveryMonth");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
+            entity.Property(e => e.WeekDay).IsUnicode(false);
         });
 
         modelBuilder.Entity<StaffSkill>(entity =>
@@ -1298,29 +1299,6 @@ public partial class HrhubContext : DbContext
         modelBuilder.Entity<UserForm>(entity =>
         {
             entity.HasKey(e => e.Formid).HasName("PK_UserForms2");
-
-            entity.Property(e => e.Action)
-                .HasMaxLength(50)
-                .HasColumnName("action");
-            entity.Property(e => e.Controller)
-                .HasMaxLength(50)
-                .HasColumnName("controller");
-            entity.Property(e => e.DOrder).HasColumnName("dOrder");
-            entity.Property(e => e.FormTitle).HasMaxLength(50);
-            entity.Property(e => e.ImageClass)
-                .HasMaxLength(50)
-                .HasColumnName("imageClass");
-            entity.Property(e => e.IsParent).HasColumnName("isParent");
-            entity.Property(e => e.ParentId).HasColumnName("parentId");
-            entity.Property(e => e.ReferenceId).HasColumnName("ReferenceID");
-            entity.Property(e => e.Status).HasColumnName("status");
-        });
-
-        modelBuilder.Entity<UserForms2>(entity =>
-        {
-            entity.HasKey(e => e.Formid);
-
-            entity.ToTable("UserForms2");
 
             entity.Property(e => e.Action)
                 .HasMaxLength(50)

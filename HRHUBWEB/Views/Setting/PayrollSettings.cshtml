@@ -321,10 +321,10 @@
                                                 <input type="radio" id="LastWorkingDayOfMonth" class="custom-control-input" name="example-radios" value="option1" checked="">
                                                 <span class="custom-control-label fs-16">The last working day of every month</span>
                                             </label>
-                                            <label class="custom-control custom-radio mb-4 d-flex align-items-center">
+                                           @* <label class="custom-control custom-radio mb-4 d-flex align-items-center">
                                                 <input type="radio" id="SpecificDay" class="custom-control-input" name="example-radios" value="option2">
                                                 <span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
-                                            </label>
+                                            </label>*@
                                         </div>
                                     </div>
 
@@ -931,7 +931,7 @@
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
 
             debugger;
-            var str = '@Model.MonthlyIsSpecificDayofEveryMonth';
+            //var str = '@*Model.MonthlyIsSpecificDayofEveryMonth*@';
 
             if (str.toUpperCase() == "TRUE") {
                 $('#SpecificDay').prop('checked', true);
