@@ -5,6 +5,7 @@ using HRHUBWEB.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NuGet.Packaging.Signing;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 
@@ -13,12 +14,18 @@ namespace HRHUBWEB.Controllers
     public class CompanyController : Controller
     {
         private readonly HttpClient _client;
-		private IWebHostEnvironment _webHostEnvironment;
-		public CompanyController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment)
+        private IWebHostEnvironment _webHostEnvironment;
+        private readonly APIHelper _APIHelper;
+        private readonly User _user;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CompanyController(IHttpClientFactory httpClient, IWebHostEnvironment webHostEnvironment, APIHelper APIHelper, IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClient.CreateClient("APIClient");
-			_webHostEnvironment = webHostEnvironment;
-		}
+            _webHostEnvironment = webHostEnvironment;
+            _APIHelper = APIHelper;
+            _httpContextAccessor = httpContextAccessor;
+            _user = _httpContextAccessor.HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+        }
         #region CompanyInfo
         [CustomAuthorization]
         public async Task<IActionResult> CompanyList(string data = "")
@@ -79,7 +86,7 @@ namespace HRHUBWEB.Controllers
 
             }
         }
-        private async Task<Company> GetCompanybyID(int id)
+        private async Task<Company> GetCompanybyID(int? id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -160,7 +167,7 @@ namespace HRHUBWEB.Controllers
 				var CompanyLogo = my.Files.GetFile("CompanyLogo");
 
 				ObjCompany.LogoAttachment = uploadImage(ObjCompany.CompanyName, CompanyLogo, "CompanyAttachment");
-
+                
 
 
 				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");               
@@ -193,8 +200,8 @@ namespace HRHUBWEB.Controllers
 
                     }
 
-                    return RedirectToAction("CompanyList", new { data = status });
-
+                    // return RedirectToAction("CompanyList", new { data = status });
+                    return RedirectToAction("CompanySetting", new { tab = "CompanyProfile" });
                 }
                 else
                 {
@@ -210,6 +217,70 @@ namespace HRHUBWEB.Controllers
                 return View();
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PostCompanydata(IFormCollection my, Company ObjCompany)
+        {
+            try
+            {
+                var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+                var CompanyLogo = my.Files.GetFile("CompanyLogo");
+
+                ObjCompany.LogoAttachment = uploadImage(ObjCompany.CompanyName, CompanyLogo, "CompanyAttachment");
+
+
+
+                var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
+                ObjCompany.CreatedBy = userObject.UserId;
+                HttpResponseMessage message = await _client.PostAsJsonAsync("api/Company/PostCompanyProfile", ObjCompany);
+
+                if (message.IsSuccessStatusCode)
+                {
+
+                    var body = message.Content.ReadAsStringAsync();
+
+
+                    var model = JsonConvert.DeserializeObject<Response>(body.Result);
+
+
+                    int status = 0;
+                    if (model.Success)
+                    {
+
+
+                        if (model.Message.Contains("Insert"))
+                        {
+                            status = 1;
+                        }
+                        else if (model.Message.Contains("Update"))
+                        {
+                            status = 2;
+                        }
+
+
+                    }
+
+                    // return RedirectToAction("CompanyList", new { data = status });
+                    return RedirectToAction("CompanySetting", new { tab = "CompanyProfile" });
+                }
+                else
+                {
+                    return RedirectToAction("Loginpage", "User", new { id = 2 });
+                }
+
+
+
+            }
+            catch (Exception)
+            {
+
+                return View();
+            }
+        }
+
+
         public async Task<IActionResult> CompanyDelete(int id)
         {
             var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
@@ -252,24 +323,42 @@ namespace HRHUBWEB.Controllers
 
 		// Company Settings 
 		[HttpGet]
-		public async Task<IActionResult> CompanySetting(int id)
+		public async Task<IActionResult> CompanySetting()
 		{
 			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 
 			//Get Instutute ID through Sessions
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-			var CompanyId = userObject.CompanyId;
+			var CompanyId = userObject.CompanyId;// ary database se data tp compny ki base per hi is id ki base per or wo opr hy id aa ri hy wo? bass
 
 			if (Token != null)
 			{
-				if (id == 0)
-				{
-					Company Info = new Company();
-					Info.LogoAttachment = "~/Images/CompanyLogo.png";
 
-					return View(Info);
-				}
+                HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetLeaveStatusInfos");
+                if (message2.IsSuccessStatusCode)
+                {
+                    var result = message2.Content.ReadAsStringAsync().Result;
+                    ViewBag.LeaveStatusList = JsonConvert.DeserializeObject<List<LeaveStatus>>(result);
+
+                }
+
+
+                HttpResponseMessage message3 = await _client.GetAsync($"api/Leave/GetWeekendRuleInfos");
+                if (message3.IsSuccessStatusCode)
+                {
+                    var result = message3.Content.ReadAsStringAsync().Result;
+                    ViewBag.LeaveWeekendRule = JsonConvert.DeserializeObject<List<WeekendRule>>(result);
+
+                }
+
+    //            if (id == 0) 
+				//{
+				//	Company Info = new Company();
+				//	Info.LogoAttachment = "~/Images/CompanyLogo.png";
+
+				//	return View(Info);
+				//}
 
 				//HttpResponseMessage message1 = await _client.GetAsync($"api/Staffs/GetStaffByCompanyId{CompanyId}");
 				//if (message1.IsSuccessStatusCode)
@@ -280,30 +369,8 @@ namespace HRHUBWEB.Controllers
 				//}
 
 
-                HttpResponseMessage message2 = await _client.GetAsync($"api/Leave/GetLeaveStatusInfos");
-				if (message2.IsSuccessStatusCode)
-				{
-					var result = message2.Content.ReadAsStringAsync().Result;
-					ViewBag.LeaveStatusList = JsonConvert.DeserializeObject<List<LeaveStatus>>(result);
 
-				}
-
-
-				HttpResponseMessage message3 = await _client.GetAsync($"api/Leave/GetWeekendRuleInfos");
-				if (message3.IsSuccessStatusCode)
-				{
-					var result = message3.Content.ReadAsStringAsync().Result;
-					ViewBag.LeaveWeekendRule = JsonConvert.DeserializeObject<List<WeekendRule>>(result);
-
-				}
-
-
-
-
-
-
-
-				Company Companyinfo = await GetCompanybyID(id);
+				Company Companyinfo = await GetCompanybyID(CompanyId);
 
 				return View(Companyinfo);
 			}

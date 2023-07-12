@@ -63,8 +63,6 @@ namespace HRHUBAPI.Controllers
         [HttpPost("DesignationAddOrUpdate")]
         public async Task<ActionResult<Designation>> DesignationAddOrUpdate(Designation obj)
         {
-
-
             var result = await new Designation().PostDesignation(obj, _context);
             if (result != null && result.Flag ==2)
                 return Ok(new

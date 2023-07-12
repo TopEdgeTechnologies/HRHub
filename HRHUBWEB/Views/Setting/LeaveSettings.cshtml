@@ -393,12 +393,17 @@
 @section scripts{
 
     <script>
+        debugger; 
+        var currentUrl = window.location.search;
+        var urlParams = new URLSearchParams(currentUrl);
+  var tab = urlParams.get("tab");
+  console.log(tab); 
         $(document).ready(function () {
 
-            var currentUrl = window.location.href;
-            var tab = currentUrl.split('=')[1];
+            //var currentUrl = window.location.href;
+            //var tab = currentUrl.split('=')[1];
 
-            if (tab !== "" && tab !== undefined ){
+            if (tab !== "" && tab !== undefined && tab !== null ){
                
                 $('a.nav-link').removeClass('active');
                 $('div.tab-pane').removeClass('active show');

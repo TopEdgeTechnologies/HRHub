@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input class="form-control timepicker" asp-for="OfficeStartTime" placeholder="HH:MM AM/PM" type="text">
+                                            <input class="form-control timepicker" asp-for="OfficeStartTime" placeholder="HH:MM AM/PM" type="time">
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
                                                     <i class="feather feather-clock"></i>
@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <input class="form-control timepicker" asp-for="OfficeEndTime" placeholder="HH:MM AM/PM" type="text">
+                                            <input class="form-control timepicker" asp-for="OfficeEndTime" placeholder="HH:MM AM/PM" type="time">
                                             <div class="input-group-append">
                                                 <div class="input-group-text">
                                                     <i class="feather feather-clock"></i>
@@ -148,29 +148,29 @@
                                                     var count = 1;
                                                     foreach (var item in ViewBag.ListWeekEndRule)
                                                     {
-                                                                    <tr>
-                                                                        <td id="@item.WeekendRuleId">@count</td>
-                                                                        <td>@item.DayName</td>
-                                                                        <td>
-                                                                            <label class="custom-switch form-switch mb-0">
-                                                                                <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.WeekendRuleId" onchange="setweekendvalue(this.id)" @(item.Status == true? "checked" : "")>
-                                                                                <span class="custom-switch-indicator"></span>
-                                                                            </label>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div class="d-flex">
+                                                                        <tr>
+                                                                            <td id="@item.WeekendRuleId">@count</td>
+                                                                            <td>@item.DayName</td>
+                                                                            <td>
+                                                                                <label class="custom-switch form-switch mb-0">
+                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@item.WeekendRuleId" onchange="setweekendvalue(this.id)" @(item.Status == true? "checked" : "")>
+                                                                                    <span class="custom-switch-indicator"></span>
+                                                                                </label>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
 
-                                                                                @*<a class="action-btns1 btn-xs" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
+                                                                                    @*<a class="action-btns1 btn-xs" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete" data-bs-original-title="Delete" aria-label="Delete">
                                                             <i class="feather feather-trash-2 text-danger mt-1"></i>
                                                             </a>*@
 
-                                                                                <a class="btn-l" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                                    <i class="feather feather-trash-2 fs-4 text-danger mt-1"></i>
-                                                                                </a>
+                                                                                    <a class="btn-l" onclick="confirmation(@item.WeekendRuleId, this)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                                        <i class="feather feather-trash-2 fs-4 text-danger mt-1"></i>
+                                                                                    </a>
 
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
                                                         count++;
                                                     }
                                                 }
@@ -358,25 +358,25 @@
                                                     var i = 1;
                                                     foreach (var items in ViewBag.ListAttendancePolicy)
                                                     {
-                                                                    <tr>
-                                                                        <td id="@items.PolicyConfigurationId">@i</td>
-                                                                        <td>@items.Title</td>
-                                                                        <td>
-                                                                            <label class="custom-switch form-switch mb-0">
-                                                                                <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@items.PolicyConfigurationId" onchange="setpolicyvalue(this.id)" @(items.Status == true? "checked" : "")>
-                                                                                <span class="custom-switch-indicator"></span>
-                                                                            </label>
-                                                                        </td>
-                                                                        <td>
-                                                                            @* <a onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
+                                                                        <tr>
+                                                                            <td id="@items.PolicyConfigurationId">@i</td>
+                                                                            <td>@items.Title</td>
+                                                                            <td>
+                                                                                <label class="custom-switch form-switch mb-0">
+                                                                                    <input type="checkbox" name="custom-switch-radio" class="custom-switch-input" id="IsActive_@items.PolicyConfigurationId" onchange="setpolicyvalue(this.id)" @(items.Status == true? "checked" : "")>
+                                                                                    <span class="custom-switch-indicator"></span>
+                                                                                </label>
+                                                                            </td>
+                                                                            <td>
+                                                                                @* <a onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" class="action-btns1 btn-xs" data-bs-placement="top" data-bs-toggle="tooltip" title="Edit">
                                                         <i class="feather feather-edit primary text-primary mt-1 "></i>
                                                         </a>*@
 
-                                                                            <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
-                                                                                <i class="feather feather-edit primary text-primary mt-1"></i>
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
+                                                                                <a class="action-btns1 btn-xs" onclick="editpolicyconfiguration(@items.PolicyConfigurationId)" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit" data-bs-original-title="Edit" aria-label="Edit">
+                                                                                    <i class="feather feather-edit primary text-primary mt-1"></i>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
                                                         i++;
                                                     }
                                                 }
@@ -401,14 +401,19 @@
 @section scripts{
 
     <script>
-
+       // var currentUrl = window.location.href;
+           // var tab = currentUrl.split('=')[1];
+           debugger; 
+        var currentUrl = window.location.search;
+        var urlParams = new URLSearchParams(currentUrl);
+  var tab = urlParams.get("tab");
+  console.log(tab); 
         $(document).ready(function () {
             debugger;
 
-            var currentUrl = window.location.href;
-            var tab = currentUrl.split('=')[1];
+            
 
-            if (tab !== "" && tab !== undefined ){
+            if (tab !== "" && tab !== undefined && tab !== null ){
                
                 $('a.nav-link').removeClass('active');
                 $('div.tab-pane').removeClass('active show');
@@ -571,8 +576,9 @@
                                 //var b = JSON.parse(data)
                                 if (data.success) {
 
-                                    //window.location.href =  window.location.href;
-                                    var url = '@Url.Action("AttendanceSettings", "Setting",new { data = 2 })';
+                                    var url = '@Url.Action("AttendanceSettings", "Setting",new { data = 2})' + '&tab=' + tab;;
+
+                                    //var url = '@Url.Action("AttendanceSettings", "Setting",new { data = 2})';
                                     window.location.href = url;
                                     status = false;
                                 }
