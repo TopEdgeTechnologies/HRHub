@@ -49,6 +49,7 @@ namespace HRHUBWEB.Controllers
 
 
 		//Submit Attendance Data Company Vise 
+
 		[HttpPost]
 		public async Task<IActionResult> MarkAttendenceSubmit()
 		{
@@ -58,7 +59,7 @@ namespace HRHUBWEB.Controllers
 			obj.CreatedBy = _user.UserId;
 			obj.CompanyID = _user.CompanyId;
 
-			obj.AttendanceDate = DateTime.Now;
+			obj.AttendanceDate = DateTime.Now;//.ToString("dd-MMM-yyyy");
 			obj.FirstPunchIn = DateTime.Now.TimeOfDay;
 			obj.LastPunchOut = DateTime.Now.TimeOfDay;
 
