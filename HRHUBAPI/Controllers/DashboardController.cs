@@ -35,12 +35,27 @@ namespace HRHUBAPI.Controllers
 
         }
 
+		//[HttpGet("GetAnyProcdureData{ProcedureName}")]
+		//public async Task<ActionResult> GetAnyProcdureData( string ProcedureName, [FromBody] object[] parameters)
+		//{
+		//	string parameterString = string.Join(",", parameters);
+		//	DataTable dataTable = await Task.Run(() => _DbCom.ReturnDataTable(ProcedureName + " " + parameterString));
+		//	//var result = _DbCom.GetTableRows(dataTable);
+		//   var result = _DbCom.ConvertDataTableToList<List<dynamic>>(dataTable);
+
+
+		//	return Ok(result);
+
+		//}
+
+
+
 		//[HttpGet("GetDashboardData/{CompanyId}/{FunctionName}")]
 		//public async Task<ActionResult> GetDashboardDataFunction(int CompanyId, string FunctionName, [FromBody] object[] parameters)
 		//{
 		//	string parameterString = string.Join(",", parameters);
 		//	string query = $"SELECT * FROM {FunctionName}({parameterString})";
-  //          query += " OPTION (MAXRECURSION 0) ";
+		//          query += " OPTION (MAXRECURSION 0) ";
 		//	DataTable dataTable = await Task.Run(() => _DbCom.ReturnDataTable(query));
 		//	var result = _DbCom.GetTableRows(dataTable);
 		//	return Ok(result);

@@ -53,7 +53,84 @@ namespace HRHUBAPI.Models.Configuration
             return lstRows;
         }
 
-        public string ReturnColumn(string Query, string ColumnName)
+
+		    public  List<T> ConvertDataTableToList<T>(DataTable dataTable) where T : new()
+		    {
+			    List<T> modelList = new List<T>();
+
+			    foreach (DataRow row in dataTable.Rows)
+			    {
+				    T model = new T();
+				    var properties = typeof(T).GetProperties();
+
+				    foreach (DataColumn column in dataTable.Columns)
+				    {
+					    var property = Array.Find(properties, p => p.Name.Equals(column.ColumnName));
+					    if (property != null && row[column] != DBNull.Value)
+					    {
+						    if (property.PropertyType == typeof(bool?))
+						    {
+							    if (string.IsNullOrEmpty(row[column].ToString()))
+							    {
+								    property.SetValue(model, null);
+							    }
+							    else
+							    {
+								    property.SetValue(model, Convert.ToBoolean(row[column]));
+							    }
+						    }
+						    //else if (property.PropertyType == typeof(int?))
+						    //{
+							   // property.SetValue(model, ConvertToNullableInt(row[column]));
+						    //}
+						else if (property.PropertyType == typeof(int?))
+						{
+
+							if (string.IsNullOrEmpty(row[column].ToString()))
+							{
+								property.SetValue(model, null);
+							}
+							else
+							{
+								property.SetValue(model, Convert.ToInt32(row[column]));
+							}
+						}
+
+						else if (property.PropertyType == typeof(decimal?))
+						    {
+
+							    if (string.IsNullOrEmpty(row[column].ToString()))
+							    {
+								    property.SetValue(model, null);
+							    }
+							    else
+							    {
+								    property.SetValue(model, Convert.ToDecimal(row[column]));
+							    }
+						    }
+						    else
+						        {
+							        property.SetValue(model, Convert.ChangeType(row[column], property.PropertyType));
+						        }
+					    }
+				    }
+
+				    modelList.Add(model);
+			    }
+
+			    return modelList;
+		    }
+
+		//private  int? ConvertToNullableInt(object value)
+		//{
+		//	if (value is int intValue)
+		//	{
+		//		return intValue;
+		//	}
+
+		//	return null;
+		//}
+		public string ReturnColumn(string Query, string ColumnName)
         {
             string result = "";
             DataTable dt = new DataTable();

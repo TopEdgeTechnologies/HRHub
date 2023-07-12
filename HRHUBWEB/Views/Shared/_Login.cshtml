@@ -89,14 +89,20 @@
                                 </button><strong>Success! </strong> Your password successfully change .
                                 <a href="javascript:void(0);" class="alert-link"></a>
                             </div>
-
-
-
-                            @*<div id="AlertValidationSession" class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>Login Failed </strong>Please Login Again, Session expired.
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>*@
+                      
                         }
+
+                        <div id="AlertValidationCaptcha" style="display:none">
+                            <div class="alert alert-warning" role="alert">
+                                <strong>Warning! </strong> Invalid CAPTCHA. Please try again.
+                                <a href="javascript:void(0);" class="alert-link"></a>
+                            </div>
+
+                        </div>
+
+
+
+
                         <div class="pt-4 pb-2 ps-2">
                             <a class="header-brand" href="index.html">
                                 <img src="~/assets/images/brand/logo.png" class="header-brand-img custom-logo" alt="Dayonelogo">
@@ -130,6 +136,25 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            <div id="captcha-container"></div>
+                            <div id="catachEnterDiv" class="form-group" style="display:none">
+                                <div class="input-group mb-4">
+                                    <div class="input-group">
+                                        <a class="input-group-text">
+                                            <i class="fa fa-refresh"></i>
+                                        </a>
+                                        <input class="form-control" id="captcha-input" name="captcha-input" placeholder="Enter Captcha">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+
+
                             <div class="form-group">
                                 <label class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1">
@@ -188,16 +213,23 @@
     <!-- custom js -->
     <script src="~/assets/js/custom.js"></script>
 
-
-
+    <script src="~/js/validateoperation.js"></script>
 
 
     <script type="text/javascript">
+
+      
         $(document).ready(function () {
 
-          
+          debugger;
 
-          
+      
+            var loginCounter = localStorage.getItem('loginCounter');
+            if (parseInt(loginCounter) > 3) {
+
+                $("#catachEnterDiv").css("display", "block")
+                generateCaptcha();
+            }
 
             $(".alert").delay(5000).slideUp(200, function () {
                 $(this).alert('close');
@@ -210,6 +242,9 @@
 
 
             if (paramValue !== "" && paramValue == '1') {
+                alert(loginCounter)
+
+              
                 //     toastr.error("Please Login Again.");
 
                 $('#AlertValidation').css("display", "block")
@@ -219,6 +254,8 @@
 
 
             if (paramValue !== "" && paramValue == '2') {
+           
+
                 //    toastr.error("Please Login Again.");
 
                 $('#AlertValidationSession').css("display", "block")
@@ -235,8 +272,10 @@
             }
         });
 
+
         function postdata() {
             debugger
+            storeLoginAttempt();
             var status = true;
 
             if ($("#UserName").val() == "") {
@@ -275,10 +314,49 @@
 
             }
 
+            if ($('#catachEnterDiv').is(':visible')) {
+
+                if ($("#captcha-input").val() == "") {
+
+                    $.growl.warning({
+                        message: "Please Enter user captcha"
+                    });
+
+
+                    $("#captcha-input").css("border-color", "red");
+                    status = false;
+
+                }
+                else {
+                    $("#captcha-input").css("border-color", "#ddd");
+
+                }
+
+            }
+
+ 
+
            
 
             if (status) {
-                $("#myform").submit();
+
+
+                var enteredCaptcha = $('#captcha-input').val();
+                var captcha = $('#captcha-container').text();
+
+                if (enteredCaptcha === captcha) {
+
+                    $("#myform").submit();
+                } else {
+                    // CAPTCHA is incorrect
+
+
+                    $("#AlertValidationCaptcha").show();
+
+                    generateCaptcha();
+                }
+
+             
 
             }
         }
