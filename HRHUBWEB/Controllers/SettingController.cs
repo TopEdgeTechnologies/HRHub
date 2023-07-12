@@ -325,8 +325,8 @@ namespace HRHUBWEB.Controllers
         {
 
             StaffSalarySetting obj = new StaffSalarySetting();
-            obj.MonthlyDateOfEveryMonth = MonthlyDateOfEveryMonth;
-            obj.MonthlyIsSpecificDayofEveryMonth = IsSpecificDayofEveryMonth;
+            //obj.MonthlyDateOfEveryMonth = MonthlyDateOfEveryMonth;
+            //obj.MonthlyIsSpecificDayofEveryMonth = IsSpecificDayofEveryMonth;
             obj.CompanyId = Convert.ToInt32(_user.CompanyId);
 
             var result = await _APIHelper.CallApiAsyncPost<Response>(obj, "api/Setting/PostPayrollSetting", HttpMethod.Post);
