@@ -1,5 +1,4 @@
 ﻿using HRHUBAPI.Models.Configuration;
-using HRHUBAPI.Models.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -15,6 +14,15 @@ namespace HRHUBAPI.Models
     {
 
         #region [NotMapped]
+
+            [NotMapped]
+            public string? UserName { get; set; }
+
+            [NotMapped]
+            public string? UserPassword { get; set; }
+
+            [NotMapped]
+            public bool EmailNotification { get; set; }
 
             [NotMapped]
             public int? TotalActiveStaff { get; set; }
@@ -198,6 +206,8 @@ namespace HRHUBAPI.Models
                         Gender = row["Gender"].ToString(),
                         //JoiningDate = DateTime.ParseExact(row["JoiningDate"].ToString(), "dd-MM-yyyy", CultureInfo.InvariantCulture),
                         Status = Convert.ToBoolean(row["Status"])
+                        //UserName = string.IsNullOrWhiteSpace(row["UserName"].ToString()) ? "" : row["UserName"].ToString(),
+                        //UserPassword = string.IsNullOrWhiteSpace(row["Password"].ToString()) ? "" : row["Password"].ToString()
                     })
                     .ToList();
                 return staff;
@@ -210,6 +220,23 @@ namespace HRHUBAPI.Models
             try
             {
                 var dbResult = await hrhubContext.Staff.FirstOrDefaultAsync(x => x.IsDeleted == false && x.StaffId == Id);
+                if (dbResult != null)
+                {
+                    return dbResult;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch { throw; }
+        }
+
+        public async Task<User> GetUserByStaffId(int CompanyId, int StaffId, HrhubContext hrhubContext)
+        {
+            try
+            {
+                var dbResult = await hrhubContext.Users.FirstOrDefaultAsync(x => x.IsActive == true && x.CompanyId == CompanyId && x.StaffId == StaffId);
                 if (dbResult != null)
                 {
                     return dbResult;
@@ -407,6 +434,9 @@ namespace HRHUBAPI.Models
 
                         await hrhubContext.SaveChangesAsync();
 
+                        //UserDetail Save
+                        UserDetailSave(staff, hrhubContext);
+
                         //Staff Salary
                         StaffSalaryDetailSave(staff, hrhubContext);
 
@@ -427,6 +457,9 @@ namespace HRHUBAPI.Models
 
                         hrhubContext.Staff.Add(staff);
                         await hrhubContext.SaveChangesAsync();
+
+                        //UserDetail Save
+                        UserDetailSave(staff, hrhubContext);
 
                         //Staff Salary
                         StaffSalaryDetailSave(staff, hrhubContext);
@@ -450,6 +483,35 @@ namespace HRHUBAPI.Models
             }
         }
 
+        public bool UserDetailSave(Staff objStaff, HrhubContext hrhubContext)
+        {
+            var dbResult = hrhubContext.Users.FirstOrDefault(x => x.IsActive == true && x.StaffId == objStaff.StaffId);
+            if(dbResult != null)
+            {
+                dbResult.UserName = objStaff.UserName;
+                dbResult.Password = objStaff.UserPassword;
+                dbResult.UpdatedBy = objStaff.CreatedBy;
+                dbResult.UpdatedOn = DateTime.Now;
+                
+                hrhubContext.SaveChanges();
+            }
+            else
+            {
+                User objUser = new User();
+                objUser.CompanyId = objStaff.CompanyId;
+                objUser.UserName = objStaff.UserName;
+                objUser.Password = objStaff.UserPassword;
+                objUser.StaffId = objStaff.StaffId;
+                objUser.IsActive = false;
+                objUser.CreatedOn = DateTime.Now;   
+                objUser.CreateBy = objStaff.CreatedBy;
+
+                hrhubContext.Users.Add(objUser);
+                hrhubContext.SaveChanges();
+            }
+            return true;
+        }
+
         private bool StaffSalaryDetailSave(Staff objStaff, HrhubContext hrhubContext)
         {
             try
@@ -464,19 +526,22 @@ namespace HRHUBAPI.Models
                 List<StaffSalaryComponent> ListStaffSalaryComponents = new List<StaffSalaryComponent>();
 
                 int i = 0;
-                foreach (var item in objStaff.ListComponentAmountEarning)
-                {
-                    if (item != null && item > 0)
+                if(objStaff.ListComponentAmountEarning != null) 
+                { 
+                    foreach (var item in objStaff.ListComponentAmountEarning)
                     {
-                        StaffSalaryComponent staffSalaryComponent = new StaffSalaryComponent();
-                        staffSalaryComponent.StaffId = objStaff.StaffId;
-                        staffSalaryComponent.ComponentId = objStaff.ListComponentId.ToArray()[i];
-                        staffSalaryComponent.ComponentAmount = item;
-                        staffSalaryComponent.PercentageValue = objStaff.ListComponentPercentageEarning.ToArray()[i];
+                        if (item != null && item > 0)
+                        {
+                            StaffSalaryComponent staffSalaryComponent = new StaffSalaryComponent();
+                            staffSalaryComponent.StaffId = objStaff.StaffId;
+                            staffSalaryComponent.ComponentId = objStaff.ListComponentId.ToArray()[i];
+                            staffSalaryComponent.ComponentAmount = item;
+                            staffSalaryComponent.PercentageValue = objStaff.ListComponentPercentageEarning.ToArray()[i];
 
-                        ListStaffSalaryComponents.Add(staffSalaryComponent);
+                            ListStaffSalaryComponents.Add(staffSalaryComponent);
+                        }
+                        i++;
                     }
-                    i++;
                 }
                 hrhubContext.AddRange(ListStaffSalaryComponents);
 				hrhubContext.SaveChanges();

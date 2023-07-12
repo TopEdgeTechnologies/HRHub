@@ -1,8 +1,5 @@
 ﻿@model HRHUBAPI.Models.User
 
-
-
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -66,12 +63,9 @@
                         }
                         @if (Model.status != null && Model.status == 2)
                         {
-                           
                             <div id="AlertValidationSession" class="alert alert-warning" role="alert"><button class="btn-close" 
                                 data-bs-dismiss="alert" aria-hidden="true">×</button><strong>Warning! </strong> Please Login Again, Session expired. 
                                 <a href="javascript:void(0);" class="alert-link"></a></div>
-                            
-                            
                             
                             @*<div id="AlertValidationSession" class="alert alert-warning alert-dismissible fade show" role="alert">
                                 <strong>Login Failed </strong>Please Login Again, Session expired.
@@ -81,7 +75,6 @@
 
                         @if (Model.status != null && Model.status == 4)
                         {
-
                             <div id="AlertValidationSession" class="alert alert-success" role="alert">
                                 <button class="btn-close"
                                     data-bs-dismiss="alert" aria-hidden="true">
@@ -205,8 +198,6 @@
     <script src="/assets/plugins/notify/js/notifIt.js"></script>
     <script src="/assets/js/popover.js"></script>
 
-
-
     <!-- Color Theme js -->
     <script src="~/assets/js/themeColors.js"></script>
 
@@ -236,22 +227,17 @@
             });
 
             const urlParams = new URLSearchParams(window.location.search);
-
             // Get the value of a specific parameter
             const paramValue = urlParams.get('status');
-
 
             if (paramValue !== "" && paramValue == '1') {
                 alert(loginCounter)
 
               
                 //     toastr.error("Please Login Again.");
-
                 $('#AlertValidation').css("display", "block")
                 //alert("Please Login Again.")
             }
-
-
 
             if (paramValue !== "" && paramValue == '2') {
            
@@ -261,8 +247,6 @@
                 $('#AlertValidationSession').css("display", "block")
                 //alert("Please Login Again.")
             }
-
-           
 
         });
 
@@ -280,23 +264,16 @@
 
             if ($("#UserName").val() == "") {
 
-
                 $.growl.warning({
                     message: "Please Enter user Name"
                 });
 
-
-
-
                 $("#UserName").css("border-color", "red");
                 status = false;
-
             }
             else {
                 $("#UserName").css("border-color", "#ddd");
-
             }
-
 
             if ($("#Password").val() == "") {              
 
@@ -304,14 +281,11 @@
                     message: "Please Enter user password"
                 });
 
-               
                 $("#Password").css("border-color", "red");
                 status = false;
-
             }
             else {
                 $("#Password").css("border-color", "#ddd");
-
             }
 
             if ($('#catachEnterDiv').is(':visible')) {
@@ -362,37 +336,6 @@
         }
 
     </script>
-
-
-    <script>
-
-        //$('.icon').click(function () {
-        //    if ($('#my-password').attr('type') == 'text') {
-        //        $('#my-password').attr('type', 'password');
-        //        $('#show-password').removeClass('fa-eye-slash').addClass('fa-eye');
-        //    } else {
-        //        $('#my-password').attr('type', 'text');
-        //        $('#show-password').removeClass('fa-eye').addClass('fa-eye-slash');
-        //    }
-        //});
-
-
-
-
-
-
-
-    </script>
-
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>

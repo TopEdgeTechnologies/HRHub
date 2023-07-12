@@ -115,7 +115,318 @@
     </div>
 </div>
 
+<section class="account-setup-section">
+    <div class="row">
+        <div class="col-md-6 col-xl-6">
+            <div class="card shadow-lg">
+                <div class="card-header border-bottom-0 bg-primary">
+                    <div class="row w-100 justify-content-between align-items-center">
+                        <div class="col-md-8">
+                            <div class="card-text-area">
+                                <div class="card-title text-white mb-2">
+                                    Get Started with HR Dashboard
+                                </div>
+                                <p class="text-white card-sub-text">Complete the following steps to get a hastle free experience</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-progress-area">
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <div class="progress progress-md">
+                                            @{
+                                                int barpercent = 0;
+                                                int stepcompleted = 0;
+                                                if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
+                                                {
+                                                    stepcompleted = stepcompleted  + 1;
+                                                }
+                                                if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
+                                                {
+                                                    stepcompleted = stepcompleted  + 1;
+                                                }
+                                                if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
+                                                {
+                                                    stepcompleted = stepcompleted  + 1;
+                                                }
+                                                if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                                                {
+                                                    stepcompleted = stepcompleted + 1;
+                                                }
+                                                if (ViewBag.OffBoardingStatus != null && ViewBag.OffBoardingStatus.Count > 0)
+                                                {
+                                                    stepcompleted = stepcompleted + 1;
+                                                }
+                                                if (ViewBag.LeaveTypeStatus != null && ViewBag.LeaveTypeStatus.Count > 0)
+                                                {
+                                                    stepcompleted = stepcompleted + 1;
+                                                }
 
+                                                barpercent = ((Convert.ToInt32(stepcompleted))  * 100) / 6;
+                                            }
+                                            <div class="progress-bar bg-success" style="width:@barpercent%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <span class="card-sub-text text-white">@stepcompleted/6</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
+                            {
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="CompanySetting" asp-controller="Company" asp-route-tab="CompanyProfile">Company Profile</a></li>
+                        </div>
+                        <div class="status">
+                              @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
+                            {
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="AttendanceSettings" asp-controller="Setting" asp-route-tab="OfficeTimimg">Office Timing Setting</a></li>
+                        </div>
+                        <div class="status">
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
+                            {  
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="PayrollSettings" asp-controller="Setting" asp-route-tab="ComponentSetting">Payroll Setting</a></li>
+                        </div>
+                        <div class="status">
+                            @if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                            {  
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="SMTPSettings" asp-controller="Setting" asp-route-tab="SMTPSetting">SMTP Setting</a></li>
+                        </div>
+                        <div class="status">
+                              @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.OffBoardingStatus != null && ViewBag.OffBoardingStatus.Count > 0)
+                            {
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="GeneralTypeSettings" asp-controller="Setting" asp-route-tab="OffBoarding">Off Boarding Setting</a></li>
+                        </div>
+                        <div class="status">
+                            @if (ViewBag.OffBoardingStatus != null && ViewBag.OffBoardingStatus.Count > 0)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <div class="list-icon me-4">
+                            @if (ViewBag.LeaveTypeStatus != null && ViewBag.LeaveTypeStatus.Count > 0)
+                            {
+                                <i class="fa fa-check text-success"></i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-circle text-danger"></i>
+                            }
+                            </div>
+                            <li class="task-name fs-18 list-unstyled"><a asp-action="LeaveSettings" asp-controller="Setting" asp-route-tab="LeaveType">Leave Type Setting</a></li>
+                        </div>
+                        <div class="status">
+                            @if (ViewBag.LeaveTypeStatus != null && ViewBag.LeaveTypeStatus.Count > 0)
+                            {
+                                <span class="text-success fs-16">Complete</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger fs-16">Incomplete</span>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-6">
+            <div class="card shadow-lg">
+                <div class="card-header border-bottom-0">
+                    <div class="card-title">Set up benfits and time off policies</div>
+                </div>
+                <div class="card-body">
+                    <div class="task-list px-4 py-4 border-bottom mb-3 ">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-md-9">
+                                <div class="d-flex align-items-center">
+                                    <div class="list-icon list-icon-square me-4">
+                                        <img src="/assets/loading-state-images/loan (2).png">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="action-btn text-end">
+                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom mb-3 ">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-md-9">
+                                <div class="d-flex align-items-center">
+                                    <div class="list-icon list-icon-square me-4">
+                                        <img src="/assets/loading-state-images/loan (2).png">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="action-btn text-end">
+                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 border-bottom mb-3 ">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-md-9">
+                                <div class="d-flex align-items-center">
+                                    <div class="list-icon list-icon-square me-4">
+                                        <img src="/assets/loading-state-images/loan (2).png">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="action-btn text-end">
+                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="task-list px-4 py-4 mb-3 ">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col-md-9">
+                                <div class="d-flex align-items-center">
+                                    <div class="list-icon list-icon-square me-4">
+                                        <img src="/assets/loading-state-images/loan (2).png">
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="action-btn text-end">
+                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
 
 
 <div class="modal fade" id="ModelEvent">
@@ -627,8 +938,8 @@
             $('#fromdate').datepicker('setDate', currentDate);
             $('#leavedate').val('@DateTime.Now.ToString("dd-MM-yyyy")');
             $('#dateModel').datepicker('setDate', currentDate);
-            $('#activityDate').datepicker('setDate', currentDate);
             
+  
 
 
 
@@ -642,8 +953,8 @@
             checkdailyAttendance();
             loadLeavesrequest();
             loadLoanrequest();
-            loadCandiate();
-            loadStaffActivity(0)
+             loadCandiate() ;
+
 
                $('#activityDate').change(function () {
 				loadStaffActivity(0)
@@ -1337,14 +1648,9 @@
 
                         table.rows.add(rows);
                         table.draw();
-
-
-                    }
-                }
-            }, function (errorStatus) {
-                console.log('Error:', errorStatus);
-            });
-
+                      
+                
+                        }
 
 
 

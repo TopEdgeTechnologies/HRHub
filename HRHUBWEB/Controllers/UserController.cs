@@ -16,7 +16,7 @@ namespace HRHUBWEB.Controllers
     {
         private readonly HttpClient _client;
         //   private readonly CacheExtensions _cacheExtensions;
-        public UserController(IHttpClientFactory httpClient )
+        public UserController(IHttpClientFactory httpClient)
         {
             _client = httpClient.CreateClient("APIClient");
            // _cacheExtensions = cacheExtensions; 
@@ -31,7 +31,6 @@ namespace HRHUBWEB.Controllers
             User obj = new User();
             obj.status = id;
            // _cacheExtensions.SetObject("UserDataKey", obj);
-
             return PartialView("_Login" , obj); 
         }
 
@@ -61,7 +60,7 @@ namespace HRHUBWEB.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Loginpage", "User" , new {id=1 });
+                        return RedirectToAction("Loginpage", "User" , new { id = 1 });
                     }
                 }
                 return RedirectToAction("Loginpage", "User", new { id = 1 });
@@ -77,40 +76,32 @@ namespace HRHUBWEB.Controllers
 		{
 			try
 			{
-
-
 				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
 				var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 				_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
-
 
 				if (string.IsNullOrWhiteSpace( OldPasword ))
 				{
 					return Json(new
 					{
-
 						Message = "Please Enter Current Password !",
 						Success = false
 					});
 				}
 
-
 				if (string.IsNullOrWhiteSpace(Password))
 				{
 					return Json(new
 					{
-
 						Message = "Please Enter New Password !",
 						Success = false
 					});
 				}
 
-
 				if (OldPasword != userObject.Password)
 				{
 					return Json(new
 					{
-
 						Message = "Fail due old password incorrect",
 						Success = false
 					});
@@ -125,42 +116,32 @@ namespace HRHUBWEB.Controllers
                     if (message.IsSuccessStatusCode)
                     {
                         var body = message.Content.ReadAsStringAsync();
-
                         var model = JsonConvert.DeserializeObject<Response>(body.Result);
-
                         return Json(model);
-
-
                     }else
                     {
-
-						return Json( new { 
-                        
-                        Message="Fail ",
-					    Success=false
-						}  );
-
+						return Json( new 
+                        {   
+                            Message="Fail ",
+					        Success=false
+						});
 					}
                 }
                 else
                 {
 					return RedirectToAction("Loginpage", "User", new { id = 2 });
 				} 
-				
 			}
 			catch (Exception)
 			{
-
 				return Json(new
 				{
-
 					Message = "Fail",
 					Success = false
-
-
 				});
 			}
 		}
+
 		#endregion
 
 		#region Register
@@ -223,14 +204,12 @@ namespace HRHUBWEB.Controllers
             try
             {
 				var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
 				HttpResponseMessage message = await _client.PostAsJsonAsync("api/User/UserLogOutHistory", userObject);
 
                 if (message.IsSuccessStatusCode)
                 {
 
                  }
-
 				foreach (var cookie in Request.Cookies.Keys)
                 {
                     Response.Cookies.Delete(cookie);
@@ -254,25 +233,18 @@ namespace HRHUBWEB.Controllers
             HttpContext.Session.Clear();
         }
 
-
-
-
-
 		#region System User
 
 		[CustomAuthorization]
 		public async Task<IActionResult> UserList(string data = "")
 		{
-
 			ViewBag.IsNew = Convert.ToBoolean(TempData["IsNew"]);
 			ViewBag.IsEdit = Convert.ToBoolean(TempData["IsEdit"]);
 			ViewBag.IsDelete = Convert.ToBoolean(TempData["IsDelete"]);
 			ViewBag.IsPrint = Convert.ToBoolean(TempData["IsPrint"]);
 
-
 			ViewBag.Success = data;
 			List<User> ObjUser = new List<User>();
-
 
 			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
@@ -280,15 +252,12 @@ namespace HRHUBWEB.Controllers
 
 			if (Token != null)
 			{
-
 				HttpResponseMessage message = await _client.GetAsync($"api/User/ListUser{userObject.CompanyId}");
 				if (message.IsSuccessStatusCode)
 				{
 					var result = message.Content.ReadAsStringAsync().Result;
 					ObjUser = JsonConvert.DeserializeObject<List<User>>(result);
-
 				}
-
 				return View(ObjUser);
 			}
 			else
@@ -297,26 +266,17 @@ namespace HRHUBWEB.Controllers
 			}
 		}
 
-
-
-
-
         [HttpGet]
 		public async Task<ActionResult<JsonObject>> UpdateUserStatus(int id, bool status)
 		{
-
 			var Token = HttpContext.Session.GetObjectFromJson<string>("AuthenticatedToken");
 			_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
 			var userObject = HttpContext.Session.GetObjectFromJson<User>("AuthenticatedUser");
-
 
 			User Obj = new User();
 			Obj.UserId = id;
 			Obj.IsActive = status;
 			Obj.UpdatedBy = userObject.UserId;
-
-
-
 
             //HttpResponseMessage message = await _client.PostAsJsonAsync("api/User/UpdateUsers", Obj);
             HttpResponseMessage message = await _client.GetAsync($"api/User/UpdateUsers{id}/{status}/{userObject.UserId}");
@@ -325,18 +285,12 @@ namespace HRHUBWEB.Controllers
 			{
 				var result = message.Content.ReadAsStringAsync().Result;
 				return Json(result);
-
 			}
 			else
 			{
 				return RedirectToAction("Loginpage", "User", new { id = 2 });
 			}
-
-
 		}
-
-
-
 
 		#endregion
 

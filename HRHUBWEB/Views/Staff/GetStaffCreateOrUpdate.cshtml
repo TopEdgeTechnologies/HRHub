@@ -391,7 +391,66 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <h4 class="mb-5 mt-7 font-weight-bold">Account Login</h4>
+                                @{
+                                    await textWidget("Official Email", "UserName", Model.UserName, "Enter Official Email", "text", false);
+                                    await textWidget("Password", "UserPassword", Model.UserPassword, "Enter Password", "password", false);
+                                    //await checkboxWidget("Email Notification", "EmailNotification", Model.EmailNotification, false);
+                                }
+                                @*
+                                <div class="form-group mt-7">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <h4 class="form-label" font-weight-bold">Account Login</h4>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <label class="custom-switch">
+                                                <input type="checkbox" name="chk_AccountLoginSwitch" id="chk_AccountLoginSwitch" onchange="AccountLoginControls()" class="custom-switch-input">
+                                                <span class="custom-switch-indicator"></span>
+                                                <span class="custom-switch-description">On/Off</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Staff Email</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input type="text" id="txt_OfficialEmailAddress" disabled="disabled" class="form-control" placeholder="Staff email">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label mb-0 mt-2">Password</label>
+                            </div>
+                            <div class="col-md-9">
+                            <input type="password" id="txt_OfficialEmailPassword" disabled="disabled" class="form-control" placeholder="password">
+                            </div>
+                            </div>
+                            </div>
+                            <div class="form-group mt-7">
+                            <div class="row">
+                            <div class="col-md-3">
+                            <label class="form-label">Email Notification:</label>
+                            </div>
+                            <div class="col-md-9">
+                            <label class="custom-switch">
+                            <input type="checkbox" name="chk_EmailNotification" id="chk_EmailNotification" disabled="disabled" class="custom-switch-input">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">On/Off</span>
+                            </label>
+                            </div>
+                            </div>
+                            </div>
+                            string labelTitle, object fieldName, string? fieldValue, string placeholderTitle, string fieldValueType, bool isMandatory
+                            string labelTitle, object fieldName, bool fieldValue, bool isMandatory
+                                *@
+                                
                             </div>
                         </div>
                         <div class="tab-pane" id="tab6">

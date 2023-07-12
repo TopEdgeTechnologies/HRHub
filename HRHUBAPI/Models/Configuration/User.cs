@@ -72,12 +72,10 @@ namespace HRHUBAPI.Models
         public async Task<User> Login(User Obj, HrhubContext _context)
         {
             try
-            
 			{
                 //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
                 Obj.Password = Obj.Password;
                 // var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == Obj.UserName && x.Password == Obj.Password && x.IsActive == true);
-
 				var user = from u in _context.Users
 							join c in _context.Companies on u.CompanyId equals c.CompanyId
 							join sss in _context.StaffSalarySettings on u.CompanyId equals sss.CompanyId
@@ -104,8 +102,8 @@ namespace HRHUBAPI.Models
 								Phone=   c.Phone,
 								LogoAttachment= c.LogoAttachment,
 								WebUrl= c.WebUrl,
-                                MonthlyIsSpecificDayofEveryMonth = sss.MonthlyIsSpecificDayofEveryMonth,
-                                MonthlyDateOfEveryMonth = sss.MonthlyDateOfEveryMonth,
+                                //MonthlyIsSpecificDayofEveryMonth = sss.MonthlyIsSpecificDayofEveryMonth,
+                                //MonthlyDateOfEveryMonth = sss.MonthlyDateOfEveryMonth,
                                 DesignationName = d.Title,
 								DesignationID = d.DesignationId,
 								DepartmentId = dep.DepartmentId,
@@ -120,8 +118,7 @@ namespace HRHUBAPI.Models
 
 				if ( user != null && user.Count()>0)
                 {
-
-				await	UserLogOutHistory(user.FirstOrDefault().UserId, _context);
+					await UserLogOutHistory(user.FirstOrDefault().UserId, _context);
 
 					UserLoginHistory objHistory = new UserLoginHistory();
 					objHistory.UserId = user.FirstOrDefault().UserId;
@@ -130,7 +127,6 @@ namespace HRHUBAPI.Models
 					objHistory.CreatedOn= DateTime.Now;
 					_context.Add(objHistory);
 					_context.SaveChanges();
-
 
 					return await user.FirstOrDefaultAsync();
                 }
@@ -177,8 +173,7 @@ namespace HRHUBAPI.Models
 					{
 						item.UpdatedOn = DateTime.Now;
 						item.UpdatedBy = userID;
-						item.SessionTo = DateTime.Now;
-					 
+						item.SessionTo = DateTime.Now;					 
 					}
 					_context.SaveChanges();
 					return true;
@@ -188,15 +183,11 @@ namespace HRHUBAPI.Models
 					return false;
 				}
 			}
-			catch (Exception)
-			{
+            catch (Exception) { throw; }
+        }
 
-				throw;
-			}
-		}
 		public async Task<User> RegisterUser(User Obj, HrhubContext _context)
         {
-
             try
             {
                 //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
@@ -208,16 +199,11 @@ namespace HRHUBAPI.Models
                 await _context.SaveChangesAsync();
                 return Obj;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
 		public async Task<User> ChangePassword(User Obj, HrhubContext _context)
 		{
-
 			try
 			{
 				var result=await _context.Users.FirstOrDefaultAsync(x=>x.UserId== Obj.UserId);
@@ -228,17 +214,12 @@ namespace HRHUBAPI.Models
                     result.UpdatedBy = Obj.CreateBy;
                     result.UpdatedOn = DateTime.Now;
 
-
 					await _context.SaveChangesAsync();
 				}
                 return Obj;
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 
 		public async Task<bool> AlreadyExist(int userid, string username, HrhubContext _context)
 		{
@@ -251,8 +232,6 @@ namespace HRHUBAPI.Models
 					{
 						return true;
 					}
-
-
 				}
 				else
 				{
@@ -261,17 +240,11 @@ namespace HRHUBAPI.Models
 					{
 						return true;
 					}
-
 				}
-
 				return false;
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 
 		// Get single record of User by company ID
 		public async Task<User> GetUserCompanyVise(int CompanyId, HrhubContext hrhubContext)
@@ -291,7 +264,6 @@ namespace HRHUBAPI.Models
 			catch { throw; }
 		}
 
-
         // Get single record of User by company ID and UserId
         public async Task<User> GetUserIdVise(int CompanyId,int UserId ,HrhubContext hrhubContext)
         {
@@ -309,8 +281,6 @@ namespace HRHUBAPI.Models
             }
             catch { throw; }
         }
-
-
 
         #region System User
         public async Task<List<User>> GetUser(int CompanyId, HrhubContext _context)
@@ -444,13 +414,6 @@ namespace HRHUBAPI.Models
 
 
 		#endregion
-
-
-
-
-
-
-
 
 	}
 }

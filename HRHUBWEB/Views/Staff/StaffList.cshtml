@@ -152,15 +152,19 @@
                                                         @if (Convert.ToBoolean(ViewBag.IsEdit))
                                                         {
                                                             <a onclick="LoadStaffCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Record" class="dropdown-item" href="javascript:void(0);">
-                                                                <i class="feather feather-edit me-2"></i>Edit Record
+                                                                <i class="feather feather-edit me-2"></i> Edit Record
                                                             </a>
-                                                        }
-                                                        @if (Convert.ToBoolean(ViewBag.IsEdit))
-                                                        {
                                                             <a onclick="LoadStaffAcademicCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Academic" class="dropdown-item" href="javascript:void(0);">
-                                                                <i class="feather feather-edit me-2"></i>Add/Edit Academic
+                                                                <i class="fa fa-graduation-cap"></i> Academic Info
+                                                            </a>
+                                                            <a onclick="LoadStaffDependantCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Dependant" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="fa fa-chain-broken"></i> Dependant Info
+                                                            </a>
+                                                            <a onclick="LoadStaffSkillCreateOrUpdate(@item.StaffId)" data-bs-toggle="tooltip" data-bs-placement="top" title="Add/Edit Skill" class="dropdown-item" href="javascript:void(0);">
+                                                                <i class="fa fa-cogs"></i> Skill Info
                                                             </a>
                                                         }
+                                                        
                                                         @if (Convert.ToBoolean(ViewBag.IsDelete))
                                                         {
                                                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" class="dropdown-item" href="javascript:void(0);">
@@ -192,6 +196,34 @@
     <script>
 
         $(document).ready(function () {
+            debugger
+
+            var msg = '@ViewBag.Success';
+            if (msg !== "" && msg == '1') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Inserted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '2') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Updated Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '3') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Success:</b> You record is Deleted Succesfully.",
+                    type: "success"
+                });
+            }
+            if (msg !== "" && msg == '0') {
+                notif({
+                    msg: "<i class='fa fa-check fs-20 me-2'></i><b>Error:</b> Error Occured.",
+                    type: "error"
+                });
+            }
+
             var table = $('#hr-table').DataTable({
                 dom: 'Bfrtip',
                 "lengthMenu": [10, 20, 50],
@@ -304,6 +336,18 @@
         function LoadStaffAcademicCreateOrUpdate(staffId) {
             debugger
             var url = "/Staff/StaffAcademicList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
+
+        function LoadStaffDependantCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffDependentList?staffId=" + encodeURIComponent(staffId);
+            window.location.href = url;
+        }
+
+        function LoadStaffSkillCreateOrUpdate(staffId) {
+            debugger
+            var url = "/Staff/StaffSkillList?staffId=" + encodeURIComponent(staffId);
             window.location.href = url;
         }
 

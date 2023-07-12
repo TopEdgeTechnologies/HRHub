@@ -8,9 +8,6 @@ namespace HRHUBAPI.Models
     public partial class GluserGroup
     {
        
-
-       
-
         [NotMapped]
         public IEnumerable<string>? ListForm { get; set; }
         [NotMapped]
@@ -24,10 +21,8 @@ namespace HRHUBAPI.Models
         [NotMapped]
         public IEnumerable<string>? ListisNew { get; set; }
 
-
         [NotMapped]
 		public IEnumerable<GluserGroupDetail>? ListGluserGroupDetail { get; set; }
-
 
         public async Task<List<GluserGroup>> GetGluserGroup(int CompanyId,HrhubContext _context)
         {
@@ -35,26 +30,15 @@ namespace HRHUBAPI.Models
             {
                 return await _context.GluserGroups.Where(x=>x.IsDeleted==false && x.CompanyId== CompanyId).ToListAsync();
             }
-            catch (Exception ex)
-            {
-
-                throw;
-
-            }
+            catch (Exception ex) {throw;}
         }
-
-
 
         // Load userforms details in Edit modes...
         public async Task<List<GluserGroupDetail>> GetGlUserByGroupId(int id, DbConnection _db)
         {
             try
             {
-
-                List<GluserGroupDetail> GetGroupDetails = new List<GluserGroupDetail>();
-              
-
-
+                List<GluserGroupDetail> GetGroupDetails = new List<GluserGroupDetail>();            
                 string query = "exec sp_getUserGroupDetail " + id;
                 DataTable dt = _db.ReturnDataTable(query);
 
@@ -72,35 +56,17 @@ namespace HRHUBAPI.Models
                     FormTitle = row["FormTitle"].ToString(),
 					level = Convert.ToInt32(row["level"]),
 					form_path = row["form_path"].ToString(),
-
-
 				})
                 .ToList();
-
-
                 return GetGroupDetails;
-
-
-
-
-
             }
-            catch (Exception ex)
-            {
-
-                throw;
-
-            }
+            catch (Exception ex) { throw; }
         }
-
-
-
 
         public async Task<GluserGroup> GetGluserGroupById(int id, HrhubContext _context)
         {
             try
             {
-
                 var result = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupId == id && x.IsDeleted==false);
                 if (result != null)
                 {
@@ -109,31 +75,18 @@ namespace HRHUBAPI.Models
                 else
                 {
                     return null;
-
                 }
 
-
-
             }
-            catch (Exception ex)
-            {
-
-                throw;
-
-            }
+            catch (Exception ex) { throw; }
         }
-
 
         public async Task<GluserGroup> PostGluserGroup(GluserGroup ObjGluserGroup, HrhubContext _context)
         {
             using (var dbContextTransaction = _context.Database.BeginTransaction())
             {
-
-
                 try
                 {
-
-
                     string msg = "";
                     var checkuserGroup = await _context.GluserGroups.FirstOrDefaultAsync(x => x.GroupId == ObjGluserGroup.GroupId && x.IsDeleted == false);
                     if (checkuserGroup != null && checkuserGroup.GroupId > 0)
@@ -145,7 +98,6 @@ namespace HRHUBAPI.Models
                         checkuserGroup.UpdatedOn = DateTime.Now;
                         checkuserGroup.UpdatedBy = ObjGluserGroup.CreateBy;
                         await _context.SaveChangesAsync();
-
                     }
                     else
                     {
@@ -154,27 +106,19 @@ namespace HRHUBAPI.Models
                         ObjGluserGroup.IsDeleted = false;
                         _context.GluserGroups.Add(ObjGluserGroup);
                         await _context.SaveChangesAsync();
-
                     }
 
-
-
                     // ---------------------------------------------Save and update User Groups Details records
-
-
 
                     var acadresult = _context.GluserGroupDetails.Where(x => x.UserGroupId == ObjGluserGroup.GroupId).ToList();
                     if (  acadresult != null && acadresult.Count() > 0)
                     {
-
                         _context.RemoveRange(acadresult);
                         //foreach (var item in acadresult)
                         //{
 
                         //}
-
                         await _context.SaveChangesAsync();
-
                     }
 
                     List<GluserGroupDetail> lsobjAca = new List<GluserGroupDetail>();
@@ -182,10 +126,8 @@ namespace HRHUBAPI.Models
                     int a = 0;
                     if (ObjGluserGroup.ListForm != null)
                     {
-
                         foreach (var item in ObjGluserGroup.ListForm)
                         {
-
                             GluserGroupDetail objAca = new GluserGroupDetail();
 
                             objAca.FormId = Convert.ToInt32(item);
@@ -195,36 +137,24 @@ namespace HRHUBAPI.Models
                             objAca.IsPrint = Convert.ToBoolean(Convert.ToInt32(ObjGluserGroup.ListIsPrint.ToArray()[a]));
                             objAca.IsNew = Convert.ToBoolean(Convert.ToInt32(ObjGluserGroup.ListisNew.ToArray()[a]));
                             
-                           
                             objAca.UserGroupId = ObjGluserGroup.GroupId;
                             lsobjAca.Add(objAca);
                             a++;
-
                         }
-
 
                         _context.GluserGroupDetails.AddRange(lsobjAca);
                         await _context.SaveChangesAsync();
                     }
 
-
-                    //--------------------------------------------------------------------------------
-
-
                     dbContextTransaction.Commit();
                     return ObjGluserGroup;
-
 
                 }
                 catch (Exception ex)
                 {
-
                     dbContextTransaction.Rollback();
-
                     throw;
-
-                }
-               // return null;
+                }     
             }
         }
 
@@ -245,15 +175,8 @@ namespace HRHUBAPI.Models
                 await _context.SaveChangesAsync();
                 return check;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-
-
+            catch (Exception ex) { throw; }
         }
-
 
         public async Task<bool> AlreadyExist(int GluserGroupId, string GluserGroupname, HrhubContext _context)
         {
@@ -266,8 +189,6 @@ namespace HRHUBAPI.Models
                     {
                         return true;
                     }
-
-
                 }
                 else
                 {
@@ -276,19 +197,11 @@ namespace HRHUBAPI.Models
                     {
                         return true;
                     }
-
                 }
-
                 return false;
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception ex) { throw; }
         }
-
-
 
         // Update Active and inactive Status User
 
@@ -311,22 +224,8 @@ namespace HRHUBAPI.Models
                 }
                 return false;
             }
-            catch (Exception ex)
-            {
-
-                throw;
-
-            }
+            catch (Exception ex) { throw; }
         }
-
-
-
-
-
-
-
-
-
 
     }
 }

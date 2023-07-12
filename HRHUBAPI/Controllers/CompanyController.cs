@@ -61,6 +61,26 @@ namespace HRHUBAPI.Controllers
                 });
 
 
+        }
+        [HttpPost("PostCompanyProfile")]
+        public async Task<ActionResult<Company>> PostCompanyProfile(Company obj)
+        {
+
+            var result = await new Company().PostCompanyProfile(obj, _context);
+            if (result != null && result.TransFlag == 2)
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Update Successfully!"
+                });
+            else
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Data Insert Successfully!"
+                });
+
+
 
 
 

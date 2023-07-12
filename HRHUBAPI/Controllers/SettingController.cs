@@ -58,7 +58,6 @@ namespace HRHUBAPI.Controllers
 
             return NotFound();
 
-
         }
         [HttpGet("DeleteLeaveType{id}")]
         public async Task<ActionResult<bool>> DeleteLeaveType(int Id, int UserId)

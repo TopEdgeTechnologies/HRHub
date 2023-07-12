@@ -67,7 +67,19 @@ namespace HRHUBAPI.Controllers
             return NotFound();
         }
 
-		[HttpPost("PostStaff")]
+        [HttpGet("GetUserByStaffId{CompanyId}/{StaffId}")]
+        public async Task<ActionResult<User>> GetUserByStaffId(int CompanyId, int StaffId)
+        {
+            //return await new Staff().GetUserByStaffId(CompanyId, StaffId, _context);
+            var dbResult = await new Staff().GetUserByStaffId(CompanyId, StaffId, _context);
+            if (dbResult != null)
+            {
+                return Ok(dbResult);
+            }
+            return NotFound();
+        }
+
+        [HttpPost("PostStaff")]
         public async Task<ActionResult<Staff>> PostStaff(Staff staff)
         {
             var dbResult = await new Staff().PostStaff(staff, _context);    
@@ -174,20 +186,20 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<StaffAcademic>> PostStaffAcademic(StaffAcademic StaffAcademic)
         {
             var dbResult = await new StaffAcademic().PostStaffAcademic(StaffAcademic, _context);
-            if (dbResult != null && dbResult.TranFlag == 2)
+            if (dbResult != null && dbResult.TranFlag == 1)
             {
                 return Ok(new
                 {
                     success = true,
-                    Message = "Data Updated Successfully"
+                    Message = "Data Inserted Successfully"
                 });
             }
             else
             {
                 return Ok(new
                 {
-                    success = true,
-                    Message = "Data Inserted Successfully"
+                    success = false,
+                    Message = "Data Not Inserted"
                 });
             }
         }
@@ -246,7 +258,7 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("GetStaffDependentByStaffId/{StaffId}")]
-        public async Task<ActionResult<StaffDependent>> GetStaffDependentByStaffId(int StaffId)
+        public async Task<ActionResult<List<StaffDependent>>> GetStaffDependentByStaffId(int StaffId)
         {
             return await new StaffDependent().GetStaffDependentByStaffId(StaffId, _context);
         }
@@ -255,7 +267,7 @@ namespace HRHUBAPI.Controllers
         public async Task<ActionResult<StaffDependent>> PostStaffDependent(StaffDependent StaffDependent)
         {
             var dbResult = await new StaffDependent().PostStaffDependent(StaffDependent, _context);
-            if (dbResult != null && dbResult.TranFlag == 2)
+            if (dbResult != null && dbResult.TranFlag == 1)
             {
                 return Ok(new
                 {
@@ -327,7 +339,7 @@ namespace HRHUBAPI.Controllers
         }
 
         [HttpGet("GetStaffSkillByStaffId/{StaffId}")]
-        public async Task<ActionResult<StaffSkill>> GetStaffSkillByStaffId(int StaffId)
+        public async Task<ActionResult<List<StaffSkill>>> GetStaffSkillByStaffId(int StaffId)
         {
             return await new StaffSkill().GetStaffSkillByStaffId(StaffId, _context);
         }

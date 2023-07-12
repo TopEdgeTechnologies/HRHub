@@ -26,10 +26,10 @@
 	<div class="col-md-12 col-xl-3">
 		<div class="card">
 			<div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
-				<a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
+				<a class="nav-link active CompanyProfile" data-bs-toggle="pill" href="#tab-1" role="tab">
 					<i class="nav-icon las la-cog"></i> General Settings
 				</a>
-				<a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
+				<a class="nav-link " data-bs-toggle="pill" href="#tab-2" role="tab">
 					<i class="nav-icon las la-user-circle"></i> Profile Settings
 				</a>
 				<a class="nav-link" data-bs-toggle="pill" href="#" role="tab">
@@ -48,14 +48,15 @@
 	</div>
 	<div class="col-md-12 col-xl-9">
 		<div class="tab-content adminsetting-content" id="setting-tabContent">
-			<div class="tab-pane fade show active" id="tab-1" role="tabpanel">
-				@using (@Html.BeginForm("CompanyCreateOrUpdate", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
+			<div class="tab-pane fade show active CompanyProfile" id="tab-1" role="tabpanel">
+				@using (@Html.BeginForm("PostCompanydata", "Company", FormMethod.Post, new { @id = "myform", @class = "needs-validation", enctype = "multipart/form-data", @novalidate = "novalidate" }))
 				{
 				<div class="card">
 					<div class="card-header  border-0">
 						<h4 class="card-title">General Settings</h4>
 					</div>
 					<div class="card-body">
+						<input type="hidden" asp-for="CompanyId" />
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-3">
@@ -72,7 +73,7 @@
 									<label class="form-label mb-0 mt-2">Email</label>
 								</div>
 								<div class="col-md-9">
-										<input asp-for="Email" type="text" class="form-control" placeholder="Enter Youre Email">
+										<input asp-for="Email" type="email" class="form-control" placeholder="Enter Your Email">
 								</div>
 							</div>
 						</div>
@@ -123,6 +124,7 @@
 								</div>
 								<div class="col-md-1">
 								<img src="@Url.Content(Model.LogoAttachment)" alt="user-img" id="viewlogo" class="avatar-lg rounded-circle mb-1">
+								<input hidden id="ImgPath" name="ImgPath" value="@Model.LogoAttachment"  />
 								</div>
 								<div class="col-md-8">
 									<div class="form-group">
@@ -138,7 +140,7 @@
 									<label class="form-label mb-0 mt-2">Country</label>
 								</div>
 								<div class="col-md-9">
-									<select class="form-control custom-select select2" data-placeholder="Select Country">
+									<select id="Country" class="form-control custom-select select2"  data-placeholder="Select Country">
 										<option label="Select Country"></option>
 										<option value="1">Germany</option>
 										<option value="3">Canada</option>
@@ -263,7 +265,7 @@
 						</div>
 					</div>
 					<div class="card-footer">
-						<a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
+							<button type="button"  id="btn_SaveCompanyProfile" class="btn btn-primary">Save Changes</button>
 						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
 					</div>
 				</div>
@@ -535,9 +537,9 @@
 									<label class="form-label mb-0 mt-2">Leave Status</label>
 								</div>
 								<div class="col-md-3">
-									<select asp-for="LeaveStatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.LeaveStatusList,"LeaveStatusId" ,"Title"))">
+									@*<select asp-for="LeaveStatusId" class="form-control" asp-items="@(new SelectList(@ViewBag.LeaveStatusList,"LeaveStatusId" ,"Title"))">
 										<option value="">Select Leave Status</option>
-									</select>
+									</select>*@
 									
 								</div>
 							</div>
@@ -545,7 +547,7 @@
 					
 					</div>
 					<div class="card-footer">
-						<a href="javascript:void(0);" class="btn btn-primary">Save Changes</a>
+						<a href="javascript:void(0);"  class="btn btn-primary">Save Changes</a>
 						<a href="javascript:void(0);" class="btn btn-danger">Cancel</a>
 					</div>
 				</div>
@@ -574,10 +576,129 @@
 
 	$(document).ready(function () {
 
+			var currentUrl = window.location.href;
+			var tab = currentUrl.split('=')[1];
+
+			if (tab !== "" && tab !== undefined) {
+
+				$('a.nav-link').removeClass('active');
+				$('div.tab-pane').removeClass('active show');
+
+				$('.' + tab).addClass('active show');
+
+			}
+
 
 			$('#Language,#StaffId,#Currency,#LeaveStatusId').select2();
-		
 
+
+			$("#btn_SaveCompanyProfile").click(function () {
+				debugger;
+				var status = true;
+					debugger;
+					if ($("#CompanyName").val() == "") {
+						$.growl.warning({
+							message: "Please Enter Organization Name"
+						});
+						$("#CompanyName").css("border-color", "red");
+						status = false;
+						return false;
+					}
+				else if ($("#Email").val() == "") {
+					$.growl.warning({
+						message: "Please Enter Email"
+					});
+					$("#Email").css("border-color", "red");
+					status = false;
+					return false;
+				}
+				else if ($("viewlogo").attr("src") == "" && $("viewlogo").attr("src") == null && $("viewlogo").attr("src") == undefined) {
+					$.growl.warning({
+						message: "Please Select Logo"
+					});
+					$("#CompanyLogo").css("border-color", "red");
+					status = false;
+					return false;
+				}
+					else {
+						$("#CompanyName").css("border-color", "#ddd");
+						$("#Email").css("border-color", "#ddd");
+					$("#CompanyLogo").css("border-color", "#ddd");
+					}
+				//var Data = {
+				//	CompanyId: $("#CompanyId").val(),
+				//	CompanyName: $('#CompanyName').val(),
+				//	Email: $("#Email").val(),
+				//	Address: $("#Address").val(),
+				//	Phone: $("#Phone").val(),
+				//	WebUrl: $("#WebUrl").val(),
+				//	ContactPerson: $("#ContactPerson").val(),
+				//	Country: $("#Country").val(),
+				//	Language: $("#Language").val(),
+				//	Currency: $("#Currency").val()
+
+				//}
+					const swalWithBootstrapButtons = Swal.mixin({
+						customClass: {
+							confirmButton: 'btn btn-success',
+							cancelButton: 'btn btn-danger'
+						},
+						buttonsStyling: false
+					});
+					if (status) {
+						swalWithBootstrapButtons.fire({
+							title: 'Are you sure?',
+							text: "You won't be able to revert this!",
+							icon: 'warning',
+							showCancelButton: true,
+							cancelButtonText: 'No, cancel!',
+							confirmButtonText: 'Yes, Save it!',
+							timer: 30000,
+							reverseButtons: true
+						}).then((result) => {
+							if (result.isConfirmed) {
+
+
+								$("#myform").submit();
+
+
+								//$.ajax({
+								//	async: false,
+								//	url: "/Company/SaveCompanyProfileData",
+								//	type: "GET",
+								//	data: Data,
+								//	success: function (data) {
+								//		if (data != "") {
+								//			console.log(data)
+								//			status = data.success;
+								//			var url = "/Company/CompanySetting/tab=CompanyProfile";
+								//			window.location.href = url;
+								//		}
+								//	},
+								//	error: function () 
+								//	{
+								//		status = false;
+								//		//   toastr.error("Please Fill Required Field");
+								//	}
+								//})
+							}
+							else if (result.dismiss === Swal.DismissReason.cancel) {
+								swalWithBootstrapButtons.fire(
+									'Cancelled',
+									'Your record is safe :)',
+									'error'
+								)
+							}
+						});
+
+
+					}
+			})
+
+			function SaveCompanyProfile() {
+			
+					
+			}
 
 			// Show logo
 			function readURL(input) {

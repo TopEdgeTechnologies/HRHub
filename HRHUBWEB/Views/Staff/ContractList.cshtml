@@ -506,6 +506,7 @@
 
 		function AddNewRecord() {
 			debugger
+			ClearControl();
 			$("#AddGeneralModal").modal('show');	
 			
 			$("#Status").prop('checked', true)
@@ -756,7 +757,7 @@
 			$('#ContractDuration').select2({ placeholder: 'Select Months', width: '100%', allowClear: true }).val("").trigger('change');
 
 
-			$(".StartDate").val('');
+			
 			$(".EndDate").val('');
 			$("#AdditionalDetails").val('');
 

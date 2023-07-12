@@ -121,19 +121,19 @@
         <div class="col-md-12 col-lg-3 col-xl-3">
             <div class="card">
                 <div class="nav flex-column admisetting-tabs" id="settings-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#tab-1" role="tab">
-                        <i class="fa fa-cog me-2 fs-16 PayrollGeneralSetting"></i>General Settings
+                    <a class="nav-link active PayrollGeneralSetting" data-bs-toggle="pill" href="#tab-1" role="tab">
+                        <i class="fa fa-cog me-2 fs-16 "></i>General Settings
                     </a>
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-2" role="tab">
-                        <i class="fa fa-bar-chart me-2 fs-16 ComponentSetting"></i> Component Settings
-                    </a>
-
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-3" role="tab">
-                        <i class="fa fa-edit me-2 fs-16 PayrollPolicy"></i> Policies Settings
+                    <a class="nav-link ComponentSetting" data-bs-toggle="pill" href="#tab-2" role="tab">
+                        <i class="fa fa-bar-chart me-2 fs-16 "></i> Component Settings
                     </a>
 
-                    <a class="nav-link" data-bs-toggle="pill" href="#tab-4" role="tab">
-                        <i class="fa fa-percent me-2 fs-16 CompanyTaxSetting"></i> Company Tax Settings
+                    <a class="nav-link PayrollPolicy" data-bs-toggle="pill" href="#tab-3" role="tab">
+                        <i class="fa fa-edit me-2 fs-16 "></i> Policies Settings
+                    </a>
+
+                    <a class="nav-link CompanyTaxSetting" data-bs-toggle="pill" href="#tab-4" role="tab">
+                        <i class="fa fa-percent me-2 fs-16 "></i> Company Tax Settings
                         <i class="fas fa-portal-exit"></i>
                     </a>
                 </div>
@@ -141,7 +141,7 @@
         </div>
         <div class="col-md-12 col-lg-9 col-xl-9">
             <div class="tab-content adminsetting-content" id="setting-tabContent">
-                <div class="tab-pane fade show active PayrollGeneralSetting" id="tab-1" role="tabpanel">
+                <div class="tab-pane fade tab-pane-all show active PayrollGeneralSetting" id="tab-1" role="tabpanel">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">General Settings</h4>
@@ -152,7 +152,7 @@
                             <p class="fs-18 font-weight-semibold">How often do you pay your staff? <span class="text-danger">*</span></p>
                             <div class="row">
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -161,7 +161,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="other-week-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="other-week-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -170,7 +170,7 @@
                                 </div>
 
                                 <div class="col-sm-6 col-lg-3 col-xl-3">
-                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center divdisable" id="twice-month-widget">
+                                    <div class="shadow-sm flex-column calendar-widget mb-4 d-flex align-items-center pb-2 justify-content-center " id="twice-month-widget">
                                         <div class="mb-3 w-100 text-center widget-icon">
                                             <i class="fa fa-calendar text-info fs-2"></i>
                                         </div>
@@ -323,7 +323,7 @@
                                             </label>
                                             <label class="custom-control custom-radio mb-4 d-flex align-items-center">
                                                 <input type="radio" id="SpecificDay" class="custom-control-input" name="example-radios" value="option2">
-                                                <span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>
+                                                @*<span class="custom-control-label fs-16">Day <input type="number" asp-for="MonthlyDateOfEveryMonth" placeholder="1" class="form-control w-20 w-sm-10 d-inline-block"> of every month</span>*@
                                             </label>
                                         </div>
                                     </div>
@@ -351,7 +351,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show ComponentSetting" id="tab-2" role="tabpanel">
+                <div class="tab-pane fade tab-pane-all show ComponentSetting" id="tab-2" role="tabpanel">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Component Settings</h4>
@@ -549,7 +549,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade PayrollPolicy" id="tab-3" role="tabpanel">
+                <div class="tab-pane fade tab-pane-all PayrollPolicy" id="tab-3" role="tabpanel">
                     <div class="card">
                         <div class="card-header justify-content-between align-items-center border-0">
                             <h4 class="card-title">Policy Settings</h4>
@@ -866,18 +866,22 @@
 
     <script>
 
-
+        debugger; 
+        var currentUrl = window.location.search;
+        var urlParams = new URLSearchParams(currentUrl);
+  var tab = urlParams.get("tab");
+  console.log(tab); 
 
         // Sidebar
         $(document).ready(function () {
 
-            var currentUrl = window.location.href;
-            var tab = currentUrl.split('=')[1];
+            //var currentUrl = window.location.href;
+            //var tab = currentUrl.split('=')[1];
 
-            if (tab !== "" && tab !== undefined) {
+            if (tab !== "" && tab !== undefined && tab !== null ){
 
                 $('a.nav-link').removeClass('active');
-                $('div.tab-pane').removeClass('active show');
+                $('div.tab-pane-all').removeClass('active show');
 
                 $('.' + tab).addClass('active show');
 
@@ -927,7 +931,7 @@
             $("#policy-types").select2({ placeholder: "Choose Policy", width: '100%', allowClear: true }).val('').trigger('change');
 
             debugger;
-            var str = '@Model.MonthlyIsSpecificDayofEveryMonth';
+            //var str = '@*Model.MonthlyIsSpecificDayofEveryMonth*@';
 
             if (str.toUpperCase() == "TRUE") {
                 $('#SpecificDay').prop('checked', true);
