@@ -191,6 +191,7 @@ namespace HRHUBWEB.Controllers
         {
             StaffSalary objStaffSalary = new StaffSalary();
             loadMonthAndYear();
+            objStaffSalary.ComponentTitle = _user.SalaryFrequency;
             return View(objStaffSalary);
 		}
 
@@ -230,32 +231,57 @@ namespace HRHUBWEB.Controllers
         public async Task<IActionResult> SalaryGenerationDateCheck(int month, int year)
         {
             //List<(string, string)>? datesList = new List<(string, string)>();  
+            //datesList.Add(("FOM", FOM.ToString()));
+            //datesList.Add(("EOM", EOM.ToString()));  
+            //datesList.Add(("canGenerateSalary", canGenerateSalary.ToString()));
+            var FDate = "";
+            var EDate = "";
+            int canGenerateSalary = 0;
+            var WDay = "";
 
-            if(_user.MonthlyIsSpecificDayofEveryMonth == false)
+            if (_user.SalaryFrequency != null && _user.SalaryFrequency == "Monthly")
             {
-                var dayMonth = "1";
-                var FOM = $"{year}/{month}/{dayMonth}";
-                DateTime EOM = new DateTime(year, month, DateTime.DaysInMonth(year, month));
-                int canGenerateSalary = DateTime.Now >= EOM ? 1 : 0;
-
-                //datesList.Add(("FOM", FOM.ToString()));
-                //datesList.Add(("EOM", EOM.ToString()));  
-                //datesList.Add(("canGenerateSalary", canGenerateSalary.ToString()));
-
-
-                return Json(new
+                if(_user.SalaryFirstDateNumber == 1) //1st Date of Every Month
                 {
-                    FOM = FOM.ToString(),
-                    EOM = EOM.ToString(),
-                    canGenerateSalary = canGenerateSalary.ToString()
-                });
-            }
-            else if (_user.MonthlyIsSpecificDayofEveryMonth == true)
-            {
-                return Json(null);
+                    var dayMonth = _user.SalaryFirstDateNumber;
+                    FDate = $"{year}/{month}/{dayMonth}";
+                    DateTime EOM = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                    EDate = EOM.ToString();
+                    canGenerateSalary = DateTime.Now >= EOM ? 1 : 0;
+
+                }
+                else if (_user.SalaryFirstDateNumber > 1) //Instead of 1st Date of Every Month i.e. {26-May to 25-Jun}
+                {
+                    var dayMonth = _user.SalaryFirstDateNumber;
+                    
+                    if ((month - 1) > 0)
+                    {
+                        FDate = $"{year}/{(month - 1)}/{dayMonth}";
+                    }
+                    else
+                    {
+                        FDate = $"{(year - 1)}/{12}/{dayMonth}";
+                    }
+                    EDate = $"{year}/{month}/{_user.SalarySecondDateNumber}";
+                    canGenerateSalary = DateTime.Now >= Convert.ToDateTime(EDate) ? 1 : 0;
+
+                }
 
             }
-                return Json(null);
+            else if (_user.SalaryFrequency != null && _user.SalaryFrequency == "Weekly")
+            {
+                WDay = _user.SalaryWeekDay;
+                var CurrentDayofWeek = DateTime.Now.DayOfWeek;
+                canGenerateSalary = (CurrentDayofWeek.ToString() == WDay) ? 1 : 0;
+
+            }
+
+            return Json(new
+            {
+                FOM = FDate.ToString(),
+                EOM = EDate.ToString(),
+                canGenerateSalary = canGenerateSalary.ToString()
+            });
 
         }
 

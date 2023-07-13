@@ -240,6 +240,7 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.AverageTo).HasColumnType("decimal(18, 0)");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.DOrder).HasColumnName("dOrder");
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
 
@@ -532,8 +533,11 @@ public partial class HrhubContext : DbContext
 
             entity.Property(e => e.NotificationId).HasColumnName("NotificationID");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+            entity.Property(e => e.OnAnnouncements).HasDefaultValueSql("((0))");
             entity.Property(e => e.OnAnnouncementsTemplateId).HasColumnName("OnAnnouncements_TemplateID");
+            entity.Property(e => e.OnBenefitEnrollment).HasDefaultValueSql("((0))");
             entity.Property(e => e.OnBenefitEnrollmentTemplateId).HasColumnName("OnBenefitEnrollment_TemplateID");
+            entity.Property(e => e.OnLeaveApproval).HasDefaultValueSql("((0))");
             entity.Property(e => e.OnLeaveApprovalTemplateId).HasColumnName("OnLeaveApproval_TemplateID");
             entity.Property(e => e.OnSalaryGenerationTemplateId).HasColumnName("OnSalaryGeneration_TemplateID");
         });
@@ -683,11 +687,16 @@ public partial class HrhubContext : DbContext
             entity.ToTable("LeaveApprovalSetting", "HR");
 
             entity.Property(e => e.SettingId).HasColumnName("SettingID");
-            entity.Property(e => e.AllowApplyHalfDayLeave).HasColumnName("Allow_ApplyHalfDayLeave");
-            entity.Property(e => e.AllowApplyShortDayLeave).HasColumnName("Allow_ApplyShortDayLeave");
+            entity.Property(e => e.AllowApplyHalfDayLeave)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("Allow_ApplyHalfDayLeave");
+            entity.Property(e => e.AllowApplyShortDayLeave)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("Allow_ApplyShortDayLeave");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
             entity.Property(e => e.FinalApprovalByDesignationId).HasColumnName("FinalApprovalBy_DesignationID");
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.LeaveApprovalLeaveStatusId).HasColumnName("LeaveApproval_LeaveStatusID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
         });
@@ -798,8 +807,10 @@ public partial class HrhubContext : DbContext
         modelBuilder.Entity<OffBoardingProcessSetting>(entity =>
         {
             entity.Property(e => e.OffboardingProcessSettingId).HasColumnName("OffboardingProcessSettingID");
+            entity.Property(e => e.AllowExitInterview).HasDefaultValueSql("((0))");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("((0))");
             entity.Property(e => e.NeedClearenceFromDepartmentId).HasColumnName("NeedClearenceFrom_DepartmentID");
             entity.Property(e => e.NeedClearenceFromDesignationId).HasColumnName("NeedClearenceFrom_DesignationID");
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
@@ -1026,9 +1037,8 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.ReportingToStaffId).HasColumnName("ReportingTo_StaffID");
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
-            entity.Property(e => e.SalaryMethodId)
-                .IsUnicode(false)
-                .HasColumnName("SalaryMethodID");
+            entity.Property(e => e.SalaryFrequencyId).HasColumnName("SalaryFrequencyID");
+            entity.Property(e => e.SalaryMethodId).HasColumnName("SalaryMethodID");
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffStatusId).HasColumnName("StaffStatusID");
             entity.Property(e => e.TaxPayerNumber).IsUnicode(false);
@@ -1341,6 +1351,16 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.CompanyAddress).IsUnicode(false);
             entity.Property(e => e.CompanyCurrency).IsUnicode(false);
             entity.Property(e => e.CompanyEmail).IsUnicode(false);
+            entity.Property(e => e.CompanyEmailPassword)
+                .IsUnicode(false)
+                .HasColumnName("CompanyEmail_Password");
+            entity.Property(e => e.CompanyEmailSendFrom)
+                .IsUnicode(false)
+                .HasColumnName("CompanyEmail_SendFrom");
+            entity.Property(e => e.CompanyEmailServerHost)
+                .IsUnicode(false)
+                .HasColumnName("CompanyEmail_ServerHost");
+            entity.Property(e => e.CompanyEmailSmtpport).HasColumnName("CompanyEmail_SMTPPort");
             entity.Property(e => e.CompanyEmployeeWebCheckIn).HasColumnName("CompanyEmployeeWebCheckIN");
             entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
             entity.Property(e => e.CompanyLanguage).IsUnicode(false);
@@ -1392,11 +1412,13 @@ public partial class HrhubContext : DbContext
             entity.Property(e => e.PermanentAddress).IsUnicode(false);
             entity.Property(e => e.PresentAddress).IsUnicode(false);
             entity.Property(e => e.RegistrationNo).IsUnicode(false);
+            entity.Property(e => e.ReportingToStaffId).HasColumnName("ReportingTo_StaffID");
             entity.Property(e => e.ResigningDate).HasColumnType("date");
             entity.Property(e => e.SalaryAmount).HasColumnType("money");
             entity.Property(e => e.SalaryFrequency).IsUnicode(false);
             entity.Property(e => e.SalaryMethodId).HasColumnName("SalaryMethodID");
             entity.Property(e => e.SalaryMethodTitle).IsUnicode(false);
+            entity.Property(e => e.SalaryWeekDay).IsUnicode(false);
             entity.Property(e => e.SnapPath).IsUnicode(false);
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.StaffSalarySettingId).HasColumnName("StaffSalarySettingID");
