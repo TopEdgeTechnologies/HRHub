@@ -143,6 +143,30 @@ namespace HRHUBWEB.Controllers
             return View();
         }
 
+        public async Task<IActionResult> DepartmentCreateOrUpdate(string title,string shortcode, bool status)
+        {
+            Department ObjDept = new Department();
+            ObjDept.Title = title;
+            ObjDept.ShortCode = shortcode;
+            ObjDept.Status = status;
+            ObjDept.CompanyId = _user.CompanyId;
+            ObjDept.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDept, "api/Configuration/PostDepartment", HttpMethod.Post);
+            return Json(result);
+        }
+        public async Task<IActionResult> DesignationCreateOrUpdate(string title, bool status)
+        {
+            Designation ObjDesignation = new Designation();
+            ObjDesignation.Title = title;
+            ObjDesignation.Status = status;
+            ObjDesignation.CompanyId = _user.CompanyId;
+            ObjDesignation.CreatedBy = _user.UserId;
+
+            var result = await _APIHelper.CallApiAsyncPost<Response>(ObjDesignation, "api/Configuration/DesignationAddOrUpdate", HttpMethod.Post);
+            return Json(result);
+        }
+
         #endregion
 
         #region Staff Dashboard

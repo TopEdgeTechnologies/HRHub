@@ -2,7 +2,13 @@
     ViewData["Title"] = "HR Dashboard";
 }
 
+<style>
 
+    .fixed-card-height {
+        max-height: 546px;
+    }
+
+</style>
 
 <link href="~/assets/css/animated.css" rel="stylesheet">
 <div class="modal fade" id="ModelNotice">
@@ -139,17 +145,17 @@
                                                 int stepcompleted = 0;
                                                 if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
                                                 {
-                                                    stepcompleted = stepcompleted  + 1;
+                                                    stepcompleted = stepcompleted + 1;
                                                 }
                                                 if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
                                                 {
-                                                    stepcompleted = stepcompleted  + 1;
+                                                    stepcompleted = stepcompleted + 1;
                                                 }
                                                 if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
                                                 {
-                                                    stepcompleted = stepcompleted  + 1;
+                                                    stepcompleted = stepcompleted + 1;
                                                 }
-                                                if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                                                if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSmtpport != null && ViewBag.CompanyInfo.EmailServerHost != null)
                                                 {
                                                     stepcompleted = stepcompleted + 1;
                                                 }
@@ -162,7 +168,7 @@
                                                     stepcompleted = stepcompleted + 1;
                                                 }
 
-                                                barpercent = ((Convert.ToInt32(stepcompleted))  * 100) / 6;
+                                                barpercent = ((Convert.ToInt32(stepcompleted)) * 100) / 6;
                                             }
                                             <div class="progress-bar bg-success" style="width:@barpercent%"></div>
                                         </div>
@@ -179,19 +185,19 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
-                            {
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="CompanySetting" asp-controller="Company" asp-route-tab="CompanyProfile">Company Profile</a></li>
                         </div>
                         <div class="status">
-                              @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.Email != null && ViewBag.CompanyInfo.LogoAttachment != null)
                             {
                                 <span class="text-success fs-16">Complete</span>
                             }
@@ -204,14 +210,14 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
-                            {
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.OfficeStartTime != null && ViewBag.CompanyInfo.OfficeEndTime != null)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="AttendanceSettings" asp-controller="Setting" asp-route-tab="OfficeTimimg">Office Timing Setting</a></li>
                         </div>
@@ -229,14 +235,14 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
-                            {  
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.ComponentInfoStatus != null && ViewBag.ComponentInfoStatus.Count > 0)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="PayrollSettings" asp-controller="Setting" asp-route-tab="ComponentSetting">Payroll Setting</a></li>
                         </div>
@@ -254,19 +260,19 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
-                            {  
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSmtpport != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="SMTPSettings" asp-controller="Setting" asp-route-tab="SMTPSetting">SMTP Setting</a></li>
                         </div>
                         <div class="status">
-                              @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSMTPPort != null && ViewBag.CompanyInfo.EmailServerHost != null)
+                            @if (ViewBag.CompanyInfo != null && ViewBag.CompanyInfo.EmailSendFrom != null && ViewBag.CompanyInfo.EmailPassword != null && ViewBag.CompanyInfo.EmailSmtpport != null && ViewBag.CompanyInfo.EmailServerHost != null)
                             {
                                 <span class="text-success fs-16">Complete</span>
                             }
@@ -279,14 +285,14 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.OffBoardingStatus != null && ViewBag.OffBoardingStatus.Count > 0)
-                            {
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.OffBoardingStatus != null && ViewBag.OffBoardingStatus.Count > 0)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="GeneralTypeSettings" asp-controller="Setting" asp-route-tab="OffBoarding">Off Boarding Setting</a></li>
                         </div>
@@ -304,14 +310,14 @@
                     <div class="task-list px-4 py-4 border-bottom d-flex mb-3 align-items-center justify-content-between">
                         <div class="d-flex align-items-center">
                             <div class="list-icon me-4">
-                            @if (ViewBag.LeaveTypeStatus != null && ViewBag.LeaveTypeStatus.Count > 0)
-                            {
-                                <i class="fa fa-check text-success"></i>
-                            }
-                            else
-                            {
-                                <i class="fa fa-circle text-danger"></i>
-                            }
+                                @if (ViewBag.LeaveTypeStatus != null && ViewBag.LeaveTypeStatus.Count > 0)
+                                {
+                                    <i class="fa fa-check text-success"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-circle text-danger"></i>
+                                }
                             </div>
                             <li class="task-name fs-18 list-unstyled"><a asp-action="LeaveSettings" asp-controller="Setting" asp-route-tab="LeaveType">Leave Type Setting</a></li>
                         </div>
@@ -336,23 +342,23 @@
                 <div class="card-header border-bottom-0">
                     <div class="card-title">Set up benfits and time off policies</div>
                 </div>
-                <div class="card-body">
+                <div class="card-body chat-conatct-list fixed-card-height">
                     <div class="task-list px-4 py-4 border-bottom mb-3 ">
                         <div class="row align-items-center justify-content-between">
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <div class="d-flex align-items-center">
                                     <div class="list-icon list-icon-square me-4">
-                                        <img src="/assets/loading-state-images/loan (2).png">
+                                        <img src="~/assets/images/loading-state/loan.png" width="150">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add Department</li>
                                         <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="action-btn text-end">
-                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                    <a href="#" onclick="addnewdepartment()" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add</a>
                                 </div>
 
                             </div>
@@ -360,20 +366,20 @@
                     </div>
                     <div class="task-list px-4 py-4 border-bottom mb-3 ">
                         <div class="row align-items-center justify-content-between">
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <div class="d-flex align-items-center">
                                     <div class="list-icon list-icon-square me-4">
-                                        <img src="/assets/loading-state-images/loan (2).png">
+                                        <img src="~/assets/images/loading-state/loan.png" width="150">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add Designation</li>
                                         <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="action-btn text-end">
-                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                    <a href="#" onclick="addnewdesignation()" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add</a>
                                 </div>
 
                             </div>
@@ -381,41 +387,41 @@
                     </div>
                     <div class="task-list px-4 py-4 border-bottom mb-3 ">
                         <div class="row align-items-center justify-content-between">
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <div class="d-flex align-items-center">
                                     <div class="list-icon list-icon-square me-4">
-                                        <img src="/assets/loading-state-images/loan (2).png">
+                                        <img src="~/assets/images/loading-state/gender.png" width="150">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add Staff</li>
                                         <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="action-btn text-end">
-                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                    <a asp-controller="Staff" asp-action="GetStaffCreateOrUpdate" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add</a>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    <div class="task-list px-4 py-4 mb-3 ">
+                    <div class="task-list px-4 py-4 border-bottom mb-3 ">
                         <div class="row align-items-center justify-content-between">
-                            <div class="col-md-9">
+                            <div class="col-md-10">
                                 <div class="d-flex align-items-center">
                                     <div class="list-icon list-icon-square me-4">
-                                        <img src="/assets/loading-state-images/loan (2).png">
+                                        <img src="~/assets/images/loading-state/loan.png" width="150">
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add employee benifits</li>
+                                        <li class="task-name fs-18 list-unstyled font-weight-bold ">Add Benefits</li>
                                         <span class="task-desc fs-15 text-muted">offer health insureance and retirement planning and other non-wage compensations to your employees</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="action-btn text-end">
-                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add benifit</a>
+                                    <a href="#" class="bg-primary rounded text-white font-weight-medium py-3 px-3">Add</a>
                                 </div>
 
                             </div>
@@ -427,6 +433,7 @@
 
     </div>
 </section>
+
 
 
 <div class="modal fade" id="ModelEvent">
@@ -635,7 +642,8 @@
 
                 </a>
             </div>
-            <div class="card-body pt-0 "> .
+            <div class="card-body pt-0 ">
+                .
                 <div class="loading-state-hr" id="cardEmptyEventsState">
                     <div class="loading-state-image-hr mb-3">
                         <img src="/assets/images/loading-state/events.png" class="w-100 img-fluid" />
@@ -643,7 +651,7 @@
                     <span class="text-muted loading-state-text fs-16 d-block">No recent Events found</span>
                 </div>
 
-                <ul  id="EventBoarddata">
+                <ul id="EventBoarddata">
                     <li class="item">
                     </li>
                     <li class="item">
@@ -712,33 +720,31 @@
                     </div>
                     <span class="text-muted loading-state-text fs-18 d-block">No recent activity found</span>
                 </div>
-                <ul id="CardActivity" class="timeline" >
-
+                <ul id="CardActivity" class="timeline">
                 </ul>
             </div>
         </div>
     </div>
-   
+
     <div class="col-xl-4 col-md-12 col-lg-12">
-        <div class="card chart-donut1 overflow-auto"  style="height: 420px;">
+        <div class="card chart-donut1 overflow-auto" style="height: 420px;">
             <div class="card-header sticky-thead  border-0">
                 <h4 class="card-title">Gender by Employees</h4>
             </div>
             <div class="card-body">
 
-                    <div class="loading-state-hr" id="cardEmptyGenderState">
-                        <div class="loading-state-image-hr mb-3">
-                            <img src="/assets/images/loading-state/leave.png" class="w-100 img-fluid" />
-                        </div>
-                        <span class="text-muted loading-state-text fs-18 d-block">No recent employee found</span>
+                <div class="loading-state-hr" id="cardEmptyGenderState">
+                    <div class="loading-state-image-hr mb-3">
+                        <img src="/assets/images/loading-state/leave.png" class="w-100 img-fluid" />
                     </div>
+                    <span class="text-muted loading-state-text fs-18 d-block">No recent employee found</span>
+                </div>
                 <div id="employeesGender" class="mx-auto apex-dount">
-
                 </div>
 
 
-               
-                
+
+
             </div>
         </div>
     </div>
@@ -795,7 +801,7 @@
                                 <tbody id="candidatebody">
                                 </tbody>
                             </table>
-                               <div class="loading-state-hr" id="cardEmptyCandidateState">
+                            <div class="loading-state-hr" id="cardEmptyCandidateState">
                                 <div class="loading-state-image-hr mb-3">
                                     <img src="/assets/images/loading-state/application.png" class="w-100 img-fluid" />
                                 </div>
@@ -824,7 +830,7 @@
                                 <tbody id="tbodyLeaves">
                                 </tbody>
                             </table>
-                             <div class="loading-state-hr" id="cardEmptyLeavesState">
+                            <div class="loading-state-hr" id="cardEmptyLeavesState">
                                 <div class="loading-state-image-hr mb-3">
                                     <img src="/assets/images/loading-state/leave.png" class="w-100 img-fluid" />
                                 </div>
@@ -896,11 +902,11 @@
                     </tbody>
                 </table>
                 <div class="loading-state-hr" id="cardEmptyAttendanceState">
-                                    <div class="loading-state-image-hr mb-3">
-                                <img src="/assets/images/loading-state/application.png" class="w-100 img-fluid" />
-                            </div>
-                     <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
-                 </div>
+                    <div class="loading-state-image-hr mb-3">
+                        <img src="/assets/images/loading-state/application.png" class="w-100 img-fluid" />
+                    </div>
+                    <span class="text-muted loading-state-text fs-18 d-block">No recent application found</span>
+                </div>
             </div>
 
 
@@ -909,6 +915,88 @@
     </div>
 </div>
 
+<!--Add Department Modal -->
+<div class="modal fade" id="adddesignationmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Designation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Designation Title</label>
+                    <input id="DesignationTitle" name="DesignationTitle" class="form-control" type="text" placeholder="Enter Designation Title">
+                </div>
+
+                <div class="form-group">
+
+                    <label class="custom-switch">
+                        <label class="form-label me-2 mt-1">IsActive</label>
+                        <input type="checkbox" id="Status" name="Status" class="custom-switch-input" checked="checked">
+                        <span class="custom-switch-indicator custom-switch-indicator"></span>
+                    </label>
+
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Save" id="btnsave" onclick="CheckDesignation()" class="btn btn-primary" />
+                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add Department Modal -->
+<div class="modal fade" id="adddepartmentmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Department Title</label>
+                    <input id="DepartmentTitle" name="DepartmentTitle" class="form-control" type="text" placeholder="Enter Department Title">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Short Code</label>
+                    <input id="ShortCode" name="ShortCode" class="form-control" type="text" placeholder="Enter Short Code">
+                </div>
+             @*   <div class="form-group">
+                    <label class="form-label">Logo Attachment</label>
+                    <input name="LogoAttachmentFile" accept=".jpg, .jpeg, .png" id="LogoAttachmentFile" class="form-control" type="file" placeholder="Enter Title">
+                </div>*@
+                <div class="form-group">
+                    @*<img src="/Images/Avatar.png" alt="user-img" id="viewlogo" class="avatar-xxl rounded-circle mb-1">*@
+
+                    <label class="custom-switch ms-5">
+                        <label class="form-label me-2 mt-1">IsActive</label>
+                        <input type="checkbox" id="Status" name="Status" class="custom-switch-input" checked="checked">
+                        <span class="custom-switch-indicator custom-switch-indicator"></span>
+                    </label>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="Save" id="btnsave" onclick="CheckDepartment()" class="btn btn-primary" />
+                <a class="btn btn-danger" data-bs-dismiss="modal">Close</a>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -938,13 +1026,13 @@
             $('#fromdate').datepicker('setDate', currentDate);
             $('#leavedate').val('@DateTime.Now.ToString("dd-MM-yyyy")');
             $('#dateModel').datepicker('setDate', currentDate);
-            
-  
 
 
 
 
-         
+
+
+
             CheckAtendence();
             CheckAnnounments();
             CheckEvent();
@@ -953,11 +1041,11 @@
             checkdailyAttendance();
             loadLeavesrequest();
             loadLoanrequest();
-             loadCandiate() ;
+            loadCandiate();
 
 
-               $('#activityDate').change(function () {
-				loadStaffActivity(0)
+            $('#activityDate').change(function () {
+                loadStaffActivity(0)
             });
             $('#sumaryYear').change(function () {
                 loadSalarySummaryGraph();
@@ -1067,7 +1155,7 @@
 
                     response.length > 0 ? $("#cardEmptyEventsState").hide() : $("#cardEmptyEventsState").show();
 
-                    
+
                     //var html = ' <ul class="vertical-scroll">';
                     $('#EventBoarddata').html('')
                     var html = '';
@@ -1236,11 +1324,11 @@
             makeAjaxRequest("/Dashboard/EmployeeSalarySummery", 'GET', requestData, false, function (response) {
 
                 if (response != null) {
-                  response.length>0? $("#cardEmptyGenderState").hide():  $("#cardEmptyGenderState").show();
+                    response.length > 0 ? $("#cardEmptyGenderState").hide() : $("#cardEmptyGenderState").show();
 
                     response.length > 0 ? $("#employeesGender").show() : $("#employeesGender").hide();
 
-                    
+
                     debugger;
                     console.log(response)
                     var MonthName = [];
@@ -1384,8 +1472,8 @@
             makeAjaxRequest("/Dashboard/StaffDailyAttendance", 'GET', requestData, false, function (response) {
 
                 if (response != null) {
-          
-                  response.length>0? $("#cardEmptyAttendanceState").hide():  $("#cardEmptyAttendanceState").show();
+
+                    response.length > 0 ? $("#cardEmptyAttendanceState").hide() : $("#cardEmptyAttendanceState").show();
 
 
                     console.log(response)
@@ -1416,7 +1504,7 @@
                     //$("#tableAttendance").DataTable();
 
                 }
-                else{
+                else {
                     $("#cardEmptyAttendanceState").show();
 
                 }
@@ -1474,11 +1562,9 @@
 
 
                 }
-                else
-
-                {
+                else {
                     $("#cardEmptyLeavesState").show();
-                
+
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
@@ -1501,8 +1587,8 @@
                 if (response != null) {
                     debugger
 
-                    response.length>0? $("#cardEmptyLoanState").hide():  $("#cardEmptyLoanState").show();
-                   
+                    response.length > 0 ? $("#cardEmptyLoanState").hide() : $("#cardEmptyLoanState").show();
+
 
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
@@ -1536,7 +1622,7 @@
 
 
                 }
-               
+
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
             });
@@ -1558,8 +1644,8 @@
                 if (response != null) {
                     debugger
 
-                  response.length>0? $("#cardEmptyCandidateState").hide():  $("#cardEmptyCandidateState").show();
-      
+                    response.length > 0 ? $("#cardEmptyCandidateState").hide() : $("#cardEmptyCandidateState").show();
+
 
                     var html = '';
                     for (var i = 0; i < response.length; i++) {
@@ -1592,11 +1678,10 @@
 
 
 
-                }else
-                {
+                } else {
                     $("#cardEmptyCandidateState").show()
-                
-                
+
+
                 }
             }, function (errorStatus) {
                 console.log('Error:', errorStatus);
@@ -1648,25 +1733,25 @@
 
                         table.rows.add(rows);
                         table.draw();
-                      
-                
-                        }
 
 
+                    }
+                }
 
+            })
         }
 
 
 
         function loadStaffActivity(staffId) {
             var dateValue = $("#activityDate").val()
-            var requestData = { staffId:staffId, currentDate: dateValue }
+            var requestData = { staffId: staffId, currentDate: dateValue }
             makeAjaxRequest("/Staff/Staff_Activity", 'GET', requestData, false, function (response) {
                 if (response != null) {
 
-                  response.length>0? $("#cardEmptyActivityState").hide():  $("#cardEmptyActivityState").show();
+                    response.length > 0 ? $("#cardEmptyActivityState").hide() : $("#cardEmptyActivityState").show();
 
-         
+
                     debugger
                     var htmlActivity = ''
                     for (var i = 0; i < response.length; i++) {
@@ -1684,6 +1769,255 @@
                 console.log('Error:', errorStatus)
             });
         }
+
+
+         function addnewdesignation() {
+
+            $("#adddesignationmodal").modal('show');
+            $("#DesignationId").val(0);
+            $("#DesignationTitle").val('');
+            $("#Status").prop('checked', true);
+
+            $("#DesignationTitle").css("border-color", "#ddd");
+
+
+        }
+        function CheckDesignation() {
+            var status = true;
+            debugger;
+            debugger;
+            if ($("#DesignationTitle").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#DesignationTitle").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#DesignationTitle").css("border-color", "#ddd");
+            }
+            var DesignationTitle = $('#DesignationTitle').val()
+
+            var Data = { id: $("#DesignationId").val(), title: DesignationTitle == '' ? '""' : DesignationTitle, CompanyId: $("#CompanyId").val() }
+
+            $.ajax({
+                async: false,
+                url: "/Configuration/DesignationCheckData",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        ///  var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(b.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#adddesignationmodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+						PostDesignation()
+                    }
+                    else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+        function PostDesignation() {
+			var status = false;
+
+			var Data = {
+                title: $("#DesignationTitle").val(),
+				status: $("#Status").prop("checked")
+			}
+			console.log(Data)
+			$.ajax({
+				async: false,
+                url: "/Dashboard/DesignationCreateOrUpdate",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						status = data.success;
+						var url = "/Dashboard/HR";
+						window.location.href = url;
+					}
+				},
+				error: function () 
+				{
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			return status;
+		}
+
+
+        function addnewdepartment() {
+
+            $("#adddepartmentmodal").modal('show');
+            $("#DepartmentId").val(0)
+            $("#DepartmentTitle").val('')
+            $("#ShortCode").val('')
+            $("#LogoAttachmentFile").val('')
+
+            $("#Status").prop('checked', true);
+            $("#Title").css("border-color", "#ddd");
+        }
+
+
+        function CheckDepartment() {
+            var status = true;
+            debugger;
+            if ($("#DepartmentTitle").val() == "") {
+                $.growl.warning({
+                    message: "Please Enter Title"
+                });
+                $("#DepartmentTitle").css("border-color", "red");
+                status = false;
+                return false;
+            }
+            else {
+                $("#DepartmentTitle").css("border-color", "#ddd");
+            }
+            var Data = { id: $("#DepartmentId").val(), title: $('#DepartmentTitle').val() == '' ? '""' : $('#DepartmentTitle').val(), CompanyId: $("#CompanyId").val() }
+            console.log(Data)
+            $.ajax({
+                async: false,
+                url: "/Configuration/DepartmentAlreadyExists",
+                type: "GET",
+                data: Data,
+                success: function (data) {
+                    if (data != "") {
+                        debugger
+                        //var b = JSON.parse(data)
+                        if (data.success) {
+
+                            // $.growl.warning(data.message);
+                            $.growl.warning({
+                                message: data.message
+                            });
+                            status = false;
+                        }
+                        else {
+                            $("#adddepartmentmodal").modal('hide');
+                        }
+                    }
+                },
+                error: function () {
+                    status = false;
+                    //   toastr.error("Please Fill Required Field");
+                }
+            })
+
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+            });
+
+            if (status) {
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Yes, Save it!',
+                    timer: 30000,
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+						PostDepartment()
+                    }
+                    else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                            'Cancelled',
+                            'Your record is safe :)',
+                            'error'
+                        )
+                    }
+                });
+            }
+        }
+
+        function PostDepartment() {
+			var status = false;
+
+			var Data = {
+                title: $("#DepartmentTitle").val(),
+				shortcode: $("#ShortCode").val(),
+				status: $("#Status").prop("checked")
+			}
+			console.log(Data)
+			$.ajax({
+				async: false,
+				url: "/Dashboard/DepartmentCreateOrUpdate",
+				type: "GET",
+				data: Data,
+				success: function (data) {
+					if (data != "") {
+						console.log(data)
+						status = data.success;
+						var url = "/Dashboard/HR";
+						window.location.href = url;
+					}
+				},
+				error: function () 
+				{
+					status = false;
+					//   toastr.error("Please Fill Required Field");
+				}
+			})
+			return status;
+		}
+
 
     </script>
 
