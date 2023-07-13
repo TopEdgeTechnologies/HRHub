@@ -81,6 +81,8 @@ public partial class VInfoStaff
 
     public string? WorkMode { get; set; }
 
+    public int? ReportingToStaffId { get; set; }
+
     public int? SalaryMethodId { get; set; }
 
     public string? SalaryMethodTitle { get; set; }
@@ -143,7 +145,19 @@ public partial class VInfoStaff
 
     public int? CompanyStartTimeGraceMinutes { get; set; }
 
+    public bool? CompanyIsGraceMinutesAllowed { get; set; }
+
+    public bool? CompanyIsMarkHalfDayAllow { get; set; }
+
     public int? CompanyMarkHalfDayAfterLateMinutes { get; set; }
+
+    public string? CompanyEmailSendFrom { get; set; }
+
+    public string? CompanyEmailPassword { get; set; }
+
+    public int? CompanyEmailSmtpport { get; set; }
+
+    public string? CompanyEmailServerHost { get; set; }
 
     public bool CompanyStatus { get; set; }
 
@@ -169,9 +183,9 @@ public partial class VInfoStaff
 
     public string? SalaryFrequency { get; set; }
 
-    public string? WeekDay { get; set; }
+    public string? SalaryWeekDay { get; set; }
 
-    public short? FirstDateNumber { get; set; }
+    public short? SalaryFirstDateNumber { get; set; }
 
-    public short? SecondDateNumber { get; set; }
+    public short? SalarySecondDateNumber { get; set; }
 }

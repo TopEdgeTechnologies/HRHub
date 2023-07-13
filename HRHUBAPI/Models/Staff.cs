@@ -51,7 +51,9 @@ public partial class Staff
 
     public DateTime? TerminationDate { get; set; }
 
-    public string? SalaryMethodId { get; set; }
+    public short? SalaryMethodId { get; set; }
+
+    public short? SalaryFrequencyId { get; set; }
 
     public decimal? SalaryAmount { get; set; }
 

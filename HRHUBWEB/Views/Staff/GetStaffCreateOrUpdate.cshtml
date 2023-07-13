@@ -690,13 +690,19 @@
                                         await dropdownWidget("SalaryMethod", "SalaryMethodId", Model.SalaryMethodId?.ToString(), "Select Salary Method", false , salaryMethodItems, true);
                                     }
                                     await textWidget("Gross Salary", "SalaryAmount", Model.SalaryAmount.ToString(), "$Salary", "number", false);
+
+                                     if (Model.SalaryFrequencyList != null && Model.SalaryFrequencyList.Count() > 0)
+                                    {
+                                        // We've Salary Method DB Table to Populate Salary Frequency
+                                        IEnumerable<SelectListItem> salaryFrequencyItems = Model.SalaryFrequencyList.Select(d => new SelectListItem { Value = d.SalaryMethodId.ToString(), Text = d.Title });
+                                        await dropdownWidget("SalaryFrequency", "SalaryFrequencyId", Model.SalaryFrequencyId?.ToString(), "Select Salary Frequency", false , salaryFrequencyItems, true);
+                                    }
                                 }
-                               
-                                
+                                                               
                                 <div>
                                     <h4 class="mb-4 font-weight-bold">Salary Breakup
                                         <span id="lbl_Earning" class="fs-18 text-success">0</span>
-                                        <span id="lbl_EarningPercenage" class="fs-18 text-success">0</span>
+                                        @*<span id="lbl_EarningPercenage" class="fs-18 text-success">0</span>*@
                                     </h4>
                                     <table id="StaffEarningTable" class="table table-vcenter text-nowrap table-bordered border-bottom">
                                             <thead>
@@ -1271,6 +1277,7 @@
 
         function customValidation()
         {
+            debugger
             var isvalid = true;
             isvalid = alreadyExist();
 

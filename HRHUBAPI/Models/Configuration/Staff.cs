@@ -84,8 +84,9 @@ namespace HRHUBAPI.Models
             [NotMapped]
             public IEnumerable<Designation>? DesignationList { get; set; }
 
-            [NotMapped]
-            public IEnumerable<SalaryMethod>? SalaryMethodList { get; set; }
+            [NotMapped] public IEnumerable<SalaryMethod>? SalaryMethodList { get; set; }
+        
+            [NotMapped] public IEnumerable<SalaryMethod>? SalaryFrequencyList { get; set; }
 
             [NotMapped]
             public IEnumerable<string>? DocumentTitle { get; set; }
@@ -417,6 +418,7 @@ namespace HRHUBAPI.Models
                         dbResult.ResigningDate = staff.ResigningDate;
                         dbResult.TerminationDate = staff.TerminationDate;
                         dbResult.SalaryMethodId = staff.SalaryMethodId;
+                        dbResult.SalaryFrequencyId = staff.SalaryFrequencyId;
                         dbResult.SalaryAmount = staff.SalaryAmount;
                         dbResult.AccountTitle = staff.AccountTitle;
                         dbResult.BankAccountNumber = staff.BankAccountNumber;

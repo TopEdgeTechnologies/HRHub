@@ -54,18 +54,14 @@ namespace HRHUBAPI.Models
 			[NotMapped]
 			public string? EmailServerHost { get; set; }
 
-			[NotMapped]
-			public string? StaffName { get; set; }
-			[NotMapped]
-			public string? GroupName { get; set; }
+			[NotMapped] public string? StaffName { get; set; }
+			[NotMapped] public string? GroupName { get; set; }
 
-			[NotMapped]
-			public bool? MonthlyIsSpecificDayofEveryMonth { get; set; }
-			[NotMapped]
-			public bool? IsMarkHalfDayAllow { get; set; }
-
-			[NotMapped]
-			public int? MonthlyDateOfEveryMonth { get; set; }
+			[NotMapped] public bool? IsMarkHalfDayAllow { get; set; }
+			[NotMapped] public string? SalaryFrequency { get; set; }
+			[NotMapped] public string? SalaryWeekDay { get; set; }
+            [NotMapped] public int? SalaryFirstDateNumber { get; set; }
+            [NotMapped] public int? SalarySecondDateNumber { get; set; }
 
         #endregion
 
@@ -74,49 +70,85 @@ namespace HRHUBAPI.Models
             try
 			{
                 //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
-                Obj.Password = Obj.Password;
+                var user = from u in _context.Users
+                            join s in _context.VInfoStaffs on u.StaffId equals s.StaffId
+
+                           where u.IsActive == true && u.Password == Obj.Password && u.UserName == Obj.UserName
+                           select new User
+                           {
+                               UserId = u.UserId,
+                               UserName = u.UserName,
+                               Password = u.Password,
+                               CompanyId = u.CompanyId,
+                               GroupId = u.GroupId,
+                               StaffId = u.StaffId,
+                               StaffName = s.FirstName,
+                               UserImage = s.SnapPath,
+                               ContactPerson = s.ContactPerson,
+                               DesignationName = s.DesignationTitle,
+                               DesignationID = s.DesignationId,
+                               DepartmentId = s.DepartmentId,
+                               Departmentname = s.DepartmentTitle,
+                               CompanyName = s.CompanyName,
+                               SalaryFrequency = s.SalaryFrequency,
+                               SalaryWeekDay = s.SalaryWeekDay,
+                               SalaryFirstDateNumber = s.SalaryFirstDateNumber,
+                               SalarySecondDateNumber = s.SalarySecondDateNumber,
+                               Email = s.CompanyEmail,
+                               Currency = s.CompanyCurrency,
+                               Language = s.CompanyLanguage,
+                               Phone = s.CompanyPhone,
+                               LogoAttachment = s.CompanyLogoAttachment,
+                               WebUrl = s.CompanyWebUrl,
+                               EmailSendFrom = s.CompanyEmailSendFrom,
+                               EmailPassword = s.CompanyEmailPassword,
+                               EmailSMTPPort = s.CompanyEmailSmtpport,
+                               EmailServerHost = s.CompanyEmailServerHost,
+                               IsMarkHalfDayAllow = s.CompanyIsMarkHalfDayAllow
+                           };
+                //Obj.Password = PasswordHasher.Encrypt(Obj.Password, true);
                 // var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == Obj.UserName && x.Password == Obj.Password && x.IsActive == true);
-				var user = from u in _context.Users
-							join c in _context.Companies on u.CompanyId equals c.CompanyId
-							join sss in _context.StaffSalarySettings on u.CompanyId equals sss.CompanyId
-							join st in _context.Staff on u.StaffId equals st.StaffId
-							into staffs
-							from staff in staffs.DefaultIfEmpty()
-							join d in _context.Designations on staff.DesignationId equals d.DesignationId
-                            join dep in _context.Departments on staff.DepartmentId equals dep.DepartmentId
+                //var user = from u in _context.Users
+                //			join c in _context.Companies on u.CompanyId equals c.CompanyId
+                //			join sss in _context.StaffSalarySettings on u.CompanyId equals sss.CompanyId
+                //			join st in _context.Staff on u.StaffId equals st.StaffId
+                //			into staffs
+                //			from staff in staffs.DefaultIfEmpty()
+                //			join d in _context.Designations on staff.DesignationId equals d.DesignationId
+                //                        join dep in _context.Departments on staff.DepartmentId equals dep.DepartmentId
 
-							where u.IsActive== true && u.Password== Obj.Password && u.UserName== Obj.UserName
-							select  new User  {
-							  UserId=  u.UserId,
-								UserName= u.UserName,
-								Password= u.Password,
-								CompanyId= u.CompanyId,
-								StaffId= u.StaffId,
-								GroupId = u.GroupId,
-								UserImage = staff.SnapPath,
-								CompanyName = c.CompanyName,
-								ContactPerson= c.ContactPerson,
-								Email= c.Email,
-								Currency= c.Currency,
-								Language=  c.Language,
-								Phone=   c.Phone,
-								LogoAttachment= c.LogoAttachment,
-								WebUrl= c.WebUrl,
-                                //MonthlyIsSpecificDayofEveryMonth = sss.MonthlyIsSpecificDayofEveryMonth,
-                                //MonthlyDateOfEveryMonth = sss.MonthlyDateOfEveryMonth,
-                                DesignationName = d.Title,
-								DesignationID = d.DesignationId,
-								DepartmentId = dep.DepartmentId,
-								Departmentname = dep.Title,
-								EmailSendFrom=c.EmailSendFrom,
-								EmailPassword=c.EmailPassword,
-								EmailSMTPPort=c.EmailSmtpport,
-								EmailServerHost=c.EmailServerHost,
-                                StaffName= staff.FirstName,
-								IsMarkHalfDayAllow = c.IsMarkHalfDayAllow
-							};
+                //			where u.IsActive== true && u.Password== Obj.Password && u.UserName== Obj.UserName
+                //			select  new User  {
+                //			  UserId=  u.UserId,
+                //				UserName= u.UserName,
+                //				Password= u.Password,
+                //				CompanyId= u.CompanyId,
+                //				StaffId= u.StaffId,
+                //				GroupId = u.GroupId,
+                //				UserImage = staff.SnapPath,
+                //				CompanyName = c.CompanyName,
+                //				ContactPerson= c.ContactPerson,
+                //				Email= c.Email,
+                //				Currency= c.Currency,
+                //				Language=  c.Language,
+                //				Phone=   c.Phone,
+                //				LogoAttachment= c.LogoAttachment,
+                //				WebUrl= c.WebUrl,
+                //                            //SalaryFrequency = sss.SalaryFrequency,
+                //                            //MonthlyDateOfEveryMonth = sss.MonthlyDateOfEveryMonth,
+                //                            DesignationName = d.Title,
+                //				DesignationID = d.DesignationId,
+                //				DepartmentId = dep.DepartmentId,
+                //				Departmentname = dep.Title,
+                //				EmailSendFrom=c.EmailSendFrom,
+                //				EmailPassword=c.EmailPassword,
+                //				EmailSMTPPort=c.EmailSmtpport,
+                //				EmailServerHost=c.EmailServerHost,
+                //                            StaffName= staff.FirstName,
+                //				IsMarkHalfDayAllow = c.IsMarkHalfDayAllow
+                //			};
 
-				if ( user != null && user.Count()>0)
+                if ( user != null && user.Count() > 0)
                 {
 					await UserLogOutHistory(user.FirstOrDefault().UserId, _context);
 
